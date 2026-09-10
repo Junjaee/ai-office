@@ -43,10 +43,10 @@ jobs:
 
       - name: 실행
         env:
-          # ledger 전용 시크릿(gmail.modify + spreadsheets 스코프). 공용 GOOGLE_*(드라이브)와 분리.
-          GOOGLE_CLIENT_ID: ${{ secrets.LEDGER_GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.LEDGER_GOOGLE_CLIENT_SECRET }}
-          GOOGLE_REFRESH_TOKEN: ${{ secrets.LEDGER_GOOGLE_REFRESH_TOKEN }}
+          # 공용 통합 토큰(드라이브+gmail.modify+spreadsheets). 모든 자동화가 같은 GOOGLE_* 를 쓴다.
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
           REQUEST_ID: ${{ inputs.request_id }}
           PYTHONUTF8: "1"
         run: |
