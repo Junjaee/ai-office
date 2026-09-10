@@ -3,40 +3,36 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 취소 2건, 건너뜀 3건, 실패 0건, 7초",
+  "summary": "신규 0건, 취소 0건, 건너뜀 3건, 실패 0건, 1초",
   "counts": {
-    "new": 3,
-    "replaced": 2,
+    "new": 0,
+    "replaced": 0,
     "skip": 3,
     "failed": 0
   },
   "next_run": "매시간",
   "log": [
-    "신규 3건, 취소 2건, 건너뜀 3건, 실패 0건, 7초",
-    "[추가] 2026년 9월 9/10 다이소아성산업 5,000원 (생활비)",
-    "[추가] 2026년 9월 9/10 쿠팡(쿠페이) 14,000원 (생활비)",
-    "[추가] 2026년 9월 9/10 (주)모빌리언스 1,000원 (생활비)",
-    "[취소삭제] 2026년 9월 쿠팡(쿠페이) 14,000원"
+    "신규 0건, 취소 0건, 건너뜀 3건, 실패 0건, 1초"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 34450234952,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34450234952",
-  "request_id": "req-20260910162946-final",
+  "run_id": 34451202204,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34451202204",
+  "request_id": "req-20260910164113-unified",
   "trigger": "manual",
-  "started_at": "2026-09-10T16:30:02+09:00",
-  "duration_sec": 7,
+  "started_at": "2026-09-10T16:41:37+09:00",
+  "duration_sec": 1,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 8건 확인, 결제 5건"
+      "summary": "메일 3건 확인, 결제 0건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 3 · 취소 2 · 건너뜀 3"
+      "summary": "추가 0 · 취소 0 · 건너뜀 3"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-10T16:30:10+09:00"
+  "updated_at": "2026-09-10T16:41:40+09:00"
 }
