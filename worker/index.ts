@@ -1,12 +1,15 @@
-/** Cloudflare Worker entry point for the vinext-starter template. */
+/** Cloudflare Worker 진입점 — /api/run · /api/status 만 직접 처리하고 나머지는 vinext 에 넘긴다. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
-import { integrationStatus, publishReport, type DayReport, type PublishEnv } from "./report";
+import { WORKSPACES } from "../app/workspaces/index";
+import { GitHubClient } from "./github.ts";
+import { createRunApiStores, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
 
-interface Env extends PublishEnv {
+interface Env {
   ASSETS: Fetcher;
-  DB: D1Database;
-  IMAGES: {
+  /** fine-grained PAT (Cloudflare Secret / .dev.vars). 값은 절대 응답·로그에 내보내지 않는다 */
+  GITHUB_TOKEN?: string;
+  IMAGES?: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
         output(options: { format: string; quality: number }): Promise<{ response(): Response }>;
@@ -15,36 +18,28 @@ interface Env extends PublishEnv {
   };
 }
 
-interface ExecutionContext {
-  waitUntil(promise: Promise<unknown>): void;
-  passThroughOnException(): void;
-}
+// 인스턴스(isolate) 메모리 — 하루 상한 카운터 · 최근 dispatch 시각 · /api/status 15초 캐시
+const stores = createRunApiStores();
 
-// Image security config. SVG sources with .svg extension auto-skip the
-// optimization endpoint on the client side (served directly, no proxy).
-// To route SVGs through the optimizer (with security headers), set
-// dangerouslyAllowSVG: true in next.config.js and uncomment below:
-// const imageConfig: ImageConfig = { dangerouslyAllowSVG: true };
+function depsFor(env: Env): RunApiDeps {
+  return {
+    ...stores,
+    now: () => Date.now(),
+    workspaces: WORKSPACES,
+    github: env.GITHUB_TOKEN ? new GitHubClient(env.GITHUB_TOKEN) : null,
+  };
+}
 
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
-    // 연동 설정 여부만 알려준다 (값은 절대 내보내지 않는다)
-    if (url.pathname === "/api/integrations") {
-      return Response.json(integrationStatus(env));
+    if (url.pathname === "/api/run") {
+      return handleRun(request, env, depsFor(env));
     }
 
-    // 완료 보고를 Notion + Discord로 동시 발행
-    if (url.pathname === "/api/report") {
-      if (request.method !== "POST") return new Response("POST only", { status: 405 });
-      try {
-        const report = (await request.json()) as DayReport;
-        const result = await publishReport(report, env);
-        return Response.json(result);
-      } catch (error) {
-        return Response.json({ error: String(error) }, { status: 400 });
-      }
+    if (url.pathname === "/api/status") {
+      return handleStatus(request, env, depsFor(env));
     }
 
     if (url.pathname === "/_vinext/image") {
@@ -52,6 +47,7 @@ const worker = {
       return handleImageOptimization(request, {
         fetchAsset: (path) => env.ASSETS.fetch(new Request(new URL(path, request.url))),
         transformImage: async (body, { width, format, quality }) => {
+          if (!env.IMAGES) throw new Error("IMAGES binding is not configured");
           const result = await env.IMAGES.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
           return result.response();
         },

@@ -6,6 +6,8 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": ["@cloudflare/workers-types/2023-07-01", "node"],
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
