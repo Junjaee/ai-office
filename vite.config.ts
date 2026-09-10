@@ -14,6 +14,8 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
+  // Worker 코드(/api/status 정적 폴백, 이미지 최적화)가 env.ASSETS 로 정적 파일을 읽는다
+  assets: { binding: "ASSETS" },
   d1_databases: d1
     ? [
         {

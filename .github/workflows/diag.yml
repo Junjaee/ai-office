@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: 사무실 PC에서 국회 사이트·구글 접속 확인
-        shell: pwsh
+        shell: powershell
         run: |
           foreach ($u in @("https://open.assembly.go.kr/portal/openapi/nzbyfwhwaoanttzje", "https://record.assembly.go.kr/assembly/mnts/main.do", "https://www.googleapis.com/discovery/v1/apis", "https://github.com/")) {
             try { $r = Invoke-WebRequest -UseBasicParsing -Uri $u -TimeoutSec 25 -UserAgent "Mozilla/5.0"; "$u -> $($r.StatusCode)" } catch { "$u -> FAIL $($_.Exception.Message)" }
