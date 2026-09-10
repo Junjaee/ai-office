@@ -551,3 +551,65 @@
 
 /* 숨긴 부서: 빈 사무실로 표시 */
 .rm.rm-hidden { opacity: .35; background: var(--c-gray100); border-style: dashed; box-shadow: none; }
+
+/* ── 재설계: 직원 상태 배지·방 상태·라운지 ───────────────────────── */
+.ag-tag em { background: var(--c-gray300); color: var(--ink); min-width: 12px; text-align: center; }
+.ag-tag em.s-running { background: var(--c-500); color: #fff; animation: blinkDot .9s steps(2) infinite; }
+.ag-tag em.s-done { background: #3fbf8a; color: #fff; }
+.ag-tag em.s-error { background: #ff5c5c; color: #fff; }
+.ag-tag em.s-planned { background: var(--c-gray200); color: var(--ink-soft); }
+.ag.s-idle .ag-body { opacity: .78; }
+.ag.s-planned { opacity: .45; }
+.ag.s-error .p-torso { box-shadow: 0 0 0 1.5px #ff5c5c; }
+.compact .ag-tag { display: flex; font-size: 7px; padding: 0 3px; top: 2px; }
+.compact .ag-tag em { display: none; }
+.rm.waiting { background: #fff; }
+.rm.done { background: #f0faf5; }
+.rm.error { background: #fff1f0; }
+.rm.planned { background: var(--c-gray50); border-style: dashed; opacity: .6; }
+.rm-dot.error { background: #ff5c5c; animation: blinkDot .5s steps(2) infinite; }
+.rm-dot.planned { background: var(--c-gray200); }
+.rm-dot { width: auto; min-width: 7px; height: auto; padding: 0 4px; font-size: 8px; font-weight: 900; line-height: 12px; color: var(--ink); }
+.rm-dot.working { color: #fff; }
+.rm-lounge .rm-head b { color: var(--ink-soft); }
+
+/* ── 재설계: 단일 페이지 구성 ───────────────────────────────────── */
+.hub-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hub-header .checked { margin-left: auto; color: var(--ink-soft); font-size: 11px; }
+.banner { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 14px; border: 2px solid var(--ink); border-radius: 12px; font-size: 13px; font-weight: 700; }
+.banner.red { background: #ffe1e1; }
+.banner.yellow { background: #fff3c4; }
+.banner.gray { background: var(--c-gray100); color: var(--ink-soft); }
+.banner a { color: inherit; }
+.summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.summary-grid .metric.working { background: var(--c-sky100); }
+.summary-grid .metric.done { background: #e6f7ef; }
+.summary-grid .metric.idle { background: #fff; }
+.summary-grid .metric.error { background: #ffe1e1; }
+.summary-sub { margin: 6px 0 0; color: var(--ink-soft); font-size: 12px; }
+.auto-cards { display: grid; gap: 12px; margin-top: 14px; }
+.auto-card { padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--win); box-shadow: var(--shadow); }
+.auto-card.highlight { outline: 3px solid var(--c-500); outline-offset: 2px; }
+.auto-card .auto-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.auto-card .auto-head h3 { margin: 0; font-size: 16px; flex: 1 1 auto; }
+.auto-card .auto-sub { margin: 4px 0 8px; color: var(--ink-soft); font-size: 12px; }
+.task-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.task-row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.task-row.highlight { background: var(--c-100); border-radius: 8px; }
+.task-row .status-dot { position: static; }
+.task-row small { color: var(--ink-soft); }
+.auto-meta { margin: 8px 0 0; color: var(--ink-soft); font-size: 12px; }
+.auto-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.auto-log { margin: 8px 0 0; padding-left: 16px; font-size: 11px; color: var(--ink-soft); }
+.status-dot.idle { background: var(--c-gray300); }
+.status-dot.running { background: var(--c-500); animation: blinkDot .9s steps(2) infinite; }
+.status-dot.done { background: #3fbf8a; }
+.status-dot.planned { background: var(--c-gray200); }
+.status-pill.running { background: var(--c-sky100); }
+.status-pill.done { background: #e6f7ef; }
+.status-pill.idle { background: #fff; }
+.status-pill.planned { background: var(--c-gray100); color: var(--ink-soft); }
+.empty-state { padding: 40px 20px; text-align: center; color: var(--ink-soft); border: 2px dashed var(--c-gray300); border-radius: 14px; background: var(--win); }
+.toast { position: fixed; left: 50%; bottom: 24px; z-index: 999; transform: translateX(-50%); padding: 10px 16px; border: 2px solid var(--ink); border-radius: 12px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; box-shadow: var(--shadow); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.office-block { margin-top: 14px; }

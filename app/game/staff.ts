@@ -1,82 +1,55 @@
-// 인사기록부 — 직원 + 대표 1명
-// 실제 내용은 프로젝트 루트의 company.config.ts 에서 가져옵니다.
-// 이 파일은 고칠 필요 없어요. 이름·성격·색을 바꾸려면 company.config.ts 를 여세요.
-
-import { CEO_PROFILE, DEPARTMENTS, PENDING_INTEGRATIONS, STAFF_LIST } from "../../company.config";
+// 직원 = 자동화의 하위 작업. 사무실 설정(automations[].tasks[])에서 파생한다.
+import type { AutomationDef } from "../workspaces/types";
+import { agentId } from "./office-model";
 
 export type StaffSeed = {
+  /** `${automationId}.${taskId}` */
   id: string;
-  name: string;
-  callsign?: string;
-  role: string;
+  automationId: string;
+  taskId: string;
   deptId: string;
-  rank: "lead" | "member" | "ceo";
+  /** 직원 이름 = 업무명 */
+  name: string;
+  role: string;
+  planned: boolean;
   hair: string;
   shirt: string;
   accent: string;
   skin: string;
-  /** 자리를 비웠을 때 혼잣말하는 생각 */
-  thoughts: string[];
 };
 
+const PALETTE: [string, string, string][] = [
+  ["#6b3d34", "#dbeafe", "#3b82f6"],
+  ["#2f2a3d", "#cbd5e1", "#bfdbfe"],
+  ["#8a4a3c", "#bfdbfe", "#3b82f6"],
+  ["#372b4a", "#f1f5f9", "#cbd5e1"],
+  ["#c26e4b", "#3b82f6", "#e0f2fe"],
+  ["#2d4b46", "#bfdbfe", "#bfdbfe"],
+];
 const SKIN = ["#ffdcc4", "#f7cdae", "#ffe3cf", "#eec39f"];
 
-function skin(i: number) {
-  return SKIN[i % SKIN.length];
+/** 자동화 목록 → 직원 목록 (설정 순서 유지) */
+export function buildStaff(automations: AutomationDef[]): StaffSeed[] {
+  const out: StaffSeed[] = [];
+  let i = 0;
+  for (const a of automations) {
+    for (const t of a.tasks) {
+      const colors = t.colors ?? PALETTE[i % PALETTE.length];
+      out.push({
+        id: agentId(a.id, t.id),
+        automationId: a.id,
+        taskId: t.id,
+        deptId: a.dept,
+        name: t.name,
+        role: t.role,
+        planned: Boolean(t.planned),
+        hair: colors[0],
+        shirt: colors[1],
+        accent: colors[2],
+        skin: SKIN[i % SKIN.length],
+      });
+      i += 1;
+    }
+  }
+  return out;
 }
-
-let seq = 0;
-function make(
-  dept: string,
-  rank: StaffSeed["rank"],
-  name: string,
-  role: string,
-  colors: [string, string, string],
-  thoughts: string[],
-  callsign?: string,
-): StaffSeed {
-  const i = seq++;
-  return {
-    id: `${dept}-${rank === "lead" ? "lead" : `m${i}`}`,
-    name,
-    callsign,
-    role,
-    deptId: dept,
-    rank,
-    hair: colors[0],
-    shirt: colors[1],
-    accent: colors[2],
-    skin: skin(i),
-    thoughts,
-  };
-}
-
-export const CEO: StaffSeed = {
-  id: "ceo",
-  name: CEO_PROFILE.name,
-  callsign: CEO_PROFILE.callsign,
-  role: CEO_PROFILE.role,
-  deptId: "ceo",
-  rank: "ceo",
-  hair: CEO_PROFILE.hair,
-  shirt: CEO_PROFILE.shirt,
-  accent: CEO_PROFILE.accent,
-  skin: CEO_PROFILE.skin,
-  thoughts: [...CEO_PROFILE.thoughts],
-};
-
-export const STAFF: StaffSeed[] = STAFF_LIST.map((s) =>
-  make(s.dept, s.rank, s.name, s.role, s.colors, s.thoughts, s.callsign),
-);
-
-export const DEPT_LEAD: Record<string, StaffSeed> = Object.fromEntries(
-  STAFF.filter((s) => s.rank === "lead").map((s) => [s.deptId, s]),
-);
-
-/** 부서별 오늘 업무 · 한줄보고 */
-export const DEPT_BRIEF: Record<string, { task: string; report: string }> = Object.fromEntries(
-  DEPARTMENTS.map((d) => [d.id, { task: d.task, report: d.report }]),
-);
-
-/** 아직 외부 연동이 안 붙은 부서 → 화면에 "연동 대기"로 표시 */
-export const BLOCK_NEED: Record<string, string> = PENDING_INTEGRATIONS;

@@ -1,16 +1,11 @@
-// 오피스 월드 맵
+// 오피스 월드 맵 — 보이는 부서만 4열로 배치(행 수 가변), 라운지는 마지막 행 아래 고정.
 // 타일 그리드 기반. 0 = 걸을 수 있음, 1 = 막힘(벽·가구)
-
-import { DEPARTMENTS } from "../../company.config";
 
 export const TILE = 18;
 export const COLS = 74;
-export const ROWS = 58;
-export const WORLD_W = COLS * TILE;
-export const WORLD_H = ROWS * TILE;
 
 export type Pt = { x: number; y: number };
-export type RoomKind = "dept" | "ceo" | "meeting" | "lounge";
+export type RoomKind = "dept" | "lounge";
 
 export type Desk = {
   /** 책상 상판 좌측 타일 */
@@ -18,6 +13,8 @@ export type Desk = {
   deskY: number;
   /** 앉는 자리(경로 목적지) */
   seat: Pt;
+  /** 오류일 때 서 있는 자리(책상 옆) */
+  side: Pt;
 };
 
 export type Room = {
@@ -32,30 +29,62 @@ export type Room = {
   h: number;
   doors: Pt[];
   desks: Desk[];
-  /** 그 방 안에서 서성일 수 있는 자리 */
-  loiter: Pt[];
+  /** 라운지 소파 좌석 */
+  seats: Pt[];
 };
 
-/** 부서 방 배치 — 4열 3행 */
+export type Prop = {
+  kind: "desk" | "monitor" | "table" | "sofa" | "coffee" | "plant" | "shelf" | "screen" | "rug" | "cabinet" | "whiteboard";
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label?: string;
+};
+
+export type DeptMeta = { id: string; name: string; short: string; icon: string };
+
+export type World = {
+  cols: number;
+  rows: number;
+  worldW: number;
+  worldH: number;
+  deptRooms: Room[];
+  lounge: Room;
+  rooms: Room[];
+  props: Prop[];
+  grid: Uint8Array;
+  walkable(x: number, y: number): boolean;
+  roomOf(id: string): Room;
+  /** 방 안쪽 문 앞 타일 */
+  doorApproach(room: Room): Pt;
+};
+
+/** 부서 방 배치 — 4열, 행 간격 14 (방 높이 11 + 복도 3) */
 const COL_X = [2, 20, 38, 56];
-const ROW_Y = [17, 31, 45];
+const ROW0_Y = 2;
+const ROW_GAP = 14;
 const DEPT_W = 15;
 const DEPT_H = 11;
+const LOUNGE_W = 20;
+const LOUNGE_H = 12;
+/** 부서당 좌석 6석 (2줄 × 3) */
+export const SEATS_PER_DEPT = 6;
 
-// 부서 이름·아이콘은 company.config.ts 에서 가져옵니다.
-const DEPT_LAYOUT: { id: string; name: string; short: string; icon: string }[] = DEPARTMENTS.map(
-  (d) => ({ id: d.id, name: d.name, short: d.short, icon: d.icon }),
-);
-
-function deptRoom(index: number): Room {
-  const meta = DEPT_LAYOUT[index];
+function deptRoom(meta: DeptMeta, index: number): Room {
   const x = COL_X[index % 4];
-  const y = ROW_Y[Math.floor(index / 4)];
-  const desks: Desk[] = [3, 7, 11].map((dx) => ({
-    deskX: x + dx - 1,
-    deskY: y + 5,
-    seat: { x: x + dx, y: y + 6 },
-  }));
+  const y = ROW0_Y + Math.floor(index / 4) * ROW_GAP;
+  const desks: Desk[] = [];
+  for (const dy of [3, 6]) {
+    for (const dx of [3, 7, 11]) {
+      desks.push({
+        deskX: x + dx - 1,
+        deskY: y + dy,
+        seat: { x: x + dx, y: y + dy + 1 },
+        side: { x: x + dx + 1, y: y + dy + 1 },
+      });
+    }
+  }
   return {
     ...meta,
     kind: "dept",
@@ -68,176 +97,71 @@ function deptRoom(index: number): Room {
       { x: x + 8, y },
     ],
     desks,
-    loiter: [
-      { x: x + 1, y: y + 8 },
-      { x: x + 5, y: y + 8 },
-      { x: x + 9, y: y + 8 },
-      { x: x + 13, y: y + 3 },
+    seats: [],
+  };
+}
+
+function loungeRoom(rowCount: number): Room {
+  const x = 2;
+  const y = ROW0_Y + rowCount * ROW_GAP;
+  const seats: Pt[] = [];
+  for (const sx of [4, 5, 6, 7, 8, 11, 12, 13, 14, 15]) seats.push({ x: x + sx, y: y + 4 });
+  return {
+    id: "lounge",
+    name: "라운지",
+    short: "lounge",
+    icon: "☕",
+    kind: "lounge",
+    x,
+    y,
+    w: LOUNGE_W,
+    h: LOUNGE_H,
+    doors: [
+      { x: x + 9, y },
+      { x: x + 10, y },
     ],
+    desks: [],
+    seats,
   };
 }
 
-export const CEO_ROOM: Room = {
-  id: "ceo",
-  name: "대표실",
-  short: "ceo.office",
-  icon: "🎀",
-  kind: "ceo",
-  x: 2,
-  y: 2,
-  w: 18,
-  h: 12,
-  doors: [
-    { x: 10, y: 13 },
-    { x: 11, y: 13 },
-  ],
-  desks: [{ deskX: 9, deskY: 6, seat: { x: 11, y: 5 } }],
-  loiter: [
-    { x: 8, y: 10 },
-    { x: 11, y: 10 },
-    { x: 14, y: 10 },
-    { x: 6, y: 8 },
-  ],
-};
+/** 보이는 부서 목록으로 월드를 만든다. 부서가 0개여도 라운지만 있는 월드가 나온다. */
+export function createWorld(depts: DeptMeta[]): World {
+  const deptRooms = depts.map((meta, i) => deptRoom(meta, i));
+  const rowCount = Math.ceil(deptRooms.length / 4);
+  const lounge = loungeRoom(rowCount);
+  const rooms = [...deptRooms, lounge];
+  const rows = lounge.y + LOUNGE_H + 2;
+  const cols = COLS;
 
-export const MEETING_ROOM: Room = {
-  id: "meeting",
-  name: "대표 승인 회의실",
-  short: "meeting.hall",
-  icon: "💬",
-  kind: "meeting",
-  x: 23,
-  y: 2,
-  w: 26,
-  h: 12,
-  doors: [
-    { x: 35, y: 13 },
-    { x: 36, y: 13 },
-  ],
-  desks: [],
-  loiter: [
-    { x: 26, y: 10 },
-    { x: 45, y: 10 },
-  ],
-};
-
-export const LOUNGE_ROOM: Room = {
-  id: "lounge",
-  name: "AI 라운지",
-  short: "lounge.chill",
-  icon: "☕",
-  kind: "lounge",
-  x: 52,
-  y: 2,
-  w: 20,
-  h: 12,
-  doors: [
-    { x: 61, y: 13 },
-    { x: 62, y: 13 },
-  ],
-  desks: [],
-  loiter: [
-    { x: 56, y: 7 },
-    { x: 58, y: 7 },
-    { x: 60, y: 7 },
-    { x: 63, y: 10 },
-    { x: 66, y: 6 },
-    { x: 69, y: 8 },
-  ],
-};
-
-/** 회의실 좌석 8개 (테이블 위·아래) */
-export const MEETING_SEATS: Pt[] = [
-  { x: 31, y: 5 },
-  { x: 34, y: 5 },
-  { x: 37, y: 5 },
-  { x: 40, y: 5 },
-  { x: 31, y: 9 },
-  { x: 34, y: 9 },
-  { x: 37, y: 9 },
-  { x: 40, y: 9 },
-];
-
-/** 대표 책상 앞 보고 위치 */
-export const CEO_REPORT_SPOT: Pt = { x: 11, y: 9 };
-export const CEO_SEAT: Pt = { x: 11, y: 5 };
-/** 출입구 (출근·퇴근) */
-export const ENTRANCE: Pt = { x: 36, y: 57 };
-
-export const DEPT_ROOMS: Room[] = DEPT_LAYOUT.map((_, i) => deptRoom(i));
-export const ROOMS: Room[] = [CEO_ROOM, MEETING_ROOM, LOUNGE_ROOM, ...DEPT_ROOMS];
-
-export type Prop = {
-  kind:
-    | "desk"
-    | "monitor"
-    | "table"
-    | "sofa"
-    | "coffee"
-    | "plant"
-    | "shelf"
-    | "screen"
-    | "ceo-desk"
-    | "rug"
-    | "cabinet"
-    | "whiteboard";
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  label?: string;
-};
-
-/** 가구 목록 — 렌더링과 충돌 판정에 함께 사용 */
-export const PROPS: Prop[] = [];
-
-for (const room of DEPT_ROOMS) {
-  for (const desk of room.desks) {
-    PROPS.push({ kind: "desk", x: desk.deskX, y: desk.deskY, w: 3, h: 1 });
+  const props: Prop[] = [];
+  for (const room of deptRooms) {
+    for (const desk of room.desks) props.push({ kind: "desk", x: desk.deskX, y: desk.deskY, w: 3, h: 1 });
+    props.push({ kind: "shelf", x: room.x + 1, y: room.y + 1, w: 3, h: 1 });
+    props.push({ kind: "plant", x: room.x + 13, y: room.y + 1, w: 1, h: 1 });
+    props.push({ kind: "cabinet", x: room.x + 12, y: room.y + 9, w: 2, h: 1 });
   }
-  PROPS.push({ kind: "shelf", x: room.x + 1, y: room.y + 1, w: 3, h: 1 });
-  PROPS.push({ kind: "plant", x: room.x + 13, y: room.y + 1, w: 1, h: 1 });
-  PROPS.push({ kind: "cabinet", x: room.x + 12, y: room.y + 8, w: 2, h: 1 });
-}
+  props.push({ kind: "sofa", x: lounge.x + 4, y: lounge.y + 3, w: 5, h: 1 });
+  props.push({ kind: "sofa", x: lounge.x + 11, y: lounge.y + 3, w: 5, h: 1 });
+  props.push({ kind: "table", x: lounge.x + 7, y: lounge.y + 7, w: 4, h: 2 });
+  props.push({ kind: "coffee", x: lounge.x + 15, y: lounge.y + 8, w: 3, h: 1, label: "☕" });
+  props.push({ kind: "plant", x: lounge.x + 1, y: lounge.y + 10, w: 1, h: 1 });
+  props.push({ kind: "plant", x: lounge.x + 18, y: lounge.y + 1, w: 1, h: 1 });
 
-PROPS.push({ kind: "ceo-desk", x: 9, y: 6, w: 5, h: 2 });
-PROPS.push({ kind: "rug", x: 8, y: 9, w: 7, h: 3 });
-PROPS.push({ kind: "plant", x: 4, y: 4, w: 1, h: 1 });
-PROPS.push({ kind: "plant", x: 17, y: 4, w: 1, h: 1 });
-
-PROPS.push({ kind: "table", x: 31, y: 6, w: 10, h: 3 });
-PROPS.push({ kind: "screen", x: 28, y: 3, w: 5, h: 1, label: "TOP 3" });
-PROPS.push({ kind: "whiteboard", x: 42, y: 3, w: 5, h: 1 });
-PROPS.push({ kind: "plant", x: 25, y: 11, w: 1, h: 1 });
-PROPS.push({ kind: "plant", x: 46, y: 11, w: 1, h: 1 });
-
-PROPS.push({ kind: "sofa", x: 56, y: 5, w: 5, h: 1 });
-PROPS.push({ kind: "table", x: 62, y: 8, w: 3, h: 2 });
-PROPS.push({ kind: "coffee", x: 66, y: 4, w: 3, h: 1, label: "☕" });
-PROPS.push({ kind: "plant", x: 70, y: 11, w: 1, h: 1 });
-PROPS.push({ kind: "plant", x: 53, y: 11, w: 1, h: 1 });
-
-/** 걷기 가능 여부 그리드 */
-function buildGrid(): Uint8Array {
-  const grid = new Uint8Array(COLS * ROWS); // 0 = walkable
-
+  const grid = new Uint8Array(cols * rows);
   const block = (x: number, y: number) => {
-    if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return;
-    grid[y * COLS + x] = 1;
+    if (x < 0 || y < 0 || x >= cols || y >= rows) return;
+    grid[y * cols + x] = 1;
   };
-
-  // 외벽
-  for (let x = 0; x < COLS; x += 1) {
+  for (let x = 0; x < cols; x += 1) {
     block(x, 0);
-    block(x, ROWS - 1);
+    block(x, rows - 1);
   }
-  for (let y = 0; y < ROWS; y += 1) {
+  for (let y = 0; y < rows; y += 1) {
     block(0, y);
-    block(COLS - 1, y);
+    block(cols - 1, y);
   }
-
-  // 방 벽
-  for (const room of ROOMS) {
+  for (const room of rooms) {
     for (let x = room.x; x < room.x + room.w; x += 1) {
       block(x, room.y);
       block(x, room.y + room.h - 1);
@@ -247,41 +171,29 @@ function buildGrid(): Uint8Array {
       block(room.x + room.w - 1, y);
     }
   }
-
-  // 가구
-  for (const prop of PROPS) {
+  for (const prop of props) {
     if (prop.kind === "rug") continue;
     for (let y = prop.y; y < prop.y + prop.h; y += 1) {
       for (let x = prop.x; x < prop.x + prop.w; x += 1) block(x, y);
     }
   }
-
-  // 문 뚫기
-  for (const room of ROOMS) {
-    for (const door of room.doors) grid[door.y * COLS + door.x] = 0;
+  for (const room of rooms) {
+    for (const door of room.doors) grid[door.y * cols + door.x] = 0;
   }
-  // 출입구
-  grid[ENTRANCE.y * COLS + ENTRANCE.x] = 0;
-  grid[ENTRANCE.y * COLS + ENTRANCE.x + 1] = 0;
 
-  return grid;
-}
+  const walkable = (x: number, y: number) => {
+    if (x < 0 || y < 0 || x >= cols || y >= rows) return false;
+    return grid[y * cols + x] === 0;
+  };
+  const roomOf = (id: string) => {
+    const room = rooms.find((r) => r.id === id);
+    if (!room) throw new Error(`unknown room: ${id}`);
+    return room;
+  };
+  const doorApproach = (room: Room): Pt => {
+    const door = room.doors[0];
+    return door.y === room.y ? { x: door.x, y: door.y - 1 } : { x: door.x, y: door.y + 1 };
+  };
 
-export const GRID = buildGrid();
-
-export function walkable(x: number, y: number): boolean {
-  if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return false;
-  return GRID[y * COLS + x] === 0;
-}
-
-export function roomOf(id: string): Room {
-  const room = ROOMS.find((r) => r.id === id);
-  if (!room) throw new Error(`unknown room: ${id}`);
-  return room;
-}
-
-/** 방 안쪽 문 앞 타일 */
-export function doorApproach(room: Room): Pt {
-  const door = room.doors[0];
-  return door.y === room.y ? { x: door.x, y: door.y - 1 } : { x: door.x, y: door.y + 1 };
+  return { cols, rows, worldW: cols * TILE, worldH: rows * TILE, deptRooms, lounge, rooms, props, grid, walkable, roomOf, doorApproach };
 }
