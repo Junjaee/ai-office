@@ -1,0 +1,52 @@
+name: 지출·정산
+
+on:
+  schedule:
+    - cron: "0 * * * *"        # 매시간 정각(UTC=KST 시간 간격 동일)
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: "화면에서 누른 요청 id (비워도 됨)"
+        type: string
+        default: ""
+
+# runs API 의 display_title 로 "내가 누른 실행"을 결정적으로 매칭한다 — 바꾸지 말 것
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('ledger · {0}', inputs.request_id) || 'ledger · 예약' }}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ledger
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 의존성 설치
+        run: |
+          python --version
+          python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
+
+      - name: git 사용자 설정 (상태 파일 커밋용)
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+
+      - name: 실행
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/ledger/run_ledger.py --config automations/ledger/config.actions.yaml

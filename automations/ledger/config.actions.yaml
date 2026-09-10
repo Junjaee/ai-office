@@ -1,0 +1,13 @@
+# 지출·정산 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
+# 시트/카드/분류 등 작업 상수는 run_ledger.py 안에 있다(비밀 아님).
+
+# 결과물 위치 (있으면 카드에 "결과 열기" 버튼) — 가계부 시트
+result_link: "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit"
+
+# 상태 보고: 저장소 루트(체크아웃 위치)에 커밋
+office_repo: "."
+office_workspace: "home"     # public/status/home/ 에 상태 파일
+next_run: "매시간"            # 카드에 보일 다음 실행 문구
+
+# 화면 직원(하위 작업) id — app/workspaces/home.ts 의 ledger.tasks 와 일치해야 함
+tasks: [collect, sheet]
