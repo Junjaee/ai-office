@@ -1,6 +1,6 @@
 // /api/run · /api/status 순수 로직. vinext/next 를 import 하지 않고, 시간·GitHub·저장소는 deps 로 주입받는다.
 import { DAILY_RUN_LIMIT, RUNS_PER_PAGE, STATUS_CACHE_MS, TOO_SOON_MS } from "./config.ts";
-import { GitHubAuthError, GitHubUnavailableError, type GitHubLike, type RunSummary } from "./github.ts";
+import { GitHubAuthError, GitHubNotFoundError, GitHubUnavailableError, type GitHubLike, type RunSummary } from "./github.ts";
 
 // ── 사무실 설정(구조만 맞으면 됨 — app/workspaces 의 WorkspaceConfig 와 호환) ──
 export type AutomationLike = { id: string; workflow?: string; inputs?: Record<string, string> };
@@ -100,9 +100,18 @@ export function toRunView(run: RunSummary): RunView {
 }
 
 // ── deps / env ──
+export type GitHubErrorKind = null | "auth" | "not_found" | "unavailable";
+
+function classifyGitHubError(error: unknown): GitHubErrorKind {
+  if (error instanceof GitHubAuthError) return "auth";
+  if (error instanceof GitHubNotFoundError) return "not_found";
+  return "unavailable";
+}
+
 export type StatusBody = {
   checkedAt: string;
-  config: { canRun: boolean; tokenExpiresAt: string | null };
+  /** githubError: null 정상 / auth 401·403 / not_found 저장소 접근 불가 / unavailable 5xx·네트워크 */
+  config: { canRun: boolean; tokenExpiresAt: string | null; githubError: GitHubErrorKind };
   runs: Record<string, RunView | null>;
   files: Record<string, unknown | null>;
   source: "github" | "static";
@@ -271,6 +280,7 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
   const runs: Record<string, RunView | null> = {};
   const files: Record<string, unknown | null> = {};
   let source: StatusBody["source"] = github ? "github" : "static";
+  let githubError: GitHubErrorKind = null;
 
   if (github) {
     try {
@@ -279,8 +289,9 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
         const run = latest.get(a.workflow as string);
         runs[a.id] = run ? toRunView(run) : null;
       }
-    } catch {
+    } catch (error) {
       source = "static";
+      githubError = classifyGitHubError(error);
     }
   }
 
@@ -290,8 +301,10 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
     if (github) {
       try {
         file = await github.readStatusFile(ws, a.id);
-        ok = true;
+        // runs 조회가 실패했는데 파일도 없으면(404) 토큰이 저장소를 못 보는 것 → 정적 파일로
+        ok = file != null || githubError === null;
       } catch {
+        // Contents 만 실패(권한에 Contents:Read 없음 등)면 실행은 되므로 canRun 은 유지하고 정적 파일로 대신한다
         ok = false;
       }
     }
@@ -304,7 +317,12 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
 
   return {
     checkedAt: new Date(now).toISOString(),
-    config: { canRun: Boolean(github), tokenExpiresAt: github?.tokenExpiresAt ?? null },
+    config: {
+      // 토큰이 있어도 인증 실패·저장소 접근 불가면 시작 버튼을 숨긴다
+      canRun: Boolean(github) && githubError !== "auth" && githubError !== "not_found",
+      tokenExpiresAt: github?.tokenExpiresAt ?? null,
+      githubError,
+    },
     runs,
     files,
     source,

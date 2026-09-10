@@ -116,6 +116,8 @@ export const BANNERS = {
   scheduleMissed: (ago: string) => `예약 실행이 밀리고 있어요 (마지막 실행 ${ago}) · 실행기가 켜져 있는지 확인해 주세요`,
   tokenExpiring: (days: number) => `실행 연결이 ${days}일 뒤 끊겨요 · 설정 안내 보기`,
   tokenBroken: "실행 연결이 끊겼어요 · 설정을 다시 해야 해요",
+  tokenNoRepo: "실행 연결이 잘못됐어요 · 토큰이 ai-office 저장소를 못 봐요 (토큰의 Repository access 에 ai-office 를 넣어 주세요)",
+  githubDown: "GitHub 응답이 없어요 · 잠시 뒤 자동으로 다시 확인해요",
   staleSource: (minutes: number) => `최신 상태를 못 가져왔어요 (${minutes}분 전 기준)`,
 } as const;
 

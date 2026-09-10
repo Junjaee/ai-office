@@ -4,7 +4,7 @@ import {
   decideRun, parseRequestId, latestValidRunByWorkflow, kstDateKey, dailyCount, addDailyCount,
   createRunApiStores, handleRun, handleStatus, isCrossOrigin,
 } from "../worker/run-api.ts";
-import { GitHubClient, GitHubAuthError, GitHubUnavailableError } from "../worker/github.ts";
+import { GitHubClient, GitHubAuthError, GitHubUnavailableError, GitHubNotFoundError } from "../worker/github.ts";
 import { DAILY_RUN_LIMIT, STATUS_CACHE_MS, TOO_SOON_MS } from "../worker/config.ts";
 
 // ── 공통 가짜 객체 ──
@@ -322,7 +322,7 @@ test("handleStatus: runs 를 자동화별로 매핑, cancelled 제외, requestId
   assert.equal(res.status, 200);
   const body = await res.json();
   assert.equal(body.checkedAt, new Date(NOW).toISOString());
-  assert.deepEqual(body.config, { canRun: true, tokenExpiresAt: "2027-09-01T00:00:00.000Z" });
+  assert.deepEqual(body.config, { canRun: true, tokenExpiresAt: "2027-09-01T00:00:00.000Z", githubError: null });
   assert.equal(body.source, "github");
   assert.deepEqual(body.runs, {
     minutes: {
@@ -362,11 +362,36 @@ test("handleStatus: runs API 실패 시 runs 빈 객체 + source static", async 
   assert.deepEqual(body.files.minutes, { id: "minutes" });
 });
 
+test("handleStatus: 토큰이 저장소를 못 보면(404) canRun false · githubError not_found · 정적 파일 폴백", async () => {
+  const github = fakeGithub({ runsError: new GitHubNotFoundError(), files: {} });
+  const env = fakeEnv({ "/status/assembly/minutes.json": { id: "minutes", from: "static" } });
+  const body = await (await handleStatus(statusRequest(), env, makeDeps({ github }))).json();
+  assert.equal(body.config.canRun, false);
+  assert.equal(body.config.githubError, "not_found");
+  assert.equal(body.source, "static");
+  assert.deepEqual(body.files.minutes, { id: "minutes", from: "static" }, "Contents 404 여도 정적 파일을 쓴다");
+});
+
+test("handleStatus: 인증 실패(401)면 canRun false · githubError auth", async () => {
+  const github = fakeGithub({ runsError: new GitHubAuthError(401), fileError: new GitHubAuthError(401) });
+  const env = fakeEnv({ "/status/assembly/minutes.json": { id: "minutes" } });
+  const body = await (await handleStatus(statusRequest(), env, makeDeps({ github }))).json();
+  assert.equal(body.config.canRun, false);
+  assert.equal(body.config.githubError, "auth");
+});
+
+test("handleStatus: 5xx 는 canRun 유지 · githubError unavailable", async () => {
+  const github = fakeGithub({ runsError: new GitHubUnavailableError(500), files: { minutes: { id: "minutes" } } });
+  const body = await (await handleStatus(statusRequest(), fakeEnv(), makeDeps({ github }))).json();
+  assert.equal(body.config.canRun, true);
+  assert.equal(body.config.githubError, "unavailable");
+});
+
 test("handleStatus: 토큰 없으면 runs 빈 객체 · canRun false · static 파일", async () => {
   const env = fakeEnv({ "/status/assembly/minutes.json": { id: "minutes", from: "static" } });
   env.GITHUB_TOKEN = undefined;
   const body = await (await handleStatus(statusRequest(), env, makeDeps({ github: null }))).json();
-  assert.deepEqual(body.config, { canRun: false, tokenExpiresAt: null });
+  assert.deepEqual(body.config, { canRun: false, tokenExpiresAt: null, githubError: null });
   assert.deepEqual(body.runs, {});
   assert.deepEqual(body.files, { minutes: { id: "minutes", from: "static" }, mail: null });
   assert.equal(body.source, "static");

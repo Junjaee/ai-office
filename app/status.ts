@@ -21,7 +21,7 @@ import type { AutomationDef, WorkspaceConfig } from "./workspaces/types";
 /** Worker `/api/status` 응답 (worker/run-api.ts StatusBody 와 같은 모양) */
 export type ApiStatus = {
   checkedAt: string;
-  config: { canRun: boolean; tokenExpiresAt?: string | null };
+  config: { canRun: boolean; tokenExpiresAt?: string | null; githubError?: null | "auth" | "not_found" | "unavailable" };
   runs: Record<string, RunInfo | null>;
   files: Record<string, RealStatus | null>;
   source: StatusSource;
@@ -228,8 +228,13 @@ export function buildLiveState(ws: WorkspaceConfig, api: ApiStatus | null, local
     if (v.state === "error") banners.push({ key: `failed:${v.id}`, level: "error", text: BANNERS.failed(v.name), href: v.runUrl });
   }
   for (const b of collectWarnings(visibleViews, now)) banners.push({ key: b.kind, level: b.level, text: b.text });
-  if (api && !api.config.canRun && api.source === "github") {
+  const ghErr = api?.config.githubError ?? null;
+  if (ghErr === "not_found") {
+    banners.push({ key: "token", level: "error", text: BANNERS.tokenNoRepo });
+  } else if (ghErr === "auth" || (api && !api.config.canRun && api.source === "github")) {
     banners.push({ key: "token", level: "error", text: BANNERS.tokenBroken });
+  } else if (ghErr === "unavailable") {
+    banners.push({ key: "github-down", level: "warn", text: BANNERS.githubDown });
   } else if (api?.config.tokenExpiresAt) {
     const days = Math.floor((Date.parse(api.config.tokenExpiresAt) - now.getTime()) / 86400000);
     if (Number.isFinite(days) && days <= 30) {

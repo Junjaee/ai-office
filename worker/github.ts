@@ -13,6 +13,15 @@ export class GitHubAuthError extends Error {
   }
 }
 
+/** GitHub 이 404 를 돌려줌 — 토큰이 저장소를 못 봄(fine-grained 토큰의 Repository access 에 ai-office 가 없음) */
+export class GitHubNotFoundError extends Error {
+  status = 404;
+  constructor(message = "GitHub returned 404 (token cannot see the repository)") {
+    super(message);
+    this.name = "GitHubNotFoundError";
+  }
+}
+
 /** GitHub 5xx · 네트워크 오류 · 예상 밖 응답 */
 export class GitHubUnavailableError extends Error {
   status: number | null;
@@ -93,6 +102,7 @@ export class GitHubClient implements GitHubLike {
   /** GET /repos/{o}/{r}/actions/runs?per_page=N → 화면에 필요한 필드만 추린다 */
   async listRuns(perPage: number): Promise<RunSummary[]> {
     const res = await this.#request(`/repos/${OWNER}/${REPO}/actions/runs?per_page=${perPage}`);
+    if (res.status === 404) throw new GitHubNotFoundError();
     if (!res.ok) throw new GitHubUnavailableError(res.status, `runs returned ${res.status}`);
     const data = (await res.json()) as { workflow_runs?: Array<Record<string, unknown>> };
     return (data.workflow_runs ?? []).map((r) => ({
