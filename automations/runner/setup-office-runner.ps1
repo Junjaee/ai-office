@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   사무실 PC를 GitHub Actions 자체 실행기(self-hosted runner)로 등록한다.
 
@@ -20,6 +20,10 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+# 구형 Windows PowerShell은 TLS 1.2를 기본으로 켜지 않아 GitHub 연결이 실패한다. 회사 프록시가 있으면 시스템 설정을 따른다.
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+[Net.WebRequest]::DefaultWebProxy = [Net.WebRequest]::GetSystemWebProxy()
+[Net.WebRequest]::DefaultWebProxy.Credentials = [Net.CredentialCache]::DefaultNetworkCredentials
 function Step($msg) { Write-Host "`n== $msg" -ForegroundColor Cyan }
 
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
