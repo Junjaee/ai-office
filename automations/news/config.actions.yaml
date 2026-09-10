@@ -1,0 +1,31 @@
+# 기사 수집 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
+
+# 검색어. group 은 화면·문서에서 나눠 보일 묶음 이름이다. 자유롭게 더하고 뺄 수 있다.
+queries:
+  - { q: "이준석",      group: "의원 관련" }
+  - { q: "이준석 의원", group: "의원 관련" }
+  - { q: "개혁신당",    group: "의원 관련" }
+  - { q: "재경위",      group: "위원회 동향" }
+  - { q: "예결위",      group: "위원회 동향" }
+
+search_days: 1         # 검색어당 최근 며칠 기사를 받아올지 (3시간마다 돌므로 1일이면 충분)
+manifest_days: 60      # 이미 본 기사 기록을 며칠 보관할지 (파일이 끝없이 커지지 않게)
+
+# 저장 위치: 내 드라이브/직장/국회/01. 의정활동/12. 언론모니터링 (없으면 자동으로 만든다)
+drive_parent_id: "1v4HQgeaGstU3Arwr7Kr5D7uUYzk5Amdp"   # 01. 의정활동
+drive_folder_name: "12. 언론모니터링"
+
+request_delay: 1.0     # 요청 간격(초). 1초 이상 유지
+retries: 3
+timeout: 30
+
+# 결과물 위치 (있으면 카드에 "결과 폴더 열기" 버튼). 첫 실행 뒤 실제 폴더 주소로 채운다
+result_link: ""
+
+# 상태 보고: 저장소 루트(체크아웃 위치)에 커밋
+office_repo: "."
+office_workspace: "assembly"   # 상태 파일을 쓸 사무실 (public/status/<id>/)
+next_run: "3시간마다"           # 카드에 보일 다음 실행 문구
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts 의 automations[].tasks[] (테스트로 일치 강제)
+tasks: [collect, digest]

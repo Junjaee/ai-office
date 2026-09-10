@@ -140,7 +140,11 @@ export const AUTOMATIONS: AutomationDef[] = [
     ],
   },
   { id: "news", dept: "brand", name: "기사 수집",
-    tasks: [{ id: "collect", name: "기사 수집", role: "의원 관련 기사 매일 수집·정리" }] },
+    workflow: "news.yml", schedule: "3시간마다",
+    tasks: [
+      { id: "collect", name: "기사 모으기", role: "구글 뉴스에서 의원·위원회 기사 검색", colors: ["#2f4858", "#e8eef2", "#0f766e"] },
+      { id: "digest", name: "요약 정리", role: "중복 기사를 합치고 묶음별로 정리해 드라이브에 저장", colors: ["#4a3b2f", "#f0e6d8", "#b45309"] },
+    ] },
   { id: "sns", dept: "strategy1", name: "SNS 확인",
     tasks: [
       { id: "facebook", name: "페이스북 확인", role: "페이스북 새 게시글 확인·알림" },

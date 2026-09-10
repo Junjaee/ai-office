@@ -17,6 +17,7 @@ except ImportError:  # pragma: no cover - requests 없는 환경
     _REQ_CONN = ()
 
 MSG_SITE = "국회 사이트에 연결할 수 없어요"
+MSG_NEWS = "뉴스 목록을 받아오지 못했어요"
 MSG_GOOGLE = "구글 드라이브 인증이 없거나 만료됐어요"
 MSG_DISK = "저장 공간이 부족해요"
 MSG_OTHER = "실행 중 문제가 생겼어요"
@@ -40,6 +41,9 @@ def to_korean(exc: BaseException) -> str:
     # 디스크 부족
     if (isinstance(exc, OSError) and exc.errno == errno.ENOSPC) or "디스크 여유" in msg:
         return MSG_DISK
+    # 뉴스 RSS: google_news 가 재시도 끝에 던지는 RuntimeError("뉴스 요청 실패 ...") — 국회 사이트보다 먼저 본다
+    if isinstance(exc, RuntimeError) and "뉴스 요청 실패" in msg:
+        return MSG_NEWS
     # 국회 사이트 연결: requests 연결/타임아웃, 또는 record_site가 재시도 끝에 던지는 RuntimeError("요청 실패 ...")
     if _REQ_CONN and isinstance(exc, _REQ_CONN):
         return MSG_SITE

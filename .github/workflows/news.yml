@@ -1,0 +1,60 @@
+name: 기사 수집
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"        # UTC. 3시간 간격이라 KST 로도 00·03·06·09·12·15·18·21시 정각이 된다
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: "화면에서 누른 요청 id (비워도 됨)"
+        type: string
+        default: ""
+
+# runs API 의 display_title 로 "내가 누른 실행"을 결정적으로 매칭한다 — 바꾸지 말 것
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('news · {0}', inputs.request_id) || 'news · 예약' }}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: news
+  cancel-in-progress: false
+
+jobs:
+  run:
+    # 기본은 GitHub 서버(ubuntu-latest). 국회 사이트처럼 해외 IP 를 막는 곳을 쓸 때만 아래 "사무실 PC" 블록으로 바꾼다.
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # ── 사무실 PC 에서 돌릴 때만 주석을 풀어 쓴다 (runs-on: [self-hosted, windows, kr-office]) ──
+    # defaults:
+    #   run:
+    #     # PC 의 PowerShell 프로필(Set-Location 등)을 읽지 않도록 -NoProfile. 이 줄을 지우면 상대 경로가 깨진다
+    #     shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ". '{0}'; exit $LASTEXITCODE"
+    steps:
+      - uses: actions/checkout@v4
+
+      # GitHub 서버에서만 필요 (사무실 PC 에는 Python 3.13 이 이미 있음)
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 의존성 설치
+        run: |
+          python --version
+          python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
+
+      - name: git 사용자 설정 (상태 파일 커밋용)
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+
+      - name: 실행
+        env:
+          # 필요한 비밀값만 남긴다. 값은 GitHub 저장소 Settings → Secrets 에서 넣는다
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/news/run_news.py --config automations/news/config.actions.yaml

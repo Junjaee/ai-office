@@ -149,7 +149,7 @@ def test_daily_with_open_api_uses_api_then_site_for_audit_and_recheck(tmp_path):
 
 
 def test_drive_storage_uses_drive_client(tmp_path):
-    from tests.test_drive_store import FakeDrive
+    from .test_drive_store import FakeDrive   # 같은 tests 패키지 안 (묶어 돌릴 때도 이름이 안 겹친다)
     drive = FakeDrive()
     cfg = tmp_path / "config.yaml"
     cfg.write_text(yaml.safe_dump(dict(storage="drive", drive_folder_id="root", current_th=22, recent_sessions=2,
