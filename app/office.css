@@ -324,6 +324,8 @@
 .summary-grid .metric.waiting { background: #fff; }
 .summary-grid .metric.error { background: #ffe1e1; }
 .summary-sub { margin: 6px 0 0; color: var(--ink-soft); font-size: 12px; }
+.summary-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.summary-row .summary-sub { margin: 0; }
 .auto-cards { display: grid; gap: 12px; margin-top: 14px; }
 .auto-card { padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--win); box-shadow: var(--shadow); }
 .auto-card.highlight { outline: 3px solid var(--c-500); outline-offset: 2px; }

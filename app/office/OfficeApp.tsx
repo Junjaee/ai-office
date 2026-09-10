@@ -164,15 +164,7 @@ export default function OfficeApp() {
             ))}
           </div>
           <span className="checked">{live.checkedAt ? `마지막 확인 ${live.checkedAt.toLocaleTimeString("ko-KR")}` : "상태 확인 중…"}</span>
-          {runnable.length > 0 ? (
-            canRun ? (
-              <button className="btn btn-primary btn-run" onClick={() => run("all")} disabled={busy.has("all") || allRunning || !live.loaded}>
-                {busy.has("all") ? "요청 중…" : "▶ 전체 시작"}
-              </button>
-            ) : (
-              <span className="status-pill error">실행 연결이 안 돼 있어요</span>
-            )
-          ) : null}
+          {runnable.length > 0 && !canRun ? <span className="status-pill error">실행 연결이 안 돼 있어요</span> : null}
         </nav>
 
         {live.banners.map((b) => (
@@ -196,7 +188,15 @@ export default function OfficeApp() {
             </div>
           ))}
         </section>
-        <p className="summary-sub">{live.loaded ? live.summary.brief : "자동화 상태를 불러오는 중…"}</p>
+        {/* 전체 시작은 따라다니는 머리글(sticky)에 두지 않는다 — 스크롤하면 카드의 ▶ 시작 위에 겹쳐 개별 시작 대신 눌렸다 */}
+        <div className="summary-row">
+          <p className="summary-sub">{live.loaded ? live.summary.brief : "자동화 상태를 불러오는 중…"}</p>
+          {runnable.length > 0 && canRun ? (
+            <button className="btn btn-ghost btn-run-all" onClick={() => run("all")} disabled={busy.has("all") || allRunning || !live.loaded}>
+              {busy.has("all") ? "요청 중…" : `▶ 전체 시작 · ${runnable.length}개`}
+            </button>
+          ) : null}
+        </div>
 
         <section className="office-block">
           {visibleDepts.length === 0 ? (

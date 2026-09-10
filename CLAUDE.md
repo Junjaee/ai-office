@@ -62,4 +62,4 @@ python -m pytest -q automations
 - `app/office/OfficeApp.tsx` 단일 페이지 화면. `app/game/` 월드(`world.ts`)·경로(`pathfinding.ts`)·직원(`staff.ts`)·상태→자리 번역(`office-model.ts`)·엔진(`engine.ts`)·렌더러(`OfficeWorld.tsx`).
 - `worker/` Cloudflare Worker: `index.ts`(라우팅) `run-api.ts`(`/api/run`, `/api/status`) `github.ts`(dispatch·runs·Contents) `config.ts`.
 - `automations/` 파이썬 자동화와 공통 모듈, `.github/workflows/` 실행 워크플로, `public/status/<사무실>/` 상태 파일.
-- `scripts/npm.sh` npm 명령을 드라이브 밖 로컬 작업 폴더에서 돌리는 도구. `templates/automation/` 새 자동화 뼈대. `.claude/skills/new-automation/` 새 자동화 절차.
+- `scripts/npm.sh` npm 명령을 드라이브 밖 로컬 작업 폴더에서 돌리는 도구. `scripts/npm.cmd` 는 명령 프롬프트·미리보기 도구(`.claude/launch.json`)용 — 그냥 `bash` 라고 부르면 WSL 이 잡히므로 Git Bash 를 찾아 npm.sh 를 부른다. `templates/automation/` 새 자동화 뼈대. `.claude/skills/new-automation/` 새 자동화 절차.

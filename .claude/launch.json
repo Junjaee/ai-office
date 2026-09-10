@@ -1,6 +1,17 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "ai-office-dev", "url": "http://localhost:3011", "port": 3011 }
+    {
+      "name": "ai-office-dev",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": [
+        "/c",
+        "scripts\\npm.cmd",
+        "dev",
+        "--port",
+        "3011"
+      ],
+      "port": 3011
+    }
   ]
 }
