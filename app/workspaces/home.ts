@@ -131,7 +131,7 @@ export const HIDDEN_DEPARTMENTS: string[] = [
  * 자동화 목록. 아직 워크플로가 없는 것은 "준비 중". 첫 워크플로가 생기면 workflow 한 줄만 채운다.
  */
 export const AUTOMATIONS: AutomationDef[] = [
-  { id: "ledger", dept: "research", name: "지출·정산", workflow: "ledger.yml", schedule: "매시간",
+  { id: "ledger", dept: "research", name: "지출·정산", workflow: "ledger.yml", schedule: "6시간마다",
     tasks: [
       { id: "collect", name: "내역 수집", role: "카드·계좌 지출 내역 받아오기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
       { id: "sheet", name: "시트 정리", role: "지출 시트 기록·월별 합계", colors: ["#4b3b2c", "#bfdbfe", "#cbd5e1"] },

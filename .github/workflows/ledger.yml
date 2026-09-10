@@ -2,7 +2,7 @@ name: 지출·정산
 
 on:
   schedule:
-    - cron: "0 * * * *"        # 매시간 정각(UTC=KST 시간 간격 동일)
+    - cron: "0 */6 * * *"      # 6시간마다 (UTC 0/6/12/18 = KST 09/15/21/03)
   workflow_dispatch:
     inputs:
       request_id:
