@@ -1,0 +1,57 @@
+name: 국회회의록 수집
+
+on:
+  schedule:
+    - cron: "0 0 * * *"        # 매일 09:00 KST (UTC 00:00)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "실행 방식"
+        type: choice
+        default: daily
+        options: [daily, dry-run]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: minutes
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: automations/requirements.txt
+
+      - run: pip install -r automations/requirements.txt
+
+      - name: git 사용자 설정 (상태 파일 커밋용)
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+
+      - name: 수집 실행
+        env:
+          OPEN_API_KEY: ${{ secrets.OPEN_API_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          PYTHONUTF8: "1"
+        run: |
+          if [ -z "$GOOGLE_REFRESH_TOKEN" ]; then
+            echo "::warning::Google Drive 인증 secrets(GOOGLE_CLIENT_ID/SECRET/REFRESH_TOKEN)가 없어 이번 실행을 건너뜁니다."
+            exit 0
+          fi
+          if [ "${{ github.event.inputs.mode }}" = "dry-run" ]; then
+            python automations/minutes/collect_minutes.py --daily --dry-run --config automations/minutes/config.actions.yaml
+          else
+            python automations/minutes/collect_minutes.py --daily --config automations/minutes/config.actions.yaml
+          fi

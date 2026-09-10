@@ -1,0 +1,19 @@
+# 로컬(이 PC) 실행용 기본 설정. 인증키는 여기 적지 말고 환경변수 OPEN_API_KEY 또는
+# 드라이브의 개인 설정 파일(--config "G:\내 드라이브\dev\자동화\01_국회회의록\config.yaml")을 쓴다.
+storage: local
+drive_root: "G:/내 드라이브/직장/국회/01. 의정활동/02. 위원회_회의/_회의록"
+drive_link: "https://drive.google.com/drive/folders/10G_Rbp4a_P0UayGqAcTyQPyv6ohqOqpI"
+
+current_th: 22
+recent_sessions: 2
+api_months: 2
+open_api_key: ""
+
+request_delay: 1.0
+retries: 3
+timeout: 90
+min_free_gb: 2
+
+office_repo: "C:/Users/smart/dev/ai-office"
+next_run: "매일 09:00 (GitHub Actions)"
+office_workspace: "assembly"   # 상태 파일을 쓸 사무실 (public/status/<id>/)

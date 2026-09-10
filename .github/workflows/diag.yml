@@ -1,0 +1,15 @@
+name: 진단 (네트워크)
+on:
+  workflow_dispatch:
+jobs:
+  net:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 국회 사이트 접속 확인
+        run: |
+          for u in https://open.assembly.go.kr/portal/openapi/nzbyfwhwaoanttzje https://record.assembly.go.kr/assembly/mnts/main.do https://www.assembly.go.kr/ https://www.google.com/; do
+            code=$(curl -s -o /dev/null -w "%{http_code} %{time_total}s" --max-time 25 -A "Mozilla/5.0" "$u" || echo "FAIL")
+            echo "$u -> $code"
+          done
+          echo "runner ip: $(curl -s --max-time 10 https://api.ipify.org)"
