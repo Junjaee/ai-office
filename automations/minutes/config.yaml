@@ -17,3 +17,6 @@ min_free_gb: 2
 office_repo: "C:/Users/smart/dev/ai-office"
 next_run: "매일 09:00 (GitHub Actions)"
 office_workspace: "assembly"   # 상태 파일을 쓸 사무실 (public/status/<id>/)
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts 의 automations[].tasks[] (테스트로 일치 강제)
+tasks: [collect, replace]
