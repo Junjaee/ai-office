@@ -5,11 +5,13 @@ on:
     - cron: "0 0 * * *"        # 매일 09:00 KST (UTC 00:00)
   workflow_dispatch:
     inputs:
-      mode:
-        description: "실행 방식"
-        type: choice
-        default: daily
-        options: [daily, dry-run]
+      request_id:
+        description: "화면에서 누른 요청 id (비워도 됨)"
+        type: string
+        default: ""
+
+# runs API의 display_title로 "내가 누른 실행"을 결정적으로 매칭한다
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('수집 · {0}', inputs.request_id) || '수집 · 예약' }}
 
 permissions:
   contents: write
@@ -39,20 +41,16 @@ jobs:
           git config user.name "ai-office-bot"
           git config user.email "ai-office-bot@users.noreply.github.com"
 
+      # GOOGLE_REFRESH_TOKEN 검사는 Python(collect_minutes.py)이 한다: 비어 있으면
+      # 상태 파일에 "구글 드라이브 인증이 없거나 만료됐어요"를 남기고 exit 1.
       - name: 수집 실행
         env:
           OPEN_API_KEY: ${{ secrets.OPEN_API_KEY }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          REQUEST_ID: ${{ inputs.request_id }}
           PYTHONUTF8: "1"
-          MODE: ${{ github.event.inputs.mode }}
         run: |
-          if (-not $env:GOOGLE_REFRESH_TOKEN) {
-            Write-Host "::warning::Google Drive 인증 secrets가 없어 이번 실행을 건너뜁니다."
-            exit 0
-          }
-          $extra = @()
-          if ($env:MODE -eq "dry-run") { $extra = @("--dry-run") }
-          python -X utf8 automations/minutes/collect_minutes.py --daily @extra --config automations/minutes/config.actions.yaml
+          python -X utf8 automations/minutes/collect_minutes.py --daily --config automations/minutes/config.actions.yaml
           exit $LASTEXITCODE

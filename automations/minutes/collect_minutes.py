@@ -11,8 +11,9 @@ import argparse
 import os
 import sys
 import time
+import traceback
 import warnings
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import yaml
@@ -25,12 +26,15 @@ from open_api import OpenApi
 from record_site import RecordSite
 from store import DriveApiStore, LocalDriveStore
 
-# AI 오피스 대시보드 보고 모듈 (dev/자동화/common). 없으면 보고 없이 동작한다.
+# AI 오피스 대시보드 보고 모듈 (automations/common). 없으면 보고 없이 동작한다.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
+from errors import MSG_GOOGLE, MissingGoogleToken, to_korean  # noqa: E402
 try:
     from report_status import report as report_status  # noqa: E402
 except ImportError:
     report_status = None
+
+KST = timezone(timedelta(hours=9))
 
 
 def build_store(cfg: dict, drive_client=None):
@@ -114,9 +118,61 @@ def process(entry: MinutesEntry, site, store: LocalDriveStore, dry_run: bool) ->
         return "error"
 
 
+def build_tasks(cfg: dict, counts: dict) -> list[dict]:
+    """상태 JSON v2의 tasks[]. 설정 `tasks:` 목록에 있는 id만 만든다(원천은 app/workspaces/assembly.ts)."""
+    out: list[dict] = []
+    for tid in cfg.get("tasks") or []:
+        if tid == "collect":
+            out.append({"id": "collect", "status": "done" if counts["error"] == 0 else "error",
+                        "summary": f"신규 {counts['new']}건"})
+        elif tid == "replace":
+            out.append({"id": "replace", "status": "done", "summary": f"교체 {counts['replaced']}건"})
+    return out
+
+
+def _report(cfg: dict, **kw) -> None:
+    """office_repo가 설정돼 있고 보고 모듈이 있을 때만 상태 파일을 쓰고 push 한다."""
+    repo = (cfg.get("office_repo") or "").strip()
+    if repo and report_status:
+        report_status(repo, automation_id="minutes", name="국회회의록 수집", dept="research",
+                      next_run=cfg.get("next_run", "매일 09:00"), link=cfg.get("drive_link", ""),
+                      workspace=cfg.get("office_workspace", "assembly"), **kw)
+
+
 def run(argv: list[str], site=None, api=None, drive_client=None) -> int:
+    """수집 실행. 실패해도(예외·토큰 없음) 상태 파일에 한국어 원인을 남긴 뒤 1을 돌려준다.
+
+    dry-run은 성공/실패 모두 보고하지 않는다(상태 파일이 화면과 어긋나지 않도록).
+    """
     args = parse_args(argv)
     cfg = load_config(args.config)
+    started_at = datetime.now(KST).isoformat(timespec="seconds")
+    started = time.monotonic()
+    counts = {"new": 0, "replaced": 0, "skip": 0, "no_pdf": 0, "error": 0}
+
+    def fail(exc: BaseException) -> int:
+        summary = to_korean(exc)
+        detail = f"{type(exc).__name__}: {str(exc)[:300]}"
+        print(f"{summary} ({detail})", file=sys.stderr)
+        if not args.dry_run:
+            _report(cfg, ok=False, summary=summary, counts=dict(counts), log_lines=[summary, detail],
+                    started_at=started_at, duration_sec=int(time.monotonic() - started), tasks=None)
+        return 1
+
+    # 드라이브 저장소인데 토큰이 없으면 DriveApiStore(=DriveClient)를 만들기 전에 끝낸다.
+    # 주입된 drive_client가 있으면(테스트) 이미 인증된 것으로 본다.
+    if (cfg.get("storage") or "local") == "drive" and drive_client is None \
+            and not (os.environ.get("GOOGLE_REFRESH_TOKEN") or "").strip():
+        return fail(MissingGoogleToken(f"{MSG_GOOGLE} (GOOGLE_REFRESH_TOKEN 환경변수가 비어 있음)"))
+
+    try:
+        return _run_body(args, cfg, site, api, drive_client, counts, started_at, started)
+    except Exception as exc:  # noqa: BLE001 - 원인을 상태 파일에 남기고 실패로 끝낸다
+        traceback.print_exc()
+        return fail(exc)
+
+
+def _run_body(args, cfg: dict, site, api, drive_client, counts: dict, started_at: str, started: float) -> int:
     site = site or RecordSite(delay=cfg["request_delay"], retries=cfg["retries"], timeout=cfg["timeout"])
     key = (cfg.get("open_api_key") or os.environ.get("OPEN_API_KEY") or "").strip()
     if api is None and key:
@@ -133,9 +189,7 @@ def run(argv: list[str], site=None, api=None, drive_client=None) -> int:
         recent = int(cfg["recent_sessions"])
         mode = "daily" + (" (Open API)" if api else "")
 
-    counts = {"new": 0, "replaced": 0, "skip": 0, "no_pdf": 0, "error": 0}
     lines: list[str] = []
-    started = time.monotonic()
     stop = False
     for th in ths:
         if args.backfill:
@@ -171,18 +225,12 @@ def run(argv: list[str], site=None, api=None, drive_client=None) -> int:
     if not args.dry_run:
         store.save_manifest()
         store.log_run(mode, [summary] + lines)
-        repo = (cfg.get("office_repo") or "").strip()
-        if repo and report_status:
-            total_ok = sum(1 for v in store.manifest.values() if v.get("status") == "ok")
-            report_status(
-                repo, automation_id="minutes", name="국회회의록 수집", dept="research",
-                ok=counts["error"] == 0, summary=summary,
+        total_ok = sum(1 for v in store.manifest.values() if v.get("status") == "ok")
+        _report(cfg, ok=counts["error"] == 0, summary=summary,
                 counts={"new": counts["new"], "replaced": counts["replaced"],
                         "failed": counts["error"], "total": total_ok},
-                next_run=cfg.get("next_run", "매일 09:00"), log_lines=[summary] + lines[:4],
-                link=cfg.get("drive_link", ""),
-            workspace=cfg.get("office_workspace", "assembly"),
-            )
+                log_lines=[summary] + lines[:4], tasks=build_tasks(cfg, counts),
+                started_at=started_at, duration_sec=int(time.monotonic() - started))
     return 0
 
 

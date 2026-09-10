@@ -170,3 +170,121 @@ def test_open_api_key_from_env(tmp_path, monkeypatch):
     cfg = str(write_config(tmp_path))
     assert collect_minutes.run(["--daily", "--dry-run", "--config", cfg], site=AuditSite()) == 0
     assert captured["key"] == "envkey"
+
+
+# ---------------------------------------------------------------- 실패 경로·v2 tasks (설계 4.7절)
+
+def _office_config(tmp_path, **extra):
+    cfg = tmp_path / "config.yaml"
+    base = dict(drive_root=str(tmp_path / "root"), current_th=22, recent_sessions=2,
+                request_delay=0, retries=1, timeout=5, min_free_gb=0,
+                office_repo=str(tmp_path / "site"), drive_link="https://drive/x", tasks=["collect", "replace"])
+    base.update(extra)
+    cfg.write_text(yaml.safe_dump(base, allow_unicode=True), encoding="utf-8")
+    return str(cfg)
+
+
+class DownSite(FakeSite):
+    """국회 사이트 연결 실패."""
+
+    def meetings(self, th, cls, code, key):
+        import requests
+        raise requests.exceptions.ConnectionError("Max retries exceeded with url: /record/mhwkList.do")
+
+
+def test_run_reports_korean_summary_and_returns_1_on_exception(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(collect_minutes, "report_status", lambda repo, **kw: calls.append((repo, kw)) or True)
+    assert collect_minutes.run(["--daily", "--config", _office_config(tmp_path)], site=DownSite()) == 1
+    assert len(calls) == 1
+    repo, kw = calls[0]
+    assert repo == str(tmp_path / "site")
+    assert kw["ok"] is False and kw["summary"] == "국회 사이트에 연결할 수 없어요"
+    assert kw["log_lines"][0] == "국회 사이트에 연결할 수 없어요"
+    assert kw["log_lines"][1].startswith("ConnectionError: Max retries exceeded")
+    assert kw["started_at"].endswith("+09:00") and isinstance(kw["duration_sec"], int)
+    assert kw["tasks"] is None and kw["workspace"] == "assembly"
+
+
+def test_run_returns_1_after_report_push_finished(tmp_path, monkeypatch):
+    """예외 보고의 push(report_status 반환)까지 끝난 뒤에 1을 돌려준다."""
+    order = []
+
+    def slow_report(repo, **kw):
+        order.append("report-start")
+        order.append("report-end")
+        return False                                    # push 실패여도 반환값은 1
+
+    monkeypatch.setattr(collect_minutes, "report_status", slow_report)
+    assert collect_minutes.run(["--daily", "--config", _office_config(tmp_path)], site=DownSite()) == 1
+    assert order == ["report-start", "report-end"]
+
+
+def test_dry_run_failure_never_reports(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(collect_minutes, "report_status", lambda repo, **kw: calls.append(1))
+    assert collect_minutes.run(["--daily", "--dry-run", "--config", _office_config(tmp_path)], site=DownSite()) == 1
+    assert calls == []
+
+
+def test_missing_google_token_reports_before_drive_store(tmp_path, monkeypatch):
+    monkeypatch.delenv("GOOGLE_REFRESH_TOKEN", raising=False)
+    calls = []
+    monkeypatch.setattr(collect_minutes, "report_status", lambda repo, **kw: calls.append(kw) or True)
+    monkeypatch.setattr(collect_minutes, "DriveApiStore",
+                        lambda *a, **k: (_ for _ in ()).throw(AssertionError("DriveApiStore를 만들면 안 된다")))
+    cfg = _office_config(tmp_path, storage="drive", drive_folder_id="root")
+    site = FakeSite()
+    assert collect_minutes.run(["--daily", "--config", cfg], site=site) == 1
+    assert site.downloaded == []
+    assert len(calls) == 1
+    kw = calls[0]
+    assert kw["ok"] is False and kw["summary"] == "구글 드라이브 인증이 없거나 만료됐어요"
+    assert "GOOGLE_REFRESH_TOKEN" in kw["log_lines"][1]
+
+
+def test_missing_google_token_is_blank_string(tmp_path, monkeypatch):
+    monkeypatch.setenv("GOOGLE_REFRESH_TOKEN", "   ")
+    calls = []
+    monkeypatch.setattr(collect_minutes, "report_status", lambda repo, **kw: calls.append(kw) or True)
+    cfg = _office_config(tmp_path, storage="drive", drive_folder_id="root")
+    assert collect_minutes.run(["--daily", "--config", cfg], site=FakeSite()) == 1
+    assert calls and calls[0]["ok"] is False
+
+
+def test_success_builds_tasks_from_config(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(collect_minutes, "report_status", lambda repo, **kw: calls.append(kw) or True)
+    assert collect_minutes.run(["--daily", "--config", _office_config(tmp_path)], site=FakeSite()) == 0
+    kw = calls[0]
+    assert kw["ok"] is True
+    assert kw["tasks"] == [{"id": "collect", "status": "done", "summary": "신규 1건"},
+                           {"id": "replace", "status": "done", "summary": "교체 0건"}]
+    assert kw["started_at"].endswith("+09:00") and kw["duration_sec"] >= 0
+    assert kw["workspace"] == "assembly"
+
+
+def test_tasks_only_for_ids_in_config(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(collect_minutes, "report_status", lambda repo, **kw: calls.append(kw) or True)
+    assert collect_minutes.run(["--daily", "--config", _office_config(tmp_path, tasks=["collect", "audit"])],
+                               site=FakeSite()) == 0
+    assert [t["id"] for t in calls[0]["tasks"]] == ["collect"]     # audit(planned)·replace(목록에 없음)는 안 만든다
+
+
+def test_collect_task_error_when_download_fails(tmp_path, monkeypatch):
+    class BadPdfSite(FakeSite):
+        def download_pdf(self, minutes_id):
+            raise RuntimeError("PDF가 아닌 응답")
+
+    calls = []
+    monkeypatch.setattr(collect_minutes, "report_status", lambda repo, **kw: calls.append(kw) or True)
+    assert collect_minutes.run(["--daily", "--config", _office_config(tmp_path)], site=BadPdfSite()) == 0
+    kw = calls[0]
+    assert kw["ok"] is False                                        # 한 건 실패는 예외가 아니라 counts.error
+    assert kw["tasks"][0] == {"id": "collect", "status": "error", "summary": "신규 0건"}
+    assert kw["tasks"][1]["status"] == "done"
+
+
+def test_build_tasks_without_config_section():
+    assert collect_minutes.build_tasks({}, {"new": 1, "replaced": 2, "error": 0}) == []
