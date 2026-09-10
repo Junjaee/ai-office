@@ -83,8 +83,9 @@ def get_services(token_path: str | None):
                        os.environ.get("GOOGLE_CLIENT_SECRET"),
                        os.environ.get("GOOGLE_REFRESH_TOKEN"))
     if cid and csec and rtok:                    # GitHub Actions: 환경변수
+        # 리프레시 토큰 갱신에는 scope 를 넣지 않는다(넣으면 invalid_scope). 발급 시 부여된 scope 로 갱신됨.
         creds = Credentials(None, refresh_token=rtok, client_id=cid, client_secret=csec,
-                            token_uri="https://oauth2.googleapis.com/token", scopes=SCOPES)
+                            token_uri="https://oauth2.googleapis.com/token")
     elif token_path and os.path.exists(token_path):   # 로컬 시험: token.json
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)
     else:
