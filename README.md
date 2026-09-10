@@ -59,11 +59,12 @@
 
 ## 이 PC에서 실행 (Windows ARM)
 
-workerd 는 ARM 빌드가 없어 x64 Node 로 실행합니다.
+node_modules 는 이 폴더(구글 드라이브)에 두지 않습니다. `scripts/npm.sh` 가 소스를 이 PC 의 로컬 작업 폴더(`%LOCALAPPDATA%i-office-node`)로 복사해 거기서 npm 을 돌립니다. workerd 는 ARM 빌드가 없어 x64 Node(`%LOCALAPPDATA%
+ode-x64
+ode`)가 있으면 그것을 씁니다.
 
 ```bash
-export PATH="/c/Users/smart/AppData/Local/node-x64/node:$PATH"
-npm run dev -- --port 3011
+bash scripts/npm.sh dev --port 3011   # 파일을 고치면 다시 실행해야 반영됩니다
 ```
 
 화면 확인용 가짜 상태: `/assembly?mock=running` (`done`, `error`, `idle`, `queued`, `runner_waiting`, `finishing`, `schedule_missed`, `static`, `no_token`).
@@ -71,8 +72,8 @@ npm run dev -- --port 3011
 ## 테스트
 
 ```bash
-npm test              # tests/*.test.mjs (상태 규칙·Worker API·엔진·사무실 설정)
-npx tsc --noEmit
+bash scripts/npm.sh test   # tests/*.test.mjs (상태 규칙·Worker API·엔진·사무실 설정)
+bash scripts/npm.sh tsc
 python -m pytest -q automations
 ```
 

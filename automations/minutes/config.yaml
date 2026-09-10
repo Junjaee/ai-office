@@ -14,7 +14,7 @@ retries: 3
 timeout: 90
 min_free_gb: 2
 
-office_repo: "C:/Users/smart/dev/ai-office"
+office_repo: "G:/내 드라이브/dev/자동화"
 next_run: "매일 09:00 (GitHub Actions)"
 office_workspace: "assembly"   # 상태 파일을 쓸 사무실 (public/status/<id>/)
 

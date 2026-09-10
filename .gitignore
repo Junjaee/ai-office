@@ -64,3 +64,6 @@ seen_msgs.json
 # 드라이브 CLAUDE.md 병합용 백업
 CLAUDE.md.drive-old
 .claude/settings.local.json
+
+# Claude Code 개인 설정(이 PC 의 권한 허용 목록)
+.claude/settings.local.json

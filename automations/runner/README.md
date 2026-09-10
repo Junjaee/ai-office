@@ -30,7 +30,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 - 실행기는 Windows 서비스로 돌아 재부팅 후 자동 시작된다. 로그인은 필요 없다.
 - 절전은 스크립트가 끈다. 노트북이면 덮개 닫힘 동작을 "아무 것도 안 함"으로 바꾼다.
 - 실행기가 오프라인이면 예약 실행이 대기 상태로 남고, 대시보드는 36시간 뒤 "대기"로 표시된다.
-- PC를 폐기·이관할 때는 `C:\actions-runner` 에서 `.\config.cmd remove --token <토큰>` 으로 등록을 해제한다.
+- PC를 폐기·이관할 때는 실행기 폴더(`$env:SystemDrive\actions-runner`, 시스템 디스크)에서 `.\config.cmd remove --token <토큰>` 으로 등록을 해제한다.
 
 ## 문제 해결
 

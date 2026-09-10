@@ -97,11 +97,10 @@ PY
 ## 6. 검증 (전부 통과해야 다음으로)
 
 ```bash
-export PATH="/c/Users/smart/AppData/Local/node-x64/node:$PATH"
 cd "/g/내 드라이브/dev/자동화"
-python -m pytest -q automations/<id> automations/common
+python -m pytest -q automations
 python automations/<id>/run_<id>.py --dry-run          # 상태 파일을 쓰지 않는 시험 실행
-npm test && npx tsc --noEmit && npm run build
+bash scripts/npm.sh test && bash scripts/npm.sh tsc && bash scripts/npm.sh build   # node_modules 는 드라이브 밖 로컬 작업 폴더
 ```
 
 로컬 `--dry-run` 이 실제 데이터를 한 번 훑고 요약을 찍어야 한다. 실패하면 여기서 고친다.
@@ -115,7 +114,8 @@ npm test && npx tsc --noEmit && npm run build
    curl -s -X POST https://ai-office.smartjohn-d34.workers.dev/api/run -H "Content-Type: application/json" -H "Origin: https://ai-office.smartjohn-d34.workers.dev" -d '{"ws":"<사무실>","automation":"<id>","requestId":"req-<YYYYMMDDHHmmss>-test"}'
    ```
    run 이 `completed/success` 가 되고 `files.<id>.request_id` 가 같은 값으로 올라오면 완료. 실패하면 `gh run view <id> --log-failed` 로 원인을 본다.
-4. `automations/<id>/README.md` 를 실제 동작에 맞게 다듬고, `REPO/README.md` 사무실 표에 한 줄 추가.
+4. 첫 실행으로 결과 폴더가 생겼으면 `config.actions.yaml` 의 `result_link` 에 폴더 주소를 넣는다(카드의 "결과 폴더 열기" 버튼). 다음 실행부터 버튼이 보인다.
+5. `automations/<id>/README.md` 를 실제 동작에 맞게 다듬고, `REPO/README.md` 사무실 표에 한 줄 추가.
 
 ## 완료 체크리스트 (모두 예여야 "완료")
 
@@ -123,6 +123,7 @@ npm test && npx tsc --noEmit && npm run build
 - [ ] 로컬 `--dry-run` 이 실제 데이터로 요약을 출력
 - [ ] 사이트 카드에 직원(tasks)이 보이고 상태가 "쉬는 중/끝남" 중 하나
 - [ ] 시작 버튼(API) 으로 1회 실행 → 끝남 → 상태 파일에 `run_id`·`request_id`·`tasks[]` 기록
+- [ ] 결과물이 있으면 `result_link` 가 채워져 카드에 "결과 폴더 열기" 버튼이 보임
 - [ ] 비밀값이 코드·문서·커밋에 없음
 - [ ] 메모리(`project-ai-office-dashboard`)에 새 자동화 한 줄 추가
 
@@ -130,8 +131,11 @@ npm test && npx tsc --noEmit && npm run build
 
 - 국회 사이트는 해외 IP 차단 → GitHub 서버 실행기에서 타임아웃. 사무실 PC 실행기 사용.
 - 사무실 PC 에 `pwsh` 없음 → 워크플로 셸은 Windows PowerShell.
-- PC 의 PowerShell 프로필이 `Set-Location C:\` 를 실행 → 상대 경로가 깨짐. 워크플로 `shell:` 의 `-NoProfile` 을 지우지 말 것.
+- PC 의 PowerShell 프로필이 작업 위치를 다른 폴더로 옮김(`Set-Location`) → 상대 경로가 깨짐. 워크플로 `shell:` 의 `-NoProfile` 을 지우지 말 것.
 - fine-grained 토큰의 Repository access 에 저장소가 없으면 GitHub 가 404 → 화면에 "토큰이 ai-office 저장소를 못 봐요" 배너.
 - 예약(cron)은 UTC 로 적는다. KST 09:00 = `0 0 * * *`.
 - Open API(열린국회정보)는 브라우저 User-Agent 가 없으면 400.
 - 임시 회의록처럼 "나중에 바뀌는 결과물"은 manifest 에 상태를 두고 다음 실행에서 교체한다.
+- 자동화마다 모듈 이름이 같으면(`store.py` 등) `pytest automations` 에서 서로 가린다 → 모듈 이름에 자동화 id 를 붙인다(예 `news_store.py`).
+- 이 폴더는 구글 드라이브 가상 디스크라 `node_modules` 를 두지 않고 연결(junction)도 안 된다 → npm 은 `bash scripts/npm.sh …`.
+- 사이트 화면은 JS 가 그린다 → 카드가 반영됐는지는 HTML 이 아니라 `/api/status?ws=<사무실>` 의 `files.<id>` 로 확인한다.

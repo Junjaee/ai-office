@@ -7,7 +7,7 @@
 ## 실행
 
 ```bash
-cd C:\Users\smart\dev\ai-office
+cd "/g/내 드라이브/dev/자동화"                      # 저장소 = 이 폴더
 python automations/__ID__/run___ID__.py --dry-run   # 시험 (상태 파일 안 씀)
 python automations/__ID__/run___ID__.py             # 실제
 ```

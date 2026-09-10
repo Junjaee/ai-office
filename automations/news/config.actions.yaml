@@ -19,8 +19,8 @@ request_delay: 1.0     # 요청 간격(초). 1초 이상 유지
 retries: 3
 timeout: 30
 
-# 결과물 위치 (있으면 카드에 "결과 폴더 열기" 버튼). 첫 실행 뒤 실제 폴더 주소로 채운다
-result_link: ""
+# 결과물 위치 → 카드의 "결과 폴더 열기" 버튼 (12. 언론모니터링)
+result_link: "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX"
 
 # 상태 보고: 저장소 루트(체크아웃 위치)에 커밋
 office_repo: "."

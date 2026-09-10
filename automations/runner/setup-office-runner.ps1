@@ -16,7 +16,7 @@ param(
   [string]$Repo = "https://github.com/Junjaee/ai-office",
   [string]$RunnerName = "office-pc",
   [string]$Labels = "kr-office",
-  [string]$RunnerDir = "C:\actions-runner"
+  [string]$RunnerDir = "$env:SystemDrive\actions-runner"   # 시스템 디스크의 actions-runner 폴더
 )
 
 $ErrorActionPreference = "Stop"

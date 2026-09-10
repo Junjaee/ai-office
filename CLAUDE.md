@@ -1,14 +1,17 @@
 # AI 오피스 — 작업 지침 (AI 코딩 도구용)
 
-이 저장소는 **자동화를 실행하고 상태를 보여 주는 픽셀 사무실 대시보드**다. 한 사이트에 사무실(`/assembly`, `/home`)이 여럿 있고, 각 사무실은 `app/workspaces/<id>.ts` 한 파일로 정의된다. 사용자는 개발자가 아니므로 전문용어 대신 쉬운 말로 안내한다.
+이 저장소는 **자동화를 실행하고 상태를 보여 주는 픽셀 사무실 대시보드**다. 한 사이트에 사무실(`/assembly`, `/home`)이 여럿 있고, 각 사무실은 `app/workspaces/<id>.ts` 한 파일로 정의된다.
 
-설계 문서: `docs\superpowers\specs\2026-09-10-오피스-실행구조-재설계-design.md` (상태 규칙·실행 경로·화면 구성의 근거).
+- **한국어로 대화한다.** 사용자는 개발자가 아니므로 전문용어 대신 쉬운 말로 안내한다.
+- 대시보드: https://ai-office.smartjohn-d34.workers.dev — `/assembly`(국회) `/home`(홈). 주소는 비공개 취급(주소를 아는 사람은 누구나 시작 버튼을 누를 수 있다).
+- 설계 문서: `docs\superpowers\specs\2026-09-10-오피스-실행구조-재설계-design.md` (상태 규칙·실행 경로·화면 구성의 근거). 계획: `docs\superpowers\plans\`.
 
-> **이 폴더 = 저장소 (사용자 결정 2026-09-10).** 이 폴더 자체가 git 저장소(GitHub `Junjaee/ai-office`)이자 **구글 드라이브 동기화 폴더**다. 코드·워크플로·대시보드·문서·템플릿이 전부 여기 있고, 커밋·푸시하면 GitHub Actions·대시보드에 반영된다.
-> - **비밀값(토큰·키·OAuth `token.json`·`client_secret.json`)은 이 폴더 어떤 파일에도 두지 않는다** — git+드라이브라 커밋되거나 클라우드에 올라간다. 자동화용은 **GitHub Secrets**, 대시보드용은 Cloudflare Worker 비밀값·`.dev.vars`(gitignore). 코드는 `os.environ` 으로만 읽는다.
-> - 개인 설정·메모는 `ai-<사무실>/NN_<이름>/`(예 `ai-home/01_가계부/`)에 두고 **`.gitignore` 로 제외**한다(공유 안 함). 코드는 `automations/<id>/` 에 둔다.
+> **이 폴더 = 저장소 (사용자 결정 2026-09-10).** 이 폴더(`G:\내 드라이브\dev\자동화`) 자체가 git 저장소(GitHub `Junjaee/ai-office`, 비공개)이자 **구글 드라이브 동기화 폴더**다. 코드·워크플로·대시보드·문서·템플릿이 전부 여기 있고, 커밋·푸시하면 GitHub Actions·대시보드에 반영된다. 다른 곳에 복사본을 두고 작업하지 않는다.
+> - 코드는 `automations/<id>/`, 개인 설정·메모는 `ai-<사무실>/NN_<이름>/`(예 `ai-assembly/01_국회회의록/`, `ai-home/01_가계부/`). 개인 폴더는 `.gitignore` 로 제외돼 GitHub 에 올라가지 않는다.
+> - **비밀값 파일(`config.yaml`·`token.json`·`client_secret.json` 등)은 개인 폴더에 둬도 된다** — 드라이브에 올라가는 것은 괜찮다(사용자 결정 2026-09-10). 단 **커밋·코드·문서·채팅에는 절대 적지 않는다.** 자동화 실행용 값은 GitHub Secrets, 대시보드용은 Cloudflare Worker 비밀값·`.dev.vars`(gitignore). 코드는 `os.environ` 으로만 읽는다.
+> - 비밀값 파일은 열어 보지 않는다. 필요하면 키 이름만 확인한다.
 > - 새 자동화는 `/new-automation <이름>` 스킬(`.claude/skills/`)로 시작하고, 뼈대는 `templates/automation/` 을 복사한다.
-> - **주의(드라이브+git)**: `.git`·`node_modules` 를 드라이브가 동기화하다 충돌시킬 수 있다. git 작업 중 문제가 나면 드라이브 동기화를 잠시 멈춘다.
+> - **드라이브 폴더라서 생기는 제약**: `node_modules` 는 이 폴더에 설치하지 않는다(파일 수만 개가 클라우드로 올라가고, 드라이브 가상 디스크는 연결(junction)도 안 된다). npm 명령은 `bash scripts/npm.sh …` 로 돌린다 — 소스를 이 PC 의 로컬 작업 폴더(`%LOCALAPPDATA%\ai-office-node`)로 복사해 거기서 실행한다. git 작업 중 이상한 충돌이 나면 드라이브 동기화를 잠시 멈춘다.
 
 ---
 
@@ -22,26 +25,33 @@
 
 ## 새 자동화 붙이기
 
-1. 파이썬: `automations/<id>/` 에 코드와 `config.actions.yaml`(`tasks:` 목록 포함). 끝나면 `automations/common/report_status.py` 의 `report(..., workspace="<사무실>", tasks=[...])` 로 상태 파일을 커밋한다.
-2. 워크플로: `.github/workflows/<id>.yml` — `workflow_dispatch` 에 `request_id` 입력, `run-name` 에 그 값을 넣는다(`minutes.yml` 복사).
-3. 사무실 설정: `app/workspaces/<사무실>.ts` 의 `AUTOMATIONS` 에 `{ id, dept, name, workflow: "<id>.yml", schedule?, tasks[] }`. `tasks[].id` 는 yaml 의 `tasks:` 와 같아야 한다(`tests/workspaces.test.mjs` 가 검사).
-4. 실행기: 워크플로의 `runs-on` 라벨이 맞는 실행기(사무실 PC 또는 국내 서버)가 켜져 있어야 한다. `automations/runner/README.md`.
+1. **먼저 `/new-automation <이름>` 스킬을 부른다.** 질문 3개 → 템플릿 복사 → 등록 → 검증 → 배포 순서를 안내한다.
+2. 파이썬: `automations/<id>/` 에 코드와 `config.actions.yaml`(`tasks:` 목록 포함). 끝나면 `automations/common/report_status.py` 의 `report(..., workspace="<사무실>", tasks=[...])` 로 상태 파일을 커밋한다. 모듈 이름은 다른 자동화와 겹치지 않게 짓는다(예 `news_store.py`).
+3. 워크플로: `.github/workflows/<id>.yml` — `workflow_dispatch` 에 `request_id` 입력, `run-name` 에 그 값을 넣는다(`templates/automation/workflow.yml`).
+4. 사무실 설정: `app/workspaces/<사무실>.ts` 의 `AUTOMATIONS` 에 `{ id, dept, name, workflow: "<id>.yml", schedule?, tasks[] }`. `tasks[].id` 는 yaml 의 `tasks:` 와 같아야 한다(`tests/workspaces.test.mjs` 가 검사).
+5. 실행기: 워크플로의 `runs-on` 라벨이 맞는 실행기가 켜져 있어야 한다(아래 "실행 위치", `automations/runner/README.md`).
+6. **끝났다고 말하기 전에** 스킬의 완료 체크리스트를 전부 통과시킨다(테스트, 로컬 1회 실행, 사이트에서 시작 버튼 1회).
 
 ## 절대 규칙
 
 - 부서 `id` 12개(`research brand strategy1 qa strategy2 reels carousel partner finance review ops secretary`)는 바꾸지 않는다. 안 쓰는 부서는 `HIDDEN_DEPARTMENTS` 로 숨긴다.
 - 상태 판정 규칙은 `app/status-rules.ts` 한 곳에만 둔다(`import type` 만 허용, `node --test` 가 직접 실행). 화면·엔진에서 규칙을 다시 만들지 않는다.
-- 비밀값(`GITHUB_TOKEN`, Google 토큰, Open API 키)은 코드·문서·채팅에 적지 않는다. 배포용은 Cloudflare 대시보드의 Worker 비밀값, 로컬은 `.dev.vars`(gitignore).
-- `.dev.vars` 와 `automations/*/config.yaml` 은 공유·커밋 금지.
+- 비밀값(`GITHUB_TOKEN`, Google 토큰, Open API 키)은 코드·문서·채팅·커밋에 적지 않는다. 배포용은 Cloudflare 대시보드의 Worker 비밀값, 로컬은 `.dev.vars`(gitignore).
+- `.dev.vars` 와 개인 폴더(`ai-*/`)의 설정 파일은 커밋 금지(`.gitignore` 로 막혀 있다).
+- **실행 위치의 기본은 GitHub 서버(`ubuntu-latest`).** 국회 사이트(assembly.go.kr)처럼 해외 IP 를 막는 곳을 쓰거나 이 PC 에만 있는 것이 필요할 때만 사무실 PC 실행기(`runs-on: [self-hosted, windows, kr-office]`)를 쓴다. (사용자 결정 2026-09-10)
 
-## 확인 명령 (이 PC 는 x64 Node 사용)
+## 이 PC 환경
+
+- Windows 11 ARM. arm64 빌드가 없는 모듈(workerd 등) 때문에 npm 은 x64 Node 로 돌린다 — `scripts/npm.sh` 가 `%LOCALAPPDATA%\node-x64\node` 를 찾아 알아서 쓴다.
+- Python 3.13(requests, bs4, lxml, PyYAML, pytest, google-api-python-client) 있음. `pwsh` 없음(Windows PowerShell 5.1).
+
+## 확인 명령 (저장소 폴더에서, Git Bash)
 
 ```bash
-export PATH="/c/Users/smart/AppData/Local/node-x64/node:$PATH"
-npx tsc --noEmit          # 오류 0
-npm test                  # tests/*.test.mjs
-npm run build
-npm run dev -- --port 3011   # 화면 확인: /assembly?mock=running|done|error|idle|queued|runner_waiting|finishing|schedule_missed|static|no_token
+bash scripts/npm.sh tsc      # 타입 검사, 오류 0
+bash scripts/npm.sh test     # tests/*.test.mjs
+bash scripts/npm.sh build
+bash scripts/npm.sh dev --port 3011   # 화면 확인: /assembly?mock=running|done|error|idle|queued|runner_waiting|finishing|schedule_missed|static|no_token
 python -m pytest -q automations
 ```
 
@@ -52,3 +62,4 @@ python -m pytest -q automations
 - `app/office/OfficeApp.tsx` 단일 페이지 화면. `app/game/` 월드(`world.ts`)·경로(`pathfinding.ts`)·직원(`staff.ts`)·상태→자리 번역(`office-model.ts`)·엔진(`engine.ts`)·렌더러(`OfficeWorld.tsx`).
 - `worker/` Cloudflare Worker: `index.ts`(라우팅) `run-api.ts`(`/api/run`, `/api/status`) `github.ts`(dispatch·runs·Contents) `config.ts`.
 - `automations/` 파이썬 자동화와 공통 모듈, `.github/workflows/` 실행 워크플로, `public/status/<사무실>/` 상태 파일.
+- `scripts/npm.sh` npm 명령을 드라이브 밖 로컬 작업 폴더에서 돌리는 도구. `templates/automation/` 새 자동화 뼈대. `.claude/skills/new-automation/` 새 자동화 절차.

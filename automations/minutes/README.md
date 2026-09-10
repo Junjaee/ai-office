@@ -11,11 +11,12 @@ record.assembly.go.kr 의 제21·22대 회의록 PDF를 드라이브 `02. 위원
 ## 실행
 
 ```bash
-cd "G:\내 드라이브\dev\자동화\ai-assembly\01_국회회의록"
-python collect_minutes.py --daily            # 최근 회기만 (매일 실행용, 수 분)
-python collect_minutes.py --backfill 22      # 22대 전체 (1시간 이상)
-python collect_minutes.py --backfill 21      # 21대 전체
-python collect_minutes.py --daily --dry-run  # 받지 않고 목록만
+cd "/g/내 드라이브/dev/자동화"                  # 저장소 = 이 폴더
+CFG="ai-assembly/01_국회회의록/config.yaml"     # 개인 설정 (Open API 키 포함, 공유 금지)
+python automations/minutes/collect_minutes.py --daily --config "$CFG"            # 최근 회기만 (매일 실행용, 수 분)
+python automations/minutes/collect_minutes.py --backfill 22 --config "$CFG"      # 22대 전체 (1시간 이상)
+python automations/minutes/collect_minutes.py --backfill 21 --config "$CFG"      # 21대 전체
+python automations/minutes/collect_minutes.py --daily --dry-run --config "$CFG"  # 받지 않고 목록만
 ```
 
 중단돼도 다시 실행하면 `_manifest.json` 기준으로 이어서 받는다.
