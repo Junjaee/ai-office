@@ -3,18 +3,37 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 확정본 교체 0건, 실패 0건, PDF없음 0건, 건너뜀 568건, 1.8분",
+  "summary": "신규 1건, 확정본 교체 1건, 실패 0건, PDF없음 0건, 건너뜀 568건, 4.8분",
   "counts": {
-    "new": 0,
-    "replaced": 0,
+    "new": 1,
+    "replaced": 1,
     "failed": 0,
-    "total": 5894
+    "total": 5895
   },
-  "next_run": "매일 09:00",
+  "next_run": "매일 09:00 (GitHub Actions)",
   "log": [
-    "신규 0건, 확정본 교체 0건, 실패 0건, PDF없음 0건, 건너뜀 568건, 1.8분"
+    "신규 1건, 확정본 교체 1건, 실패 0건, PDF없음 0건, 건너뜀 568건, 4.8분",
+    "[신규] 제22대/국회본회의/제22대국회 제439회(정기회) 제3차 국회본회의(전체회의) (2026.09.07.).pdf",
+    "[교체] 제22대/특별위원회/기후위기특별위원회/제22대국회 제438회(임시회) 제2차 기후위기특별위원회(탄소중립기본법심사소위원회) (2026.08.10.).pdf"
   ],
-  "link": "",
+  "link": "https://drive.google.com/drive/folders/10G_Rbp4a_P0UayGqAcTyQPyv6ohqOqpI",
+  "run_id": 34430605359,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34430605359",
+  "trigger": "manual",
+  "started_at": "2026-09-10T11:44:39+09:00",
+  "duration_sec": 301,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "신규 1건"
+    },
+    {
+      "id": "replace",
+      "status": "done",
+      "summary": "교체 1건"
+    }
+  ],
   "id": "minutes",
-  "updated_at": "2026-09-09T15:07:59+09:00"
+  "updated_at": "2026-09-10T11:49:42+09:00"
 }
