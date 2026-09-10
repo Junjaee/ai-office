@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 12초",
+  "summary": "신규 6건, 실패 0건, 12초",
   "counts": {
-    "new": 5,
+    "new": 6,
     "failed": 0,
-    "total": 192
+    "total": 198
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 12초",
-    "[신규] 화성특례시, 108만 대도시 격에 맞추어‘사법·치안 인프라’확충에 총력:장애인인식개선신문 — 장애인인식개선신문",
-    "[신규] 골드 코스트 호텔 카지노 2025년 애자일 개발: 현상, 본질 및 법칙 — Histoire pour tous",
-    "[신규] 천하람 \"강신철, 엘리트 투기꾼…파병까지 악용한 거짓 해명\" — 프리진뉴스",
-    "[신규] 추미애 경기도지사, 이광재 국회 예결위원장 만나 2027년 경기도 주요 국비 사업 2,446억 원 증액 요청 — 프레스뉴스"
+    "신규 6건, 실패 0건, 12초",
+    "[신규] NEWS > 상세 — mbcgn.kr",
+    "[신규] 르노 카지노 : 실제 경험자들의 조언 — Histoire pour tous",
+    "[신규] 신화가 그림으로 살아 움직일 때 [미깡의 어쩌면, 인생 만화] — 한국일보",
+    "[신규] 연출 속도와 진행 규칙은 별개인가요? 암호화폐실무지침서 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34511300936,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34511300936",
+  "run_id": 34525821150,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34525821150",
   "trigger": "schedule",
-  "started_at": "2026-09-11T02:57:06+09:00",
+  "started_at": "2026-09-11T05:21:06+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 166건"
+      "summary": "검색어 5개에서 171건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 5건) · Histoire pour tous 4건, Nate News 1건, newscenterkorea.com 1건"
+      "summary": "오늘 19건 (신규 6건) · Histoire pour tous 8건, Nate News 1건, mbcgn.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-11T02:57:19+09:00"
+  "updated_at": "2026-09-11T05:21:19+09:00"
 }
