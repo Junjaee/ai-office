@@ -24,7 +24,21 @@ export type ApiStatus = {
   config: { canRun: boolean; tokenExpiresAt?: string | null; githubError?: null | "auth" | "not_found" | "unavailable" };
   runs: Record<string, RunInfo | null>;
   files: Record<string, RealStatus | null>;
+  history?: HistoryItem[];
   source: StatusSource;
+};
+
+/** 오늘 실행 이력 한 줄 (worker/run-api.ts HistoryItem 과 같은 모양) */
+export type HistoryItem = {
+  id: number;
+  automationId: string;
+  status: string;
+  conclusion: string | null;
+  trigger: "manual" | "schedule" | "other";
+  requestId: string | null;
+  startedAt: string | null;
+  completedAt: string | null;
+  url: string;
 };
 
 export type UiBanner = { key: string; level: "error" | "warn" | "info"; text: string; href?: string };
@@ -35,6 +49,7 @@ export type LiveState = {
   summary: TaskSummary;
   banners: UiBanner[];
   hotRoom: string | null;
+  history: HistoryItem[];
   source: StatusSource | null;
   checkedAt: Date | null;
   canRun: boolean | null;
@@ -119,7 +134,7 @@ async function fetchStaticStatus(ws: string, defs: AutomationDef[]): Promise<Api
         }
       }),
   );
-  return { checkedAt: new Date().toISOString(), config: { canRun: false }, runs: {}, files, source: "static" };
+  return { checkedAt: new Date().toISOString(), config: { canRun: false }, runs: {}, files, history: [], source: "static" };
 }
 
 /** 개발용 상태 주입: ?mock=done|running|queued|runner_waiting|finishing|error|idle|schedule_missed|static|no_token|empty */
@@ -128,6 +143,7 @@ function mockStatus(mode: string, defs: AutomationDef[]): ApiStatus {
   const iso = (ms: number) => new Date(now + ms).toISOString();
   const runs: Record<string, RunInfo | null> = {};
   const files: Record<string, RealStatus | null> = {};
+  const history: HistoryItem[] = [];
   let source: StatusSource = "github";
   defs
     .filter((d) => d.workflow)
@@ -202,8 +218,14 @@ function mockStatus(mode: string, defs: AutomationDef[]): ApiStatus {
           runs[d.id] = run({});
           files[d.id] = okFile();
       }
+      if (mode !== "empty" && mode !== "idle") {
+        const r = runs[d.id];
+        if (r) history.push({ id: runId, automationId: d.id, status: r.status, conclusion: r.conclusion, trigger: "manual", requestId: "req-20260910090001-a1b2", startedAt: r.startedAt ?? null, completedAt: r.completedAt || null, url });
+        history.push({ id: runId - 1, automationId: d.id, status: "completed", conclusion: "success", trigger: "schedule", requestId: null, startedAt: iso(-4 * 3600000), completedAt: iso(-4 * 3600000 + 110000), url });
+        history.push({ id: runId - 2, automationId: d.id, status: "completed", conclusion: "cancelled", trigger: "manual", requestId: "req-20260910080000-zzzz", startedAt: iso(-5 * 3600000), completedAt: iso(-5 * 3600000 + 20000), url });
+      }
     });
-  return { checkedAt: new Date().toISOString(), config: { canRun: mode !== "no_token" && mode !== "empty" }, runs, files, source };
+  return { checkedAt: new Date().toISOString(), config: { canRun: mode !== "no_token" && mode !== "empty" }, runs, files, history: source === "github" ? history.sort((a, b) => b.id - a.id) : [], source };
 }
 
 // ───────── 판정 (순수) ─────────
@@ -253,6 +275,7 @@ export function buildLiveState(ws: WorkspaceConfig, api: ApiStatus | null, local
     summary,
     banners,
     hotRoom,
+    history: api?.history ?? [],
     source,
     checkedAt: api ? new Date(api.checkedAt) : null,
     canRun: api ? api.config.canRun : null,

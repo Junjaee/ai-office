@@ -38,6 +38,8 @@ export type RunSummary = {
   status: string;
   conclusion: string | null;
   display_title: string;
+  /** workflow_dispatch · schedule · … */
+  event: string;
   run_started_at: string | null;
   updated_at: string;
   html_url: string;
@@ -111,6 +113,7 @@ export class GitHubClient implements GitHubLike {
       status: String(r.status ?? ""),
       conclusion: r.conclusion == null ? null : String(r.conclusion),
       display_title: String(r.display_title ?? r.name ?? ""),
+      event: String(r.event ?? ""),
       run_started_at: r.run_started_at == null ? null : String(r.run_started_at),
       updated_at: String(r.updated_at ?? ""),
       html_url: String(r.html_url ?? ""),

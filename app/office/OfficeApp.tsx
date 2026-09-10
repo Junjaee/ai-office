@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { WORKSPACE } from "../../company.config";
 import { WORKSPACE_LIST } from "../workspaces";
-import { LABELS, STATE_CLASS, relativeTime, type AutomationView, type TaskState } from "../status-rules";
+import { LABELS, STATE_CLASS, TRIGGER_LABEL, durationText, historyLabel, relativeTime, type AutomationView, type TaskState } from "../status-rules";
 import { useLiveStatus } from "../status";
 import OfficeWorld from "../game/OfficeWorld";
 import { OfficeEngine, type Agent } from "../game/engine";
@@ -311,6 +311,56 @@ export default function OfficeApp() {
             );
           })}
         </section>
+
+        {runnable.length > 0 ? (
+          <section className="history" aria-label="오늘 실행 이력">
+            <h3>오늘 실행 이력</h3>
+            {!live.loaded ? (
+              <p className="auto-meta">불러오는 중…</p>
+            ) : live.source !== "github" ? (
+              <p className="auto-meta">실행 이력은 GitHub 연결이 있을 때만 보여요.</p>
+            ) : live.history.length === 0 ? (
+              <p className="auto-meta">오늘은 아직 실행한 게 없어요.</p>
+            ) : (
+              <div className="history-scroll">
+                <table className="history-table">
+                  <thead>
+                    <tr>
+                      <th>시각</th>
+                      <th>자동화</th>
+                      <th>방식</th>
+                      <th>상태</th>
+                      <th>소요</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {live.history.map((h) => {
+                      const label = historyLabel(h.status, h.conclusion);
+                      const started = h.startedAt ? new Date(h.startedAt) : null;
+                      return (
+                        <tr key={h.id}>
+                          <td>{started ? started.toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" }) : "–"}</td>
+                          <td>{nameOf(h.automationId)}</td>
+                          <td>{TRIGGER_LABEL[h.trigger]}</td>
+                          <td>
+                            <span className={`status-pill ${label.cls}`}>{label.text}</span>
+                          </td>
+                          <td>{durationText(h.startedAt, h.completedAt)}</td>
+                          <td>
+                            <a href={h.url} target="_blank" rel="noreferrer">
+                              기록 ↗
+                            </a>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        ) : null}
 
         <footer className="auto-meta">{COMPANY.description}</footer>
       </div>

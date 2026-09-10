@@ -34,6 +34,9 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 ## 문제 해결
 
+- `Could not open requirements file` / 상대 경로가 안 잡힘: PC 의 PowerShell 프로필(`$PROFILE`)이 `Set-Location` 을 실행해 작업 폴더가 바뀐 것. 워크플로는 `-NoProfile` 로 띄우도록 해 두었으니 워크플로의 `shell:` 줄을 지우지 말 것.
+- `pwsh: command not found`: PC 에 PowerShell 7 이 없음. 워크플로는 Windows PowerShell(`powershell`)을 쓴다.
+
 - `python` 이 없다고 나오면 PowerShell을 새로 열어 다시 실행 (PATH 갱신)
 - 등록 실패: 토큰 만료 → 새 토큰으로 재실행
 - 서비스가 Running인데 GitHub에서 Offline: 사내 방화벽이 github.com 아웃바운드를 막는지 확인

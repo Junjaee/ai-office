@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   decideRun, parseRequestId, latestValidRunByWorkflow, kstDateKey, dailyCount, addDailyCount,
-  createRunApiStores, handleRun, handleStatus, isCrossOrigin,
+  createRunApiStores, handleRun, handleStatus, isCrossOrigin, todayHistory,
 } from "../worker/run-api.ts";
 import { GitHubClient, GitHubAuthError, GitHubUnavailableError, GitHubNotFoundError } from "../worker/github.ts";
 import { DAILY_RUN_LIMIT, STATUS_CACHE_MS, TOO_SOON_MS } from "../worker/config.ts";
@@ -27,7 +27,7 @@ function run(over = {}) {
   const id = over.id ?? 100;
   return {
     id, path: ".github/workflows/minutes.yml", status: "completed", conclusion: "success",
-    display_title: "수집 · req-20260911090001-a1b2", run_started_at: "2026-09-11T00:01:00Z",
+    display_title: "수집 · req-20260911090001-a1b2", event: "workflow_dispatch", run_started_at: "2026-09-11T00:01:00Z",
     updated_at: "2026-09-11T00:03:00Z", html_url: `https://github.com/Junjaee/ai-office/actions/runs/${id}`, ...over,
   };
 }
@@ -387,6 +387,33 @@ test("handleStatus: 5xx 는 canRun 유지 · githubError unavailable", async () 
   assert.equal(body.config.githubError, "unavailable");
 });
 
+test("todayHistory: 오늘(KST) 시작한 이 사무실 run 만, 취소 포함, 최신순, 방식 분류", () => {
+  const runs = [
+    run({ id: 1, run_started_at: "2026-09-10T14:00:00Z" }),                       // KST 어제 23:00 → 제외
+    run({ id: 2, run_started_at: "2026-09-10T15:30:00Z", event: "schedule" }),    // KST 오늘 00:30
+    run({ id: 3, status: "in_progress", conclusion: null }),
+    run({ id: 4, conclusion: "cancelled" }),
+    run({ id: 5, path: ".github/workflows/other.yml" }),                           // 이 사무실 자동화 아님
+    run({ id: 6, path: ".github/workflows/mail.yml", event: "push" }),
+  ];
+  const h = todayHistory(runs, workspaces.assembly.automations, NOW);
+  assert.deepEqual(h.map((x) => x.id), [6, 4, 3, 2]);
+  assert.equal(h[3].trigger, "schedule");
+  assert.equal(h[2].trigger, "manual");
+  assert.equal(h[0].trigger, "other");
+  assert.equal(h[0].automationId, "mail");
+  assert.equal(h[1].conclusion, "cancelled");
+  assert.equal(h[2].completedAt, null);
+  assert.equal(h[3].requestId, "req-20260911090001-a1b2");
+});
+
+test("handleStatus: history 는 오늘 이력, GitHub 실패면 빈 배열", async () => {
+  const ok = await (await handleStatus(statusRequest(), fakeEnv(), makeDeps({ github: fakeGithub({ runs: [run(), run({ id: 101, conclusion: "cancelled" })] }) }))).json();
+  assert.deepEqual(ok.history.map((x) => x.id), [101, 100]);
+  const bad = await (await handleStatus(statusRequest(), fakeEnv(), makeDeps({ github: fakeGithub({ runsError: new GitHubUnavailableError(500) }) }))).json();
+  assert.deepEqual(bad.history, []);
+});
+
 test("handleStatus: 토큰 없으면 runs 빈 객체 · canRun false · static 파일", async () => {
   const env = fakeEnv({ "/status/assembly/minutes.json": { id: "minutes", from: "static" } });
   env.GITHUB_TOKEN = undefined;
@@ -451,7 +478,7 @@ test("GitHubClient: listRuns 는 필요한 필드만 추린다", async () => {
   const f = fakeFetch(() => Response.json({ workflow_runs: [{ ...run({ id: 7 }), name: "minutes", extra: "drop" }] }));
   const runs = await new GitHubClient("t", f).listRuns(30);
   assert.equal(f.calls[0].url, "https://api.github.com/repos/Junjaee/ai-office/actions/runs?per_page=30");
-  assert.deepEqual(Object.keys(runs[0]).sort(), ["conclusion", "display_title", "html_url", "id", "path", "run_started_at", "status", "updated_at"]);
+  assert.deepEqual(Object.keys(runs[0]).sort(), ["conclusion", "display_title", "event", "html_url", "id", "path", "run_started_at", "status", "updated_at"]);
   assert.equal(runs[0].id, 7);
 });
 

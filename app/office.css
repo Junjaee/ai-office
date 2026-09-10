@@ -351,3 +351,13 @@
 .toast { position: fixed; left: 50%; bottom: 24px; z-index: 999; transform: translateX(-50%); padding: 10px 16px; border: 2px solid var(--ink); border-radius: 12px; background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; box-shadow: var(--shadow); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 .office-block { margin-top: 14px; }
+
+/* ── 오늘 실행 이력 ─────────────────────────────────────────────── */
+.history { margin-top: 14px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--win); box-shadow: var(--shadow); }
+.history h3 { margin: 0 0 8px; font-size: 15px; }
+.history-scroll { overflow-x: auto; }
+.history-table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
+.history-table th { text-align: left; padding: 4px 8px; font-size: 11px; color: var(--ink-soft); border-bottom: 1.5px solid var(--c-gray200); }
+.history-table td { padding: 6px 8px; border-bottom: 1px solid var(--c-gray100); vertical-align: middle; }
+.history-table tr:last-child td { border-bottom: 0; }
+.history-table a { color: var(--c-500); font-weight: 700; }

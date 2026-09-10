@@ -1,11 +1,26 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  deriveDeptStatus, summarize, STALE_HOURS,
-  LABELS, STATE_CLASS, SUBTITLES, BANNERS, phaseToState,
-  deriveAutomationView, deriveTaskStates, deriveDeptView, summarizeTasks, collectWarnings,
-  relativeTime, runningSince,
-  LOCAL_REQUEST_TTL_MS, RUNNER_WAIT_MS, RESULT_WAIT_MS,
+  deriveDeptStatus,
+  summarize,
+  STALE_HOURS,
+  LABELS,
+  STATE_CLASS,
+  SUBTITLES,
+  BANNERS,
+  phaseToState,
+  deriveAutomationView,
+  deriveTaskStates,
+  deriveDeptView,
+  summarizeTasks,
+  collectWarnings,
+  relativeTime,
+  runningSince,
+  LOCAL_REQUEST_TTL_MS,
+  RUNNER_WAIT_MS,
+  RESULT_WAIT_MS,
+  historyLabel,
+  durationText,
 } from "../app/status-rules.ts";
 
 const now = new Date("2026-09-09T15:00:00+09:00");
@@ -408,4 +423,19 @@ test("문구 상수: 배너·부제 확정 문구", () => {
   assert.equal(BANNERS.tokenExpiring(7), "실행 연결이 7일 뒤 끊겨요 · 설정 안내 보기");
   assert.equal(BANNERS.staleSource(3), "최신 상태를 못 가져왔어요 (3분 전 기준)");
   assert.equal(SUBTITLES.logLink, "자세한 기록 보기");
+});
+
+test("historyLabel: queued/in_progress/success/failure/cancelled", () => {
+  assert.deepEqual(historyLabel("queued", null), { text: "시작 준비 중", cls: "working" });
+  assert.equal(historyLabel("in_progress", null).text, "일하는 중");
+  assert.deepEqual(historyLabel("completed", "success"), { text: "끝남", cls: "done" });
+  assert.deepEqual(historyLabel("completed", "failure"), { text: "오류", cls: "error" });
+  assert.deepEqual(historyLabel("completed", "cancelled"), { text: "취소됨", cls: "planned" });
+});
+
+test("durationText: 초·분 표기, 값이 없으면 빈 문자열", () => {
+  assert.equal(durationText("2026-09-11T00:00:00Z", "2026-09-11T00:00:45Z"), "45초");
+  assert.equal(durationText("2026-09-11T00:00:00Z", "2026-09-11T00:04:48Z"), "4.8분");
+  assert.equal(durationText("2026-09-11T00:00:00Z", null), "");
+  assert.equal(durationText(null, null), "");
 });

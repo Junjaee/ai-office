@@ -87,6 +87,45 @@ export type RunView = {
   url: string;
 };
 
+/** 오늘 실행 이력 한 줄 (취소 포함, 최신순) */
+export type HistoryItem = {
+  id: number;
+  automationId: string;
+  status: string;
+  conclusion: string | null;
+  trigger: "manual" | "schedule" | "other";
+  requestId: string | null;
+  startedAt: string | null;
+  completedAt: string | null;
+  url: string;
+};
+
+/** 이 사무실 자동화의 run 중 KST 오늘 시작한 것만, run id 내림차순 */
+export function todayHistory(runs: RunSummary[], automations: WorkspaceLike["automations"], nowMs: number): HistoryItem[] {
+  const today = kstDateKey(nowMs);
+  const byFile = new Map<string, string>();
+  for (const a of automations) if (a.workflow) byFile.set(a.workflow, a.id);
+  const out: HistoryItem[] = [];
+  for (const run of runs) {
+    const automationId = byFile.get(workflowFileOf(run));
+    if (!automationId) continue;
+    const startedMs = run.run_started_at ? Date.parse(run.run_started_at) : NaN;
+    if (Number.isNaN(startedMs) || kstDateKey(startedMs) !== today) continue;
+    out.push({
+      id: run.id,
+      automationId,
+      status: run.status,
+      conclusion: run.conclusion,
+      trigger: run.event === "workflow_dispatch" ? "manual" : run.event === "schedule" ? "schedule" : "other",
+      requestId: parseRequestId(run.display_title),
+      startedAt: run.run_started_at,
+      completedAt: run.status === "completed" ? run.updated_at : null,
+      url: run.html_url,
+    });
+  }
+  return out.sort((a, b) => b.id - a.id);
+}
+
 export function toRunView(run: RunSummary): RunView {
   return {
     id: run.id,
@@ -114,6 +153,8 @@ export type StatusBody = {
   config: { canRun: boolean; tokenExpiresAt: string | null; githubError: GitHubErrorKind };
   runs: Record<string, RunView | null>;
   files: Record<string, unknown | null>;
+  /** 오늘(KST) 실행 이력, GitHub 조회 실패면 빈 배열 */
+  history: HistoryItem[];
   source: "github" | "static";
 };
 
@@ -281,10 +322,13 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
   const files: Record<string, unknown | null> = {};
   let source: StatusBody["source"] = github ? "github" : "static";
   let githubError: GitHubErrorKind = null;
+  let history: HistoryItem[] = [];
 
   if (github) {
     try {
-      const latest = latestValidRunByWorkflow(await github.listRuns(RUNS_PER_PAGE));
+      const allRuns = await github.listRuns(RUNS_PER_PAGE);
+      history = todayHistory(allRuns, workspace.automations, now);
+      const latest = latestValidRunByWorkflow(allRuns);
       for (const a of automations) {
         const run = latest.get(a.workflow as string);
         runs[a.id] = run ? toRunView(run) : null;
@@ -325,6 +369,7 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
     },
     runs,
     files,
+    history,
     source,
   };
 }

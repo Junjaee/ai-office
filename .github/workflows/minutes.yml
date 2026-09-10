@@ -27,7 +27,8 @@ jobs:
     timeout-minutes: 60
     defaults:
       run:
-        shell: powershell
+        # 사무실 PC 의 PowerShell 프로필이 Set-Location 등을 실행하므로 -NoProfile 로 띄운다
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ". '{0}'; exit $LASTEXITCODE"
     steps:
       - uses: actions/checkout@v4
 

@@ -124,6 +124,30 @@ export const BANNERS = {
 export type BannerLevel = "error" | "warn" | "info";
 export type Banner = { kind: WarnReason; level: BannerLevel; text: string; ids: string[] };
 
+// ───────────────────────── 오늘 실행 이력 한 줄 표시 ─────────────────────────
+
+export type HistoryLabel = { text: string; cls: string };
+
+/** GitHub run 의 status/conclusion → 화면 문구·클래스 (취소는 회색) */
+export function historyLabel(status: string, conclusion: string | null): HistoryLabel {
+  if (status === "queued") return { text: "시작 준비 중", cls: STATE_CLASS.running };
+  if (status !== "completed") return { text: LABELS.running, cls: STATE_CLASS.running };
+  if (conclusion === "success") return { text: LABELS.done, cls: STATE_CLASS.done };
+  if (conclusion === "cancelled" || conclusion === "skipped") return { text: "취소됨", cls: STATE_CLASS.planned };
+  return { text: LABELS.error, cls: STATE_CLASS.error };
+}
+
+export const TRIGGER_LABEL = { manual: "수동", schedule: "예약", other: "기타" } as const;
+
+/** "4.8분" / "45초" / "" */
+export function durationText(startedAt: string | null | undefined, completedAt: string | null | undefined): string {
+  const a = toMs(startedAt);
+  const b = toMs(completedAt);
+  if (Number.isNaN(a) || Number.isNaN(b) || b < a) return "";
+  const sec = Math.round((b - a) / 1000);
+  return sec < 60 ? `${sec}초` : `${(sec / 60).toFixed(1)}분`;
+}
+
 // ───────────────────────── 시각 헬퍼 (순수, now 주입) ─────────────────────────
 
 function toMs(v: string | number | undefined | null): number {
