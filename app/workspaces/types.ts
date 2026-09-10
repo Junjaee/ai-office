@@ -1,4 +1,4 @@
-// 워크스페이스(사무실) 하나의 설정. 엔진은 company.config.ts 를 통해 현재 워크스페이스 값을 읽는다.
+// 워크스페이스(사무실) 하나의 설정. 화면·엔진은 company.config.ts 를 통해 현재 사무실 값을 읽는다.
 export type CompanyInfo = {
   name: string;
   logoLetter: string;
@@ -12,17 +12,6 @@ export type CompanyInfo = {
   reportName: string;
 };
 
-export type CeoProfile = {
-  name: string;
-  callsign: string;
-  role: string;
-  hair: string;
-  shirt: string;
-  accent: string;
-  skin: string;
-  thoughts: string[];
-};
-
 export type Department = {
   id: string;
   name: string;
@@ -30,16 +19,6 @@ export type Department = {
   icon: string;
   task: string;
   report: string;
-};
-
-export type StaffEntry = {
-  dept: string;
-  rank: "lead" | "member";
-  name: string;
-  role: string;
-  colors: [string, string, string];
-  thoughts: string[];
-  callsign?: string;
 };
 
 /** 자동화의 하위 작업 = 화면의 직원 한 명 (이름은 업무명) */
@@ -80,15 +59,9 @@ export type WorkspaceConfig = {
   /** 상단 사무실 선택 탭에 보이는 이름 */
   label: string;
   icon: string;
-  /** globals.css 의 html[data-ws="…"] 팔레트 이름 */
-  palette: string;
   company: CompanyInfo;
-  ceo: CeoProfile;
   departments: readonly Department[];
-  staff: StaffEntry[];
-  pending: Record<string, string>;
   hidden: string[];
-  storageLink: string;
   /** 자동화 목록 (직원·카드·실행 허용 목록의 원천) */
   automations: AutomationDef[];
   /** true 면 자동화 없는 부서도 회색으로 그림 (기본 false) */

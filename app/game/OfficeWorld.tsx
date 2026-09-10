@@ -113,28 +113,33 @@ export default function OfficeWorld({ engine, world, deptViews, hotRoom, selecte
     [onSelect],
   );
 
-  // 카메라 목표: 전체 보기 또는 (자동 추적 시) 일하는 중인 방
+  // 카메라 목표: 전체 보기(매 프레임 뷰포트 크기에 맞춤) 또는 (자동 추적 시) 일하는 중인 방
+  const modeRef = useRef({ zoom, follow, hotRoom });
+  const snappedRef = useRef(false);
   useEffect(() => {
+    modeRef.current = { zoom, follow, hotRoom };
     const viewport = viewportRef.current;
     if (!viewport) return;
-    const compute = () => {
-      const rect = viewport.getBoundingClientRect();
-      const fit = Math.min(rect.width / world.worldW, rect.height / world.worldH);
-      if (zoom === "fit") {
-        targetRef.current = { x: world.worldW / 2, y: world.worldH / 2, scale: fit };
-        return;
+    const rect = viewport.getBoundingClientRect();
+    const fit = Math.min(rect.width / world.worldW, rect.height / world.worldH);
+    if (zoom === "fit") {
+      // 첫 그리기(또는 전체 보기 복귀)는 보간 없이 바로 맞춘다 — rAF 가 멈춘 탭에서도 화면이 맞게 나온다
+      const cam = { x: world.worldW / 2, y: world.worldH / 2, scale: fit };
+      targetRef.current = cam;
+      if (!snappedRef.current && stageRef.current) {
+        camRef.current = { ...cam };
+        stageRef.current.style.transform = `translate3d(${rect.width / 2 - cam.x * fit}px, ${rect.height / 2 - cam.y * fit}px, 0) scale(${fit})`;
+        stageRef.current.classList.toggle("compact", fit < 0.62);
+        snappedRef.current = true;
       }
-      const scale = Math.max(fit * 1.9, 0.95);
-      const room = hotRoom ? world.rooms.find((r) => r.id === hotRoom) : null;
-      targetRef.current =
-        follow && room
-          ? { x: (room.x + room.w / 2) * TILE, y: (room.y + room.h / 2) * TILE, scale }
-          : { ...targetRef.current, scale };
-    };
-    compute();
-    const observer = new ResizeObserver(compute);
-    observer.observe(viewport);
-    return () => observer.disconnect();
+      return;
+    }
+    const scale = Math.max(fit * 1.9, 0.95);
+    const room = hotRoom ? world.rooms.find((r) => r.id === hotRoom) : null;
+    targetRef.current =
+      follow && room
+        ? { x: (room.x + room.w / 2) * TILE, y: (room.y + room.h / 2) * TILE, scale }
+        : { ...targetRef.current, scale };
   }, [zoom, follow, hotRoom, world]);
 
   // 페인트 루프: 카메라 보간 + 걷는 직원 위치·자세
@@ -154,6 +159,10 @@ export default function OfficeWorld({ engine, world, deptViews, hotRoom, selecte
         cam.y += (target.y - cam.y) * 0.07;
         cam.scale += (target.scale - cam.scale) * 0.08;
         const rect = viewport.getBoundingClientRect();
+        if (modeRef.current.zoom === "fit") {
+          const fit = Math.min(rect.width / world.worldW, rect.height / world.worldH);
+          targetRef.current = { x: world.worldW / 2, y: world.worldH / 2, scale: fit };
+        }
         const ox = rect.width / 2 - cam.x * cam.scale;
         const oy = rect.height / 2 - cam.y * cam.scale;
         stage.style.transform = `translate3d(${ox}px, ${oy}px, 0) scale(${cam.scale})`;
@@ -180,7 +189,7 @@ export default function OfficeWorld({ engine, world, deptViews, hotRoom, selecte
     };
     raf = requestAnimationFrame(paint);
     return () => cancelAnimationFrame(raf);
-  }, [engine]);
+  }, [engine, world]);
 
   const onPointerDown = (e: React.PointerEvent) => {
     if ((e.target as HTMLElement).closest(".world-hud")) return;

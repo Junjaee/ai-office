@@ -1,8 +1,8 @@
 // 상태 → 위치·자세 번역 엔진. 각본·타이머·랜덤 행동 없음.
 // 직원은 상태가 바뀔 때만 움직인다: 쉬는 중(라운지 소파) ↔ 책상. 오류는 책상 옆에 서 있다.
 import type { TaskState } from "../status-rules";
-import { needsWalk, placeFor, poseFor, type Anim, type Facing, type OfficeInput, type Place } from "./office-model";
-import { findPath, nearestWalkable } from "./pathfinding";
+import { needsWalk, placeFor, poseFor, type Anim, type Facing, type OfficeInput, type Place } from "./office-model.ts";
+import { findPath, nearestWalkable } from "./pathfinding.ts";
 import type { Pt, Room, World } from "./world";
 import type { StaffSeed } from "./staff";
 

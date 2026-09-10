@@ -1,80 +1,48 @@
-# AI 오피스 (사무실 여러 개) — 작업 지침 (AI 코딩 도구용)
+# AI 오피스 — 작업 지침 (AI 코딩 도구용)
 
-> 사무실별 설정은 `app/workspaces/<id>.ts` 에 있다. 아래 안내의 `company.config.ts` 는 현재 사무실 값을 내보내는 얇은 파일이므로, 실제 수정은 `app/workspaces/` 의 해당 사무실 파일에 한다. 사무실 추가 방법은 README 참고.
+이 저장소는 **자동화를 실행하고 상태를 보여 주는 픽셀 사무실 대시보드**다. 한 사이트에 사무실(`/assembly`, `/home`)이 여럿 있고, 각 사무실은 `app/workspaces/<id>.ts` 한 파일로 정의된다. 사용자는 개발자가 아니므로 전문용어 대신 쉬운 말로 안내한다.
 
-이 프로젝트는 **AI 직원들이 돌아다니는 픽셀 사무실 시뮬레이션**입니다.
-사용자는 대부분 개발을 모르는 크리에이터입니다. 전문용어 말고 쉬운 말로 안내하세요.
-
----
-
-## 사용자가 "실행해줘" 라고 하면
-
-아래를 순서대로 하고, 각 단계를 한 줄로만 보고하세요.
-
-1. **Node.js 확인** — `node -v`
-   - 없거나 22 미만이면: 설치가 필요하다고 알리고 https://nodejs.org 의 LTS 설치를 안내하세요.
-     (직접 설치를 시도해도 되지만, 실패하면 사용자에게 링크를 주고 멈추세요.)
-2. **의존성 설치** — `npm install`
-   - 30초쯤 걸리고 폴더가 750MB로 커집니다. 미리 알려주세요. 정상입니다.
-3. **서버 실행** — `npm run dev` (백그라운드로)
-   - 다른 포트를 원하면 `npx vinext dev --port <번호>`
-4. **브라우저 열기** — http://localhost:3000
-5. 마지막에 이렇게 안내하세요:
-   > 화면 위쪽 **"오늘 업무 시작하기"** 를 누르면 직원들이 출근합니다.
-   > 직원을 클릭하면 프로필이 열려요.
-   > 이 창을 닫으면 서버도 꺼집니다. 다시 보려면 `npm run dev`.
+설계 문서: `G:\내 드라이브\dev\자동화\docs\superpowers\specs\2026-09-10-오피스-실행구조-재설계-design.md` (상태 규칙·실행 경로·화면 구성의 근거).
 
 ---
 
-## 사용자가 "내 것처럼 만들어줘" 라고 하면
+## 화면이 보여 주는 것 (바꾸지 말 것)
 
-**`company.config.ts` 이 파일 하나만 고치세요. 다른 파일은 절대 건드리지 마세요.**
+- 직원 = 자동화의 하위 작업(`automations[].tasks[]`). 이름은 사람 이름이 아니라 **업무명**.
+- 직원 상태는 네 가지뿐: **쉬는 중 · 일하는 중 · 끝남 · 오류** (+ 아직 자동화 안 된 업무는 "준비 중"). 각본·타이머·랜덤 행동은 없고, 상태가 바뀔 때만 자리를 옮긴다(쉬는 중=라운지 소파, 일하는 중·끝남=책상, 오류=책상 옆).
+- 그려지는 부서 = 워크플로가 있는 자동화가 붙은 부서만(4열, 행 수 가변). 회의실·대표실 없음. 라운지는 항상 있음.
+- 상단 **전체 시작**, 카드마다 **시작** 버튼이 실제로 GitHub Actions 를 실행한다(`POST /api/run`). 버튼 보호는 없다(사이트 주소를 아는 사람은 누구나 실행 가능). 중복 실행 방지·하루 50회 상한은 Worker 가 지킨다.
+- **사이트 변경은 모든 사무실에 함께 적용한다.** 사무실 하나만 고치는 요청이라도 나머지 사무실에서 깨지지 않는지 본다.
 
-사용자의 직업·이름·브랜드에 맞춰 아래를 바꿉니다:
+## 새 자동화 붙이기
 
-| 항목 | 위치 |
-|---|---|
-| 회사 이름, 로고 글자, 화면 제목 | `COMPANY` |
-| 대표(사용자 본인) 이름·성격 | `CEO_PROFILE` |
-| 부서 12개의 이름·아이콘·하는 일 | `DEPARTMENTS` |
-| 직원 이름·직책·색·혼잣말 | `STAFF_LIST` |
+1. 파이썬: `automations/<id>/` 에 코드와 `config.actions.yaml`(`tasks:` 목록 포함). 끝나면 `automations/common/report_status.py` 의 `report(..., workspace="<사무실>", tasks=[...])` 로 상태 파일을 커밋한다.
+2. 워크플로: `.github/workflows/<id>.yml` — `workflow_dispatch` 에 `request_id` 입력, `run-name` 에 그 값을 넣는다(`minutes.yml` 복사).
+3. 사무실 설정: `app/workspaces/<사무실>.ts` 의 `AUTOMATIONS` 에 `{ id, dept, name, workflow: "<id>.yml", schedule?, tasks[] }`. `tasks[].id` 는 yaml 의 `tasks:` 와 같아야 한다(`tests/workspaces.test.mjs` 가 검사).
+4. 실행기: 워크플로의 `runs-on` 라벨이 맞는 실행기(사무실 PC 또는 국내 서버)가 켜져 있어야 한다. `automations/runner/README.md`.
 
-### 🚨 절대 어기면 안 되는 규칙 3가지
+## 절대 규칙
 
-1. **부서 `id`를 바꾸지 마세요.**
-   `research` `brand` `strategy1` `qa` `strategy2` `reels`
-   `carousel` `partner` `finance` `review` `ops` `secretary`
-   → 시뮬레이션 엔진(`app/game/sim.ts`)이 이 id를 26곳에서 직접 참조합니다.
-   바꾸면 캐릭터가 길을 잃고 화면이 깨집니다.
-   **바꿔도 되는 건 `name` · `icon` · `short` · `task` · `report` 입니다.**
+- 부서 `id` 12개(`research brand strategy1 qa strategy2 reels carousel partner finance review ops secretary`)는 바꾸지 않는다. 안 쓰는 부서는 `HIDDEN_DEPARTMENTS` 로 숨긴다.
+- 상태 판정 규칙은 `app/status-rules.ts` 한 곳에만 둔다(`import type` 만 허용, `node --test` 가 직접 실행). 화면·엔진에서 규칙을 다시 만들지 않는다.
+- 비밀값(`GITHUB_TOKEN`, Google 토큰, Open API 키)은 코드·문서·채팅에 적지 않는다. 배포용은 Cloudflare 대시보드의 Worker 비밀값, 로컬은 `.dev.vars`(gitignore).
+- `.dev.vars` 와 `automations/*/config.yaml` 은 공유·커밋 금지.
 
-2. **부서는 정확히 12개를 유지하세요.**
-   사무실 배치가 4열 3행 = 12칸 고정입니다.
-   안 쓸 부서는 지우지 말고 **이름만 바꿔서** 쓰세요.
+## 확인 명령 (이 PC 는 x64 Node 사용)
 
-3. **`app/game/` 안의 파일을 고치지 마세요.**
-   `sim.ts` `world.ts` `staff.ts` `OfficeWorld.tsx` `pathfinding.ts` 는 엔진입니다.
-   커스터마이징으로 이 파일들을 건드릴 이유가 없습니다.
+```bash
+export PATH="/c/Users/smart/AppData/Local/node-x64/node:$PATH"
+npx tsc --noEmit          # 오류 0
+npm test                  # tests/*.test.mjs
+npm run build
+npm run dev -- --port 3011   # 화면 확인: /assembly?mock=running|done|error|idle|queued|runner_waiting|finishing|schedule_missed|static|no_token
+python -m pytest -q automations
+```
 
-### 지켜야 할 것
+## 구조
 
-- 직원 수는 자유입니다. 단 **한 팀에 `rank: "lead"` 는 정확히 1명**.
-- `colors`는 `[머리색, 옷색, 포인트색]` 이며, 기존 파스텔 톤을 유지하세요.
-  (기존 값들에서 고르면 안전합니다)
-- `thoughts`는 그 직원의 성격이 드러나는 혼잣말 2~3개. 사용자 업종의 현실적인 고민을 담으세요.
-- 고친 뒤 `npx tsc --noEmit` 으로 타입 오류가 없는지 확인하세요.
-  (`db/index.ts` · `worker/index.ts` 의 Cloudflare 타입 오류 3개는 원래 있는 것이니 무시)
-- 서버가 떠 있으면 저장 즉시 화면에 반영됩니다.
-
----
-
-## 연동(Notion·Discord)에 대해
-
-**기본값은 "연동 없음"이고, 그 상태로 완전히 정상 작동합니다.**
-화면에 "미설정"으로 뜨는 건 오류가 아닙니다. 연결 안 된 걸 연결됐다고 표시하지 않는 게 이 앱의 원칙입니다.
-
-사용자가 실제 연동을 원할 때만 `.dev.vars.example` 를 복사해 `.dev.vars` 를 만들고 값을 채우게 안내하세요.
-
-🔒 **`.dev.vars` 는 비밀번호와 같습니다.** 절대 그 내용을 화면에 출력하거나, 커밋하거나, 압축파일에 넣지 마세요.
-사용자가 이 폴더를 남에게 공유하려 하면 `.dev.vars` 를 반드시 빼라고 경고하세요.
-
+- `app/workspaces/` 사무실 설정(`types.ts`, `assembly.ts`, `home.ts`, `index.ts`). `company.config.ts` 는 현재 사무실을 내보내는 한 줄짜리 파일.
+- `app/status-rules.ts` 상태 파일 v2 + GitHub run + 로컬 요청 → 화면 상태(순수). `app/status.ts` 조회·폴링 훅(`/api/status` → 정적 파일 폴백).
+- `app/office/OfficeApp.tsx` 단일 페이지 화면. `app/game/` 월드(`world.ts`)·경로(`pathfinding.ts`)·직원(`staff.ts`)·상태→자리 번역(`office-model.ts`)·엔진(`engine.ts`)·렌더러(`OfficeWorld.tsx`).
+- `worker/` Cloudflare Worker: `index.ts`(라우팅) `run-api.ts`(`/api/run`, `/api/status`) `github.ts`(dispatch·runs·Contents) `config.ts`.
+- `automations/` 파이썬 자동화와 공통 모듈, `.github/workflows/` 실행 워크플로, `public/status/<사무실>/` 상태 파일.

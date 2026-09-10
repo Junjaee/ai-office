@@ -1,6 +1,6 @@
 // 직원 = 자동화의 하위 작업. 사무실 설정(automations[].tasks[])에서 파생한다.
 import type { AutomationDef } from "../workspaces/types";
-import { agentId } from "./office-model";
+import { agentId } from "./office-model.ts";
 
 export type StaffSeed = {
   /** `${automationId}.${taskId}` */

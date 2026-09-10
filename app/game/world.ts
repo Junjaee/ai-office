@@ -132,7 +132,10 @@ export function createWorld(depts: DeptMeta[]): World {
   const lounge = loungeRoom(rowCount);
   const rooms = [...deptRooms, lounge];
   const rows = lounge.y + LOUNGE_H + 2;
-  const cols = COLS;
+  // 쓰는 열만큼만 넓힌다 (부서 1개면 라운지 폭 기준). 4열이면 COLS 그대로.
+  const usedCols = Math.min(4, Math.max(deptRooms.length, 0));
+  const deptRight = usedCols > 0 ? COL_X[usedCols - 1] + DEPT_W + 2 : 0;
+  const cols = Math.min(COLS, Math.max(lounge.x + LOUNGE_W + 2, deptRight));
 
   const props: Prop[] = [];
   for (const room of deptRooms) {
