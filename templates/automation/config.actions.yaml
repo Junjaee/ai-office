@@ -1,0 +1,17 @@
+# __NAME__ — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
+
+# 작업에 필요한 값 (자유롭게 추가)
+request_delay: 1.0     # 사이트 요청 간격(초). 1초 이상 유지
+retries: 3
+timeout: 60
+
+# 결과물 위치 (있으면 카드에 "결과 폴더 열기" 버튼)
+result_link: ""
+
+# 상태 보고: 저장소 루트(체크아웃 위치)에 커밋
+office_repo: "."
+office_workspace: "__WORKSPACE__"   # 상태 파일을 쓸 사무실 (public/status/<id>/)
+next_run: "__NEXT_RUN__"             # 카드에 보일 다음 실행 문구
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/__WORKSPACE__.ts 의 automations[].tasks[] (테스트로 일치 강제)
+tasks: [collect]

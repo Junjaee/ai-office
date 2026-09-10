@@ -52,3 +52,15 @@ dist
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# 개인 폴더(설정·메모, 공유 안 함) — 사용자 결정 2026-09-10
+/ai-assembly/
+/ai-home/
+/ai-stock/
+# 비밀값(혹시 폴더에 남아도 절대 커밋 금지)
+token.json
+client_secret.json
+seen_msgs.json
+# 드라이브 CLAUDE.md 병합용 백업
+CLAUDE.md.drive-old
+.claude/settings.local.json

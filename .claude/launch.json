@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "ai-office-dev", "url": "http://localhost:3011", "port": 3011 }
+  ]
+}

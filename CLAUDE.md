@@ -2,7 +2,13 @@
 
 이 저장소는 **자동화를 실행하고 상태를 보여 주는 픽셀 사무실 대시보드**다. 한 사이트에 사무실(`/assembly`, `/home`)이 여럿 있고, 각 사무실은 `app/workspaces/<id>.ts` 한 파일로 정의된다. 사용자는 개발자가 아니므로 전문용어 대신 쉬운 말로 안내한다.
 
-설계 문서: `G:\내 드라이브\dev\자동화\docs\superpowers\specs\2026-09-10-오피스-실행구조-재설계-design.md` (상태 규칙·실행 경로·화면 구성의 근거).
+설계 문서: `docs\superpowers\specs\2026-09-10-오피스-실행구조-재설계-design.md` (상태 규칙·실행 경로·화면 구성의 근거).
+
+> **이 폴더 = 저장소 (사용자 결정 2026-09-10).** 이 폴더 자체가 git 저장소(GitHub `Junjaee/ai-office`)이자 **구글 드라이브 동기화 폴더**다. 코드·워크플로·대시보드·문서·템플릿이 전부 여기 있고, 커밋·푸시하면 GitHub Actions·대시보드에 반영된다.
+> - **비밀값(토큰·키·OAuth `token.json`·`client_secret.json`)은 이 폴더 어떤 파일에도 두지 않는다** — git+드라이브라 커밋되거나 클라우드에 올라간다. 자동화용은 **GitHub Secrets**, 대시보드용은 Cloudflare Worker 비밀값·`.dev.vars`(gitignore). 코드는 `os.environ` 으로만 읽는다.
+> - 개인 설정·메모는 `ai-<사무실>/NN_<이름>/`(예 `ai-home/01_가계부/`)에 두고 **`.gitignore` 로 제외**한다(공유 안 함). 코드는 `automations/<id>/` 에 둔다.
+> - 새 자동화는 `/new-automation <이름>` 스킬(`.claude/skills/`)로 시작하고, 뼈대는 `templates/automation/` 을 복사한다.
+> - **주의(드라이브+git)**: `.git`·`node_modules` 를 드라이브가 동기화하다 충돌시킬 수 있다. git 작업 중 문제가 나면 드라이브 동기화를 잠시 멈춘다.
 
 ---
 
