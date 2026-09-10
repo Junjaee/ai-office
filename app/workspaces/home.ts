@@ -1,5 +1,5 @@
 // 홈 사무실 설정. 부서 id 12개는 엔진이 참조하므로 바꾸지 말 것 (이름·아이콘·업무는 자유).
-import type { CeoProfile, CompanyInfo, Department, StaffEntry, WorkspaceConfig } from "./types";
+import type { AutomationDef, CeoProfile, CompanyInfo, Department, StaffEntry, WorkspaceConfig } from "./types";
 
 /** 기본 정보 */
 export const COMPANY: CompanyInfo = {
@@ -236,6 +236,26 @@ export const HIDDEN_DEPARTMENTS: string[] = [
   "brand", "strategy1", "qa", "strategy2", "reels", "carousel", "partner", "finance", "review",
 ];
 
+/**
+ * 자동화 목록. 아직 워크플로가 없는 것은 "준비 중". 첫 워크플로가 생기면 workflow 한 줄만 채운다.
+ */
+export const AUTOMATIONS: AutomationDef[] = [
+  { id: "ledger", dept: "research", name: "지출·정산",
+    tasks: [
+      { id: "collect", name: "내역 수집", role: "카드·계좌 지출 내역 받아오기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
+      { id: "sheet", name: "시트 정리", role: "지출 시트 기록·월별 합계", colors: ["#4b3b2c", "#bfdbfe", "#cbd5e1"] },
+    ] },
+  { id: "grocery", dept: "brand", name: "장보기·생필품", tasks: [{ id: "remind", name: "재구매 알림", role: "생필품 재구매 시기 알림" }] },
+  { id: "family", dept: "strategy1", name: "가족 일정", tasks: [{ id: "sync", name: "일정 정리", role: "가족 캘린더 정리·겹침 확인" }] },
+  { id: "bills", dept: "qa", name: "공과금·고지서", tasks: [{ id: "remind", name: "납부 알림", role: "공과금 납부 기한 알림" }] },
+  { id: "health", dept: "strategy2", name: "건강·운동", tasks: [{ id: "log", name: "건강 기록", role: "운동·건강 기록 정리" }] },
+  { id: "trip", dept: "reels", name: "여행 계획", tasks: [{ id: "plan", name: "여행 일정표", role: "여행 계획을 일정표로 정리" }] },
+  { id: "house", dept: "carousel", name: "집안 관리", tasks: [{ id: "cycle", name: "교체 주기", role: "소모품 교체·수리 주기 관리" }] },
+  { id: "car", dept: "partner", name: "차량 관리", tasks: [{ id: "schedule", name: "차량 일정", role: "정비·보험·검사 일정 알림" }] },
+  { id: "asset", dept: "finance", name: "자산·투자", tasks: [{ id: "quote", name: "시세 정리", role: "주식·코인 현황 정리" }] },
+  { id: "hobby", dept: "review", name: "취미·콘텐츠", tasks: [{ id: "archive", name: "콘텐츠 정리", role: "유튜브·AI 노래 프로젝트 기록" }] },
+];
+
 export const workspace: WorkspaceConfig = {
   id: "home",
   label: "홈",
@@ -248,4 +268,6 @@ export const workspace: WorkspaceConfig = {
   pending: PENDING_INTEGRATIONS,
   hidden: HIDDEN_DEPARTMENTS,
   storageLink: STORAGE_LINK,
+  automations: AUTOMATIONS,
+  showPlanned: false,
 };
