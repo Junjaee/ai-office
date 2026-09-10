@@ -11,7 +11,7 @@ record.assembly.go.kr 의 제21·22대 회의록 PDF를 드라이브 `02. 위원
 ## 실행
 
 ```bash
-cd "G:\내 드라이브\dev\자동화\01_국회회의록"
+cd "G:\내 드라이브\dev\자동화\ai-assembly\01_국회회의록"
 python collect_minutes.py --daily            # 최근 회기만 (매일 실행용, 수 분)
 python collect_minutes.py --backfill 22      # 22대 전체 (1시간 이상)
 python collect_minutes.py --backfill 21      # 21대 전체
