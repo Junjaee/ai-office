@@ -2,14 +2,25 @@ name: 진단 (네트워크)
 on:
   workflow_dispatch:
 jobs:
-  net:
+  github-runner:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: 국회 사이트 접속 확인
+      - name: GitHub 서버(해외)에서 국회 사이트 접속 확인
         run: |
-          for u in https://open.assembly.go.kr/portal/openapi/nzbyfwhwaoanttzje https://record.assembly.go.kr/assembly/mnts/main.do https://www.assembly.go.kr/ https://www.google.com/; do
+          for u in https://open.assembly.go.kr/portal/openapi/nzbyfwhwaoanttzje https://record.assembly.go.kr/assembly/mnts/main.do https://www.google.com/; do
             code=$(curl -s -o /dev/null -w "%{http_code} %{time_total}s" --max-time 25 -A "Mozilla/5.0" "$u" || echo "FAIL")
             echo "$u -> $code"
           done
-          echo "runner ip: $(curl -s --max-time 10 https://api.ipify.org)"
+  office-runner:
+    runs-on: [self-hosted, windows, kr-office]
+    timeout-minutes: 5
+    steps:
+      - name: 사무실 PC에서 국회 사이트·구글 접속 확인
+        shell: pwsh
+        run: |
+          foreach ($u in @("https://open.assembly.go.kr/portal/openapi/nzbyfwhwaoanttzje", "https://record.assembly.go.kr/assembly/mnts/main.do", "https://www.googleapis.com/discovery/v1/apis", "https://github.com/")) {
+            try { $r = Invoke-WebRequest -UseBasicParsing -Uri $u -TimeoutSec 25 -UserAgent "Mozilla/5.0"; "$u -> $($r.StatusCode)" } catch { "$u -> FAIL $($_.Exception.Message)" }
+          }
+          "python: $(python --version 2>&1)"
+          "git: $(git --version)"
