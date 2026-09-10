@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 101건, 실패 0건, 14초",
+  "summary": "신규 12건, 실패 0건, 18초",
   "counts": {
-    "new": 101,
+    "new": 12,
     "failed": 0,
-    "total": 101
+    "total": 113
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 101건, 실패 0건, 14초",
-    "[신규] 이준석 \"6.3 지선 사전투표는 하나도 문제 없어…없애면 참정권 제약\" — 머니투데이",
-    "[신규] 명지대 건축대학, 예비 건축가 79명 졸업전시회 개최 — v.daum.net",
-    "[신규] 이준석 경마장역 : 시간과 비용 절약 - 최신 트렌드 — Histoire pour tous",
-    "[신규] 비대위 전환 추진중인 개혁신당...천하람 “비대위원장 임기 내년 8월 보장” — 더퍼블릭"
+    "신규 12건, 실패 0건, 18초",
+    "[신규] ‘개혁신당’은 이대로 망하는 건가? - 평범한미디어의 토론 | 내 손 안의 광장, 빠띠 — campaigns.do",
+    "[신규] 이우일의 만화 그리스로마 신화 2: 헤라클레스 — 브런치",
+    "[신규] 화성특례시 \"108만 대도시 걸맞는 등기·치안 인프라 확충 시급\" — 뉴스웍스",
+    "[신규] 개혁신당 “용혜인 임명해 현 정부의 ‘공정’ 뭔지 보여야…‘꼼수 정당’ 합리화” — KBS 뉴스"
   ],
-  "link": "",
-  "run_id": 34444751445,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34444751445",
-  "request_id": "req-20260910152011-ucx8",
+  "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
+  "run_id": 34448124618,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34448124618",
+  "request_id": "req-20260910160402-link",
   "trigger": "manual",
-  "started_at": "2026-09-10T15:20:30+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-09-10T16:04:45+09:00",
+  "duration_sec": 18,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 120건"
+      "summary": "검색어 5개에서 104건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 101건 (신규 101건) · v.daum.net 14건, 머니투데이 5건, Histoire pour tous 4건"
+      "summary": "오늘 113건 (신규 12건) · v.daum.net 16건, Histoire pour tous 5건, 머니투데이 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-10T15:20:45+09:00"
+  "updated_at": "2026-09-10T16:05:03+09:00"
 }
