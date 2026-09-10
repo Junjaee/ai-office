@@ -4,7 +4,7 @@
 
 실행이 끝나면 `../common/report_status.py` 가 `public/status/assembly/minutes.json`(v2: `run_id`·`request_id`·`tasks[]` = `collect`·`replace`)을 커밋해 화면 상태가 바뀐다. 실패하면 `ok: false` 와 한국어 오류 문구(`../common/errors.py`)를 남긴다.
 
-로컬 실행은 개인 설정 파일을 지정한다: `python automations/minutes/collect_minutes.py --daily --config "G:\내 드라이브\dev\자동화_국회회의록\config.yaml"`
+로컬 실행은 개인 설정 파일을 지정한다: `python automations/minutes/collect_minutes.py --daily --config "G:\내 드라이브\dev\자동화\ai-assembly\01_국회회의록\config.yaml"`
 
 record.assembly.go.kr 의 제21·22대 회의록 PDF를 드라이브 `02. 위원회_회의/_회의록/` 에 저장한다.
 
