@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 9초",
+  "summary": "신규 5건, 실패 0건, 12초",
   "counts": {
-    "new": 8,
+    "new": 5,
     "failed": 0,
-    "total": 187
+    "total": 192
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 9초",
-    "[신규] 게임 소개에 담긴 장르 표현을 풀어보는 포커스팡 ai — Histoire pour tous",
-    "[신규] 마작 오야 뜻 인식 디자인 패턴 상세 설명 — Histoire pour tous",
-    "[신규] 카지노 온라인 한국어 무료 : 시간과 비용 절약 - 최신 트렌드 — Histoire pour tous",
-    "[신규] 개혁신당 비대위 설치 확정, 비대위원장에 조응천 거론 — 국제신문"
+    "신규 5건, 실패 0건, 12초",
+    "[신규] 화성특례시, 108만 대도시 격에 맞추어‘사법·치안 인프라’확충에 총력:장애인인식개선신문 — 장애인인식개선신문",
+    "[신규] 골드 코스트 호텔 카지노 2025년 애자일 개발: 현상, 본질 및 법칙 — Histoire pour tous",
+    "[신규] 천하람 \"강신철, 엘리트 투기꾼…파병까지 악용한 거짓 해명\" — 프리진뉴스",
+    "[신규] 추미애 경기도지사, 이광재 국회 예결위원장 만나 2027년 경기도 주요 국비 사업 2,446억 원 증액 요청 — 프레스뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34498889817,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34498889817",
-  "request_id": "req-20260911005616-92qn",
-  "trigger": "manual",
-  "started_at": "2026-09-11T00:56:31+09:00",
-  "duration_sec": 9,
+  "run_id": 34511300936,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34511300936",
+  "trigger": "schedule",
+  "started_at": "2026-09-11T02:57:06+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 163건"
+      "summary": "검색어 5개에서 166건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 8건 (신규 8건) · Histoire pour tous 3건, Nate News 1건, 국제신문 1건"
+      "summary": "오늘 13건 (신규 5건) · Histoire pour tous 4건, Nate News 1건, newscenterkorea.com 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-11T00:56:41+09:00"
+  "updated_at": "2026-09-11T02:57:19+09:00"
 }
