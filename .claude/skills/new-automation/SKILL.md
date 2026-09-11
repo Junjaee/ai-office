@@ -92,6 +92,13 @@ PY
 - `tasks[].id` = yaml `tasks:` = `do_work` 가 돌려주는 `tasks` 키. `tests/workspaces.test.mjs` 가 불일치를 잡는다.
 - 그 부서가 `HIDDEN_DEPARTMENTS` 에 있으면 뺀다. 부서 하나에 직원(tasks) 합계 6명 이하.
 
+## 4-1. (선택) 사용자가 고른 것만 만들게 하려면 — 검토 칸
+
+자동으로 다 만들지 않고 **사용자가 사이트에서 골라야** 하는 자동화(인스타 주제처럼)는 `automations/insta/` 의 검토 방식을 그대로 쓴다.
+1. 자동화가 후보를 `public/review/<사무실>/<id>.json` 에 쓴다(모양·예약 규칙은 `automations/insta/insta_review.py` — 그대로 import 해 쓴다).
+2. 워크플로 `workflow_dispatch` 에 `mode`(topics/queue/publish)·`picks` 입력을 두고, 예약(cron)으로 후보 뽑기와 예약 확인을 돈다(`.github/workflows/insta.yml` 복사).
+3. 사무실 설정의 자동화에 `review: { kind: "topics", title: "…" }` 를 넣으면 카드에 검토 칸이 생긴다(대시보드 코드 수정 없음).
+
 ## 5. 비밀값·실행기
 
 - 새 비밀값이 필요하면 사용자에게 **GitHub 저장소 Settings → Secrets and variables → Actions** 에 넣게 안내한다. 값은 채팅에 받지 않는다. 워크플로 `env:` 에 이름을 추가한다.
