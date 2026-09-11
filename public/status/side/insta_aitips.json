@@ -3,49 +3,48 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 2건, 2.0분",
+  "summary": "게시 1건, 실패 0건, 누적 3건, 9.3분",
   "counts": {
-    "new": 0,
+    "new": 1,
     "failed": 0,
-    "total": 2
+    "total": 3
   },
   "next_run": "매일 08:00 후보 · 고르면 24÷N시간 간격으로 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 2건, 2.0분",
-    "[후보] GPT가 이렇게까지 떠먹여 주는데, 가만히 있으실 거예요? — IG @ai.trend.kr · 좋아요 2.0천 · 댓글 1.5천",
-    "[후보] 여러분, 지금 당장 카톡 켜세요. ChatGPT Plus가 두 달 공짜입니다 — IG @ai.trend.kr · 좋아요 300 · 댓글 247",
-    "[후보] 이제 GPT-6에 인스타 링크 하나 넣으면 브랜드 웹사이트가 나옵니다 — IG @ai.trend.kr · 좋아요 0 · 댓글 101",
-    "[후보] 매주 30억 장을 그리던 챗GPT가 또 업그레이드됐습니다 — IG @ai.trend.kr · 좋아요 111 · 댓글 64"
+    "게시 1건, 실패 0건, 누적 3건, 9.3분",
+    "[예약] 2건 · 12.0시간 간격",
+    "[기사] 오픈AI, 말 끊김 80% 줄인 음성 AI 공개 · 검수 43점",
+    "[게시] https://www.instagram.com/p/DdJtRIjFH2k/"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34612316929,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34612316929",
-  "request_id": "req-20260911234814-d7ze",
+  "run_id": 34613867912,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34613867912",
+  "request_id": "req-20260912000344-kkfw",
   "trigger": "manual",
-  "started_at": "2026-09-11T23:49:07+09:00",
-  "duration_sec": 117,
+  "started_at": "2026-09-12T00:04:40+09:00",
+  "duration_sec": 560,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 10건 · 사이트에서 골라 주세요"
+      "summary": "후보 10건 · 예약 8건 · 게시 4건"
     },
     {
       "id": "write",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "검수 43점 (claude_cli)"
     },
     {
       "id": "card",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "카드 8장"
     },
     {
       "id": "upload",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "1건 게시"
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-11T23:51:05+09:00"
+  "updated_at": "2026-09-12T00:14:02+09:00"
 }
