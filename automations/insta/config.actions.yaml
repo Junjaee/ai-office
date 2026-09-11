@@ -6,9 +6,9 @@ default_account: aitips
 accounts:
   aitips:
     profile: aitips                          # profiles/<이름>.yaml
-    handle: "@aitips"                        # 카드에 찍히는 표시 (실제 아이디로 바꾼다)
+    handle: "@aitips_korea"                  # 카드에 찍히는 표시 (실제 인스타 사용자 이름)
     dept: research                           # 사무실 설정의 부서 id (인스타 게시글팀)
-    result_link: "https://www.instagram.com/"   # 계정이 생기면 프로필 주소로
+    result_link: "https://www.instagram.com/aitips_korea/"
     posts_per_run: 1                         # 실행 1회에 올릴 게시물 수
     candidates_to_llm: 30                    # 소재 후보를 몇 개까지 편집장(모델)에게 보여 줄지
     next_run: "수동 (▶ 시작)"
