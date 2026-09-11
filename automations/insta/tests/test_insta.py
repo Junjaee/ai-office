@@ -214,6 +214,17 @@ def test_extract_prompt_and_chat_bubble():
     assert research.is_official("https://help.openai.com/en/articles/1") and not research.is_official("https://www.pcworld.com/x")
 
 
+def test_korean_mock_renders_and_english_mock_is_dropped():
+    assert writer.clean_mock({"app": "ChatGPT", "user": "Find my data", "assistant": ["site A | info"]}) is None, "영어 목업은 버린다"
+    m = writer.clean_mock({"app": "ChatGPT", "user": "내 정보가 공개된 사이트를 표로 정리해 줘", "assistant": ["사이트 | 노출 정보 | 삭제 링크", "사람찾기 A | 이름·주소 | 삭제 요청", "B | 전화번호 | 삭제 요청"]})
+    assert m and m["app"] == "ChatGPT"
+    plan = {"cover": {"title": "제목", "sub": "s", "image": None, "mock": m}, "cards": [{"title": "c", "lines": ["a"], "image": None, "mock": m}], "cta": "x"}
+    slides = cards.build_slides(plan, "@a")
+    html = cards.render_html("dark_code", slides[0], {"accent": "#fff"})
+    assert 'class="phone"' in html and "<table>" in html and "사람찾기 A" in html and "예시 화면" in html
+    assert research.is_korean_source("https://www.aitimes.com/x", "제미나이 출시") and not research.is_korean_source("https://www.pcworld.com/x", "The Optery Guide")
+
+
 def test_plan_cards_uses_cc_photo_from_image_query_when_nothing_picked(monkeypatch):
     p = profile(cc_photos=True)
     calls = []

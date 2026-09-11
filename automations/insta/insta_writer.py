@@ -58,6 +58,14 @@ EDITOR_SCHEMA = {
                    "better_titles": {"type": "array", "items": {"type": "string"}}},
 }
 
+# 한글 채팅 화면 목업(우리가 그리는 그래픽): 앱 이름, 사용자 입력, 답변 줄(표는 "|" 로 칸 구분)
+MOCK_SCHEMA = {
+    "type": "object", "required": ["user", "assistant"],
+    "properties": {"app": {"type": "string", "maxLength": 20},
+                   "user": {"type": "string", "maxLength": 120},
+                   "assistant": {"type": "array", "minItems": 1, "maxItems": 6, "items": {"type": "string", "maxLength": 60}}},
+}
+
 CARDS_SCHEMA = {
     "type": "object",
     "required": ["cover", "cards", "cta"],
@@ -65,7 +73,7 @@ CARDS_SCHEMA = {
         "cover": {"type": "object", "required": ["title", "sub"],
                   "properties": {"title": {"type": "string", "maxLength": 48}, "sub": {"type": "string", "maxLength": 80},
                                  "image_id": {"type": "integer"}, "category": {"type": "string", "maxLength": 24},
-                                 "image_query": {"type": "string", "maxLength": 60}}},
+                                 "image_query": {"type": "string", "maxLength": 60}, "mock": MOCK_SCHEMA}},
         "cards": {
             "type": "array", "minItems": 1, "maxItems": 9,
             "items": {"type": "object", "required": ["image_id"],
@@ -73,7 +81,7 @@ CARDS_SCHEMA = {
                                      "image_caption": {"type": "string", "maxLength": 60},
                                      "keyword": {"type": "string", "maxLength": 24},
                                      "highlights": {"type": "array", "maxItems": 3, "items": {"type": "string", "maxLength": 30}},
-                                     "image_query": {"type": "string", "maxLength": 60}}},
+                                     "image_query": {"type": "string", "maxLength": 60}, "mock": MOCK_SCHEMA}},
         },
         "cta": {"type": "string", "maxLength": 80},
     },
@@ -328,14 +336,18 @@ def cards_prompt(p: Profile, article: dict, images_block: str) -> tuple[str, str
               "highlights(그 문단 text 안에 **글자 그대로 들어 있는** 강조할 어구 1~3개, 각 2~12자 — 색이 들어간다. 문단에 없는 말은 넣지 않는다).\n"
               "- 사진은 그 문단의 소주제와 **실제로 맞는** 것만 고른다(설명·출처로 판단). 공식 출처(official) 우선. 표지에는 가장 대표적인 화면·제품 사진. "
               "맞는 후보가 없으면 0. **다른 인스타 계정의 게시물 사진·화면은 후보에 없고 절대 쓰지 않는다** — 그 대신 같은 내용을 보여 줄 사진을 image_query 로 찾는다.\n"
+              "- mock(한글 화면 목업): 사진 후보에 **한글 화면**이 없으면 표지(cover.mock)와 사진 없는 카드에 챗GPT·제미나이 같은 앱 화면을 한글로 구성한다 — "
+              "app(앱 이름), user(그 카드 내용을 보여 주는 한국어 입력 한 줄), assistant(한국어 답변 3~5줄. 표가 어울리면 '사이트 | 노출 정보 | 삭제 링크' 처럼 '|' 로 칸을 나눈다). "
+              "실제 결과처럼 보이되 지어낸 회사명·개인정보는 넣지 않는다(예: '사람찾기 사이트 A'). 영어 화면·영어 문장 금지.\n"
               "- image_query: 후보 중 맞는 게 없을 때(또는 후보가 없을 때) 그 카드에 어울리는 **개념 사진**을 찾을 영어 검색어 2~5단어 "
               "(예 'person typing laptop privacy', 'smartphone photo gallery', 'security padlock data'). CC 라이선스 사진 저장소에서 찾으므로 제품 화면이 아니라 상황·사물 사진을 뜻하는 말로. "
               "표지에도 cover.image_query 를 반드시 채운다.\n"
               f"- 마지막 카드 문구(cta): {p.cta}")
     user = ("기사:\n" + json.dumps({k: article.get(k) for k in ("title", "subtitle", "paragraphs")}, ensure_ascii=False, indent=1) +
             "\n\n사진 후보(번호·종류·설명·출처):\n" + (images_block or "(없음)") +
-            '\n\nJSON: {"cover": {"title": "...\\n...", "sub": "...", "image_id": 0, "category": "AI NEWS | TOOL", "image_query": "..."}, '
-            '"cards": [{"image_id": 0, "image_caption": "", "keyword": "...", "highlights": ["..."], "image_query": "..."}], "cta": "..."}')
+            '\n\nJSON: {"cover": {"title": "...\\n...", "sub": "...", "image_id": 0, "category": "AI NEWS | TOOL", "image_query": "...", '
+            '"mock": {"app": "ChatGPT", "user": "...", "assistant": ["...", "..."]}}, '
+            '"cards": [{"image_id": 0, "image_caption": "", "keyword": "...", "highlights": ["..."], "image_query": "...", "mock": {...}}], "cta": "..."}')
     return system, user
 
 
@@ -391,7 +403,8 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
         shot = next((c for c in images if c.get("kind") == "screenshot"), None)
         photo = next((c for c in images if c.get("kind") in ("official", "related")), None)
         cc = cc_search(cover.get("image_query", ""), used) if p.cc_photos else None
-        cover["image"] = shot or photo or cc          # 공식 페이지 캡처 → 기사 사진 → (옵션) CC 개념 사진
+        # 공식 페이지 캡처 → (한글 목업이 있으면 목업) → 기사 사진 → (옵션) CC. 사진이 없으면 목업만 그린다
+        cover["image"] = shot or (None if cover.get("mock") else (photo or cc))
         if cover["image"]:
             progress("표지 사진 없음 → " + {"screenshot": "공식 페이지 캡처", "cc": "CC 사진"}.get(cover["image"].get("kind", ""), "기사 사진") + "으로 대체")
     if cover["image"]:
@@ -399,6 +412,7 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
     # 표지 사진이 렌더 때 실패(차단·빈 화면)하면 쓸 예비 후보: 사진 → 다른 캡처 순
     cover["fallbacks"] = [c for c in images if c.get("kind") in ("official", "related", "screenshot")
                           and c is not cover["image"] and c["url"] not in used][:4]
+    cover["mock"] = clean_mock(cover.get("mock"))
     paras = article.get("paragraphs", [])
     cards = plan.get("cards", [])
     # 본문은 기사 문단 그대로: 소제목 한 줄(줄바꿈 제거), 문장마다 한 줄
@@ -414,8 +428,10 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
         c["image"] = by_id.get(int(c.get("image_id") or 0))
         if c["image"] and c["image"]["url"] in used:
             c["image"] = None                       # 같은 사진을 두 카드에 쓰지 않는다
+        c["mock"] = clean_mock(c.get("mock")) if not c["image"] and i < 4 else None   # 사진 없는 앞 카드만 목업
         if c["prompt"]:
             c["image"] = None                       # 말풍선이 있는 카드는 사진을 겹치지 않는다
+            c["mock"] = None                        # 말풍선과 목업을 같이 두지 않는다
         if not c["image"] and not c["prompt"] and i < 4 and p.cc_photos:
             c["image"] = cc_search(c.get("image_query", ""), used)
             if c["image"]:
@@ -435,6 +451,16 @@ def extract_prompt(text: str) -> str:
         if re.search(r"(해\s?줘|해주세요|해 주세요|정리해|찾아|알려|보내|만들어|바꿔|써 줘|써줘)", cand):
             return cand
     return ""
+
+
+def clean_mock(m) -> dict | None:
+    """목업 검사: 사용자 입력·답변이 한국어인지, 영어 문장은 버린다."""
+    if not isinstance(m, dict) or not m.get("user") or not m.get("assistant"):
+        return None
+    lines = [str(x).strip() for x in m.get("assistant", []) if str(x).strip()][:6]
+    if not lines or not re.search(r"[가-힣]", str(m["user"])) or not any(re.search(r"[가-힣]", ln) for ln in lines):
+        return None
+    return {"app": str(m.get("app") or "ChatGPT")[:20], "user": str(m["user"])[:120], "assistant": lines}
 
 
 def strip_prompt(text: str, prompt: str) -> str:

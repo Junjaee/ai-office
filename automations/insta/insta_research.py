@@ -108,6 +108,12 @@ OFFICIAL_DOMAINS = ("openai.com", "chatgpt.com", "google", "gemini.google", "ant
                     "canva.com", "figma.com", "naver.com", "kakao.com", "samsung.com", "lge.co.kr", "nvidia.com", "amazon.com")
 
 
+def is_korean_source(url: str, title: str = "") -> bool:
+    """한국 매체·한국어 페이지인가: .kr 도메인이거나 제목에 한글이 있으면."""
+    host = re.sub(r"^https?://(www\.)?", "", url or "").split("/")[0].lower()
+    return host.endswith(".kr") or bool(re.search(r"[가-힣]", title or ""))
+
+
 def is_official(url: str) -> bool:
     host = re.sub(r"^https?://(www\.)?", "", url or "").split("/")[0].lower()
     return any(host == d or host.endswith("." + d) for d in OFFICIAL_DOMAINS)
@@ -138,6 +144,8 @@ def image_candidates(main: dict, related: list[dict], *, main_url: str = "", ext
         for im in link_art.get("images") or []:
             add(im["url"], im.get("alt", ""), link_art["link"], link_art.get("title", "공식 링크"), "official")
     for art in related:
+        if not is_korean_source(art.get("link", ""), art.get("title", "")):
+            continue                                 # 외국 매체 사진(영문 화면·홍보 사진)은 쓰지 않는다 — 사용자 결정 2026-09-11
         for im in art.get("images") or []:
             add(im["url"], im.get("alt", ""), art["link"], art.get("title", ""), "related")
     for link in (main.get("links") or [])[:2]:

@@ -29,10 +29,11 @@ def build_slides(plan: dict, handle: str) -> list[dict]:
     cover = plan.get("cover", {})
     slides = [{"kind": "cover", "title": cover.get("title", ""), "sub": cover.get("sub", ""), "n": 1, "total": total,
                "handle": handle, "image": cover.get("image") or None, "image_caption": "",
-               "category": cover.get("category", ""), "fallbacks": list(cover.get("fallbacks") or [])}]
+               "category": cover.get("category", ""), "fallbacks": list(cover.get("fallbacks") or []),
+               "mock": cover.get("mock")}]
     for i, c in enumerate(body, start=2):
         slides.append({"kind": "body", "title": c.get("title", ""), "lines": list(c.get("lines", [])),
-                       "prompt": c.get("prompt", ""),
+                       "prompt": c.get("prompt", ""), "mock": c.get("mock"),
                        "keyword": c.get("keyword", ""), "highlights": list(c.get("highlights") or []),
                        "image": c.get("image") or None, "image_caption": c.get("image_caption", ""),
                        "n": i, "total": total, "handle": handle, "idx": i - 1})
@@ -93,6 +94,10 @@ def render_html(template: str, slide: dict, theme: dict | None = None) -> str:
     th = {**DEFAULT_THEME, **(theme or {})}
     view = dict(slide)
     view["lines_html"] = [mark_highlights(ln, view.get("highlights") or []) for ln in view.get("lines") or []]
+    m = view.get("mock")
+    if m:
+        view["mock_rows"] = [[c.strip() for c in ln.split("|")] for ln in m["assistant"]]
+        view["mock_is_table"] = all(len(r) >= 2 for r in view["mock_rows"]) and len(view["mock_rows"]) >= 2
     view.setdefault("brand", BRAND)
     img = view.get("image")
     view["credit"] = view.get("credit") or (credit_of(img) if isinstance(img, dict) else "")
@@ -147,7 +152,7 @@ def prepare_image(browser, ref: str, media_dir: Path, stem: str, progress=print)
         if ref.startswith("screenshot:"):
             url = ref[len("screenshot:"):].strip()
             pg = browser.new_page(viewport={"width": 1440, "height": 900}, device_scale_factor=1,
-                                  locale="ko-KR")
+                                  locale="ko-KR", extra_http_headers={"Accept-Language": "ko-KR,ko;q=0.9"})
             try:
                 pg.goto(url, wait_until="domcontentloaded", timeout=40000)
             except Exception:  # noqa: BLE001 — 무거운 페이지는 커밋 시점까지만 기다리고 캡처한다
