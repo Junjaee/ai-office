@@ -1,11 +1,13 @@
 "use client";
-// 단일 페이지: 헤더(사무실 탭·전체 시작) → 배너 → 요약 4칸 → 픽셀 사무실 → 자동화 카드 → 토스트
+// 단일 페이지: 헤더(사무실 탭) → 배너 → 요약 4칸·전체 시작 → 픽셀 사무실 → 자동화 카드 → 실행 이력(날짜별) → 토스트
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { WORKSPACE } from "../../company.config";
 import { WORKSPACE_LIST } from "../workspaces";
 import { LABELS, STATE_CLASS, TRIGGER_LABEL, durationText, historyLabel, relativeTime, type AutomationView, type TaskState } from "../status-rules";
 import { useLiveStatus } from "../status";
+import { useHistory } from "../history";
+import { HISTORY_START, clampDate, historyMessage, historyTitle, shiftDate } from "../history-rules";
 import OfficeWorld from "../game/OfficeWorld";
 import { OfficeEngine, type Agent } from "../game/engine";
 import { createWorld } from "../game/world";
@@ -34,6 +36,17 @@ export default function OfficeApp() {
   const [selected, setSelected] = useState<string | null>(null);
   const [follow, setFollow] = useState(true);
   const [open, setOpen] = useState<Set<string>>(() => new Set());
+  const [histDate, setHistDate] = useState<string | null>(null); // null = 오늘
+  const hist = useHistory(ws, histDate);
+  const histItems = hist.data?.items ?? [];
+  const histMsg = historyMessage({
+    loading: hist.loading,
+    error: hist.error,
+    source: hist.data?.source ?? null,
+    partial: hist.data?.partial ?? false,
+    count: histItems.length,
+    isToday: hist.date === hist.today,
+  });
 
   // 그리는 부서 = 숨기지 않았고 워크플로 있는 자동화가 하나라도 있는 부서 (showPlanned 면 자동화만 있어도)
   const visibleDepts = useMemo(
@@ -313,15 +326,33 @@ export default function OfficeApp() {
         </section>
 
         {runnable.length > 0 ? (
-          <section className="history" aria-label="오늘 실행 이력">
-            <h3>오늘 실행 이력</h3>
-            {!live.loaded ? (
-              <p className="auto-meta">불러오는 중…</p>
-            ) : live.source !== "github" ? (
-              <p className="auto-meta">실행 이력은 GitHub 연결이 있을 때만 보여요.</p>
-            ) : live.history.length === 0 ? (
-              <p className="auto-meta">오늘은 아직 실행한 게 없어요.</p>
-            ) : (
+          <section className="history" aria-label="실행 이력">
+            <div className="history-head">
+              <h3>{historyTitle(hist.date, hist.today)}</h3>
+              <div className="history-nav">
+                <button className="btn btn-ghost" onClick={() => setHistDate(shiftDate(hist.date, -1))} disabled={hist.date <= HISTORY_START} aria-label="이전 날">
+                  ◀
+                </button>
+                <input
+                  type="date"
+                  value={hist.date}
+                  min={HISTORY_START}
+                  max={hist.today}
+                  onChange={(e) => {
+                    if (e.target.value) setHistDate(clampDate(e.target.value, HISTORY_START, hist.today));
+                  }}
+                  aria-label="날짜 고르기"
+                />
+                <button className="btn btn-ghost" onClick={() => setHistDate(shiftDate(hist.date, 1))} disabled={hist.date >= hist.today} aria-label="다음 날">
+                  ▶
+                </button>
+                <button className="btn btn-ghost" onClick={() => setHistDate(null)} disabled={hist.date === hist.today}>
+                  오늘로
+                </button>
+              </div>
+            </div>
+            {histMsg ? <p className="auto-meta">{histMsg.text}</p> : null}
+            {histMsg?.replacesTable ? null : (
               <div className="history-scroll">
                 <table className="history-table">
                   <thead>
@@ -330,12 +361,13 @@ export default function OfficeApp() {
                       <th>자동화</th>
                       <th>방식</th>
                       <th>상태</th>
+                      <th>결과</th>
                       <th>소요</th>
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {live.history.map((h) => {
+                    {histItems.map((h) => {
                       const label = historyLabel(h.status, h.conclusion);
                       const started = h.startedAt ? new Date(h.startedAt) : null;
                       return (
@@ -346,11 +378,16 @@ export default function OfficeApp() {
                           <td>
                             <span className={`status-pill ${label.cls}`}>{label.text}</span>
                           </td>
+                          <td className="history-summary" title={h.summary ?? undefined}>
+                            {h.summary ?? "–"}
+                          </td>
                           <td>{durationText(h.startedAt, h.completedAt)}</td>
                           <td>
-                            <a href={h.url} target="_blank" rel="noreferrer">
-                              기록 ↗
-                            </a>
+                            {h.url ? (
+                              <a href={h.url} target="_blank" rel="noreferrer">
+                                기록 ↗
+                              </a>
+                            ) : null}
                           </td>
                         </tr>
                       );

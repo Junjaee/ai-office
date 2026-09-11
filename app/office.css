@@ -357,6 +357,12 @@
 /* ── 오늘 실행 이력 ─────────────────────────────────────────────── */
 .history { margin-top: 14px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 14px; background: var(--win); box-shadow: var(--shadow); }
 .history h3 { margin: 0 0 8px; font-size: 15px; }
+.history-head { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.history-head h3 { margin: 0; }
+.history-nav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.history-nav .btn-ghost { padding: 6px 10px; }
+.history-nav input[type="date"] { padding: 5px 8px; border: 2px solid var(--ink); border-radius: 10px; background: #fff; font: inherit; font-size: 13px; }
+.history-table td.history-summary { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
 .history-scroll { overflow-x: auto; }
 .history-table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
 .history-table th { text-align: left; padding: 4px 8px; font-size: 11px; color: var(--ink-soft); border-bottom: 1.5px solid var(--c-gray200); }

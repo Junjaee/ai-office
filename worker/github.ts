@@ -1,5 +1,5 @@
 // GitHub REST 클라이언트 (dispatch · runs · Contents). fetchImpl 을 주입할 수 있어 가짜 fetch 로 테스트한다.
-import { OWNER, REF, REPO } from "./config.ts";
+import { HISTORY_MAX_PAGES, HISTORY_RUNS_PER_PAGE, OWNER, REF, REPO } from "./config.ts";
 
 export type FetchImpl = (input: string, init?: RequestInit) => Promise<Response>;
 
@@ -50,8 +50,25 @@ export type GitHubLike = {
   tokenExpiresAt: string | null;
   dispatch(workflowFile: string, inputs: Record<string, string>): Promise<void>;
   listRuns(perPage: number): Promise<RunSummary[]>;
+  listRunsBetween(fromIso: string, toIso: string): Promise<RunSummary[]>;
+  readRepoText(path: string): Promise<string | null>;
   readStatusFile(ws: string, id: string): Promise<unknown | null>;
 };
+
+/** runs API 한 건 → 화면에 필요한 필드만 */
+function toRunSummary(r: Record<string, unknown>): RunSummary {
+  return {
+    id: Number(r.id),
+    path: String(r.path ?? ""),
+    status: String(r.status ?? ""),
+    conclusion: r.conclusion == null ? null : String(r.conclusion),
+    display_title: String(r.display_title ?? r.name ?? ""),
+    event: String(r.event ?? ""),
+    run_started_at: r.run_started_at == null ? null : String(r.run_started_at),
+    updated_at: String(r.updated_at ?? ""),
+    html_url: String(r.html_url ?? ""),
+  };
+}
 
 const API = "https://api.github.com";
 const TOKEN_EXPIRATION_HEADER = "github-authentication-token-expiration";
@@ -107,17 +124,32 @@ export class GitHubClient implements GitHubLike {
     if (res.status === 404) throw new GitHubNotFoundError();
     if (!res.ok) throw new GitHubUnavailableError(res.status, `runs returned ${res.status}`);
     const data = (await res.json()) as { workflow_runs?: Array<Record<string, unknown>> };
-    return (data.workflow_runs ?? []).map((r) => ({
-      id: Number(r.id),
-      path: String(r.path ?? ""),
-      status: String(r.status ?? ""),
-      conclusion: r.conclusion == null ? null : String(r.conclusion),
-      display_title: String(r.display_title ?? r.name ?? ""),
-      event: String(r.event ?? ""),
-      run_started_at: r.run_started_at == null ? null : String(r.run_started_at),
-      updated_at: String(r.updated_at ?? ""),
-      html_url: String(r.html_url ?? ""),
-    }));
+    return (data.workflow_runs ?? []).map(toRunSummary);
+  }
+
+  /** GET actions/runs?created=from..to — 100개씩, 최대 HISTORY_MAX_PAGES 페이지 */
+  async listRunsBetween(fromIso: string, toIso: string): Promise<RunSummary[]> {
+    const out: RunSummary[] = [];
+    for (let page = 1; page <= HISTORY_MAX_PAGES; page++) {
+      const res = await this.#request(`/repos/${OWNER}/${REPO}/actions/runs?per_page=${HISTORY_RUNS_PER_PAGE}&page=${page}&created=${fromIso}..${toIso}`);
+      if (res.status === 404) throw new GitHubNotFoundError();
+      if (!res.ok) throw new GitHubUnavailableError(res.status, `runs returned ${res.status}`);
+      const data = (await res.json()) as { workflow_runs?: Array<Record<string, unknown>> };
+      const runs = (data.workflow_runs ?? []).map(toRunSummary);
+      out.push(...runs);
+      if (runs.length < HISTORY_RUNS_PER_PAGE) break;
+    }
+    return out;
+  }
+
+  /** GET contents/{path}?ref=main (raw) → 글자, 404 면 null */
+  async readRepoText(path: string): Promise<string | null> {
+    const res = await this.#request(`/repos/${OWNER}/${REPO}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${REF}`, {
+      accept: "application/vnd.github.raw+json",
+    });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new GitHubUnavailableError(res.status, `contents returned ${res.status}`);
+    return await res.text();
   }
 
   /** GET /repos/{o}/{r}/contents/public/status/{ws}/{id}.json?ref=main (raw) → JSON, 404 면 null */

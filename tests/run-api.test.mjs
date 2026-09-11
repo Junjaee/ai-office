@@ -2,10 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   decideRun, parseRequestId, latestValidRunByWorkflow, kstDateKey, dailyCount, addDailyCount,
-  createRunApiStores, handleRun, handleStatus, isCrossOrigin, todayHistory,
+  createRunApiStores, handleRun, handleStatus, isCrossOrigin, handleHistory, isValidDate, kstDayRangeUtc, historyFromRuns, parseArchive, mergeHistory,
 } from "../worker/run-api.ts";
 import { GitHubClient, GitHubAuthError, GitHubUnavailableError, GitHubNotFoundError } from "../worker/github.ts";
-import { DAILY_RUN_LIMIT, STATUS_CACHE_MS, TOO_SOON_MS } from "../worker/config.ts";
+import { DAILY_RUN_LIMIT, STATUS_CACHE_MS, TOO_SOON_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS, HISTORY_PAST_CACHE_MS } from "../worker/config.ts";
 
 // ── 공통 가짜 객체 ──
 const ORIGIN = "https://ai-office.example.workers.dev";
@@ -33,8 +33,8 @@ function run(over = {}) {
 }
 
 /** 가짜 GitHub 클라이언트 — 호출 기록을 남긴다 */
-function fakeGithub({ runs = [], files = {}, dispatchError = null, runsError = null, fileError = null, tokenExpiresAt = "2027-09-01T00:00:00.000Z" } = {}) {
-  const calls = { dispatch: [], listRuns: 0, readStatusFile: [] };
+function fakeGithub({ runs = [], files = {}, dispatchError = null, runsError = null, fileError = null, tokenExpiresAt = "2027-09-01T00:00:00.000Z", ranged = [], texts = {}, rangedError = null, textError = null } = {}) {
+  const calls = { dispatch: [], listRuns: 0, readStatusFile: [], listRunsBetween: [], readRepoText: [] };
   return {
     calls,
     tokenExpiresAt,
@@ -51,6 +51,16 @@ function fakeGithub({ runs = [], files = {}, dispatchError = null, runsError = n
       calls.readStatusFile.push(`${ws}/${id}`);
       if (fileError) throw fileError;
       return files[id] ?? null;
+    },
+    async listRunsBetween(from, to) {
+      calls.listRunsBetween.push([from, to]);
+      if (rangedError) throw rangedError;
+      return ranged;
+    },
+    async readRepoText(path) {
+      calls.readRepoText.push(path);
+      if (textError) throw textError;
+      return texts[path] ?? null;
     },
   };
 }
@@ -387,31 +397,113 @@ test("handleStatus: 5xx 는 canRun 유지 · githubError unavailable", async () 
   assert.equal(body.config.githubError, "unavailable");
 });
 
-test("todayHistory: 오늘(KST) 시작한 이 사무실 run 만, 취소 포함, 최신순, 방식 분류", () => {
-  const runs = [
-    run({ id: 1, run_started_at: "2026-09-10T14:00:00Z" }),                       // KST 어제 23:00 → 제외
-    run({ id: 2, run_started_at: "2026-09-10T15:30:00Z", event: "schedule" }),    // KST 오늘 00:30
-    run({ id: 3, status: "in_progress", conclusion: null }),
-    run({ id: 4, conclusion: "cancelled" }),
-    run({ id: 5, path: ".github/workflows/other.yml" }),                           // 이 사무실 자동화 아님
-    run({ id: 6, path: ".github/workflows/mail.yml", event: "push" }),
-  ];
-  const h = todayHistory(runs, workspaces.assembly.automations, NOW);
-  assert.deepEqual(h.map((x) => x.id), [6, 4, 3, 2]);
-  assert.equal(h[3].trigger, "schedule");
-  assert.equal(h[2].trigger, "manual");
-  assert.equal(h[0].trigger, "other");
-  assert.equal(h[0].automationId, "mail");
-  assert.equal(h[1].conclusion, "cancelled");
-  assert.equal(h[2].completedAt, null);
-  assert.equal(h[3].requestId, "req-20260911090001-a1b2");
+// ── 실행 이력 (날짜별) ──
+test("isValidDate · kstDayRangeUtc: KST 하루 → UTC 범위", () => {
+  assert.equal(isValidDate("2026-09-10"), true);
+  assert.equal(isValidDate("2026-02-30"), false);
+  assert.equal(isValidDate("2026-9-10"), false);
+  assert.deepEqual(kstDayRangeUtc("2026-09-10"), { from: "2026-09-09T15:00:00Z", to: "2026-09-10T14:59:59Z" });
 });
 
-test("handleStatus: history 는 오늘 이력, GitHub 실패면 빈 배열", async () => {
-  const ok = await (await handleStatus(statusRequest(), fakeEnv(), makeDeps({ github: fakeGithub({ runs: [run(), run({ id: 101, conclusion: "cancelled" })] }) }))).json();
-  assert.deepEqual(ok.history.map((x) => x.id), [101, 100]);
-  const bad = await (await handleStatus(statusRequest(), fakeEnv(), makeDeps({ github: fakeGithub({ runsError: new GitHubUnavailableError(500) }) }))).json();
-  assert.deepEqual(bad.history, []);
+test("historyFromRuns: 이 사무실 자동화 run 만, 방식 분류, 요약 없음", () => {
+  const h = historyFromRuns([
+    run({ id: 1, event: "schedule" }),
+    run({ id: 2, path: ".github/workflows/other.yml" }),
+    run({ id: 3, path: ".github/workflows/mail.yml", event: "push", status: "in_progress", conclusion: null }),
+  ], workspaces.assembly.automations);
+  assert.deepEqual(h.map((x) => [x.id, x.automationId, x.trigger]), [["1", "minutes", "schedule"], ["3", "mail", "other"]]);
+  assert.equal(h[0].summary, null);
+  assert.equal(h[1].completedAt, null);
+});
+
+test("parseArchive: 그날(KST) 줄만, 깨진 줄은 건너뜀", () => {
+  const text = [
+    JSON.stringify({ run_id: 1, automation: "minutes", started_at: "2026-09-10T23:59:00+09:00", ok: true, summary: "어제" }),
+    "{깨진 줄",
+    JSON.stringify({ run_id: 2, started_at: "2026-09-10T15:30:00Z", ok: true, summary: "오늘 00:30" }),
+    JSON.stringify({ automation: "minutes", recorded_at: "2026-09-11T08:00:00+09:00", trigger: "local", ok: false, summary: "이 PC" }),
+    "",
+  ].join("\n");
+  const lines = parseArchive(text, "minutes", "2026-09-11");
+  assert.deepEqual(lines.map((l) => l.summary), ["오늘 00:30", "이 PC"]);
+  assert.equal(lines[0].automation, "minutes");
+});
+
+test("mergeHistory: GitHub 상태 + 일지 요약, 일지에만 있는 실행, 최신순", () => {
+  const gh = historyFromRuns([
+    run({ id: 10, run_started_at: "2026-09-11T00:10:00Z" }),
+    run({ id: 11, conclusion: "cancelled", run_started_at: "2026-09-11T01:00:00Z" }),
+  ], workspaces.assembly.automations);
+  const archive = [
+    { run_id: 10, automation: "minutes", started_at: "2026-09-11T09:10:05+09:00", ok: true, summary: "신규 3건" },
+    { run_id: 9, automation: "minutes", trigger: "schedule", started_at: "2026-09-11T08:00:00+09:00", duration_sec: 90, ok: false, summary: "실패", url: "u9" },
+    { automation: "minutes", trigger: "local", started_at: "2026-09-11T11:00:00+09:00", ok: true, summary: "이 PC" },
+  ];
+  const m = mergeHistory(gh, archive);
+  assert.deepEqual(m.map((x) => x.id), ["local:minutes:2026-09-11T11:00:00+09:00", "11", "10", "9"]);
+  assert.equal(m[2].summary, "신규 3건");
+  assert.equal(m[2].url, "https://github.com/Junjaee/ai-office/actions/runs/10");
+  assert.equal(m[1].summary, null);
+  assert.deepEqual([m[3].status, m[3].conclusion, m[3].trigger, m[3].completedAt], ["completed", "failure", "schedule", "2026-09-10T23:01:30.000Z"]);
+  assert.equal(m[0].url, null);
+});
+
+function historyRequest(query) {
+  return new Request(ORIGIN + "/api/history?" + query, { method: "GET" });
+}
+
+test("handleHistory: 날짜 검증 · 모르는 사무실", async () => {
+  const deps = makeDeps();
+  assert.equal((await handleHistory(historyRequest("ws=assembly&date=2026-9-1"), deps)).status, 400);
+  assert.equal((await handleHistory(historyRequest("ws=assembly&date=2026-09-12"), deps)).status, 400); // KST 오늘 9/11 → 미래
+  assert.equal((await handleHistory(historyRequest("ws=nope&date=2026-09-11"), deps)).status, 404);
+  assert.equal((await handleHistory(historyRequest("ws=assembly&date=2026-09-11"), deps)).status, 200);
+});
+
+test("handleHistory: GitHub 목록 + 그 달 일지(workflow 있는 자동화) 합치기", async () => {
+  const github = fakeGithub({
+    ranged: [run({ id: 100, run_started_at: "2026-09-11T00:01:00Z" })],
+    texts: { "history/assembly/minutes/2026-09.jsonl": JSON.stringify({ run_id: 100, automation: "minutes", started_at: "2026-09-11T09:01:10+09:00", ok: true, summary: "신규 3건" }) + "\n" },
+  });
+  const body = await (await handleHistory(historyRequest("ws=assembly&date=2026-09-11"), makeDeps({ github }))).json();
+  assert.deepEqual(github.calls.listRunsBetween, [["2026-09-10T15:00:00Z", "2026-09-11T14:59:59Z"]]);
+  assert.deepEqual([...github.calls.readRepoText].sort(), ["history/assembly/mail/2026-09.jsonl", "history/assembly/minutes/2026-09.jsonl"]);
+  assert.deepEqual([body.date, body.today, body.start, body.source, body.partial], ["2026-09-11", "2026-09-11", HISTORY_START, "github", false]);
+  assert.deepEqual(body.items.map((x) => [x.id, x.summary]), [["100", "신규 3건"]]);
+});
+
+test("handleHistory: GitHub 실패 → 일지만(archive·partial), 토큰 없음 → static, 시작일 이전 → 빈 목록", async () => {
+  const github = fakeGithub({ rangedError: new GitHubUnavailableError(502), texts: { "history/assembly/minutes/2026-09.jsonl": JSON.stringify({ run_id: 7, started_at: "2026-09-11T08:00:00+09:00", ok: true, summary: "일지" }) } });
+  const a = await (await handleHistory(historyRequest("ws=assembly&date=2026-09-11"), makeDeps({ github }))).json();
+  assert.deepEqual([a.source, a.partial, a.items.map((x) => x.summary)], ["archive", true, ["일지"]]);
+  const s = await (await handleHistory(historyRequest("ws=assembly&date=2026-09-11"), makeDeps({ github: null }))).json();
+  assert.deepEqual([s.source, s.items], ["static", []]);
+  const g2 = fakeGithub();
+  const old = await (await handleHistory(historyRequest("ws=assembly&date=2026-09-01"), makeDeps({ github: g2 }))).json();
+  assert.deepEqual([old.items, g2.calls.listRunsBetween.length], [[], 0]);
+});
+
+test("handleHistory: 캐시 — 오늘 30초, 지난 날 10분", async () => {
+  let now = NOW;
+  const github = fakeGithub();
+  const deps = makeDeps({ github, now: () => now });
+  await handleHistory(historyRequest("ws=assembly&date=2026-09-11"), deps);
+  await handleHistory(historyRequest("ws=assembly&date=2026-09-10"), deps);
+  now += HISTORY_TODAY_CACHE_MS - 1;
+  await handleHistory(historyRequest("ws=assembly&date=2026-09-11"), deps);
+  assert.equal(github.calls.listRunsBetween.length, 2);
+  now += 2;
+  await handleHistory(historyRequest("ws=assembly&date=2026-09-11"), deps);
+  await handleHistory(historyRequest("ws=assembly&date=2026-09-10"), deps);
+  assert.equal(github.calls.listRunsBetween.length, 3);
+  now += HISTORY_PAST_CACHE_MS;
+  await handleHistory(historyRequest("ws=assembly&date=2026-09-10"), deps);
+  assert.equal(github.calls.listRunsBetween.length, 4);
+});
+
+test("handleStatus: history 는 보내지 않는다 (표는 /api/history)", async () => {
+  const body = await (await handleStatus(statusRequest(), fakeEnv(), makeDeps({ github: fakeGithub({ runs: [run()] }) }))).json();
+  assert.equal("history" in body, false);
 });
 
 test("handleStatus: 토큰 없으면 runs 빈 객체 · canRun false · static 파일", async () => {
@@ -489,4 +581,26 @@ test("GitHubClient: readStatusFile 은 raw Accept, JSON 반환, 404 면 null", a
   assert.equal(f.calls[0].url, "https://api.github.com/repos/Junjaee/ai-office/contents/public/status/assembly/minutes.json?ref=main");
   assert.equal(f.calls[0].init.headers.Accept, "application/vnd.github.raw+json");
   assert.equal(await gh.readStatusFile("assembly", "mail"), null);
+});
+
+test("GitHubClient.listRunsBetween: created 범위 · 100개씩 · 최대 3페이지", async () => {
+  const page = (n) => ({ workflow_runs: Array.from({ length: n }, (_, i) => ({ id: i + 1, path: ".github/workflows/minutes.yml", status: "completed", conclusion: "success", display_title: "t", event: "schedule", run_started_at: null, updated_at: "u", html_url: "h" })) });
+  const bodies = [page(100), page(100), page(100), page(5)];
+  const f = fakeFetch(() => Response.json(bodies.shift()));
+  const runs = await new GitHubClient("t", f).listRunsBetween("2026-09-09T15:00:00Z", "2026-09-10T14:59:59Z");
+  assert.equal(runs.length, 300);
+  assert.equal(f.calls.length, 3);
+  assert.equal(f.calls[0].url, "https://api.github.com/repos/Junjaee/ai-office/actions/runs?per_page=100&page=1&created=2026-09-09T15:00:00Z..2026-09-10T14:59:59Z");
+  const one = fakeFetch(() => Response.json(page(2)));
+  assert.equal((await new GitHubClient("t", one).listRunsBetween("a", "b")).length, 2);
+  assert.equal(one.calls.length, 1);
+});
+
+test("GitHubClient.readRepoText: raw 글자, 404 → null, 5xx → Unavailable", async () => {
+  const f = fakeFetch(() => new Response("line1\nline2\n"));
+  assert.equal(await new GitHubClient("t", f).readRepoText("history/assembly/news/2026-09.jsonl"), "line1\nline2\n");
+  assert.equal(f.calls[0].url, "https://api.github.com/repos/Junjaee/ai-office/contents/history/assembly/news/2026-09.jsonl?ref=main");
+  assert.equal(f.calls[0].init.headers.Accept, "application/vnd.github.raw+json");
+  assert.equal(await new GitHubClient("t", fakeFetch(() => new Response("", { status: 404 }))).readRepoText("x"), null);
+  await assert.rejects(new GitHubClient("t", fakeFetch(() => new Response("", { status: 502 }))).readRepoText("x"), GitHubUnavailableError);
 });

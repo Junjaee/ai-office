@@ -1,9 +1,9 @@
-/** Cloudflare Worker 진입점 — /api/run · /api/status 만 직접 처리하고 나머지는 vinext 에 넘긴다. */
+/** Cloudflare Worker 진입점 — /api/run · /api/status · /api/history 만 직접 처리하고 나머지는 vinext 에 넘긴다. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { WORKSPACES } from "../app/workspaces/index";
 import { GitHubClient } from "./github.ts";
-import { createRunApiStores, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
+import { createRunApiStores, handleHistory, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
 
 interface Env {
   ASSETS: Fetcher;
@@ -40,6 +40,10 @@ const worker = {
 
     if (url.pathname === "/api/status") {
       return handleStatus(request, env, depsFor(env));
+    }
+
+    if (url.pathname === "/api/history") {
+      return handleHistory(request, depsFor(env));
     }
 
     if (url.pathname === "/_vinext/image") {

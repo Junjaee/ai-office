@@ -1,5 +1,8 @@
 // /api/run · /api/status 순수 로직. vinext/next 를 import 하지 않고, 시간·GitHub·저장소는 deps 로 주입받는다.
-import { DAILY_RUN_LIMIT, RUNS_PER_PAGE, STATUS_CACHE_MS, TOO_SOON_MS } from "./config.ts";
+import {
+  DAILY_RUN_LIMIT, HISTORY_CACHE_MAX, HISTORY_PAST_CACHE_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS,
+  RUNS_PER_PAGE, STATUS_CACHE_MS, TOO_SOON_MS,
+} from "./config.ts";
 import { GitHubAuthError, GitHubNotFoundError, GitHubUnavailableError, type GitHubLike, type RunSummary } from "./github.ts";
 
 // ── 사무실 설정(구조만 맞으면 됨 — app/workspaces 의 WorkspaceConfig 와 호환) ──
@@ -87,43 +90,137 @@ export type RunView = {
   url: string;
 };
 
-/** 오늘 실행 이력 한 줄 (취소 포함, 최신순) */
+/** 실행 이력 한 줄 (취소 포함). id 는 GitHub 실행 번호, 이 PC 실행은 "local:<자동화>:<시작 시각>" */
+export type HistoryTrigger = "manual" | "schedule" | "local" | "other";
 export type HistoryItem = {
-  id: number;
+  id: string;
   automationId: string;
   status: string;
   conclusion: string | null;
-  trigger: "manual" | "schedule" | "other";
+  trigger: HistoryTrigger;
   requestId: string | null;
   startedAt: string | null;
   completedAt: string | null;
-  url: string;
+  url: string | null;
+  summary: string | null;
 };
 
-/** 이 사무실 자동화의 run 중 KST 오늘 시작한 것만, run id 내림차순 */
-export function todayHistory(runs: RunSummary[], automations: WorkspaceLike["automations"], nowMs: number): HistoryItem[] {
-  const today = kstDateKey(nowMs);
+/** 일지 한 줄 (automations/common/history_log.py 가 쓴다) */
+export type ArchiveLine = {
+  run_id?: number;
+  automation?: string;
+  request_id?: string;
+  trigger?: string;
+  started_at?: string;
+  duration_sec?: number;
+  ok?: boolean;
+  summary?: string;
+  url?: string;
+  recorded_at?: string;
+};
+
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+export function isValidDate(date: string): boolean {
+  if (!DATE_RE.test(date)) return false;
+  const t = Date.parse(`${date}T00:00:00Z`);
+  return !Number.isNaN(t) && new Date(t).toISOString().slice(0, 10) === date;
+}
+
+/** KST 하루 → GitHub `created` 필터용 UTC 범위 */
+export function kstDayRangeUtc(date: string): { from: string; to: string } {
+  const start = Date.parse(`${date}T00:00:00+09:00`);
+  const iso = (ms: number) => new Date(ms).toISOString().replace(".000Z", "Z");
+  return { from: iso(start), to: iso(start + 86_400_000 - 1000) };
+}
+
+function toTrigger(event: string): HistoryTrigger {
+  return event === "workflow_dispatch" ? "manual" : event === "schedule" ? "schedule" : "other";
+}
+
+/** GitHub run → 이력 한 줄. 이 사무실 자동화의 워크플로가 아니면 뺀다 */
+export function historyFromRuns(runs: RunSummary[], automations: WorkspaceLike["automations"]): HistoryItem[] {
   const byFile = new Map<string, string>();
   for (const a of automations) if (a.workflow) byFile.set(a.workflow, a.id);
   const out: HistoryItem[] = [];
   for (const run of runs) {
     const automationId = byFile.get(workflowFileOf(run));
     if (!automationId) continue;
-    const startedMs = run.run_started_at ? Date.parse(run.run_started_at) : NaN;
-    if (Number.isNaN(startedMs) || kstDateKey(startedMs) !== today) continue;
     out.push({
-      id: run.id,
+      id: String(run.id),
       automationId,
       status: run.status,
       conclusion: run.conclusion,
-      trigger: run.event === "workflow_dispatch" ? "manual" : run.event === "schedule" ? "schedule" : "other",
+      trigger: toTrigger(run.event),
       requestId: parseRequestId(run.display_title),
       startedAt: run.run_started_at,
       completedAt: run.status === "completed" ? run.updated_at : null,
-      url: run.html_url,
+      url: run.html_url || null,
+      summary: null,
     });
   }
-  return out.sort((a, b) => b.id - a.id);
+  return out;
+}
+
+/** 일지 파일(jsonl) → 그날(KST) 줄만. 깨진 줄은 건너뛴다 */
+export function parseArchive(text: string, automationId: string, date: string): ArchiveLine[] {
+  const out: ArchiveLine[] = [];
+  for (const raw of text.split("\n")) {
+    const s = raw.trim();
+    if (!s) continue;
+    let line: ArchiveLine;
+    try {
+      line = JSON.parse(s) as ArchiveLine;
+    } catch {
+      continue;
+    }
+    if (!line || typeof line !== "object") continue;
+    const when = line.started_at ?? line.recorded_at;
+    const ms = when ? Date.parse(when) : NaN;
+    if (Number.isNaN(ms) || kstDateKey(ms) !== date) continue;
+    out.push({ ...line, automation: line.automation ?? automationId });
+  }
+  return out;
+}
+
+function archiveKey(line: ArchiveLine): string {
+  return line.run_id != null ? String(line.run_id) : `local:${line.automation}:${line.started_at ?? line.recorded_at ?? ""}`;
+}
+
+function itemFromArchive(line: ArchiveLine): HistoryItem {
+  const started = line.started_at ?? null;
+  const startMs = started ? Date.parse(started) : NaN;
+  const completedAt =
+    !Number.isNaN(startMs) && typeof line.duration_sec === "number" ? new Date(startMs + line.duration_sec * 1000).toISOString() : (line.recorded_at ?? null);
+  const trigger: HistoryTrigger = line.trigger === "manual" || line.trigger === "schedule" || line.trigger === "local" ? line.trigger : "other";
+  return {
+    id: archiveKey(line),
+    automationId: line.automation ?? "",
+    status: "completed",
+    conclusion: line.ok === false ? "failure" : "success",
+    trigger,
+    requestId: line.request_id ?? null,
+    startedAt: started,
+    completedAt,
+    url: line.url ?? null,
+    summary: line.summary ?? null,
+  };
+}
+
+/** GitHub 목록 + 일지 → 실행 번호로 합친다 (상태·시각·링크는 GitHub, 요약은 일지). 최신순 */
+export function mergeHistory(fromGithub: HistoryItem[], archive: ArchiveLine[]): HistoryItem[] {
+  const byId = new Map<string, HistoryItem>(fromGithub.map((h) => [h.id, { ...h }]));
+  for (const line of archive) {
+    const key = archiveKey(line);
+    const hit = byId.get(key);
+    if (hit) {
+      if (line.summary) hit.summary = line.summary;
+    } else {
+      byId.set(key, itemFromArchive(line));
+    }
+  }
+  const at = (h: HistoryItem) => (h.startedAt ? Date.parse(h.startedAt) : 0) || 0;
+  return [...byId.values()].sort((a, b) => at(b) - at(a) || b.id.localeCompare(a.id, undefined, { numeric: true }));
 }
 
 export function toRunView(run: RunSummary): RunView {
@@ -153,9 +250,19 @@ export type StatusBody = {
   config: { canRun: boolean; tokenExpiresAt: string | null; githubError: GitHubErrorKind };
   runs: Record<string, RunView | null>;
   files: Record<string, unknown | null>;
-  /** 오늘(KST) 실행 이력, GitHub 조회 실패면 빈 배열 */
-  history: HistoryItem[];
   source: "github" | "static";
+};
+
+/** GET /api/history 응답 */
+export type HistoryBody = {
+  date: string;
+  today: string;
+  start: string;
+  items: HistoryItem[];
+  /** github: GitHub 목록 + 일지 / archive: GitHub 실패, 일지만 / static: 토큰 없음 */
+  source: "github" | "archive" | "static";
+  partial: boolean;
+  checkedAt: string;
 };
 
 export type RunApiEnv = {
@@ -174,10 +281,12 @@ export type RunApiDeps = {
   dispatchLog: Map<string, number>;
   /** ws → 캐시된 /api/status 응답 */
   statusCache: Map<string, { at: number; body: StatusBody }>;
+  /** "<ws>/<date>" → 캐시된 /api/history 응답 */
+  historyCache: Map<string, { at: number; body: HistoryBody }>;
 };
 
-export function createRunApiStores(): Pick<RunApiDeps, "dailyCounter" | "dispatchLog" | "statusCache"> {
-  return { dailyCounter: createDailyCounterStore(), dispatchLog: new Map(), statusCache: new Map() };
+export function createRunApiStores(): Pick<RunApiDeps, "dailyCounter" | "dispatchLog" | "statusCache" | "historyCache"> {
+  return { dailyCounter: createDailyCounterStore(), dispatchLog: new Map(), statusCache: new Map(), historyCache: new Map() };
 }
 
 const MAX_BODY_BYTES = 1024;
@@ -322,12 +431,10 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
   const files: Record<string, unknown | null> = {};
   let source: StatusBody["source"] = github ? "github" : "static";
   let githubError: GitHubErrorKind = null;
-  let history: HistoryItem[] = [];
 
   if (github) {
     try {
       const allRuns = await github.listRuns(RUNS_PER_PAGE);
-      history = todayHistory(allRuns, workspace.automations, now);
       const latest = latestValidRunByWorkflow(allRuns);
       for (const a of automations) {
         const run = latest.get(a.workflow as string);
@@ -369,7 +476,6 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
     },
     runs,
     files,
-    history,
     source,
   };
 }
@@ -387,5 +493,64 @@ export async function handleStatus(request: Request, env: RunApiEnv, deps: RunAp
 
   const body = await buildStatus(ws, workspace, url.origin, env, deps);
   deps.statusCache.set(ws, { at: now, body });
+  return json(body);
+}
+
+// ── GET /api/history?ws=…&date=YYYY-MM-DD ──
+export async function buildHistory(ws: string, workspace: WorkspaceLike, date: string, deps: RunApiDeps): Promise<HistoryBody> {
+  const now = deps.now();
+  const base = { date, today: kstDateKey(now), start: HISTORY_START, checkedAt: new Date(now).toISOString() };
+  const github = deps.github;
+  if (!github) return { ...base, items: [], source: "static", partial: false };
+  if (date < HISTORY_START) return { ...base, items: [], source: "github", partial: false };
+
+  let fromGithub: HistoryItem[] = [];
+  let githubFailed = false;
+  try {
+    const { from, to } = kstDayRangeUtc(date);
+    fromGithub = historyFromRuns(await github.listRunsBetween(from, to), workspace.automations);
+  } catch {
+    githubFailed = true;
+  }
+  let archiveFailed = false;
+  const month = date.slice(0, 7);
+  const archive = (
+    await Promise.all(
+      workspace.automations
+        .filter((a) => a.workflow)
+        .map(async (a) => {
+          try {
+            const text = await github.readRepoText(`history/${ws}/${a.id}/${month}.jsonl`);
+            return text ? parseArchive(text, a.id, date) : [];
+          } catch {
+            archiveFailed = true;
+            return [];
+          }
+        }),
+    )
+  ).flat();
+  return { ...base, items: mergeHistory(fromGithub, archive), source: githubFailed ? "archive" : "github", partial: githubFailed || archiveFailed };
+}
+
+export async function handleHistory(request: Request, deps: RunApiDeps): Promise<Response> {
+  if (request.method !== "GET") return json({ error: "method_not_allowed" }, 405);
+  const url = new URL(request.url);
+  const ws = url.searchParams.get("ws") ?? "";
+  const date = url.searchParams.get("date") ?? "";
+  const workspace = deps.workspaces[ws];
+  if (!workspace) return json({ error: "not_found" }, 404);
+  const now = deps.now();
+  const today = kstDateKey(now);
+  if (!isValidDate(date) || date > today) return json({ error: "bad_request" }, 400);
+
+  const key = `${ws}/${date}`;
+  const ttl = date === today ? HISTORY_TODAY_CACHE_MS : HISTORY_PAST_CACHE_MS;
+  const cached = deps.historyCache.get(key);
+  if (cached && now - cached.at < ttl) return json(cached.body);
+
+  const body = await buildHistory(ws, workspace, date, deps);
+  deps.historyCache.delete(key);
+  deps.historyCache.set(key, { at: now, body });
+  while (deps.historyCache.size > HISTORY_CACHE_MAX) deps.historyCache.delete(deps.historyCache.keys().next().value as string);
   return json(body);
 }

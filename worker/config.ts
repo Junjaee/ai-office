@@ -11,3 +11,11 @@ export const STATUS_CACHE_MS = 15_000;
 export const TOO_SOON_MS = 60_000;
 /** runs API 한 번에 받는 run 개수 */
 export const RUNS_PER_PAGE = 30;
+
+/** 실행 이력: 시작일(화면과 같은 값) · 캐시 · 날짜별 runs 조회 크기 */
+export { HISTORY_START } from "../app/history-rules.ts";
+export const HISTORY_TODAY_CACHE_MS = 30_000;
+export const HISTORY_PAST_CACHE_MS = 600_000;
+export const HISTORY_CACHE_MAX = 100;
+export const HISTORY_RUNS_PER_PAGE = 100;
+export const HISTORY_MAX_PAGES = 3;

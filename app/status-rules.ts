@@ -137,7 +137,7 @@ export function historyLabel(status: string, conclusion: string | null): History
   return { text: LABELS.error, cls: STATE_CLASS.error };
 }
 
-export const TRIGGER_LABEL = { manual: "수동", schedule: "예약", other: "기타" } as const;
+export const TRIGGER_LABEL = { manual: "수동", schedule: "예약", local: "이 PC", other: "기타" } as const;
 
 /** "4.8분" / "45초" / "" */
 export function durationText(startedAt: string | null | undefined, completedAt: string | null | undefined): string {
