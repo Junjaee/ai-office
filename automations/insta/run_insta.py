@@ -96,10 +96,20 @@ def step_topic(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, ar
     return data
 
 
-def step_write(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, out: Path, topic: dict, progress) -> dict:
+def step_write(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, out: Path, topic: dict, progress,
+               seed_feedback: str = "") -> dict:
     posts = []
     for cand in topic["chosen"]:
-        post, verdict = writer.generate_post(llm, p, refs, cand, cand.get("angle", ""), progress=progress)
+        if not cand.get("article"):
+            progress("원문 읽는 중")
+            cand["article"] = sources.fetch_article(cand["link"])
+            for link in cand["article"].get("links", [])[:2]:      # 공식 출처가 있으면 그 본문도 같이
+                more = sources.fetch_article(link, max_chars=2500)
+                if more.get("text"):
+                    cand["article"]["text"] += f"\n\n[참고 링크 {link}]\n" + more["text"]
+            (out / "topic.json").write_text(json.dumps(topic, ensure_ascii=False, indent=1), encoding="utf-8")
+        post, verdict = writer.generate_post(llm, p, refs, cand, cand.get("angle", ""), seed_feedback=seed_feedback,
+                                             progress=progress)
         posts.append({"candidate": cand, "post": post, "verdict": verdict, "provider": llm.last_provider})
     data = {"posts": posts}
     (out / "post.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -180,7 +190,18 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         return _partial(tasks, lines, len(load_posted(args.account)))
 
     progress("글 쓰는 중")
-    written = cached("post") or step_write(cfg, acct, p, refs, llm, out, topic, progress)
+    written = None if args.revise else cached("post")
+    if written is None:
+        seed = ""
+        prev = out / "post.json"
+        if args.revise and prev.exists():        # 다듬기: 지난 심사의 지적을 첫 회부터 반영
+            try:
+                seed = str(json.loads(prev.read_text(encoding="utf-8"))["posts"][0]["verdict"].get("feedback", ""))
+            except (KeyError, IndexError, ValueError):
+                seed = ""
+        for stale in ("cards.json",):
+            (out / stale).unlink(missing_ok=True)
+        written = step_write(cfg, acct, p, refs, llm, out, topic, progress, seed_feedback=seed)
     v = written["posts"][0]["verdict"]
     ok_write = v.get("verdict") == "pass"
     tasks["write"] = (ok_write, f"심사 {v.get('total')}점 ({written['posts'][0].get('provider', '')})")
@@ -222,6 +243,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--until", choices=STEPS, default="", help="이 단계까지만 실행")
     p.add_argument("--resume", action="store_true", help="out/ 의 중간 결과를 이어서")
     p.add_argument("--pick", type=int, default=0, help="후보 N번을 강제 선택")
+    p.add_argument("--revise", action="store_true", help="지난 심사 피드백을 반영해 원고를 다시 쓴다(--resume 과 함께)")
     p.add_argument("--date", default="", help="출력 폴더 날짜 (기본 오늘)")
     a = p.parse_args(argv)
     return a

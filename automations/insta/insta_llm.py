@@ -116,12 +116,24 @@ class LLM:
         return False
 
     def _call_claude_cli(self, system: str, user: str) -> str:
-        cmd = [self.claude_bin, "-p", user, "--output-format", "json", "--system-prompt", system,
+        # 프롬프트는 길어서 명령줄에 못 싣는다(Windows 8천 자 제한) → 시스템 프롬프트는 파일, 사용자 프롬프트는 표준입력으로
+        import tempfile
+
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as f:
+            f.write(system)
+            sys_path = f.name
+        cmd = [self.claude_bin, "-p", "--output-format", "json", "--system-prompt-file", sys_path,
                "--disallowedTools", "Bash,Edit,Write,Read,Glob,Grep,WebFetch,WebSearch,Agent,NotebookEdit"]
         if self.claude_model:
             cmd += ["--model", self.claude_model]
-        proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                              timeout=self.timeout, shell=os.name == "nt")
+        try:
+            proc = subprocess.run(cmd, input=user, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                  timeout=self.timeout, shell=os.name == "nt")
+        finally:
+            try:
+                os.unlink(sys_path)
+            except OSError:
+                pass
         out = (proc.stdout or "").strip()
         if not out:
             raise RuntimeError(f"claude 출력 없음 (exit {proc.returncode}): {(proc.stderr or '')[:200]}")

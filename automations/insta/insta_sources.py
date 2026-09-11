@@ -123,3 +123,27 @@ def as_prompt_rows(cands: list[Candidate], limit: int) -> str:
         sig = f" [{', '.join(c.signals)}]" if c.signals else ""
         rows.append(f"{i}. ({c.source} {when}){sig} {c.title}\n   {c.summary[:200]}\n   {c.link}")
     return "\n".join(rows)
+
+
+def fetch_article(url: str, *, timeout: int = 30, max_chars: int = 3500) -> dict:
+    """소재 원문을 읽어 본문 텍스트와 본문 안의 바깥 링크를 돌려준다(글쓰기 근거용). 실패하면 빈 값."""
+    try:
+        from bs4 import BeautifulSoup
+
+        r = requests.get(url, headers={"User-Agent": UA}, timeout=timeout)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "lxml")
+        for t in soup(["script", "style", "nav", "header", "footer", "noscript"]):
+            t.decompose()
+        main = soup.find("article") or soup.find("main") or soup.body or soup
+        text = re.sub(r"\s+", " ", main.get_text(" ")).strip()
+        host = re.sub(r"^https?://(www\.)?", "", url).split("/")[0]
+        links = []
+        for a in main.find_all("a", href=True):
+            h = a["href"]
+            if h.startswith("http") and host not in h and not re.search(r"(twitter|x\.com|facebook|instagram|reddit\.com/r/|login|signup)", h):
+                if h not in links:
+                    links.append(h)
+        return {"text": text[:max_chars], "links": links[:8]}
+    except Exception as exc:  # noqa: BLE001
+        return {"text": "", "links": [], "error": f"{type(exc).__name__}: {str(exc)[:80]}"}
