@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 53건, 실패 0건, 10초",
+  "summary": "신규 15건, 실패 0건, 13초",
   "counts": {
-    "new": 53,
+    "new": 15,
     "failed": 0,
-    "total": 291
+    "total": 306
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 53건, 실패 0건, 10초",
-    "[신규] 제2기 국회 세종의사당 건립위원회 출범…강준현 의원, “차질 없는 추진을 위해 최선 다할 것” — 시민행정신문",
-    "[신규] 與 김민석 14.3%·정청래 9.2% … 野 한동훈 15.6%·오세훈 15.1%·장동혁 14.0%·이진숙 11.4% — newdaily.co.kr",
-    "[신규] 지원 기능을 기준으로 비교하는 페이팔 카지노 모바일 게임 목록 — histoire-pour-tous.fr",
-    "[신규] 명지대 건축대학, 예비 건축가 79인의 창의적 공간과 미래 비전 담은 졸업전시회 개최 — usline.kr"
+    "신규 15건, 실패 0건, 13초",
+    "[신규] 연천군-중소벤처기업진흥공단, 경기북부 그린바이오 산업 활성화 협력체계 구축 — 새한일보",
+    "[신규] 김현정 국회의원, 평택시학원연합회와 간담회 개최 — 시민행정신문",
+    "[신규] 여러 슬롯 중 구조를 비교해 보고 싶은 도박 합법인 이유 — Histoire pour tous",
+    "[신규] PC 확대 비율을 바꿀 때 확인할 도박 치료 후기 화면 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34602418038,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34602418038",
+  "run_id": 34630752211,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34630752211",
   "trigger": "schedule",
-  "started_at": "2026-09-11T22:06:28+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-09-12T02:59:46+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 94건"
+      "summary": "검색어 5개에서 91건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 112건 (신규 53건) · histoire-pour-tous.fr 12건, Histoire pour tous 11건, 네이트 8건"
+      "summary": "오늘 15건 (신규 15건) · Histoire pour tous 5건, 시민행정신문 4건, mt.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-11T22:06:40+09:00"
+  "updated_at": "2026-09-12T03:00:00+09:00"
 }
