@@ -124,5 +124,127 @@
    "id": "6f6eb2bc"
   }
  ],
- "queue": []
+ "queue": [
+  {
+   "id": "784f7c3a",
+   "key": "https://www.instagram.com/p/dc-nn8wjywt",
+   "title": "GPT로 나도 몰랐던 내 정보 싹 다 지우세요",
+   "link": "https://www.instagram.com/p/Dc-nN8WjyWt/",
+   "source": "IG @ai.trend.kr · 좋아요 7.6천 · 댓글 6.3천",
+   "summary": "GPT로 나도 몰랐던 내 정보 싹 다 지우세요. 🧹 챗GPT 워크 모드에서 프롬프트 세 개만 넣으면 돼요. 첫 번째는 내 정보가 떠 있는 사이트를 전부 찾아 삭제 요청 링크까지 표로 뽑는 것, 두 번째는 사이트마다 삭제 요청문을 써서 브라우저로 대신 제출하는 것이에요. 로그인이나 최종 전송처럼 확인이 필요한 순간엔 멈춰서 물어보고요. 마지막으로 매주 다시 확인해서 무시된 요청은 다시 보내는 예약을 걸어둡니다. 에트가 직접 돌려봤는데, 1분 남짓에 가입한 줄도 몰랐던 외부 사이트 일곱 곳이 표로 나왔어요. 삭제가 전부 되는 건 아니지",
+   "angle": "프롬프트 3단계(내 정보가 뜬 사이트 찾기 → 삭제 요청문 쓰고 제출 → 매주 다시 확인)를 그대로 따라 쓸 수 있게 풀고, AI에 맡길 때 주의할 점도 함께 적는다",
+   "due": "2026-09-11T17:30:29+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "96f2b27d",
+   "key": "https://www.instagram.com/p/dc92nt7j8pp",
+   "title": "이제 프롬프트 필요 없이 명령어만 붙이세요",
+   "link": "https://www.instagram.com/p/Dc92nT7j8PP/",
+   "source": "IG @ai.trend.kr · 좋아요 1.4천 · 댓글 2.4천",
+   "summary": "이제 프롬프트 필요 없이 명령어만 붙이세요. 🎨 챗지피티에 그림을 시킬 때 /droneview라고 붙이면 드론샷이, /goldenhour를 붙이면 해 질 녘 화보가 나옵니다. 문장으로 길게 설명할 필요 없이 슬래시 뒤에 단어 하나면 조명, 앵글, 분위기까지 한 번에 잡히는 거예요. 이렇게 쓸 수 있는 명령어가 무려 100개인데, 아직 아는 사람이 거의 없습니다. 그중 당장 써먹기 좋은 것들만 골라 카드에 정리했어요. 100개 전체 정리본이 필요하다면 지금 댓글 남겨주세요. Editor ・ kiki Content curated by ",
+   "angle": "자주 쓰는 명령어를 앵글·조명·분위기로 나눠 추리고, 똑같은 사진에 명령어만 바꿔 넣은 결과를 나란히 비교한다",
+   "due": "2026-09-11T20:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "c566a8ca",
+   "key": "https://www.instagram.com/reel/ddabkirphq2",
+   "title": "아니 이 영화 대체 어디서 보는 거예요?",
+   "link": "https://www.instagram.com/reel/DdAbKIRPHq2/",
+   "source": "IG @ai.trend.kr · 좋아요 2.1만 · 댓글 74",
+   "summary": "아니 이 영화 대체 어디서 보는 거예요? 🎬 조회수 1112만을 넘긴 27초 AI 영상인데요. 눈 내린 뉴욕 거리에서 여자가 책을 와르르 쏟고, 남자가 다가와 함께 줍다 두 사람 눈이 마주쳐요. 그때 가게 문이 열리고 금발 여자가 나와 그의 팔짱을 낍니다. 남자는 책 위에 명함 한 장만 올려두고 떠나죠. 여자는 그 명함을 한참 보다가, 쓰레기통 앞에서 조용히 손을 놓습니다. 90년대 로맨스 영화 같지만, 이 영화는 어디에도 없습니다. 김 오르는 맨해튼 거리도, 필름 그레인도, 배우의 눈빛도 전부 AI가 만든 거거든요. 만든 사람은 ",
+   "angle": "화제가 된 영상의 줄거리 구성과 장면 나누기를 분석하고, 일반인이 쓸 수 있는 AI 영상 도구로 비슷한 짧은 영상을 만드는 순서를 정리한다",
+   "due": "2026-09-11T23:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "65bdedf0",
+   "key": "https://www.instagram.com/p/dddb8cmd5yk",
+   "title": "GPT-6 활용사례 1탄 올리는 사이에 또 와르르 쏟아졌어요",
+   "link": "https://www.instagram.com/p/DdDB8CMD5yk/",
+   "source": "IG @ai.trend.kr · 좋아요 1.6천 · 댓글 169",
+   "summary": "GPT-6 활용사례 1탄 올리는 사이에 또 와르르 쏟아졌어요. 🔥 지난주 정리한 GPT-6 Astra 활용 사례에 반응이 뜨거웠는데요. 올리는 며칠 사이에도 X에는 믿기 힘든 결과물이 계속 올라왔습니다. 혼자 보기 아까워 2탄으로 들고 왔어요. 이번엔 결이 더 넓어졌습니다. 오픈AI 엔지니어는 80년대 뮤직비디오를 블렌더로 통째로 재현했고, 한 개발자는 사람 몸을 2,234조각으로 분해하는 3D 사이트를 만들었어요. 맥에서 뚝뚝 끊기던 게임을 매끈하게 고친 사례도 있죠. 서울 25개 구 전체를 3D로 세우는 데는 44분이 걸렸습니다",
+   "angle": "공식 발표(75번)로 무엇이 달라졌는지 짧게 정리하고, 개발자가 아닌 사람도 따라 할 만한 사례(문서, 3D, 컴퓨터 대신 조작하기) 위주로 고른다",
+   "due": "2026-09-12T01:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "311431bb",
+   "key": "https://www.instagram.com/p/dddmnpbmn_e",
+   "title": "“엄친아 GPT, 이미지 생성도 1등“",
+   "link": "https://www.instagram.com/p/DdDmNpBmn_e/",
+   "source": "IG @ai_freaks.kr · 좋아요 441 · 댓글 655",
+   "summary": "“엄친아 GPT, 이미지 생성도 1등“ 🎨 챗GPT가 또 1등 자리를 차지했어요! 오늘 GPT 이미지 생성 2.5가 공개됐는데, 나오자마자 아레나의 이미지 벤치마크 전 분야에서 1위를 찍었죠. 낙서 한 장으로도 완성 이미지를 뽑아주고, 템플릿 고르면 디자인도 금방 끝나요. 해외에서는 스톱모션이나 픽셀아트 스타일 애니메이션에 활용하고 있다는데요? 👀 카드뉴스를 넘기며 자세한 내용과 사용방법까지 살펴보세요! 💌 댓글 남겨주시면, 자료를 보내드려요 :) 👉🏻 AI 소식 놓치지 않으려면? ai_freaks.kr",
+   "angle": "공식 발표(40번)를 근거로 글자 넣기·투명 배경·부분만 고치기 같은 달라진 기능을 설명하고, 낙서 한 장을 완성 이미지로 바꾸는 실습을 넣는다",
+   "due": "2026-09-12T04:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "ac6e3a04",
+   "key": "https://www.instagram.com/p/ddbzpymmqjz",
+   "title": "“이제 글쓰기도 클로드 대신 GPT로?”",
+   "link": "https://www.instagram.com/p/DdBZPYmmqJz/",
+   "source": "IG @ai_freaks.kr · 좋아요 339 · 댓글 17",
+   "summary": "“이제 글쓰기도 클로드 대신 GPT로?” 😲 오픈AI가 챗GPT 워크에 ‘문체 학습’ 기능을 추가했어요! 구글 메일·구글 드라이브·슬랙만 연결하면, 내 말투와 습관까지 GPT가 알아서 배운대요. 업무 메일이나 사내 메신저까지 AI 티 안 나게 완성할 수 있겠는데요? 👀 카드뉴스를 넘기며 자세한 내용과 사용방법까지 살펴보세요! :) AI 소식 놓치지 않으려면? 👉🏻 ai_freaks.kr",
+   "angle": "구글 메일·드라이브·슬랙 연결로 문체 학습을 켜는 방법을 단계별로 안내하고, 켜기 전과 후의 메일 초안을 비교하며 개인정보 주의점도 짚는다",
+   "due": "2026-09-12T06:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "24deca78",
+   "key": "https://www.instagram.com/p/ddggvixgp12",
+   "title": "“안 보던 사진도, 감성 그림으로 부활”",
+   "link": "https://www.instagram.com/p/DdGgvixGp12/",
+   "source": "IG @ai_freaks.kr · 좋아요 160 · 댓글 517",
+   "summary": "“안 보던 사진도, 감성 그림으로 부활” 🎨 갤러리에 잠만 자던 사진들 많으시죠? 그 사진, 감성 엽서로 바꿔줄 프롬프트 6종을 준비했어요! 챗GPT에 사진 올리고 원하는 프롬프트만 붙여넣으면 끝이에요. 댓글 남기고 수채화, 색연필, 펜화, 빈티지 잉크, 마커, 우표까지 바로 쓸 수 있는 프롬프트 받아가세요. 💌 댓글 남겨주시면 프롬프트를 보내드려요. :) 👉🏻 AI 소식 놓치지 않으려면? ai_freaks.kr",
+   "angle": "수채화·색연필·펜화·빈티지·마커·우표 6가지 스타일의 프롬프트를 전부 공개하고, 같은 사진으로 만든 결과를 한 장씩 보여 준다",
+   "due": "2026-09-12T08:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "4d4e7920",
+   "key": "https://openai.com/index/put-data-to-work",
+   "title": "Now everyone can put data to work",
+   "link": "https://openai.com/index/put-data-to-work",
+   "source": "OpenAI",
+   "summary": "Meet the Data agent in ChatGPT Work. Connect company data, uncover insights, and build interactive dashboards with AI using natural language.",
+   "angle": "ChatGPT Work의 데이터 에이전트로 데이터를 연결하고, 질문하고, 대시보드를 만드는 흐름을 업무 예시 하나로 따라가 본다",
+   "due": "2026-09-12T11:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "61a745ff",
+   "key": "https://www.instagram.com/reel/dc0tpdomrof",
+   "title": "“씨댄스 2.5로 여행 드론샷 만드는 법 ”",
+   "link": "https://www.instagram.com/reel/Dc0tpdOMroF/",
+   "source": "IG @ai_freaks.kr · 좋아요 0 · 댓글 146",
+   "summary": "“씨댄스 2.5로 여행 드론샷 만드는 법 ✈️” 핸드폰 촬영 영상과 프롬프트만 있으면 여행 유튜버처럼 드론샷을 만들 수 있어요. 씨댄스 2.5로 여행 속 인상 깊은 장면을 극적으로 표현해보세요. 인물이 중요하게 나오는 영상에는 캐릭터 일관성을 위한 캐릭터 시트 꿀팁도 넣었으니 참고해보세요! 💌 댓글 남기면 ‘프롬프트 가이드 & 씨댄스 2.5 링크’ 전송 :) 👉🏻 AI 소식 놓치지 않으려면? ai_freaks.kr higgsfield.ai #제작지원 #HiggsfieldPartner #HiggsfieldCreator",
+   "angle": "씨댄스 2.5에 쓰는 드론샷 프롬프트 공식과, 인물이 나오는 영상에서 얼굴이 바뀌지 않게 하는 캐릭터 시트 요령을 정리한다",
+   "due": "2026-09-12T13:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  },
+  {
+   "id": "6f6eb2bc",
+   "key": "https://www.instagram.com/p/ddiyfyumojx",
+   "title": "“한국도 곧 지원할 메타의 무료 AI 비서” ‍",
+   "link": "https://www.instagram.com/p/DdIYFyUmoJX/",
+   "source": "IG @ai_freaks.kr · 좋아요 91 · 댓글 204",
+   "summary": "“한국도 곧 지원할 메타의 무료 AI 비서” 👩‍💼 메타가 만든 개인용 AI 에이전트 ‘뮤즈’, 스스로 계획 짜는 내 비서를 무료로 쓸 수 있어요! 예약, 쇼핑, 이메일까지 알아서 처리하는데 심지어 대화창을 닫아도 뒤에서 계속 일하죠. 한국 사용자들은 대기명단을 받고 있다고 하는데요? 카드뉴스를 넘기며 자세한 내용 살펴보세요! 💌 댓글에 ‘ai’ 남겨주시면, ‘뮤즈 대기 명단’ 등록 링크 전송 :) 👉🏻 AI 소식 놓치지 않으려면? ai_freaks.kr",
+   "angle": "뮤즈가 할 수 있는 일과 챗GPT와의 차이, 한국 대기명단 신청 방법, 미리 알아 둘 주의점을 정리한다",
+   "due": "2026-09-12T16:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-11T17:30:29+09:00"
+  }
+ ],
+ "interval_hours": 2.4
 }
