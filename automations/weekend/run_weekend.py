@@ -71,7 +71,8 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         if type(exc).__name__ != "HttpError":
             raise
         status = getattr(getattr(exc, "resp", None), "status", "?")
-        raise RuntimeError(f"캘린더 읽기 실패: HTTP {status}") from None
+        reason = str(getattr(exc, "reason", "") or "")[:200]   # 권한 부족·API 꺼짐·캘린더 없음을 가르는 단서
+        raise RuntimeError(f"캘린더 읽기 실패: HTTP {status} {reason}".rstrip()) from None
     events = to_events(items, days)
     reveal = cfg.get("reveal_keywords") or []   # 비어 있으면 전부 종류만 (가리는 쪽이 기본)
     text = build_message(cfg.get("calendar_name") or "캘린더", days, events, reveal)
