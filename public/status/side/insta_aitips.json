@@ -1,39 +1,38 @@
 {
   "name": "인스타 게시글 · aitips",
   "dept": "research",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 3건, 3.3분",
+  "summary": "게시 0건, 실패 1건, 누적 3건, 5.6분",
   "counts": {
     "new": 0,
-    "failed": 0,
+    "failed": 1,
     "total": 3
   },
   "next_run": "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격",
   "log": [
-    "게시 0건, 실패 0건, 누적 3건, 3.3분",
-    "[후보] 옛 중고거래 글에 남긴 연락처, 지운 적 없다면 지금도 검색될 수 있습니다 — IG 🇰🇷 @prompt_what · 좋아요 998 · 댓글 607",
-    "[후보] 요즘 엄청 바이럴되는 뮤직비디오 훔치는 방법 ‍ — IG 🇰🇷 @prompt_what · 좋아요 1.2천 · 댓글 2.1천",
-    "[후보] 🇺🇸빈자리 “show me what chatgpt would have looked like in the 80s” — IG 🇺🇸 @openai · 좋아요 6.6천 · 댓글 151",
-    "[후보] 🇺🇸빈자리 Yesterday Anthropic released a 150-page report on how people — IG 🇺🇸 @evolving.ai · 좋아요 2.2천 · 댓글 80"
+    "게시 0건, 실패 1건, 누적 3건, 5.6분",
+    "[예약] 2건 · 12.0시간 간격",
+    "[기사] GPT-6 아스트라, 문서 편집 잡무 대신 해요 · 검수 34점",
+    "[보류] SNS 게시물은 출처로 쓸 수 없음 — 공식 페이지·기사 주소로: https://www.youtube.com/shorts/4bGb2OjU5tA / [사실 오류] '음성으로 쓰는 법"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34617702981,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34617702981",
-  "request_id": "req-20260912004216-topics20",
+  "run_id": 34618191299,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34618191299",
+  "request_id": "req-20260912004712-reel",
   "trigger": "manual",
-  "started_at": "2026-09-12T00:43:23+09:00",
-  "duration_sec": 199,
+  "started_at": "2026-09-12T00:48:09+09:00",
+  "duration_sec": 333,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 사이트에서 골라 주세요"
+      "summary": "후보 20건 · 예약 9건 · 게시 4건"
     },
     {
       "id": "write",
-      "status": "idle",
-      "summary": ""
+      "status": "error",
+      "summary": "검수 34점 (claude_cli)"
     },
     {
       "id": "card",
@@ -47,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T00:46:43+09:00"
+  "updated_at": "2026-09-12T00:53:43+09:00"
 }
