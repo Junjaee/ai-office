@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 12초",
+  "summary": "신규 53건, 실패 0건, 10초",
   "counts": {
-    "new": 9,
+    "new": 53,
     "failed": 0,
-    "total": 238
+    "total": 291
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 12초",
-    "[신규] 천하람 “강신철, 군인 아닌 투기꾼”…철거민 코스프레 의혹 제기 — 자유일보",
-    "[신규] \"창의·탐구 교육 지원\" 강동구의회 행정재경위, 동신중 방문해 IB 후보학교 현장 점검 — 시정일보",
-    "[신규] 문진석 의원, 재정경제기획위 예결소위원장 선임⋯162조 미래대응기금 심사 — 동양일보",
-    "[신규] 국세청 국세외수입 수납률 저조... 재경위 보고서 “징수역량 강화해야” — 세정일보"
+    "신규 53건, 실패 0건, 10초",
+    "[신규] 제2기 국회 세종의사당 건립위원회 출범…강준현 의원, “차질 없는 추진을 위해 최선 다할 것” — 시민행정신문",
+    "[신규] 與 김민석 14.3%·정청래 9.2% … 野 한동훈 15.6%·오세훈 15.1%·장동혁 14.0%·이진숙 11.4% — newdaily.co.kr",
+    "[신규] 지원 기능을 기준으로 비교하는 페이팔 카지노 모바일 게임 목록 — histoire-pour-tous.fr",
+    "[신규] 명지대 건축대학, 예비 건축가 79인의 창의적 공간과 미래 비전 담은 졸업전시회 개최 — usline.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34575066522,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34575066522",
+  "run_id": 34602418038,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34602418038",
   "trigger": "schedule",
-  "started_at": "2026-09-11T16:35:25+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-11T22:06:28+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 107건"
+      "summary": "검색어 5개에서 94건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 59건 (신규 9건) · Histoire pour tous 11건, histoire-pour-tous.fr 5건, v.daum.net 2건"
+      "summary": "오늘 112건 (신규 53건) · histoire-pour-tous.fr 12건, Histoire pour tous 11건, 네이트 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-11T16:35:37+09:00"
+  "updated_at": "2026-09-11T22:06:40+09:00"
 }
