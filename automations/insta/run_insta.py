@@ -112,7 +112,11 @@ def step_write(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, ou
     for cand in topic["chosen"]:
         if not cand.get("article"):
             progress("소재 원문 읽는 중")
-            art = sources.fetch_article(cand["link"])
+            if research.is_social(cand["link"]):
+                # 참고 계정(인스타) 글: 페이지를 긁지 않는다 — 캡션(summary)만 근거로 쓰고 사진은 다른 출처에서 찾는다
+                art = {"title": cand["title"], "text": cand.get("summary", ""), "links": [], "images": []}
+            else:
+                art = sources.fetch_article(cand["link"])
             art["link_articles"] = []
             for link in art.get("links", [])[:2]:      # 공식 출처가 있으면 그 본문·사진도 같이
                 more = sources.fetch_article(link, max_chars=2500)
@@ -163,7 +167,10 @@ def step_card(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, wri
     result = []
     for i, item in enumerate(written["posts"], 1):
         cand = next((c for c in topic["chosen"] if c["key"] == item["candidate"]["key"]), topic["chosen"][0])
-        images = research.image_candidates(cand.get("article") or {}, cand.get("related") or [], main_url=cand["link"])
+        art = item["article"]
+        extra = [c.get("source", "") for c in art.get("claims", [])] + list(art.get("sources") or [])
+        images = research.image_candidates(cand.get("article") or {}, cand.get("related") or [], main_url=cand["link"],
+                                           extra_links=[u for u in extra if isinstance(u, str)])
         progress(f"사진 후보 {len(images)}장")
         plan = writer.plan_cards(llm, p, item["article"], images, progress=progress)
         d = out / f"post{i}"

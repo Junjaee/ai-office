@@ -92,14 +92,27 @@ def related_articles(queries: list[str], *, exclude: set[str] | None = None, max
     return out
 
 
-def image_candidates(main: dict, related: list[dict], *, main_url: str = "", max_items: int = 24) -> list[dict]:
-    """카드에 넣을 사진 후보 목록(번호 붙음). 공식 출처 → 관련 기사 → 공식 페이지 캡처 순.
+# 다른 사람의 SNS 게시물 사진·화면은 절대 카드에 넣지 않는다 (사용자 결정 2026-09-11 — "베꼈다"는 프레임을 피한다)
+SOCIAL_RE = re.compile(r"(instagram\.com|cdninstagram\.com|fbcdn\.net|facebook\.com|threads\.(net|com)|tiktok\.com|"
+                       r"twitter\.com|x\.com|twimg\.com|pinterest\.|linkedin\.com|youtube\.com|youtu\.be|blog\.naver\.com)", re.I)
+
+
+def is_social(url: str) -> bool:
+    return bool(SOCIAL_RE.search(url or ""))
+
+
+def image_candidates(main: dict, related: list[dict], *, main_url: str = "", extra_links: list[str] | None = None,
+                     max_items: int = 24) -> list[dict]:
+    """카드에 넣을 사진 후보 목록(번호 붙음). 공식 출처 → 관련 기사 → 공식 페이지 캡처 순. 소셜 도메인은 뺀다.
     [{id, url, alt, source_url, source_title, kind}]"""
     cands: list[dict] = []
     seen: set[str] = set()
 
     def add(url: str, alt: str, source_url: str, source_title: str, kind: str) -> None:
         if not url or url in seen or len(cands) >= max_items:
+            return
+        target = url[len("screenshot:"):] if url.startswith("screenshot:") else url
+        if is_social(target) or is_social(source_url or ""):
             return
         seen.add(url)
         cands.append({"id": len(cands) + 1, "url": url, "alt": (alt or "")[:80], "source_url": source_url,
@@ -115,9 +128,49 @@ def image_candidates(main: dict, related: list[dict], *, main_url: str = "", max
             add(im["url"], im.get("alt", ""), art["link"], art.get("title", ""), "related")
     for link in (main.get("links") or [])[:2]:
         add(f"screenshot:{link}", "공식 페이지 화면 캡처", link, "공식 페이지", "screenshot")
+    # 기사가 출처로 든 공식 페이지(claims·sources) — 도메인당 하나, 3개까지
+    hosts: set[str] = {re.sub(r"^https?://(www\.)?", "", c["url"][len("screenshot:"):]).split("/")[0]
+                       for c in cands if c["kind"] == "screenshot"}
+    for link in extra_links or []:
+        host = re.sub(r"^https?://(www\.)?", "", link).split("/")[0]
+        if not link.startswith("http") or host in hosts or is_social(link):
+            continue
+        hosts.add(host)
+        add(f"screenshot:{link}", f"출처 페이지 화면 캡처 ({host})", link, host, "screenshot")
+        if len(hosts) >= 3:
+            break
     if main_url:
         add(f"screenshot:{main_url}", "소재 원문 페이지 화면 캡처", main_url, main.get("title", "소재 원문"), "screenshot")
     return cands
+
+
+OPENVERSE = "https://api.openverse.org/v1/images/"
+
+
+def openverse_search(query: str, *, n: int = 3, min_width: int = 800, timeout: int = 20) -> list[dict]:
+    """CC 라이선스 사진 검색(무료·키 없음). [{url, alt, source_url, source_title, kind:'cc', creator, license}]
+    상업적 이용이 되는 라이선스만(cc0, by, by-sa, pdm). 실패하면 빈 목록."""
+    if not query.strip():
+        return []
+    try:
+        r = requests.get(OPENVERSE, params={"q": query, "license": "cc0,by,by-sa,pdm", "page_size": 20, "mature": "false"},
+                         headers={"User-Agent": UA}, timeout=timeout)
+        r.raise_for_status()
+        rows = r.json().get("results", [])
+    except Exception:  # noqa: BLE001
+        return []
+    out = []
+    for x in rows:
+        if int(x.get("width") or 0) < min_width or not str(x.get("url", "")).startswith("http"):
+            continue
+        lic = str(x.get("license", "")).upper()
+        creator = (x.get("creator") or "").strip()[:30]
+        out.append({"url": x["url"], "alt": (x.get("title") or "")[:80], "source_url": x.get("foreign_landing_url") or x["url"],
+                    "source_title": f"{creator} · CC {lic}" if creator else f"CC {lic}", "kind": "cc",
+                    "creator": creator, "license": lic})
+        if len(out) >= n:
+            break
+    return out
 
 
 def as_prompt(images: list[dict]) -> str:

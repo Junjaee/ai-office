@@ -62,6 +62,13 @@ python automations/insta/run_insta.py --account aitips --until card --resume --r
 
 자주 걸리는 지적은 코드 검사(`insta_writer.local_checks`)와 규칙(`_article_rules`)에 이미 들어 있다: 문단 길이(90~200자), 금지어, 출처 URL, 문단 수.
 
+## 사진 규칙 (사용자 지적 2026-09-11 — 절대 규칙)
+
+- **다른 인스타 계정의 사진·화면 캡처는 절대 카드에 넣지 않는다.** 참고 계정 게시물은 "이런 주제가 반응이 좋았다"는 힌트일 뿐이다. `insta_research.is_social` 이 instagram·facebook·threads·tiktok·x 등 소셜 도메인의 이미지·캡처를 후보에서 걸러 낸다.
+- 참고 계정 소재는 페이지를 긁지 않는다(캡션만 근거). 사실·출처는 관련 기사·공식 페이지에서 찾고, **SNS 게시물 주소는 claims 출처로 쓸 수 없다**(코드 검사로 반려). 남의 체험담('~해 봤더니')을 우리 체험처럼 쓰는 것도 반려.
+- 사진 후보 순서: 공식 출처 사진 → 관련 기사 사진 → 기사가 출처로 든 공식 페이지 캡처(도메인당 1) → 소재 원문 캡처. 맞는 게 없으면 모델이 `image_query`(영문 개념어)를 주고 **Openverse**(CC0·BY·BY-SA, 무료·키 없음)에서 찾아 넣는다. 카드에 '사진: 작가 · CC BY' 로 표기한다. 표지 + 앞 카드 4장까지.
+- 같은 사진을 두 카드에 쓰지 않는다.
+
 ## 카드 렌더링 함정 (겪은 것)
 
 - `page.set_content()` 로 연 페이지는 주소가 `about:blank` 라서 Chrome 이 `file://` 이미지·글꼴을 막는다. 그래서 글꼴(Pretendard)과 카드 이미지는 **base64 데이터 URI 로 HTML 에 직접 심는다**(`insta_cards.data_uri`). 이 때문에 카드 하나의 HTML 이 수 MB 가 되지만 문제없다.

@@ -25,7 +25,7 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
   const picked = candidates.filter((c) => checked.has(c.id) && !taken.has(c.id));
   const queue = (file?.queue ?? []).slice().sort((a, b) => Date.parse(a.due) - Date.parse(b.due));
   const activeQueue = queue.filter((q) => q.status === "queued" || q.status === "making");
-  const doneQueue = queue.filter((q) => q.status === "done" || q.status === "failed");
+  const doneQueue = queue.filter((q) => q.status === "done" || q.status === "failed" || q.status === "cancelled");
 
   const toggle = (id: string) =>
     setChecked((s) => {

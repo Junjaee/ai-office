@@ -139,7 +139,7 @@ def test_plan_cards_uses_paragraphs_verbatim_and_maps_images():
     p = profile()
     images = [{"id": 1, "url": "https://img/1.jpg", "alt": "앱 화면", "source_url": "https://blog.google/x",
                "source_title": "구글 블로그", "kind": "official"}]
-    bad = {"cover": {"title": "구글, 윈도우용\\n제미나이 앱 출시", "sub": "s", "image_id": 1},
+    bad = {"cover": {"title": "구글, 윈도우용\\n제미나이 앱 출시", "sub": "s", "image_id": 0},
            "cards": [{"image_id": 9 if i == 0 else 0} for i in range(6)], "cta": "저장"}
     good = json.loads(json.dumps(bad)); good["cards"][0]["image_id"] = 1
     seq = iter([bad, good])
@@ -153,7 +153,7 @@ def test_plan_cards_uses_paragraphs_verbatim_and_maps_images():
     art = sample_article()
     art["paragraphs"][0]["heading"] = "소주제\n둘째 줄"
     plan = writer.plan_cards(Fake(), p, art, images, progress=lambda m: None)
-    assert plan["cover"]["image"]["url"] == "https://img/1.jpg"
+    assert plan["cover"]["image"] is None, "표지: 고른 사진도 image_query 도 없으면 비움"
     assert plan["cards"][0]["image"]["url"] == "https://img/1.jpg" and plan["cards"][1]["image"] is None
     assert plan["cards"][0]["title"] == "소주제 둘째 줄", "소제목은 한 줄"
     assert plan["cards"][0]["lines"][0].startswith("구글이 9월 10일") and len(plan["cards"][0]["lines"]) == 4, "문단을 문장 단위로 그대로"
@@ -176,6 +176,21 @@ def test_build_slides_and_render_from_plan():
     assert cards.credit_of({"url": "https://cdn.x/1.jpg", "source_url": "https://www.aitimes.com/news/1", "kind": "related"}) == "사진: aitimes.com"
 
 
+def test_image_candidates_never_use_social_media_images():
+    main = {"title": "인스타 글", "images": [{"url": "https://scontent-sea5-1.cdninstagram.com/v/x.jpg", "alt": "a"}],
+            "links": ["https://www.instagram.com/p/abc/", "https://openai.com/chatgpt"]}
+    related = [{"link": "https://www.instagram.com/p/other/", "title": "다른 계정", "images": [{"url": "https://cdn.x/1.jpg", "alt": "n"}]},
+               {"link": "https://www.aitimes.com/news/1", "title": "기사", "images": [{"url": "https://cdn.aitimes.com/1.jpg", "alt": "n"}]}]
+    c = research.image_candidates(main, related, main_url="https://www.instagram.com/p/abc/",
+                                  extra_links=["https://openai.com/index/x", "https://help.openai.com/y", "https://www.threads.net/z"])
+    urls = [x["url"] for x in c]
+    assert not any(research.is_social(u.replace("screenshot:", "")) for u in urls), urls
+    assert "https://cdn.aitimes.com/1.jpg" in urls
+    assert "screenshot:https://openai.com/chatgpt" in urls and "screenshot:https://help.openai.com/y" in urls
+    assert "screenshot:https://openai.com/index/x" not in urls, "출처 캡처는 도메인당 하나"
+    assert research.credit_of if False else cards.credit_of({"kind": "cc", "source_title": "Jane · CC BY"}) == "사진: Jane · CC BY"
+
+
 def test_image_candidates_order_and_numbering():
     main = {"title": "원문", "images": [{"url": "https://a/1.jpg", "alt": "a"}], "links": ["https://official/x"],
             "link_articles": [{"link": "https://official/x", "title": "공식", "images": [{"url": "https://o/1.jpg", "alt": "o"}]}]}
@@ -184,6 +199,31 @@ def test_image_candidates_order_and_numbering():
     assert [x["id"] for x in c] == [1, 2, 3, 4, 5]
     assert [x["kind"] for x in c] == ["official", "official", "related", "screenshot", "screenshot"]
     assert c[3]["url"] == "screenshot:https://official/x" and c[4]["url"] == "screenshot:https://src/a"
+
+
+def test_plan_cards_uses_cc_photo_from_image_query_when_nothing_picked(monkeypatch):
+    p = profile()
+    calls = []
+
+    def fake_openverse(query, *, n=3, **kw):
+        calls.append(query)
+        return [{"url": f"https://cc/{query.replace(' ', '_')}.jpg", "alt": query, "source_url": "https://flickr/x",
+                 "source_title": "Jane · CC BY", "kind": "cc"}]
+
+    monkeypatch.setattr(research, "openverse_search", fake_openverse)
+    plan_json = {"cover": {"title": "제목", "sub": "s", "image_id": 0, "image_query": "laptop privacy"},
+                 "cards": [{"image_id": 0, "image_query": f"concept {i}"} for i in range(6)], "cta": "저장"}
+
+    class Fake:
+        last_provider = "fake"
+
+        def json(self, *, system, user, schema=None):
+            return plan_json
+
+    plan = writer.plan_cards(Fake(), p, sample_article(), [], progress=lambda m: None)
+    assert plan["cover"]["image"]["kind"] == "cc" and plan["cover"]["image"]["url"].endswith("laptop_privacy.jpg")
+    assert [c["image"]["kind"] if c["image"] else None for c in plan["cards"]] == ["cc"] * 4 + [None, None], "앞 4장만 개념 사진"
+    assert len(set(c["image"]["url"] for c in plan["cards"] if c["image"])) == 4, "같은 사진 반복 없음"
 
 
 def test_plan_cards_falls_back_to_screenshot_cover_when_no_image_picked():

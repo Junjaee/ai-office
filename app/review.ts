@@ -23,7 +23,7 @@ export type ReviewQueueItem = {
   link: string;
   source: string;
   due: string;
-  status: "queued" | "making" | "done" | "failed";
+  status: "queued" | "making" | "done" | "failed" | "cancelled";
   added_at?: string;
   finished_at?: string;
   permalink?: string;
@@ -63,6 +63,7 @@ export const QUEUE_LABEL: Record<ReviewQueueItem["status"], { text: string; cls:
   making: { text: "만드는 중", cls: "running" },
   done: { text: "게시됨", cls: "done" },
   failed: { text: "실패", cls: "error" },
+  cancelled: { text: "취소", cls: "idle" },
 };
 
 /** 후보 중 이미 예약·진행·게시된 것의 id */

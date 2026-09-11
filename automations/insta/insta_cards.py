@@ -41,11 +41,13 @@ def build_slides(plan: dict, handle: str) -> list[dict]:
 
 
 def credit_of(image: dict | None) -> str:
-    """사진 출처 표시 문구: '사진: 출처 도메인' (공식 페이지 캡처면 '화면: 도메인')."""
+    """사진 출처 표시 문구: '사진: 출처 도메인' (공식 페이지 캡처면 '화면: 도메인', CC 사진이면 '사진: 작가 · CC BY')."""
     if not image:
         return ""
     import re
 
+    if image.get("kind") == "cc":
+        return "사진: " + str(image.get("source_title") or "CC")
     host = re.sub(r"^https?://(www\.)?", "", str(image.get("source_url") or image.get("url") or "")).split("/")[0]
     return ("화면: " if image.get("kind") == "screenshot" else "사진: ") + host
 

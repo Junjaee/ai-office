@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 
 from insta_llm import LLM
@@ -63,14 +64,16 @@ CARDS_SCHEMA = {
     "properties": {
         "cover": {"type": "object", "required": ["title", "sub"],
                   "properties": {"title": {"type": "string", "maxLength": 48}, "sub": {"type": "string", "maxLength": 80},
-                                 "image_id": {"type": "integer"}, "category": {"type": "string", "maxLength": 24}}},
+                                 "image_id": {"type": "integer"}, "category": {"type": "string", "maxLength": 24},
+                                 "image_query": {"type": "string", "maxLength": 60}}},
         "cards": {
             "type": "array", "minItems": 1, "maxItems": 9,
             "items": {"type": "object", "required": ["image_id"],
                       "properties": {"image_id": {"type": "integer"},
                                      "image_caption": {"type": "string", "maxLength": 60},
                                      "keyword": {"type": "string", "maxLength": 24},
-                                     "highlights": {"type": "array", "maxItems": 3, "items": {"type": "string", "maxLength": 30}}}},
+                                     "highlights": {"type": "array", "maxItems": 3, "items": {"type": "string", "maxLength": 30}},
+                                     "image_query": {"type": "string", "maxLength": 60}}},
         },
         "cta": {"type": "string", "maxLength": 80},
     },
@@ -154,7 +157,9 @@ def _article_rules(p: Profile) -> str:
         f"- 반드시 포함: {', '.join(p.must_include)}",
         f"- 금지 표현: {', '.join(p.banned)}. 느낌표 남발·이모지 금지(캡션은 문단당 1개 이하).",
         "- 숫자·툴 이름·명령어는 출처 그대로. 소재 원문·공식 링크·관련 글에 없는 사실은 쓰지 않는다. 확실치 않은 세부(요금·지원 OS·날짜)는 '공식 안내 확인' 으로 돌린다.",
-        "- 모든 사실 주장은 claims 에 {text, source(URL)} 로 넣는다(공식 출처 우선).",
+        "- 모든 사실 주장은 claims 에 {text, source(URL)} 로 넣는다(공식 출처 우선). **인스타그램·스레드 등 SNS 게시물 주소는 출처로 쓸 수 없다** — "
+        "소재가 다른 계정의 인스타 글이면 그 글은 '이런 주제가 반응이 좋았다'는 힌트일 뿐이고, 사실은 아래 관련 글·공식 페이지에서 찾아 그 주소를 단다. 못 찾은 세부는 쓰지 않는다.",
+        "- 남의 글을 옮겨 쓰지 않는다: 참고 계정 글의 문장·표현을 그대로 쓰거나, 그 계정의 체험('실제로 돌려봤더니', '~해 봤어요')을 우리 체험처럼 쓰지 않는다. 우리가 직접 한 것이 아니면 '~할 수 있어요', '~된다고 해요' 로 쓴다.",
         "- caption: 인스타 본문. 300~500자, 3문단(첫 줄 = 제목 반복 → 핵심 요약 → 저장·공유 유도). 해시태그는 hashtags 배열로.",
         f"- hashtags: 기본 {', '.join(p.hashtags_base)} 중 3개 + 소재에 맞는 2개.",
         "- alt_text: 시각장애인용 한 문장.",
@@ -216,10 +221,19 @@ def local_checks(p: Profile, article: dict) -> list[str]:
             problems.append(f"금지 표현 '{b}' 포함")
     if not article.get("claims"):
         problems.append("claims 비어 있음(출처 있는 주장이 없음)")
+    from insta_research import is_social
+
     for c in article.get("claims", []):
-        if not str(c.get("source", "")).startswith("http"):
+        src = str(c.get("source", ""))
+        if not src.startswith("http"):
             problems.append(f"출처가 URL 이 아님: {c.get('source')}")
             break
+        if is_social(src):
+            problems.append(f"SNS 게시물은 출처로 쓸 수 없음 — 공식 페이지·기사 주소로: {src[:50]}")
+            break
+    text_all = " ".join(str(x.get("text", "")) for x in article.get("paragraphs", []))
+    if re.search(r"(실제로 )?(돌려|해|써|넣어|시켜)\s*봤(더니|어요|습니다|는데)", text_all):
+        problems.append("남의 체험담을 우리 체험처럼 씀('~해 봤더니') — '~할 수 있어요'/'~된다고 해요' 로")
     paras = article.get("paragraphs", [])
     if p.paragraphs and abs(len(paras) - p.paragraphs) > 1:
         problems.append(f"문단이 {len(paras)}개 — {p.paragraphs}개 안팎으로")
@@ -312,12 +326,15 @@ def cards_prompt(p: Profile, article: dict, images_block: str) -> tuple[str, str
               "keyword(그 문단의 핵심어 하나 — 제품명·단축키·명령어·숫자. 예 'Alt+Space', '/autoprompt', '22초 vs 177초'. 카드 제목 아래 칩으로 표시됨), "
               "highlights(그 문단 text 안에 **글자 그대로 들어 있는** 강조할 어구 1~3개, 각 2~12자 — 색이 들어간다. 문단에 없는 말은 넣지 않는다).\n"
               "- 사진은 그 문단의 소주제와 **실제로 맞는** 것만 고른다(설명·출처로 판단). 공식 출처(official) 우선. 표지에는 가장 대표적인 화면·제품 사진. "
-              "맞는 후보가 없으면 0 — 억지로 넣지 않는다.\n"
+              "맞는 후보가 없으면 0. **다른 인스타 계정의 게시물 사진·화면은 후보에 없고 절대 쓰지 않는다** — 그 대신 같은 내용을 보여 줄 사진을 image_query 로 찾는다.\n"
+              "- image_query: 후보 중 맞는 게 없을 때(또는 후보가 없을 때) 그 카드에 어울리는 **개념 사진**을 찾을 영어 검색어 2~5단어 "
+              "(예 'person typing laptop privacy', 'smartphone photo gallery', 'security padlock data'). CC 라이선스 사진 저장소에서 찾으므로 제품 화면이 아니라 상황·사물 사진을 뜻하는 말로. "
+              "표지에도 cover.image_query 를 반드시 채운다.\n"
               f"- 마지막 카드 문구(cta): {p.cta}")
     user = ("기사:\n" + json.dumps({k: article.get(k) for k in ("title", "subtitle", "paragraphs")}, ensure_ascii=False, indent=1) +
             "\n\n사진 후보(번호·종류·설명·출처):\n" + (images_block or "(없음)") +
-            '\n\nJSON: {"cover": {"title": "...\\n...", "sub": "...", "image_id": 0, "category": "AI NEWS | TOOL"}, '
-            '"cards": [{"image_id": 0, "image_caption": "", "keyword": "...", "highlights": ["..."]}], "cta": "..."}')
+            '\n\nJSON: {"cover": {"title": "...\\n...", "sub": "...", "image_id": 0, "category": "AI NEWS | TOOL", "image_query": "..."}, '
+            '"cards": [{"image_id": 0, "image_caption": "", "keyword": "...", "highlights": ["..."], "image_query": "..."}], "cta": "..."}')
     return system, user
 
 
@@ -367,12 +384,16 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
         feedback = "; ".join(problems)
     cover = plan.get("cover", {})
     cover["image"] = by_id.get(int(cover.get("image_id") or 0))
+    used: set[str] = set()
     if not cover["image"]:
-        # 모델이 고른 사진이 없으면 원문·공식 페이지 캡처라도 표지에 넣는다 (글만 있는 표지는 스크롤을 못 세운다)
+        # 모델이 고른 사진이 없으면 CC 사진(image_query) → 공식 페이지 캡처 순으로 표지를 채운다 (글만 있는 표지는 스크롤을 못 세운다)
+        cc = cc_search(cover.get("image_query", ""), used)
         shot = next((c for c in images if c.get("kind") == "screenshot"), None)
-        if shot:
-            cover["image"] = shot
-            progress("표지 사진 없음 → 원문 페이지 캡처로 대체")
+        cover["image"] = cc or shot
+        if cover["image"]:
+            progress("표지 사진 없음 → " + ("CC 사진" if cc else "공식 페이지 캡처") + "으로 대체")
+    if cover["image"]:
+        used.add(cover["image"]["url"])
     paras = article.get("paragraphs", [])
     cards = plan.get("cards", [])
     # 본문은 기사 문단 그대로: 소제목 한 줄(줄바꿈 제거), 문장마다 한 줄
@@ -384,7 +405,27 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
         c["highlights"] = [h for h in (c.get("highlights") or []) if h and h in text][:3]
         c["keyword"] = " ".join(str(c.get("keyword") or "").split())[:24]
         c["image"] = by_id.get(int(c.get("image_id") or 0))
+        if c["image"] and c["image"]["url"] in used:
+            c["image"] = None                       # 같은 사진을 두 카드에 쓰지 않는다
+        if not c["image"] and i < 4:                # 앞쪽 카드 4장까지는 개념 사진(CC)으로 채운다
+            c["image"] = cc_search(c.get("image_query", ""), used)
+            if c["image"]:
+                c["image_caption"] = c.get("image_caption") or c["image"].get("alt", "")
+        if c["image"]:
+            used.add(c["image"]["url"])
         if i >= len(cards):
             cards.append(c)
     plan["cards"] = cards[:len(paras)]
     return plan
+
+
+def cc_search(query: str, used: set[str]) -> dict | None:
+    """image_query 로 CC 사진을 찾아 아직 안 쓴 첫 장을 돌려준다. 검색 실패·없음이면 None."""
+    from insta_research import openverse_search
+
+    if not (query or "").strip():
+        return None
+    for c in openverse_search(query, n=4):
+        if c["url"] not in used:
+            return c
+    return None
