@@ -116,6 +116,23 @@ def collect(source_names: list[str], *, max_age_hours: float, signals: list[str]
     return found, failed
 
 
+def cap_by_source(cands: list[Candidate], caps: dict) -> list[Candidate]:
+    """출처 라벨별 후보 상한 (caps 는 SOURCES 이름 기준). 순서는 유지."""
+    label_caps = {SOURCES[k]["label"]: int(n) for k, n in caps.items() if k in SOURCES}
+    if not label_caps:
+        return cands
+    counts: dict[str, int] = {}
+    out = []
+    for c in cands:
+        lim = label_caps.get(c.source)
+        if lim is not None:
+            counts[c.source] = counts.get(c.source, 0) + 1
+            if counts[c.source] > lim:
+                continue
+        out.append(c)
+    return out
+
+
 def as_prompt_rows(cands: list[Candidate], limit: int) -> str:
     rows = []
     for i, c in enumerate(cands[:limit], 1):

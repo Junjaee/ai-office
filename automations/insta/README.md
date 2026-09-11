@@ -28,6 +28,12 @@
 
 주의: 대시보드의 실행 상태는 **워크플로 파일 단위**로 잡힌다. 같은 `insta.yml` 을 쓰는 계정이 둘 이상이면 최근 실행 하나만 보이므로, 두 번째 계정을 붙일 때 Worker 의 run 매칭에 `inputs.account` 를 반영해야 한다(할 일).
 
+## 참고 계정 주제 (한국 AI 인스타 계정이 올린 것 먼저 — 사용자 결정 2026-09-11)
+
+후보의 앞자리는 RSS 가 아니라 **참고 계정(`profiles/<주제>.yaml` 의 `watch_accounts`)의 최근 게시물**이다. Instagram Graph API 의 비즈니스 디스커버리로 캡션·좋아요·댓글 수를 읽어(`insta_watch.py`) 좋아요 순으로 후보에 넣고, 편집장은 "인스타에서 반응 좋았던 주제 → 공식 소식 → 커뮤니티" 순으로 고른다. 레딧 같은 시끄러운 출처는 `source_caps` 로 후보 수를 제한한다.
+
+준비물(한 번): 페이스북 페이지 하나 + 그 페이지에 인스타 프로페셔널 계정 연결 + 페이지 권한이 있는 사용자 토큰(`instagram_basic`, `pages_show_list`, `pages_read_engagement`, 장기 60일). `python automations/insta/discovery_setup.py <토큰 파일> --app-id … --app-secret-file …` 이 장기 토큰 교환·인스타 계정 id 확인·시험 조회까지 해 준다. 값은 GitHub Secrets `IG_DISCOVERY_TOKEN`, `IG_DISCOVERY_USER_ID`. 없으면 참고 계정만 건너뛰고 RSS 로 진행한다.
+
 ## 주제 검토 방식 (사용자 결정 2026-09-11 — 기본 운영 방식)
 
 주제는 자동으로 고르지 않고 **사용자가 사이트에서 고른 것만** 만든다.

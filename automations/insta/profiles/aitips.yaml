@@ -21,7 +21,10 @@ must_include:
 banned: ["혁신적인", "게임체인저", "놀라운", "!!!", "무조건", "완전 대박", "충격", "역대급"]
 cta: "저장해 두고 하나씩 써보세요 · 필요한 분께 공유"
 hashtags_base: ["#AI활용", "#챗GPT", "#제미나이", "#업무자동화", "#생산성", "#AI툴", "#프롬프트"]
-sources: [openai_news, anthropic_news, google_ai, geeknews, aitimes, producthunt_ai, reddit_chatgpt, reddit_claude, huggingface]
+# 참고 계정(한국 AI 인스타, 프로페셔널 계정만 가능) — 최근 게시물·좋아요를 읽어 후보 앞자리에 둔다. IG_DISCOVERY_TOKEN/USER_ID 필요
+watch_accounts: [ai.trend.kr, ai_freaks.kr, hyunsight, un_ni_tip]
+sources: [openai_news, anthropic_news, google_ai, geeknews, aitimes, producthunt_ai, reddit_chatgpt, huggingface]
+source_caps: { reddit_chatgpt: 5, producthunt_ai: 5 }     # 시끄러운 출처는 후보 상한
 source_signals: ["프롬프트", "prompt", "사용법", "무료", "free", "업데이트", "기능", "feature", "자동", "단축", "tip", "how to", "출시", "launch"]
 max_age_hours: 72
 template: dark_code

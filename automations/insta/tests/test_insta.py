@@ -13,6 +13,7 @@ import insta_cards as cards  # noqa: E402
 import insta_publisher as pub  # noqa: E402
 import insta_research as research  # noqa: E402
 import insta_sources as sources  # noqa: E402
+import insta_watch as watch  # noqa: E402
 import insta_writer as writer  # noqa: E402
 from insta_llm import LLM, LLMError, extract_json  # noqa: E402
 
@@ -239,3 +240,33 @@ def test_publish_carousel_flow_with_fake_session():
 def test_missing_token_is_clear():
     with pytest.raises(pub.MissingInstaToken):
         pub.Instagram("", "1")
+
+
+def test_watch_candidates_from_captions_sorted_by_likes(monkeypatch):
+    monkeypatch.setenv("IG_DISCOVERY_TOKEN", "t")
+    monkeypatch.setenv("IG_DISCOVERY_USER_ID", "1")
+    posts = {"ai.trend.kr": [
+        {"caption": "나만 빼고 다 아는 챗GPT 명령어 100개 받아가세요. 🔥\n오픈AI가…", "permalink": "https://www.instagram.com/p/A/", "timestamp": "2026-09-10T01:00:00+0000", "like_count": 33000, "comments_count": 16000},
+        {"caption": "#광고 협찬 게시물", "permalink": "https://www.instagram.com/p/B/", "timestamp": "2026-09-10T02:00:00+0000", "like_count": 500, "comments_count": 3},
+    ]}
+    monkeypatch.setattr(watch, "fetch_account", lambda acct, **kw: posts[acct])
+    found, failed = watch.collect_watch(["ai.trend.kr"], min_likes=1000, now=datetime(2026, 9, 11, tzinfo=timezone.utc), progress=lambda m: None)
+    assert failed == [] and len(found) == 1
+    assert found[0].title == "나만 빼고 다 아는 챗GPT 명령어 100개 받아가세요"
+    assert "좋아요 3.3만" in found[0].source and watch.likes_of(found[0]) == 33000
+
+
+def test_watch_skips_quietly_without_token(monkeypatch):
+    monkeypatch.delenv("IG_DISCOVERY_TOKEN", raising=False)
+    msgs = []
+    assert watch.collect_watch(["ai.trend.kr"], progress=msgs.append) == ([], [])
+    assert msgs and "IG_DISCOVERY_TOKEN" in msgs[0]
+
+
+def test_cap_by_source_limits_noisy_sources():
+    items = [cand(f"r{i}", 1, f"https://x.test/r{i}") for i in range(4)]
+    for c in items:
+        c.source = "r/ChatGPT"
+    items.append(cand("o", 1, "https://x.test/o"))
+    out = sources.cap_by_source(items, {"reddit_chatgpt": 2})
+    assert [c.title for c in out] == ["r0", "r1", "o"]

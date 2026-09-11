@@ -35,6 +35,7 @@ from errors import to_korean  # noqa: E402
 import insta_research as research  # noqa: E402
 import insta_review as review  # noqa: E402
 import insta_sources as sources  # noqa: E402
+import insta_watch as watch  # noqa: E402
 import insta_writer as writer  # noqa: E402
 from insta_llm import LLM, LLMError  # noqa: E402
 try:
@@ -228,11 +229,15 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
     path = review_file(cfg, args.account)
     data = review.load(path)
     exclude = {r.get("key", "") for r in load_posted(args.account)} | review.active_keys(data)
+    watched, wfailed = watch.collect_watch(list(p.watch_accounts or []), exclude_keys=exclude, progress=progress)
     cands, failed = sources.collect(p.sources, max_age_hours=p.max_age_hours, signals=p.source_signals,
                                     exclude_keys=exclude, progress=progress)
+    cands = sources.cap_by_source(cands, p.source_caps or {})
+    cands = watched + cands                                 # 참고 계정 주제가 앞자리 (좋아요 순)
+    failed = wfailed + failed
     if not cands:
         raise RuntimeError("소재 후보가 없습니다 (출처 전부 실패: " + "; ".join(failed[:3]) + ")")
-    limit = int(acct.get("candidates_to_llm", 30))
+    limit = int(acct.get("candidates_to_llm", 30)) + len(watched)
     want = int(acct.get("review_count", 10))
     rows = sources.as_prompt_rows(cands, limit)
     s_, u_ = writer.pick_prompt(p, rows, want)
