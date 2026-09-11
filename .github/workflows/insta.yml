@@ -1,13 +1,26 @@
 name: 인스타 게시글
 
 on:
-  # 예약은 빈도가 정해지면 켠다 (UTC. KST 18:30 = "30 9 * * 1-5")
+  schedule:
+    # 매일 08:00 KST — 후보 10개 뽑아 검토 칸에 올림 (UTC 23:00 전날)
+    - cron: "0 23 * * *"
+    # 매시 정각 — 예약 시각이 된 주제를 만들어 게시 (만들 것 없으면 20초 안에 끝남)
+    - cron: "0 * * * *"
   workflow_dispatch:
     inputs:
       account:
         description: "계정 이름 (config.actions.yaml 의 accounts 키)"
         type: string
         default: "aitips"
+      mode:
+        description: "topics=후보 뽑기 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시 / run=1건 자동 게시(시험)"
+        type: choice
+        options: [topics, queue, publish, run]
+        default: "topics"
+      picks:
+        description: "queue 방식에서 고른 후보 id (쉼표). 사이트 검토 칸이 채운다"
+        type: string
+        default: ""
       request_id:
         description: "화면에서 누른 요청 id (비워도 됨)"
         type: string
@@ -26,7 +39,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -34,7 +47,28 @@ jobs:
         with:
           python-version: "3.13"
 
+      # 예약(cron) 이면 어느 예약인지로 방식을 정하고, publish 인데 만들 것이 없으면 여기서 끝낸다 (의존성 설치 전 — 실행 시간 절약)
+      - name: 실행 방식 정하기
+        id: mode
+        env:
+          ACCOUNT: ${{ inputs.account || 'aitips' }}
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            if [ "${{ github.event.schedule }}" = "0 23 * * *" ]; then MODE=topics; else MODE=publish; fi
+          else
+            MODE="${{ inputs.mode || 'topics' }}"
+          fi
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          if [ "$MODE" = "publish" ]; then
+            DUE=$(python automations/insta/review_due.py --workspace side --automation "insta_$ACCOUNT")
+          else
+            DUE=true
+          fi
+          echo "due=$DUE" >> "$GITHUB_OUTPUT"
+          echo "방식=$MODE 만들 것=$DUE"
+
       - name: 의존성 설치 (파이썬 + 카드용 Chromium + Claude Code CLI)
+        if: steps.mode.outputs.due == 'true'
         run: |
           python --version
           python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
@@ -42,13 +76,15 @@ jobs:
           npm install -g @anthropic-ai/claude-code
 
       - name: git 사용자 설정 (상태 파일 커밋용)
+        if: steps.mode.outputs.due == 'true'
         run: |
           git config user.name "ai-office-bot"
           git config user.email "ai-office-bot@users.noreply.github.com"
 
       - name: 실행
+        if: steps.mode.outputs.due == 'true'
         env:
-          # 글 생성 (전부 무료): Claude 구독 토큰 1순위, Gemini 무료 등급 2순위
+          # 글 생성: Claude 구독 토큰 (Gemini 예비 키는 두지 않기로 함 — 사용자 결정 2026-09-11)
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           # 이미지 공개 URL (Cloudflare R2)
@@ -61,16 +97,18 @@ jobs:
           INSTA_AITIPS_TOKEN: ${{ secrets.INSTA_AITIPS_TOKEN }}
           INSTA_AITIPS_USER_ID: ${{ secrets.INSTA_AITIPS_USER_ID }}
           INSTA_ACCOUNT: ${{ inputs.account || 'aitips' }}
+          INSTA_MODE: ${{ steps.mode.outputs.mode }}
+          INSTA_PICKS: ${{ inputs.picks }}
           REQUEST_ID: ${{ inputs.request_id }}
           PYTHONUTF8: "1"
         run: |
           python -X utf8 automations/insta/run_insta.py --config automations/insta/config.actions.yaml
 
       - name: 만든 카드 보관 (7일)
-        if: always()
+        if: always() && steps.mode.outputs.due == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: insta-cards-${{ inputs.account || 'aitips' }}
+          name: insta-cards-${{ inputs.account || 'aitips' }}-${{ github.run_id }}
           path: automations/insta/out/
           retention-days: 7
           if-no-files-found: ignore

@@ -22,10 +22,10 @@ QUERY_SCHEMA = {
 PICK_SCHEMA = {
     "type": "object",
     "required": ["picks"],
-    "properties": {"picks": {"type": "array", "minItems": 1, "maxItems": 3,
+    "properties": {"picks": {"type": "array", "minItems": 1, "maxItems": 12,
                              "items": {"type": "object", "required": ["index", "reason", "angle"],
                                        "properties": {"index": {"type": "integer"}, "reason": {"type": "string"},
-                                                      "angle": {"type": "string"}}}}},
+                                                      "angle": {"type": "string"}, "title_ko": {"type": "string", "maxLength": 40}}}}},
 }
 
 ARTICLE_SCHEMA = {
@@ -119,8 +119,9 @@ def pick_prompt(p: Profile, rows: str, n: int) -> tuple[str, str]:
               "커뮤니티 글(reddit 등)보다 우선. 커뮤니티 글은 공식 링크나 결과물 이미지가 딸려 있을 때만 고른다.\n"
               "도구를 쓰지 말고 JSON 객체 하나만 출력합니다.")
     user = (f"후보:\n{rows}\n\n"
-            f"가장 좋은 {n}개를 고르고 각각 index(후보 번호), reason(선정 이유 한 줄), angle(기사로 풀 때의 각도 한 줄)을 적으세요.\n"
-            'JSON: {"picks": [{"index": 3, "reason": "...", "angle": "..."}]}')
+            f"가장 좋은 {n}개를 고르고(좋은 순서대로, 서로 다른 주제로) 각각 index(후보 번호), title_ko(한국어 제목 한 줄, 20자 안팎 — 검토하는 사람이 한눈에 알게), "
+            "reason(선정 이유 한 줄 — 독자에게 왜 도움이 되는지), angle(기사로 풀 때의 각도 한 줄)을 적으세요.\n"
+            'JSON: {"picks": [{"index": 3, "title_ko": "...", "reason": "...", "angle": "..."}]}')
     return system, user
 
 

@@ -49,6 +49,8 @@ export type AutomationDef = {
   inputs?: Record<string, string>;
   /** "매일 09:00" 같은 예약 설명. 있으면 예약 밀림 배너 대상 */
   schedule?: string;
+  /** 검토 칸: 자동화가 public/review/<ws>/<id>.json 에 후보를 올리고, 사용자가 사이트에서 골라 만들게 한다 */
+  review?: { kind: "topics"; title?: string };
   /** 1개 이상, 부서 합계 6개 이하 */
   tasks: TaskDef[];
 };

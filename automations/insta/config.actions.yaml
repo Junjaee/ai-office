@@ -11,7 +11,8 @@ accounts:
     result_link: "https://www.instagram.com/aitips.kr/"
     posts_per_run: 1                         # 실행 1회에 올릴 게시물 수
     candidates_to_llm: 30                    # 소재 후보를 몇 개까지 편집장(모델)에게 보여 줄지
-    next_run: "수동 (▶ 시작)"
+    review_count: 10                         # 매일 검토 칸에 올릴 후보 수
+    next_run: "매일 08:00 후보 · 고르면 24÷N시간 간격으로 게시"
 
 # 글 생성기: 앞에서부터 시도, 실패하면 다음 (전부 무료 경로)
 llm_providers: [claude_cli, gemini]

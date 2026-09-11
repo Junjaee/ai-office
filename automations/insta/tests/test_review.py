@@ -1,0 +1,62 @@
+"""주제 검토·예약 파일(insta_review) — 간격 계산, 예약, 만들 시각 판정, 상태 표시."""
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+import insta_review as review  # noqa: E402
+
+KST = timezone(timedelta(hours=9))
+NOW = datetime(2026, 9, 12, 9, 17, tzinfo=KST)
+
+
+def cands(n):
+    return [{"key": f"https://x.test/{i}", "title": f"후보 {i}", "link": f"https://x.test/{i}", "source": "T",
+             "summary": "", "reason": "r", "angle": "a"} for i in range(n)]
+
+
+def test_schedule_spreads_24h_over_n_and_rounds_to_hour():
+    times = review.schedule_times(3, NOW)                       # 24÷3 = 8시간 간격
+    assert times[0] == NOW
+    assert [t.strftime("%H:%M") for t in times[1:]] == ["18:00", "02:00"]   # 17:17→18:00, 01:17→02:00 로 올림
+    assert review.schedule_times(1, NOW) == [NOW]
+    five = review.schedule_times(5, NOW)                         # 4.8시간 간격 → 14:05→15:00, 18:53→19:00 …
+    assert [t.strftime("%H:%M") for t in five] == ["09:17", "15:00", "19:00", "00:00", "05:00"]
+
+
+def test_enqueue_skips_unknown_and_already_queued_and_marks_due():
+    data = review.set_candidates({"queue": []}, cands(4), now=NOW)
+    ids = [c["id"] for c in data["candidates"]]
+    data, added = review.enqueue(data, [ids[0], "nope", ids[2], ids[0]], now=NOW)
+    assert [a["title"] for a in added] == ["후보 0", "후보 2"] and data["interval_hours"] == 12
+    assert [q["status"] for q in data["queue"]] == ["queued", "queued"]
+    assert review.active_keys(data) == {"https://x.test/0", "https://x.test/2"}
+    # 지금 만들 것은 첫 개뿐
+    assert [q["title"] for q in review.due_items(data, NOW)] == ["후보 0"]
+    assert [q["title"] for q in review.due_items(data, NOW + timedelta(hours=13))] == ["후보 0", "후보 2"]
+    # 다시 고르면 이미 예약된 것은 빠진다
+    data, again = review.enqueue(data, [ids[0], ids[1]], now=NOW)
+    assert [a["title"] for a in again] == ["후보 1"]
+
+
+def test_mark_and_new_day_keeps_active_queue_only():
+    data = review.set_candidates({"queue": []}, cands(2), now=NOW)
+    ids = [c["id"] for c in data["candidates"]]
+    data, _ = review.enqueue(data, ids, now=NOW)
+    data = review.mark(data, ids[0], "making", now=NOW)
+    data = review.mark(data, ids[0], "done", now=NOW, permalink="https://instagram.com/p/x/")
+    assert data["queue"][0]["status"] == "done" and data["queue"][0]["permalink"].endswith("/x/")
+    assert "게시 1건" in review.summarize(data) and "예약 1건" in review.summarize(data)
+    # 3일 뒤 새 후보: 끝난 항목은 지워지고 예약된 항목은 남는다
+    later = review.set_candidates(data, cands(1), now=NOW + timedelta(days=3))
+    assert [q["status"] for q in later["queue"]] == ["queued"] and later["count"] == 1
+
+
+def test_has_due_reads_file(tmp_path):
+    path = tmp_path / "public" / "review" / "side" / "insta_aitips.json"
+    assert review.has_due(path) is False
+    data = review.set_candidates({"queue": []}, cands(1), now=NOW)
+    data, _ = review.enqueue(data, [data["candidates"][0]["id"]], now=NOW)
+    review.save(path, data)
+    assert review.has_due(path, NOW) is True and review.has_due(path, NOW - timedelta(hours=1)) is False

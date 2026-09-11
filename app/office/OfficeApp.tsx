@@ -9,6 +9,7 @@ import { useLiveStatus } from "../status";
 import { useHistory } from "../history";
 import { HISTORY_START, clampDate, historyMessage, historyTitle, shiftDate } from "../history-rules";
 import OfficeWorld from "../game/OfficeWorld";
+import ReviewPanel from "./ReviewPanel";
 import { OfficeEngine, type Agent } from "../game/engine";
 import { createWorld } from "../game/world";
 import { buildStaff } from "../game/staff";
@@ -92,28 +93,30 @@ export default function OfficeApp() {
   const allRunning = runnable.length > 0 && runnable.every((a) => viewById.get(a.id)?.state === "running");
   const nameOf = (id: string) => ws.automations.find((a) => a.id === id)?.name ?? id;
 
+  /** 실행 요청. inputs(검토 칸의 mode·picks)는 Worker 허용 목록 안에서만 통과한다. 받아들여졌으면 true */
   const run = useCallback(
-    async (target: string) => {
+    async (target: string, inputs?: Record<string, string>): Promise<boolean> => {
       const requestId = newRequestId();
       setBusy((s) => new Set(s).add(target));
+      const what = inputs?.mode === "queue" ? "만들기" : inputs?.mode === "topics" ? "주제 뽑기" : "시작";
       try {
         const r = await fetch("/api/run", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ws: ws.id, automation: target, requestId }),
+          body: JSON.stringify({ ws: ws.id, automation: target, requestId, ...(inputs ? { inputs } : {}) }),
         });
         if (r.status === 429) {
           showToast("오늘 실행 한도를 넘었어요");
-          return;
+          return false;
         }
         if (r.status === 502) {
           const data = (await r.json().catch(() => ({}))) as { error?: string };
           showToast(data.error === "github_auth" ? "실행 연결이 끊겼어요 · 설정을 다시 해야 해요" : "GitHub 응답이 없어요. 잠시 뒤 다시 눌러 주세요");
-          return;
+          return false;
         }
         if (!r.ok) {
           showToast(`실행 요청 실패 (HTTP ${r.status})`);
-          return;
+          return false;
         }
         const data = (await r.json()) as { results: RunResult[] };
         const accepted = data.results.filter((x) => x.accepted);
@@ -123,15 +126,17 @@ export default function OfficeApp() {
           if (!accepted.length) showToast("이미 모두 실행 중이에요");
           else showToast(`${accepted.length}개 시작 요청${skipped.length ? `, ${skipped.length}개는 이미 실행 중` : ""}`);
         } else if (accepted.length) {
-          showToast(`${nameOf(target)} 시작 요청했어요`);
+          showToast(`${nameOf(target)} ${what} 요청했어요`);
         } else if (skipped[0]?.skipped === "too_soon") {
           showToast("방금 요청했어요. 잠시 뒤 다시 눌러 주세요");
         } else {
-          showToast("이미 실행 중이에요");
+          showToast("이미 실행 중이에요 · 끝나면 다시 눌러 주세요");
         }
         live.refresh();
+        return accepted.length > 0;
       } catch {
         showToast("GitHub 응답이 없어요. 잠시 뒤 다시 눌러 주세요");
+        return false;
       } finally {
         setBusy((s) => {
           const n = new Set(s);
@@ -254,7 +259,7 @@ export default function OfficeApp() {
                   {def.workflow ? (
                     canRun ? (
                       <button className="btn btn-primary btn-run" onClick={() => run(v.id)} disabled={busy.has(v.id) || v.state === "running" || !live.loaded}>
-                        {busy.has(v.id) ? "요청 중…" : "▶ 시작"}
+                        {busy.has(v.id) ? "요청 중…" : def.review ? "▶ 주제 뽑기" : "▶ 시작"}
                       </button>
                     ) : null
                   ) : null}
@@ -285,6 +290,16 @@ export default function OfficeApp() {
                     );
                   })}
                 </ul>
+                {def.review && def.workflow ? (
+                  <ReviewPanel
+                    ws={ws.id}
+                    automationId={v.id}
+                    title={def.review.title ?? "검토"}
+                    canRun={canRun}
+                    busy={busy.has(v.id) || v.state === "running"}
+                    onRun={(inputs) => run(v.id, inputs)}
+                  />
+                ) : null}
                 <p className="auto-meta">
                   {v.lastRunAt ? `마지막 실행 ${relativeTime(v.lastRunAt, now)}` : "아직 실행한 적 없어요"}
                   {v.nextRun ? ` · 다음 실행 ${v.nextRun}` : ""}

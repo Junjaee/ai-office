@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   decideRun, parseRequestId, latestValidRunByWorkflow, kstDateKey, dailyCount, addDailyCount,
   createRunApiStores, handleRun, handleStatus, isCrossOrigin, handleHistory, isValidDate, kstDayRangeUtc, historyFromRuns, parseArchive, archiveDate, mergeHistory,
+  handleReview, parseRunInputs,
 } from "../worker/run-api.ts";
 import { GitHubClient, GitHubAuthError, GitHubUnavailableError, GitHubNotFoundError } from "../worker/github.ts";
 import { DAILY_RUN_LIMIT, STATUS_CACHE_MS, TOO_SOON_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS, HISTORY_PAST_CACHE_MS } from "../worker/config.ts";
@@ -165,8 +166,8 @@ test("handleRun: JSON 아니면 400", async () => {
   assert.equal((await call(validBody, makeDeps(), { headers: { "Content-Type": "text/plain" } })).status, 400);
 });
 
-test("handleRun: 본문 1KB 초과면 400", async () => {
-  const big = { ...validBody, pad: "x".repeat(1100) };
+test("handleRun: 본문 2KB 초과면 400", async () => {
+  const big = { ...validBody, pad: "x".repeat(2200) };
   assert.equal((await call(big)).status, 400);
 });
 
@@ -633,4 +634,55 @@ test("GitHubClient.readRepoText: raw 글자, 404 → null, 5xx → Unavailable",
   assert.equal(f.calls[0].init.headers.Accept, "application/vnd.github.raw+json");
   assert.equal(await new GitHubClient("t", fakeFetch(() => new Response("", { status: 404 }))).readRepoText("x"), null);
   await assert.rejects(new GitHubClient("t", fakeFetch(() => new Response("", { status: 502 }))).readRepoText("x"), GitHubUnavailableError);
+});
+
+
+// ── /api/run inputs (mode·picks) ──
+test("parseRunInputs: 허용 목록·형식만 통과, 그 밖은 null", () => {
+  assert.deepEqual(parseRunInputs(undefined), {});
+  assert.deepEqual(parseRunInputs({ mode: "queue", picks: "0123abcd,89ef0123" }), { mode: "queue", picks: "0123abcd,89ef0123" });
+  assert.equal(parseRunInputs({ mode: "run" }), null, "run 은 화면에서 못 고른다");
+  assert.equal(parseRunInputs({ picks: "x" }), null);
+  assert.equal(parseRunInputs({ account: "other" }), null, "계정은 바꿀 수 없다");
+  assert.equal(parseRunInputs("mode=queue"), null);
+});
+
+test("handleRun: inputs 가 있으면 설정값 뒤에 덧붙여 dispatch, all 에는 못 붙인다", async () => {
+  const deps = makeDeps({ github: fakeGithub() });
+  const res = await handleRun(runRequest({ ...validBody, inputs: { mode: "queue", picks: "0123abcd" } }), fakeEnv(), deps);
+  assert.equal(res.status, 200);
+  assert.deepEqual(deps.github.calls.dispatch, [{ file: "minutes.yml", inputs: { mode: "queue", picks: "0123abcd", request_id: validBody.requestId } }]);
+  const bad = await handleRun(runRequest({ ...validBody, automation: "all", inputs: { mode: "queue" } }), fakeEnv(), makeDeps({ github: fakeGithub() }));
+  assert.equal(bad.status, 400);
+  const bad2 = await handleRun(runRequest({ ...validBody, inputs: { mode: "run" } }), fakeEnv(), makeDeps({ github: fakeGithub() }));
+  assert.equal(bad2.status, 400);
+});
+
+// ── /api/review ──
+function reviewRequest(ws, automation) {
+  return new Request(`${ORIGIN}/api/review?ws=${ws}&automation=${automation}`);
+}
+
+test("handleReview: 저장소 파일을 그대로 돌려주고 15초 캐시, 없으면 file null", async () => {
+  const file = { date: "2026-09-12", count: 1, candidates: [{ id: "0123abcd", title: "t" }], queue: [] };
+  const deps = makeDeps({ github: fakeGithub({ texts: { "public/review/assembly/minutes.json": JSON.stringify(file) } }) });
+  const res = await handleReview(reviewRequest("assembly", "minutes"), fakeEnv(), deps);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.deepEqual(body.file, file);
+  assert.equal(body.source, "github");
+  await handleReview(reviewRequest("assembly", "minutes"), fakeEnv(), deps);
+  assert.equal(deps.github.calls.readRepoText.length, 1, "15초 안 재요청은 캐시");
+  const none = await (await handleReview(reviewRequest("assembly", "mail"), fakeEnv(), deps)).json();
+  assert.equal(none.file, null);
+});
+
+test("handleReview: 사무실·자동화 없으면 404, 토큰 없으면 정적 파일", async () => {
+  assert.equal((await handleReview(reviewRequest("nope", "minutes"), fakeEnv(), makeDeps({ github: fakeGithub() }))).status, 404);
+  assert.equal((await handleReview(reviewRequest("assembly", "unknown"), fakeEnv(), makeDeps({ github: fakeGithub() }))).status, 404);
+  const deps = makeDeps({ github: null });
+  const env = fakeEnv({ "/review/assembly/minutes.json": { date: "2026-09-12", candidates: [], queue: [] } });
+  const body = await (await handleReview(reviewRequest("assembly", "minutes"), env, deps)).json();
+  assert.equal(body.source, "static");
+  assert.equal(body.file.date, "2026-09-12");
 });

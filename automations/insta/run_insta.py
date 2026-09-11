@@ -1,5 +1,11 @@
 """인스타그램 게시글 자동화 — 소재(topic) → 글(write: 조사·기사·검수) → 카드(card: 요약·사진·렌더) → 업로드(upload).
 
+실행 방식(--mode, 사용자 결정 2026-09-11 "주제는 내가 검토한 뒤 만든다"):
+  topics   매일 08:00 — 후보 10개를 골라 public/review/<사무실>/<자동화>.json 에 저장 (대시보드 검토 칸이 읽음)
+  queue    사이트에서 고른 후보(--picks id,id)를 예약에 넣는다: N개 → 24÷N 시간 간격. 첫 개는 바로 게시
+  publish  매시 정각 — 예약 시각이 된 것을 기사→카드→게시
+  run      (예전 방식) 후보 중 1건을 골라 바로 게시. 이 PC 시험용
+
 사용:
   python run_insta.py --account aitips                  # 실제 실행 (게시 + 상태 파일 커밋·push)
   python run_insta.py --account aitips --dry-run        # 게시·보고 없이 카드까지만 만들어 out/ 에 저장
@@ -27,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from errors import to_korean  # noqa: E402
 import insta_research as research  # noqa: E402
+import insta_review as review  # noqa: E402
 import insta_sources as sources  # noqa: E402
 import insta_writer as writer  # noqa: E402
 from insta_llm import LLM, LLMError  # noqa: E402
@@ -194,14 +201,145 @@ def step_upload(cfg: dict, acct: dict, out: Path, written: dict, rendered: dict,
     return {"published": results}
 
 
-def commit_data(account: str, today: str) -> None:
-    """게시 기록(data/insta/<계정>/posted.jsonl)을 로컬 커밋해 둔다. push 는 report_status 가 한다."""
+def commit_paths(paths: list[Path], message: str) -> None:
+    """저장소 안 파일을 로컬 커밋해 둔다. push 는 report_status 가 한다 (--until·--dry-run 이면 push 안 됨)."""
     repo = HERE.parent.parent
     if not (repo / ".git").exists():
         return
-    rel = str(posted_path(account).relative_to(repo))
-    subprocess.run(["git", "-C", str(repo), "add", rel], check=False)
-    subprocess.run(["git", "-C", str(repo), "commit", "-qm", f"insta({account}): 게시 기록 {today}"], check=False)
+    rels = [str(x.resolve().relative_to(repo.resolve())) for x in paths if x.exists()]
+    if not rels:
+        return
+    subprocess.run(["git", "-C", str(repo), "add", *rels], check=False)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", message], check=False)
+
+
+def commit_data(account: str, today: str) -> None:
+    commit_paths([posted_path(account)], f"insta({account}): 게시 기록 {today}")
+
+
+# ───────────────────────── 검토 방식: topics / queue / publish ─────────────────────────
+
+def review_file(cfg: dict, account: str) -> Path:
+    return review.review_path(HERE.parent.parent, cfg.get("office_workspace", "side"), f"insta_{account}")
+
+
+def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress) -> dict:
+    """후보 N개(review_count, 기본 10)를 골라 검토 파일에 저장. 이미 올린 것·예약된 것은 뺀다."""
+    path = review_file(cfg, args.account)
+    data = review.load(path)
+    exclude = {r.get("key", "") for r in load_posted(args.account)} | review.active_keys(data)
+    cands, failed = sources.collect(p.sources, max_age_hours=p.max_age_hours, signals=p.source_signals,
+                                    exclude_keys=exclude, progress=progress)
+    if not cands:
+        raise RuntimeError("소재 후보가 없습니다 (출처 전부 실패: " + "; ".join(failed[:3]) + ")")
+    limit = int(acct.get("candidates_to_llm", 30))
+    want = int(acct.get("review_count", 10))
+    rows = sources.as_prompt_rows(cands, limit)
+    s_, u_ = writer.pick_prompt(p, rows, want)
+    picks = llm.json(system=s_, user=u_, schema=writer.PICK_SCHEMA)["picks"]
+    chosen = []
+    for pk in picks:
+        i = int(pk["index"]) - 1
+        if 0 <= i < min(limit, len(cands)):
+            c = cands[i]
+            chosen.append({"key": c.key, "title": c.title, "link": c.link, "source": c.source,
+                           "published": c.published.isoformat(timespec="minutes") if c.published else "",
+                           "summary": c.summary[:300], "angle": pk.get("angle", ""), "reason": pk.get("reason", ""),
+                           "title_ko": pk.get("title_ko", "")})
+    if not chosen:
+        raise RuntimeError("편집장이 고른 번호가 후보 범위를 벗어났습니다")
+    now = datetime.now(KST)
+    data = review.set_candidates(data, chosen, now=now)
+    review.save(path, data)
+    commit_paths([path], f"insta({args.account}): 후보 {len(chosen)}건 {now:%Y-%m-%d %H:%M}")
+    progress(f"후보 {len(cands)}건 → {len(chosen)}건 저장 (검토 대기)")
+    lines = [f"[후보] {c['title'][:60]} — {c['source']}" for c in chosen]
+    return {"counts": {"new": 0, "failed": 0, "total": len(load_posted(args.account))}, "lines": lines,
+            "tasks": {"topic": (True, f"후보 {len(chosen)}건 · 사이트에서 골라 주세요")}}
+
+
+def do_queue(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args, progress) -> dict:
+    """사이트에서 고른 후보를 예약에 넣고(24÷N 시간 간격), 바로 만들 것(첫 개)은 이어서 만든다."""
+    path = review_file(cfg, args.account)
+    data = review.load(path)
+    ids = [x.strip() for x in (args.picks or "").split(",") if x.strip()]
+    now = datetime.now(KST)
+    data, added = review.enqueue(data, ids, now=now)
+    if not added:
+        raise RuntimeError("예약할 후보가 없습니다 (이미 예약됐거나 후보 목록이 바뀌었어요 — 사이트를 새로 고쳐 주세요)")
+    review.save(path, data)
+    commit_paths([path], f"insta({args.account}): 예약 {len(added)}건 ({data.get('interval_hours')}시간 간격)")
+    for q in added:
+        progress(f"예약 {q['due'][11:16]} — {q['title'][:50]}")
+    result = do_publish(cfg, acct, p, refs, llm, args, progress)
+    result["lines"] = [f"[예약] {len(added)}건 · {data.get('interval_hours')}시간 간격"] + result["lines"]
+    return result
+
+
+def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args, progress) -> dict:
+    """예약 시각이 된 항목을 하나씩 기사→카드→게시. 결과는 검토 파일에 표시."""
+    path = review_file(cfg, args.account)
+    data = review.load(path)
+    now = datetime.now(KST)
+    due = review.due_items(data, now)
+    tasks: dict[str, tuple[bool, str]] = {"topic": (True, review.summarize(data))}
+    lines: list[str] = []
+    made = failed = 0
+    if not due:
+        lines.append("[예약] 지금 만들 것 없음")
+        return {"counts": {"new": 0, "failed": 0, "total": len(load_posted(args.account))}, "lines": lines, "tasks": tasks}
+    for q in due:
+        data = review.mark(data, q["id"], "making", now=now)
+        review.save(path, data); commit_paths([path], f"insta({args.account}): 만드는 중 {q['title'][:40]}")
+        cand = {k: q.get(k, "") for k in ("key", "title", "link", "source", "summary", "angle")}
+        try:
+            res = make_post(cfg, acct, p, refs, llm, cand, args, progress)
+        except Exception as exc:  # noqa: BLE001
+            traceback.print_exc()
+            res = {"ok": False, "error": f"{type(exc).__name__}: {str(exc)[:160]}", "tasks": {}, "lines": [f"[실패] {q['title'][:40]} — {type(exc).__name__}"]}
+        now = datetime.now(KST)
+        if res["ok"]:
+            made += 1
+            data = review.mark(data, q["id"], "done", now=now, permalink=res.get("permalink", ""))
+        else:
+            failed += 1
+            data = review.mark(data, q["id"], "failed", now=now, error=res.get("error", ""))
+        review.save(path, data); commit_paths([path], f"insta({args.account}): {'게시' if res['ok'] else '실패'} {q['title'][:40]}")
+        tasks.update(res.get("tasks", {}))
+        lines += res.get("lines", [])
+    tasks["topic"] = (True, review.summarize(data))
+    return {"counts": {"new": made, "failed": failed, "total": len(load_posted(args.account))}, "lines": lines, "tasks": tasks}
+
+
+def make_post(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, cand: dict, args, progress) -> dict:
+    """소재 하나 → 기사 → 카드 → 게시. {ok, permalink, tasks, lines, error}"""
+    stamp = datetime.now(KST).strftime("%Y-%m-%d")
+    out = HERE / "out" / args.account / stamp / review.short_id(cand["key"])
+    out.mkdir(parents=True, exist_ok=True)
+    topic = {"chosen": [dict(cand)], "n_candidates": 0}
+    (out / "topic.json").write_text(json.dumps(topic, ensure_ascii=False, indent=1), encoding="utf-8")
+    tasks: dict[str, tuple[bool, str]] = {}
+    lines: list[str] = []
+    progress(f"글 쓰는 중 — {cand['title'][:50]}")
+    written = step_write(cfg, acct, p, refs, llm, out, topic, progress)
+    v = written["posts"][0]["verdict"]
+    ok_write = v.get("verdict") == "pass"
+    tasks["write"] = (ok_write, f"검수 {v.get('total')}점 ({written['posts'][0].get('provider', '')})")
+    lines.append(f"[기사] {written['posts'][0]['article']['title']} · 검수 {v.get('total')}점")
+    if not ok_write:
+        return {"ok": False, "error": f"검수 미달 {v.get('total')}점", "tasks": tasks, "lines": lines + [f"[보류] {str(v.get('feedback', ''))[:100]}"]}
+    progress("카드 만드는 중")
+    rendered = step_card(cfg, acct, p, llm, out, written, progress)
+    tasks["card"] = (True, f"카드 {len(rendered['cards'][0]['files'])}장")
+    if args.dry_run:
+        lines.append(f"[카드] {rendered['cards'][0]['preview']} (dry-run: 게시 안 함)")
+        return {"ok": True, "permalink": "", "tasks": tasks, "lines": lines}
+    progress("올리는 중")
+    uploaded = step_upload(cfg, acct, out, written, rendered, args, progress)
+    n = len(uploaded["published"])
+    tasks["upload"] = (n > 0, f"{n}건 게시")
+    lines += [f"[게시] {r['permalink']}" for r in uploaded["published"]]
+    return {"ok": n > 0, "permalink": uploaded["published"][0]["permalink"] if n else "", "tasks": tasks, "lines": lines}
 
 
 def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
@@ -210,6 +348,12 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         raise RuntimeError(f"설정에 없는 계정: {args.account}")
     p, refs = load_profile(acct["profile"])
     llm = LLM(list(cfg.get("llm_providers") or ["claude_cli", "gemini"]), gemini_model=cfg.get("gemini_model") or "gemini-2.5-flash")
+    if args.mode == "topics":
+        return do_topics(cfg, acct, p, llm, args, progress)
+    if args.mode == "queue":
+        return do_queue(cfg, acct, p, refs, llm, args, progress)
+    if args.mode == "publish":
+        return do_publish(cfg, acct, p, refs, llm, args, progress)
     today = args.date or datetime.now(KST).strftime("%Y-%m-%d")
     out = HERE / "out" / args.account / today
     out.mkdir(parents=True, exist_ok=True)
@@ -290,6 +434,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--revise", action="store_true", help="지난 검수 지적을 반영해 기사를 다시 쓴다(--resume 과 함께)")
     p.add_argument("--feedback", default="", help="다듬기에 넣을 사용자 지적(--revise 와 함께). 줄바꿈 가능")
     p.add_argument("--date", default="", help="출력 폴더 날짜 (기본 오늘)")
+    p.add_argument("--mode", choices=["run", "topics", "queue", "publish"], default=os.environ.get("INSTA_MODE", "run"),
+                   help="run=1건 자동 게시(시험) / topics=후보 저장 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시")
+    p.add_argument("--picks", default=os.environ.get("INSTA_PICKS", ""), help="queue 방식에서 고른 후보 id (쉼표)")
     a = p.parse_args(argv)
     return a
 

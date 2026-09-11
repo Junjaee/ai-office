@@ -1,4 +1,4 @@
-// /api/run · /api/status 순수 로직. vinext/next 를 import 하지 않고, 시간·GitHub·저장소는 deps 로 주입받는다.
+// /api/run · /api/status · /api/history · /api/review 순수 로직. vinext/next 를 import 하지 않고, 시간·GitHub·저장소는 deps 로 주입받는다.
 import {
   DAILY_RUN_LIMIT, HISTORY_CACHE_MAX, HISTORY_GITHUB_DAYS, HISTORY_PAST_CACHE_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS,
   RUNS_PER_PAGE, STATUS_CACHE_MS, TOO_SOON_MS,
@@ -303,14 +303,34 @@ export type RunApiDeps = {
   statusCache: Map<string, { at: number; body: StatusBody }>;
   /** "<ws>/<date>" → 캐시된 /api/history 응답 */
   historyCache: Map<string, { at: number; body: HistoryBody }>;
+  /** "review/<ws>/<automation>" → 캐시된 /api/review 응답 */
+  reviewCache: Map<string, { at: number; body: ReviewBody }>;
 };
 
-export function createRunApiStores(): Pick<RunApiDeps, "dailyCounter" | "dispatchLog" | "statusCache" | "historyCache"> {
-  return { dailyCounter: createDailyCounterStore(), dispatchLog: new Map(), statusCache: new Map(), historyCache: new Map() };
+export function createRunApiStores(): Pick<RunApiDeps, "dailyCounter" | "dispatchLog" | "statusCache" | "historyCache" | "reviewCache"> {
+  return { dailyCounter: createDailyCounterStore(), dispatchLog: new Map(), statusCache: new Map(), historyCache: new Map(), reviewCache: new Map() };
 }
 
-const MAX_BODY_BYTES = 1024;
+const MAX_BODY_BYTES = 2048;
 const REQUEST_ID_RE = /^req-[A-Za-z0-9-]{1,80}$/;
+/** 화면이 덧붙일 수 있는 workflow 입력값 — 이름·형식 허용 목록 (그 밖의 키는 400) */
+const RUN_INPUT_RULES: Record<string, RegExp> = {
+  mode: /^(topics|queue|publish)$/,
+  picks: /^[a-f0-9]{8}(,[a-f0-9]{8}){0,19}$/,
+};
+
+/** 요청 본문의 inputs → 검증된 문자열 맵. 없으면 {}. 허용되지 않은 키·형식이면 null */
+export function parseRunInputs(raw: unknown): Record<string, string> | null {
+  if (raw === undefined || raw === null) return {};
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    const rule = RUN_INPUT_RULES[k];
+    if (!rule || typeof v !== "string" || !rule.test(v)) return null;
+    out[k] = v;
+  }
+  return out;
+}
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -361,10 +381,14 @@ export async function handleRun(request: Request, env: RunApiEnv, deps: RunApiDe
     return json({ error: "bad_request" }, 400);
   }
   if (!body || typeof body !== "object") return json({ error: "bad_request" }, 400);
-  const { ws, automation, requestId } = body as Record<string, unknown>;
+  const { ws, automation, requestId, inputs: rawInputs } = body as Record<string, unknown>;
   if (typeof ws !== "string" || !ws || typeof automation !== "string" || !automation || typeof requestId !== "string" || !REQUEST_ID_RE.test(requestId)) {
     return json({ error: "bad_request" }, 400);
   }
+  const extraInputs = parseRunInputs(rawInputs);
+  if (extraInputs === null) return json({ error: "bad_request" }, 400);
+  // 화면 입력값(mode·picks)은 자동화 하나를 지정할 때만 — "all" 에는 붙이지 않는다
+  if (automation === "all" && Object.keys(extraInputs).length > 0) return json({ error: "bad_request" }, 400);
 
   // 2. 출처
   if (isCrossOrigin(request)) return json({ error: "forbidden" }, 403);
@@ -417,7 +441,7 @@ export async function handleRun(request: Request, env: RunApiEnv, deps: RunApiDe
       continue;
     }
     try {
-      await github.dispatch(def.workflow as string, { ...(def.inputs ?? {}), request_id: requestId });
+      await github.dispatch(def.workflow as string, { ...(def.inputs ?? {}), ...extraInputs, request_id: requestId });
     } catch (error) {
       const res = githubErrorResponse(error);
       if (res) return res;
@@ -513,6 +537,59 @@ export async function handleStatus(request: Request, env: RunApiEnv, deps: RunAp
 
   const body = await buildStatus(ws, workspace, url.origin, env, deps);
   deps.statusCache.set(ws, { at: now, body });
+  return json(body);
+}
+
+// ── GET /api/review?ws=…&automation=… ── 주제 검토 파일(public/review/<ws>/<automation>.json)
+export type ReviewBody = {
+  ws: string;
+  automation: string;
+  /** 파일 내용 그대로 (없으면 null) */
+  file: unknown | null;
+  source: "github" | "static";
+  checkedAt: string;
+};
+
+const AUTOMATION_ID_RE = /^[a-z0-9_]{1,40}$/;
+
+async function readStaticReview(env: RunApiEnv, origin: string, ws: string, id: string): Promise<unknown | null> {
+  try {
+    const res = await env.ASSETS.fetch(new Request(`${origin}/review/${encodeURIComponent(ws)}/${encodeURIComponent(id)}.json`));
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function handleReview(request: Request, env: RunApiEnv, deps: RunApiDeps): Promise<Response> {
+  if (request.method !== "GET") return json({ error: "method_not_allowed" }, 405);
+  const url = new URL(request.url);
+  const ws = url.searchParams.get("ws") ?? "";
+  const automation = url.searchParams.get("automation") ?? "";
+  const workspace = deps.workspaces[ws];
+  if (!workspace || !AUTOMATION_ID_RE.test(automation)) return json({ error: "not_found" }, 404);
+  if (!workspace.automations.some((a) => a.id === automation)) return json({ error: "not_found" }, 404);
+
+  const now = deps.now();
+  const key = `review/${ws}/${automation}`;
+  const cached = deps.reviewCache.get(key);
+  if (cached && now - cached.at < STATUS_CACHE_MS) return json(cached.body);
+
+  let file: unknown | null = null;
+  let source: ReviewBody["source"] = "static";
+  if (deps.github) {
+    try {
+      const text = await deps.github.readRepoText(`public/review/${ws}/${automation}.json`);
+      file = text ? JSON.parse(text) : null;
+      source = "github";
+    } catch {
+      file = null;
+    }
+  }
+  if (source !== "github") file = await readStaticReview(env, url.origin, ws, automation);
+  const body: ReviewBody = { ws, automation, file, source, checkedAt: new Date(now).toISOString() };
+  deps.reviewCache.set(key, { at: now, body });
   return json(body);
 }
 
