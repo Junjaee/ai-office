@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 11초",
   "counts": {
-    "new": 7,
+    "new": 4,
     "failed": 0,
-    "total": 313
+    "total": 317
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 12초",
-    "[신규] PC 브라우저에서 확인하는 토토사이트 순위 쇼미더벳 실행 정보 — Histoire pour tous",
-    "[신규] 이 대통령 지지율 38% ‘취임 후 최저’...용혜인 부적합 61%·김승원 43% [한국갤럽] — 시사타파NEWS",
-    "[신규] 넷플릭스 top 10 웹사이트 특수 심벌이 적용되지 않는 경우 — Histoire pour tous",
-    "[신규] 무작위 결과라는 표현을 이해하는 코인 푸시 게임 기초 해설 — Histoire pour tous"
+    "신규 4건, 실패 0건, 11초",
+    "[신규] 한 번에 이해되지 않는 표현을 풀어 쓴 카지노 비밀작전 — Histoire pour tous",
+    "[신규] \"후원계좌 지웠습니다\"…돈보다 '이것' 채운 국회의원 명함 [여의도는 지금] — 한국경제",
+    "[신규] 카지노 안전한 사이트 배당표에 나오는 기호 설명 — Histoire pour tous",
+    "[신규] 李대통령 지지율 전주보다 2%p 하락한 38%…최저치 경신[한국갤럽] — 연합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34645277014,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34645277014",
+  "run_id": 34655888129,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34655888129",
   "trigger": "schedule",
-  "started_at": "2026-09-12T05:38:54+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-12T07:53:36+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 94건"
+      "summary": "검색어 5개에서 97건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 22건 (신규 7건) · Histoire pour tous 9건, citizenadmnews.co.kr 4건, 시민행정신문 4건"
+      "summary": "오늘 26건 (신규 4건) · Histoire pour tous 11건, citizenadmnews.co.kr 4건, 시민행정신문 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-12T05:39:07+09:00"
+  "updated_at": "2026-09-12T07:53:48+09:00"
 }
