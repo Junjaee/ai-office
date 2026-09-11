@@ -108,13 +108,13 @@ def describe(e: Event, reveal_keywords: list[str] | None) -> str:
     return "기타 일정"
 
 
-def build_message(calendar_name: str, days: tuple[date, date], events: list[Event],
+def build_message(title: str, days: tuple[date, date], events: list[Event],
                   reveal_keywords: list[str] | None = None) -> str:
     """텔레그램으로 보낼 글. 날짜마다 제목 줄, 일정이 없으면 '일정 없음'. 4096자를 넘으면 잘라 표시.
     일정 내용은 describe() 규칙(reveal_keywords)으로 가린다."""
     sat, sun = days
-    lines = [f"📅 {calendar_name} · 주말 일정 ({sat.month}/{sat.day} {WEEKDAYS[sat.weekday()]} ~ "
-             f"{sun.month}/{sun.day} {WEEKDAYS[sun.weekday()]})"]
+    # 첫 줄: "이준석 주말 일정(9/12 토 ~ 9/13 일)" (사용자 지정 2026-09-11)
+    lines = [f"{title}({sat.month}/{sat.day} {WEEKDAYS[sat.weekday()]} ~ {sun.month}/{sun.day} {WEEKDAYS[sun.weekday()]})"]
     for d in days:
         lines += ["", f"■ {d.month}월 {d.day}일 ({WEEKDAYS[d.weekday()]})"]
         todays = [e for e in events if e.day == d]

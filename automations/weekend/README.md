@@ -30,7 +30,7 @@
 
 ## 설정 (config.actions.yaml)
 
-- `calendar_id` 읽을 캘린더, `calendar_name` 메시지 첫 줄 이름, `tasks: [fetch, send]`.
+- `calendar_id` 읽을 캘린더, `title` 메시지 첫 줄(→ `이준석 주말 일정(9/12 토 ~ 9/13 일)`), `reveal_keywords` 그대로 보여 줄 단어, `tasks: [fetch, send]`.
 - 사무실 설정(`app/workspaces/assembly.ts`)에는 `schedule` 을 넣지 않는다 — 주 1회라 36시간 기준 "예약 놓침" 경고가 잘못 뜬다. 카드 문구는 `next_run`.
 
 ## 문제 해결

@@ -58,7 +58,7 @@ def test_dry_run_never_reports(cfg_file, reports):
 
 # ───────────────────────── do_work ─────────────────────────
 
-CFG = {"calendar_id": "cal@group.calendar.google.com", "calendar_name": "530호 일정", "tasks": ["fetch", "send"],
+CFG = {"calendar_id": "cal@group.calendar.google.com", "title": "이준석 주말 일정", "tasks": ["fetch", "send"],
        "reveal_keywords": ["동탄"]}
 ITEMS = [
     {"summary": "국회 행사", "start": {"dateTime": "2026-09-12T10:00:00+09:00"}, "end": {"dateTime": "2026-09-12T12:00:00+09:00"}},
@@ -112,6 +112,7 @@ def test_do_work_reads_weekend_and_sends(fakes):
     assert (call["timeMin"], call["timeMax"]) == ("2026-09-12T00:00:00+09:00", "2026-09-14T00:00:00+09:00")
     assert call["singleEvents"] is True
     assert sent[0][0] == "42" and "9월 13일 (일)" in sent[0][1]
+    assert sent[0][1].startswith("이준석 주말 일정(9/12 토 ~ 9/13 일)")
     assert "행사 일정" in sent[0][1] and "국회 행사" not in sent[0][1]   # 동탄 관련이 아니면 종류만
     assert result["counts"] == {"events": 2, "sent": 1}
     assert all("국회 행사" not in ln and "지역 방문" not in ln for ln in result["lines"])   # 대시보드 기록도 가림

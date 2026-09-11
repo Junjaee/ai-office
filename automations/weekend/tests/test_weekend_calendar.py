@@ -53,8 +53,8 @@ def test_build_message_groups_by_day_and_marks_empty_day():
         Event(SAT, "10:00", "12:00", "국회 행사", "여의도"),
         Event(SAT, "22:00", "~", "밤 일정", ""),
     ]
-    assert build_message("530호 일정", (SAT, SUN), ev).splitlines() == [
-        "📅 530호 일정 · 주말 일정 (9/12 토 ~ 9/13 일)",
+    assert build_message("이준석 주말 일정", (SAT, SUN), ev).splitlines() == [
+        "이준석 주말 일정(9/12 토 ~ 9/13 일)",
         "",
         "■ 9월 12일 (토)",
         "· 종일  지역 방문",

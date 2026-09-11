@@ -75,7 +75,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         raise RuntimeError(f"캘린더 읽기 실패: HTTP {status} {reason}".rstrip()) from None
     events = to_events(items, days)
     reveal = cfg.get("reveal_keywords") or []   # 비어 있으면 전부 종류만 (가리는 쪽이 기본)
-    text = build_message(cfg.get("calendar_name") or "캘린더", days, events, reveal)
+    text = build_message(cfg.get("title") or "주말 일정", days, events, reveal)
     per_day = " · ".join(f"{'토' if d.weekday() == 5 else '일'} {sum(1 for e in events if e.day == d)}건" for d in days)
 
     if args.dry_run:
