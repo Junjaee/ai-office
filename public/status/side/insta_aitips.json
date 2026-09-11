@@ -3,36 +3,36 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "게시 0건, 실패 1건, 누적 5건, 6.2분",
+  "summary": "게시 0건, 실패 2건, 누적 5건, 12.5분",
   "counts": {
     "new": 0,
-    "failed": 1,
+    "failed": 2,
     "total": 5
   },
   "next_run": "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격",
   "log": [
-    "게시 0건, 실패 1건, 누적 5건, 6.2분",
-    "[예약] 1건 · 24.0시간 간격",
-    "[기사] 이어붙이기 없이 30초, 시댄스 2.5 · 검수 34점",
-    "[보류] 사실 오류 성격의 날짜 혼동이 있어 revise 처리합니다. '비공개 모델이라' 문단: '한편, 같은 날 미니맥스도 경쟁 영상 모델 H3를 오픈소스로 내놨어요. 시댄스 2.5가 중"
+    "게시 0건, 실패 2건, 누적 5건, 12.5분",
+    "[기사] 챗GPT 플러스 2개월, 40달러를 공짜로 · 검수 31점",
+    "[보류] 출처가 URL 이 아님: 카카오톡 'ChatGPT for Kakao' 채널 공식 안내(이벤트 페이지) — 정확한 기간·세부 조건은 공식 안내 확인 / 사실 오류 때문에 revise",
+    "[기사] 아니 이 영화, AI가 만들었다고요? · 검수 43점",
+    "[보류] SNS 게시물은 출처로 쓸 수 없음 — 공식 페이지·기사 주소로: https://vrew.voyagerx.com / 사실관계는 문제없어요. 소라·런웨이·클링·브루 설명과 요금 문단"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34622269162,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34622269162",
-  "request_id": "req-20260912012918-zy37",
-  "trigger": "manual",
-  "started_at": "2026-09-12T01:30:31+09:00",
-  "duration_sec": 369,
+  "run_id": 34638535201,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34638535201",
+  "trigger": "schedule",
+  "started_at": "2026-09-12T04:24:11+09:00",
+  "duration_sec": 750,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 16건 · 게시 6건"
+      "summary": "후보 20건 · 예약 14건 · 게시 6건"
     },
     {
       "id": "write",
       "status": "error",
-      "summary": "검수 34점 (claude_cli)"
+      "summary": "검수 43점 (claude_cli)"
     },
     {
       "id": "card",
@@ -46,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T01:36:41+09:00"
+  "updated_at": "2026-09-12T04:36:41+09:00"
 }
