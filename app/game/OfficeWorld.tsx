@@ -245,7 +245,7 @@ export default function OfficeWorld({ engine, world, deptViews, hotRoom, selecte
                   </b>
                   {state ? (
                     <i className={`rm-dot ${STATE_CLASS[state]}`} title={LABELS[state]}>
-                      {view && view.runningCount > 0 ? ` ${LABELS.running} ${view.runningCount}` : ""}
+                      {view && view.runningCount > 0 ? LABELS.running : ""}
                     </i>
                   ) : null}
                 </span>

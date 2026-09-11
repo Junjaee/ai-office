@@ -306,7 +306,7 @@
 .rm.planned { background: var(--c-gray50); border-style: dashed; opacity: .6; }
 .rm-dot.error { background: #ff5c5c; animation: blinkDot .5s steps(2) infinite; }
 .rm-dot.planned { background: var(--c-gray200); }
-.rm-dot { width: auto; min-width: 7px; height: auto; padding: 0 4px; font-size: 8px; font-weight: 900; line-height: 12px; color: var(--ink); border-radius: 99px; }
+.rm-dot { width: auto; min-width: 7px; height: auto; padding: 0 4px; font-size: 8px; font-weight: 900; font-style: normal; line-height: 12px; color: var(--ink); border-radius: 99px; }
 .rm-dot.working { color: #fff; }
 /* 방 이름표의 "일하는 중 N" 이 잘려 보이던 문제 (2026-09-11)
    1) 상태 표시가 border-radius:50% 라 글자가 들어가면 알약이 아니라 타원이 됐다 → 양 끝 흰 글자가
