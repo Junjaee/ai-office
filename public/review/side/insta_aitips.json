@@ -1,6 +1,6 @@
 {
  "date": "2026-09-11",
- "generated_at": "2026-09-11T16:44:29+09:00",
+ "generated_at": "2026-09-11T16:47:01+09:00",
  "count": 10,
  "candidates": [
   {
@@ -10,22 +10,10 @@
    "source": "r/ChatGPT",
    "published": "2026-09-10T04:21+00:00",
    "summary": "part 1 covered the eight rules and the generation prompts, it is here if you missed it same prompt library as part 1, edit section is the second half: https://github.com/AtlasCloudAI/awesome-gpt-image-2.5-prompts TL;DR: every edit prompt is two lines, what changes and what stays, and anything you le",
-   "angle": "'이미지 한 부분만 고치기' 프롬프트 공식 패턴 9가지: 배경 바꾸기·옷 색 바꾸기·글자 넣기처럼 상황별 문장 틀을 소개하고, 여러 번 고칠수록 그림이 망가지는 문제(드리프트)를 줄이는 요령을 덧붙인다.",
-   "reason": "GPT Image 2.5로 사진·이미지를 고칠 때 바로 복사해 쓸 수 있는 공식 편집 패턴 9가지를 정리한 글이다. GitHub 프롬프트 모음에 결과 이미지가 함께 있어 카드용 사진을 구할 수 있고, 저장해 두고 싶은 내용이다.",
-   "title_ko": "",
+   "angle": "공식 편집 패턴 9가지를 '이럴 때 이 문장' 형식으로 정리하고, 여러 번 고치면 원본이 망가지는 문제를 막는 요령을 덧붙인다",
+   "reason": "사진 수정·배경 교체 같은 이미지 편집 문장 틀을 그대로 복사해 쓸 수 있어 저장해 둘 만하고, 깃허브 공식 모음과 결과 이미지도 있다",
+   "title_ko": "GPT 이미지 2.5 편집 프롬프트 9가지",
    "id": "b40ae185"
-  },
-  {
-   "key": "https://www.producthunt.com/products/chat-recall",
-   "title": "chat-recall",
-   "link": "https://www.producthunt.com/products/chat-recall",
-   "source": "Product Hunt",
-   "published": "2026-09-10T08:39+00:00",
-   "summary": "Ctrl+F for every conversation you've had with an AI Discussion | Link",
-   "angle": "AI 대화 기록을 Ctrl+F처럼 찾는 법: chat-recall이 무엇을 해 주는지, 설치하고 쓰는 흐름, 개인정보 관련 주의점, 무료로 할 수 있는 대안(각 서비스의 기본 검색 기능)을 비교한다.",
-   "reason": "ChatGPT·Claude 등과 나눈 지난 대화를 한 번에 검색하는 도구다. 'AI가 해 준 그 답을 어디서 봤더라' 하는 직장인의 흔한 불편을 바로 풀어 준다. Product Hunt 제품 페이지에 화면 사진이 있다.",
-   "title_ko": "",
-   "id": "5ce14313"
   },
   {
    "key": "https://blog.google/products-and-platforms/products/search/running-race-training-tips",
@@ -34,22 +22,22 @@
    "source": "Google AI",
    "published": "2026-09-10T07:00+00:00",
    "summary": "Illustration on a blue background of technicolor runners with a magnifying glass and Gemini spark overlaid",
-   "angle": "'마라톤·러닝 대회 준비, 구글 검색 AI에게 맡기기' 3단계: 훈련 계획 짜기, 코스·날씨 확인, 준비물 체크리스트. 러닝 말고 다른 목표에도 쓸 수 있는 질문 틀도 함께 준다.",
-   "reason": "구글 공식 블로그 글이라 화면 이미지가 확실하다. 검색창에 들어간 Gemini로 운동 계획·코스 정보·준비물을 챙기는 방법이라, 일반인도 오늘 바로 따라 할 수 있다.",
-   "title_ko": "",
+   "angle": "구글이 소개한 활용법 3가지를 따라 하고, 한국 대회에 맞춘 질문 예시를 붙인다",
+   "reason": "구글 공식 블로그 소식이라 화면 이미지를 쓸 수 있고, 운동하는 직장인이 훈련 계획에 바로 써먹을 수 있다",
+   "title_ko": "마라톤 준비, 구글 검색 AI로",
    "id": "94ad36d7"
   },
   {
-   "key": "https://www.reddit.com/r/chatgpt/comments/1wcf1z7/apparently_chatgpt_added_snake_while_your_image",
-   "title": "Apparently ChatGPT added Snake while your image is generating..",
-   "link": "https://www.reddit.com/r/ChatGPT/comments/1wcf1z7/apparently_chatgpt_added_snake_while_your_image/",
-   "source": "r/ChatGPT",
-   "published": "2026-09-10T01:15+00:00",
-   "summary": "Not sure how new this is, but I just noticed ChatGPT lets you play Snake while waiting for an image to generate. Honestly, this is such a small feature but a pretty clever one I almost missed it completely, so I figured I'd share it in case other people haven't noticed it yet. Now I'm not sure if I'",
-   "angle": "'ChatGPT에 숨은 게임이 있다?' 이스터에그 소개로 관심을 끈 뒤, 이미지 생성이 오래 걸리는 이유와 기다리는 시간을 줄이는 프롬프트 요령(크기·비율·장수 지정)을 이어서 설명한다.",
-   "reason": "ChatGPT 이미지 생성을 기다리는 동안 스네이크 게임이 뜨는 숨은 기능이다. 새롭고 가볍게 공유하기 좋은 소재이고, 글쓴이의 실제 화면 캡처가 있다.",
-   "title_ko": "",
-   "id": "7f4d5ecf"
+   "key": "https://www.producthunt.com/products/chat-recall",
+   "title": "chat-recall",
+   "link": "https://www.producthunt.com/products/chat-recall",
+   "source": "Product Hunt",
+   "published": "2026-09-10T08:39+00:00",
+   "summary": "Ctrl+F for every conversation you've had with an AI Discussion | Link",
+   "angle": "chat-recall 소개와 함께, 여러 AI에 흩어진 대화를 정리하는 습관(제목 붙이기·프로젝트 폴더)을 같이 알려 준다",
+   "reason": "'그때 챗GPT한테 물어본 답이 어디 있더라' 하는 흔한 불편을 풀어 주는 도구라 공감이 크다",
+   "title_ko": "AI 대화 기록 한 번에 찾기",
+   "id": "5ce14313"
   },
   {
    "key": "https://www.producthunt.com/products/accordio",
@@ -58,9 +46,9 @@
    "source": "Product Hunt",
    "published": "2026-09-10T15:18+00:00",
    "summary": "Give Claude your hours, invoices and contracts Discussion | Link",
-   "angle": "'프리랜서 서류 업무 AI에게 넘기기': Accordio로 근무 시간을 기록하고 청구서를 만들고 계약서를 찾는 흐름을 보여 준다. 도구가 없어도 Claude에 바로 붙여 쓸 수 있는 청구서·계약 요약 프롬프트를 덧붙인다.",
-   "reason": "근무 시간·청구서·계약서를 Claude에 연결해 정리하는 도구다. 프리랜서와 N잡러의 서류 업무를 줄이는 실용적인 사례이고, 제품 페이지에 화면 사진이 있다.",
-   "title_ko": "",
+   "angle": "Accordio로 할 수 있는 일을 화면 중심으로 보여 주고, 도구 없이 Claude에 청구서를 요청할 때 쓰는 프롬프트 예시도 넣는다",
+   "reason": "프리랜서·1인 사업자가 근무시간 기록과 청구서, 계약서 관리를 AI에게 맡기는 구체적인 방법이다",
+   "title_ko": "근무시간·청구서를 Claude에게",
    "id": "711c3b26"
   },
   {
@@ -70,22 +58,10 @@
    "source": "OpenAI",
    "published": "2026-09-10T07:00+00:00",
    "summary": "César de la Fuente’s lab uses Codex and ChatGPT to search living and extinct genomes for antimicrobial candidates to fight drug-resistant infections.",
-   "angle": "'연구실은 ChatGPT를 이렇게 쓴다': 항생 물질 연구 사례로 자료 탐색 → 후보 추리기 → 검증으로 이어지는 흐름을 소개하고, 학생이 과제·논문 조사에 적용할 수 있는 단계별 질문법으로 옮겨 설명한다.",
-   "reason": "OpenAI 공식 사례 글이라 이미지를 구할 수 있다. 연구자가 ChatGPT로 방대한 자료를 뒤지는 방식은 대학원생·학생의 논문·자료 조사에 그대로 응용할 수 있다.",
-   "title_ko": "",
+   "angle": "항생물질 후보 탐색 사례를 쉽게 풀고, 일반인도 따라 할 수 있는 '많은 자료에서 후보를 추려 내는' 질문 방식으로 옮겨 설명한다",
+   "reason": "OpenAI 공식 사례라 신뢰도가 높고, 자료 조사·분석에 AI를 쓰는 흐름을 대학원생·연구직이 참고할 수 있다",
+   "title_ko": "연구자의 챗GPT·Codex 활용법",
    "id": "01415994"
-  },
-  {
-   "key": "https://www.reddit.com/r/chatgpt/comments/1wcqk5n/since_when_is_this_sexual_or_provocative",
-   "title": "Since when is this sexual or provocative?",
-   "link": "https://www.reddit.com/r/ChatGPT/comments/1wcqk5n/since_when_is_this_sexual_or_provocative/",
-   "source": "r/ChatGPT",
-   "published": "2026-09-10T08:56+00:00",
-   "summary": "I asked ChatGPT to create an Realistic human girl in an ultra realistic coffee shop... And it said this. Wtf ChatGPT submitted by /u/Embarrassed-Yak-856 [link] [comments]",
-   "angle": "'ChatGPT 이미지 생성이 거절될 때 고쳐 쓰는 법': 거절이 잘 걸리는 표현(초실사·특정 신체 묘사 등)과 바꿔 쓸 표현, 용도와 분위기를 먼저 밝히는 프롬프트 틀을 전후 비교로 보여 준다.",
-   "reason": "평범한 인물 사진을 부탁했는데 '선정적'이라며 거절당하는 일은 많은 사람이 겪는다. 글쓴이의 거절 화면 캡처가 있어서 문제 해결형 꿀팁으로 만들기 좋다.",
-   "title_ko": "",
-   "id": "2432915c"
   },
   {
    "key": "https://www.reddit.com/r/chatgpt/comments/1wd1xd7/learning_spanish",
@@ -94,10 +70,34 @@
    "source": "r/ChatGPT",
    "published": "2026-09-10T16:17+00:00",
    "summary": "I've started using the voice mode to practice my Spanish. Unlike the preprogrammed stuff like Duolingo, I can stop mid-sentence and ask about a point of grammar or spelling or that kind of thing. I can have it make conversation, quiz me, work on pronunciation... Whatever I feel like practicing. I'm ",
-   "angle": "'ChatGPT 음성 모드로 1:1 회화 과외 받기': 레벨 설정, 실수 교정 요청, 상황극(카페 주문·면접) 같은 역할을 정해 주는 첫 문장 프롬프트를 소개하고 듀오링고와의 차이를 비교한다.",
-   "reason": "ChatGPT 음성 모드로 외국어 회화를 연습하면 말하는 도중에 문법을 바로 물어볼 수 있다는 실제 사용 후기다. 학생·직장인 모두 오늘 바로 해 볼 수 있다. 음성 모드 화면은 OpenAI 공식 도움말 이미지로 채운다.",
-   "title_ko": "",
+   "angle": "음성 모드 공식 화면을 곁들여 회화 연습용 첫 지시문, 틀린 문장 고쳐 받기, 수준 조절법을 단계별로 안내한다",
+   "reason": "말하다가 중간에 끊고 문법을 물어볼 수 있다는 점이 기존 학습 앱과 달라 공부하는 독자에게 바로 쓸모 있다",
+   "title_ko": "챗GPT 음성모드로 외국어 회화",
    "id": "a79f88d1"
+  },
+  {
+   "key": "https://www.reddit.com/r/chatgpt/comments/1wcf1z7/apparently_chatgpt_added_snake_while_your_image",
+   "title": "Apparently ChatGPT added Snake while your image is generating..",
+   "link": "https://www.reddit.com/r/ChatGPT/comments/1wcf1z7/apparently_chatgpt_added_snake_while_your_image/",
+   "source": "r/ChatGPT",
+   "published": "2026-09-10T01:15+00:00",
+   "summary": "Not sure how new this is, but I just noticed ChatGPT lets you play Snake while waiting for an image to generate. Honestly, this is such a small feature but a pretty clever one I almost missed it completely, so I figured I'd share it in case other people haven't noticed it yet. Now I'm not sure if I'",
+   "angle": "숨은 기능 소개로 시작해 이미지가 오래 걸리는 이유와 빨리 받는 요령(크기·수정 횟수)으로 이어 간다",
+   "reason": "이미지를 만드는 동안 지루함을 달래 주는 숨은 기능이라 가볍게 공유하기 좋고, 캡처 이미지가 있다",
+   "title_ko": "이미지 기다리며 스네이크 게임",
+   "id": "7f4d5ecf"
+  },
+  {
+   "key": "https://www.reddit.com/r/chatgpt/comments/1wcqk5n/since_when_is_this_sexual_or_provocative",
+   "title": "Since when is this sexual or provocative?",
+   "link": "https://www.reddit.com/r/ChatGPT/comments/1wcqk5n/since_when_is_this_sexual_or_provocative/",
+   "source": "r/ChatGPT",
+   "published": "2026-09-10T08:56+00:00",
+   "summary": "I asked ChatGPT to create an Realistic human girl in an ultra realistic coffee shop... And it said this. Wtf ChatGPT submitted by /u/Embarrassed-Yak-856 [link] [comments]",
+   "angle": "커뮤니티 사례를 바탕으로 거절을 부르는 표현과 바꿔 쓸 표현을 비교표로 정리한다",
+   "reason": "평범한 요청도 거절당하는 일이 흔해서, 문장을 바꿔 다시 요청하는 요령이 실제로 도움이 된다",
+   "title_ko": "이미지 생성 거절될 때 대처법",
+   "id": "2432915c"
   },
   {
    "key": "https://openai.com/index/introducing-the-agents-api",
@@ -106,22 +106,22 @@
    "source": "OpenAI",
    "published": "2026-09-09T15:00+00:00",
    "summary": "Build and launch cloud agents with the Agents API, a managed service powered by the Codex harness for orchestration, long-running sessions, and tool use.",
-   "angle": "'AI 에이전트가 뭔데? 비개발자용 3분 설명': Agents API 발표를 계기로 에이전트와 챗봇의 차이, 이미 쓸 수 있는 에이전트 기능(ChatGPT 에이전트 모드 등), 앞으로 업무가 어떻게 달라질지를 정리한다.",
-   "reason": "OpenAI 공식 출시 소식이라 공식 이미지가 확실하다. 개발자용이지만 'AI가 몇 시간씩 알아서 일하는' 에이전트가 앞으로 우리가 쓰는 앱에 들어온다는 흐름을 쉽게 짚어 줄 수 있다.",
-   "title_ko": "",
+   "angle": "개발 내용은 줄이고, 앞으로 쓰게 될 서비스에서 무엇이 달라지는지(긴 작업 맡기기·도구 사용)를 쉽게 풀어 준다",
+   "reason": "공식 출시 소식이라 이미지를 구하기 쉽고, 'AI가 오래 알아서 일하는' 흐름을 일반인 눈높이로 알려 줄 수 있다",
+   "title_ko": "OpenAI 에이전트 API 출시",
    "id": "2b26a806"
   },
   {
-   "key": "https://www.producthunt.com/products/devin-voice",
-   "title": "Devin Voice",
-   "link": "https://www.producthunt.com/products/devin-voice",
-   "source": "Product Hunt",
-   "published": "2026-09-10T13:45+00:00",
-   "summary": "You say it, Devin ships it Discussion | Link",
-   "angle": "'이제 AI에게 말로 일 시킨다': Devin Voice를 사례로 음성으로 업무를 맡기는 흐름을 보여 주고, 비개발자가 지금 쓸 수 있는 음성 지시 도구(ChatGPT·Gemini 음성 모드)와 말로 지시할 때의 요령을 정리한다.",
-   "reason": "말로 지시하면 AI가 결과물까지 만들어 주는 음성 기반 작업 도구다. 제품 페이지에 화면 사진이 있다. 타이핑 대신 말로 AI를 부리는 흐름이 새롭다.",
-   "title_ko": "",
-   "id": "ef382263"
+   "key": "https://blog.google/products-and-platforms/products/search/football-features-google-search",
+   "title": "Get ready for the game with new football features in Search",
+   "link": "https://blog.google/products-and-platforms/products/search/football-features-google-search/",
+   "source": "Google AI",
+   "published": "2026-09-09T07:00+00:00",
+   "summary": "An illustrated graphic set against a vibrant green background featuring American football elements, including a gold trophy, a blue helmet, a silver whistle, a football, a mini scoreboard, and play diagrams, with the icon for AI Mode in Google Search in t",
+   "angle": "풋볼 기능을 예로 들어 경기 일정·결과 요약처럼 검색 AI를 생활 정보에 쓰는 방법으로 넓혀 본다",
+   "reason": "구글 공식 발표라 이미지가 있고, 검색 AI가 실시간 정보를 요약해 주는 방식을 보여 주는 사례다",
+   "title_ko": "구글 검색, 풋볼 시즌 새 기능",
+   "id": "91d5074f"
   }
  ],
  "queue": []
