@@ -614,7 +614,103 @@
    "due": "2026-09-12T13:00:00+09:00",
    "status": "queued",
    "added_at": "2026-09-12T00:55:54+09:00"
+  },
+  {
+   "id": "05291c66",
+   "key": "https://www.instagram.com/p/ddh-8hmvztm",
+   "title": "“show me what chatgpt would have looked like in the 80s”",
+   "link": "https://www.instagram.com/p/DdH-8hMvztm/",
+   "source": "IG 🇺🇸 @openai · 좋아요 6.6천 · 댓글 151",
+   "summary": "“show me what chatgpt would have looked like in the 80s”",
+   "angle": "실제 프롬프트 문구와 결과 이미지를 보여주며 '나도 해보기' 형태로 유도",
+   "due": "2026-09-12T01:06:40+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:06:40+09:00"
+  },
+  {
+   "id": "d427a828",
+   "key": "https://www.instagram.com/p/ddjmnj5agd1",
+   "title": "Yesterday Anthropic released a 150-page report on how people, hackers, governmen",
+   "link": "https://www.instagram.com/p/DdJmnJ5AGD1/",
+   "source": "IG 🇺🇸 @evolving.ai · 좋아요 2.2천 · 댓글 80",
+   "summary": "⚠️ Yesterday Anthropic released a 150-page report on how people, hackers, governments and companies are misusing Claude around the world. It’s one of the craziest things you’ll read all month. Some of the cases are wild. -> A weapons cell in Yemen used Claude while building guidance software for roc",
+   "angle": "앤트로픽이 공개한 150쪽 보고서 핵심을 5가지 사례로 압축해 소개",
+   "due": "2026-09-12T05:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:06:40+09:00"
+  },
+  {
+   "id": "540933cd",
+   "key": "https://techcrunch.com/2026/09/10/openai-puts-pro-subscriptions-on-hold-due-to-astra-demand",
+   "title": "OpenAI puts Pro subscriptions on hold due to Astra demand",
+   "link": "https://techcrunch.com/2026/09/10/openai-puts-pro-subscriptions-on-hold-due-to-astra-demand/",
+   "source": "TechCrunch",
+   "summary": "The company said Pro subscriptions put the most strain on its systems, so it's pausing sign-ups while adding more capacity.",
+   "angle": "왜 중단됐고 언제 재개될지, 지금 Plus로 대체할 수 있는지 정리",
+   "due": "2026-09-12T08:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:06:40+09:00"
+  },
+  {
+   "id": "397b6dcc",
+   "key": "https://www.instagram.com/p/ddhn0k-g-nu",
+   "title": "Meet Bradford and Bryan Manning, the founders of twoblindbrothers",
+   "link": "https://www.instagram.com/p/DdHN0k-G-NU/",
+   "source": "IG 🇺🇸 @openai · 좋아요 2.4천 · 댓글 63",
+   "summary": "Meet Bradford and Bryan Manning, the founders of twoblindbrothers Both live with Stargardt disease, a condition that has taken much of their central vision. Today, they use ChatGPT to navigate everyday life, run their nonprofit, and build new opportunities for the blind community. From reading menus",
+   "angle": "시각장애를 가진 형제가 챗GPT로 일상 과제를 해결하는 구체적 장면을 소개",
+   "due": "2026-09-12T11:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:06:40+09:00"
+  },
+  {
+   "id": "696281d5",
+   "key": "https://www.instagram.com/reel/ddhol9iuu1u",
+   "title": "Hello Windows, the Gemini app is here! Get quick help with a simple keyboard sho",
+   "link": "https://www.instagram.com/reel/DdHOL9iuU1U/",
+   "source": "IG 🇺🇸 @googlegemini · 좋아요 1.7천 · 댓글 52",
+   "summary": "Hello Windows, the Gemini app is here! 👋 Get quick help with a simple keyboard shortcut on your PC.",
+   "angle": "단축키 설정법과 활용 장면을 짧게 보여주는 영상 기반 튜토리얼",
+   "due": "2026-09-12T14:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:06:40+09:00"
+  },
+  {
+   "id": "a6add69c",
+   "key": "https://www.testingcatalog.com/openai-launches-chatgpt-for-financial-services",
+   "title": "OpenAI launches ChatGPT for Financial Services",
+   "link": "https://www.testingcatalog.com/openai-launches-chatgpt-for-financial-services/",
+   "source": "TestingCatalog",
+   "summary": "OpenAI launches ChatGPT for Financial Services with GPT-6 Astra, built-in premium data, firm templates, and enterprise controls.",
+   "angle": "무엇이 새로 추가됐고 일반 챗GPT와 뭐가 다른지 실무자 관점에서 비교",
+   "due": "2026-09-12T17:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:06:40+09:00"
+  },
+  {
+   "id": "01415994",
+   "key": "https://openai.com/index/using-codex-chatgpt-to-search-for-new-antimicrobials",
+   "title": "How a researcher uses Codex and ChatGPT to search for new antimicrobial molecules",
+   "link": "https://openai.com/index/using-codex-chatgpt-to-search-for-new-antimicrobials",
+   "source": "OpenAI",
+   "summary": "César de la Fuente’s lab uses Codex and ChatGPT to search living and extinct genomes for antimicrobial candidates to fight drug-resistant infections.",
+   "angle": "연구자가 Codex와 챗GPT로 신약 후보를 탐색하는 과정을 스토리로 풀기",
+   "due": "2026-09-12T20:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:06:40+09:00"
+  },
+  {
+   "id": "1f3b8588",
+   "key": "https://www.instagram.com/p/ddexzvlj-w4",
+   "title": "여러분, 지금 당장 카톡 켜세요. ChatGPT Plus가 두 달 공짜입니다",
+   "link": "https://www.instagram.com/p/DdEXZvlj-w4/",
+   "source": "IG 🇰🇷 @ai.trend.kr · 좋아요 302 · 댓글 248",
+   "summary": "여러분, 지금 당장 카톡 켜세요. ChatGPT Plus가 두 달 공짜입니다 🎁 카카오와 오픈AI가 만 19~34세를 대상으로 ChatGPT Plus 2개월 무료 이벤트를 시작했어요. ChatGPT 유료 플랜을 한 번도 안 써봤거나, 마지막 구독이 끝난 지 90일이 지난 계정이면 참여할 수 있습니다. 방법은 간단해요. 카카오톡에서 ChatGPT for Kakao 채널을 친구 추가하고 ChatGPT 계정을 연결한 뒤, 이벤트 페이지에서 참여를 누르면 바로 Plus가 켜집니다. 카드 등록도 필요 없고, 두 달이 지나도 자동 결제는 되지",
+   "angle": "신청 조건과 방법을 단계별로 안내해 바로 따라 하게 구성",
+   "due": "2026-09-12T23:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:06:40+09:00"
   }
  ],
- "interval_hours": 12.0
+ "interval_hours": 3.0
 }
