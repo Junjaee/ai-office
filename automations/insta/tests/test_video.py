@@ -32,6 +32,16 @@ def test_find_video_prefers_link_then_text_then_page(monkeypatch):
     assert video.find_video({"link": "https://deepmind.google/blog/a/"})["kind"] == "file"
 
 
+def test_reel_profile_shortens_article_rules():
+    import insta_writer as writer
+
+    p = writer.Profile(name="n", audience="a", tone="t", format="news", must_include=["무료/유료"], banned=[], cta="c", hashtags_base=["#a"],
+                       sources=[], source_signals=[], template="dark_code", judge_weights={}, pass_score=38, paragraphs=6)
+    r = writer.reel_profile(p)
+    assert (r.paragraphs, r.pass_score, r.reel, p.reel, p.paragraphs) == (4, 32, True, False, 6)
+    assert "릴스" in writer._article_rules(r) and "릴스" not in writer._article_rules(p)
+
+
 def test_video_filter_and_credit():
     assert video.video_filter(1920, 1080).startswith("scale=1080:-2,pad=1080:1920")
     assert video.video_filter(1080, 1920).startswith("scale=1080:1920:force_original_aspect_ratio=increase,crop")

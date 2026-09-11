@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from insta_llm import LLM
 
@@ -121,11 +121,17 @@ class Profile:
     hook_patterns: list[str] | None = None
     flow: dict | None = None
     images_per_post: int = 0
+    reel: bool = False                  # True 면 릴스(영상) 캡션·자막용 짧은 기사 규칙 (reel_profile 이 켠다)
 
     @classmethod
     def from_dict(cls, d: dict) -> "Profile":
         known = {k: d[k] for k in cls.__dataclass_fields__ if k in d}
         return cls(**known)
+
+
+def reel_profile(p: Profile) -> Profile:
+    """영상 소재용 프로필: 문단 4개, 합격선 6점 완화, 릴스 규칙 켬. (유튜브 설명·X 글처럼 근거가 짧아도 쓸 수 있게)"""
+    return replace(p, paragraphs=4, pass_score=max(30, int(p.pass_score) - 6), reel=True)
 
 
 # ───────────────────────── 1) 소재 고르기 / 검색어 ─────────────────────────
@@ -170,7 +176,10 @@ def _article_rules(p: Profile) -> str:
         f"- 문단(paragraphs) {p.paragraphs}개. **문단 하나 = 소주제 하나**. heading 은 그 소주제를 12자 안팎으로, text 는 3~4줄(90~200자) 완결된 문장.",
         "- 문단 순서: 독자가 궁금한 순서. 소식이면 '언제·누가·무엇 → 달라지는 점(장점) 여러 개 → 쓰는 법 → 받는 곳·조건' 순.",
         "- 문단마다 구체적인 예(숫자·화면·입력 예시)를 하나 이상 넣는다. 추상적인 설명만 있는 문단은 실패.",
-        f"- 반드시 포함: {', '.join(p.must_include)}",
+        f"- 반드시 포함: {', '.join(p.must_include)}" + ("" if not p.reel else " (영상 글에서는 확인되는 것만 — 없으면 빼도 감점 아님)"),
+        *(["- **이 글은 릴스(세로 영상)의 캡션·자막용**이다. 영상이 보여 주는 것(무엇을, 어떻게, 결과가 어땠는지)을 문단 4개로 쓴다. "
+           "영상 설명·원문에 있는 사실만 쓰고, 요금·지원 기기·날짜처럼 확인 안 되는 세부는 넣지 않는다. 제목은 영상 위에 크게 얹히므로 18자 안, 부제는 한 줄. "
+           "caption 은 영상 아래 본문이므로 첫 줄에 제목, 둘째 문단에 영상 설명, 셋째에 저장·공유 유도."] if p.reel else []),
         f"- 금지 표현: {', '.join(p.banned)}. 느낌표 남발·이모지 금지(캡션은 문단당 1개 이하).",
         "- 숫자·툴 이름·명령어는 출처 그대로. 소재 원문·공식 링크·관련 글에 없는 사실은 쓰지 않는다. 확실치 않은 세부(요금·지원 OS·날짜)는 '공식 안내 확인' 으로 돌린다.",
         "- 모든 사실 주장은 claims 에 {text, source(URL)} 로 넣는다(공식 출처 우선). **인스타그램·스레드 등 SNS 게시물 주소는 출처로 쓸 수 없다** — "

@@ -185,7 +185,7 @@ def step_card(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, wri
     return {"cards": result}
 
 
-def step_video(cfg: dict, acct: dict, p: writer.Profile, out: Path, written: dict, progress) -> dict | None:
+def step_video(cfg: dict, acct: dict, p: writer.Profile, out: Path, written: dict, progress, found: dict | None = None) -> dict | None:
     """소재에 영상(공식 유튜브·X·공식 페이지 mp4)이 있으면 받아서 릴스로. 없거나 실패하면 None (카드로 간다)."""
     import insta_video as video
 
@@ -195,10 +195,10 @@ def step_video(cfg: dict, acct: dict, p: writer.Profile, out: Path, written: dic
     topic = json.loads((out / "topic.json").read_text(encoding="utf-8"))
     item = written["posts"][0]
     cand = next((c for c in topic["chosen"] if c["key"] == item["candidate"]["key"]), topic["chosen"][0])
-    found = video.find_video(cand)
+    found = found or video.find_video(cand)
     if not found:
         return None
-    progress(f"영상 찾음 ({found['kind']}) {found['url'][:60]}")
+    progress(f"영상 ({found['kind']}) {found['url'][:60]}")
     d = out / "reel"
     try:
         meta = video.download(found["url"], d, progress=progress)
@@ -424,6 +424,15 @@ def make_post(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, can
     (out / "topic.json").write_text(json.dumps(topic, ensure_ascii=False, indent=1), encoding="utf-8")
     tasks: dict[str, tuple[bool, str]] = {}
     lines: list[str] = []
+    # 영상이 딸린 소재면 먼저 확인해 두고(값싼 검사), 릴스용 짧은 기사 규칙으로 쓴다
+    found = None
+    if acct.get("reels", True):
+        import insta_video as video
+
+        found = video.find_video(cand) if video.tools_ok() else None
+        if found:
+            p = writer.reel_profile(p)
+            progress(f"영상 소재 ({found['kind']}) — 릴스용으로 씁니다")
     progress(f"글 쓰는 중 — {cand['title'][:50]}")
     written = step_write(cfg, acct, p, refs, llm, out, topic, progress)
     v = written["posts"][0]["verdict"]
@@ -433,9 +442,9 @@ def make_post(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, can
     if not ok_write:
         return {"ok": False, "error": f"검수 미달 {v.get('total')}점", "tasks": tasks, "lines": lines + [f"[보류] {str(v.get('feedback', ''))[:100]}"]}
     reel = None
-    if acct.get("reels", True):
-        progress("영상 찾는 중")
-        reel = step_video(cfg, acct, p, out, written, progress)
+    if found:
+        progress("영상 받는 중")
+        reel = step_video(cfg, acct, p, out, written, progress, found=found)
     if reel:
         tasks["card"] = (True, f"릴스 {reel['duration']:.0f}초 · {reel['credit']}")
         lines.append(f"[릴스] {reel['duration']:.0f}초 · {reel['credit']}")
