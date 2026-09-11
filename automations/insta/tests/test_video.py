@@ -40,6 +40,11 @@ def test_reel_profile_shortens_article_rules():
     r = writer.reel_profile(p)
     assert (r.paragraphs, r.pass_score, r.reel, p.reel, p.paragraphs) == (4, 32, True, False, 6)
     assert "릴스" in writer._article_rules(r) and "릴스" not in writer._article_rules(p)
+    art = {"title": "t", "subtitle": "s", "paragraphs": [{"heading": "h", "text": "가" * 100}] * 4, "caption": "c" * 100, "hashtags": ["#a"],
+           "alt_text": "a", "sources": ["https://www.youtube.com/shorts/4bGb2OjU5tA"],
+           "claims": [{"text": "x", "source": "https://www.youtube.com/shorts/4bGb2OjU5tA"}]}
+    assert not any("SNS" in x for x in writer.local_checks(r, art)), "릴스 글은 영상 주소가 출처"
+    assert any("SNS" in x for x in writer.local_checks(p, art)), "일반 글은 여전히 안 됨"
 
 
 def test_video_filter_and_credit():

@@ -129,6 +129,10 @@ class Profile:
         return cls(**known)
 
 
+def _video_source(url: str) -> bool:
+    return bool(re.search(r"(youtube\.com/|youtu\.be/|(?:x|twitter)\.com/\w+/status/)", url or ""))
+
+
 def reel_profile(p: Profile) -> Profile:
     """영상 소재용 프로필: 문단 4개, 합격선 6점 완화, 릴스 규칙 켬. (유튜브 설명·X 글처럼 근거가 짧아도 쓸 수 있게)"""
     return replace(p, paragraphs=4, pass_score=max(30, int(p.pass_score) - 6), reel=True)
@@ -178,7 +182,8 @@ def _article_rules(p: Profile) -> str:
         "- 문단마다 구체적인 예(숫자·화면·입력 예시)를 하나 이상 넣는다. 추상적인 설명만 있는 문단은 실패.",
         f"- 반드시 포함: {', '.join(p.must_include)}" + ("" if not p.reel else " (영상 글에서는 확인되는 것만 — 없으면 빼도 감점 아님)"),
         *(["- **이 글은 릴스(세로 영상)의 캡션·자막용**이다. 영상이 보여 주는 것(무엇을, 어떻게, 결과가 어땠는지)을 문단 4개로 쓴다. "
-           "영상 설명·원문에 있는 사실만 쓰고, 요금·지원 기기·날짜처럼 확인 안 되는 세부는 넣지 않는다. 제목은 영상 위에 크게 얹히므로 18자 안, 부제는 한 줄. "
+           "영상 설명·원문에 있는 사실만 쓰고, 요금·지원 기기·날짜처럼 확인 안 되는 세부와 '업계 반응'·'전문가 평가' 같은 원문에 없는 내용은 넣지 않는다. "
+           "claims 의 source 는 그 영상 주소(유튜브·X)여도 된다. 제목은 영상 위에 크게 얹히므로 18자 안, 부제는 한 줄. "
            "caption 은 영상 아래 본문이므로 첫 줄에 제목, 둘째 문단에 영상 설명, 셋째에 저장·공유 유도."] if p.reel else []),
         f"- 금지 표현: {', '.join(p.banned)}. 느낌표 남발·이모지 금지(캡션은 문단당 1개 이하).",
         "- 숫자·툴 이름·명령어는 출처 그대로. 소재 원문·공식 링크·관련 글에 없는 사실은 쓰지 않는다. 확실치 않은 세부(요금·지원 OS·날짜)는 '공식 안내 확인' 으로 돌린다.",
@@ -253,7 +258,8 @@ def local_checks(p: Profile, article: dict) -> list[str]:
         if not src.startswith("http"):
             problems.append(f"출처가 URL 이 아님: {c.get('source')}")
             break
-        if is_social(src):
+        if is_social(src) and not (p.reel and _video_source(src)):
+            # 릴스(영상) 글은 그 영상(유튜브·X)이 곧 원문이라 출처로 허용한다 (사용자 결정 2026-09-12: 남의 영상은 출처 표기하고 사용)
             problems.append(f"SNS 게시물은 출처로 쓸 수 없음 — 공식 페이지·기사 주소로: {src[:50]}")
             break
     text_all = " ".join(str(x.get("text", "")) for x in article.get("paragraphs", []))
