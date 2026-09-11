@@ -240,7 +240,7 @@ export default function OfficeWorld({ engine, world, deptViews, hotRoom, selecte
                 style={{ left: room.x * TILE, top: room.y * TILE, width: room.w * TILE, height: room.h * TILE }}
               >
                 <span className="rm-head">
-                  <b>
+                  <b title={room.name}>
                     {room.icon} {room.name}
                   </b>
                   {state ? (

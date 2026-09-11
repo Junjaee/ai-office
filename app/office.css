@@ -306,8 +306,17 @@
 .rm.planned { background: var(--c-gray50); border-style: dashed; opacity: .6; }
 .rm-dot.error { background: #ff5c5c; animation: blinkDot .5s steps(2) infinite; }
 .rm-dot.planned { background: var(--c-gray200); }
-.rm-dot { width: auto; min-width: 7px; height: auto; padding: 0 4px; font-size: 8px; font-weight: 900; line-height: 12px; color: var(--ink); }
+.rm-dot { width: auto; min-width: 7px; height: auto; padding: 0 4px; font-size: 8px; font-weight: 900; line-height: 12px; color: var(--ink); border-radius: 99px; }
 .rm-dot.working { color: #fff; }
+/* 방 이름표의 "일하는 중 N" 이 잘려 보이던 문제 (2026-09-11)
+   1) 상태 표시가 border-radius:50% 라 글자가 들어가면 알약이 아니라 타원이 됐다 → 양 끝 흰 글자가
+      파란 바탕 밖 흰 바탕에 묻혔다. 위에서 99px 로 알약 모양.
+   2) 방의 문(.rm-door)이 이름표보다 나중에 그려져 이름표 오른쪽 끝을 덮었다 → 이름표를 위로.
+   3) 방이 좁으면 이름이 "…"으로 줄고 상태 표시(flex:none)는 온전히 남는다. */
+.rm-head { z-index: 2; }
+.rm-head b { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* 글자 없는 상태(끝남·오류·쉬는 중)는 원래 설계대로 7px 동그라미. height:auto 때문에 2px 선으로 눌려 있었다 */
+.rm-dot:empty { width: 7px; height: 7px; padding: 0; }
 .rm-lounge .rm-head b { color: var(--ink-soft); }
 
 /* ── 재설계: 단일 페이지 구성 ───────────────────────────────────── */
