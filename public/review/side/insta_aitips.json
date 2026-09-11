@@ -376,7 +376,31 @@
    "due": "2026-09-12T21:00:00+09:00",
    "status": "queued",
    "added_at": "2026-09-11T23:39:17+09:00"
+  },
+  {
+   "id": "4e410dad",
+   "key": "https://openai.com/index/introducing-gpt-live-1-in-the-api",
+   "title": "Build more natural voice experiences with GPT‑Live‑1 in the API",
+   "link": "https://openai.com/index/introducing-gpt-live-1-in-the-api",
+   "source": "OpenAI",
+   "summary": "GPT‑Live‑1 brings natural, full-duplex voice conversations to the API, with stronger instruction following, custom voices, and telephony support.",
+   "angle": "GPT-Live-1의 실시간 음성 대화 기능을 소개하고 업무에서 활용될 장면(상담·예약봇)을 상상해 풀어냄",
+   "due": "2026-09-12T00:04:40+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T00:04:40+09:00"
+  },
+  {
+   "id": "ada2f646",
+   "key": "https://blog.google/innovation-and-ai/technology/ai/love-rendered-film",
+   "title": "Recreating a 70-year love story frame by frame",
+   "link": "https://blog.google/innovation-and-ai/technology/ai/love-rendered-film/",
+   "source": "Google AI",
+   "summary": "An elderly couple sitting in a movie theater. Overlayed are \"Teulluride Film Festival\" and \"Love, Rendered\"",
+   "angle": "구글이 만든 70년 부부 사랑 이야기 복원 영상 제작 과정과 AI 활용 포인트 소개",
+   "due": "2026-09-12T13:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T00:04:40+09:00"
   }
  ],
- "interval_hours": 3.0
+ "interval_hours": 12.0
 }
