@@ -562,6 +562,30 @@
    "due": "2026-09-12T13:00:00+09:00",
    "status": "queued",
    "added_at": "2026-09-12T00:04:40+09:00"
+  },
+  {
+   "id": "10a77f0e",
+   "key": "https://www.youtube.com/shorts/4bgb2oju5ta",
+   "title": "GPT-6 Astra handles the editing busywork",
+   "link": "https://www.youtube.com/shorts/4bGb2OjU5tA",
+   "source": "OpenAI 유튜브",
+   "summary": "",
+   "angle": "데모 영상을 근거로 어떤 잡무를 얼마나 줄여주는지 구체적으로 소개",
+   "due": "2026-09-12T00:48:09+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T00:48:09+09:00"
+  },
+  {
+   "id": "d7510e71",
+   "key": "https://www.youtube.com/shorts/47-k5b9wmzi",
+   "title": "Hungry for some dinner inspo? Screenshot this prompt and upload it to Gemini to see what you get. 🍽️",
+   "link": "https://www.youtube.com/shorts/47-k5B9WMzI",
+   "source": "Gemini 유튜브",
+   "summary": "",
+   "angle": "스크린샷 프롬프트를 그대로 캡처해 올리고 결과 예시를 보여주는 실습형 카드",
+   "due": "2026-09-12T13:00:00+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T00:48:09+09:00"
   }
  ],
  "interval_hours": 12.0
