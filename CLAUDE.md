@@ -62,5 +62,6 @@ python -m pytest -q automations
 - `app/status-rules.ts` 상태 파일 v2 + GitHub run + 로컬 요청 → 화면 상태(순수). `app/status.ts` 조회·폴링 훅(`/api/status` → 정적 파일 폴백). `app/history.ts`·`app/history-rules.ts` 실행 이력(날짜별) 조회 훅·순수 규칙.
 - `app/office/OfficeApp.tsx` 단일 페이지 화면. `app/game/` 월드(`world.ts`)·경로(`pathfinding.ts`)·직원(`staff.ts`)·상태→자리 번역(`office-model.ts`)·엔진(`engine.ts`)·렌더러(`OfficeWorld.tsx`).
 - `worker/` Cloudflare Worker: `index.ts`(라우팅) `run-api.ts`(`/api/run`, `/api/status`, `/api/history`) `github.ts`(dispatch·runs·Contents) `config.ts`.
+- `automations/insta/` 인스타 게시글(콘텐츠 제작·게시형의 표준 구현: 소재→글→카드→업로드, 주제 프로필·계정별 자동화). 새 계정·새 플랫폼은 `automations/insta/README.md` 참고.
 - `automations/` 파이썬 자동화와 공통 모듈, `.github/workflows/` 실행 워크플로, `public/status/<사무실>/` 상태 파일. `history/<사무실>/<자동화>/<YYYY-MM>.jsonl` 실행 일지(영구 기록) — `report()` 가 실행마다 한 줄씩 더하고, 지난 기록 복원은 `python automations/common/history_log.py --backfill`(여러 번 돌려도 같은 결과). 화면의 실행 이력은 이 일지와 GitHub 날짜별 실행 목록을 합쳐 보여 준다(`/api/history`).
 - `scripts/npm.sh` npm 명령을 드라이브 밖 로컬 작업 폴더에서 돌리는 도구. `scripts/npm.cmd` 는 명령 프롬프트·미리보기 도구(`.claude/launch.json`)용 — 그냥 `bash` 라고 부르면 WSL 이 잡히므로 Git Bash 를 찾아 npm.sh 를 부른다. `templates/automation/` 새 자동화 뼈대. `.claude/skills/new-automation/` 새 자동화 절차.

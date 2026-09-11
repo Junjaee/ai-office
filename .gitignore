@@ -68,3 +68,5 @@ CLAUDE.md.drive-old
 
 # Claude Code 개인 설정(이 PC 의 권한 허용 목록)
 .claude/settings.local.json
+# 인스타 자동화 중간 결과(카드 JPEG 등)
+/automations/insta/out/

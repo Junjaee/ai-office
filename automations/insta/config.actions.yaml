@@ -1,0 +1,25 @@
+# 인스타 게시글 자동화 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
+# 코드는 플랫폼당 한 벌(이 폴더). 계정마다 아래 accounts 에 한 항목씩 더한다 (팀 = 플랫폼, 자동화 = 계정).
+
+default_account: aitips
+
+accounts:
+  aitips:
+    profile: aitips                          # profiles/<이름>.yaml
+    handle: "@aitips"                        # 카드에 찍히는 표시 (실제 아이디로 바꾼다)
+    dept: research                           # 사무실 설정의 부서 id (인스타 게시글팀)
+    result_link: "https://www.instagram.com/"   # 계정이 생기면 프로필 주소로
+    posts_per_run: 1                         # 실행 1회에 올릴 게시물 수
+    candidates_to_llm: 30                    # 소재 후보를 몇 개까지 편집장(모델)에게 보여 줄지
+    next_run: "수동 (▶ 시작)"
+
+# 글 생성기: 앞에서부터 시도, 실패하면 다음 (전부 무료 경로)
+llm_providers: [claude_cli, gemini]
+gemini_model: gemini-2.5-flash
+
+# 상태 보고: 저장소 루트(체크아웃 위치)에 커밋
+office_repo: "."
+office_workspace: "side"
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/side.ts 의 automations[].tasks[] (테스트로 일치 강제)
+tasks: [topic, write, card, upload]

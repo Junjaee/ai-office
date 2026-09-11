@@ -129,7 +129,17 @@ export const HIDDEN_DEPARTMENTS: string[] = [
  * 예: { id: "insta_main", dept: "research", name: "인스타 게시글 · main", workflow: "insta.yml",
  *       inputs: { account: "main" }, tasks: [{ id: "topic", … }, { id: "make", … }, { id: "upload", … }] }
  */
-export const AUTOMATIONS: AutomationDef[] = [];
+export const AUTOMATIONS: AutomationDef[] = [
+  // 계정 = 자동화. 코드는 automations/insta 한 벌, 계정은 inputs.account 로 구분한다.
+  { id: "insta_aitips", dept: "research", name: "인스타 게시글 · aitips (AI 툴·프롬프트 꿀팁)",
+    workflow: "insta.yml", inputs: { account: "aitips" },
+    tasks: [
+      { id: "topic", name: "소재 선정", role: "RSS 후보 중 오늘 올릴 소재 1건 고르기", colors: ["#2b2f36", "#f3ead6", "#f2b544"] },
+      { id: "write", name: "글쓰기", role: "카드 원고·캡션·해시태그 작성과 자동 심사", colors: ["#3a2f1f", "#fbf1d9", "#d99a1e"] },
+      { id: "card", name: "카드 제작", role: "1080×1350 카드 8장 렌더링", colors: ["#1f2329", "#e8dcc2", "#f2b544"] },
+      { id: "upload", name: "업로드", role: "공개 URL 에 올리고 인스타그램에 게시", colors: ["#4d5157", "#faf8f3", "#e0a52a"] },
+    ] },
+];
 
 export const workspace: WorkspaceConfig = {
   id: "side",

@@ -10,6 +10,7 @@ description: AI 오피스에 새 자동화(파이썬 + GitHub Actions + 대시�
 - 저장소 = **이 폴더** `G:\내 드라이브\dev\자동화` (이하 `REPO`. git 저장소이자 드라이브 동기화 폴더, GitHub `Junjaee/ai-office`). 코드도 여기 두고, 커밋·푸시하면 Actions 가 돈다.
 - 템플릿: `templates/automation/` (이 폴더 안)
 - 참고 구현(읽을 필요가 있을 때만): `automations/minutes/collect_minutes.py`, `automations/common/report_status.py`
+- **콘텐츠 제작·게시형(인스타·릴스·쇼츠·블로그)** 은 `automations/insta/` 가 표준 구현이다: 소재(RSS)→글(무료 LLM: Claude 구독 CLI→Gemini)→카드(HTML→Playwright JPEG)→업로드(R2 공개 URL→플랫폼 API), 주제 프로필 `profiles/<주제>.yaml`, 계정별 자동화 id `<플랫폼>_<계정>`. 새 인스타 계정은 코드 복사 없이 `automations/insta/README.md` 의 "새 계정 붙이기" 6단계만 따른다. 릴스·쇼츠·블로그는 이 구조를 복사해 `automations/<플랫폼>/` 을 만든다.
 
 ## 0. 시작 전 질문 (한 번에 묻고, 답을 받은 뒤 진행)
 

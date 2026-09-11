@@ -1,0 +1,45 @@
+# 인스타 게시글 자동화 (insta)
+
+소재 수집 → 글 생성 → 카드 제작 → 업로드를 한 번에 돌린다. **코드는 플랫폼당 한 벌**이고, 계정마다 `config.actions.yaml` 의 `accounts` 항목 + `profiles/<주제>.yaml` 만 다르다(팀 = 플랫폼, 자동화 = 계정). 전부 무료 경로만 쓴다(Claude 구독 토큰 → Gemini 무료 등급, R2 무료, Playwright).
+
+조사·설계: `docs/superpowers/specs/2026-09-11-인스타-게시글-자동화-research.md`
+
+## 흐름
+
+| 단계(직원) | 파일 | 하는 일 | 품질 장치 |
+|---|---|---|---|
+| topic 소재 선정 | `insta_sources.py` | 프로필의 RSS 출처에서 72시간 내 글 수집, 이미 올린 소재 제외, 신호 단어로 정렬 → 편집장(모델)이 1건 선정 | 중복 제외(`data/insta/<계정>/posted.jsonl`), 광고·행사 제외 지시 |
+| write 글쓰기 | `insta_writer.py` | 프로필 규칙 + 참고 원고 + 소재 → 카드 원고 JSON | 스키마 검증, 금지어·출처 URL 코드 검사, 모델 심사(5항목 가중 점수) 미달 시 피드백 붙여 재생성(최대 2회), 그래도 미달이면 **보류**(억지로 안 올림) |
+| card 카드 제작 | `insta_cards.py` + `templates/*.html` | Jinja2 HTML → Playwright 스크린샷 1080×1350 JPEG | Pretendard 글꼴 동봉, 글자 넘침 자동 축소, 검토용 preview.jpg |
+| upload 업로드 | `insta_publisher.py` | R2 에 올려 공개 URL → Instagram API 캐러셀 게시 → 게시 기록 커밋 | 컨테이너 상태 확인, 하루 100건 한도 |
+
+## 새 계정(주제) 붙이기
+
+1. `profiles/<주제>.yaml` 을 `aitips.yaml` 복사해 채운다: 독자·말투·형식·훅 패턴·금지어·출처·템플릿·채점 가중치. 참고 원고 `refs/<주제>.md` 도.
+2. `config.actions.yaml` 의 `accounts` 에 항목 추가 (`profile`, `handle`, `dept`, `result_link`).
+3. `.github/workflows/insta.yml` 의 env 에 `INSTA_<계정대문자>_TOKEN`, `INSTA_<계정대문자>_USER_ID` 두 줄 추가, GitHub Secrets 에 값 등록.
+4. `app/workspaces/side.ts` 의 `AUTOMATIONS` 에 `{ id: "insta_<계정>", dept, workflow: "insta.yml", inputs: { account: "<계정>" }, tasks: [topic, write, card, upload] }`.
+5. `ai-side/NN_인스타게시글_<계정>/README.md` 개인 폴더.
+6. 카드 겉모습을 바꾸려면 `templates/<이름>.html` 을 만들고 프로필 `template` 에 이름을 적는다.
+
+주의: 대시보드의 실행 상태는 **워크플로 파일 단위**로 잡힌다. 같은 `insta.yml` 을 쓰는 계정이 둘 이상이면 최근 실행 하나만 보이므로, 두 번째 계정을 붙일 때 Worker 의 run 매칭에 `inputs.account` 를 반영해야 한다(할 일).
+
+## 비밀값 (GitHub Secrets)
+
+| 이름 | 용도 |
+|---|---|
+| `CLAUDE_CODE_OAUTH_TOKEN` | Claude 구독으로 글 생성. 이 PC 에서 `claude setup-token \| tail -1 \| gh secret set CLAUDE_CODE_OAUTH_TOKEN` |
+| `GEMINI_API_KEY` | 대체 글 생성 (Google AI Studio 무료 키) |
+| `R2_ACCOUNT_ID` `R2_ACCESS_KEY_ID` `R2_SECRET_ACCESS_KEY` `R2_BUCKET` `R2_PUBLIC_BASE` | 카드 이미지 공개 URL |
+| `INSTA_<계정>_TOKEN` `INSTA_<계정>_USER_ID` | Instagram API (Instagram Login 경로, 장기 토큰 60일) |
+
+## 이 PC 에서
+
+```bash
+python -m pip install -r automations/requirements.txt
+python automations/insta/run_insta.py --account aitips --dry-run            # 카드까지 (게시 X)
+python automations/insta/run_insta.py --account aitips --until topic        # 단계별
+python -m pytest -q automations/insta
+```
+
+카드 렌더는 설치된 Chrome 을 쓴다. 글 생성은 `claude login` 이 된 CLI 또는 `GEMINI_API_KEY` 가 있어야 한다.

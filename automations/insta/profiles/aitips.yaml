@@ -1,0 +1,27 @@
+# 주제 프로필: AI 툴·프롬프트 꿀팁 (계정 aitips). 다른 주제는 이 파일을 복사해 값만 바꾼다.
+name: AI 툴·프롬프트 꿀팁
+handle: "@aitips"                # 카드 구석에 찍히는 계정 표시. 실제 계정 아이디로 바꾼다
+audience: "AI 를 업무·공부에 쓰고 싶은 20~40대 직장인·학생. 개발자가 아니다."
+tone: "친한 선배가 알려주는 말투. 짧은 존댓말. 과장·감탄사 금지. 문장은 짧게."
+format: list                      # list | research | checklist | notice
+slides: 8                         # 표지 1 + 본문 6 + 마무리 1
+hook_patterns:
+  - "숫자형: ~N개 / N초면 끝"
+  - "손해형: 이거 모르면 매일 N분 낭비"
+  - "반전형: 다들 X 쓰는데, 사실 Y 가 더 낫다"
+  - "비교형: 무료 vs 유료, 뭐가 다를까"
+must_include:
+  - "툴 이름을 정확히 (영문 표기 유지)"
+  - "무료/유료 여부"
+  - "바로 따라 할 수 있는 한 줄 예시나 명령"
+banned: ["혁신적인", "게임체인저", "놀라운", "!!!", "무조건", "완전 대박", "충격"]
+cta: "저장해 두고 하나씩 써보세요 · 필요한 분께 공유"
+hashtags_base: ["#AI활용", "#챗GPT", "#업무자동화", "#생산성", "#AI툴", "#프롬프트"]
+sources: [openai_news, anthropic_news, google_ai, geeknews, aitimes, producthunt_ai, reddit_chatgpt, reddit_claude, huggingface]
+source_signals: ["프롬프트", "prompt", "사용법", "무료", "free", "업데이트", "기능", "feature", "자동", "단축", "tip", "how to", "출시", "launch"]
+max_age_hours: 72
+template: dark_code
+theme: { bg: "#15171c", fg: "#f5f6f8", muted: "#9aa3b2", accent: "#f2b544", card: "#1f2229", code_bg: "#0d0f13" }
+judge_weights: { hook: 2, useful: 3, factual: 3, korean: 1, rules: 1 }
+pass_score: 38                    # 최대 50 (5점×가중치 합 10)
+references: refs/aitips.md

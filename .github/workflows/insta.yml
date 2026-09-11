@@ -1,0 +1,76 @@
+name: 인스타 게시글
+
+on:
+  # 예약은 빈도가 정해지면 켠다 (UTC. KST 18:30 = "30 9 * * 1-5")
+  workflow_dispatch:
+    inputs:
+      account:
+        description: "계정 이름 (config.actions.yaml 의 accounts 키)"
+        type: string
+        default: "aitips"
+      request_id:
+        description: "화면에서 누른 요청 id (비워도 됨)"
+        type: string
+        default: ""
+
+# runs API 의 display_title 로 "내가 누른 실행"을 결정적으로 매칭한다 — 바꾸지 말 것
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('insta_{0} · {1}', inputs.account, inputs.request_id) || 'insta · 예약' }}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: insta-${{ inputs.account || 'aitips' }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 의존성 설치 (파이썬 + 카드용 Chromium + Claude Code CLI)
+        run: |
+          python --version
+          python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
+          python -m playwright install --with-deps chromium
+          npm install -g @anthropic-ai/claude-code
+
+      - name: git 사용자 설정 (상태 파일 커밋용)
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+
+      - name: 실행
+        env:
+          # 글 생성 (전부 무료): Claude 구독 토큰 1순위, Gemini 무료 등급 2순위
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # 이미지 공개 URL (Cloudflare R2)
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_PUBLIC_BASE: ${{ secrets.R2_PUBLIC_BASE }}
+          # 계정별 인스타그램 토큰 — 계정을 더하면 여기에 두 줄씩 추가
+          INSTA_AITIPS_TOKEN: ${{ secrets.INSTA_AITIPS_TOKEN }}
+          INSTA_AITIPS_USER_ID: ${{ secrets.INSTA_AITIPS_USER_ID }}
+          INSTA_ACCOUNT: ${{ inputs.account || 'aitips' }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/insta/run_insta.py --config automations/insta/config.actions.yaml
+
+      - name: 만든 카드 보관 (7일)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: insta-cards-${{ inputs.account || 'aitips' }}
+          path: automations/insta/out/
+          retention-days: 7
+          if-no-files-found: ignore
