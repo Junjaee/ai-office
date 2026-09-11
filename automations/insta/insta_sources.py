@@ -144,6 +144,20 @@ def fetch_article(url: str, *, timeout: int = 30, max_chars: int = 3500) -> dict
             if h.startswith("http") and host not in h and not re.search(r"(twitter|x\.com|facebook|instagram|reddit\.com/r/|login|signup)", h):
                 if h not in links:
                     links.append(h)
-        return {"text": text[:max_chars], "links": links[:8]}
+        images = []
+        og = soup.find("meta", property="og:image")
+        if og and og.get("content", "").startswith("http"):
+            images.append(og["content"])
+        for im in main.find_all("img"):
+            src = im.get("src") or im.get("data-src") or ""
+            if not src.startswith("http") or src in images:
+                continue
+            if re.search(r"(logo|icon|avatar|badge|sprite|1x1|pixel|emoji)", src, re.I):
+                continue
+            w = im.get("width")
+            if w and str(w).isdigit() and int(w) < 300:
+                continue
+            images.append(src)
+        return {"text": text[:max_chars], "links": links[:8], "images": images[:8]}
     except Exception as exc:  # noqa: BLE001
-        return {"text": "", "links": [], "error": f"{type(exc).__name__}: {str(exc)[:80]}"}
+        return {"text": "", "links": [], "images": [], "error": f"{type(exc).__name__}: {str(exc)[:80]}"}

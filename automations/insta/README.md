@@ -24,6 +24,13 @@
 
 주의: 대시보드의 실행 상태는 **워크플로 파일 단위**로 잡힌다. 같은 `insta.yml` 을 쓰는 계정이 둘 이상이면 최근 실행 하나만 보이므로, 두 번째 계정을 붙일 때 Worker 의 run 매칭에 `inputs.account` 를 반영해야 한다(할 일).
 
+## 카드 렌더링 함정 (겪은 것)
+
+- `page.set_content()` 로 연 페이지는 주소가 `about:blank` 라서 Chrome 이 `file://` 이미지·글꼴을 막는다. 그래서 글꼴(Pretendard)과 카드 이미지는 **base64 데이터 URI 로 HTML 에 직접 심는다**(`insta_cards.data_uri`). 이 때문에 카드 하나의 HTML 이 수 MB 가 되지만 문제없다.
+- `--resume` 은 `out/<계정>/<날짜>/cards.json` 이 있으면 카드를 다시 만들지 않는다. 템플릿·이미지만 고쳐서 다시 보려면 그 파일을 지우고 돌린다(`--revise` 는 자동으로 지운다).
+- 공식 페이지 캡처(`screenshot:<url>`)는 1440×900 으로 잡고 쿠키 배너를 닫거나 CSS 로 숨긴다(`_dismiss_banners`). 완벽하지 않으니 표지 캡처는 결과를 눈으로 본다.
+- 한글 줄바꿈은 두 겹이다: 모델이 훅·제목에 `\n` 을 직접 넣고(어절 경계), CSS 는 `word-break: keep-all` + `text-wrap: balance/pretty` 로 본문을 어절 단위로 끊는다.
+
 ## 비밀값 (GitHub Secrets)
 
 | 이름 | 용도 |

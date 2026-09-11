@@ -7,42 +7,60 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: {{ width }}px; height: {{ height }}px; overflow: hidden; }
   body { font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; background: {{ theme.bg }}; color: {{ theme.fg }}; }
+  /* 한글 줄바꿈: 어절 단위(keep-all) + 줄 길이 균형. 원고의 줄바꿈 문자는 그대로 살린다(pre-line) */
+  .kr { word-break: keep-all; overflow-wrap: anywhere; white-space: pre-line; }
+  .balance { text-wrap: balance; }
+  .pretty { text-wrap: pretty; }
   .card { position: relative; width: 100%; height: 100%; padding: 96px 88px 120px; display: flex; flex-direction: column; }
   .top { display: flex; justify-content: space-between; align-items: center; color: {{ theme.muted }}; font-size: 30px; font-weight: 600; letter-spacing: .02em; }
   .top .handle::before { content: ""; display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: {{ theme.accent }}; margin-right: 14px; vertical-align: middle; }
   .bar { position: absolute; left: 88px; right: 88px; bottom: 84px; height: 6px; background: rgba(255,255,255,.08); border-radius: 3px; overflow: hidden; }
   .bar i { display: block; height: 100%; background: {{ theme.accent }}; }
   .foot { position: absolute; left: 88px; right: 88px; bottom: 36px; display: flex; justify-content: space-between; color: {{ theme.muted }}; font-size: 26px; }
-  .main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .main { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+  .has-image .main { justify-content: flex-start; padding-top: 40px; }
   .cover .kicker { color: {{ theme.accent }}; font-size: 34px; font-weight: 700; margin-bottom: 36px; letter-spacing: .04em; }
-  .cover .hook { font-size: 108px; line-height: 1.16; font-weight: 800; letter-spacing: -.02em; word-break: keep-all; }
-  .cover .sub { margin-top: 44px; font-size: 42px; line-height: 1.5; color: {{ theme.muted }}; word-break: keep-all; }
-  .body .num { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 22px; background: {{ theme.accent }}; color: {{ theme.bg }}; font-size: 44px; font-weight: 800; margin-bottom: 40px; }
-  .body .title { font-size: 72px; line-height: 1.22; font-weight: 800; letter-spacing: -.02em; word-break: keep-all; margin-bottom: 40px; }
-  .body .text { font-size: 44px; line-height: 1.58; color: {{ theme.fg }}; word-break: keep-all; opacity: .92; }
-  .body .code { margin-top: 44px; padding: 30px 36px; border-radius: 20px; background: {{ theme.code_bg }}; color: {{ theme.accent }}; font-family: "Cascadia Mono", "Consolas", "D2Coding", monospace; font-size: 36px; line-height: 1.45; white-space: pre-wrap; word-break: break-all; border: 2px solid rgba(255,255,255,.08); }
-  .cta .big { font-size: 84px; line-height: 1.2; font-weight: 800; word-break: keep-all; letter-spacing: -.02em; }
-  .cta .hint { margin-top: 48px; font-size: 40px; color: {{ theme.muted }}; line-height: 1.5; word-break: keep-all; }
+  .cover .hook { font-size: 104px; line-height: 1.18; font-weight: 800; letter-spacing: -.02em; }
+  .cover .sub { margin-top: 44px; font-size: 42px; line-height: 1.5; color: {{ theme.muted }}; }
+  .cover.has-image .hook { font-size: 88px; }
+  .cover.has-image .sub { margin-top: 28px; font-size: 36px; }
+  .body .num { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 22px; background: {{ theme.accent }}; color: {{ theme.bg }}; font-size: 44px; font-weight: 800; margin-bottom: 36px; }
+  .body .title { font-size: 70px; line-height: 1.22; font-weight: 800; letter-spacing: -.02em; margin-bottom: 36px; }
+  .body .text { font-size: 42px; line-height: 1.6; color: {{ theme.fg }}; opacity: .92; }
+  .body.has-image .num { width: 64px; height: 64px; font-size: 34px; border-radius: 16px; margin-bottom: 22px; }
+  .body.has-image .title { font-size: 56px; margin-bottom: 22px; }
+  .body.has-image .text { font-size: 36px; line-height: 1.5; }
+  /* 코드 칸: 한글은 Pretendard, 영문·기호만 고정폭 느낌(글자 간격) */
+  .body .code { margin-top: 40px; padding: 28px 34px; border-radius: 20px; background: {{ theme.code_bg }}; color: {{ theme.accent }}; font-family: "Pretendard", sans-serif; font-weight: 600; font-size: 36px; line-height: 1.5; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; border: 2px solid rgba(255,255,255,.08); }
+  .body .code::before { content: "▸ "; opacity: .6; }
+  .shot { margin: 28px 0 0; border-radius: 22px; overflow: hidden; border: 2px solid rgba(255,255,255,.12); background: #000; box-shadow: 0 24px 60px rgba(0,0,0,.45); flex: 0 0 auto; }
+  .shot img { display: block; width: 100%; max-height: 560px; object-fit: cover; object-position: top; }
+  .cover .shot img { max-height: 520px; }
+  .shot-cap { margin-top: 14px; font-size: 26px; color: {{ theme.muted }}; }
+  .cta .big { font-size: 84px; line-height: 1.2; font-weight: 800; letter-spacing: -.02em; }
+  .cta .hint { margin-top: 48px; font-size: 40px; color: {{ theme.muted }}; line-height: 1.5; }
   .cta .icons { margin-top: 64px; display: flex; gap: 28px; }
   .cta .icons span { padding: 22px 34px; border-radius: 999px; border: 3px solid {{ theme.accent }}; color: {{ theme.accent }}; font-size: 34px; font-weight: 700; }
 </style>
 </head>
 <body>
-<div class="card {{ slide.kind }}">
+<div class="card {{ slide.kind }}{% if slide.image %} has-image{% endif %}">
   <div class="top"><span class="handle">{{ slide.handle }}</span><span>{{ slide.n }} / {{ slide.total }}</span></div>
   <div class="main" id="main">
     {% if slide.kind == "cover" %}
       <div class="kicker">오늘의 AI 꿀팁</div>
-      <div class="hook" data-fit="60">{{ slide.hook }}</div>
-      {% if slide.sub %}<div class="sub" data-fit="28">{{ slide.sub }}</div>{% endif %}
+      <div class="hook kr balance" data-fit="56">{{ slide.hook }}</div>
+      {% if slide.sub %}<div class="sub kr pretty" data-fit="28">{{ slide.sub }}</div>{% endif %}
+      {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div>{% endif %}
     {% elif slide.kind == "body" %}
       <div class="num">{{ slide.idx }}</div>
-      <div class="title" data-fit="44">{{ slide.title }}</div>
-      <div class="text" data-fit="30">{{ slide.body }}</div>
-      {% if slide.code %}<div class="code" data-fit="24">{{ slide.code }}</div>{% endif %}
+      <div class="title kr balance" data-fit="40">{{ slide.title }}</div>
+      <div class="text kr pretty" data-fit="28">{{ slide.body }}</div>
+      {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div>{% if slide.image_caption %}<div class="shot-cap kr">{{ slide.image_caption }}</div>{% endif %}{% endif %}
+      {% if slide.code %}<div class="code kr" data-fit="24">{{ slide.code }}</div>{% endif %}
     {% else %}
-      <div class="big" data-fit="48">{{ slide.cta }}</div>
-      <div class="hint">{{ slide.hook }} — 저장해 두면 다시 찾기 쉬워요</div>
+      <div class="big kr balance" data-fit="48">{{ slide.cta }}</div>
+      <div class="hint kr pretty">{{ slide.hook | replace("\n", " ") }} — 저장해 두면 다시 찾기 쉬워요</div>
       <div class="icons"><span>🔖 저장</span><span>✈️ 친구에게 공유</span></div>
     {% endif %}
   </div>
@@ -50,7 +68,7 @@
   <div class="foot"><span>{{ slide.handle }}</span><span>← 넘겨서 보기 →</span></div>
 </div>
 <script>
-  // 글자가 영역을 넘치면 data-fit(최소 px)까지 단계적으로 줄인다
+  // 글자·이미지가 영역을 넘치면 data-fit(최소 px)까지 단계적으로 줄이고, 그래도 넘치면 이미지 높이를 줄인다
   window.__fit = function () {
     const main = document.getElementById("main");
     const limit = main.clientHeight;
@@ -62,6 +80,11 @@
         if (cur > min) { el.style.fontSize = (cur * 0.94) + "px"; shrunk = true; }
       }
       if (!shrunk) break;
+    }
+    const img = main.querySelector(".shot img");
+    for (let i = 0; img && i < 20 && main.scrollHeight > limit; i++) {
+      const h = parseFloat(getComputedStyle(img).maxHeight) || 560;
+      img.style.maxHeight = (h * 0.9) + "px";
     }
   };
 </script>

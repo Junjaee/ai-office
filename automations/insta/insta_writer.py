@@ -13,14 +13,17 @@ POST_SCHEMA = {
     "type": "object",
     "required": ["hook", "sub", "slides", "cta", "caption", "hashtags", "alt_text", "sources", "claims"],
     "properties": {
-        "hook": {"type": "string", "minLength": 4, "maxLength": 40},
+        "hook": {"type": "string", "minLength": 4, "maxLength": 48},
+        "cover_image": {"type": "string", "maxLength": 400},
         "sub": {"type": "string", "maxLength": 80},
         "slides": {
             "type": "array", "minItems": 4, "maxItems": 9,
             "items": {"type": "object", "required": ["title", "body"],
-                      "properties": {"title": {"type": "string", "maxLength": 40},
+                      "properties": {"title": {"type": "string", "maxLength": 48},
                                      "body": {"type": "string", "maxLength": 220},
-                                     "code": {"type": "string", "maxLength": 120}}},
+                                     "code": {"type": "string", "maxLength": 120},
+                                     "image": {"type": "string", "maxLength": 400},
+                                     "image_caption": {"type": "string", "maxLength": 60}}},
         },
         "cta": {"type": "string", "maxLength": 80},
         "caption": {"type": "string", "minLength": 80, "maxLength": 1200},
@@ -70,6 +73,8 @@ class Profile:
     handle: str = ""
     theme: dict | None = None
     max_age_hours: int = 72
+    flow: dict | None = None
+    images_per_post: int = 0
 
     @classmethod
     def from_dict(cls, d: dict) -> "Profile":
@@ -82,6 +87,8 @@ def _rules(p: Profile) -> str:
         f"- 독자: {p.audience}",
         f"- 말투: {p.tone}",
         f"- 형식: {p.format} (카드 {p.slides}장: 표지 1 + 본문 {p.slides - 2} + 마무리 1)",
+        _flow_rule(p),
+        "- 표지 hook 은 낚시가 아니라 뉴스 헤드라인처럼 사실을 말한다(예: 'Windows용 제미나이 앱 출시'). sub 는 독자 이득 한 줄.",
         "- 카드 한 장 본문은 15~25단어. 표지는 한 줄 훅(15자 안팎) + 보조 문장 한 줄.",
         "- 첫 3장은 각각 독립적으로 흥미를 끌어야 한다(스크롤을 멈추는 미끼 3개).",
         f"- 훅 패턴 예: {', '.join(p.hook_patterns)}",
@@ -94,7 +101,20 @@ def _rules(p: Profile) -> str:
         "- caption: 300~450자, 3문단(첫 줄이 훅 반복 → 핵심 요약 → 저장·공유 유도). 해시태그는 caption 에 넣지 말고 hashtags 배열로.",
         f"- hashtags: 기본 {', '.join(p.hashtags_base)} 중 3개 + 소재에 맞는 2개, 총 5개 안팎.",
         "- alt_text: 시각장애인용 한 문장 설명.",
+        "- 줄바꿈: hook 과 slides[].title 은 카드에서 2줄로 보이도록, 뜻이 끊기지 않는 자리(조사·어절 경계)에 줄바꿈 문자(\\n)를 직접 넣는다. 한 줄 12자 안팎. 예: '윈도우용 제미나이 앱\\n드디어 출시'. '한 번이면' 같은 어구 중간에서 끊지 않는다.",
+        f"- 이미지: 아래 '쓸 수 있는 이미지' 목록에 있는 값만 slides[].image 에 넣는다(표지 포함 {p.images_per_post or 3}장 안팎, 실제 화면·제품 사진이 어울리는 카드에). 없는 카드는 image 를 비운다. image_caption 은 사진 설명 한 줄. 'screenshot:<페이지 URL>' 은 그 공식 페이지를 캡처해 넣는다. 표지에 넣을 이미지는 cover_image 키에.",
     ])
+
+
+def _flow_rule(p: Profile) -> str:
+    """프로필의 flow(소재 유형별 카드 순서)를 규칙 문장으로."""
+    flows = p.flow or {}
+    if not flows:
+        return "- 카드 순서는 독자가 궁금해하는 순서대로."
+    lines = ["- 소재 유형을 먼저 정하고(news=출시·업데이트 소식, list=모음, howto=따라 하기) 그 유형의 카드 순서를 그대로 따른다:"]
+    for kind, steps in flows.items():
+        lines.append(f"  · {kind}: " + " → ".join(f"[{i}] {st}" for i, st in enumerate(steps, 1)))
+    return "\n".join(lines)
 
 
 def pick_prompt(p: Profile, rows: str, n: int) -> tuple[str, str]:
@@ -120,6 +140,10 @@ def write_prompt(p: Profile, refs: str, cand: dict, angle: str, best_own: str = 
         extra += f"\n원문 발췌(여기 있는 사실만 쓴다):\n{article['text']}\n"
     if article.get("links"):
         extra += "원문이 가리키는 바깥 링크(공식 출처가 있으면 claims 의 source 로 우선 사용):\n" + "\n".join(article["links"]) + "\n"
+    imgs = list(article.get("images") or [])
+    shots = [f"screenshot:{u}" for u in (article.get("links") or [])[:2]]
+    if imgs or shots:
+        extra += "쓸 수 있는 이미지(이 목록의 값만 image 에 그대로 넣는다):\n" + "\n".join(imgs + shots) + "\n"
     user = (f"오늘 소재:\n제목: {cand['title']}\n출처: {cand['source']} {cand['link']}\n"
             f"요약: {cand.get('summary', '')}\n각도: {angle}\n{extra}\n"
             "다음 키를 가진 JSON 을 출력하세요: hook, sub, slides[{title, body, code?}], cta, caption, hashtags[], alt_text, "
