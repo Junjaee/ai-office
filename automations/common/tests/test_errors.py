@@ -35,3 +35,10 @@ def test_disk_full():
 def test_unknown_exception():
     assert to_korean(ValueError("x")) == MSG_OTHER
     assert to_korean(KeyError("drive_folder_id")) == MSG_OTHER
+
+
+def test_calendar_and_telegram_messages():
+    from errors import MSG_CALENDAR, MSG_TELEGRAM, MSG_TELEGRAM_SETUP
+    assert to_korean(RuntimeError("캘린더 읽기 실패: HTTP 403")) == MSG_CALENDAR
+    assert to_korean(RuntimeError("텔레그램 전송 실패: Forbidden")) == MSG_TELEGRAM
+    assert to_korean(RuntimeError("텔레그램 설정 없음: TELEGRAM_CHAT_ID")) == MSG_TELEGRAM_SETUP

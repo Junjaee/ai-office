@@ -13,7 +13,14 @@ import json
 import sys
 from pathlib import Path
 
-SCOPES = ["https://www.googleapis.com/auth/drive"]
+# 공용 토큰 권한 — 모든 자동화가 GOOGLE_* 하나를 함께 쓴다. 권한을 더할 때는 이 목록에 넣고 다시 발급한다
+# (빼면 그 권한을 쓰는 자동화가 멈춘다: 드라이브=회의록·기사, 지메일·시트=가계부, 캘린더=주말 일정)
+SCOPES = [
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/gmail.modify",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/calendar.readonly",
+]
 
 
 def main(secret_path: str, out_path: str) -> None:

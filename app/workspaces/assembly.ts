@@ -170,6 +170,12 @@ export const AUTOMATIONS: AutomationDef[] = [
     tasks: [{ id: "draft", name: "보도자료 초안", role: "질의 결과를 보도자료 형식으로 작성" }] },
   { id: "calendar", dept: "partner", name: "의사일정",
     tasks: [{ id: "sync", name: "의사일정 반영", role: "상임위 의사일정을 캘린더에 반영" }] },
+  // 매주 목 17:00 예약이지만 schedule 은 비워 둔다 — 주 1회라 36시간 기준 "예약 놓침" 경고가 잘못 뜬다(문구는 next_run).
+  { id: "weekend", dept: "partner", name: "주말 일정 알림", workflow: "weekend.yml",
+    tasks: [
+      { id: "fetch", name: "주말 일정 모으기", role: "530호 비공개 캘린더에서 이번 주 토·일 일정 읽기", colors: ["#2e3a4f", "#e6eef7", "#2563eb"] },
+      { id: "send", name: "텔레그램 보내기", role: "정리한 주말 일정을 받는 분 텔레그램으로 전송", colors: ["#3b2f4a", "#efe7f7", "#229ed9"] },
+    ] },
   { id: "filing", dept: "review", name: "자료 분류",
     tasks: [{ id: "sort", name: "자료 분류", role: "받은 자료를 회의 날짜별 폴더로 분류" }] },
 ];

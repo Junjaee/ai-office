@@ -1,0 +1,20 @@
+# 주말 일정 알림 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
+#   TELEGRAM_BOT_TOKEN(보내는 봇) · TELEGRAM_CHAT_ID(받는 분 대화방) · GOOGLE_*(공용 토큰, 캘린더 읽기 권한 포함)
+
+# 읽을 캘린더: 530호 일정 (비공개). 캘린더 ID 만으로는 읽을 수 없고 권한 있는 토큰이 있어야 한다
+calendar_id: "1cad154d55cbc50b2d6f7205d0e583e845c725d89a89177461c814662e6815c2@group.calendar.google.com"
+calendar_name: "530호 일정"   # 메시지 첫 줄에 보일 이름
+
+retries: 3     # 텔레그램 전송 재시도
+timeout: 30
+
+# 결과물 위치 (텔레그램으로 보내는 자동화라 폴더 없음)
+result_link: ""
+
+# 상태 보고: 저장소 루트(체크아웃 위치)에 커밋
+office_repo: "."
+office_workspace: "assembly"   # 상태 파일을 쓸 사무실 (public/status/<id>/)
+next_run: "매주 목 17:00"       # 카드에 보일 다음 실행 문구 (사무실 설정의 schedule 은 비워 둔다)
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts 의 automations[].tasks[] (테스트로 일치 강제)
+tasks: [fetch, send]
