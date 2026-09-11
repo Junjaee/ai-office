@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 11초",
+  "summary": "신규 13건, 실패 0건, 11초",
   "counts": {
-    "new": 5,
+    "new": 13,
     "failed": 0,
-    "total": 203
+    "total": 216
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 11초",
-    "[신규] 개혁신당, 비대위 체제로 전환키로…내주 초 비대위원장 지명 — 매일경제",
-    "[신규] 이재훈 카지노 : 흥미로운 사실과 통찰력 있는 분석 — Histoire pour tous",
-    "[신규] 법원은 생기는데 등기소는 없다?…화성시, 사법·치안 인프라 확충 총력 — 더리포트",
-    "[신규] 천하람 \"강신철, 일가 총동원 철거민 딱지 확보\" — cpbc News"
+    "신규 13건, 실패 0건, 11초",
+    "[신규] 연천군, 중진공과 그린바이오 산업 육성...기업 자금·수출·인력 지원 연계 — 경인매일",
+    "[신규] 서울시보다 큰데 경찰서는 단 2곳..화성시·국회의원 공동전선 — edaily.co.kr",
+    "[신규] 에이전트 카지노 먹튀 - 시대별 변화와 영향 - 업계 전문가들의 조언 — Histoire pour tous",
+    "[신규] 홀덤 림프 뜻 - 2026년 최신판 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34539419646,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34539419646",
+  "run_id": 34553037275,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34553037275",
   "trigger": "schedule",
-  "started_at": "2026-09-11T07:51:16+09:00",
+  "started_at": "2026-09-11T11:02:25+09:00",
   "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 167건"
+      "summary": "검색어 5개에서 142건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 24건 (신규 5건) · Histoire pour tous 9건, Nate News 1건, cpbc News 1건"
+      "summary": "오늘 37건 (신규 13건) · Histoire pour tous 11건, Nate News 1건, cpbc News 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-11T07:51:28+09:00"
+  "updated_at": "2026-09-11T11:02:38+09:00"
 }
