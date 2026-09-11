@@ -11,12 +11,10 @@
   .kr { word-break: keep-all; overflow-wrap: anywhere; white-space: pre-line; }
   .balance { text-wrap: balance; }
   .pretty { text-wrap: pretty; }
-  .card { position: relative; width: 100%; height: 100%; padding: 96px 88px 120px; display: flex; flex-direction: column; }
+  .card { position: relative; width: 100%; height: 100%; padding: 96px 88px 110px; display: flex; flex-direction: column; }
   .top { display: flex; justify-content: space-between; align-items: center; color: {{ theme.muted }}; font-size: 30px; font-weight: 600; letter-spacing: .02em; }
   .top .handle::before { content: ""; display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: {{ theme.accent }}; margin-right: 14px; vertical-align: middle; }
-  .bar { position: absolute; left: 88px; right: 88px; bottom: 84px; height: 6px; background: rgba(255,255,255,.08); border-radius: 3px; overflow: hidden; }
-  .bar i { display: block; height: 100%; background: {{ theme.accent }}; }
-  .foot { position: absolute; left: 88px; right: 88px; bottom: 36px; display: flex; justify-content: space-between; color: {{ theme.muted }}; font-size: 26px; }
+  .foot { position: absolute; left: 88px; right: 88px; bottom: 40px; display: flex; justify-content: space-between; color: {{ theme.muted }}; font-size: 26px; }
   .main { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
   .has-image .main { justify-content: flex-start; padding-top: 40px; }
   .cover .kicker { color: {{ theme.accent }}; font-size: 34px; font-weight: 700; margin-bottom: 36px; letter-spacing: .04em; }
@@ -25,19 +23,20 @@
   .cover.has-image .hook { font-size: 88px; }
   .cover.has-image .sub { margin-top: 28px; font-size: 36px; }
   .body .num { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 22px; background: {{ theme.accent }}; color: {{ theme.bg }}; font-size: 44px; font-weight: 800; margin-bottom: 36px; }
-  .body .title { font-size: 70px; line-height: 1.22; font-weight: 800; letter-spacing: -.02em; margin-bottom: 36px; }
-  .body .text { font-size: 42px; line-height: 1.6; color: {{ theme.fg }}; opacity: .92; }
+  .body .title { font-size: 70px; line-height: 1.22; font-weight: 800; letter-spacing: -.02em; margin-bottom: 40px; }
+  /* 본문 = 문단 요약 2~3줄 (점 하나에 한 줄) */
+  .body .lines { list-style: none; font-size: 42px; line-height: 1.55; }
+  .body .lines li { position: relative; padding-left: 44px; margin-bottom: 18px; }
+  .body .lines li::before { content: ""; position: absolute; left: 0; top: .62em; width: 16px; height: 16px; border-radius: 50%; background: {{ theme.accent }}; }
   .body.has-image .num { width: 64px; height: 64px; font-size: 34px; border-radius: 16px; margin-bottom: 22px; }
-  .body.has-image .title { font-size: 56px; margin-bottom: 22px; }
-  .body.has-image .text { font-size: 36px; line-height: 1.5; }
-  /* 코드 칸: 한글은 Pretendard, 영문·기호만 고정폭 느낌(글자 간격) */
-  .body .code-label { margin-top: 40px; font-size: 28px; font-weight: 700; color: {{ theme.muted }}; letter-spacing: .02em; }
-  .body .code { margin-top: 12px; padding: 28px 34px; border-radius: 20px; background: {{ theme.code_bg }}; color: {{ theme.accent }}; font-family: "Pretendard", sans-serif; font-weight: 600; font-size: 36px; line-height: 1.5; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; border: 2px solid rgba(255,255,255,.08); }
-  .body .code::before { content: "▸ "; opacity: .6; }
+  .body.has-image .title { font-size: 56px; margin-bottom: 24px; }
+  .body.has-image .lines { font-size: 36px; line-height: 1.5; }
+  .body.has-image .lines li { margin-bottom: 10px; padding-left: 38px; }
   .shot { margin: 28px 0 0; border-radius: 22px; overflow: hidden; border: 2px solid rgba(255,255,255,.12); background: #000; box-shadow: 0 24px 60px rgba(0,0,0,.45); flex: 0 0 auto; }
   .shot img { display: block; width: 100%; max-height: 560px; object-fit: cover; object-position: top; }
   .cover .shot img { max-height: 520px; }
-  .shot-cap { margin-top: 14px; font-size: 26px; color: {{ theme.muted }}; }
+  .shot-cap { margin-top: 14px; font-size: 26px; color: {{ theme.muted }}; display: flex; justify-content: space-between; gap: 24px; }
+  .shot-cap .credit { flex: 0 0 auto; opacity: .75; }
   .cta .big { font-size: 84px; line-height: 1.2; font-weight: 800; letter-spacing: -.02em; }
   .cta .hint { margin-top: 48px; font-size: 40px; color: {{ theme.muted }}; line-height: 1.5; }
   .cta .icons { margin-top: 64px; display: flex; gap: 28px; }
@@ -50,22 +49,20 @@
   <div class="main" id="main">
     {% if slide.kind == "cover" %}
       <div class="kicker">오늘의 AI 꿀팁</div>
-      <div class="hook kr balance" data-fit="56">{{ slide.hook }}</div>
+      <div class="hook kr balance" data-fit="56">{{ slide.title }}</div>
       {% if slide.sub %}<div class="sub kr pretty" data-fit="28">{{ slide.sub }}</div>{% endif %}
-      {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div>{% endif %}
+      {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div>{% if slide.credit %}<div class="shot-cap"><span></span><span class="credit">{{ slide.credit }}</span></div>{% endif %}{% endif %}
     {% elif slide.kind == "body" %}
       <div class="num">{{ slide.idx }}</div>
       <div class="title kr balance" data-fit="40">{{ slide.title }}</div>
-      <div class="text kr pretty" data-fit="28">{{ slide.body }}</div>
-      {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div>{% if slide.image_caption %}<div class="shot-cap kr">{{ slide.image_caption }}</div>{% endif %}{% endif %}
-      {% if slide.code %}<div class="code-label">💬 이렇게 입력해 보세요</div><div class="code kr" data-fit="24">{{ slide.code }}</div>{% endif %}
+      <ul class="lines" data-fit="28">{% for ln in slide.lines %}<li class="kr pretty">{{ ln }}</li>{% endfor %}</ul>
+      {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div><div class="shot-cap"><span class="kr">{{ slide.image_caption }}</span><span class="credit">{{ slide.credit }}</span></div>{% endif %}
     {% else %}
       <div class="big kr balance" data-fit="48">{{ slide.cta }}</div>
-      <div class="hint kr pretty">{{ slide.hook | replace("\n", " ") }} — 저장해 두면 다시 찾기 쉬워요</div>
+      <div class="hint kr pretty">{{ slide.title | replace("\n", " ") }} — 저장해 두면 다시 찾기 쉬워요</div>
       <div class="icons"><span>🔖 저장</span><span>✈️ 친구에게 공유</span></div>
     {% endif %}
   </div>
-  <div class="bar"><i style="width: {{ (slide.n / slide.total * 100) | round }}%"></i></div>
   <div class="foot"><span>{{ slide.handle }}</span><span>← 넘겨서 보기 →</span></div>
 </div>
 <script>

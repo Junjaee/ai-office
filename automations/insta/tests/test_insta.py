@@ -1,4 +1,4 @@
-"""insta 자동화 — 오프라인으로 검사할 수 있는 부분: 소재 걸러내기, JSON 추출·스키마, 로컬 검사, 카드 슬라이드 구성, 게시 흐름(가짜 API)."""
+"""insta 자동화 — 오프라인으로 검사할 수 있는 부분: 소재 걸러내기, JSON 추출·스키마, 기사 검사·검수 루프, 카드 계획·슬라이드, 사진 후보, 게시 흐름(가짜 API)."""
 import json
 import sys
 from datetime import datetime, timedelta, timezone
@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "common")
 
 import insta_cards as cards  # noqa: E402
 import insta_publisher as pub  # noqa: E402
+import insta_research as research  # noqa: E402
 import insta_sources as sources  # noqa: E402
 import insta_writer as writer  # noqa: E402
 from insta_llm import LLM, LLMError, extract_json  # noqa: E402
@@ -85,35 +86,38 @@ def test_llm_raises_when_all_fail(monkeypatch):
         llm.json(system="s", user="u")
 
 
-def sample_post():
-    return {"hook": "챗GPT 명령어 3개", "sub": "몰라서 못 쓰던 것", "cta": "저장",
-            "slides": [{"title": f"팁 {i}", "body": "짧은 설명 한 줄", "code": "/human"} for i in range(6)],
-            "caption": "훅 반복\n\n핵심 요약 문장을 조금 길게 써서 길이 조건을 채웁니다. 실제로는 삼백 자 안팎으로 씁니다.\n\n저장해 두세요.",
-            "hashtags": ["AI활용", "#챗GPT", "#프롬프트"], "alt_text": "카드뉴스",
-            "sources": ["https://openai.com/x"], "claims": [{"text": "명령어 24개", "source": "https://openai.com/x"}]}
+def sample_article():
+    para = "구글이 9월 10일 윈도우용 제미나이(Gemini) 앱을 내놨어요. Alt+Space 를 누르면 하던 화면 위에 바로 떠요. 브라우저 탭을 찾지 않아도 돼요. 무료 계정으로도 쓸 수 있어요."
+    return {"title": "구글, 윈도우용 제미나이 앱 출시", "subtitle": "Alt+Space 한 번이면 화면 위에 AI",
+            "paragraphs": [{"heading": f"소주제 {i}", "text": para} for i in range(6)],
+            "caption": "제목 반복\n\n핵심 요약 문장을 조금 길게 써서 길이 조건을 채웁니다. 실제로는 삼백 자 안팎으로 씁니다.\n\n저장해 두세요.",
+            "hashtags": ["AI활용", "#챗GPT", "#제미나이"], "alt_text": "카드뉴스",
+            "sources": ["https://blog.google/x"], "claims": [{"text": "9월 10일 출시", "source": "https://blog.google/x"}]}
 
 
-def test_local_checks_flag_banned_and_missing_sources_and_fix_hashtags():
-    p = writer.Profile.from_dict({"name": "t", "audience": "a", "tone": "t", "format": "list", "slides": 8,
-                                  "hook_patterns": [], "must_include": [], "banned": ["게임체인저"], "cta": "c",
-                                  "hashtags_base": [], "sources": [], "source_signals": [], "template": "dark_code",
-                                  "judge_weights": {}, "pass_score": 38})
-    post = sample_post()
-    assert writer.local_checks(p, post) == []
-    assert post["hashtags"][0] == "#AI활용"
-    post["slides"][0]["body"] = "게임체인저"
-    post["claims"][0]["source"] = "출처 없음"
-    problems = writer.local_checks(p, post)
-    assert any("금지" in x for x in problems) and any("URL" in x for x in problems)
+def profile(**over):
+    d = {"name": "t", "audience": "a", "tone": "t", "format": "news", "paragraphs": 6,
+         "must_include": [], "banned": ["게임체인저"], "cta": "저장", "hashtags_base": ["#a"], "sources": [],
+         "source_signals": [], "template": "dark_code", "judge_weights": {"readability": 3}, "pass_score": 38}
+    d.update(over)
+    return writer.Profile.from_dict(d)
 
 
-def test_generate_post_revises_until_pass(monkeypatch):
-    p = writer.Profile.from_dict({"name": "t", "audience": "a", "tone": "t", "format": "list", "slides": 8,
-                                  "hook_patterns": ["x"], "must_include": ["y"], "banned": [], "cta": "c",
-                                  "hashtags_base": ["#a"], "sources": [], "source_signals": [], "template": "dark_code",
-                                  "judge_weights": {"hook": 2}, "pass_score": 38})
-    seq = iter([sample_post(), {"scores": {}, "total": 20, "verdict": "revise", "feedback": "훅 약함"},
-                sample_post(), {"scores": {}, "total": 45, "verdict": "pass", "feedback": ""}])
+def test_local_checks_flag_banned_missing_sources_paragraph_length_and_fix_hashtags():
+    p = profile()
+    art = sample_article()
+    assert writer.local_checks(p, art) == []
+    assert art["hashtags"][0] == "#AI활용"
+    art["paragraphs"][0]["text"] = "게임체인저"
+    art["claims"][0]["source"] = "출처 없음"
+    problems = writer.local_checks(p, art)
+    assert any("금지" in x for x in problems) and any("URL" in x for x in problems) and any("짧음" in x for x in problems)
+
+
+def test_generate_article_revises_until_editor_passes():
+    p = profile()
+    seq = iter([sample_article(), {"scores": {}, "total": 20, "verdict": "revise", "feedback": "3번 문단이 추상적"},
+                sample_article(), {"scores": {}, "total": 45, "verdict": "pass", "feedback": ""}])
     prompts = []
 
     class Fake:
@@ -123,17 +127,53 @@ def test_generate_post_revises_until_pass(monkeypatch):
             prompts.append(user)
             return next(seq)
 
-    post, verdict = writer.generate_post(Fake(), p, "refs", {"title": "t", "source": "s", "link": "l"}, "angle", progress=lambda m: None)
+    art, verdict = writer.generate_article(Fake(), p, "refs", {"title": "t", "source": "s", "link": "l"}, "관련 글",
+                                           progress=lambda m: None)
     assert verdict["verdict"] == "pass"
-    assert "훅 약함" in prompts[2], "2차 원고 요청에 피드백이 붙는다"
+    assert "3번 문단이 추상적" in prompts[2], "2차 기사 요청에 검수 지적이 붙는다"
+    assert "관련 글" in prompts[0], "조사 결과가 글쓰기 프롬프트에 들어간다"
 
 
-def test_build_slides_has_cover_body_cta_numbering():
-    slides = cards.build_slides(sample_post(), "@aitips")
+def test_plan_cards_maps_image_ids_and_rejects_bad_ones():
+    p = profile()
+    images = [{"id": 1, "url": "https://img/1.jpg", "alt": "앱 화면", "source_url": "https://blog.google/x",
+               "source_title": "구글 블로그", "kind": "official"}]
+    bad = {"cover": {"title": "구글, 윈도우용\n제미나이 앱 출시", "sub": "s", "image_id": 1},
+           "cards": [{"title": f"카드 {i}", "lines": ["핵심 한 줄"], "image_id": 9 if i == 0 else 0} for i in range(6)], "cta": "저장"}
+    good = json.loads(json.dumps(bad)); good["cards"][0]["image_id"] = 1
+    seq = iter([bad, good])
+
+    class Fake:
+        last_provider = "fake"
+
+        def json(self, *, system, user, schema=None):
+            return next(seq)
+
+    plan = writer.plan_cards(Fake(), p, sample_article(), images, progress=lambda m: None)
+    assert plan["cover"]["image"]["url"] == "https://img/1.jpg"
+    assert plan["cards"][0]["image"]["url"] == "https://img/1.jpg" and plan["cards"][1]["image"] is None
+
+
+def test_build_slides_and_render_from_plan():
+    plan = {"cover": {"title": "제목\n둘째 줄", "sub": "부제", "image": None},
+            "cards": [{"title": f"카드 {i}", "lines": ["핵심 A", "핵심 B"], "image": None, "image_caption": ""} for i in range(6)],
+            "cta": "저장해 두세요"}
+    slides = cards.build_slides(plan, "@aitips")
     assert [s["kind"] for s in slides] == ["cover"] + ["body"] * 6 + ["cta"]
     assert [s["n"] for s in slides] == list(range(1, 9)) and all(s["total"] == 8 for s in slides)
     html = cards.render_html("dark_code", slides[1], {"accent": "#fff"})
-    assert "팁 0" in html and "/human" in html and "@font-face" in html
+    assert "카드 0" in html and "핵심 A" in html and "@font-face" in html and 'class="bar"' not in html
+    assert cards.credit_of({"url": "https://cdn.x/1.jpg", "source_url": "https://www.aitimes.com/news/1", "kind": "related"}) == "사진: aitimes.com"
+
+
+def test_image_candidates_order_and_numbering():
+    main = {"title": "원문", "images": [{"url": "https://a/1.jpg", "alt": "a"}], "links": ["https://official/x"],
+            "link_articles": [{"link": "https://official/x", "title": "공식", "images": [{"url": "https://o/1.jpg", "alt": "o"}]}]}
+    related = [{"link": "https://news/1", "title": "기사", "images": [{"url": "https://n/1.jpg", "alt": "n"}, {"url": "https://a/1.jpg", "alt": "dup"}]}]
+    c = research.image_candidates(main, related, main_url="https://src/a")
+    assert [x["id"] for x in c] == [1, 2, 3, 4]
+    assert [x["kind"] for x in c] == ["official", "official", "related", "screenshot"]
+    assert c[3]["url"] == "screenshot:https://official/x"
 
 
 def test_publish_carousel_flow_with_fake_session():

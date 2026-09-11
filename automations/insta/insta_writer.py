@@ -1,39 +1,22 @@
-"""글 생성 — 주제 프로필 + 참고 원고 + 선정 소재 → 카드 원고·캡션·해시태그 (JSON), 그리고 자동 심사.
+"""글 생성 — 기사 한 편을 쓰고(어그로 제목 + 소주제별 문단), 글쓰기 전문가가 검수하고, 문단마다 카드 한 장으로 요약한다.
 
+흐름 (사용자 결정 2026-09-11):
+  1) 검색어 뽑기 → 같은 주제의 기사·블로그 조사 (insta_research)
+  2) 기사 쓰기: 제목(어그로) + 부제 + 문단 5~7개, 문단마다 소주제 하나·3~4줄
+  3) 검수: 글쓰기 전문가가 가독성·흥미·사실·구조를 채점, 미달이면 지적을 붙여 다시 쓴다
+  4) 카드 요약: 표지(제목) + 문단마다 카드 1장(핵심만, 토씨 다 옮기지 않음) + 어울리는 사진 번호
 프롬프트는 프로필(yaml)의 값으로 채운다. 주제가 바뀌어도 이 파일은 그대로다.
 """
 from __future__ import annotations
 
 import json
-import re
 from dataclasses import dataclass
 
 from insta_llm import LLM
 
-POST_SCHEMA = {
-    "type": "object",
-    "required": ["hook", "sub", "slides", "cta", "caption", "hashtags", "alt_text", "sources", "claims"],
-    "properties": {
-        "hook": {"type": "string", "minLength": 4, "maxLength": 48},
-        "cover_image": {"type": "string", "maxLength": 400},
-        "sub": {"type": "string", "maxLength": 80},
-        "slides": {
-            "type": "array", "minItems": 4, "maxItems": 9,
-            "items": {"type": "object", "required": ["title", "body"],
-                      "properties": {"title": {"type": "string", "maxLength": 48},
-                                     "body": {"type": "string", "maxLength": 220},
-                                     "code": {"type": "string", "maxLength": 120},
-                                     "image": {"type": "string", "maxLength": 400},
-                                     "image_caption": {"type": "string", "maxLength": 60}}},
-        },
-        "cta": {"type": "string", "maxLength": 80},
-        "caption": {"type": "string", "minLength": 80, "maxLength": 1200},
-        "hashtags": {"type": "array", "minItems": 3, "maxItems": 8, "items": {"type": "string"}},
-        "alt_text": {"type": "string", "maxLength": 200},
-        "sources": {"type": "array", "items": {"type": "string"}},
-        "claims": {"type": "array", "items": {"type": "object", "required": ["text", "source"],
-                                              "properties": {"text": {"type": "string"}, "source": {"type": "string"}}}},
-    },
+QUERY_SCHEMA = {
+    "type": "object", "required": ["queries"],
+    "properties": {"queries": {"type": "array", "minItems": 2, "maxItems": 4, "items": {"type": "string", "maxLength": 60}}},
 }
 
 PICK_SCHEMA = {
@@ -45,11 +28,53 @@ PICK_SCHEMA = {
                                                       "angle": {"type": "string"}}}}},
 }
 
-JUDGE_SCHEMA = {
+ARTICLE_SCHEMA = {
+    "type": "object",
+    "required": ["title", "subtitle", "paragraphs", "caption", "hashtags", "alt_text", "sources", "claims"],
+    "properties": {
+        "title": {"type": "string", "minLength": 6, "maxLength": 40},
+        "subtitle": {"type": "string", "maxLength": 70},
+        "paragraphs": {
+            "type": "array", "minItems": 4, "maxItems": 8,
+            "items": {"type": "object", "required": ["heading", "text"],
+                      "properties": {"heading": {"type": "string", "maxLength": 30},
+                                     "text": {"type": "string", "minLength": 60, "maxLength": 320}}},
+        },
+        "caption": {"type": "string", "minLength": 80, "maxLength": 1500},
+        "hashtags": {"type": "array", "minItems": 3, "maxItems": 8, "items": {"type": "string"}},
+        "alt_text": {"type": "string", "maxLength": 200},
+        "sources": {"type": "array", "items": {"type": "string"}},
+        "claims": {"type": "array", "items": {"type": "object", "required": ["text", "source"],
+                                              "properties": {"text": {"type": "string"}, "source": {"type": "string"}}}},
+    },
+}
+
+EDITOR_SCHEMA = {
     "type": "object",
     "required": ["scores", "total", "verdict", "feedback"],
     "properties": {"scores": {"type": "object"}, "total": {"type": "number"},
-                   "verdict": {"type": "string", "enum": ["pass", "revise"]}, "feedback": {"type": "string"}},
+                   "verdict": {"type": "string", "enum": ["pass", "revise"]}, "feedback": {"type": "string"},
+                   "better_titles": {"type": "array", "items": {"type": "string"}}},
+}
+
+CARDS_SCHEMA = {
+    "type": "object",
+    "required": ["cover", "cards", "cta"],
+    "properties": {
+        "cover": {"type": "object", "required": ["title", "sub"],
+                  "properties": {"title": {"type": "string", "maxLength": 48}, "sub": {"type": "string", "maxLength": 80},
+                                 "image_id": {"type": "integer"}}},
+        "cards": {
+            "type": "array", "minItems": 4, "maxItems": 8,
+            "items": {"type": "object", "required": ["title", "lines"],
+                      "properties": {"title": {"type": "string", "maxLength": 40},
+                                     "lines": {"type": "array", "minItems": 1, "maxItems": 4,
+                                               "items": {"type": "string", "maxLength": 60}},
+                                     "image_id": {"type": "integer"},
+                                     "image_caption": {"type": "string", "maxLength": 60}}},
+        },
+        "cta": {"type": "string", "maxLength": 80},
+    },
 }
 
 
@@ -60,8 +85,6 @@ class Profile:
     audience: str
     tone: str
     format: str
-    slides: int
-    hook_patterns: list[str]
     must_include: list[str]
     banned: list[str]
     cta: str
@@ -74,6 +97,10 @@ class Profile:
     handle: str = ""
     theme: dict | None = None
     max_age_hours: int = 72
+    paragraphs: int = 6                 # 기사 문단 수 (= 본문 카드 수)
+    title_patterns: list[str] | None = None
+    slides: int = 0                     # (구버전 호환) 쓰지 않음
+    hook_patterns: list[str] | None = None
     flow: dict | None = None
     images_per_post: int = 0
 
@@ -83,144 +110,250 @@ class Profile:
         return cls(**known)
 
 
-def _rules(p: Profile) -> str:
-    return "\n".join([
-        f"- 독자: {p.audience}",
-        f"- 말투: {p.tone}",
-        f"- 형식: {p.format} (카드 {p.slides}장: 표지 1 + 본문 {p.slides - 2} + 마무리 1)",
-        _flow_rule(p),
-        "- 표지 hook 은 낚시가 아니라 뉴스 헤드라인처럼 사실을 말한다(예: 'Windows용 제미나이 앱 출시'). sub 는 독자 이득 한 줄.",
-        "- 카드 한 장 본문은 15~25단어. 표지는 한 줄 훅(15자 안팎) + 보조 문장 한 줄.",
-        "- 첫 3장은 각각 독립적으로 흥미를 끌어야 한다(스크롤을 멈추는 미끼 3개).",
-        f"- 훅 패턴 예: {', '.join(p.hook_patterns)}",
-        f"- 반드시 포함: {', '.join(p.must_include)}",
-        f"- 금지 표현: {', '.join(p.banned)}. 느낌표 남발·이모지는 카드당 1개 이하.",
-        "- 숫자·툴 이름·명령어는 출처 그대로. 출처에 없는 사실을 지어내지 않는다.",
-        "- 모든 사실 주장은 claims 에 {text, source(URL)} 로 넣는다. 출처를 못 대는 주장은 쓰지 않는다. 원문·공식 링크에 없는 세부(요금, 지원 OS, 날짜)는 단정하지 말고 '공식 안내 확인'으로 돌린다.",
-        "- code 칸은 카드에 '이렇게 입력해 보세요' 라벨과 함께 표시된다. 독자가 그대로 복사해 넣을 수 있는 **완성된 문장**만 넣는다. '(문단 붙여넣기)' 같은 빈칸·자리표시자 금지 — 빈칸이 필요하면 실제 예시로 채운다(예: '이 문단에서 사실관계가 틀린 곳만 찾아 줘: 구글은 9월 10일 …'). 안내 문구·단축키 설명은 code 에 넣지 않는다(없으면 비운다). code 가 있는 카드의 body 는 그 문장을 어디에 넣으면 무엇이 나오는지 한 줄로 알려 준다.",
-        "- 카드 한 장은 그것만 떼어 봐도 이해돼야 한다. body 는 title 이 약속한 내용만 담는다 — title 이 '앱 여는 법 세 가지' 면 body 는 그 세 가지뿐, 다른 이야기(기록 동기화 등)는 넣지 않는다.",
-        "- title 에 'N가지'·'N단계'·'N개' 가 있으면 body 는 정확히 N줄, 한 줄에 하나씩 '1. …' 번호를 붙이고 줄바꿈 문자(\\n)로 나눈다. 한 줄 20자 안팎.",
-        f"- 마지막 장(cta): {p.cta}",
-        "- caption: 300~450자, 3문단(첫 줄이 훅 반복 → 핵심 요약 → 저장·공유 유도). 해시태그는 caption 에 넣지 말고 hashtags 배열로.",
-        f"- hashtags: 기본 {', '.join(p.hashtags_base)} 중 3개 + 소재에 맞는 2개, 총 5개 안팎.",
-        "- alt_text: 시각장애인용 한 문장 설명.",
-        "- 줄바꿈: hook 과 slides[].title 은 카드에서 2줄로 보이도록, 뜻이 끊기지 않는 자리(조사·어절 경계)에 줄바꿈 문자(\\n)를 직접 넣는다. 한 줄 12자 안팎. 예: '윈도우용 제미나이 앱\\n드디어 출시'. '한 번이면' 같은 어구 중간에서 끊지 않는다.",
-        f"- 이미지: 아래 '쓸 수 있는 이미지' 목록에 있는 값만 slides[].image 에 넣는다(표지 포함 {p.images_per_post or 3}장 안팎, 실제 화면·제품 사진이 어울리는 카드에). 없는 카드는 image 를 비운다. image_caption 은 사진 설명 한 줄. 'screenshot:<페이지 URL>' 은 그 공식 페이지를 캡처해 넣는다. 표지에 넣을 이미지는 cover_image 키에.",
-    ])
-
-
-def _flow_rule(p: Profile) -> str:
-    """프로필의 flow(소재 유형별 카드 순서)를 규칙 문장으로."""
-    flows = p.flow or {}
-    if not flows:
-        return "- 카드 순서는 독자가 궁금해하는 순서대로."
-    lines = ["- 소재 유형을 먼저 정하고(news=출시·업데이트 소식, list=모음, howto=따라 하기) 그 유형의 카드 순서를 그대로 따른다:"]
-    for kind, steps in flows.items():
-        lines.append(f"  · {kind}: " + " → ".join(f"[{i}] {st}" for i, st in enumerate(steps, 1)))
-    return "\n".join(lines)
-
+# ───────────────────────── 1) 소재 고르기 / 검색어 ─────────────────────────
 
 def pick_prompt(p: Profile, rows: str, n: int) -> tuple[str, str]:
     system = (f"당신은 인스타그램 정보 계정 '{p.name}'의 편집장입니다. 독자: {p.audience}\n"
               "후보 목록에서 오늘 게시할 소재를 고릅니다. 선정 기준: 독자가 바로 써먹을 수 있는가, 저장하고 싶은가, 새로운가, "
-              "한 장짜리 카드 8장으로 풀 수 있는가. 광고·모금·행사 안내·기업 실적 뉴스는 제외.\n"
+              "기사 한 편(문단 5~7개)으로 풀 수 있는가. 광고·모금·행사 안내·기업 실적 뉴스는 제외.\n"
               "도구를 쓰지 말고 JSON 객체 하나만 출력합니다.")
     user = (f"후보:\n{rows}\n\n"
-            f"가장 좋은 {n}개를 고르고 각각 index(후보 번호), reason(선정 이유 한 줄), angle(카드로 풀 때의 각도 한 줄)을 적으세요.\n"
+            f"가장 좋은 {n}개를 고르고 각각 index(후보 번호), reason(선정 이유 한 줄), angle(기사로 풀 때의 각도 한 줄)을 적으세요.\n"
             'JSON: {"picks": [{"index": 3, "reason": "...", "angle": "..."}]}')
     return system, user
 
 
-def write_prompt(p: Profile, refs: str, cand: dict, angle: str, best_own: str = "") -> tuple[str, str]:
-    system = (f"당신은 인스타그램 정보 계정 '{p.name}'({p.handle})의 카드뉴스 작가입니다.\n"
-              "아래 규칙을 지켜 카드 원고를 씁니다.\n" + _rules(p) +
-              "\n\n[잘 된 게시물 예시 — 결과 구조와 톤을 참고하되 문장은 베끼지 않는다]\n" + refs +
+def query_prompt(cand: dict) -> tuple[str, str]:
+    system = ("당신은 리서처입니다. 아래 소재와 같은 내용을 다룬 한국어 기사·블로그 글을 찾기 위한 뉴스 검색어를 만듭니다. "
+              "도구를 쓰지 말고 JSON 만 출력합니다.")
+    user = (f"소재 제목: {cand['title']}\n요약: {cand.get('summary', '')[:300]}\n\n"
+            "검색어 3개: 한국어 2개(제품·기능 이름은 한글 표기, 예 '제미나이 윈도우 앱'), 영어 1개(공식 명칭). 각 2~5단어.\n"
+            'JSON: {"queries": ["...", "...", "..."]}')
+    return system, user
+
+
+# ───────────────────────── 2) 기사 쓰기 ─────────────────────────
+
+def _article_rules(p: Profile) -> str:
+    pats = p.title_patterns or ["'<누가>, <무엇> 출시' 같은 뉴스 헤드라인 + 독자 이득", "숫자형 '<툴> 기능 N개'", "질문형"]
+    return "\n".join([
+        f"- 독자: {p.audience}",
+        f"- 말투: {p.tone}",
+        "- 결과물은 인스타그램 카드뉴스의 바탕이 되는 **기사 한 편**이다. 카드 문구가 아니라 완결된 글로 쓴다.",
+        f"- 제목(title): 스크롤을 멈추게 하는 제목. 다만 사실을 벗어난 낚시는 금지. 패턴 예: {' / '.join(pats)}. 20자 안팎.",
+        "- 부제(subtitle): 제목이 약속한 이득을 한 줄로.",
+        f"- 문단(paragraphs) {p.paragraphs}개. **문단 하나 = 소주제 하나**. heading 은 그 소주제를 12자 안팎으로, text 는 3~4줄(90~200자) 완결된 문장.",
+        "- 문단 순서: 독자가 궁금한 순서. 소식이면 '언제·누가·무엇 → 달라지는 점(장점) 여러 개 → 쓰는 법 → 받는 곳·조건' 순.",
+        "- 문단마다 구체적인 예(숫자·화면·입력 예시)를 하나 이상 넣는다. 추상적인 설명만 있는 문단은 실패.",
+        f"- 반드시 포함: {', '.join(p.must_include)}",
+        f"- 금지 표현: {', '.join(p.banned)}. 느낌표 남발·이모지 금지(캡션은 문단당 1개 이하).",
+        "- 숫자·툴 이름·명령어는 출처 그대로. 소재 원문·공식 링크·관련 글에 없는 사실은 쓰지 않는다. 확실치 않은 세부(요금·지원 OS·날짜)는 '공식 안내 확인' 으로 돌린다.",
+        "- 모든 사실 주장은 claims 에 {text, source(URL)} 로 넣는다(공식 출처 우선).",
+        "- caption: 인스타 본문. 300~500자, 3문단(첫 줄 = 제목 반복 → 핵심 요약 → 저장·공유 유도). 해시태그는 hashtags 배열로.",
+        f"- hashtags: 기본 {', '.join(p.hashtags_base)} 중 3개 + 소재에 맞는 2개.",
+        "- alt_text: 시각장애인용 한 문장.",
+    ])
+
+
+def article_prompt(p: Profile, refs: str, cand: dict, research: str, best_own: str = "") -> tuple[str, str]:
+    system = (f"당신은 인스타그램 정보 계정 '{p.name}'({p.handle})의 기자 겸 작가입니다.\n"
+              "아래 규칙을 지켜 기사 한 편을 씁니다.\n" + _article_rules(p) +
+              "\n\n[잘 된 게시물 예시 — 흐름·호흡·첫 줄의 결을 참고하되 문장은 베끼지 않는다]\n" + refs +
               (f"\n\n[우리 계정에서 성과가 좋았던 글]\n{best_own}" if best_own else "") +
               "\n\n도구를 쓰지 말고 JSON 객체 하나만 출력합니다.")
     article = cand.get("article") or {}
     extra = ""
     if article.get("text"):
-        extra += f"\n원문 발췌(여기 있는 사실만 쓴다):\n{article['text']}\n"
+        extra += f"\n[소재 원문 발췌 — 1차 근거]\n{article['text']}\n"
     if article.get("links"):
-        extra += "원문이 가리키는 바깥 링크(공식 출처가 있으면 claims 의 source 로 우선 사용):\n" + "\n".join(article["links"]) + "\n"
-    imgs = list(article.get("images") or [])
-    shots = [f"screenshot:{u}" for u in (article.get("links") or [])[:2]]
-    if imgs or shots:
-        extra += "쓸 수 있는 이미지(이 목록의 값만 image 에 그대로 넣는다):\n" + "\n".join(imgs + shots) + "\n"
+        extra += "\n[원문이 가리키는 바깥 링크 — 공식 출처면 claims 의 source 로 우선 사용]\n" + "\n".join(article["links"]) + "\n"
+    if research:
+        extra += "\n[같은 주제를 다룬 다른 기사·블로그 — 어떤 점을 강조했고 어떤 순서로 풀었는지 참고. 사실은 원문·공식 출처와 맞는 것만]\n" + research + "\n"
     user = (f"오늘 소재:\n제목: {cand['title']}\n출처: {cand['source']} {cand['link']}\n"
-            f"요약: {cand.get('summary', '')}\n각도: {angle}\n{extra}\n"
-            "다음 키를 가진 JSON 을 출력하세요: hook, sub, slides[{title, body, code?}], cta, caption, hashtags[], alt_text, "
-            "sources[], claims[{text, source}]. slides 는 본문 카드만(표지·마무리 제외) "
-            f"{p.slides - 2}장.")
+            f"요약: {cand.get('summary', '')}\n각도: {cand.get('angle', '')}\n{extra}\n"
+            "다음 키를 가진 JSON 을 출력하세요: title, subtitle, paragraphs[{heading, text}], caption, hashtags[], alt_text, "
+            f"sources[], claims[{{text, source}}]. paragraphs 는 {p.paragraphs}개.")
     return system, user
 
 
-def judge_prompt(p: Profile, post: dict) -> tuple[str, str]:
+# ───────────────────────── 3) 검수 (글쓰기 전문가) ─────────────────────────
+
+def editor_prompt(p: Profile, article: dict) -> tuple[str, str]:
     w = p.judge_weights
-    system = ("당신은 인스타그램 카드뉴스 품질 심사관입니다. 냉정하게 채점합니다. 도구를 쓰지 말고 JSON 만 출력합니다.\n"
-              "채점 항목(각 1~5점): hook(첫 장이 스크롤을 멈추는가, 구체적인가), useful(독자가 바로 써먹는가), "
-              "factual(주장마다 출처가 있고 과장이 없는가), korean(자연스러운 한국어, AI 티 나는 표현 없음), "
-              "rules(카드 길이·금지어·형식 규칙 준수, 제목이 약속한 것만 본문에 있는가, code 칸이 자리표시자 없는 완성 문장인가).\n"
-              "korean 은 문장이 매끄러운지뿐 아니라 카드 한 장만 봐도 뜻이 통하는지(앞뒤 카드 없이도 이해되는지)를 본다.\n"
+    system = ("당신은 20년 차 글쓰기 전문가이자 인스타그램 정보 계정 편집장입니다. 아래 기사를 독자 입장에서 냉정하게 검수합니다. "
+              "도구를 쓰지 말고 JSON 만 출력합니다.\n"
+              "채점 항목(각 1~5점):\n"
+              "- readability(가독성): 문장이 짧고 쉬운가, 한 문단에 한 소주제만 있는가, 3~4줄 호흡이 지켜지는가, AI 티 나는 표현이 없는가\n"
+              "- interest(흥미): 제목이 스크롤을 멈추는가(낚시 아님), 첫 문단이 계속 읽게 하는가, 독자가 저장·공유하고 싶은가\n"
+              "- factual(사실): 주장마다 출처가 있고 과장·추측이 없는가, 숫자·이름이 출처와 같은가\n"
+              "- structure(구조): 문단 순서가 독자가 궁금한 순서인가, 문단마다 구체적 예가 있는가, 카드 한 장씩으로 나눠도 각각 뜻이 통하는가\n"
               f"가중치: {json.dumps(w, ensure_ascii=False)}. total = Σ(점수×가중치). "
-              f"total ≥ {p.pass_score} 이면 verdict=pass, 아니면 revise 와 함께 고칠 점을 feedback 에 구체적으로.")
-    user = ("원고:\n" + json.dumps(post, ensure_ascii=False, indent=1) +
+              f"total ≥ {p.pass_score} 이면 verdict=pass. 단 **사실 오류**(출처에 없는 숫자·날짜·기능을 지어냄, 출처와 다른 주장)가 하나라도 있으면 "
+              "점수와 무관하게 revise — '요금은 공식 안내 확인' 처럼 단정을 피한 안전한 문구는 오류가 아니다. "
+              "구조·표현 지적(소주제 섞임, 반복, 밋밋한 도입 등)은 점수에만 반영하고 feedback 에 적는다. "
+              "revise 면 어느 문단의 무엇을 어떻게 고칠지 구체적으로(고친 문장을 직접 써 준다). pass 여도 더 좋아질 점은 feedback 에 짧게. "
+              "제목이 약하면 better_titles 에 대안 2~3개.")
+    user = ("기사:\n" + json.dumps({k: article.get(k) for k in ("title", "subtitle", "paragraphs", "caption", "claims")},
+                                  ensure_ascii=False, indent=1) +
             f"\n\n금지 표현: {', '.join(p.banned)}\n"
-            'JSON: {"scores": {"hook": n, "useful": n, "factual": n, "korean": n, "rules": n}, "total": n, "verdict": "pass|revise", "feedback": "..."}')
+            'JSON: {"scores": {"readability": n, "interest": n, "factual": n, "structure": n}, "total": n, '
+            '"verdict": "pass|revise", "feedback": "...", "better_titles": ["..."]}')
     return system, user
 
 
-def local_checks(p: Profile, post: dict) -> list[str]:
+def local_checks(p: Profile, article: dict) -> list[str]:
     """모델을 부르기 전에 코드로 잡는 문제들."""
     problems = []
-    text = json.dumps(post, ensure_ascii=False)
+    text = json.dumps(article, ensure_ascii=False)
     for b in p.banned:
         if b and b in text:
             problems.append(f"금지 표현 '{b}' 포함")
-    if not post.get("claims"):
+    if not article.get("claims"):
         problems.append("claims 비어 있음(출처 있는 주장이 없음)")
-    if p.format == "news" and not re.search(r"출시|공개|업데이트|추가|지원|시작|무료|배포|나왔", str(post.get("hook", ""))):
-        problems.append("뉴스형인데 표지 hook 이 헤드라인이 아님 — '<누가>, <무엇> 출시/공개/업데이트' 꼴로 (이득 문장은 sub 에)")
-    for c in post.get("claims", []):
+    for c in article.get("claims", []):
         if not str(c.get("source", "")).startswith("http"):
             problems.append(f"출처가 URL 이 아님: {c.get('source')}")
             break
-    for i, s in enumerate(post.get("slides", []), 1):
-        words = len(str(s.get("body", "")).split())
-        if words > 45:
-            problems.append(f"{i}번 카드 본문이 너무 김({words}단어)")
-        code = str(s.get("code", ""))
-        if re.search(r"[(\[（][^)\]）]*(붙여넣|입력|넣기|여기에|내용|텍스트|placeholder)[^)\]）]*[)\]）]", code, re.I):
-            problems.append(f"{i}번 카드 code 에 자리표시자가 있음 — 실제 예시로 채울 것: {code[:40]}")
-        m = re.search(r"([0-9]|[두세네다섯여섯일곱여덟아홉열])\s*(가지|단계|개)", str(s.get("title", "")))
-        if m:
-            n = {"두": 2, "세": 3, "네": 4, "다섯": 5, "여섯": 6, "일곱": 7, "여덟": 8, "아홉": 9, "열": 10}.get(m.group(1)) or int(m.group(1))
-            numbered = [ln for ln in str(s.get("body", "")).split("\n") if re.match(r"\s*\d+[.)]", ln)]
-            if len(numbered) != n:
-                problems.append(f"{i}번 카드 제목이 '{m.group(0)}' 인데 본문에 번호 줄이 {len(numbered)}개 — 정확히 {n}줄, 줄마다 '1. ' 번호")
-    post["hashtags"] = ["#" + str(h).strip().lstrip("#") for h in post.get("hashtags", []) if str(h).strip()]
+    paras = article.get("paragraphs", [])
+    if p.paragraphs and abs(len(paras) - p.paragraphs) > 1:
+        problems.append(f"문단이 {len(paras)}개 — {p.paragraphs}개 안팎으로")
+    for i, para in enumerate(paras, 1):
+        n = len(str(para.get("text", "")))
+        if n < 70:
+            problems.append(f"{i}번 문단이 너무 짧음({n}자) — 3~4줄(90~200자)")
+        elif n > 260:
+            problems.append(f"{i}번 문단이 너무 김({n}자) — 3~4줄(90~200자)")
+    article["hashtags"] = ["#" + str(h).strip().lstrip("#") for h in article.get("hashtags", []) if str(h).strip()]
     return problems
 
 
-def generate_post(llm: LLM, p: Profile, refs: str, cand: dict, angle: str, *, best_own: str = "",
-                  max_rounds: int = 2, seed_feedback: str = "", progress=print) -> tuple[dict, dict]:
-    """원고 생성 → 코드 검사 → 모델 심사 → 필요하면 피드백 붙여 재생성. (원고, 심사결과) 반환.
-    seed_feedback 이 있으면(다듬기) 첫 회부터 그 피드백을 반영해 쓴다."""
-    system, user = write_prompt(p, refs, cand, angle, best_own)
+def _revise_block(article: dict | None, feedback: str) -> str:
+    """재작성 요청에 붙일 블록: 이전 기사가 있으면 그것을 주고 지적된 부분만 고치게 한다."""
+    if not feedback:
+        return ""
+    block = "\n\n[검수관 지적 — 반드시 반영]\n" + feedback
+    if article:
+        keep = {k: article.get(k) for k in ("title", "subtitle", "paragraphs", "caption", "hashtags", "claims")}
+        block += ("\n\n[이전 기사 — 처음부터 다시 쓰지 말고, 위 지적이 가리키는 부분만 고친다. 지적 없는 문단·문장·출처는 그대로 둔다]\n"
+                  + json.dumps(keep, ensure_ascii=False))
+    return block
+
+
+def generate_article(llm: LLM, p: Profile, refs: str, cand: dict, research: str, *, best_own: str = "",
+                     max_rounds: int = 3, seed_feedback: str = "", prev_article: dict | None = None,
+                     progress=print) -> tuple[dict, dict]:
+    """기사 생성 → 코드 검사 → 전문가 검수 → 미달이면 이전 기사+지적을 주고 그 부분만 고쳐 재검수. (기사, 검수결과) 반환.
+    seed_feedback 이 있으면(다듬기) 첫 회부터 그 지적을 반영해 쓴다."""
+    system, user = article_prompt(p, refs, cand, research, best_own)
     feedback = seed_feedback
-    post: dict = {}
+    article: dict = dict(prev_article or {})
     verdict: dict = {}
+    best: tuple[float, dict, dict] | None = None      # (점수, 기사, 검수) — 코드 검사는 통과한 것만
     for round_no in range(1, max_rounds + 1):
-        prompt = user + (f"\n\n[이전 원고 심사 피드백 — 반영해서 다시 쓰세요]\n{feedback}" if feedback else "")
-        post = llm.json(system=system, user=prompt, schema=POST_SCHEMA)
-        problems = local_checks(p, post)
-        js, ju = judge_prompt(p, post)
-        verdict = llm.json(system=js, user=ju, schema=JUDGE_SCHEMA)
+        prompt = user + _revise_block(article or None, feedback)
+        article = llm.json(system=system, user=prompt, schema=ARTICLE_SCHEMA)
+        problems = local_checks(p, article)
+        es, eu = editor_prompt(p, article)
+        verdict = llm.json(system=es, user=eu, schema=EDITOR_SCHEMA)
         if problems:
             verdict["verdict"] = "revise"
             verdict["feedback"] = "; ".join(problems) + " / " + str(verdict.get("feedback", ""))
-        progress(f"원고 {round_no}차: {verdict.get('total')}점 → {verdict.get('verdict')}")
+        elif best is None or float(verdict.get("total") or 0) > best[0]:
+            best = (float(verdict.get("total") or 0), article, verdict)
+        progress(f"기사 {round_no}차: 검수 {verdict.get('total')}점 → {verdict.get('verdict')}")
         if verdict.get("verdict") == "pass":
             break
         feedback = str(verdict.get("feedback", ""))
-    return post, verdict
+    if verdict.get("verdict") != "pass" and best and best[0] >= p.pass_score:
+        # 회차를 다 썼지만 기준 점수는 넘는 판이 있다 → 그 판을 채택하고 남은 지적은 메모로
+        _, article, verdict = best
+        verdict = {**verdict, "verdict": "pass", "note": f"{max_rounds}회 안에 검수관이 만족하지 않았지만 기준({p.pass_score}점)을 넘어 채택. 남은 지적은 feedback 참고"}
+        progress(f"검수: 가장 높은 {best[0]}점 판 채택 (지적은 메모로)")
+    if verdict.get("verdict") == "pass" and len(str(verdict.get("feedback", ""))) >= 200:
+        # 통과했지만 검수관이 구체적인 손질 거리를 남겼다 → 한 번 다듬고, 점수가 안 떨어졌을 때만 채택
+        article, verdict = _polish(llm, p, system, user, article, verdict, progress)
+    return article, verdict
+
+
+def _polish(llm: LLM, p: Profile, system: str, user: str, article: dict, verdict: dict, progress) -> tuple[dict, dict]:
+    prompt = user + _revise_block(article, str(verdict.get("feedback", "")))
+    try:
+        polished = llm.json(system=system, user=prompt, schema=ARTICLE_SCHEMA)
+        if local_checks(p, polished):
+            progress("다듬기: 코드 검사 미달 → 원래 기사 유지")
+            return article, verdict
+        es, eu = editor_prompt(p, polished)
+        v2 = llm.json(system=es, user=eu, schema=EDITOR_SCHEMA)
+    except Exception as exc:  # noqa: BLE001
+        progress(f"다듬기 실패({type(exc).__name__}) → 원래 기사 유지")
+        return article, verdict
+    progress(f"다듬기: 검수 {v2.get('total')}점 → {v2.get('verdict')}")
+    if v2.get("verdict") == "pass" and float(v2.get("total") or 0) >= float(verdict.get("total") or 0):
+        return polished, v2
+    return article, verdict
+
+
+# ───────────────────────── 4) 카드 요약 ─────────────────────────
+
+def cards_prompt(p: Profile, article: dict, images_block: str) -> tuple[str, str]:
+    system = (f"당신은 인스타그램 정보 계정 '{p.name}'의 카드뉴스 디자이너 겸 편집자입니다. 검수를 통과한 기사를 카드로 옮깁니다. "
+              "도구를 쓰지 말고 JSON 만 출력합니다.\n"
+              "규칙:\n"
+              "- 표지(cover): title 은 기사 제목을 카드용으로(뜻이 끊기지 않는 자리에 줄바꿈 문자 \\n 을 넣어 2줄, 한 줄 12자 안팎). sub 는 부제.\n"
+              "- 문단 하나 = 카드 한 장. 문단 순서 그대로. 카드 title 은 문단 heading(2줄이면 \\n), lines 는 그 문단의 **핵심만 2~3줄**(한 줄 25자 안팎, 완결된 짧은 문장). "
+              "문단 문장을 그대로 옮기지 말고 요약한다. 숫자·이름·예시는 살린다.\n"
+              "- 사진: 아래 후보 목록의 번호만 image_id 에 넣는다(없으면 0). 카드의 소주제와 **실제로 맞는** 사진만 고른다(설명·출처로 판단). "
+              "표지에는 가장 대표적인 화면·제품 사진. 후보가 마땅치 않으면 넣지 않는다. image_caption 은 사진이 무엇인지 한 줄.\n"
+              f"- 마지막 카드 문구(cta): {p.cta}\n"
+              f"- 금지 표현: {', '.join(p.banned)}")
+    user = ("기사:\n" + json.dumps({k: article.get(k) for k in ("title", "subtitle", "paragraphs")}, ensure_ascii=False, indent=1) +
+            "\n\n사진 후보(번호·종류·설명·출처):\n" + (images_block or "(없음)") +
+            '\n\nJSON: {"cover": {"title": "...\\n...", "sub": "...", "image_id": 0}, '
+            '"cards": [{"title": "...", "lines": ["...", "..."], "image_id": 0, "image_caption": ""}], "cta": "..."}')
+    return system, user
+
+
+def local_card_checks(p: Profile, plan: dict, n_paragraphs: int, n_images: int) -> list[str]:
+    problems = []
+    cards = plan.get("cards", [])
+    if len(cards) != n_paragraphs:
+        problems.append(f"카드 {len(cards)}장 — 문단 수({n_paragraphs})와 같아야 함")
+    for i, c in enumerate(cards, 1):
+        for ln in c.get("lines", []):
+            if len(ln) > 45:
+                problems.append(f"{i}번 카드 줄이 너무 김({len(ln)}자): {ln[:20]}…")
+        iid = int(c.get("image_id") or 0)
+        if iid < 0 or iid > n_images:
+            problems.append(f"{i}번 카드 image_id {iid} 가 후보 범위 밖")
+            c["image_id"] = 0
+    cid = int(plan.get("cover", {}).get("image_id") or 0)
+    if cid < 0 or cid > n_images:
+        plan["cover"]["image_id"] = 0
+    text = json.dumps(plan, ensure_ascii=False)
+    for b in p.banned:
+        if b and b in text:
+            problems.append(f"금지 표현 '{b}' 포함")
+    return problems
+
+
+def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_rounds: int = 2, progress=print) -> dict:
+    """기사 → 카드 계획(표지·카드별 요약·사진 번호). image_id 를 실제 후보(dict)로 바꿔 돌려준다."""
+    from insta_research import as_prompt
+
+    system, user = cards_prompt(p, article, as_prompt(images))
+    by_id = {c["id"]: c for c in images}
+    plan: dict = {}
+    feedback = ""
+    for round_no in range(1, max_rounds + 1):
+        prompt = user + (f"\n\n[지적 — 반영해서 다시]\n{feedback}" if feedback else "")
+        plan = llm.json(system=system, user=prompt, schema=CARDS_SCHEMA)
+        problems = local_card_checks(p, plan, len(article.get("paragraphs", [])), len(images))
+        progress(f"카드 계획 {round_no}차: " + ("OK" if not problems else "; ".join(problems)[:100]))
+        if not problems:
+            break
+        feedback = "; ".join(problems)
+    cover = plan.get("cover", {})
+    cover["image"] = by_id.get(int(cover.get("image_id") or 0))
+    for c in plan.get("cards", []):
+        c["image"] = by_id.get(int(c.get("image_id") or 0))
+    return plan

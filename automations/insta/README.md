@@ -4,18 +4,22 @@
 
 조사·설계: `docs/superpowers/specs/2026-09-11-인스타-게시글-자동화-research.md`
 
-## 흐름
+## 흐름 (사용자 결정 2026-09-11: 기사 먼저, 카드는 요약)
 
 | 단계(직원) | 파일 | 하는 일 | 품질 장치 |
 |---|---|---|---|
 | topic 소재 선정 | `insta_sources.py` | 프로필의 RSS 출처에서 72시간 내 글 수집, 이미 올린 소재 제외, 신호 단어로 정렬 → 편집장(모델)이 1건 선정 | 중복 제외(`data/insta/<계정>/posted.jsonl`), 광고·행사 제외 지시 |
-| write 글쓰기 | `insta_writer.py` | 프로필 규칙 + 참고 원고 + 소재 → 카드 원고 JSON | 스키마 검증, 금지어·출처 URL 코드 검사, 모델 심사(5항목 가중 점수) 미달 시 피드백 붙여 재생성(최대 2회), 그래도 미달이면 **보류**(억지로 안 올림) |
-| card 카드 제작 | `insta_cards.py` + `templates/*.html` | Jinja2 HTML → Playwright 스크린샷 1080×1350 JPEG | Pretendard 글꼴 동봉, 글자 넘침 자동 축소, 검토용 preview.jpg |
+| write 글쓰기 | `insta_research.py` → `insta_writer.py` | ① 소재 원문 + 원문이 가리키는 공식 링크 본문 읽기 ② 모델이 검색어 3개(한 2·영 1) → Bing 뉴스 RSS 로 **같은 주제의 기사·블로그** 6건 본문·사진 수집 ③ **기사 한 편** 작성: 어그로 제목(사실 안에서) + 부제 + 문단 6개 안팎, **문단 하나 = 소주제 하나, 3~4줄** ④ **글쓰기 전문가 검수**(가독성·흥미·사실·구조, 최대 50점) | 스키마·금지어·출처 URL·문단 길이 코드 검사. 사실 오류가 있으면 점수와 무관하게 반려. 반려되면 **이전 기사 + 지적을 주고 그 부분만 고쳐** 재검수(최대 3회). 통과했는데 손질 거리가 길면 1회 더 다듬기(점수 안 떨어질 때만 채택). 3회 안에 만족 못 해도 기준 점수(38)를 넘는 판이 있으면 채택하고 지적은 메모로. 결과는 `out/…/article.md` 로 사람이 읽을 수 있게 저장 |
+| card 카드 제작 | `insta_writer.plan_cards` → `insta_cards.py` + `templates/*.html` | 표지(제목·부제) + **문단마다 카드 1장**(핵심만 2~3줄로 요약, 토씨 다 옮기지 않음) + 마무리. 사진 후보(소재 원문·공식 링크·관련 기사의 사진, 공식 페이지 캡처)에 번호를 붙여 주고 모델이 소주제에 맞는 것을 고름 → Playwright 로 1080×1350 JPEG | Pretendard 글꼴, 어절 단위 줄바꿈, 글자·사진 넘침 자동 축소, 너무 작은 사진(폭 480 미만) 제외, 사진 아래 **출처 도메인 표기**, 검토용 preview.jpg |
 | upload 업로드 | `insta_publisher.py` | R2 에 올려 공개 URL → Instagram API 캐러셀 게시 → 게시 기록 커밋 | 컨테이너 상태 확인, 하루 100건 한도 |
+
+사진 출처에 대해: "조회수 높은 글의 사진" 은 공개 지표가 없어 고를 수 없다. 대신 **공식 출처(제품 페이지·공식 블로그) 사진을 앞에** 두고 관련 기사 사진은 뒤에 둔다. 언론사 사진은 저작권이 있을 수 있으니 카드에 출처를 찍고, 공식 사진이 있으면 그것을 우선 쓰게 프롬프트에 적혀 있다.
+
+중간 산출물(`out/<계정>/<날짜>/`): `topic.json`(소재·원문·관련 기사·검색어) → `article.json`·`article.md`(기사·검수) → `post1/plan.json`(카드 계획·사진) → `post1/NN.jpg`·`preview.jpg` → `cards.json`.
 
 ## 새 계정(주제) 붙이기
 
-1. `profiles/<주제>.yaml` 을 `aitips.yaml` 복사해 채운다: 독자·말투·형식·훅 패턴·금지어·출처·템플릿·채점 가중치. 참고 원고 `refs/<주제>.md` 도.
+1. `profiles/<주제>.yaml` 을 `aitips.yaml` 복사해 채운다: 독자·말투·형식·문단 수·제목 패턴·금지어·출처·템플릿·검수 가중치. 참고 원고 `refs/<주제>.md` 도.
 2. `config.actions.yaml` 의 `accounts` 에 항목 추가 (`profile`, `handle`, `dept`, `result_link`).
 3. `.github/workflows/insta.yml` 의 env 에 `INSTA_<계정대문자>_TOKEN`, `INSTA_<계정대문자>_USER_ID` 두 줄 추가, GitHub Secrets 에 값 등록.
 4. `app/workspaces/side.ts` 의 `AUTOMATIONS` 에 `{ id: "insta_<계정>", dept, workflow: "insta.yml", inputs: { account: "<계정>" }, tasks: [topic, write, card, upload] }`.
@@ -32,7 +36,9 @@
 python automations/insta/run_insta.py --account aitips --until card --resume --revise --feedback "5번 카드: 번호 목록으로. 코드 칸: 빈칸 대신 실제 예시 문장으로."
 ```
 
-자주 걸리는 지적은 코드 검사(`insta_writer.local_checks`)와 규칙(`_rules`)에 이미 들어 있다: 뉴스형 표지는 헤드라인, 제목이 'N가지' 면 본문은 번호 N줄, 예시 프롬프트 칸은 자리표시자 없는 완성 문장(카드에 "이렇게 입력해 보세요" 라벨이 붙는다).
+`--revise` 는 기사(article.json)를 다시 쓴다 — 이전 기사와 지적을 같이 주므로 지적 없는 문단은 그대로 남는다. 카드 요약·사진만 다시 고르려면 `out/…/cards.json` 만 지우고 `--resume` 으로 돌린다.
+
+자주 걸리는 지적은 코드 검사(`insta_writer.local_checks`)와 규칙(`_article_rules`)에 이미 들어 있다: 문단 길이(90~200자), 금지어, 출처 URL, 문단 수.
 
 ## 카드 렌더링 함정 (겪은 것)
 

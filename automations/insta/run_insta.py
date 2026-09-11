@@ -1,9 +1,9 @@
-"""인스타그램 게시글 자동화 — 소재(topic) → 글(write) → 카드(card) → 업로드(upload).
+"""인스타그램 게시글 자동화 — 소재(topic) → 글(write: 조사·기사·검수) → 카드(card: 요약·사진·렌더) → 업로드(upload).
 
 사용:
   python run_insta.py --account aitips                  # 실제 실행 (게시 + 상태 파일 커밋·push)
   python run_insta.py --account aitips --dry-run        # 게시·보고 없이 카드까지만 만들어 out/ 에 저장
-  python run_insta.py --account aitips --until write    # 해당 단계까지만 (topic | write | card | upload)
+  python run_insta.py --account aitips --until write    # 해당 단계까지만 (topic | write | card | upload). write 뒤에 out/…/article.md 를 읽고 확인
   python run_insta.py --account aitips --resume         # out/<계정>/<날짜>/ 에 남은 중간 결과를 이어서
   옵션: --config 경로, --pick N (후보 N번을 강제로 고름), --date YYYY-MM-DD
 
@@ -26,6 +26,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from errors import to_korean  # noqa: E402
+import insta_research as research  # noqa: E402
 import insta_sources as sources  # noqa: E402
 import insta_writer as writer  # noqa: E402
 from insta_llm import LLM, LLMError  # noqa: E402
@@ -97,32 +98,70 @@ def step_topic(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, ar
 
 
 def step_write(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, out: Path, topic: dict, progress,
-               seed_feedback: str = "") -> dict:
+               seed_feedback: str = "", prev_article: dict | None = None) -> dict:
+    """조사(소재 원문 + 같은 주제 기사·블로그) → 기사 한 편 → 글쓰기 전문가 검수. out/article.json + article.md."""
     posts = []
     for cand in topic["chosen"]:
         if not cand.get("article"):
-            progress("원문 읽는 중")
-            cand["article"] = sources.fetch_article(cand["link"])
-            for link in cand["article"].get("links", [])[:2]:      # 공식 출처가 있으면 그 본문도 같이
+            progress("소재 원문 읽는 중")
+            art = sources.fetch_article(cand["link"])
+            art["link_articles"] = []
+            for link in art.get("links", [])[:2]:      # 공식 출처가 있으면 그 본문·사진도 같이
                 more = sources.fetch_article(link, max_chars=2500)
                 if more.get("text"):
-                    cand["article"]["text"] += f"\n\n[참고 링크 {link}]\n" + more["text"]
-            (out / "topic.json").write_text(json.dumps(topic, ensure_ascii=False, indent=1), encoding="utf-8")
-        post, verdict = writer.generate_post(llm, p, refs, cand, cand.get("angle", ""), seed_feedback=seed_feedback,
-                                             progress=progress)
-        posts.append({"candidate": cand, "post": post, "verdict": verdict, "provider": llm.last_provider})
+                    art["text"] += f"\n\n[참고 링크 {link}]\n" + more["text"]
+                    art["link_articles"].append({"link": link, "title": more.get("title", ""), "images": more.get("images", [])})
+            cand["article"] = art
+        if not cand.get("related"):
+            progress("같은 주제의 기사·블로그 찾는 중")
+            try:
+                qs, qu = writer.query_prompt(cand)
+                queries = llm.json(system=qs, user=qu, schema=writer.QUERY_SCHEMA)["queries"]
+            except LLMError:
+                queries = [cand["title"][:40]]
+            cand["queries"] = queries
+            cand["related"] = research.related_articles(queries, exclude={cand["link"]}, progress=progress)
+        (out / "topic.json").write_text(json.dumps(topic, ensure_ascii=False, indent=1), encoding="utf-8")
+        block = research.research_prompt_block(cand["related"])
+        article, verdict = writer.generate_article(llm, p, refs, cand, block, seed_feedback=seed_feedback,
+                                                   prev_article=prev_article, progress=progress)
+        posts.append({"candidate": {k: v for k, v in cand.items() if k not in ("article", "related")},
+                      "article": article, "verdict": verdict, "provider": llm.last_provider})
     data = {"posts": posts}
-    (out / "post.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    (out / "article.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    (out / "article.md").write_text("\n\n---\n\n".join(article_markdown(x) for x in posts), encoding="utf-8")
     return data
 
 
-def step_card(cfg: dict, acct: dict, p: writer.Profile, out: Path, written: dict, progress) -> dict:
+def article_markdown(item: dict) -> str:
+    """사람이 읽고 확인할 기사 본문(마크다운)."""
+    a, v = item["article"], item.get("verdict", {})
+    lines = [f"# {a['title']}", f"_{a.get('subtitle', '')}_", ""]
+    for i, para in enumerate(a.get("paragraphs", []), 1):
+        lines += [f"## {i}. {para.get('heading', '')}", para.get("text", ""), ""]
+    lines += ["---", "**캡션**", a.get("caption", ""), " ".join(a.get("hashtags", [])), "",
+              f"**검수** {v.get('total')}점 · {v.get('verdict')} — {v.get('feedback', '')}"]
+    if v.get("better_titles"):
+        lines.append("제목 대안: " + " / ".join(v["better_titles"]))
+    lines += ["", "**출처**"] + [f"- {c.get('text')} — {c.get('source')}" for c in a.get("claims", [])]
+    return "\n".join(lines)
+
+
+def step_card(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, written: dict, progress) -> dict:
+    """기사 → 카드 계획(문단마다 한 장으로 요약 + 사진 번호) → 렌더."""
     import insta_cards as cards
 
+    topic = json.loads((out / "topic.json").read_text(encoding="utf-8"))
     result = []
     for i, item in enumerate(written["posts"], 1):
+        cand = next((c for c in topic["chosen"] if c["key"] == item["candidate"]["key"]), topic["chosen"][0])
+        images = research.image_candidates(cand.get("article") or {}, cand.get("related") or [], main_url=cand["link"])
+        progress(f"사진 후보 {len(images)}장")
+        plan = writer.plan_cards(llm, p, item["article"], images, progress=progress)
         d = out / f"post{i}"
-        paths = cards.render_cards(item["post"], d, template=p.template, theme=p.theme,
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "plan.json").write_text(json.dumps(plan, ensure_ascii=False, indent=1), encoding="utf-8")
+        paths = cards.render_cards(plan, d, template=p.template, theme=p.theme,
                                    handle=acct.get("handle") or p.handle, progress=progress)
         preview = cards.preview_strip(paths, d / "preview.jpg")
         result.append({"dir": str(d), "files": [str(x) for x in paths], "preview": str(preview)})
@@ -138,14 +177,14 @@ def step_upload(cfg: dict, acct: dict, out: Path, written: dict, rendered: dict,
     today = args.date or datetime.now(KST).strftime("%Y-%m-%d")
     results = []
     for item, card in zip(written["posts"], rendered["cards"]):
-        post = item["post"]
+        post = item["article"]
         stamp = datetime.now(KST).strftime("%H%M%S")
         urls = pub.upload_public([Path(x) for x in card["files"]], f"insta/{args.account}/{today}-{stamp}")
         progress(f"이미지 {len(urls)}장 공개 URL 준비")
         caption = post["caption"].rstrip() + "\n\n" + " ".join(post["hashtags"])
         res = pub.publish_carousel(ig, urls, caption, post.get("alt_text", ""), progress=progress)
         row = {"date": today, "account": args.account, "key": item["candidate"]["key"],
-               "title": item["candidate"]["title"], "hook": post["hook"], "media_id": res["media_id"],
+               "title": item["candidate"]["title"], "hook": post["title"], "media_id": res["media_id"],
                "permalink": res["permalink"], "image_urls": urls, "provider": item.get("provider", "")}
         append_posted(args.account, row)
         results.append(row)
@@ -190,36 +229,35 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         return _partial(tasks, lines, len(load_posted(args.account)))
 
     progress("글 쓰는 중")
-    written = None if args.revise else cached("post")
+    written = None if args.revise else cached("article")
     if written is None:
         seed = ""
-        prev = out / "post.json"
-        if args.revise and prev.exists():        # 다듬기: 이전 원고를 주고 지적된 부분만 고치게 한다
+        prev_article = None
+        prev = out / "article.json"
+        if args.revise and prev.exists():        # 다듬기: 이전 기사를 주고 지적된 부분만 고치게 한다
             try:
                 prev_post = json.loads(prev.read_text(encoding="utf-8"))["posts"][0]
                 seed = str(prev_post["verdict"].get("feedback", ""))
-                keep = {k: prev_post["post"].get(k) for k in ("hook", "sub", "cover_image", "slides", "caption", "hashtags")}
-                seed += ("\n[이전 원고 — 아래 지적과 관계없는 부분(표지 헤드라인·카드 순서·이미지 등)은 그대로 유지하고, 지적된 부분만 고친다]\n"
-                         + json.dumps(keep, ensure_ascii=False))
+                prev_article = prev_post["article"]
             except (KeyError, IndexError, ValueError):
                 seed = ""
         if args.feedback:                        # 사용자가 카드를 보고 직접 준 지적
             seed = (seed + "\n" if seed else "") + "[사용자 지적 — 반드시 반영]\n" + args.feedback
         for stale in ("cards.json",):
             (out / stale).unlink(missing_ok=True)
-        written = step_write(cfg, acct, p, refs, llm, out, topic, progress, seed_feedback=seed)
+        written = step_write(cfg, acct, p, refs, llm, out, topic, progress, seed_feedback=seed, prev_article=prev_article)
     v = written["posts"][0]["verdict"]
     ok_write = v.get("verdict") == "pass"
-    tasks["write"] = (ok_write, f"심사 {v.get('total')}점 ({written['posts'][0].get('provider', '')})")
-    lines.append(f"[원고] {written['posts'][0]['post']['hook']} · 심사 {v.get('total')}점")
+    tasks["write"] = (ok_write, f"검수 {v.get('total')}점 ({written['posts'][0].get('provider', '')})")
+    lines.append(f"[기사] {written['posts'][0]['article']['title']} · 검수 {v.get('total')}점 · {out / 'article.md'}")
     if not ok_write:
-        lines.append(f"[보류] 심사 미달: {str(v.get('feedback', ''))[:120]}")
+        lines.append(f"[보류] 검수 미달: {str(v.get('feedback', ''))[:120]}")
         return {"counts": {"new": 0, "failed": 1, "total": len(load_posted(args.account))}, "lines": lines, "tasks": tasks}
     if until < 2:
         return _partial(tasks, lines, len(load_posted(args.account)))
 
     progress("카드 만드는 중")
-    rendered = cached("cards") or step_card(cfg, acct, p, out, written, progress)
+    rendered = cached("cards") or step_card(cfg, acct, p, llm, out, written, progress)
     if "cards" not in rendered:
         rendered = {"cards": rendered}
     tasks["card"] = (True, f"카드 {len(rendered['cards'][0]['files'])}장")
@@ -249,7 +287,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--until", choices=STEPS, default="", help="이 단계까지만 실행")
     p.add_argument("--resume", action="store_true", help="out/ 의 중간 결과를 이어서")
     p.add_argument("--pick", type=int, default=0, help="후보 N번을 강제 선택")
-    p.add_argument("--revise", action="store_true", help="지난 심사 피드백을 반영해 원고를 다시 쓴다(--resume 과 함께)")
+    p.add_argument("--revise", action="store_true", help="지난 검수 지적을 반영해 기사를 다시 쓴다(--resume 과 함께)")
     p.add_argument("--feedback", default="", help="다듬기에 넣을 사용자 지적(--revise 와 함께). 줄바꿈 가능")
     p.add_argument("--date", default="", help="출력 폴더 날짜 (기본 오늘)")
     a = p.parse_args(argv)

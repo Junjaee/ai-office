@@ -1,4 +1,4 @@
-"""카드 제작 — 원고(JSON) + HTML 템플릿 → 1080×1350 JPEG 여러 장 (Playwright).
+"""카드 제작 — 카드 계획(JSON: 표지·카드별 요약·사진) + HTML 템플릿 → 1080×1350 JPEG 여러 장 (Playwright).
 
 템플릿은 templates/<이름>.html (Jinja2). 색·글꼴 같은 겉모습은 프로필의 theme 값으로 넘긴다.
 이 PC 에서는 설치된 Chrome 을, GitHub 서버에서는 Playwright 가 받은 Chromium 을 쓴다.
@@ -14,6 +14,7 @@ HERE = Path(__file__).resolve().parent
 TEMPLATES = HERE / "templates"
 FONT = HERE / "fonts" / "PretendardVariable.woff2"
 WIDTH, HEIGHT = 1080, 1350
+MIN_IMAGE_WIDTH = 480      # 이보다 좁은 사진은 카드에 넣지 않는다
 
 DEFAULT_THEME = {
     "bg": "#15171c", "fg": "#f5f6f8", "muted": "#9aa3b2", "accent": "#f2b544", "card": "#1f2229",
@@ -21,18 +22,30 @@ DEFAULT_THEME = {
 }
 
 
-def build_slides(post: dict, handle: str) -> list[dict]:
-    """원고 → 슬라이드 목록 (표지, 본문 n, 마무리). image 는 준비된 로컬 파일 경로로 바뀐다."""
-    body = post.get("slides", [])
+def build_slides(plan: dict, handle: str) -> list[dict]:
+    """카드 계획(표지·카드·cta) → 슬라이드 목록. image 는 후보 dict(url·source_url…) 그대로 두고 렌더 때 파일로 바꾼다."""
+    body = plan.get("cards", [])
     total = len(body) + 2
-    slides = [{"kind": "cover", "hook": post["hook"], "sub": post.get("sub", ""), "n": 1, "total": total, "handle": handle,
-               "image": post.get("cover_image", "")}]
-    for i, s in enumerate(body, start=2):
-        slides.append({"kind": "body", "title": s.get("title", ""), "body": s.get("body", ""),
-                       "code": s.get("code", ""), "image": s.get("image", ""), "image_caption": s.get("image_caption", ""),
+    cover = plan.get("cover", {})
+    slides = [{"kind": "cover", "title": cover.get("title", ""), "sub": cover.get("sub", ""), "n": 1, "total": total,
+               "handle": handle, "image": cover.get("image") or None, "image_caption": ""}]
+    for i, c in enumerate(body, start=2):
+        slides.append({"kind": "body", "title": c.get("title", ""), "lines": list(c.get("lines", [])),
+                       "image": c.get("image") or None, "image_caption": c.get("image_caption", ""),
                        "n": i, "total": total, "handle": handle, "idx": i - 1})
-    slides.append({"kind": "cta", "cta": post.get("cta", ""), "hook": post["hook"], "n": total, "total": total, "handle": handle})
+    slides.append({"kind": "cta", "cta": plan.get("cta", ""), "title": cover.get("title", ""), "n": total, "total": total,
+                   "handle": handle, "image": None})
     return slides
+
+
+def credit_of(image: dict | None) -> str:
+    """사진 출처 표시 문구: '사진: 출처 도메인' (공식 페이지 캡처면 '화면: 도메인')."""
+    if not image:
+        return ""
+    import re
+
+    host = re.sub(r"^https?://(www\.)?", "", str(image.get("source_url") or image.get("url") or "")).split("/")[0]
+    return ("화면: " if image.get("kind") == "screenshot" else "사진: ") + host
 
 
 def data_uri(path: Path | str) -> str:
@@ -59,26 +72,32 @@ def render_html(template: str, slide: dict, theme: dict | None = None) -> str:
     t = env.get_template(f"{template}.html")
     th = {**DEFAULT_THEME, **(theme or {})}
     view = dict(slide)
-    img = view.get("image") or ""
-    if img and not img.startswith(("data:", "http")):
-        view["image"] = data_uri(img) if Path(img).exists() else ""
+    img = view.get("image")
+    view["credit"] = view.get("credit") or (credit_of(img) if isinstance(img, dict) else "")
+    path = view.get("image_path") or (img if isinstance(img, str) else "")
+    view["image"] = data_uri(path) if path and Path(path).exists() else ""
     return t.render(slide=view, theme=th, font_url=_FONT_URI, width=WIDTH, height=HEIGHT)
 
 
-def render_cards(post: dict, out_dir: Path, *, template: str, theme: dict | None, handle: str,
+def render_cards(plan: dict, out_dir: Path, *, template: str, theme: dict | None, handle: str,
                  progress=print) -> list[Path]:
     """슬라이드마다 JPEG 를 만든다. 반환: 파일 경로 목록(순서대로)."""
     from playwright.sync_api import sync_playwright
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    slides = build_slides(post, handle)
+    slides = build_slides(plan, handle)
     paths: list[Path] = []
     with sync_playwright() as pw:
         browser = _launch(pw)
         media_dir = out_dir / "media"
         for slide in slides:
-            if slide.get("image"):
-                slide["image"] = prepare_image(browser, slide["image"], media_dir, f"{slide['n']:02d}", progress)
+            img = slide.get("image")
+            if img:
+                ref = img["url"] if isinstance(img, dict) else str(img)
+                slide["credit"] = credit_of(img) if isinstance(img, dict) else ""
+                slide["image_path"] = prepare_image(browser, ref, media_dir, f"{slide['n']:02d}", progress)
+                if not slide["image_path"]:
+                    slide["image"] = None
         page = browser.new_page(viewport={"width": WIDTH, "height": HEIGHT}, device_scale_factor=1)
         for slide in slides:
             html = render_html(template, slide, theme)
@@ -118,7 +137,20 @@ def prepare_image(browser, ref: str, media_dir: Path, stem: str, progress=print)
         ext = ".png" if "png" in r.headers.get("content-type", "") else ".jpg"
         path = media_dir / f"{stem}{ext}"
         path.write_bytes(r.content)
-        progress(f"이미지 받음 {ref[:60]}")
+        from PIL import Image
+
+        with Image.open(path) as im:
+            w, h = im.size
+            if w < MIN_IMAGE_WIDTH or h < 240:
+                path.unlink(missing_ok=True)
+                progress(f"이미지가 작아 제외({w}×{h}) {ref[:50]}")
+                return ""
+            if im.mode not in ("RGB", "L"):        # PNG 투명·팔레트 → JPEG 로 정리
+                im.convert("RGB").save(path.with_suffix(".jpg"), quality=90)
+                if path.suffix != ".jpg":
+                    path.unlink(missing_ok=True)
+                path = path.with_suffix(".jpg")
+        progress(f"이미지 받음 {w}×{h} {ref[:50]}")
         return str(path.resolve())
     except Exception as exc:  # noqa: BLE001
         progress(f"이미지 실패({type(exc).__name__}) — 글만 있는 카드로")

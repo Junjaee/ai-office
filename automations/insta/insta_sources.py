@@ -125,8 +125,26 @@ def as_prompt_rows(cands: list[Candidate], limit: int) -> str:
     return "\n".join(rows)
 
 
+def _main_block(soup):
+    """본문 영역 고르기: <article>/<main> 에 글이 충분하면 그것, 아니면 <p> 글자 수가 가장 많은 div/section."""
+    def plen(el) -> int:
+        return sum(len(x.get_text(" ", strip=True)) for x in el.find_all("p"))
+
+    for tag in ("article", "main"):
+        el = soup.find(tag)
+        if el is not None and plen(el) >= 300:
+            return el
+    best, best_len = None, 0
+    for el in soup.find_all(["article", "main", "section", "div"]):
+        n = plen(el)
+        # 자식에 같은 글이 들어 있으면 더 안쪽(작은) 요소를 고른다
+        if n > best_len * 1.15 or (best is None and n > 0):
+            best, best_len = el, n
+    return best if best is not None and best_len >= 200 else (soup.body or soup)
+
+
 def fetch_article(url: str, *, timeout: int = 30, max_chars: int = 3500) -> dict:
-    """소재 원문을 읽어 본문 텍스트와 본문 안의 바깥 링크를 돌려준다(글쓰기 근거용). 실패하면 빈 값."""
+    """소재 원문을 읽어 제목·본문 텍스트·바깥 링크·이미지[{url, alt}] 를 돌려준다(글쓰기 근거·사진 후보용). 실패하면 빈 값."""
     try:
         from bs4 import BeautifulSoup
 
@@ -135,7 +153,7 @@ def fetch_article(url: str, *, timeout: int = 30, max_chars: int = 3500) -> dict
         soup = BeautifulSoup(r.text, "lxml")
         for t in soup(["script", "style", "nav", "header", "footer", "noscript"]):
             t.decompose()
-        main = soup.find("article") or soup.find("main") or soup.body or soup
+        main = _main_block(soup)
         text = re.sub(r"\s+", " ", main.get_text(" ")).strip()
         host = re.sub(r"^https?://(www\.)?", "", url).split("/")[0]
         links = []
@@ -144,20 +162,25 @@ def fetch_article(url: str, *, timeout: int = 30, max_chars: int = 3500) -> dict
             if h.startswith("http") and host not in h and not re.search(r"(twitter|x\.com|facebook|instagram|reddit\.com/r/|login|signup)", h):
                 if h not in links:
                     links.append(h)
-        images = []
+        ogt = soup.find("meta", property="og:title")
+        title = (ogt["content"] if ogt and ogt.get("content") else (soup.title.get_text() if soup.title else "")).strip()
+        images: list[dict] = []
         og = soup.find("meta", property="og:image")
         if og and og.get("content", "").startswith("http"):
-            images.append(og["content"])
+            images.append({"url": og["content"], "alt": "대표 이미지"})
         for im in main.find_all("img"):
             src = im.get("src") or im.get("data-src") or ""
-            if not src.startswith("http") or src in images:
+            if not src.startswith("http") or src in [i["url"] for i in images]:
                 continue
-            if re.search(r"(logo|icon|avatar|badge|sprite|1x1|pixel|emoji)", src, re.I):
+            if re.search(r"(logo|icon|avatar|badge|sprite|1x1|pixel|emoji|\.svg($|\?))", src, re.I):
                 continue
             w = im.get("width")
             if w and str(w).isdigit() and int(w) < 300:
                 continue
-            images.append(src)
-        return {"text": text[:max_chars], "links": links[:8], "images": images[:8]}
+            alt = (im.get("alt") or "").strip()
+            fig = im.find_parent("figure")
+            cap = fig.find("figcaption").get_text(" ", strip=True) if fig and fig.find("figcaption") else ""
+            images.append({"url": src, "alt": (cap or alt)[:120]})
+        return {"title": title[:120], "text": text[:max_chars], "links": links[:8], "images": images[:8]}
     except Exception as exc:  # noqa: BLE001
-        return {"text": "", "links": [], "images": [], "error": f"{type(exc).__name__}: {str(exc)[:80]}"}
+        return {"title": "", "text": "", "links": [], "images": [], "error": f"{type(exc).__name__}: {str(exc)[:80]}"}
