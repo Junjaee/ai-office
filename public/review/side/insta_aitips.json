@@ -726,6 +726,18 @@
    "added_at": "2026-09-12T01:14:05+09:00",
    "error": "검수 미달 31점",
    "finished_at": "2026-09-12T01:18:19+09:00"
+  },
+  {
+   "id": "10a77f0e",
+   "key": "https://www.youtube.com/shorts/4bgb2oju5ta",
+   "title": "GPT-6 Astra handles the editing busywork",
+   "link": "https://www.youtube.com/shorts/4bGb2OjU5tA",
+   "source": "OpenAI 유튜브",
+   "summary": "",
+   "angle": "데모 영상을 근거로 어떤 잡무를 얼마나 줄여주는지 구체적으로 소개",
+   "due": "2026-09-12T01:21:29+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T01:21:29+09:00"
   }
  ],
  "interval_hours": 24.0
