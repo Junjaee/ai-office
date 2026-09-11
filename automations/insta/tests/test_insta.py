@@ -177,9 +177,26 @@ def test_image_candidates_order_and_numbering():
             "link_articles": [{"link": "https://official/x", "title": "공식", "images": [{"url": "https://o/1.jpg", "alt": "o"}]}]}
     related = [{"link": "https://news/1", "title": "기사", "images": [{"url": "https://n/1.jpg", "alt": "n"}, {"url": "https://a/1.jpg", "alt": "dup"}]}]
     c = research.image_candidates(main, related, main_url="https://src/a")
-    assert [x["id"] for x in c] == [1, 2, 3, 4]
-    assert [x["kind"] for x in c] == ["official", "official", "related", "screenshot"]
-    assert c[3]["url"] == "screenshot:https://official/x"
+    assert [x["id"] for x in c] == [1, 2, 3, 4, 5]
+    assert [x["kind"] for x in c] == ["official", "official", "related", "screenshot", "screenshot"]
+    assert c[3]["url"] == "screenshot:https://official/x" and c[4]["url"] == "screenshot:https://src/a"
+
+
+def test_plan_cards_falls_back_to_screenshot_cover_when_no_image_picked():
+    p = profile()
+    images = [{"id": 1, "url": "screenshot:https://src/a", "alt": "캡처", "source_url": "https://src/a",
+               "source_title": "원문", "kind": "screenshot"}]
+    plan_json = {"cover": {"title": "제목", "sub": "s", "image_id": 0},
+                 "cards": [{"image_id": 0} for _ in range(6)], "cta": "저장"}
+
+    class Fake:
+        last_provider = "fake"
+
+        def json(self, *, system, user, schema=None):
+            return plan_json
+
+    plan = writer.plan_cards(Fake(), p, sample_article(), images, progress=lambda m: None)
+    assert plan["cover"]["image"]["kind"] == "screenshot"
 
 
 def test_publish_carousel_flow_with_fake_session():

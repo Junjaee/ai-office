@@ -115,6 +115,8 @@ def image_candidates(main: dict, related: list[dict], *, main_url: str = "", max
             add(im["url"], im.get("alt", ""), art["link"], art.get("title", ""), "related")
     for link in (main.get("links") or [])[:2]:
         add(f"screenshot:{link}", "공식 페이지 화면 캡처", link, "공식 페이지", "screenshot")
+    if main_url:
+        add(f"screenshot:{main_url}", "소재 원문 페이지 화면 캡처", main_url, main.get("title", "소재 원문"), "screenshot")
     return cands
 
 

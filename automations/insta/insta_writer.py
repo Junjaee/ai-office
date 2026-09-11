@@ -113,6 +113,8 @@ def pick_prompt(p: Profile, rows: str, n: int) -> tuple[str, str]:
     system = (f"당신은 인스타그램 정보 계정 '{p.name}'의 편집장입니다. 독자: {p.audience}\n"
               "후보 목록에서 오늘 게시할 소재를 고릅니다. 선정 기준: 독자가 바로 써먹을 수 있는가, 저장하고 싶은가, 새로운가, "
               "기사 한 편(문단 5~7개)으로 풀 수 있는가. 광고·모금·행사 안내·기업 실적 뉴스는 제외.\n"
+              "**카드에 넣을 실제 화면·제품 사진을 구할 수 있는 소재를 우선**한다: 공식 블로그·제품 페이지·언론 기사가 있는 출시·업데이트 소식이 "
+              "커뮤니티 글(reddit 등)보다 우선. 커뮤니티 글은 공식 링크나 결과물 이미지가 딸려 있을 때만 고른다.\n"
               "도구를 쓰지 말고 JSON 객체 하나만 출력합니다.")
     user = (f"후보:\n{rows}\n\n"
             f"가장 좋은 {n}개를 고르고 각각 index(후보 번호), reason(선정 이유 한 줄), angle(기사로 풀 때의 각도 한 줄)을 적으세요.\n"
@@ -138,6 +140,7 @@ def _article_rules(p: Profile) -> str:
         f"- 말투: {p.tone}",
         "- 결과물은 인스타그램 카드뉴스의 바탕이 되는 **기사 한 편**이다. 카드 문구가 아니라 완결된 글로 쓴다.",
         f"- 제목(title): 스크롤을 멈추게 하는 제목. 다만 사실을 벗어난 낚시는 금지. 패턴 예: {' / '.join(pats)}. 20자 안팎.",
+        "- 본문에 인상적인 **숫자·대비**(예: 22초 vs 177초, 8배, 무료, 하루 100장)가 있으면 제목이나 부제에 반드시 끌어온다. '완결편'·'총정리' 같은 밋밋한 말에만 기대지 않는다.",
         "- 부제(subtitle): 제목이 약속한 이득을 한 줄로.",
         f"- 문단(paragraphs) {p.paragraphs}개. **문단 하나 = 소주제 하나**. heading 은 그 소주제를 12자 안팎으로, text 는 3~4줄(90~200자) 완결된 문장.",
         "- 문단 순서: 독자가 궁금한 순서. 소식이면 '언제·누가·무엇 → 달라지는 점(장점) 여러 개 → 쓰는 법 → 받는 곳·조건' 순.",
@@ -355,6 +358,12 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
         feedback = "; ".join(problems)
     cover = plan.get("cover", {})
     cover["image"] = by_id.get(int(cover.get("image_id") or 0))
+    if not cover["image"]:
+        # 모델이 고른 사진이 없으면 원문·공식 페이지 캡처라도 표지에 넣는다 (글만 있는 표지는 스크롤을 못 세운다)
+        shot = next((c for c in images if c.get("kind") == "screenshot"), None)
+        if shot:
+            cover["image"] = shot
+            progress("표지 사진 없음 → 원문 페이지 캡처로 대체")
     paras = article.get("paragraphs", [])
     cards = plan.get("cards", [])
     # 본문은 기사 문단 그대로: 소제목 한 줄(줄바꿈 제거), 문장마다 한 줄
