@@ -50,6 +50,15 @@
   .body.has-image .lines { font-size: 34px; line-height: 1.45; }
   .body.has-image .lines li { margin-bottom: 8px; }
   .has-image .main { justify-content: flex-start; padding-top: 36px; }
+  /* 채팅 말풍선: 프롬프트 예시를 우리 그래픽으로 (남의 화면 캡처 대신) */
+  .chat { margin: 26px 0 0; display: flex; flex-direction: column; gap: 14px; }
+  .chat .who { font-size: 24px; color: {{ theme.muted }}; letter-spacing: .04em; }
+  .chat .bubble { align-self: flex-end; max-width: 92%; padding: 24px 30px; border-radius: 26px 26px 6px 26px; background: {{ theme.accent }}; color: {{ theme.bg }}; font-size: 34px; line-height: 1.45; font-weight: 600; }
+  .chat .reply { align-self: flex-start; max-width: 80%; padding: 18px 26px; border-radius: 26px 26px 26px 6px; background: rgba(255,255,255,.08); color: {{ theme.muted }}; font-size: 28px; }
+  .chat .reply i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: {{ theme.muted }}; margin-right: 8px; opacity: .7; }
+  .has-prompt .title { font-size: 60px; margin-bottom: 22px; }
+  .has-prompt .lines { font-size: 34px; line-height: 1.45; }
+  .has-prompt .lines li { margin-bottom: 8px; }
   .shot { margin: 28px 0 0; border-radius: 22px; overflow: hidden; border: 2px solid rgba(255,255,255,.12); background: #000; box-shadow: 0 24px 60px rgba(0,0,0,.45); flex: 0 0 auto; }
   .shot img { display: block; width: 100%; max-height: 440px; object-fit: cover; object-position: top; }
   .shot-cap { margin-top: 14px; font-size: 26px; color: {{ theme.muted }}; display: flex; justify-content: space-between; gap: 24px; }
@@ -77,7 +86,7 @@
   {% if slide.credit %}<div class="credit">{{ slide.credit }}</div>{% endif %}
 </div>
 {% else %}
-<div class="card {{ slide.kind }}{% if slide.image %} has-image{% endif %}">
+<div class="card {{ slide.kind }}{% if slide.image %} has-image{% endif %}{% if slide.prompt %} has-prompt{% endif %}">
   <div class="brand">{{ brand }}</div>
   <div class="pageno">{{ slide.n }} / {{ slide.total }}</div>
   {% if slide.kind == "body" %}<div class="wm">{{ "%02d" | format(slide.idx) }}</div>{% endif %}
@@ -90,6 +99,7 @@
       <div class="title kr balance" data-fit="40">{{ slide.title }}</div>
       {% if slide.keyword %}<div class="chip">{{ slide.keyword }}</div>{% endif %}
       <ul class="lines" data-fit="28">{% for ln in slide.lines_html %}<li class="kr pretty">{{ ln }}</li>{% endfor %}</ul>
+      {% if slide.prompt %}<div class="chat"><div class="who">💬 이렇게 입력해 보세요</div><div class="bubble kr" data-fit="24">{{ slide.prompt }}</div><div class="reply"><i></i><i></i><i></i> 답변 생성 중</div></div>{% endif %}
       {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div><div class="shot-cap"><span class="kr">{{ slide.image_caption }}</span><span class="credit">{{ slide.credit }}</span></div>{% endif %}
     {% else %}
       <div class="big kr balance" data-fit="48">{{ slide.cta }}</div>

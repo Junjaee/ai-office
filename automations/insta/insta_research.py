@@ -101,6 +101,18 @@ def is_social(url: str) -> bool:
     return bool(SOCIAL_RE.search(url or ""))
 
 
+# 페이지 캡처를 허용하는 공식 도메인(제품·회사 페이지). 언론사·블로그 페이지 캡처는 하지 않는다(쿠키 배너·광고·남의 편집물)
+OFFICIAL_DOMAINS = ("openai.com", "chatgpt.com", "google", "gemini.google", "anthropic.com", "claude.ai", "x.ai", "meta.ai",
+                    "ai.meta.com", "microsoft.com", "apple.com", "huggingface.co", "github.com", "notion.so", "adobe.com",
+                    "midjourney.com", "perplexity.ai", "mistral.ai", "deepseek.com", "runwayml.com", "elevenlabs.io",
+                    "canva.com", "figma.com", "naver.com", "kakao.com", "samsung.com", "lge.co.kr", "nvidia.com", "amazon.com")
+
+
+def is_official(url: str) -> bool:
+    host = re.sub(r"^https?://(www\.)?", "", url or "").split("/")[0].lower()
+    return any(host == d or host.endswith("." + d) for d in OFFICIAL_DOMAINS)
+
+
 def image_candidates(main: dict, related: list[dict], *, main_url: str = "", extra_links: list[str] | None = None,
                      max_items: int = 24) -> list[dict]:
     """카드에 넣을 사진 후보 목록(번호 붙음). 공식 출처 → 관련 기사 → 공식 페이지 캡처 순. 소셜 도메인은 뺀다.
@@ -114,6 +126,8 @@ def image_candidates(main: dict, related: list[dict], *, main_url: str = "", ext
         target = url[len("screenshot:"):] if url.startswith("screenshot:") else url
         if is_social(target) or is_social(source_url or ""):
             return
+        if url.startswith("screenshot:") and not is_official(target):
+            return                                   # 캡처는 공식 페이지만
         seen.add(url)
         cands.append({"id": len(cands) + 1, "url": url, "alt": (alt or "")[:80], "source_url": source_url,
                       "source_title": (source_title or "")[:60], "kind": kind})
@@ -147,7 +161,7 @@ def image_candidates(main: dict, related: list[dict], *, main_url: str = "", ext
 OPENVERSE = "https://api.openverse.org/v1/images/"
 
 
-def openverse_search(query: str, *, n: int = 3, min_width: int = 800, timeout: int = 20) -> list[dict]:
+def openverse_search(query: str, *, n: int = 3, min_width: int = 640, timeout: int = 20) -> list[dict]:
     """CC 라이선스 사진 검색(무료·키 없음). [{url, alt, source_url, source_title, kind:'cc', creator, license}]
     상업적 이용이 되는 라이선스만(cc0, by, by-sa, pdm). 실패하면 빈 목록."""
     if not query.strip():
@@ -163,14 +177,15 @@ def openverse_search(query: str, *, n: int = 3, min_width: int = 800, timeout: i
     for x in rows:
         if int(x.get("width") or 0) < min_width or not str(x.get("url", "")).startswith("http"):
             continue
-        lic = str(x.get("license", "")).upper()
+        raw = str(x.get("license", "")).lower()
+        lic = {"cc0": "CC0", "pdm": "Public Domain", "by": "CC BY", "by-sa": "CC BY-SA"}.get(raw, "CC " + raw.upper())
         creator = (x.get("creator") or "").strip()[:30]
+        w, h = int(x.get("width") or 0), int(x.get("height") or 1)
         out.append({"url": x["url"], "alt": (x.get("title") or "")[:80], "source_url": x.get("foreign_landing_url") or x["url"],
-                    "source_title": f"{creator} · CC {lic}" if creator else f"CC {lic}", "kind": "cc",
-                    "creator": creator, "license": lic})
-        if len(out) >= n:
-            break
-    return out
+                    "source_title": f"{creator} · {lic}" if creator else lic, "kind": "cc",
+                    "creator": creator, "license": lic, "landscape": w >= h})
+    out.sort(key=lambda c: not c["landscape"])          # 카드에는 가로 사진이 낫다
+    return out[:n]
 
 
 def as_prompt(images: list[dict]) -> str:

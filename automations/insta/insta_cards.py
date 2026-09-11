@@ -29,9 +29,10 @@ def build_slides(plan: dict, handle: str) -> list[dict]:
     cover = plan.get("cover", {})
     slides = [{"kind": "cover", "title": cover.get("title", ""), "sub": cover.get("sub", ""), "n": 1, "total": total,
                "handle": handle, "image": cover.get("image") or None, "image_caption": "",
-               "category": cover.get("category", "")}]
+               "category": cover.get("category", ""), "fallbacks": list(cover.get("fallbacks") or [])}]
     for i, c in enumerate(body, start=2):
         slides.append({"kind": "body", "title": c.get("title", ""), "lines": list(c.get("lines", [])),
+                       "prompt": c.get("prompt", ""),
                        "keyword": c.get("keyword", ""), "highlights": list(c.get("highlights") or []),
                        "image": c.get("image") or None, "image_caption": c.get("image_caption", ""),
                        "n": i, "total": total, "handle": handle, "idx": i - 1})
@@ -112,13 +113,15 @@ def render_cards(plan: dict, out_dir: Path, *, template: str, theme: dict | None
         browser = _launch(pw)
         media_dir = out_dir / "media"
         for slide in slides:
-            img = slide.get("image")
-            if img:
+            tries = [slide.get("image")] + (list(slide.get("fallbacks") or []) if slide["kind"] == "cover" else [])
+            slide["image"], slide["image_path"] = None, ""
+            for k, img in enumerate(x for x in tries if x):
                 ref = img["url"] if isinstance(img, dict) else str(img)
-                slide["credit"] = credit_of(img) if isinstance(img, dict) else ""
-                slide["image_path"] = prepare_image(browser, ref, media_dir, f"{slide['n']:02d}", progress)
-                if not slide["image_path"]:
-                    slide["image"] = None
+                path = prepare_image(browser, ref, media_dir, f"{slide['n']:02d}{'' if k == 0 else chr(96 + k)}", progress)
+                if path:
+                    slide["image"], slide["image_path"] = img, path
+                    slide["credit"] = credit_of(img) if isinstance(img, dict) else ""
+                    break
         page = browser.new_page(viewport={"width": WIDTH, "height": HEIGHT}, device_scale_factor=1)
         for slide in slides:
             html = render_html(template, slide, theme)
@@ -145,12 +148,21 @@ def prepare_image(browser, ref: str, media_dir: Path, stem: str, progress=print)
             url = ref[len("screenshot:"):].strip()
             pg = browser.new_page(viewport={"width": 1440, "height": 900}, device_scale_factor=1,
                                   locale="ko-KR")
-            pg.goto(url, wait_until="networkidle", timeout=45000)
+            try:
+                pg.goto(url, wait_until="domcontentloaded", timeout=40000)
+            except Exception:  # noqa: BLE001 — 무거운 페이지는 커밋 시점까지만 기다리고 캡처한다
+                pg.goto(url, wait_until="commit", timeout=40000)
+            pg.wait_for_timeout(2500)
             _dismiss_banners(pg)
             pg.wait_for_timeout(800)
+            blocked = _blocked_page(pg)
             path = media_dir / f"{stem}.png"
             pg.screenshot(path=str(path), full_page=False)
             pg.close()
+            if blocked or _is_blank(path):
+                path.unlink(missing_ok=True)
+                progress(f"캡처 제외({'봇 확인·차단 페이지' if blocked else '빈 화면'}) {url[:50]}")
+                return ""
             progress(f"화면 캡처 {url}")
             return str(path.resolve())
         r = requests.get(ref, headers={"User-Agent": "Mozilla/5.0 (ai-office-insta)"}, timeout=30)
@@ -166,6 +178,10 @@ def prepare_image(browser, ref: str, media_dir: Path, stem: str, progress=print)
                 path.unlink(missing_ok=True)
                 progress(f"이미지가 작아 제외({w}×{h}) {ref[:50]}")
                 return ""
+            if _is_blank_image(im):
+                path.unlink(missing_ok=True)
+                progress(f"이미지가 거의 비어 있어 제외 {ref[:50]}")
+                return ""
             if im.mode not in ("RGB", "L"):        # PNG 투명·팔레트 → JPEG 로 정리
                 im.convert("RGB").save(path.with_suffix(".jpg"), quality=90)
                 if path.suffix != ".jpg":
@@ -176,6 +192,38 @@ def prepare_image(browser, ref: str, media_dir: Path, stem: str, progress=print)
     except Exception as exc:  # noqa: BLE001
         progress(f"이미지 실패({type(exc).__name__}) — 글만 있는 카드로")
         return ""
+
+
+_BLOCK_RE = r"사람인지 확인|just a moment|verify you are human|are you a robot|access denied|attention required|captcha|cloudflare|enable javascript|403 forbidden|page not found|404"
+
+
+def _blocked_page(pg) -> bool:
+    """봇 확인·차단·오류 페이지인지 (제목 + 본문 앞부분으로 판단)."""
+    import re
+
+    try:
+        title = pg.title() or ""
+        body = pg.evaluate("() => (document.body && document.body.innerText || '').slice(0, 600)") or ""
+    except Exception:  # noqa: BLE001
+        return False
+    text = f"{title}\n{body}"
+    return bool(re.search(_BLOCK_RE, text, re.I)) and len(body) < 1200
+
+
+def _is_blank_image(im) -> bool:
+    """거의 단색(빈 페이지·흰 썸네일)인지: 회색조 표준편차가 작으면 빈 이미지로 본다."""
+    from PIL import ImageStat
+
+    g = im.convert("L")
+    g.thumbnail((256, 256))
+    return ImageStat.Stat(g).stddev[0] < 12
+
+
+def _is_blank(path: Path) -> bool:
+    from PIL import Image
+
+    with Image.open(path) as im:
+        return _is_blank_image(im)
 
 
 _BANNER_BUTTON = r"동의|확인|닫기|accept|agree|got it|ok\b|allow|dismiss|close"

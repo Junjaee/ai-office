@@ -153,8 +153,8 @@ def test_plan_cards_uses_paragraphs_verbatim_and_maps_images():
     art = sample_article()
     art["paragraphs"][0]["heading"] = "소주제\n둘째 줄"
     plan = writer.plan_cards(Fake(), p, art, images, progress=lambda m: None)
-    assert plan["cover"]["image"] is None, "표지: 고른 사진도 image_query 도 없으면 비움"
-    assert plan["cards"][0]["image"]["url"] == "https://img/1.jpg" and plan["cards"][1]["image"] is None
+    assert plan["cover"]["image"]["url"] == "https://img/1.jpg", "표지: 고른 사진 없으면 공식 사진이라도"
+    assert plan["cards"][0]["image"] is None and plan["cards"][1]["image"] is None, "표지에 쓴 사진은 카드에 다시 안 쓴다"
     assert plan["cards"][0]["title"] == "소주제 둘째 줄", "소제목은 한 줄"
     assert plan["cards"][0]["lines"][0].startswith("구글이 9월 10일") and len(plan["cards"][0]["lines"]) == 4, "문단을 문장 단위로 그대로"
     assert writer.split_sentences("gemini.google/desktop 에서 받아요. 1.5배 빨라요! 되나요? 네.") == \
@@ -187,22 +187,35 @@ def test_image_candidates_never_use_social_media_images():
     assert not any(research.is_social(u.replace("screenshot:", "")) for u in urls), urls
     assert "https://cdn.aitimes.com/1.jpg" in urls
     assert "screenshot:https://openai.com/chatgpt" in urls and "screenshot:https://help.openai.com/y" in urls
+    assert "screenshot:https://www.aitimes.com/news/1" not in urls, "언론사 페이지는 캡처하지 않는다"
     assert "screenshot:https://openai.com/index/x" not in urls, "출처 캡처는 도메인당 하나"
     assert research.credit_of if False else cards.credit_of({"kind": "cc", "source_title": "Jane · CC BY"}) == "사진: Jane · CC BY"
 
 
 def test_image_candidates_order_and_numbering():
-    main = {"title": "원문", "images": [{"url": "https://a/1.jpg", "alt": "a"}], "links": ["https://official/x"],
-            "link_articles": [{"link": "https://official/x", "title": "공식", "images": [{"url": "https://o/1.jpg", "alt": "o"}]}]}
+    main = {"title": "원문", "images": [{"url": "https://a/1.jpg", "alt": "a"}], "links": ["https://openai.com/x"],
+            "link_articles": [{"link": "https://openai.com/x", "title": "공식", "images": [{"url": "https://o/1.jpg", "alt": "o"}]}]}
     related = [{"link": "https://news/1", "title": "기사", "images": [{"url": "https://n/1.jpg", "alt": "n"}, {"url": "https://a/1.jpg", "alt": "dup"}]}]
-    c = research.image_candidates(main, related, main_url="https://src/a")
+    c = research.image_candidates(main, related, main_url="https://blog.google/a")
     assert [x["id"] for x in c] == [1, 2, 3, 4, 5]
     assert [x["kind"] for x in c] == ["official", "official", "related", "screenshot", "screenshot"]
-    assert c[3]["url"] == "screenshot:https://official/x" and c[4]["url"] == "screenshot:https://src/a"
+    assert c[3]["url"] == "screenshot:https://openai.com/x" and c[4]["url"] == "screenshot:https://blog.google/a"
+    assert research.image_candidates(main, [], main_url="https://www.pcworld.com/a")[-1]["url"] != "screenshot:https://www.pcworld.com/a", "언론사 원문은 캡처 안 함"
+
+
+def test_extract_prompt_and_chat_bubble():
+    assert writer.extract_prompt("이렇게 입력해 보세요. '표에 있는 사이트마다 삭제 요청문을 써서 제출해 줘.' 에이전트는 허락을 구해요.") == "표에 있는 사이트마다 삭제 요청문을 써서 제출해 줘."
+    assert writer.extract_prompt("‘옵터리(Optery)’ 같은 서비스도 있어요.") == "", "짧은 인용은 프롬프트가 아님"
+    plan = {"cover": {"title": "t", "sub": "s", "image": None},
+            "cards": [{"title": "c", "lines": ["a"], "prompt": "내 정보가 공개된 사이트를 표로 정리해 줘", "image": None}], "cta": "x"}
+    html = cards.render_html("dark_code", cards.build_slides(plan, "@a")[1], {"accent": "#fff"})
+    assert 'class="chat"' in html and "표로 정리해 줘" in html
+    assert writer.strip_prompt("이렇게 입력해 보세요. '사이트를 표로 정리해 줘.' 표가 나오면 표시해 두세요.", "사이트를 표로 정리해 줘.") == "이렇게 입력해 보세요. 표가 나오면 표시해 두세요."
+    assert research.is_official("https://help.openai.com/en/articles/1") and not research.is_official("https://www.pcworld.com/x")
 
 
 def test_plan_cards_uses_cc_photo_from_image_query_when_nothing_picked(monkeypatch):
-    p = profile()
+    p = profile(cc_photos=True)
     calls = []
 
     def fake_openverse(query, *, n=3, **kw):
@@ -218,10 +231,11 @@ def test_plan_cards_uses_cc_photo_from_image_query_when_nothing_picked(monkeypat
         last_provider = "fake"
 
         def json(self, *, system, user, schema=None):
-            return plan_json
+            return json.loads(json.dumps(plan_json))
 
     plan = writer.plan_cards(Fake(), p, sample_article(), [], progress=lambda m: None)
     assert plan["cover"]["image"]["kind"] == "cc" and plan["cover"]["image"]["url"].endswith("laptop_privacy.jpg")
+    assert writer.plan_cards(Fake(), profile(), sample_article(), [], progress=lambda m: None)["cover"]["image"] is None, "기본은 CC 검색 끔"
     assert [c["image"]["kind"] if c["image"] else None for c in plan["cards"]] == ["cc"] * 4 + [None, None], "앞 4장만 개념 사진"
     assert len(set(c["image"]["url"] for c in plan["cards"] if c["image"])) == 4, "같은 사진 반복 없음"
 

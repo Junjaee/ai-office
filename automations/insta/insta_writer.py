@@ -103,6 +103,7 @@ class Profile:
     watch_accounts: list[str] | None = None   # 참고할 한국 AI 인스타 계정(프로페셔널) — 최근 게시물이 후보 앞자리
     source_caps: dict | None = None            # 출처별 후보 상한 {출처이름: N} (레딧처럼 시끄러운 곳 제한)
     title_patterns: list[str] | None = None
+    cc_photos: bool = False             # True 면 사진 없는 카드에 CC 사진(Openverse)을 검색해 넣는다 — 관련 없는 사진이 걸릴 수 있어 기본 끔
     slides: int = 0                     # (구버전 호환) 쓰지 않음
     hook_patterns: list[str] | None = None
     flow: dict | None = None
@@ -387,27 +388,35 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
     used: set[str] = set()
     if not cover["image"]:
         # 모델이 고른 사진이 없으면 CC 사진(image_query) → 공식 페이지 캡처 순으로 표지를 채운다 (글만 있는 표지는 스크롤을 못 세운다)
-        cc = cc_search(cover.get("image_query", ""), used)
         shot = next((c for c in images if c.get("kind") == "screenshot"), None)
-        cover["image"] = cc or shot
+        photo = next((c for c in images if c.get("kind") in ("official", "related")), None)
+        cc = cc_search(cover.get("image_query", ""), used) if p.cc_photos else None
+        cover["image"] = shot or photo or cc          # 공식 페이지 캡처 → 기사 사진 → (옵션) CC 개념 사진
         if cover["image"]:
-            progress("표지 사진 없음 → " + ("CC 사진" if cc else "공식 페이지 캡처") + "으로 대체")
+            progress("표지 사진 없음 → " + {"screenshot": "공식 페이지 캡처", "cc": "CC 사진"}.get(cover["image"].get("kind", ""), "기사 사진") + "으로 대체")
     if cover["image"]:
         used.add(cover["image"]["url"])
+    # 표지 사진이 렌더 때 실패(차단·빈 화면)하면 쓸 예비 후보: 사진 → 다른 캡처 순
+    cover["fallbacks"] = [c for c in images if c.get("kind") in ("official", "related", "screenshot")
+                          and c is not cover["image"] and c["url"] not in used][:4]
     paras = article.get("paragraphs", [])
     cards = plan.get("cards", [])
     # 본문은 기사 문단 그대로: 소제목 한 줄(줄바꿈 제거), 문장마다 한 줄
     for i, para in enumerate(paras):
         c = cards[i] if i < len(cards) else {"image_id": 0, "image_caption": ""}
         c["title"] = " ".join(str(para.get("heading", "")).split())
-        c["lines"] = split_sentences(para.get("text", ""))
         text = str(para.get("text", ""))
+        c["prompt"] = extract_prompt(text)          # 따옴표 안 입력 문장 → 채팅 말풍선 그래픽 (우리 것)
+        body_text = strip_prompt(text, c["prompt"]) if c["prompt"] else text
+        c["lines"] = split_sentences(body_text)
         c["highlights"] = [h for h in (c.get("highlights") or []) if h and h in text][:3]
         c["keyword"] = " ".join(str(c.get("keyword") or "").split())[:24]
         c["image"] = by_id.get(int(c.get("image_id") or 0))
         if c["image"] and c["image"]["url"] in used:
             c["image"] = None                       # 같은 사진을 두 카드에 쓰지 않는다
-        if not c["image"] and i < 4:                # 앞쪽 카드 4장까지는 개념 사진(CC)으로 채운다
+        if c["prompt"]:
+            c["image"] = None                       # 말풍선이 있는 카드는 사진을 겹치지 않는다
+        if not c["image"] and not c["prompt"] and i < 4 and p.cc_photos:
             c["image"] = cc_search(c.get("image_query", ""), used)
             if c["image"]:
                 c["image_caption"] = c.get("image_caption") or c["image"].get("alt", "")
@@ -419,13 +428,30 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
     return plan
 
 
+def extract_prompt(text: str) -> str:
+    """문단 안 따옴표('…' / "…" / ‘…’ / “…”)로 감싼 입력 문장(15자 이상, 해 줘/해줘/해주세요 꼴)을 하나 꺼낸다. 없으면 빈 문자열."""
+    for m in re.finditer(r"[\'‘\"“]([^\'’\"”]{15,200})[\'’\"”]", text or ""):
+        cand = m.group(1).strip()
+        if re.search(r"(해\s?줘|해주세요|해 주세요|정리해|찾아|알려|보내|만들어|바꿔|써 줘|써줘)", cand):
+            return cand
+    return ""
+
+
+def strip_prompt(text: str, prompt: str) -> str:
+    """문단에서 따옴표로 감싼 프롬프트를 통째로 뺀다(말풍선으로 옮겼으니 본문에서 중복되지 않게)."""
+    out = re.sub(r"[\'‘\"“]\s*" + re.escape(prompt) + r"\s*[\'’\"”]\s*(라고|처럼|같이)?\s*", " ", text or "")
+    return re.sub(r"\s{2,}", " ", out).strip()
+
+
 def cc_search(query: str, used: set[str]) -> dict | None:
     """image_query 로 CC 사진을 찾아 아직 안 쓴 첫 장을 돌려준다. 검색 실패·없음이면 None."""
     from insta_research import openverse_search
 
-    if not (query or "").strip():
-        return None
-    for c in openverse_search(query, n=4):
-        if c["url"] not in used:
-            return c
+    words = (query or "").split()
+    # 검색어가 길면 결과가 0건이기 쉬우니 뒤에서부터 한 단어씩 줄여 가며 찾는다 (최소 2단어)
+    while len(words) >= 2:
+        for c in openverse_search(" ".join(words), n=6):
+            if c["url"] not in used:
+                return c
+        words = words[:-1]
     return None
