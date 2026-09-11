@@ -3,29 +3,33 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 확정본 교체 0건, 실패 0건, PDF없음 0건, 건너뜀 570건, 4.3분",
+  "summary": "신규 5건, 확정본 교체 0건, 실패 0건, PDF없음 0건, 건너뜀 575건, 5.4분",
   "counts": {
-    "new": 0,
+    "new": 5,
     "replaced": 0,
     "failed": 0,
-    "total": 5895
+    "total": 5900
   },
   "next_run": "매일 09:00 (GitHub Actions)",
   "log": [
-    "신규 0건, 확정본 교체 0건, 실패 0건, PDF없음 0건, 건너뜀 570건, 4.3분"
+    "신규 5건, 확정본 교체 0건, 실패 0건, PDF없음 0건, 건너뜀 575건, 5.4분",
+    "[신규] 제22대/국회본회의/제22대국회 제439회(정기회) 제4차 국회본회의(전체회의) (2026.09.08.).pdf",
+    "[신규] 제22대/상임위원회/산업통상자원중소벤처기업위원회/제22대국회 제439회(정기회) 제1차 산업통상자원중소벤처기업위원회(전체회의) (2026.09.08.).pdf",
+    "[신규] 제22대/예산결산특별위원회/제22대국회 제439회(정기회) 제4차 예산결산특별위원회(결산심사소위원회) (2026.09.08.).pdf",
+    "[신규] 제22대/상임위원회/정보위원회/제22대국회 제439회(정기회) 제2차 정보위원회(전체회의) (2026.09.03.).pdf"
   ],
   "link": "https://drive.google.com/drive/folders/10G_Rbp4a_P0UayGqAcTyQPyv6ohqOqpI",
-  "run_id": 34458225885,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34458225885",
-  "request_id": "req-20260910180014-6rgr",
+  "run_id": 34462349824,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34462349824",
+  "request_id": "req-20260910184455-ty1s",
   "trigger": "manual",
-  "started_at": "2026-09-10T18:00:54+09:00",
-  "duration_sec": 276,
+  "started_at": "2026-09-11T08:56:49+09:00",
+  "duration_sec": 344,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 0건"
+      "summary": "신규 5건"
     },
     {
       "id": "replace",
@@ -34,5 +38,5 @@
     }
   ],
   "id": "minutes",
-  "updated_at": "2026-09-10T18:05:32+09:00"
+  "updated_at": "2026-09-11T09:02:35+09:00"
 }
