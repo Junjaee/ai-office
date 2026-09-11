@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 13초",
+  "summary": "신규 7건, 실패 0건, 12초",
   "counts": {
-    "new": 15,
+    "new": 7,
     "failed": 0,
-    "total": 306
+    "total": 313
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 13초",
-    "[신규] 연천군-중소벤처기업진흥공단, 경기북부 그린바이오 산업 활성화 협력체계 구축 — 새한일보",
-    "[신규] 김현정 국회의원, 평택시학원연합회와 간담회 개최 — 시민행정신문",
-    "[신규] 여러 슬롯 중 구조를 비교해 보고 싶은 도박 합법인 이유 — Histoire pour tous",
-    "[신규] PC 확대 비율을 바꿀 때 확인할 도박 치료 후기 화면 — Histoire pour tous"
+    "신규 7건, 실패 0건, 12초",
+    "[신규] PC 브라우저에서 확인하는 토토사이트 순위 쇼미더벳 실행 정보 — Histoire pour tous",
+    "[신규] 이 대통령 지지율 38% ‘취임 후 최저’...용혜인 부적합 61%·김승원 43% [한국갤럽] — 시사타파NEWS",
+    "[신규] 넷플릭스 top 10 웹사이트 특수 심벌이 적용되지 않는 경우 — Histoire pour tous",
+    "[신규] 무작위 결과라는 표현을 이해하는 코인 푸시 게임 기초 해설 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34630752211,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34630752211",
+  "run_id": 34645277014,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34645277014",
   "trigger": "schedule",
-  "started_at": "2026-09-12T02:59:46+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-09-12T05:38:54+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 91건"
+      "summary": "검색어 5개에서 94건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 15건 (신규 15건) · Histoire pour tous 5건, 시민행정신문 4건, mt.co.kr 1건"
+      "summary": "오늘 22건 (신규 7건) · Histoire pour tous 9건, citizenadmnews.co.kr 4건, 시민행정신문 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-12T03:00:00+09:00"
+  "updated_at": "2026-09-12T05:39:07+09:00"
 }
