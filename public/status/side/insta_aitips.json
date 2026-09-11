@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "게시 0건, 실패 1건, 누적 3건, 5.6분",
+  "summary": "게시 0건, 실패 1건, 누적 3건, 7.1분",
   "counts": {
     "new": 0,
     "failed": 1,
@@ -11,23 +11,23 @@
   },
   "next_run": "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격",
   "log": [
-    "게시 0건, 실패 1건, 누적 3건, 5.6분",
+    "게시 0건, 실패 1건, 누적 3건, 7.1분",
     "[예약] 2건 · 12.0시간 간격",
-    "[기사] GPT-6 아스트라, 문서 편집 잡무 대신 해요 · 검수 34점",
-    "[보류] SNS 게시물은 출처로 쓸 수 없음 — 공식 페이지·기사 주소로: https://www.youtube.com/shorts/4bGb2OjU5tA / [사실 오류] '음성으로 쓰는 법"
+    "[기사] 오픈AI, 편집 잡무 절반으로 줄이는 데모 공개 · 검수 34점",
+    "[보류] ① [사실 오류 의심 - 4번째 문단 '다른 곳에서도 활용'] 제공된 출처(claims)에는 '아스트라가 참고 이미지를 분석해 부품 구성을 계획한다'는 내용만 있는데, 기사에는 '"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34618191299,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34618191299",
-  "request_id": "req-20260912004712-reel",
+  "run_id": 34618918297,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34618918297",
+  "request_id": "req-20260912005444-reel2",
   "trigger": "manual",
-  "started_at": "2026-09-12T00:48:09+09:00",
-  "duration_sec": 333,
+  "started_at": "2026-09-12T00:55:54+09:00",
+  "duration_sec": 423,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 9건 · 게시 4건"
+      "summary": "후보 20건 · 예약 10건 · 게시 4건"
     },
     {
       "id": "write",
@@ -46,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T00:53:43+09:00"
+  "updated_at": "2026-09-12T01:02:57+09:00"
 }
