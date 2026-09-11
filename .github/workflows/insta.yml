@@ -96,7 +96,7 @@ jobs:
         if: steps.mode.outputs.due == 'true'
         run: |
           python --version
-          ffmpeg -version | head -1
+          sudo apt-get install -y -qq ffmpeg >/dev/null 2>&1 && ffmpeg -version | head -1   # 릴스 변환용 (실행기 기본 이미지에 없음)
           python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
           python -m playwright install --with-deps chromium
           npm install -g @anthropic-ai/claude-code
