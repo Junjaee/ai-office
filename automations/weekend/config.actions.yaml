@@ -5,6 +5,10 @@
 calendar_id: "1cad154d55cbc50b2d6f7205d0e583e845c725d89a89177461c814662e6815c2@group.calendar.google.com"
 calendar_name: "530호 일정"   # 메시지 첫 줄에 보일 이름
 
+# 받는 분에게는 누구와 무엇을 하는지 빼고 일정 종류만 보낸다("등산 일정", "저녁 식사 일정" …).
+# 단 제목·장소에 아래 단어가 들어간 일정은 그대로 보여 준다 (사용자 결정 2026-09-11: 동탄 관련은 공개)
+reveal_keywords: ["동탄"]
+
 retries: 3     # 텔레그램 전송 재시도
 timeout: 30
 

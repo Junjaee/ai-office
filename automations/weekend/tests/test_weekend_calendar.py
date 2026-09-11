@@ -4,7 +4,7 @@ from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from weekend_calendar import Event, build_message, to_events, upcoming_weekend  # noqa: E402
+from weekend_calendar import Event, build_message, describe, to_events, upcoming_weekend  # noqa: E402
 
 SAT, SUN = date(2026, 9, 12), date(2026, 9, 13)
 
@@ -71,3 +71,42 @@ def test_build_message_is_cut_to_telegram_limit():
     text = build_message("530호 일정", (SAT, SUN), ev)
     assert len(text) <= 4096
     assert text.endswith("… 너무 길어 일부만 보냈어요")
+
+
+# ── 받는 분에게는 종류만 (사용자 결정 2026-09-11: 누구와 무엇을 하는지 빼고, 동탄 관련은 그대로) ──
+
+def test_masked_message_shows_only_kind_except_dongtan():
+    ev = [
+        Event(SAT, "09:00", "10:00", "화성특례시 호남향우회 한마음 대축제", "화성시민대학"),
+        Event(SAT, "16:00", "17:00", "동탄맨 콘텐츠 촬영", ""),
+        Event(SAT, "19:00", "21:00", "홍길동 대표 만찬", "여의도 식당"),
+        Event(SUN, "종일", "", "개인 용무", ""),
+        Event(SUN, "09:30", "10:30", "박창훈 회장 청계산 등산", ""),
+        Event(SUN, "12:00", "13:00", "주민 간담회", "동탄복합문화센터"),
+        Event(SUN, "15:00", "16:00", "김철수 미팅", ""),
+    ]
+    text = build_message("530호 일정", (SAT, SUN), ev, reveal_keywords=["동탄"])
+    assert text.splitlines()[2:] == [
+        "■ 9월 12일 (토)",
+        "· 09:00~10:00  행사 일정",
+        "· 16:00~17:00  동탄맨 콘텐츠 촬영",
+        "· 19:00~21:00  저녁 식사 일정",
+        "",
+        "■ 9월 13일 (일)",
+        "· 종일  기타 일정",
+        "· 09:30~10:30  등산 일정",
+        "· 12:00~13:00  주민 간담회 @ 동탄복합문화센터",
+        "· 15:00~16:00  회의 일정",
+    ]
+    for hidden in ("박창훈", "홍길동", "김철수", "호남향우회", "화성시민대학", "여의도"):
+        assert hidden not in text
+
+
+def test_describe_meal_by_time_unknown_and_reveal():
+    assert describe(Event(SAT, "12:00", "13:00", "OOO 의원 오찬", ""), ["동탄"]) == "점심 식사 일정"
+    assert describe(Event(SAT, "07:30", "08:30", "조찬 모임", ""), ["동탄"]) == "아침 식사 일정"
+    assert describe(Event(SAT, "종일", "", "가족 식사", ""), ["동탄"]) == "식사 일정"
+    assert describe(Event(SAT, "10:00", "11:00", "비밀 약속", "서울"), ["동탄"]) == "기타 일정"
+    assert describe(Event(SAT, "10:00", "11:00", "동탄 비밀 약속", "장소"), ["동탄"]) == "동탄 비밀 약속 @ 장소"
+    assert describe(Event(SAT, "10:00", "11:00", "비밀 약속", "서울"), None) == "비밀 약속 @ 서울"   # 가리지 않음
+    assert describe(Event(SAT, "10:00", "11:00", "비밀 약속", "서울"), []) == "기타 일정"            # 빈 목록 = 전부 가림

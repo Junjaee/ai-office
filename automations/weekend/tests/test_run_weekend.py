@@ -58,7 +58,8 @@ def test_dry_run_never_reports(cfg_file, reports):
 
 # ───────────────────────── do_work ─────────────────────────
 
-CFG = {"calendar_id": "cal@group.calendar.google.com", "calendar_name": "530호 일정", "tasks": ["fetch", "send"]}
+CFG = {"calendar_id": "cal@group.calendar.google.com", "calendar_name": "530호 일정", "tasks": ["fetch", "send"],
+       "reveal_keywords": ["동탄"]}
 ITEMS = [
     {"summary": "국회 행사", "start": {"dateTime": "2026-09-12T10:00:00+09:00"}, "end": {"dateTime": "2026-09-12T12:00:00+09:00"}},
     {"summary": "지역 방문", "start": {"date": "2026-09-13"}, "end": {"date": "2026-09-14"}},
@@ -110,8 +111,10 @@ def test_do_work_reads_weekend_and_sends(fakes):
     assert call["calendarId"] == "cal@group.calendar.google.com"
     assert (call["timeMin"], call["timeMax"]) == ("2026-09-12T00:00:00+09:00", "2026-09-14T00:00:00+09:00")
     assert call["singleEvents"] is True
-    assert sent[0][0] == "42" and "국회 행사" in sent[0][1] and "9월 13일 (일)" in sent[0][1]
+    assert sent[0][0] == "42" and "9월 13일 (일)" in sent[0][1]
+    assert "행사 일정" in sent[0][1] and "국회 행사" not in sent[0][1]   # 동탄 관련이 아니면 종류만
     assert result["counts"] == {"events": 2, "sent": 1}
+    assert all("국회 행사" not in ln and "지역 방문" not in ln for ln in result["lines"])   # 대시보드 기록도 가림
     assert result["tasks"]["fetch"] == (True, "토 1건 · 일 1건")
     assert result["tasks"]["send"][0] is True
 
@@ -120,7 +123,7 @@ def test_do_work_dry_run_prints_and_does_not_send(fakes, capsys):
     _, sent = fakes
     result = mod.do_work(CFG, Args(dry_run=True), lambda m: None)
     assert sent == [] and result["counts"]["sent"] == 0
-    assert "국회 행사" in capsys.readouterr().out
+    assert "행사 일정" in capsys.readouterr().out
 
 
 def test_do_work_calendar_http_error_becomes_korean(fakes, monkeypatch):

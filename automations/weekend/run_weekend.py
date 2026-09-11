@@ -24,7 +24,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
 from errors import to_korean  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from weekend_calendar import build_message, calendar_service, fetch_events, to_events, upcoming_weekend  # noqa: E402
+from weekend_calendar import build_message, calendar_service, describe, fetch_events, to_events, upcoming_weekend  # noqa: E402
 from weekend_telegram import list_chats, send_message, telegram_env  # noqa: E402
 try:
     from report_status import report as report_status  # noqa: E402
@@ -73,7 +73,8 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         status = getattr(getattr(exc, "resp", None), "status", "?")
         raise RuntimeError(f"캘린더 읽기 실패: HTTP {status}") from None
     events = to_events(items, days)
-    text = build_message(cfg.get("calendar_name") or "캘린더", days, events)
+    reveal = cfg.get("reveal_keywords") or []   # 비어 있으면 전부 종류만 (가리는 쪽이 기본)
+    text = build_message(cfg.get("calendar_name") or "캘린더", days, events, reveal)
     per_day = " · ".join(f"{'토' if d.weekday() == 5 else '일'} {sum(1 for e in events if e.day == d)}건" for d in days)
 
     if args.dry_run:
@@ -88,7 +89,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         progress("텔레그램 전송 완료")
     return {
         "counts": {"events": len(events), "sent": 0 if args.dry_run else 1},
-        "lines": [f"[{e.day.month}/{e.day.day}] {e.title}" for e in events[:6]],
+        "lines": [f"[{e.day.month}/{e.day.day}] {describe(e, reveal)}" for e in events[:6]],   # 대시보드 기록도 같은 규칙
         "tasks": {"fetch": (True, per_day), "send": (True, sent_note)},
     }
 

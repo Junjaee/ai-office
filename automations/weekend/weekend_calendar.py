@@ -72,8 +72,46 @@ def _when(e: Event) -> str:
     return f"{'' if e.start == '~' else e.start}~{'' if e.end == '~' else e.end}"
 
 
-def build_message(calendar_name: str, days: tuple[date, date], events: list[Event]) -> str:
-    """텔레그램으로 보낼 글. 날짜마다 제목 줄, 일정이 없으면 '일정 없음'. 4096자를 넘으면 잘라 표시."""
+# 제목을 가릴 때 보여 줄 일정 종류 — 앞에서부터 먼저 맞는 것. 식사는 시작 시각으로 아침·점심·저녁
+KINDS = [
+    (("등산", "산행", "둘레길", "트레킹"), "등산"),
+    (("골프",), "골프"),
+    (("운동", "헬스", "축구", "야구", "배드민턴", "마라톤"), "운동"),
+    (("결혼", "예식", "웨딩"), "결혼식"),
+    (("장례", "조문", "빈소", "발인", "추모"), "조문"),
+    (("식사", "오찬", "만찬", "조찬", "회식", "식당", "저녁", "점심", "밥"), "식사"),
+    (("회의", "간담회", "면담", "미팅", "협의", "회동", "보고"), "회의"),
+    (("촬영", "방송", "인터뷰", "녹화", "라디오", "유튜브"), "방송·촬영"),
+    (("축제", "행사", "대회", "기념식", "발대식", "개막", "시상", "축사", "포럼", "토론회", "세미나", "박람회"), "행사"),
+]
+
+
+def _meal(e: Event) -> str:
+    hhmm = e.start if e.start[:1].isdigit() else (e.end if e.end[:1].isdigit() else "")
+    if not hhmm:
+        return "식사"
+    h = int(hhmm[:2])
+    return "아침 식사" if h < 10 else "점심 식사" if h < 15 else "저녁 식사"
+
+
+def describe(e: Event, reveal_keywords: list[str] | None) -> str:
+    """보낼 한 줄의 내용.
+
+    reveal_keywords 가 None 이면 그대로. 목록이면 그 단어가 제목·장소에 든 일정만 그대로 보여 주고,
+    나머지는 누구와 무엇을 하는지 빼고 종류만("등산 일정", "저녁 식사 일정") — 사용자 결정 2026-09-11.
+    """
+    if reveal_keywords is None or any(k and (k in e.title or k in e.location) for k in reveal_keywords):
+        return e.title + (f" @ {e.location}" if e.location else "")
+    for words, kind in KINDS:
+        if any(w in e.title for w in words):
+            return f"{_meal(e) if kind == '식사' else kind} 일정"
+    return "기타 일정"
+
+
+def build_message(calendar_name: str, days: tuple[date, date], events: list[Event],
+                  reveal_keywords: list[str] | None = None) -> str:
+    """텔레그램으로 보낼 글. 날짜마다 제목 줄, 일정이 없으면 '일정 없음'. 4096자를 넘으면 잘라 표시.
+    일정 내용은 describe() 규칙(reveal_keywords)으로 가린다."""
     sat, sun = days
     lines = [f"📅 {calendar_name} · 주말 일정 ({sat.month}/{sat.day} {WEEKDAYS[sat.weekday()]} ~ "
              f"{sun.month}/{sun.day} {WEEKDAYS[sun.weekday()]})"]
@@ -83,7 +121,7 @@ def build_message(calendar_name: str, days: tuple[date, date], events: list[Even
         if not todays:
             lines.append("· 일정 없음")
         for e in todays:
-            lines.append(f"· {_when(e)}  {e.title}" + (f" @ {e.location}" if e.location else ""))
+            lines.append(f"· {_when(e)}  {describe(e, reveal_keywords)}")
     text = "\n".join(lines)
     if len(text) <= TELEGRAM_LIMIT:
         return text
