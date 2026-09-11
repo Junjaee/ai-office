@@ -1,13 +1,14 @@
 # AI 오피스 — 작업 지침 (AI 코딩 도구용)
 
-이 저장소는 **자동화를 실행하고 상태를 보여 주는 픽셀 사무실 대시보드**다. 한 사이트에 사무실(`/assembly`, `/home`)이 여럿 있고, 각 사무실은 `app/workspaces/<id>.ts` 한 파일로 정의된다.
+이 저장소는 **자동화를 실행하고 상태를 보여 주는 픽셀 사무실 대시보드**다. 한 사이트에 사무실(`/assembly`, `/home`, `/side`)이 여럿 있고, 각 사무실은 `app/workspaces/<id>.ts` 한 파일로 정의된다.
 
 - **한국어로 대화한다.** 사용자는 개발자가 아니므로 전문용어 대신 쉬운 말로 안내한다.
-- 대시보드: https://ai-office.smartjohn-d34.workers.dev — `/assembly`(국회) `/home`(홈). 주소는 비공개 취급(주소를 아는 사람은 누구나 시작 버튼을 누를 수 있다).
+- 대시보드: https://ai-office.smartjohn-d34.workers.dev — `/assembly`(국회) `/home`(홈) `/side`(부업). 주소는 비공개 취급(주소를 아는 사람은 누구나 시작 버튼을 누를 수 있다).
+- 부업 사무실(`/side`, 2026-09-11)은 **팀 = 플랫폼(인스타 게시글·릴스·쇼츠·블로그), 자동화 = 계정**. 계정별 자동화 id 는 `insta_<계정>` 처럼 짓고, 코드는 플랫폼당 한 벌(`automations/insta/`)에 워크플로 입력값 `account` 와 계정별 비밀값으로 구분한다. 한 팀에 계정 3개(직원 6명)까지, 넘으면 같은 플랫폼 2팀을 연다. 새 사무실 추가 절차는 `new-automation` 스킬 부록.
 - 설계 문서: `docs\superpowers\specs\2026-09-10-오피스-실행구조-재설계-design.md` (상태 규칙·실행 경로·화면 구성의 근거). 계획: `docs\superpowers\plans\`.
 
 > **이 폴더 = 저장소 (사용자 결정 2026-09-10).** 이 폴더(`G:\내 드라이브\dev\자동화`) 자체가 git 저장소(GitHub `Junjaee/ai-office`, 비공개)이자 **구글 드라이브 동기화 폴더**다. 코드·워크플로·대시보드·문서·템플릿이 전부 여기 있고, 커밋·푸시하면 GitHub Actions·대시보드에 반영된다. 다른 곳에 복사본을 두고 작업하지 않는다.
-> - 코드는 `automations/<id>/`, 개인 설정·메모는 `ai-<사무실>/NN_<이름>/`(예 `ai-assembly/01_국회회의록/`, `ai-home/01_가계부/`). 개인 폴더는 `.gitignore` 로 제외돼 GitHub 에 올라가지 않는다.
+> - 코드는 `automations/<id>/`, 개인 설정·메모는 `ai-<사무실>/NN_<이름>/`(예 `ai-assembly/01_국회회의록/`, `ai-home/01_가계부/`, `ai-side/01_인스타게시글_<계정>/`). 개인 폴더는 `.gitignore` 로 제외돼 GitHub 에 올라가지 않는다.
 > - **비밀값 파일(`config.yaml`·`token.json`·`client_secret.json` 등)은 개인 폴더에 둬도 된다** — 드라이브에 올라가는 것은 괜찮다(사용자 결정 2026-09-10). 단 **커밋·코드·문서·채팅에는 절대 적지 않는다.** 자동화 실행용 값은 GitHub Secrets, 대시보드용은 Cloudflare Worker 비밀값·`.dev.vars`(gitignore). 코드는 `os.environ` 으로만 읽는다.
 > - 비밀값 파일은 열어 보지 않는다. 필요하면 키 이름만 확인한다.
 > - 새 자동화는 `/new-automation <이름>` 스킬(`.claude/skills/`)로 시작하고, 뼈대는 `templates/automation/` 을 복사한다.

@@ -14,7 +14,8 @@ description: AI 오피스에 새 자동화(파이썬 + GitHub Actions + 대시�
 ## 0. 시작 전 질문 (한 번에 묻고, 답을 받은 뒤 진행)
 
 1. **무엇을 하는 자동화인가?** 입력(사이트·API·메일·파일)과 결과물(드라이브 폴더·시트·알림). 하위 작업(직원)을 1~3개로 나눌 수 있으면 이름까지. 예: 기사 수집 → `collect`(기사 수집), `digest`(요약 정리)
-2. **어느 사무실·부서인가?** 사무실 `assembly`/`home`, 부서 id(`research brand strategy1 qa strategy2 reels carousel partner finance review ops secretary`). 부서 이름은 `REPO/app/workspaces/<사무실>.ts` 의 `DEPARTMENTS` 에서 보여 주고 고르게 한다.
+2. **어느 사무실·부서인가?** 사무실 `assembly`(국회)/`home`(홈)/`side`(부업), 부서 id(`research brand strategy1 qa strategy2 reels carousel partner finance review ops secretary`). 부서 이름은 `REPO/app/workspaces/<사무실>.ts` 의 `DEPARTMENTS` 에서 보여 주고 고르게 한다. 사무실이 없으면 먼저 부록 "새 사무실 추가"를 따른다.
+   - **부업(`side`)은 팀 = 플랫폼, 자동화 = 계정**(사용자 결정 2026-09-11). 계정 이름(영문 소문자)을 묻고 id 를 `<플랫폼>_<계정>`(예 `insta_main`)으로 짓는다. 코드는 플랫폼당 한 벌 `automations/<플랫폼>/`; 두 번째 계정부터는 코드를 복사하지 않고 사무실 설정에 `{ id: "insta_second", workflow: "insta.yml", inputs: { account: "second" }, … }` 만 추가하고 워크플로가 `inputs.account` 로 계정별 비밀값(`INSTA_SECOND_TOKEN` 식)을 고르게 한다. 한 팀에 계정 3개(직원 6명)까지, 넘으면 `HIDDEN_DEPARTMENTS` 에서 같은 플랫폼 2팀을 뺀다.
 3. **언제 도는가, 비밀값은?** 예약 시각(KST) 또는 "수동만". 필요한 비밀값(구글 드라이브면 `GOOGLE_*`, Open API 면 `OPEN_API_KEY`, 그 외 새 키).
 
 **실행 위치는 묻지 않고 규칙으로 정한다(사용자 결정 2026-09-10):** 기본은 **GitHub 서버(`ubuntu-latest`)**. 국회 사이트(assembly.go.kr)처럼 해외 IP 를 막는 곳이나 이 PC 에만 있는 파일·프로그램을 써야 할 때만 **사무실 PC(`[self-hosted, windows, kr-office]`)**. 어느 쪽인지와 이유를 결정 표에 적는다.
@@ -31,8 +32,8 @@ description: AI 오피스에 새 자동화(파이썬 + GitHub Actions + 대시�
     └─ config.yaml   개인 설정(키·개인 경로). 공유·복사 금지. 없으면 만들지 않는다
 ```
 
-- 상위 폴더 이름은 `ai-` + 사무실 id (`ai-assembly`, `ai-home`, `ai-stock` …). 없으면 먼저 만든다.
-- `NN` 은 그 사무실 안에서 이어지는 번호(01, 02 …). 기존 폴더를 `ls` 로 보고 다음 번호를 쓴다.
+- 상위 폴더 이름은 `ai-` + 사무실 id (`ai-assembly`, `ai-home`, `ai-side`, `ai-stock` …). 없으면 먼저 만든다.
+- `NN` 은 그 사무실 안에서 이어지는 번호(01, 02 …). 기존 폴더를 `ls` 로 보고 다음 번호를 쓴다. 부업처럼 계정별이면 `NN_<플랫폼>_<계정>/`(예 `ai-side/01_인스타게시글_main/`).
 - README 에는 코드 경로 `automations/<id>/` (이 저장소 안)와 대시보드 주소를 적는다.
 - **개인 설정이 필요 없는 자동화(예 기사 수집)도 폴더와 README 는 만든다.** 사용자가 사무실 폴더만 보고 어떤 자동화가 있는지 알 수 있어야 한다(2026-09-11, 기사 수집 폴더가 빠져 있어 지적받음).
 
@@ -140,3 +141,16 @@ bash scripts/npm.sh test && bash scripts/npm.sh tsc && bash scripts/npm.sh build
 - 자동화마다 모듈 이름이 같으면(`store.py` 등) `pytest automations` 에서 서로 가린다 → 모듈 이름에 자동화 id 를 붙인다(예 `news_store.py`).
 - 이 폴더는 구글 드라이브 가상 디스크라 `node_modules` 를 두지 않고 연결(junction)도 안 된다 → npm 은 `bash scripts/npm.sh …`.
 - 사이트 화면은 JS 가 그린다 → 카드가 반영됐는지는 HTML 이 아니라 `/api/status?ws=<사무실>` 의 `files.<id>` 로 확인한다.
+
+## 부록: 새 사무실 추가 (예: 주식 `stock`)
+
+사무실 하나 = 사이트 탭 하나 = 개인 폴더 하나. 파일 6개를 만들고 목록 2곳에 넣는다(부업 사무실 추가 기록: `docs/superpowers/specs/2026-09-11-부업-사무실-추가-design.md`).
+
+1. 사용자와 정한다: id(영문 한 단어, 사이트 주소 `/<id>`), 탭 이름·아이콘, 팀 배치(12칸 중 쓸 칸과 이름), 팔레트(색 계열).
+2. `app/workspaces/<id>.ts` — `side.ts` 를 복사해 회사 정보·부서 12개 이름·`HIDDEN_DEPARTMENTS`·`AUTOMATIONS: []` 를 채운다. 부서 id 12개는 그대로.
+3. `app/workspaces/index.ts` 의 `WORKSPACES`·`WORKSPACE_LIST`, `tests/workspaces.test.mjs` 의 `WORKSPACE_LIST` 에 추가.
+4. `app/globals.css` 끝의 `html[data-ws="side"]` 블록을 복사해 `html[data-ws="<id>"]` 로 색만 바꾼다(변수 이름은 전부 유지).
+5. `public/status/<id>/index.json` = `{ "automations": [] }`.
+6. 개인 폴더 `ai-<id>/README.md`(사무실 설명·예정 자동화) 만들고 `.gitignore` 에 `/ai-<id>/` 추가.
+7. `README.md` 사무실 표, `CLAUDE.md` 사무실 목록, 이 스킬의 0번 질문 사무실 목록에 한 줄씩 추가.
+8. `bash scripts/npm.sh tsc && bash scripts/npm.sh test && bash scripts/npm.sh build` 통과 → 커밋·push → 사이트에서 새 탭이 보이고 다른 사무실이 그대로인지 확인. 자동화가 없으면 "아직 연결된 자동화가 없어요" 빈 화면이 정상.

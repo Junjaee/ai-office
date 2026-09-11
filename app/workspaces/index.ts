@@ -2,9 +2,10 @@
 import type { WorkspaceConfig } from "./types";
 import { workspace as assembly } from "./assembly";
 import { workspace as home } from "./home";
+import { workspace as side } from "./side";
 
-export const WORKSPACES: Record<string, WorkspaceConfig> = { assembly, home };
-export const WORKSPACE_LIST: WorkspaceConfig[] = [assembly, home];
+export const WORKSPACES: Record<string, WorkspaceConfig> = { assembly, home, side };
+export const WORKSPACE_LIST: WorkspaceConfig[] = [assembly, home, side];
 export const DEFAULT_WORKSPACE = "assembly";
 
 export function isWorkspaceId(value: unknown): value is string {

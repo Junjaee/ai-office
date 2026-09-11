@@ -5,8 +5,9 @@ import path from "node:path";
 // Node 의 타입 제거 실행은 확장자 없는 상대 import 를 못 읽으므로 사무실 파일을 직접 읽는다
 import { workspace as assembly } from "../app/workspaces/assembly.ts";
 import { workspace as home } from "../app/workspaces/home.ts";
+import { workspace as side } from "../app/workspaces/side.ts";
 
-const WORKSPACE_LIST = [assembly, home];
+const WORKSPACE_LIST = [assembly, home, side];
 const DEFAULT_WORKSPACE = "assembly";
 const isWorkspaceId = (id) => WORKSPACE_LIST.some((w) => w.id === id);
 const ROOT = path.resolve(import.meta.dirname, "..");

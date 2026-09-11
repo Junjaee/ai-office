@@ -57,6 +57,7 @@ __pycache__/
 /ai-assembly/
 /ai-home/
 /ai-stock/
+/ai-side/
 # 비밀값(혹시 폴더에 남아도 절대 커밋 금지)
 token.json
 client_secret.json

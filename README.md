@@ -5,7 +5,8 @@
 | 사무실 | 주소 | 용도 | 팔레트 |
 |---|---|---|---|
 | 국회 | `/assembly` | 의원실 자동화 (국회회의록 수집, 기사 수집 등) | 국회 CI (네이비·블루·틸) |
-| 홈 | `/home` | 가정 자동화 (지출·정산 등, 준비 중) | 블루·화이트·그레이 |
+| 홈 | `/home` | 가정 자동화 (지출·정산 등) | 블루·화이트·그레이 |
+| 부업 | `/side` | 콘텐츠 자동화 (인스타 게시글·릴스, 쇼츠, 블로그). 팀 = 플랫폼, 자동화 = 계정 | 차콜·앰버 |
 | 주식 | `/stock` (예정) | 주식 자동화 | 미정 |
 
 루트 `/` 는 국회 사무실로 이동합니다.
@@ -59,9 +60,7 @@
 
 ## 이 PC에서 실행 (Windows ARM)
 
-node_modules 는 이 폴더(구글 드라이브)에 두지 않습니다. `scripts/npm.sh` 가 소스를 이 PC 의 로컬 작업 폴더(`%LOCALAPPDATA%i-office-node`)로 복사해 거기서 npm 을 돌립니다. workerd 는 ARM 빌드가 없어 x64 Node(`%LOCALAPPDATA%
-ode-x64
-ode`)가 있으면 그것을 씁니다.
+node_modules 는 이 폴더(구글 드라이브)에 두지 않습니다. `scripts/npm.sh` 가 소스를 이 PC 의 로컬 작업 폴더(`%LOCALAPPDATA%\ai-office-node`)로 복사해 거기서 npm 을 돌립니다. workerd 는 ARM 빌드가 없어 x64 Node(`%LOCALAPPDATA%\node-x64\node`)가 있으면 그것을 씁니다.
 
 ```bash
 bash scripts/npm.sh dev --port 3011   # 파일을 고치면 다시 실행해야 반영됩니다

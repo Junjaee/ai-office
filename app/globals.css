@@ -248,6 +248,40 @@ html[data-ws="assembly"] {
   --c-ink-rgb: 17, 24, 39;
 }
 
+/* 부업 사무실 팔레트: 차콜(검정 계열) 바탕 + 앰버(호박색) 포인트 */
+html[data-ws="side"] {
+  --c-sky400: #f2b544;
+  --c-slate500: #6b6f76;
+  --c-sky25: #faf8f3;
+  --c-500: #d99a1e;
+  --c-600: #2b2f36;
+  --c-700: #1f2329;
+  --c-800: #1a1d22;
+  --c-900: #111318;
+  --c-400: #f2b544;
+  --c-300: #f7cf7a;
+  --c-sky300: #f7cf7a;
+  --c-sky500: #e0a52a;
+  --c-200: #e8dcc2;
+  --c-100: #f3ead6;
+  --c-sky100: #fbf1d9;
+  --c-50: #faf8f3;
+  --c-sky50: #fcf7ea;
+  --c-gray100: #f2f2f0;
+  --c-gray50: #f8f8f6;
+  --c-gray200: #e2e2de;
+  --c-gray300: #cfcfc9;
+  --c-line: #d6d6d2;
+  --c-ink: #16181c;
+  --c-ink-soft: #4d5157;
+  --c-ink-faint: #85898f;
+  --c-night: #111318;
+  --c-slate: #2b2f36;
+  --c-600-rgb: 43, 47, 54;
+  --c-400-rgb: 242, 181, 68;
+  --c-ink-rgb: 22, 24, 28;
+}
+
 /* 사무실 선택 탭 */
 .ws-switch { display: flex; gap: 4px; margin-left: 8px; }
 .ws-switch a { padding: 4px 10px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--win); font-size: 11px; font-weight: 900; text-decoration: none; white-space: nowrap; }
