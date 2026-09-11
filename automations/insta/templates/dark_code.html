@@ -11,33 +11,51 @@
   .kr { word-break: keep-all; overflow-wrap: anywhere; white-space: pre-line; }
   .balance { text-wrap: balance; }
   .pretty { text-wrap: pretty; }
-  .card { position: relative; width: 100%; height: 100%; padding: 96px 88px 110px; display: flex; flex-direction: column; }
-  .top { display: flex; justify-content: space-between; align-items: center; color: {{ theme.muted }}; font-size: 30px; font-weight: 600; letter-spacing: .02em; }
-  .top .handle::before { content: ""; display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: {{ theme.accent }}; margin-right: 14px; vertical-align: middle; }
-  .foot { position: absolute; left: 88px; right: 88px; bottom: 40px; display: flex; justify-content: space-between; color: {{ theme.muted }}; font-size: 26px; }
-  .main { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
-  .has-image .main { justify-content: flex-start; padding-top: 40px; }
+  .card { position: relative; width: 100%; height: 100%; padding: 88px 88px 120px; display: flex; flex-direction: column; overflow: hidden; }
+  .brand { position: absolute; top: 60px; left: 88px; color: {{ theme.muted }}; font-size: 28px; font-weight: 700; letter-spacing: .12em; }
+  .pageno { position: absolute; top: 60px; right: 88px; color: {{ theme.muted }}; font-size: 26px; font-weight: 600; }
+  /* 아래 진행 점 (ai.trend.kr 식) */
+  .dots { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 12px; z-index: 2; }
+  .dots i { display: block; width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,.22); }
+  .dots i.on { background: {{ theme.accent }}; width: 34px; border-radius: 6px; }
+  .foot { position: absolute; left: 88px; bottom: 44px; color: {{ theme.muted }}; font-size: 26px; z-index: 2; }
+  .swipe { position: absolute; right: 88px; bottom: 44px; color: {{ theme.muted }}; font-size: 26px; z-index: 2; }
+  .main { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; position: relative; z-index: 1; }
+  /* 배경 워터마크: 카드 번호 */
+  .wm { position: absolute; right: -40px; bottom: 40px; font-size: 640px; font-weight: 800; line-height: 1; color: rgba(255,255,255,.035); letter-spacing: -.06em; z-index: 0; }
+
+  /* ── 표지: 사진이 있으면 전체 화면 + 아래 제목 (ai.trend.kr 식) ── */
+  .cover.full { padding: 0; }
+  .cover.full .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+  .cover.full .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 45%, rgba(10,11,14,.92) 78%, rgba(10,11,14,1) 100%); }
+  .cover.full .brand { color: rgba(255,255,255,.85); left: 0; right: 0; text-align: center; top: 56px; }
+  .cover.full .bottom { position: absolute; left: 80px; right: 80px; bottom: 130px; z-index: 1; }
+  .cover.full .pill { display: inline-block; padding: 12px 26px; border: 2px solid rgba(255,255,255,.7); border-radius: 999px; color: #fff; font-size: 26px; font-weight: 600; letter-spacing: .06em; margin-bottom: 30px; }
+  .cover.full .hook { font-size: 96px; line-height: 1.16; font-weight: 800; letter-spacing: -.02em; color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,.5); }
+  .cover.full .sub { margin-top: 26px; font-size: 36px; line-height: 1.45; color: rgba(255,255,255,.8); }
+  .cover.full .credit { position: absolute; right: 80px; bottom: 92px; font-size: 22px; color: rgba(255,255,255,.45); z-index: 1; }
+  /* 표지: 사진이 없을 때 */
   .cover .kicker { color: {{ theme.accent }}; font-size: 34px; font-weight: 700; margin-bottom: 36px; letter-spacing: .04em; }
   .cover .hook { font-size: 104px; line-height: 1.18; font-weight: 800; letter-spacing: -.02em; }
   .cover .sub { margin-top: 44px; font-size: 42px; line-height: 1.5; color: {{ theme.muted }}; }
-  .cover.has-image .hook { font-size: 88px; }
-  .cover.has-image .sub { margin-top: 28px; font-size: 36px; }
-  .body .num { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 22px; background: {{ theme.accent }}; color: {{ theme.bg }}; font-size: 44px; font-weight: 800; margin-bottom: 36px; }
-  .body .title { font-size: 66px; line-height: 1.22; font-weight: 800; letter-spacing: -.02em; margin-bottom: 36px; }
-  /* 본문 = 문단 요약 2~3줄 (점 하나에 한 줄) */
-  .body .lines { list-style: none; font-size: 40px; line-height: 1.5; }
-  .body .lines li { position: relative; padding-left: 44px; margin-bottom: 16px; }
-  .body .lines li::before { content: ""; position: absolute; left: 0; top: .62em; width: 16px; height: 16px; border-radius: 50%; background: {{ theme.accent }}; }
-  .body.has-image .num { width: 64px; height: 64px; font-size: 34px; border-radius: 16px; margin-bottom: 22px; }
-  .body.has-image .title { font-size: 54px; margin-bottom: 22px; }
+
+  /* ── 본문 카드 ── */
+  .body .title { font-size: 74px; line-height: 1.2; font-weight: 800; letter-spacing: -.02em; margin-bottom: 30px; }
+  .body .chip { display: inline-block; align-self: flex-start; padding: 14px 26px; border-radius: 16px; background: rgba(242,181,68,.16); color: {{ theme.accent }}; font-size: 36px; font-weight: 700; margin-bottom: 34px; }
+  .body .lines { list-style: none; font-size: 40px; line-height: 1.55; }
+  .body .lines li { margin-bottom: 14px; }
+  .body .lines b.hl { color: {{ theme.accent }}; font-weight: 700; }
+  .body.has-image .title { font-size: 56px; margin-bottom: 20px; }
+  .body.has-image .chip { font-size: 30px; padding: 10px 20px; margin-bottom: 22px; }
   .body.has-image .lines { font-size: 34px; line-height: 1.45; }
-  .body.has-image .lines li { margin-bottom: 8px; padding-left: 36px; }
+  .body.has-image .lines li { margin-bottom: 8px; }
+  .has-image .main { justify-content: flex-start; padding-top: 36px; }
   .shot { margin: 28px 0 0; border-radius: 22px; overflow: hidden; border: 2px solid rgba(255,255,255,.12); background: #000; box-shadow: 0 24px 60px rgba(0,0,0,.45); flex: 0 0 auto; }
-  .shot img { display: block; width: 100%; max-height: 560px; object-fit: cover; object-position: top; }
-  .cover .shot img { max-height: 520px; }
-  .body .shot img { max-height: 440px; }
+  .shot img { display: block; width: 100%; max-height: 440px; object-fit: cover; object-position: top; }
   .shot-cap { margin-top: 14px; font-size: 26px; color: {{ theme.muted }}; display: flex; justify-content: space-between; gap: 24px; }
   .shot-cap .credit { flex: 0 0 auto; opacity: .75; }
+
+  /* ── 마무리 ── */
   .cta .big { font-size: 84px; line-height: 1.2; font-weight: 800; letter-spacing: -.02em; }
   .cta .hint { margin-top: 48px; font-size: 40px; color: {{ theme.muted }}; line-height: 1.5; }
   .cta .icons { margin-top: 64px; display: flex; gap: 28px; }
@@ -45,18 +63,33 @@
 </style>
 </head>
 <body>
+{% set brand = slide.brand or "AI TIPS" %}
+{% if slide.kind == "cover" and slide.image %}
+<div class="card cover full">
+  <img class="bg" src="{{ slide.image }}" alt="">
+  <div class="shade"></div>
+  <div class="brand">{{ brand }}</div>
+  <div class="bottom">
+    {% if slide.category %}<div class="pill">{{ slide.category }}</div>{% endif %}
+    <div class="hook kr balance">{{ slide.title }}</div>
+    {% if slide.sub %}<div class="sub kr pretty">{{ slide.sub }}</div>{% endif %}
+  </div>
+  {% if slide.credit %}<div class="credit">{{ slide.credit }}</div>{% endif %}
+</div>
+{% else %}
 <div class="card {{ slide.kind }}{% if slide.image %} has-image{% endif %}">
-  <div class="top"><span class="handle">{{ slide.handle }}</span><span>{{ slide.n }} / {{ slide.total }}</span></div>
+  <div class="brand">{{ brand }}</div>
+  <div class="pageno">{{ slide.n }} / {{ slide.total }}</div>
+  {% if slide.kind == "body" %}<div class="wm">{{ "%02d" | format(slide.idx) }}</div>{% endif %}
   <div class="main" id="main">
     {% if slide.kind == "cover" %}
-      <div class="kicker">오늘의 AI 꿀팁</div>
+      <div class="kicker">{{ slide.category or "오늘의 AI 꿀팁" }}</div>
       <div class="hook kr balance" data-fit="56">{{ slide.title }}</div>
       {% if slide.sub %}<div class="sub kr pretty" data-fit="28">{{ slide.sub }}</div>{% endif %}
-      {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div>{% if slide.credit %}<div class="shot-cap"><span></span><span class="credit">{{ slide.credit }}</span></div>{% endif %}{% endif %}
     {% elif slide.kind == "body" %}
-      <div class="num">{{ slide.idx }}</div>
       <div class="title kr balance" data-fit="40">{{ slide.title }}</div>
-      <ul class="lines" data-fit="28">{% for ln in slide.lines %}<li class="kr pretty">{{ ln }}</li>{% endfor %}</ul>
+      {% if slide.keyword %}<div class="chip">{{ slide.keyword }}</div>{% endif %}
+      <ul class="lines" data-fit="28">{% for ln in slide.lines_html %}<li class="kr pretty">{{ ln }}</li>{% endfor %}</ul>
       {% if slide.image %}<div class="shot"><img src="{{ slide.image }}" alt=""></div><div class="shot-cap"><span class="kr">{{ slide.image_caption }}</span><span class="credit">{{ slide.credit }}</span></div>{% endif %}
     {% else %}
       <div class="big kr balance" data-fit="48">{{ slide.cta }}</div>
@@ -64,12 +97,16 @@
       <div class="icons"><span>🔖 저장</span><span>✈️ 친구에게 공유</span></div>
     {% endif %}
   </div>
-  <div class="foot"><span>{{ slide.handle }}</span><span>← 넘겨서 보기 →</span></div>
+  <div class="foot">{{ slide.handle }}</div>
+  {% if slide.n < slide.total %}<div class="swipe">밀어서 확인하기 →</div>{% endif %}
 </div>
+{% endif %}
+<div class="dots">{% for i in range(1, slide.total + 1) %}<i{% if i == slide.n %} class="on"{% endif %}></i>{% endfor %}</div>
 <script>
   // 글자·이미지가 영역을 넘치면 data-fit(최소 px)까지 단계적으로 줄이고, 그래도 넘치면 이미지 높이를 줄인다
   window.__fit = function () {
     const main = document.getElementById("main");
+    if (!main) return;
     const limit = main.clientHeight;
     for (let i = 0; i < 40 && main.scrollHeight > limit; i++) {
       let shrunk = false;
@@ -82,7 +119,7 @@
     }
     const img = main.querySelector(".shot img");
     for (let i = 0; img && i < 20 && main.scrollHeight > limit; i++) {
-      const h = parseFloat(getComputedStyle(img).maxHeight) || 560;
+      const h = parseFloat(getComputedStyle(img).maxHeight) || 440;
       img.style.maxHeight = (h * 0.9) + "px";
     }
   };

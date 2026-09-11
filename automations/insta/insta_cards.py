@@ -28,9 +28,11 @@ def build_slides(plan: dict, handle: str) -> list[dict]:
     total = len(body) + 2
     cover = plan.get("cover", {})
     slides = [{"kind": "cover", "title": cover.get("title", ""), "sub": cover.get("sub", ""), "n": 1, "total": total,
-               "handle": handle, "image": cover.get("image") or None, "image_caption": ""}]
+               "handle": handle, "image": cover.get("image") or None, "image_caption": "",
+               "category": cover.get("category", "")}]
     for i, c in enumerate(body, start=2):
         slides.append({"kind": "body", "title": c.get("title", ""), "lines": list(c.get("lines", [])),
+                       "keyword": c.get("keyword", ""), "highlights": list(c.get("highlights") or []),
                        "image": c.get("image") or None, "image_caption": c.get("image_caption", ""),
                        "n": i, "total": total, "handle": handle, "idx": i - 1})
     slides.append({"kind": "cta", "cta": plan.get("cta", ""), "title": cover.get("title", ""), "n": total, "total": total,
@@ -63,6 +65,21 @@ def data_uri(path: Path | str) -> str:
 _FONT_URI: str | None = None
 
 
+BRAND = "AI TIPS"          # 카드 위 브랜드 라벨 (ai.trend.kr 의 'AI TREND' 처럼)
+
+
+def mark_highlights(line: str, highlights: list[str]):
+    """문장 안의 강조어를 <b class="hl"> 로 감싼다(나머지는 HTML 이스케이프). 템플릿에 안전한 Markup 으로 돌려준다."""
+    import html as _html
+
+    from markupsafe import Markup
+
+    out = _html.escape(line)
+    for h in sorted({h for h in highlights if h}, key=len, reverse=True):
+        out = out.replace(_html.escape(h), f'<b class="hl">{_html.escape(h)}</b>')
+    return Markup(out)
+
+
 def render_html(template: str, slide: dict, theme: dict | None = None) -> str:
     """슬라이드 하나를 HTML 로. slide['image'] 가 로컬 파일 경로면 data URI 로 바꿔 넣는다."""
     global _FONT_URI
@@ -72,6 +89,8 @@ def render_html(template: str, slide: dict, theme: dict | None = None) -> str:
     t = env.get_template(f"{template}.html")
     th = {**DEFAULT_THEME, **(theme or {})}
     view = dict(slide)
+    view["lines_html"] = [mark_highlights(ln, view.get("highlights") or []) for ln in view.get("lines") or []]
+    view.setdefault("brand", BRAND)
     img = view.get("image")
     view["credit"] = view.get("credit") or (credit_of(img) if isinstance(img, dict) else "")
     path = view.get("image_path") or (img if isinstance(img, str) else "")

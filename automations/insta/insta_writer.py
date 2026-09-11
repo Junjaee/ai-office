@@ -63,12 +63,14 @@ CARDS_SCHEMA = {
     "properties": {
         "cover": {"type": "object", "required": ["title", "sub"],
                   "properties": {"title": {"type": "string", "maxLength": 48}, "sub": {"type": "string", "maxLength": 80},
-                                 "image_id": {"type": "integer"}}},
+                                 "image_id": {"type": "integer"}, "category": {"type": "string", "maxLength": 24}}},
         "cards": {
             "type": "array", "minItems": 1, "maxItems": 9,
             "items": {"type": "object", "required": ["image_id"],
                       "properties": {"image_id": {"type": "integer"},
-                                     "image_caption": {"type": "string", "maxLength": 60}}},
+                                     "image_caption": {"type": "string", "maxLength": 60},
+                                     "keyword": {"type": "string", "maxLength": 24},
+                                     "highlights": {"type": "array", "maxItems": 3, "items": {"type": "string", "maxLength": 30}}}},
         },
         "cta": {"type": "string", "maxLength": 80},
     },
@@ -301,14 +303,17 @@ def cards_prompt(p: Profile, article: dict, images_block: str) -> tuple[str, str
               "도구를 쓰지 말고 JSON 만 출력합니다.\n"
               "규칙:\n"
               "- 표지(cover): title 은 기사 제목을 카드용으로 — 뜻이 끊기지 않는 자리에 줄바꿈 문자 \\n 을 넣어 2줄(한 줄 12자 안팎). sub 는 부제.\n"
-              "- cards 는 문단 수와 같게, 문단 순서대로 한 항목씩. 각 항목은 image_id(아래 후보 번호, 없으면 0)와 image_caption(사진이 무엇인지 한 줄).\n"
+              "- cover.category: 표지 분류 태그. 다음 중 하나: 'AI NEWS | TOOL', 'AI NEWS | UPDATE', 'AI TIPS | PROMPT', 'AI TIPS | IMAGE', 'AI TIPS | TEXT', 'AI TOOL | GENERAL'.\n"
+              "- cards 는 문단 수와 같게, 문단 순서대로 한 항목씩. 각 항목: image_id(아래 후보 번호, 없으면 0), image_caption(사진이 무엇인지 한 줄), "
+              "keyword(그 문단의 핵심어 하나 — 제품명·단축키·명령어·숫자. 예 'Alt+Space', '/autoprompt', '22초 vs 177초'. 카드 제목 아래 칩으로 표시됨), "
+              "highlights(그 문단 text 안에 **글자 그대로 들어 있는** 강조할 어구 1~3개, 각 2~12자 — 색이 들어간다. 문단에 없는 말은 넣지 않는다).\n"
               "- 사진은 그 문단의 소주제와 **실제로 맞는** 것만 고른다(설명·출처로 판단). 공식 출처(official) 우선. 표지에는 가장 대표적인 화면·제품 사진. "
               "맞는 후보가 없으면 0 — 억지로 넣지 않는다.\n"
               f"- 마지막 카드 문구(cta): {p.cta}")
     user = ("기사:\n" + json.dumps({k: article.get(k) for k in ("title", "subtitle", "paragraphs")}, ensure_ascii=False, indent=1) +
             "\n\n사진 후보(번호·종류·설명·출처):\n" + (images_block or "(없음)") +
-            '\n\nJSON: {"cover": {"title": "...\\n...", "sub": "...", "image_id": 0}, '
-            '"cards": [{"image_id": 0, "image_caption": ""}], "cta": "..."}')
+            '\n\nJSON: {"cover": {"title": "...\\n...", "sub": "...", "image_id": 0, "category": "AI NEWS | TOOL"}, '
+            '"cards": [{"image_id": 0, "image_caption": "", "keyword": "...", "highlights": ["..."]}], "cta": "..."}')
     return system, user
 
 
@@ -371,6 +376,9 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
         c = cards[i] if i < len(cards) else {"image_id": 0, "image_caption": ""}
         c["title"] = " ".join(str(para.get("heading", "")).split())
         c["lines"] = split_sentences(para.get("text", ""))
+        text = str(para.get("text", ""))
+        c["highlights"] = [h for h in (c.get("highlights") or []) if h and h in text][:3]
+        c["keyword"] = " ".join(str(c.get("keyword") or "").split())[:24]
         c["image"] = by_id.get(int(c.get("image_id") or 0))
         if i >= len(cards):
             cards.append(c)

@@ -167,8 +167,11 @@ def test_build_slides_and_render_from_plan():
     slides = cards.build_slides(plan, "@aitips")
     assert [s["kind"] for s in slides] == ["cover"] + ["body"] * 6 + ["cta"]
     assert [s["n"] for s in slides] == list(range(1, 9)) and all(s["total"] == 8 for s in slides)
+    slides[1]["highlights"] = ["핵심 A"]
+    slides[1]["keyword"] = "Alt+Space"
     html = cards.render_html("dark_code", slides[1], {"accent": "#fff"})
-    assert "카드 0" in html and "핵심 A" in html and "@font-face" in html and 'class="bar"' not in html
+    assert '<b class="hl">핵심 A</b>' in html and "Alt+Space" in html and "AI TIPS" in html and "@font-face" in html
+    assert str(cards.mark_highlights("a <b> c", ["<b>"])) == 'a <b class="hl">&lt;b&gt;</b> c', "강조어도 이스케이프"
     assert cards.credit_of({"url": "https://cdn.x/1.jpg", "source_url": "https://www.aitimes.com/news/1", "kind": "related"}) == "사진: aitimes.com"
 
 
