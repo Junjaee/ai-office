@@ -1,6 +1,6 @@
 # 국회회의록 자동 수집
 
-코드 원본은 이 저장소(`automations/minutes`)이고, GitHub Actions(`.github/workflows/minutes.yml`)가 매일 09:00(KST)에 `--daily`를 실행해 Google Drive API로 저장한다. 대시보드(`/assembly`)의 **▶ 시작** 버튼이나 Actions 탭의 "Run workflow"로 언제든 수동 실행할 수 있다. 국회 사이트가 해외 IP를 막으므로 워크플로는 자체 실행기(`runs-on: [self-hosted, windows, kr-office]`)에서 돈다(`../runner/README.md`).
+코드 원본은 이 저장소(`automations/minutes`)이고, GitHub Actions(`.github/workflows/minutes.yml`)가 사이트 ▶ 시작을 누를 때 `--daily`를 실행해(예약 없음 · 2026-09-11부터 수동으로만) Google Drive API로 저장한다. 대시보드(`/assembly`)의 **▶ 시작** 버튼이나 Actions 탭의 "Run workflow"로 언제든 수동 실행할 수 있다. 국회 사이트가 해외 IP를 막으므로 워크플로는 자체 실행기(`runs-on: [self-hosted, windows, kr-office]`)에서 돈다(`../runner/README.md`).
 
 실행이 끝나면 `../common/report_status.py` 가 `public/status/assembly/minutes.json`(v2: `run_id`·`request_id`·`tasks[]` = `collect`·`replace`)을 커밋해 화면 상태가 바뀐다. 실패하면 `ok: false` 와 한국어 오류 문구(`../common/errors.py`)를 남긴다.
 

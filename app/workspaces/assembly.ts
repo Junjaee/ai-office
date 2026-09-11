@@ -132,7 +132,7 @@ export const HIDDEN_DEPARTMENTS: string[] = ["finance", "ops", "secretary"];
 export const AUTOMATIONS: AutomationDef[] = [
   {
     id: "minutes", dept: "research", name: "국회회의록 수집",
-    workflow: "minutes.yml", schedule: "매일 09:00",
+    workflow: "minutes.yml", // 예약 없음 — 수동으로만 (2026-09-11)
     tasks: [
       { id: "collect", name: "회의록 수집", role: "본회의·위원회 회의록 목록 조회와 PDF 저장", colors: ["#6b3d34", "#d9efee", "#006bce"] },
       { id: "replace", name: "확정본 교체", role: "임시회의록이 확정본으로 바뀌면 다시 저장", colors: ["#2f2a3d", "#cfd6dc", "#b9cbdc"] },

@@ -15,7 +15,7 @@ timeout: 90
 min_free_gb: 2
 
 office_repo: "G:/내 드라이브/dev/자동화"
-next_run: "매일 09:00 (GitHub Actions)"
+next_run: "수동 실행 (사이트 ▶ 시작)"
 office_workspace: "assembly"   # 상태 파일을 쓸 사무실 (public/status/<id>/)
 
 # 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts 의 automations[].tasks[] (테스트로 일치 강제)
