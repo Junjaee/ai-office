@@ -209,6 +209,14 @@ test("handleRun: 최신 run 이 in_progress 면 skipped already_running (dispatc
   assert.equal(deps.github.calls.dispatch.length, 0);
 });
 
+test("handleRun: mode=edit 는 실행 중이어도 dispatch 된다 (예약 취소·시각 변경)", async () => {
+  const deps = makeDeps({ github: fakeGithub({ runs: [run({ status: "in_progress", conclusion: null })] }) });
+  const { status, json } = await call({ ...validBody, inputs: { mode: "edit", edits: "0123abcd=cancel" } }, deps);
+  assert.equal(status, 200);
+  assert.deepEqual(json, { results: [{ id: "minutes", accepted: true, requestedAt: new Date(NOW).toISOString() }] });
+  assert.equal(deps.github.calls.dispatch[0].inputs.edits, "0123abcd=cancel");
+});
+
 test("handleRun: cancelled 된 최신 run 은 무시하고 accepted", async () => {
   const deps = makeDeps({ github: fakeGithub({ runs: [run({ id: 200, status: "in_progress", conclusion: "cancelled" }), run({ id: 100 })] }) });
   const { json } = await call(validBody, deps);

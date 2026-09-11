@@ -423,9 +423,11 @@ export async function handleRun(request: Request, env: RunApiEnv, deps: RunApiDe
     if (res) return res;
     throw error;
   }
+  // 예약 수정(mode=edit)은 검토 파일만 고치는 20초짜리 실행이라 "실행 중"·"너무 빠름" 보호를 건너뛴다 (워크플로 concurrency 가 순서를 지킨다)
+  const isEdit = extraInputs.mode === "edit";
   const plan: Array<{ def: AutomationLike; decision: RunDecision }> = targets.map((def) => ({
     def,
-    decision: decideRun(latest.get(def.workflow as string), deps.dispatchLog.get(`${ws}/${def.id}`), now),
+    decision: isEdit ? { kind: "accepted" } : decideRun(latest.get(def.workflow as string), deps.dispatchLog.get(`${ws}/${def.id}`), now),
   }));
 
   // 3. 하루 상한 — 이번에 accepted 될 개수를 더해 오늘(KST) 누계가 상한을 넘으면 429 (skipped 는 세지 않음)
