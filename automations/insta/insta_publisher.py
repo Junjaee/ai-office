@@ -45,7 +45,8 @@ def upload_public(paths: list[Path], prefix: str, *, client=None) -> list[str]:
     urls = []
     for p in paths:
         key = f"{prefix}/{p.name}"
-        client.upload_file(str(p), bucket, key, ExtraArgs={"ContentType": "image/jpeg"})
+        ctype = "video/mp4" if p.suffix.lower() == ".mp4" else ("image/png" if p.suffix.lower() == ".png" else "image/jpeg")
+        client.upload_file(str(p), bucket, key, ExtraArgs={"ContentType": ctype})
         urls.append(f"{base}/{key}")
     return urls
 
@@ -90,6 +91,12 @@ class Instagram:
             params["alt_text"] = alt_text
         return self._req("POST", f"{self.user_id}/media", **params)["id"]
 
+    def create_reel(self, video_url: str, caption: str, cover_url: str = "", share_to_feed: bool = True) -> str:
+        params = {"media_type": "REELS", "video_url": video_url, "caption": caption, "share_to_feed": "true" if share_to_feed else "false"}
+        if cover_url:
+            params["cover_url"] = cover_url
+        return self._req("POST", f"{self.user_id}/media", **params)["id"]
+
     def wait_ready(self, container_id: str, *, tries: int = 20, delay: float = 3.0) -> None:
         for _ in range(tries):
             st = self._req("GET", container_id, fields="status_code,status")
@@ -129,6 +136,15 @@ def publish_carousel(ig: Instagram, image_urls: list[str], caption: str, alt_tex
             progress(f"컨테이너 {i}/{len(image_urls)}")
         container = ig.create_carousel(children, caption)
     ig.wait_ready(container)
+    media_id = ig.publish(container)
+    return {"media_id": media_id, "permalink": ig.permalink(media_id)}
+
+
+def publish_reel(ig: Instagram, video_url: str, caption: str, cover_url: str = "", progress=print) -> dict:
+    """영상 공개 URL → 릴스 게시(피드에도 표시). 영상 처리에 1~3분 걸리므로 오래 기다린다. (media_id, permalink) 반환."""
+    container = ig.create_reel(video_url, caption, cover_url)
+    progress("릴스 컨테이너 처리 중 (영상 변환)")
+    ig.wait_ready(container, tries=60, delay=5.0)
     media_id = ig.publish(container)
     return {"media_id": media_id, "permalink": ig.permalink(media_id)}
 

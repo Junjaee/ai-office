@@ -23,7 +23,7 @@ QUERY_SCHEMA = {
 PICK_SCHEMA = {
     "type": "object",
     "required": ["picks"],
-    "properties": {"picks": {"type": "array", "minItems": 1, "maxItems": 12,
+    "properties": {"picks": {"type": "array", "minItems": 1, "maxItems": 20,
                              "items": {"type": "object", "required": ["index", "reason", "angle"],
                                        "properties": {"index": {"type": "integer"}, "reason": {"type": "string"},
                                                       "angle": {"type": "string"}, "title_ko": {"type": "string", "maxLength": 40},
@@ -137,7 +137,8 @@ def pick_prompt(p: Profile, rows: str, n: int) -> tuple[str, str]:
               "우선순위(사용자 결정 2026-09-12): ① **미국 원출처에서 최근 24시간 안에 나온 새 소식** — OpenAI·Google DeepMind·Anthropic·The Rundown·TestingCatalog 같은 공식·해외 RSS 와 "
               "'IG 🇺🇸 @계정' 게시물. 한국 계정('IG 🇰🇷 @계정')이 아직 다루지 않은 주제면 gap=true(빈자리)로 표시한다 — 우리가 한국에 제일 먼저 올리는 셈이라 가장 귀하다. "
               "② **한국 AI 인스타에서 반응이 좋았던 주제**(좋아요·댓글 많은 것) — 같은 주제를 그대로 골라도 된다(피할 필요 없음). 우리는 우리 식(기사→카드, 우리가 그린 화면)으로 다시 쓴다. "
-              "③ 그 외 RSS·커뮤니티 글은 공식 링크가 있을 때만 맨 뒤. 10개 중 ①을 절반 이상, 나머지는 ②에서 고른다. 사용자가 고르지 않으면 1순위가 07:30 에 자동 게시되므로 1번은 가장 확실한 것으로.\n"
+              "③ 그 외 RSS·커뮤니티 글은 공식 링크가 있을 때만 맨 뒤. 고른 것 중 ①을 절반 이상, 나머지는 ②에서 고른다. 사용자가 고르지 않으면 1순위가 07:30 에 자동 게시되므로 1번은 가장 확실한 것으로. "
+              "[🎬영상] 표시(공식 유튜브·X 영상)는 릴스로 만들 수 있어 반응이 좋으니 4~5개는 영상이 있는 것으로.\n"
               "도구를 쓰지 말고 JSON 객체 하나만 출력합니다.")
     user = (f"후보:\n{rows}\n\n"
             f"가장 좋은 {n}개를 고르고(좋은 순서대로, 서로 다른 주제로) 각각 index(후보 번호), title_ko(한국어 제목 한 줄, 20자 안팎 — 검토하는 사람이 한눈에 알게), "

@@ -10,9 +10,10 @@ accounts:
     dept: research                           # 사무실 설정의 부서 id (인스타 게시글팀)
     result_link: "https://www.instagram.com/aitips.kr/"
     posts_per_run: 1                         # 실행 1회에 올릴 게시물 수
-    candidates_to_llm: 30                    # 소재 후보를 몇 개까지 편집장(모델)에게 보여 줄지
-    review_count: 10                         # 매일 검토 칸에 올릴 후보 수
+    candidates_to_llm: 40                    # 소재 후보를 몇 개까지 편집장(모델)에게 보여 줄지
+    review_count: 20                         # 매일 검토 칸에 올릴 후보 수 (사용자 결정 2026-09-12: 최대 20)
     auto_pick: 1                             # 07:30 에 예약이 없으면 편집장 1순위부터 이 개수만큼 자동 게시 (0 = 끔)
+    reels: true                              # 소재에 영상(공식 유튜브·X·공식 페이지 mp4)이 있으면 카드 대신 릴스로 게시 (출처 표기)
     next_run: "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격"
 
 # 글 생성기: 앞에서부터 시도, 실패하면 다음 (전부 무료 경로)

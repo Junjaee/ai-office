@@ -44,6 +44,13 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
     }
   };
 
+  // 예약 항목별 취소·시각 변경 (워크플로 edit 방식 — 검토 파일만 고친다)
+  const [times, setTimes] = useState<Record<string, string>>({});
+  const edit = async (id: string, value: string) => {
+    const ok = await onRun({ mode: "edit", edits: `${id}=${value}` });
+    if (ok) window.setTimeout(() => review.refresh(), 25000);
+  };
+
   return (
     <section className="review" aria-label={title}>
       <div className="review-head">
@@ -61,12 +68,12 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
       {review.loading ? <p className="auto-meta">후보를 불러오는 중…</p> : null}
       {review.error ? <p className="auto-meta">후보를 못 불러왔어요. 잠시 뒤 새로 고쳐 주세요.</p> : null}
       {!review.loading && !review.error && !candidates.length ? (
-        <p className="auto-meta">아직 뽑힌 후보가 없어요. 매일 06:30 에 10건이 올라오고, "주제 다시 뽑기"로 지금 뽑을 수도 있어요.</p>
+        <p className="auto-meta">아직 뽑힌 후보가 없어요. 매일 06:30 에 후보가 올라오고, "주제 다시 뽑기"로 지금 뽑을 수도 있어요.</p>
       ) : null}
 
       {candidates.length ? (
         <ul className="review-list">
-          {(showAll ? candidates : candidates.slice(0, 10)).map((c, i) => {
+          {(showAll ? candidates : candidates.slice(0, 20)).map((c, i) => {
             const isTaken = taken.has(c.id);
             const q = queue.find((x) => x.id === c.id);
             return (
@@ -78,6 +85,7 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
                     <b>
                       {c.title_ko || c.title}
                       {c.gap ? <span className="review-gap">🇺🇸 빈자리</span> : null}
+                      {c.video ? <span className="review-gap review-video">🎬 영상</span> : null}
                     </b>
                     <small>
                       {c.title_ko ? `${c.title.slice(0, 60)}${c.title.length > 60 ? "…" : ""} · ` : ""}
@@ -102,9 +110,9 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
           })}
         </ul>
       ) : null}
-      {candidates.length > 10 ? (
+      {candidates.length > 20 ? (
         <button className="btn btn-ghost" onClick={() => setShowAll(!showAll)}>
-          {showAll ? "접기" : `후보 ${candidates.length - 10}개 더 보기`}
+          {showAll ? "접기" : `후보 ${candidates.length - 20}개 더 보기`}
         </button>
       ) : null}
 
@@ -132,6 +140,23 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
                   </a>
                 ) : null}
                 {q.status === "failed" && q.error ? <small title={q.error}>{q.error.slice(0, 60)}</small> : null}
+                {q.status === "queued" && canRun ? (
+                  <span className="review-edit">
+                    <input
+                      type="time"
+                      aria-label="게시 시각"
+                      value={times[q.id] ?? ""}
+                      disabled={busy}
+                      onChange={(e) => setTimes((t) => ({ ...t, [q.id]: e.target.value }))}
+                    />
+                    <button className="btn btn-ghost" disabled={busy || !/^\d{2}:\d{2}$/.test(times[q.id] ?? "")} onClick={() => void edit(q.id, times[q.id])}>
+                      시각 변경
+                    </button>
+                    <button className="btn btn-ghost" disabled={busy} onClick={() => void edit(q.id, "cancel")}>
+                      취소
+                    </button>
+                  </span>
+                ) : null}
               </li>
             ))}
           </ul>

@@ -84,7 +84,7 @@ def mark_highlights(line: str, highlights: list[str]):
     return Markup(out)
 
 
-def render_html(template: str, slide: dict, theme: dict | None = None) -> str:
+def render_html(template: str, slide: dict, theme: dict | None = None, *, width: int = WIDTH, height: int = HEIGHT) -> str:
     """슬라이드 하나를 HTML 로. slide['image'] 가 로컬 파일 경로면 data URI 로 바꿔 넣는다."""
     global _FONT_URI
     if _FONT_URI is None:
@@ -103,7 +103,7 @@ def render_html(template: str, slide: dict, theme: dict | None = None) -> str:
     view["credit"] = view.get("credit") or (credit_of(img) if isinstance(img, dict) else "")
     path = view.get("image_path") or (img if isinstance(img, str) else "")
     view["image"] = data_uri(path) if path and Path(path).exists() else ""
-    return t.render(slide=view, theme=th, font_url=_FONT_URI, width=WIDTH, height=HEIGHT)
+    return t.render(slide=view, theme=th, font_url=_FONT_URI, width=width, height=height)
 
 
 def render_cards(plan: dict, out_dir: Path, *, template: str, theme: dict | None, handle: str,

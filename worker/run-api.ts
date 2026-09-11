@@ -315,8 +315,10 @@ const MAX_BODY_BYTES = 2048;
 const REQUEST_ID_RE = /^req-[A-Za-z0-9-]{1,80}$/;
 /** 화면이 덧붙일 수 있는 workflow 입력값 — 이름·형식 허용 목록 (그 밖의 키는 400) */
 const RUN_INPUT_RULES: Record<string, RegExp> = {
-  mode: /^(topics|queue|publish)$/,
+  mode: /^(topics|queue|publish|edit)$/,
   picks: /^[a-f0-9]{8}(,[a-f0-9]{8}){0,19}$/,
+  // 예약 수정: id=cancel | id=HH:MM | id=YYYY-MM-DDTHH:MM (쉼표로 여러 개)
+  edits: /^[a-f0-9]{8}=(cancel|\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2})(,[a-f0-9]{8}=(cancel|\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2})){0,19}$/,
 };
 
 /** 요청 본문의 inputs → 검증된 문자열 맵. 없으면 {}. 허용되지 않은 키·형식이면 null */

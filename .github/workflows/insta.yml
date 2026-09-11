@@ -15,12 +15,16 @@ on:
         type: string
         default: "aitips"
       mode:
-        description: "topics=후보 뽑기 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시 / auto=07:30 자동 선택 / run=1건 자동 게시(시험)"
+        description: "topics=후보 뽑기 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시 / auto=07:30 자동 선택 / edit=예약 취소·시각 변경 / run=1건 자동 게시(시험)"
         type: choice
-        options: [topics, queue, publish, auto, run]
+        options: [topics, queue, publish, auto, edit, run]
         default: "topics"
       picks:
         description: "queue 방식에서 고른 후보 id (쉼표). 사이트 검토 칸이 채운다"
+        type: string
+        default: ""
+      edits:
+        description: "edit 방식: 예약 수정 (id=cancel | id=HH:MM | id=YYYY-MM-DDTHH:MM, 쉼표). 사이트 검토 칸이 채운다"
         type: string
         default: ""
       request_id:
@@ -67,16 +71,32 @@ jobs:
           echo "mode=$MODE" >> "$GITHUB_OUTPUT"
           if [ "$MODE" = "publish" ]; then
             DUE=$(python automations/insta/review_due.py --workspace side --automation "insta_$ACCOUNT")
+          elif [ "$MODE" = "edit" ]; then
+            DUE=false
           else
             DUE=true
           fi
           echo "due=$DUE" >> "$GITHUB_OUTPUT"
           echo "방식=$MODE 만들 것=$DUE"
 
-      - name: 의존성 설치 (파이썬 + 카드용 Chromium + Claude Code CLI)
+      # 예약 취소·시각 변경: 의존성 없이 검토 파일만 고쳐 커밋 (20초)
+      - name: 예약 수정
+        if: steps.mode.outputs.mode == 'edit'
+        env:
+          ACCOUNT: ${{ inputs.account || 'aitips' }}
+          EDITS: ${{ inputs.edits }}
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+          python automations/insta/review_edit.py --workspace side --automation "insta_$ACCOUNT" --edits "$EDITS"
+          git add public/review && git commit -qm "insta($ACCOUNT): 예약 수정" || echo "바뀐 것 없음"
+          git pull -q --rebase origin main && git push -q origin main
+
+      - name: 의존성 설치 (파이썬 + 카드용 Chromium + Claude Code CLI + 릴스용 ffmpeg)
         if: steps.mode.outputs.due == 'true'
         run: |
           python --version
+          ffmpeg -version | head -1
           python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
           python -m playwright install --with-deps chromium
           npm install -g @anthropic-ai/claude-code

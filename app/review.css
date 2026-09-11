@@ -14,6 +14,7 @@
 .review-body small { font-size: 11.5px; color: var(--ink-soft); }
 .review-body small a { color: var(--c-500); font-weight: 700; }
 .review-body em { font-style: normal; font-size: 12px; color: var(--ink-soft); }
+.review-video { background: #dbeafe; color: #1e3a8a; }
 .review-gap { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: #ffe9b3; color: #7a4b00; font-size: 10.5px; font-weight: 800; vertical-align: 2px; white-space: nowrap; }
 .review-actions { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
 .review-actions .btn-primary { align-self: flex-start; }
@@ -24,3 +25,6 @@
 .review-due { font-variant-numeric: tabular-nums; color: var(--ink-soft); }
 .review-qtitle { flex: 1 1 200px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .review-queue a { color: var(--c-500); font-weight: 700; }
+.review-edit { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
+.review-edit input[type="time"] { font: inherit; font-size: 11.5px; padding: 2px 4px; border: 1.5px solid var(--c-gray200); border-radius: 6px; }
+.review-edit .btn { padding: 2px 8px; font-size: 11px; min-height: 22px; }

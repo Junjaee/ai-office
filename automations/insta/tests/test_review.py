@@ -67,6 +67,22 @@ def test_auto_pick_takes_first_candidate_only_when_nothing_is_queued():
     assert review.auto_pick(stale, exclude_keys=set(), now=NOW, n=0)[1] == []
 
 
+def test_apply_edits_cancels_and_reschedules_queued_only():
+    data = review.set_candidates({"queue": []}, cands(3), now=NOW)
+    ids = [c["id"] for c in data["candidates"]]
+    data, _ = review.enqueue(data, ids, now=NOW)                    # 09:17, 18:00, 02:00
+    data = review.mark(data, ids[0], "done", now=NOW)
+    edits = review.parse_edits(f"{ids[0]}=cancel,{ids[1]}=07:30,{ids[2]}=cancel,zzz=cancel,{ids[1]}=bad")
+    assert len(edits) == 4, "id 가 8자가 아닌 조각은 버린다"
+    data, changed = review.apply_edits(data, edits, now=NOW)
+    assert data["queue"][0]["status"] == "done", "끝난 항목은 못 건드린다"
+    assert data["queue"][2]["status"] == "cancelled"
+    assert data["queue"][1]["due"].startswith("2026-09-13T07:30"), "07:30 은 이미 지났으니 내일"
+    assert len(changed) == 2 and changed[0].startswith("09/13 07:30")
+    assert review.resolve_time("2026-09-20T10:00", NOW).isoformat().startswith("2026-09-20T10:00:00+09:00")
+    assert review.resolve_time("25:00", NOW) is None
+
+
 def test_has_due_reads_file(tmp_path):
     path = tmp_path / "public" / "review" / "side" / "insta_aitips.json"
     assert review.has_due(path) is False

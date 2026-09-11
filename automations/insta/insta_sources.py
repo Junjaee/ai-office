@@ -25,6 +25,11 @@ SOURCES: dict[str, dict] = {
     "rundown":        {"kind": "rss", "url": "https://www.therundown.ai/feed", "label": "The Rundown"},          # 매일 19:00 KST 미국 AI 소식 요약
     "testingcatalog": {"kind": "rss", "url": "https://www.testingcatalog.com/rss/", "label": "TestingCatalog"},   # 신기능·유출 (가장 빠른 축)
     "techcrunch_ai":  {"kind": "rss", "url": "https://techcrunch.com/category/artificial-intelligence/feed/", "label": "TechCrunch"},
+    # 회사 공식 유튜브 채널(Atom) — 발표·데모 영상. 영상은 릴스로 만든다(insta_video)
+    "yt_openai":      {"kind": "rss", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCXZCJLdBC09xxGZ6gcdrc6A", "label": "OpenAI 유튜브"},
+    "yt_anthropic":   {"kind": "rss", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCrDwWp7EBBv4NwvScIpBDOA", "label": "Anthropic 유튜브"},
+    "yt_deepmind":    {"kind": "rss", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCP7jMXSY2xbc3KCAE0MHQ-A", "label": "DeepMind 유튜브"},
+    "yt_gemini":      {"kind": "rss", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCNW6J6bFBIAmvbrnE0rCPnA", "label": "Gemini 유튜브"},
     "huggingface":    {"kind": "rss", "url": "https://huggingface.co/blog/feed.xml", "label": "Hugging Face"},
     "geeknews":       {"kind": "rss", "url": "https://news.hada.io/rss/news", "label": "GeekNews"},
     "aitimes":        {"kind": "rss", "url": "https://www.aitimes.com/rss/allArticle.xml", "label": "AI타임스"},
@@ -67,6 +72,15 @@ def _strip_html(text: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", text or ""))).strip()
 
 
+def _youtube_descriptions(xml: bytes) -> dict[str, str]:
+    """유튜브 채널 Atom 의 <media:description> 은 feedparser 가 버리므로 직접 꺼낸다: {videoId: 설명}."""
+    text = xml.decode("utf-8", "ignore")
+    out: dict[str, str] = {}
+    for m in re.finditer(r"<yt:videoId>([\w-]{11})</yt:videoId>.*?<media:description>(.*?)</media:description>", text, re.S):
+        out[m.group(1)] = html.unescape(m.group(2)).strip()
+    return out
+
+
 def fetch_source(name: str, *, timeout: int = 30, session: requests.Session | None = None) -> list[Candidate]:
     spec = SOURCES.get(name)
     if not spec:
@@ -75,13 +89,14 @@ def fetch_source(name: str, *, timeout: int = 30, session: requests.Session | No
     r = sess.get(spec["url"], headers={"User-Agent": UA}, timeout=timeout)
     r.raise_for_status()
     feed = feedparser.parse(r.content)
+    yt_desc = _youtube_descriptions(r.content) if "youtube.com/feeds" in spec["url"] else {}
     out: list[Candidate] = []
     for e in feed.entries:
         link = getattr(e, "link", "") or ""
         title = _strip_html(getattr(e, "title", "") or "")
         if not link or not title:
             continue
-        summary = _strip_html(getattr(e, "summary", "") or getattr(e, "description", "") or "")[:600]
+        summary = _strip_html(getattr(e, "summary", "") or getattr(e, "description", "") or yt_desc.get(getattr(e, "yt_videoid", ""), ""))[:600]
         out.append(Candidate(key=normalize_key(link), title=title, link=link, source=spec["label"],
                              published=_entry_time(e), summary=summary))
     return out
@@ -142,6 +157,8 @@ def as_prompt_rows(cands: list[Candidate], limit: int) -> str:
     for i, c in enumerate(cands[:limit], 1):
         when = c.published.strftime("%m-%d") if c.published else "--"
         sig = f" [{', '.join(c.signals)}]" if c.signals else ""
+        if "video" in c.signals or "youtube.com" in c.link or "/status/" in c.link:
+            sig = " [🎬영상]" + sig
         rows.append(f"{i}. ({c.source} {when}){sig} {c.title}\n   {c.summary[:200]}\n   {c.link}")
     return "\n".join(rows)
 

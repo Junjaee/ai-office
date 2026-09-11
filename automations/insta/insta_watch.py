@@ -60,7 +60,7 @@ def to_candidate(username: str, post: dict, flag: str = "🇰🇷") -> Candidate
     body = re.sub(r"\s+", " ", caption)[:600]
     return Candidate(key=normalize_key(post.get("permalink", "")), title=title, link=post.get("permalink", ""),
                      source=f"IG {flag} @{username} · 좋아요 {_k(likes)} · 댓글 {_k(comments)}", published=published, summary=body,
-                     signals=[f"likes:{likes}"])
+                     signals=[f"likes:{likes}"] + (["video"] if str(post.get("media_type", "")).upper() == "VIDEO" else []))
 
 
 def _k(n: int) -> str:

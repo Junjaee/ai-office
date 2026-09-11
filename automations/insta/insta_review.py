@@ -120,6 +120,61 @@ def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, 
     return enqueue(data, ids, now=now)
 
 
+def parse_edits(text: str) -> list[tuple[str, str]]:
+    """'id=cancel,id=15:30,id=2026-09-13T07:30' → [(id, 값)]. 형식이 이상한 조각은 버린다."""
+    out = []
+    for part in (text or "").split(","):
+        if "=" not in part:
+            continue
+        pid, val = part.split("=", 1)
+        pid, val = pid.strip(), val.strip()
+        if len(pid) == 8 and val:
+            out.append((pid, val))
+    return out
+
+
+def resolve_time(val: str, now: datetime) -> datetime | None:
+    """'HH:MM' → 다음에 오는 그 시각(KST, 지났으면 내일). ISO 시각은 그대로(시간대 없으면 KST). 못 읽으면 None."""
+    import re
+
+    m = re.fullmatch(r"(\d{1,2}):(\d{2})", val)
+    if m:
+        h, mi = int(m.group(1)), int(m.group(2))
+        if not (0 <= h < 24 and 0 <= mi < 60):
+            return None
+        base = now.astimezone(KST)
+        t = base.replace(hour=h, minute=mi, second=0, microsecond=0)
+        if t <= base:
+            t += timedelta(days=1)
+        return t
+    try:
+        t = datetime.fromisoformat(val)
+    except ValueError:
+        return None
+    return t if t.tzinfo else t.replace(tzinfo=KST)
+
+
+def apply_edits(data: dict, edits: list[tuple[str, str]], *, now: datetime) -> tuple[dict, list[str]]:
+    """예약 항목 취소('cancel') 또는 시각 변경. queued 인 항목만 바꾼다. (파일, 바뀐 내용 설명들) 반환."""
+    changed: list[str] = []
+    queue = list(data.get("queue", []))
+    for pid, val in edits:
+        for i, q in enumerate(queue):
+            if q.get("id") != pid or q.get("status") != "queued":
+                continue
+            if val == "cancel":
+                queue[i] = {**q, "status": "cancelled", "finished_at": now.isoformat(timespec="seconds")}
+                changed.append(f"취소 — {q.get('title', '')[:40]}")
+            else:
+                t = resolve_time(val, now)
+                if t is None:
+                    continue
+                queue[i] = {**q, "due": t.isoformat(timespec="seconds")}
+                changed.append(f"{t.astimezone(KST):%m/%d %H:%M} 로 변경 — {q.get('title', '')[:40]}")
+            break
+    return ({**data, "queue": queue} if changed else data), changed
+
+
 def due_items(data: dict, now: datetime) -> list[dict]:
     out = []
     for q in data.get("queue", []):

@@ -642,6 +642,9 @@ test("parseRunInputs: 허용 목록·형식만 통과, 그 밖은 null", () => {
   assert.deepEqual(parseRunInputs(undefined), {});
   assert.deepEqual(parseRunInputs({ mode: "queue", picks: "0123abcd,89ef0123" }), { mode: "queue", picks: "0123abcd,89ef0123" });
   assert.equal(parseRunInputs({ mode: "run" }), null, "run 은 화면에서 못 고른다");
+  assert.deepEqual(parseRunInputs({ mode: "edit", edits: "0123abcd=cancel,89ef0123=15:30,4567cdef=2026-09-13T07:30" }),
+    { mode: "edit", edits: "0123abcd=cancel,89ef0123=15:30,4567cdef=2026-09-13T07:30" });
+  assert.equal(parseRunInputs({ mode: "edit", edits: "0123abcd=rm -rf" }), null, "예약 수정 값은 정해진 꼴만");
   assert.equal(parseRunInputs({ picks: "x" }), null);
   assert.equal(parseRunInputs({ account: "other" }), null, "계정은 바꿀 수 없다");
   assert.equal(parseRunInputs("mode=queue"), null);

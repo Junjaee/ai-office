@@ -185,6 +185,66 @@ def step_card(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, wri
     return {"cards": result}
 
 
+def step_video(cfg: dict, acct: dict, p: writer.Profile, out: Path, written: dict, progress) -> dict | None:
+    """소재에 영상(공식 유튜브·X·공식 페이지 mp4)이 있으면 받아서 릴스로. 없거나 실패하면 None (카드로 간다)."""
+    import insta_video as video
+
+    if not video.tools_ok():
+        progress("ffmpeg 없음 — 영상 건너뜀")
+        return None
+    topic = json.loads((out / "topic.json").read_text(encoding="utf-8"))
+    item = written["posts"][0]
+    cand = next((c for c in topic["chosen"] if c["key"] == item["candidate"]["key"]), topic["chosen"][0])
+    found = video.find_video(cand)
+    if not found:
+        return None
+    progress(f"영상 찾음 ({found['kind']}) {found['url'][:60]}")
+    d = out / "reel"
+    try:
+        meta = video.download(found["url"], d, progress=progress)
+        art = item["article"]
+        credit = video.credit_text(meta)
+        reel = video.make_reel(meta["path"], d / "reel.mp4", title=art["title"], sub=art.get("subtitle", ""), credit=credit,
+                               brand=cards_brand(), handle=acct.get("handle") or p.handle, theme=p.theme, progress=progress)
+        thumb = video.thumbnail(reel["path"], d / "thumb.jpg")
+    except Exception as exc:  # noqa: BLE001 — 영상이 안 되면 카드로
+        progress(f"영상 실패({type(exc).__name__}: {str(exc)[:80]}) — 카드로 진행")
+        return None
+    result = {"dir": str(d), "file": reel["path"], "thumb": str(thumb), "duration": reel["duration"], "credit": credit,
+              "source_url": meta.get("page") or meta["url"], "video_url": meta["url"], "kind": found["kind"]}
+    (out / "reel.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
+    return result
+
+
+def cards_brand() -> str:
+    import insta_cards as cards
+
+    return cards.BRAND
+
+
+def step_upload_reel(cfg: dict, acct: dict, out: Path, written: dict, reel: dict, args, progress) -> dict:
+    import insta_publisher as pub
+
+    token, user_id = pub.account_env(args.account)
+    ig = pub.Instagram(token, user_id)
+    today = args.date or datetime.now(KST).strftime("%Y-%m-%d")
+    item = written["posts"][0]
+    post = item["article"]
+    stamp = datetime.now(KST).strftime("%H%M%S")
+    urls = pub.upload_public([Path(reel["file"]), Path(reel["thumb"])], f"insta/{args.account}/{today}-{stamp}")
+    progress("영상 공개 URL 준비")
+    caption = post["caption"].rstrip() + f"\n\n{reel['credit']}\n{reel['source_url']}\n\n" + " ".join(post["hashtags"])
+    res = pub.publish_reel(ig, urls[0], caption, cover_url=urls[1] if len(urls) > 1 else "", progress=progress)
+    row = {"date": today, "account": args.account, "key": item["candidate"]["key"], "title": item["candidate"]["title"],
+           "hook": post["title"], "media_id": res["media_id"], "permalink": res["permalink"], "video_url": urls[0],
+           "kind": "reel", "credit": reel["credit"], "provider": item.get("provider", "")}
+    append_posted(args.account, row)
+    progress(f"릴스 게시 완료 {res['permalink']}")
+    commit_data(args.account, today)
+    (out / "upload.json").write_text(json.dumps([row], ensure_ascii=False, indent=1), encoding="utf-8")
+    return {"published": [row]}
+
+
 def step_upload(cfg: dict, acct: dict, out: Path, written: dict, rendered: dict, args, progress) -> dict:
     import insta_publisher as pub
 
@@ -261,7 +321,8 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
             chosen.append({"key": c.key, "title": c.title, "link": c.link, "source": c.source,
                            "published": c.published.isoformat(timespec="minutes") if c.published else "",
                            "summary": c.summary[:300], "angle": pk.get("angle", ""), "reason": pk.get("reason", ""),
-                           "title_ko": pk.get("title_ko", ""), "gap": bool(pk.get("gap"))})
+                           "title_ko": pk.get("title_ko", ""), "gap": bool(pk.get("gap")),
+                           "video": ("video" in c.signals) or video_mod().is_video_site(c.link)})
     if not chosen:
         raise RuntimeError("편집장이 고른 번호가 후보 범위를 벗어났습니다")
     now = datetime.now(KST)
@@ -272,6 +333,12 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
     lines = [f"[후보]{' 🇺🇸빈자리' if c.get('gap') else ''} {c['title'][:60]} — {c['source']}" for c in chosen]
     return {"counts": {"new": 0, "failed": 0, "total": len(load_posted(args.account))}, "lines": lines,
             "tasks": {"topic": (True, f"후보 {len(chosen)}건 · 사이트에서 골라 주세요")}}
+
+
+def video_mod():
+    import insta_video
+
+    return insta_video
 
 
 def do_queue(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args, progress) -> dict:
@@ -365,6 +432,22 @@ def make_post(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, can
     lines.append(f"[기사] {written['posts'][0]['article']['title']} · 검수 {v.get('total')}점")
     if not ok_write:
         return {"ok": False, "error": f"검수 미달 {v.get('total')}점", "tasks": tasks, "lines": lines + [f"[보류] {str(v.get('feedback', ''))[:100]}"]}
+    reel = None
+    if acct.get("reels", True):
+        progress("영상 찾는 중")
+        reel = step_video(cfg, acct, p, out, written, progress)
+    if reel:
+        tasks["card"] = (True, f"릴스 {reel['duration']:.0f}초 · {reel['credit']}")
+        lines.append(f"[릴스] {reel['duration']:.0f}초 · {reel['credit']}")
+        if args.dry_run:
+            lines.append(f"[릴스] {reel['file']} (dry-run: 게시 안 함)")
+            return {"ok": True, "permalink": "", "tasks": tasks, "lines": lines}
+        progress("릴스 올리는 중")
+        uploaded = step_upload_reel(cfg, acct, out, written, reel, args, progress)
+        n = len(uploaded["published"])
+        tasks["upload"] = (n > 0, f"{n}건 게시(릴스)")
+        lines += [f"[게시] {r['permalink']}" for r in uploaded["published"]]
+        return {"ok": n > 0, "permalink": uploaded["published"][0]["permalink"] if n else "", "tasks": tasks, "lines": lines}
     progress("카드 만드는 중")
     rendered = step_card(cfg, acct, p, llm, out, written, progress)
     tasks["card"] = (True, f"카드 {len(rendered['cards'][0]['files'])}장")

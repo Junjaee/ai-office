@@ -16,6 +16,8 @@ export type ReviewCandidate = {
   angle?: string;
   /** 미국 소식인데 한국 AI 계정이 아직 안 다룬 것(빈자리) */
   gap?: boolean;
+  /** 영상이 딸린 소재(공식 유튜브·X) — 릴스로 게시된다 */
+  video?: boolean;
 };
 
 export type ReviewQueueItem = {
