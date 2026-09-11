@@ -3,48 +3,48 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "게시 0건, 실패 2건, 누적 5건, 12.5분",
+  "summary": "게시 1건, 실패 1건, 누적 6건, 14.3분",
   "counts": {
-    "new": 0,
-    "failed": 2,
-    "total": 5
+    "new": 1,
+    "failed": 1,
+    "total": 6
   },
   "next_run": "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격",
   "log": [
-    "게시 0건, 실패 2건, 누적 5건, 12.5분",
-    "[기사] 챗GPT 플러스 2개월, 40달러를 공짜로 · 검수 31점",
-    "[보류] 출처가 URL 이 아님: 카카오톡 'ChatGPT for Kakao' 채널 공식 안내(이벤트 페이지) — 정확한 기간·세부 조건은 공식 안내 확인 / 사실 오류 때문에 revise",
-    "[기사] 아니 이 영화, AI가 만들었다고요? · 검수 43점",
-    "[보류] SNS 게시물은 출처로 쓸 수 없음 — 공식 페이지·기사 주소로: https://vrew.voyagerx.com / 사실관계는 문제없어요. 소라·런웨이·클링·브루 설명과 요금 문단"
+    "게시 1건, 실패 1건, 누적 6건, 14.3분",
+    "[기사] 클로드로 심카드 2500만 개 감시한 사람들 · 검수 34점",
+    "[보류] 사실 오류: '말리의 감시 시스템' 문단의 '통화·문자·음성을 수집하고, 유심을 바꿔도 목소리로 신원을 알아내요' 문장은 8개 출처(claims) 어디에도 없는 기능(음성 생체인식",
+    "[기사] GPT-6, 컴퓨터 작업 47% 더 빨라졌다 · 검수 43점",
+    "[게시] https://www.instagram.com/p/DdKefqPj8fm/"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34638535201,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34638535201",
+  "run_id": 34652675795,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34652675795",
   "trigger": "schedule",
-  "started_at": "2026-09-12T04:24:11+09:00",
-  "duration_sec": 750,
+  "started_at": "2026-09-12T07:09:53+09:00",
+  "duration_sec": 858,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 14건 · 게시 6건"
+      "summary": "후보 20건 · 예약 12건 · 게시 7건"
     },
     {
       "id": "write",
-      "status": "error",
+      "status": "done",
       "summary": "검수 43점 (claude_cli)"
     },
     {
       "id": "card",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "카드 8장"
     },
     {
       "id": "upload",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "1건 게시"
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T04:36:41+09:00"
+  "updated_at": "2026-09-12T07:24:12+09:00"
 }
