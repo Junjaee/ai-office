@@ -24,6 +24,16 @@
 
 주의: 대시보드의 실행 상태는 **워크플로 파일 단위**로 잡힌다. 같은 `insta.yml` 을 쓰는 계정이 둘 이상이면 최근 실행 하나만 보이므로, 두 번째 계정을 붙일 때 Worker 의 run 매칭에 `inputs.account` 를 반영해야 한다(할 일).
 
+## 카드를 보고 고치기 (초기 세팅 때)
+
+카드를 눈으로 보고 지적할 게 있으면 원고를 처음부터 다시 쓰지 말고 **지적만 넣어 다듬는다** — 이전 원고를 모델에 같이 주고 지적된 부분만 고치게 한다.
+
+```bash
+python automations/insta/run_insta.py --account aitips --until card --resume --revise --feedback "5번 카드: 번호 목록으로. 코드 칸: 빈칸 대신 실제 예시 문장으로."
+```
+
+자주 걸리는 지적은 코드 검사(`insta_writer.local_checks`)와 규칙(`_rules`)에 이미 들어 있다: 뉴스형 표지는 헤드라인, 제목이 'N가지' 면 본문은 번호 N줄, 예시 프롬프트 칸은 자리표시자 없는 완성 문장(카드에 "이렇게 입력해 보세요" 라벨이 붙는다).
+
 ## 카드 렌더링 함정 (겪은 것)
 
 - `page.set_content()` 로 연 페이지는 주소가 `about:blank` 라서 Chrome 이 `file://` 이미지·글꼴을 막는다. 그래서 글꼴(Pretendard)과 카드 이미지는 **base64 데이터 URI 로 HTML 에 직접 심는다**(`insta_cards.data_uri`). 이 때문에 카드 하나의 HTML 이 수 MB 가 되지만 문제없다.

@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 
 from insta_llm import LLM
@@ -96,7 +97,9 @@ def _rules(p: Profile) -> str:
         f"- 금지 표현: {', '.join(p.banned)}. 느낌표 남발·이모지는 카드당 1개 이하.",
         "- 숫자·툴 이름·명령어는 출처 그대로. 출처에 없는 사실을 지어내지 않는다.",
         "- 모든 사실 주장은 claims 에 {text, source(URL)} 로 넣는다. 출처를 못 대는 주장은 쓰지 않는다. 원문·공식 링크에 없는 세부(요금, 지원 OS, 날짜)는 단정하지 말고 '공식 안내 확인'으로 돌린다.",
-        "- code 칸은 실제로 입력할 명령·프롬프트·단축키만 넣는다. 안내 문구나 '확인하세요' 같은 말은 code 에 넣지 않는다(없으면 비운다).",
+        "- code 칸은 카드에 '이렇게 입력해 보세요' 라벨과 함께 표시된다. 독자가 그대로 복사해 넣을 수 있는 **완성된 문장**만 넣는다. '(문단 붙여넣기)' 같은 빈칸·자리표시자 금지 — 빈칸이 필요하면 실제 예시로 채운다(예: '이 문단에서 사실관계가 틀린 곳만 찾아 줘: 구글은 9월 10일 …'). 안내 문구·단축키 설명은 code 에 넣지 않는다(없으면 비운다). code 가 있는 카드의 body 는 그 문장을 어디에 넣으면 무엇이 나오는지 한 줄로 알려 준다.",
+        "- 카드 한 장은 그것만 떼어 봐도 이해돼야 한다. body 는 title 이 약속한 내용만 담는다 — title 이 '앱 여는 법 세 가지' 면 body 는 그 세 가지뿐, 다른 이야기(기록 동기화 등)는 넣지 않는다.",
+        "- title 에 'N가지'·'N단계'·'N개' 가 있으면 body 는 정확히 N줄, 한 줄에 하나씩 '1. …' 번호를 붙이고 줄바꿈 문자(\\n)로 나눈다. 한 줄 20자 안팎.",
         f"- 마지막 장(cta): {p.cta}",
         "- caption: 300~450자, 3문단(첫 줄이 훅 반복 → 핵심 요약 → 저장·공유 유도). 해시태그는 caption 에 넣지 말고 hashtags 배열로.",
         f"- hashtags: 기본 {', '.join(p.hashtags_base)} 중 3개 + 소재에 맞는 2개, 총 5개 안팎.",
@@ -157,7 +160,8 @@ def judge_prompt(p: Profile, post: dict) -> tuple[str, str]:
     system = ("당신은 인스타그램 카드뉴스 품질 심사관입니다. 냉정하게 채점합니다. 도구를 쓰지 말고 JSON 만 출력합니다.\n"
               "채점 항목(각 1~5점): hook(첫 장이 스크롤을 멈추는가, 구체적인가), useful(독자가 바로 써먹는가), "
               "factual(주장마다 출처가 있고 과장이 없는가), korean(자연스러운 한국어, AI 티 나는 표현 없음), "
-              "rules(카드 길이·금지어·형식 규칙 준수).\n"
+              "rules(카드 길이·금지어·형식 규칙 준수, 제목이 약속한 것만 본문에 있는가, code 칸이 자리표시자 없는 완성 문장인가).\n"
+              "korean 은 문장이 매끄러운지뿐 아니라 카드 한 장만 봐도 뜻이 통하는지(앞뒤 카드 없이도 이해되는지)를 본다.\n"
               f"가중치: {json.dumps(w, ensure_ascii=False)}. total = Σ(점수×가중치). "
               f"total ≥ {p.pass_score} 이면 verdict=pass, 아니면 revise 와 함께 고칠 점을 feedback 에 구체적으로.")
     user = ("원고:\n" + json.dumps(post, ensure_ascii=False, indent=1) +
@@ -175,6 +179,8 @@ def local_checks(p: Profile, post: dict) -> list[str]:
             problems.append(f"금지 표현 '{b}' 포함")
     if not post.get("claims"):
         problems.append("claims 비어 있음(출처 있는 주장이 없음)")
+    if p.format == "news" and not re.search(r"출시|공개|업데이트|추가|지원|시작|무료|배포|나왔", str(post.get("hook", ""))):
+        problems.append("뉴스형인데 표지 hook 이 헤드라인이 아님 — '<누가>, <무엇> 출시/공개/업데이트' 꼴로 (이득 문장은 sub 에)")
     for c in post.get("claims", []):
         if not str(c.get("source", "")).startswith("http"):
             problems.append(f"출처가 URL 이 아님: {c.get('source')}")
@@ -183,6 +189,15 @@ def local_checks(p: Profile, post: dict) -> list[str]:
         words = len(str(s.get("body", "")).split())
         if words > 45:
             problems.append(f"{i}번 카드 본문이 너무 김({words}단어)")
+        code = str(s.get("code", ""))
+        if re.search(r"[(\[（][^)\]）]*(붙여넣|입력|넣기|여기에|내용|텍스트|placeholder)[^)\]）]*[)\]）]", code, re.I):
+            problems.append(f"{i}번 카드 code 에 자리표시자가 있음 — 실제 예시로 채울 것: {code[:40]}")
+        m = re.search(r"([0-9]|[두세네다섯여섯일곱여덟아홉열])\s*(가지|단계|개)", str(s.get("title", "")))
+        if m:
+            n = {"두": 2, "세": 3, "네": 4, "다섯": 5, "여섯": 6, "일곱": 7, "여덟": 8, "아홉": 9, "열": 10}.get(m.group(1)) or int(m.group(1))
+            numbered = [ln for ln in str(s.get("body", "")).split("\n") if re.match(r"\s*\d+[.)]", ln)]
+            if len(numbered) != n:
+                problems.append(f"{i}번 카드 제목이 '{m.group(0)}' 인데 본문에 번호 줄이 {len(numbered)}개 — 정확히 {n}줄, 줄마다 '1. ' 번호")
     post["hashtags"] = ["#" + str(h).strip().lstrip("#") for h in post.get("hashtags", []) if str(h).strip()]
     return problems
 

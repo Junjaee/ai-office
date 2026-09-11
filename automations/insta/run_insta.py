@@ -194,11 +194,17 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     if written is None:
         seed = ""
         prev = out / "post.json"
-        if args.revise and prev.exists():        # 다듬기: 지난 심사의 지적을 첫 회부터 반영
+        if args.revise and prev.exists():        # 다듬기: 이전 원고를 주고 지적된 부분만 고치게 한다
             try:
-                seed = str(json.loads(prev.read_text(encoding="utf-8"))["posts"][0]["verdict"].get("feedback", ""))
+                prev_post = json.loads(prev.read_text(encoding="utf-8"))["posts"][0]
+                seed = str(prev_post["verdict"].get("feedback", ""))
+                keep = {k: prev_post["post"].get(k) for k in ("hook", "sub", "cover_image", "slides", "caption", "hashtags")}
+                seed += ("\n[이전 원고 — 아래 지적과 관계없는 부분(표지 헤드라인·카드 순서·이미지 등)은 그대로 유지하고, 지적된 부분만 고친다]\n"
+                         + json.dumps(keep, ensure_ascii=False))
             except (KeyError, IndexError, ValueError):
                 seed = ""
+        if args.feedback:                        # 사용자가 카드를 보고 직접 준 지적
+            seed = (seed + "\n" if seed else "") + "[사용자 지적 — 반드시 반영]\n" + args.feedback
         for stale in ("cards.json",):
             (out / stale).unlink(missing_ok=True)
         written = step_write(cfg, acct, p, refs, llm, out, topic, progress, seed_feedback=seed)
@@ -244,6 +250,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--resume", action="store_true", help="out/ 의 중간 결과를 이어서")
     p.add_argument("--pick", type=int, default=0, help="후보 N번을 강제 선택")
     p.add_argument("--revise", action="store_true", help="지난 심사 피드백을 반영해 원고를 다시 쓴다(--resume 과 함께)")
+    p.add_argument("--feedback", default="", help="다듬기에 넣을 사용자 지적(--revise 와 함께). 줄바꿈 가능")
     p.add_argument("--date", default="", help="출력 폴더 날짜 (기본 오늘)")
     a = p.parse_args(argv)
     return a
