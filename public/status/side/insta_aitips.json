@@ -1,50 +1,50 @@
 {
   "name": "인스타 게시글 · aitips",
   "dept": "research",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "게시 1건, 실패 1건, 누적 6건, 14.3분",
+  "summary": "게시 0건, 실패 0건, 누적 6건, 2.2분",
   "counts": {
-    "new": 1,
-    "failed": 1,
+    "new": 0,
+    "failed": 0,
     "total": 6
   },
   "next_run": "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격",
   "log": [
-    "게시 1건, 실패 1건, 누적 6건, 14.3분",
-    "[기사] 클로드로 심카드 2500만 개 감시한 사람들 · 검수 34점",
-    "[보류] 사실 오류: '말리의 감시 시스템' 문단의 '통화·문자·음성을 수집하고, 유심을 바꿔도 목소리로 신원을 알아내요' 문장은 8개 출처(claims) 어디에도 없는 기능(음성 생체인식",
-    "[기사] GPT-6, 컴퓨터 작업 47% 더 빨라졌다 · 검수 43점",
-    "[게시] https://www.instagram.com/p/DdKefqPj8fm/"
+    "게시 0건, 실패 0건, 누적 6건, 2.2분",
+    "[후보] 🇺🇸빈자리 “Wait, one more thing…” — IG 🇺🇸 @openaidevs · 좋아요 1.3천 · 댓글 16",
+    "[후보] 🇺🇸빈자리 This might be one of the best uses of an AI agent yet — IG 🇺🇸 @evolving.ai · 좋아요 1.0만 · 댓글 185",
+    "[후보] 🇺🇸빈자리 Grandma Theft Auto might be the first AI game concept I’d pa — IG 🇺🇸 @evolving.ai · 좋아요 3.7만 · 댓글 505",
+    "[후보] 아니 이 영화 대체 어디서 보는 거예요? — IG 🇰🇷 @ai.trend.kr · 좋아요 2.2만 · 댓글 77"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34652675795,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34652675795",
+  "run_id": 34658288381,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34658288381",
   "trigger": "schedule",
-  "started_at": "2026-09-12T07:09:53+09:00",
-  "duration_sec": 858,
+  "started_at": "2026-09-12T08:31:13+09:00",
+  "duration_sec": 131,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 12건 · 게시 7건"
+      "summary": "후보 20건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
-      "status": "done",
-      "summary": "검수 43점 (claude_cli)"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "card",
-      "status": "done",
-      "summary": "카드 8장"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "upload",
-      "status": "done",
-      "summary": "1건 게시"
+      "status": "idle",
+      "summary": ""
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T07:24:12+09:00"
+  "updated_at": "2026-09-12T08:33:25+09:00"
 }
