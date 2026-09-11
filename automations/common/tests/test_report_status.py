@@ -212,3 +212,20 @@ def test_push_gives_up_after_three_attempts(repo, remote, monkeypatch, capsys):
     err = capsys.readouterr().err
     assert "push 실패 (3/3)" in err and "포기" in err
     assert "status: minutes" in git(repo, "log", "--oneline", "-1")    # 커밋은 남는다
+
+
+# ---------------------------------------------------------------- 실행 일지
+
+def test_report_appends_history_line_in_same_commit(repo, monkeypatch):
+    monkeypatch.setenv("GITHUB_RUN_ID", "555")
+    monkeypatch.setenv("GITHUB_SERVER_URL", "https://github.com")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "Junjaee/ai-office")
+    monkeypatch.setenv("GITHUB_EVENT_NAME", "schedule")
+    report(repo, automation_id="minutes", name="국회회의록 수집", dept="research", ok=True, summary="신규 1건",
+           started_at="2026-09-11T09:00:00+09:00", duration_sec=60)
+    changed = git(repo, "show", "--name-only", "--format=", "HEAD").split()
+    assert "history/assembly/minutes/2026-09.jsonl" in changed
+    assert "public/status/assembly/minutes.json" in changed
+    line = json.loads((repo / "history" / "assembly" / "minutes" / "2026-09.jsonl").read_text(encoding="utf-8").strip())
+    assert line["run_id"] == 555 and line["trigger"] == "schedule" and line["summary"] == "신규 1건"
+    assert git(repo, "status", "--porcelain") == ""

@@ -24,6 +24,8 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from history_log import HISTORY_DIR, append_history
+
 KST = timezone(timedelta(hours=9))
 STATUS_DIR = Path("public") / "status"
 PUSH_ATTEMPTS = 3
@@ -120,11 +122,13 @@ def report(repo: str | Path, *, automation_id: str, name: str, dept: str, ok: bo
         print(f"[report_status] 저장소가 없습니다: {repo}", file=sys.stderr)
         return False
     _git(repo, "pull", "--rebase", "-q", check=False)      # 원격이 없으면 조용히 실패
-    write_status(repo, automation_id, build_payload(
+    path = write_status(repo, automation_id, build_payload(
         name=name, dept=dept, ok=ok, summary=summary, counts=counts, next_run=next_run, log_lines=log_lines,
         link=link, tasks=tasks, started_at=started_at, duration_sec=duration_sec,
     ), workspace=workspace)
-    _git(repo, "add", str(STATUS_DIR))
+    # 영구 일지: 상태 파일과 같은 커밋에 한 줄 (자동화별 파일이라 동시에 끝나도 안 겹친다)
+    append_history(repo, workspace, automation_id, json.loads(path.read_text(encoding="utf-8")))
+    _git(repo, "add", str(STATUS_DIR), str(HISTORY_DIR))
     stamp = datetime.now(KST).strftime("%Y-%m-%d %H:%M")
     commit = _git(repo, "commit", "-qm", f"status: {automation_id} {stamp}", check=False)
     if commit.returncode not in (0, 1):                     # 1 = 변경 없음
