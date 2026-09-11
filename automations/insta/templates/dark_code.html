@@ -23,18 +23,19 @@
   .cover.has-image .hook { font-size: 88px; }
   .cover.has-image .sub { margin-top: 28px; font-size: 36px; }
   .body .num { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 84px; border-radius: 22px; background: {{ theme.accent }}; color: {{ theme.bg }}; font-size: 44px; font-weight: 800; margin-bottom: 36px; }
-  .body .title { font-size: 70px; line-height: 1.22; font-weight: 800; letter-spacing: -.02em; margin-bottom: 40px; }
+  .body .title { font-size: 66px; line-height: 1.22; font-weight: 800; letter-spacing: -.02em; margin-bottom: 36px; }
   /* 본문 = 문단 요약 2~3줄 (점 하나에 한 줄) */
-  .body .lines { list-style: none; font-size: 42px; line-height: 1.55; }
-  .body .lines li { position: relative; padding-left: 44px; margin-bottom: 18px; }
+  .body .lines { list-style: none; font-size: 40px; line-height: 1.5; }
+  .body .lines li { position: relative; padding-left: 44px; margin-bottom: 16px; }
   .body .lines li::before { content: ""; position: absolute; left: 0; top: .62em; width: 16px; height: 16px; border-radius: 50%; background: {{ theme.accent }}; }
   .body.has-image .num { width: 64px; height: 64px; font-size: 34px; border-radius: 16px; margin-bottom: 22px; }
-  .body.has-image .title { font-size: 56px; margin-bottom: 24px; }
-  .body.has-image .lines { font-size: 36px; line-height: 1.5; }
-  .body.has-image .lines li { margin-bottom: 10px; padding-left: 38px; }
+  .body.has-image .title { font-size: 54px; margin-bottom: 22px; }
+  .body.has-image .lines { font-size: 34px; line-height: 1.45; }
+  .body.has-image .lines li { margin-bottom: 8px; padding-left: 36px; }
   .shot { margin: 28px 0 0; border-radius: 22px; overflow: hidden; border: 2px solid rgba(255,255,255,.12); background: #000; box-shadow: 0 24px 60px rgba(0,0,0,.45); flex: 0 0 auto; }
   .shot img { display: block; width: 100%; max-height: 560px; object-fit: cover; object-position: top; }
   .cover .shot img { max-height: 520px; }
+  .body .shot img { max-height: 440px; }
   .shot-cap { margin-top: 14px; font-size: 26px; color: {{ theme.muted }}; display: flex; justify-content: space-between; gap: 24px; }
   .shot-cap .credit { flex: 0 0 auto; opacity: .75; }
   .cta .big { font-size: 84px; line-height: 1.2; font-weight: 800; letter-spacing: -.02em; }

@@ -65,12 +65,9 @@ CARDS_SCHEMA = {
                   "properties": {"title": {"type": "string", "maxLength": 48}, "sub": {"type": "string", "maxLength": 80},
                                  "image_id": {"type": "integer"}}},
         "cards": {
-            "type": "array", "minItems": 4, "maxItems": 8,
-            "items": {"type": "object", "required": ["title", "lines"],
-                      "properties": {"title": {"type": "string", "maxLength": 40},
-                                     "lines": {"type": "array", "minItems": 1, "maxItems": 4,
-                                               "items": {"type": "string", "maxLength": 60}},
-                                     "image_id": {"type": "integer"},
+            "type": "array", "minItems": 1, "maxItems": 9,
+            "items": {"type": "object", "required": ["image_id"],
+                      "properties": {"image_id": {"type": "integer"},
                                      "image_caption": {"type": "string", "maxLength": 60}}},
         },
         "cta": {"type": "string", "maxLength": 80},
@@ -296,21 +293,28 @@ def _polish(llm: LLM, p: Profile, system: str, user: str, article: dict, verdict
 # ───────────────────────── 4) 카드 요약 ─────────────────────────
 
 def cards_prompt(p: Profile, article: dict, images_block: str) -> tuple[str, str]:
-    system = (f"당신은 인스타그램 정보 계정 '{p.name}'의 카드뉴스 디자이너 겸 편집자입니다. 검수를 통과한 기사를 카드로 옮깁니다. "
+    system = (f"당신은 인스타그램 정보 계정 '{p.name}'의 카드뉴스 편집자입니다. 검수를 통과한 기사를 카드로 옮깁니다. "
+              "카드 본문은 기사 문단을 **그대로** 쓰므로(코드가 문장 단위로 정렬) 당신은 표지 문구와 사진만 정합니다. "
               "도구를 쓰지 말고 JSON 만 출력합니다.\n"
               "규칙:\n"
-              "- 표지(cover): title 은 기사 제목을 카드용으로(뜻이 끊기지 않는 자리에 줄바꿈 문자 \\n 을 넣어 2줄, 한 줄 12자 안팎). sub 는 부제.\n"
-              "- 문단 하나 = 카드 한 장. 문단 순서 그대로. 카드 title 은 문단 heading(2줄이면 \\n), lines 는 그 문단의 **핵심만 2~3줄**(한 줄 25자 안팎, 완결된 짧은 문장). "
-              "문단 문장을 그대로 옮기지 말고 요약한다. 숫자·이름·예시는 살린다.\n"
-              "- 사진: 아래 후보 목록의 번호만 image_id 에 넣는다(없으면 0). 카드의 소주제와 **실제로 맞는** 사진만 고른다(설명·출처로 판단). "
-              "표지에는 가장 대표적인 화면·제품 사진. 후보가 마땅치 않으면 넣지 않는다. image_caption 은 사진이 무엇인지 한 줄.\n"
-              f"- 마지막 카드 문구(cta): {p.cta}\n"
-              f"- 금지 표현: {', '.join(p.banned)}")
+              "- 표지(cover): title 은 기사 제목을 카드용으로 — 뜻이 끊기지 않는 자리에 줄바꿈 문자 \\n 을 넣어 2줄(한 줄 12자 안팎). sub 는 부제.\n"
+              "- cards 는 문단 수와 같게, 문단 순서대로 한 항목씩. 각 항목은 image_id(아래 후보 번호, 없으면 0)와 image_caption(사진이 무엇인지 한 줄).\n"
+              "- 사진은 그 문단의 소주제와 **실제로 맞는** 것만 고른다(설명·출처로 판단). 공식 출처(official) 우선. 표지에는 가장 대표적인 화면·제품 사진. "
+              "맞는 후보가 없으면 0 — 억지로 넣지 않는다.\n"
+              f"- 마지막 카드 문구(cta): {p.cta}")
     user = ("기사:\n" + json.dumps({k: article.get(k) for k in ("title", "subtitle", "paragraphs")}, ensure_ascii=False, indent=1) +
             "\n\n사진 후보(번호·종류·설명·출처):\n" + (images_block or "(없음)") +
             '\n\nJSON: {"cover": {"title": "...\\n...", "sub": "...", "image_id": 0}, '
-            '"cards": [{"title": "...", "lines": ["...", "..."], "image_id": 0, "image_caption": ""}], "cta": "..."}')
+            '"cards": [{"image_id": 0, "image_caption": ""}], "cta": "..."}')
     return system, user
+
+
+def split_sentences(text: str) -> list[str]:
+    """문단을 문장 단위로 나눈다(카드 한 줄 = 한 문장). 마침표·물음표·느낌표 뒤 공백에서 끊는다."""
+    import re
+
+    parts = re.split(r"(?<=[.?!。])\s+", str(text).strip())
+    return [x.strip() for x in parts if x.strip()]
 
 
 def local_card_checks(p: Profile, plan: dict, n_paragraphs: int, n_images: int) -> list[str]:
@@ -319,9 +323,6 @@ def local_card_checks(p: Profile, plan: dict, n_paragraphs: int, n_images: int) 
     if len(cards) != n_paragraphs:
         problems.append(f"카드 {len(cards)}장 — 문단 수({n_paragraphs})와 같아야 함")
     for i, c in enumerate(cards, 1):
-        for ln in c.get("lines", []):
-            if len(ln) > 45:
-                problems.append(f"{i}번 카드 줄이 너무 김({len(ln)}자): {ln[:20]}…")
         iid = int(c.get("image_id") or 0)
         if iid < 0 or iid > n_images:
             problems.append(f"{i}번 카드 image_id {iid} 가 후보 범위 밖")
@@ -337,7 +338,7 @@ def local_card_checks(p: Profile, plan: dict, n_paragraphs: int, n_images: int) 
 
 
 def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_rounds: int = 2, progress=print) -> dict:
-    """기사 → 카드 계획(표지·카드별 요약·사진 번호). image_id 를 실제 후보(dict)로 바꿔 돌려준다."""
+    """기사 → 카드 계획(표지 문구·사진 번호). 본문은 문단 그대로(문장 단위) 채우고, image_id 를 실제 후보(dict)로 바꿔 돌려준다."""
     from insta_research import as_prompt
 
     system, user = cards_prompt(p, article, as_prompt(images))
@@ -354,6 +355,15 @@ def plan_cards(llm: LLM, p: Profile, article: dict, images: list[dict], *, max_r
         feedback = "; ".join(problems)
     cover = plan.get("cover", {})
     cover["image"] = by_id.get(int(cover.get("image_id") or 0))
-    for c in plan.get("cards", []):
+    paras = article.get("paragraphs", [])
+    cards = plan.get("cards", [])
+    # 본문은 기사 문단 그대로: 소제목 한 줄(줄바꿈 제거), 문장마다 한 줄
+    for i, para in enumerate(paras):
+        c = cards[i] if i < len(cards) else {"image_id": 0, "image_caption": ""}
+        c["title"] = " ".join(str(para.get("heading", "")).split())
+        c["lines"] = split_sentences(para.get("text", ""))
         c["image"] = by_id.get(int(c.get("image_id") or 0))
+        if i >= len(cards):
+            cards.append(c)
+    plan["cards"] = cards[:len(paras)]
     return plan

@@ -134,12 +134,12 @@ def test_generate_article_revises_until_editor_passes():
     assert "관련 글" in prompts[0], "조사 결과가 글쓰기 프롬프트에 들어간다"
 
 
-def test_plan_cards_maps_image_ids_and_rejects_bad_ones():
+def test_plan_cards_uses_paragraphs_verbatim_and_maps_images():
     p = profile()
     images = [{"id": 1, "url": "https://img/1.jpg", "alt": "앱 화면", "source_url": "https://blog.google/x",
                "source_title": "구글 블로그", "kind": "official"}]
-    bad = {"cover": {"title": "구글, 윈도우용\n제미나이 앱 출시", "sub": "s", "image_id": 1},
-           "cards": [{"title": f"카드 {i}", "lines": ["핵심 한 줄"], "image_id": 9 if i == 0 else 0} for i in range(6)], "cta": "저장"}
+    bad = {"cover": {"title": "구글, 윈도우용\\n제미나이 앱 출시", "sub": "s", "image_id": 1},
+           "cards": [{"image_id": 9 if i == 0 else 0} for i in range(6)], "cta": "저장"}
     good = json.loads(json.dumps(bad)); good["cards"][0]["image_id"] = 1
     seq = iter([bad, good])
 
@@ -149,9 +149,15 @@ def test_plan_cards_maps_image_ids_and_rejects_bad_ones():
         def json(self, *, system, user, schema=None):
             return next(seq)
 
-    plan = writer.plan_cards(Fake(), p, sample_article(), images, progress=lambda m: None)
+    art = sample_article()
+    art["paragraphs"][0]["heading"] = "소주제\n둘째 줄"
+    plan = writer.plan_cards(Fake(), p, art, images, progress=lambda m: None)
     assert plan["cover"]["image"]["url"] == "https://img/1.jpg"
     assert plan["cards"][0]["image"]["url"] == "https://img/1.jpg" and plan["cards"][1]["image"] is None
+    assert plan["cards"][0]["title"] == "소주제 둘째 줄", "소제목은 한 줄"
+    assert plan["cards"][0]["lines"][0].startswith("구글이 9월 10일") and len(plan["cards"][0]["lines"]) == 4, "문단을 문장 단위로 그대로"
+    assert writer.split_sentences("gemini.google/desktop 에서 받아요. 1.5배 빨라요! 되나요? 네.") == \
+        ["gemini.google/desktop 에서 받아요.", "1.5배 빨라요!", "되나요?", "네."]
 
 
 def test_build_slides_and_render_from_plan():
