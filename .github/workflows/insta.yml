@@ -2,8 +2,10 @@ name: 인스타 게시글
 
 on:
   schedule:
-    # 매일 08:00 KST — 후보 10개 뽑아 검토 칸에 올림 (UTC 23:00 전날)
-    - cron: "0 23 * * *"
+    # 매일 06:30 KST — 밤사이 미국 소식까지 넣어 후보 10개를 검토 칸에 올림 (UTC 21:30 전날)
+    - cron: "30 21 * * *"
+    # 매일 07:30 KST — 아무도 안 골랐으면 편집장 1순위를 바로 게시 (UTC 22:30 전날, 사용자 결정 2026-09-12)
+    - cron: "30 22 * * *"
     # 매시 정각 — 예약 시각이 된 주제를 만들어 게시 (만들 것 없으면 20초 안에 끝남)
     - cron: "0 * * * *"
   workflow_dispatch:
@@ -13,9 +15,9 @@ on:
         type: string
         default: "aitips"
       mode:
-        description: "topics=후보 뽑기 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시 / run=1건 자동 게시(시험)"
+        description: "topics=후보 뽑기 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시 / auto=07:30 자동 선택 / run=1건 자동 게시(시험)"
         type: choice
-        options: [topics, queue, publish, run]
+        options: [topics, queue, publish, auto, run]
         default: "topics"
       picks:
         description: "queue 방식에서 고른 후보 id (쉼표). 사이트 검토 칸이 채운다"
@@ -54,7 +56,11 @@ jobs:
           ACCOUNT: ${{ inputs.account || 'aitips' }}
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            if [ "${{ github.event.schedule }}" = "0 23 * * *" ]; then MODE=topics; else MODE=publish; fi
+            case "${{ github.event.schedule }}" in
+              "30 21 * * *") MODE=topics ;;
+              "30 22 * * *") MODE=auto ;;
+              *) MODE=publish ;;
+            esac
           else
             MODE="${{ inputs.mode || 'topics' }}"
           fi

@@ -18,6 +18,8 @@ import requests
 from insta_sources import UA, Candidate, normalize_key
 
 GRAPH = "https://graph.facebook.com/v23.0"
+# 후보에서 뺄 게시물: 광고·협찬, "댓글 달면 DM" 식 유도(내용이 캡션에 없음)
+SKIP_RE = re.compile(r"#광고|제작지원|\(광고\)|^\s*comment\s+[“\"«']?\w+[”\"»']?\s+(and|to|below)|paid partnership", re.I | re.M)
 FIELDS = "media.limit({limit}){{caption,permalink,timestamp,like_count,comments_count,media_type}}"
 
 
@@ -46,7 +48,7 @@ def first_line(caption: str) -> str:
     return re.sub(r"\s+", " ", line).strip(" .·-")[:80]
 
 
-def to_candidate(username: str, post: dict) -> Candidate:
+def to_candidate(username: str, post: dict, flag: str = "🇰🇷") -> Candidate:
     caption = post.get("caption", "")
     likes = int(post.get("like_count") or 0)
     comments = int(post.get("comments_count") or 0)
@@ -57,7 +59,7 @@ def to_candidate(username: str, post: dict) -> Candidate:
     title = first_line(caption) or f"@{username} 게시물"
     body = re.sub(r"\s+", " ", caption)[:600]
     return Candidate(key=normalize_key(post.get("permalink", "")), title=title, link=post.get("permalink", ""),
-                     source=f"IG @{username} · 좋아요 {_k(likes)} · 댓글 {_k(comments)}", published=published, summary=body,
+                     source=f"IG {flag} @{username} · 좋아요 {_k(likes)} · 댓글 {_k(comments)}", published=published, summary=body,
                      signals=[f"likes:{likes}"])
 
 
@@ -73,8 +75,10 @@ def likes_of(c: Candidate) -> int:
 
 
 def collect_watch(accounts: list[str], *, max_age_hours: float = 240, exclude_keys: set[str] | None = None,
-                  min_likes: int = 0, now: datetime | None = None, progress=print) -> tuple[list[Candidate], list[str]]:
-    """참고 계정들의 최근 게시물 → 후보(좋아요 많은 순). 토큰이 없으면 빈 목록 + 안내 한 줄."""
+                  min_likes: int = 0, now: datetime | None = None, flag: str = "🇰🇷", cap: int = 0,
+                  per_account: int = 0, progress=print) -> tuple[list[Candidate], list[str]]:
+    """참고 계정들의 최근 게시물 → 후보(좋아요 많은 순, 계정당 per_account 개·전체 cap 개까지).
+    flag 는 출처 라벨의 나라 표시(🇰🇷 한국 참고 계정 / 🇺🇸 미국 원출처). 광고·"댓글 달면 DM" 게시물은 뺀다. 토큰이 없으면 빈 목록 + 안내 한 줄."""
     token, user_id = discovery_env()
     if not token or not user_id or not accounts:
         if accounts:
@@ -92,17 +96,24 @@ def collect_watch(accounts: list[str], *, max_age_hours: float = 240, exclude_ke
             failed.append(f"@{acct}: {type(exc).__name__} {str(exc)[:80]}")
             progress(f"@{acct} — 실패")
             continue
-        kept = 0
+        mine: list[Candidate] = []
         for p in posts:
-            c = to_candidate(acct, p)
+            if SKIP_RE.search(p.get("caption") or ""):
+                continue
+            c = to_candidate(acct, p, flag)
             if not c.key or c.key in exclude_keys:
                 continue
             if c.published and c.age_hours(now) > max_age_hours:
                 continue
             if likes_of(c) < min_likes:
                 continue
-            found.append(c)
-            kept += 1
-        progress(f"@{acct} — 최근 {len(posts)}건 중 {kept}건")
+            mine.append(c)
+        mine.sort(key=lambda c: (-likes_of(c), -(c.published.timestamp() if c.published else 0)))
+        if per_account > 0:
+            mine = mine[:per_account]
+        found.extend(mine)
+        progress(f"@{acct} — 최근 {len(posts)}건 중 {len(mine)}건")
     found.sort(key=lambda c: (-likes_of(c), -(c.published.timestamp() if c.published else 0)))
+    if cap > 0:
+        found = found[:cap]
     return found, failed

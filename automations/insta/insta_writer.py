@@ -26,7 +26,8 @@ PICK_SCHEMA = {
     "properties": {"picks": {"type": "array", "minItems": 1, "maxItems": 12,
                              "items": {"type": "object", "required": ["index", "reason", "angle"],
                                        "properties": {"index": {"type": "integer"}, "reason": {"type": "string"},
-                                                      "angle": {"type": "string"}, "title_ko": {"type": "string", "maxLength": 40}}}}},
+                                                      "angle": {"type": "string"}, "title_ko": {"type": "string", "maxLength": 40},
+                                                      "gap": {"type": "boolean"}}}}},
 }
 
 ARTICLE_SCHEMA = {
@@ -109,6 +110,10 @@ class Profile:
     max_age_hours: int = 72
     paragraphs: int = 6                 # 기사 문단 수 (= 본문 카드 수)
     watch_accounts: list[str] | None = None   # 참고할 한국 AI 인스타 계정(프로페셔널) — 최근 게시물이 후보 앞자리
+    watch_foreign: list[str] | None = None    # 미국 원출처 인스타(회사 공식·Rundown 등) — 최근 48시간 게시물, 한국이 아직 안 다룬 것은 빈자리
+    watch_foreign_hours: int = 48
+    watch_cap: int = 15                       # 참고 계정 그룹별 후보 상한(좋아요 순)
+    watch_per_account: int = 4                # 계정당 후보 상한 (좋아요 많은 계정이 독식하지 않게)
     source_caps: dict | None = None            # 출처별 후보 상한 {출처이름: N} (레딧처럼 시끄러운 곳 제한)
     title_patterns: list[str] | None = None
     cc_photos: bool = False             # True 면 사진 없는 카드에 CC 사진(Openverse)을 검색해 넣는다 — 관련 없는 사진이 걸릴 수 있어 기본 끔
@@ -128,15 +133,16 @@ class Profile:
 def pick_prompt(p: Profile, rows: str, n: int) -> tuple[str, str]:
     system = (f"당신은 인스타그램 정보 계정 '{p.name}'의 편집장입니다. 독자: {p.audience}\n"
               "후보 목록에서 오늘 게시할 소재를 고릅니다. 선정 기준: 독자가 바로 써먹을 수 있는가, 저장하고 싶은가, 새로운가, "
-              "기사 한 편(문단 5~7개)으로 풀 수 있는가. 광고·모금·행사 안내·기업 실적 뉴스는 제외.\n"
-              "우선순위(사용자 결정 2026-09-11): ① **한국 AI 인스타 계정이 올려서 반응이 좋았던 주제**('IG @계정 · 좋아요 N' 출처 — 좋아요·댓글이 많을수록 검증된 주제. "
-              "우리는 같은 주제를 우리 식(기사→카드)으로 다시 쓴다) ② 공식 블로그·제품 페이지·언론의 출시·업데이트 소식(사진 확보 쉬움) "
-              "③ 커뮤니티 글(reddit 등)은 공식 링크나 결과물 이미지가 있을 때만, 맨 뒤에. 후보 10개 중 인스타 참고 주제가 있으면 절반 이상을 거기서 고른다.\n"
+              "기사 한 편(문단 5~7개)으로 풀 수 있는가. 광고·모금·행사 안내·기업 실적 뉴스, '#광고'·'제작지원'이 붙은 게시물은 제외.\n"
+              "우선순위(사용자 결정 2026-09-12): ① **미국 원출처에서 최근 24시간 안에 나온 새 소식** — OpenAI·Google DeepMind·Anthropic·The Rundown·TestingCatalog 같은 공식·해외 RSS 와 "
+              "'IG 🇺🇸 @계정' 게시물. 한국 계정('IG 🇰🇷 @계정')이 아직 다루지 않은 주제면 gap=true(빈자리)로 표시한다 — 우리가 한국에 제일 먼저 올리는 셈이라 가장 귀하다. "
+              "② **한국 AI 인스타에서 반응이 좋았던 주제**(좋아요·댓글 많은 것) — 같은 주제를 그대로 골라도 된다(피할 필요 없음). 우리는 우리 식(기사→카드, 우리가 그린 화면)으로 다시 쓴다. "
+              "③ 그 외 RSS·커뮤니티 글은 공식 링크가 있을 때만 맨 뒤. 10개 중 ①을 절반 이상, 나머지는 ②에서 고른다. 사용자가 고르지 않으면 1순위가 07:30 에 자동 게시되므로 1번은 가장 확실한 것으로.\n"
               "도구를 쓰지 말고 JSON 객체 하나만 출력합니다.")
     user = (f"후보:\n{rows}\n\n"
             f"가장 좋은 {n}개를 고르고(좋은 순서대로, 서로 다른 주제로) 각각 index(후보 번호), title_ko(한국어 제목 한 줄, 20자 안팎 — 검토하는 사람이 한눈에 알게), "
-            "reason(선정 이유 한 줄 — 독자에게 왜 도움이 되는지), angle(기사로 풀 때의 각도 한 줄)을 적으세요.\n"
-            'JSON: {"picks": [{"index": 3, "title_ko": "...", "reason": "...", "angle": "..."}]}')
+            "reason(선정 이유 한 줄 — 독자에게 왜 도움이 되는지), angle(기사로 풀 때의 각도 한 줄), gap(미국 소식인데 한국 계정에 아직 없으면 true)을 적으세요.\n"
+            'JSON: {"picks": [{"index": 3, "title_ko": "...", "reason": "...", "angle": "...", "gap": false}]}')
     return system, user
 
 

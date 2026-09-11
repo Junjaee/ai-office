@@ -21,6 +21,10 @@ SOURCES: dict[str, dict] = {
     "openai_news":    {"kind": "rss", "url": "https://openai.com/news/rss.xml", "label": "OpenAI"},
     "anthropic_news": {"kind": "rss", "url": "https://rsshub.bestblogs.dev/anthropic/news", "label": "Anthropic"},
     "google_ai":      {"kind": "rss", "url": "https://blog.google/technology/ai/rss/", "label": "Google AI"},
+    "deepmind":       {"kind": "rss", "url": "https://deepmind.google/blog/rss.xml", "label": "Google DeepMind"},
+    "rundown":        {"kind": "rss", "url": "https://www.therundown.ai/feed", "label": "The Rundown"},          # 매일 19:00 KST 미국 AI 소식 요약
+    "testingcatalog": {"kind": "rss", "url": "https://www.testingcatalog.com/rss/", "label": "TestingCatalog"},   # 신기능·유출 (가장 빠른 축)
+    "techcrunch_ai":  {"kind": "rss", "url": "https://techcrunch.com/category/artificial-intelligence/feed/", "label": "TechCrunch"},
     "huggingface":    {"kind": "rss", "url": "https://huggingface.co/blog/feed.xml", "label": "Hugging Face"},
     "geeknews":       {"kind": "rss", "url": "https://news.hada.io/rss/news", "label": "GeekNews"},
     "aitimes":        {"kind": "rss", "url": "https://www.aitimes.com/rss/allArticle.xml", "label": "AI타임스"},

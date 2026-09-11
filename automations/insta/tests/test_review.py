@@ -53,6 +53,20 @@ def test_mark_and_new_day_keeps_active_queue_only():
     assert [q["status"] for q in later["queue"]] == ["queued"] and later["count"] == 1
 
 
+def test_auto_pick_takes_first_candidate_only_when_nothing_is_queued():
+    data = review.set_candidates({"queue": []}, cands(3), now=NOW)
+    # 이미 올린 것(0번)은 건너뛰고 1번을 지금 예약
+    data, added = review.auto_pick(data, exclude_keys={"https://x.test/0"}, now=NOW)
+    assert [a["title"] for a in added] == ["후보 1"] and added[0]["due"] == NOW.isoformat(timespec="seconds")
+    # 예약이 있으면 아무것도 안 한다
+    again, none = review.auto_pick(data, exclude_keys=set(), now=NOW + timedelta(hours=1))
+    assert none == [] and again == data
+    # 후보가 이틀 넘게 묵었으면 안 한다
+    stale = review.set_candidates({"queue": []}, cands(1), now=NOW)
+    assert review.auto_pick(stale, exclude_keys=set(), now=NOW + timedelta(days=3))[1] == []
+    assert review.auto_pick(stale, exclude_keys=set(), now=NOW, n=0)[1] == []
+
+
 def test_has_due_reads_file(tmp_path):
     path = tmp_path / "public" / "review" / "side" / "insta_aitips.json"
     assert review.has_due(path) is False

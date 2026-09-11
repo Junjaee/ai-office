@@ -321,6 +321,23 @@ def test_watch_candidates_from_captions_sorted_by_likes(monkeypatch):
     assert "좋아요 3.3만" in found[0].source and watch.likes_of(found[0]) == 33000
 
 
+def test_watch_foreign_flag_and_cap(monkeypatch):
+    monkeypatch.setenv("IG_DISCOVERY_TOKEN", "t")
+    monkeypatch.setenv("IG_DISCOVERY_USER_ID", "1")
+    posts = {"openai": [
+        {"caption": f"Post {i}", "permalink": f"https://www.instagram.com/p/F{i}/", "timestamp": "2026-09-10T01:00:00+0000", "like_count": 100 * i, "comments_count": 0}
+        for i in range(1, 5)] + [
+        {"caption": "Comment “Agent” and we’ll DM you the link", "permalink": "https://www.instagram.com/p/G/", "timestamp": "2026-09-10T01:00:00+0000", "like_count": 99999, "comments_count": 0}],
+        "small": [{"caption": f"S {i}", "permalink": f"https://www.instagram.com/p/S{i}/", "timestamp": "2026-09-10T01:00:00+0000", "like_count": i, "comments_count": 0} for i in range(1, 4)]}
+    monkeypatch.setattr(watch, "fetch_account", lambda acct, **kw: posts[acct])
+    found, _ = watch.collect_watch(["openai"], flag="🇺🇸", cap=2, now=datetime(2026, 9, 11, tzinfo=timezone.utc), progress=lambda m: None)
+    assert [c.title for c in found] == ["Post 4", "Post 3"] and found[0].source.startswith("IG 🇺🇸 @openai"), "댓글 유도 게시물은 제외"
+    both, _ = watch.collect_watch(["openai", "small"], per_account=2, now=datetime(2026, 9, 11, tzinfo=timezone.utc), progress=lambda m: None)
+    assert [c.title for c in both] == ["Post 4", "Post 3", "S 3", "S 2"], "계정당 상한"
+    assert watch.SKIP_RE.search("오늘은 #광고 힉스필드") and watch.SKIP_RE.search("(제작지원 higgsfield.ai)")
+    assert {"deepmind", "rundown", "testingcatalog", "techcrunch_ai"} <= set(sources.SOURCES)
+
+
 def test_watch_skips_quietly_without_token(monkeypatch):
     monkeypatch.delenv("IG_DISCOVERY_TOKEN", raising=False)
     msgs = []

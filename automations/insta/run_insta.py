@@ -1,7 +1,8 @@
 """인스타그램 게시글 자동화 — 소재(topic) → 글(write: 조사·기사·검수) → 카드(card: 요약·사진·렌더) → 업로드(upload).
 
 실행 방식(--mode, 사용자 결정 2026-09-11 "주제는 내가 검토한 뒤 만든다"):
-  topics   매일 08:00 — 후보 10개를 골라 public/review/<사무실>/<자동화>.json 에 저장 (대시보드 검토 칸이 읽음)
+  topics   매일 06:30 — 후보 10개를 골라 public/review/<사무실>/<자동화>.json 에 저장 (대시보드 검토 칸이 읽음)
+  auto     매일 07:30 — 예약이 없으면 편집장 1순위를 자동 선택해 바로 게시 (사용자 결정 2026-09-12)
   queue    사이트에서 고른 후보(--picks id,id)를 예약에 넣는다: N개 → 24÷N 시간 간격. 첫 개는 바로 게시
   publish  매시 정각 — 예약 시각이 된 것을 기사→카드→게시
   run      (예전 방식) 후보 중 1건을 골라 바로 게시. 이 PC 시험용
@@ -236,15 +237,18 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
     path = review_file(cfg, args.account)
     data = review.load(path)
     exclude = {r.get("key", "") for r in load_posted(args.account)} | review.active_keys(data)
-    watched, wfailed = watch.collect_watch(list(p.watch_accounts or []), exclude_keys=exclude, progress=progress)
+    watched, wfailed = watch.collect_watch(list(p.watch_accounts or []), exclude_keys=exclude, cap=p.watch_cap,
+                                           per_account=p.watch_per_account, progress=progress)
+    foreign, ffailed = watch.collect_watch(list(p.watch_foreign or []), flag="🇺🇸", max_age_hours=p.watch_foreign_hours,
+                                           exclude_keys=exclude, cap=p.watch_cap, per_account=p.watch_per_account, progress=progress)
     cands, failed = sources.collect(p.sources, max_age_hours=p.max_age_hours, signals=p.source_signals,
                                     exclude_keys=exclude, progress=progress)
     cands = sources.cap_by_source(cands, p.source_caps or {})
-    cands = watched + cands                                 # 참고 계정 주제가 앞자리 (좋아요 순)
-    failed = wfailed + failed
+    cands = foreign + watched + cands                       # 미국 원출처(IG) → 한국 참고 계정 → RSS
+    failed = ffailed + wfailed + failed
     if not cands:
         raise RuntimeError("소재 후보가 없습니다 (출처 전부 실패: " + "; ".join(failed[:3]) + ")")
-    limit = int(acct.get("candidates_to_llm", 30)) + len(watched)
+    limit = int(acct.get("candidates_to_llm", 30)) + len(watched) + len(foreign)
     want = int(acct.get("review_count", 10))
     rows = sources.as_prompt_rows(cands, limit)
     s_, u_ = writer.pick_prompt(p, rows, want)
@@ -257,7 +261,7 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
             chosen.append({"key": c.key, "title": c.title, "link": c.link, "source": c.source,
                            "published": c.published.isoformat(timespec="minutes") if c.published else "",
                            "summary": c.summary[:300], "angle": pk.get("angle", ""), "reason": pk.get("reason", ""),
-                           "title_ko": pk.get("title_ko", "")})
+                           "title_ko": pk.get("title_ko", ""), "gap": bool(pk.get("gap"))})
     if not chosen:
         raise RuntimeError("편집장이 고른 번호가 후보 범위를 벗어났습니다")
     now = datetime.now(KST)
@@ -265,7 +269,7 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
     review.save(path, data)
     commit_paths([path], f"insta({args.account}): 후보 {len(chosen)}건 {now:%Y-%m-%d %H:%M}")
     progress(f"후보 {len(cands)}건 → {len(chosen)}건 저장 (검토 대기)")
-    lines = [f"[후보] {c['title'][:60]} — {c['source']}" for c in chosen]
+    lines = [f"[후보]{' 🇺🇸빈자리' if c.get('gap') else ''} {c['title'][:60]} — {c['source']}" for c in chosen]
     return {"counts": {"new": 0, "failed": 0, "total": len(load_posted(args.account))}, "lines": lines,
             "tasks": {"topic": (True, f"후보 {len(chosen)}건 · 사이트에서 골라 주세요")}}
 
@@ -285,6 +289,27 @@ def do_queue(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args
         progress(f"예약 {q['due'][11:16]} — {q['title'][:50]}")
     result = do_publish(cfg, acct, p, refs, llm, args, progress)
     result["lines"] = [f"[예약] {len(added)}건 · {data.get('interval_hours')}시간 간격"] + result["lines"]
+    return result
+
+
+def do_auto(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args, progress) -> dict:
+    """매일 07:30 KST — 아무도 안 골랐으면 편집장 1순위 후보(auto_pick 개수)를 바로 만들어 게시. 예약이 있으면 그냥 publish."""
+    n = int(acct.get("auto_pick", 1))
+    path = review_file(cfg, args.account)
+    data = review.load(path)
+    now = datetime.now(KST)
+    posted = {r.get("key", "") for r in load_posted(args.account)}
+    data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=n)
+    if added:
+        review.save(path, data)
+        commit_paths([path], f"insta({args.account}): 자동 선택 {len(added)}건 {now:%Y-%m-%d %H:%M}")
+        for q in added:
+            progress(f"자동 선택 — {q['title'][:50]}")
+    else:
+        progress("자동 선택 없음 (예약이 이미 있거나 후보가 없음)")
+    result = do_publish(cfg, acct, p, refs, llm, args, progress)
+    if added:
+        result["lines"] = [f"[자동 선택] {len(added)}건 · 07:30 첫 게시"] + result["lines"]
     return result
 
 
@@ -366,6 +391,8 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         return do_queue(cfg, acct, p, refs, llm, args, progress)
     if args.mode == "publish":
         return do_publish(cfg, acct, p, refs, llm, args, progress)
+    if args.mode == "auto":
+        return do_auto(cfg, acct, p, refs, llm, args, progress)
     today = args.date or datetime.now(KST).strftime("%Y-%m-%d")
     out = HERE / "out" / args.account / today
     out.mkdir(parents=True, exist_ok=True)
@@ -446,7 +473,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--revise", action="store_true", help="지난 검수 지적을 반영해 기사를 다시 쓴다(--resume 과 함께)")
     p.add_argument("--feedback", default="", help="다듬기에 넣을 사용자 지적(--revise 와 함께). 줄바꿈 가능")
     p.add_argument("--date", default="", help="출력 폴더 날짜 (기본 오늘)")
-    p.add_argument("--mode", choices=["run", "topics", "queue", "publish"], default=os.environ.get("INSTA_MODE", "run"),
+    p.add_argument("--mode", choices=["run", "topics", "queue", "publish", "auto"], default=os.environ.get("INSTA_MODE", "run"),
                    help="run=1건 자동 게시(시험) / topics=후보 저장 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시")
     p.add_argument("--picks", default=os.environ.get("INSTA_PICKS", ""), help="queue 방식에서 고른 후보 id (쉼표)")
     a = p.parse_args(argv)

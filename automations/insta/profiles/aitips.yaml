@@ -21,10 +21,16 @@ must_include:
 banned: ["혁신적인", "게임체인저", "놀라운", "!!!", "무조건", "완전 대박", "충격", "역대급"]
 cta: "저장해 두고 하나씩 써보세요 · 필요한 분께 공유"
 hashtags_base: ["#AI활용", "#챗GPT", "#제미나이", "#업무자동화", "#생산성", "#AI툴", "#프롬프트"]
-# 참고 계정(한국 AI 인스타, 프로페셔널 계정만 가능) — 최근 게시물·좋아요를 읽어 후보 앞자리에 둔다. IG_DISCOVERY_TOKEN/USER_ID 필요
-watch_accounts: [ai.trend.kr, ai_freaks.kr, hyunsight, un_ni_tip]
-sources: [openai_news, anthropic_news, google_ai, geeknews, aitimes, producthunt_ai, reddit_chatgpt, huggingface]
-source_caps: { reddit_chatgpt: 5, producthunt_ai: 5 }     # 시끄러운 출처는 후보 상한
+# 참고 계정(프로페셔널 계정만 조회 가능) — 최근 게시물·좋아요를 읽어 후보에 넣는다. IG_DISCOVERY_TOKEN/USER_ID 필요
+# 🇰🇷 한국 AI 인스타 (같은 주제를 골라도 됨 — 사용자 결정 2026-09-12). hyunsight·un_ni_tip 은 AI 계정이 아니라 뺐다(출처 탐색 2026-09-11)
+watch_accounts: [ai.trend.kr, ai_freaks.kr, prompt_what, ai_dori_, trenddalkak.ai]
+# 🇺🇸 미국 원출처(회사 공식·뉴스레터) — 최근 48시간. 한국 계정이 아직 안 다룬 것은 "빈자리"로 표시
+watch_foreign: [openai, openaidevs, googledeepmind, googlegemini, grok, therundownai, chatgptricks, evolving.ai, rowancheung]
+watch_foreign_hours: 48
+watch_cap: 15                     # 그룹(🇰🇷/🇺🇸)별 후보 상한
+watch_per_account: 4              # 계정당 상한 — 좋아요 큰 계정이 독식하지 않게
+sources: [openai_news, anthropic_news, deepmind, google_ai, rundown, testingcatalog, techcrunch_ai, huggingface, geeknews, aitimes, producthunt_ai, reddit_chatgpt]
+source_caps: { reddit_chatgpt: 5, producthunt_ai: 5, techcrunch_ai: 5, testingcatalog: 6 }     # 시끄러운 출처는 후보 상한
 source_signals: ["프롬프트", "prompt", "사용법", "무료", "free", "업데이트", "기능", "feature", "자동", "단축", "tip", "how to", "출시", "launch"]
 max_age_hours: 72
 template: dark_code

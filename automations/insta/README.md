@@ -28,19 +28,26 @@
 
 주의: 대시보드의 실행 상태는 **워크플로 파일 단위**로 잡힌다. 같은 `insta.yml` 을 쓰는 계정이 둘 이상이면 최근 실행 하나만 보이므로, 두 번째 계정을 붙일 때 Worker 의 run 매칭에 `inputs.account` 를 반영해야 한다(할 일).
 
-## 참고 계정 주제 (한국 AI 인스타 계정이 올린 것 먼저 — 사용자 결정 2026-09-11)
+## 소재 출처와 우선순위 (사용자 결정 2026-09-12)
 
-후보의 앞자리는 RSS 가 아니라 **참고 계정(`profiles/<주제>.yaml` 의 `watch_accounts`)의 최근 게시물**이다. Instagram Graph API 의 비즈니스 디스커버리로 캡션·좋아요·댓글 수를 읽어(`insta_watch.py`) 좋아요 순으로 후보에 넣고, 편집장은 "인스타에서 반응 좋았던 주제 → 공식 소식 → 커뮤니티" 순으로 고른다. 레딧 같은 시끄러운 출처는 `source_caps` 로 후보 수를 제한한다.
+출처 탐색(`ai-side/01_인스타게시글_aitips/research/출처탐색_2026-09-11.md`) 결과, 한국 AI 인스타 계정들은 외국 AI 인스타가 아니라 **원출처(회사 공식 계정·X 창작자)** 를 다음 날 오전에 옮겨 적는다. 그래서 후보는 이렇게 모은다.
+
+1. **🇺🇸 미국 원출처** — 공식 RSS(`openai_news` `anthropic_news` `deepmind` `google_ai`), 뉴스레터·유출(`rundown` `testingcatalog` `techcrunch_ai`), 그리고 프로필 `watch_foreign` 의 인스타 계정(openai·googledeepmind·therundownai 등, 최근 48시간). 편집장은 이 중 **한국 계정이 아직 안 다룬 것을 `gap: true`(빈자리)** 로 표시한다 — 검토 칸에 "🇺🇸 빈자리" 표가 붙는다.
+2. **🇰🇷 한국 AI 인스타** — 프로필 `watch_accounts`(ai.trend.kr·ai_freaks.kr·prompt_what·ai_dori_·trenddalkak.ai)의 최근 게시물, 좋아요 순. **같은 주제를 골라도 된다**(피하지 않는다). 우리는 우리 식(기사→카드, 우리가 그린 화면)으로 다시 쓴다.
+3. 그 외 RSS·커뮤니티는 공식 링크가 있을 때만 맨 뒤. 시끄러운 출처는 `source_caps` 로 상한.
+
+인스타 계정 읽기는 Instagram Graph API 의 비즈니스 디스커버리(`insta_watch.py`, 캡션·좋아요·댓글 수만, 사진은 쓰지 않음). 그룹별 상한은 `watch_cap`(기본 15).
 
 준비물(한 번): 페이스북 페이지 하나 + 그 페이지에 인스타 프로페셔널 계정 연결 + 페이지 권한이 있는 사용자 토큰(`instagram_basic`, `pages_show_list`, `pages_read_engagement`, 장기 60일). `python automations/insta/discovery_setup.py <토큰 파일> --app-id … --app-secret-file …` 이 장기 토큰 교환·인스타 계정 id 확인·시험 조회까지 해 준다. 값은 GitHub Secrets `IG_DISCOVERY_TOKEN`, `IG_DISCOVERY_USER_ID`. 없으면 참고 계정만 건너뛰고 RSS 로 진행한다.
 
 ## 주제 검토 방식 (사용자 결정 2026-09-11 — 기본 운영 방식)
 
-주제는 자동으로 고르지 않고 **사용자가 사이트에서 고른 것만** 만든다.
+사용자가 사이트에서 고른 것을 만들되, **아무도 안 고르면 07:30 에 편집장 1순위가 자동으로 나간다**(사용자 결정 2026-09-12 — "오전 7시 30분 발행". `config.actions.yaml` 의 `auto_pick`, 0 이면 끔).
 
 | 때 | 실행 방식(`--mode`) | 하는 일 |
 |---|---|---|
-| 매일 08:00 KST (cron `0 23 * * *`) | `topics` | RSS 후보 → 편집장(모델)이 **10건** 골라 한국어 제목·이유·각도를 붙여 `public/review/<사무실>/insta_<계정>.json` 에 저장·커밋. 이미 올린 것·예약된 것은 제외 |
+| 매일 06:30 KST (cron `30 21 * * *`) | `topics` | 미국 원출처·한국 참고 계정·RSS 후보 → 편집장(모델)이 **10건** 골라 한국어 제목·이유·각도·빈자리 표시를 붙여 `public/review/<사무실>/insta_<계정>.json` 에 저장·커밋. 이미 올린 것·예약된 것은 제외 |
+| 매일 07:30 KST (cron `30 22 * * *`) | `auto` | 예약·진행 중인 것이 없으면 후보 1번(`auto_pick` 개수)을 예약에 넣고 바로 기사→카드→게시. 사용자가 미리 골라 뒀으면 건너뛴다 |
 | 사이트 검토 칸 "선택 N개 만들기" | `queue` (입력 `picks=id,id`) | 고른 N개를 **24÷N 시간 간격**으로 예약(첫 개는 지금, 나머지는 다음 정각으로 올림) → 첫 개는 바로 기사→카드→게시 |
 | 매시 정각 (cron `0 * * * *`) | `publish` | 예약 시각이 된 항목을 만들어 게시. 만들 것이 없으면 `review_due.py`(표준 라이브러리만) 로 20초 안에 끝낸다(의존성 설치 전) |
 | 카드 ▶ 주제 뽑기 / 검토 칸 "주제 다시 뽑기" | `topics` | 지금 후보를 새로 뽑는다 |

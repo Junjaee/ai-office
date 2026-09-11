@@ -14,6 +14,8 @@ export type ReviewCandidate = {
   summary?: string;
   reason?: string;
   angle?: string;
+  /** 미국 소식인데 한국 AI 계정이 아직 안 다룬 것(빈자리) */
+  gap?: boolean;
 };
 
 export type ReviewQueueItem = {

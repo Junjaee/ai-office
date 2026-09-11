@@ -9,6 +9,8 @@
 status: queued(예약) → making(만드는 중) → done(게시됨) | failed(실패)
 
 예약 간격(사용자 결정 2026-09-11): 고른 개수 N → 24÷N 시간 간격. 첫 개는 바로, 나머지는 정각으로 올림.
+자동 선택(사용자 결정 2026-09-12): 매일 07:30 KST 에 예약이 하나도 없으면 편집장 1순위 후보를 바로 만들어 게시한다(auto_pick).
+  사용자가 미리 골라 뒀으면(예약 있음) 자동 선택은 건너뛴다.
 """
 from __future__ import annotations
 
@@ -105,6 +107,17 @@ def enqueue(data: dict, pick_ids: list[str], *, now: datetime) -> tuple[dict, li
     data = {**data, "queue": list(data.get("queue", [])) + added,
             "interval_hours": round(24.0 / len(chosen), 2) if chosen else data.get("interval_hours")}
     return data, added
+
+
+def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, max_age_days: int = 2) -> tuple[dict, list[dict]]:
+    """아무도 안 골랐으면 후보 앞에서 n개를 예약(첫 개는 지금). 예약·진행 중이 있거나 후보가 오래됐으면 아무것도 안 한다."""
+    if n <= 0 or active_keys(data) or not data.get("candidates"):
+        return data, []
+    made = _parse(data.get("generated_at"))
+    if made and now - made > timedelta(days=max_age_days):
+        return data, []
+    ids = [c["id"] for c in data["candidates"] if c.get("key") not in exclude_keys][:n]
+    return enqueue(data, ids, now=now)
 
 
 def due_items(data: dict, now: datetime) -> list[dict]:

@@ -61,7 +61,7 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
       {review.loading ? <p className="auto-meta">후보를 불러오는 중…</p> : null}
       {review.error ? <p className="auto-meta">후보를 못 불러왔어요. 잠시 뒤 새로 고쳐 주세요.</p> : null}
       {!review.loading && !review.error && !candidates.length ? (
-        <p className="auto-meta">아직 뽑힌 후보가 없어요. 매일 08:00 에 10건이 올라오고, "주제 다시 뽑기"로 지금 뽑을 수도 있어요.</p>
+        <p className="auto-meta">아직 뽑힌 후보가 없어요. 매일 06:30 에 10건이 올라오고, "주제 다시 뽑기"로 지금 뽑을 수도 있어요.</p>
       ) : null}
 
       {candidates.length ? (
@@ -75,7 +75,10 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
                   <input type="checkbox" checked={checked.has(c.id) && !isTaken} disabled={isTaken || !canRun} onChange={() => toggle(c.id)} />
                   <span className="review-no">{i + 1}</span>
                   <span className="review-body">
-                    <b>{c.title_ko || c.title}</b>
+                    <b>
+                      {c.title_ko || c.title}
+                      {c.gap ? <span className="review-gap">🇺🇸 빈자리</span> : null}
+                    </b>
                     <small>
                       {c.title_ko ? `${c.title.slice(0, 60)}${c.title.length > 60 ? "…" : ""} · ` : ""}
                       {c.source}
@@ -110,7 +113,7 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
           <button className="btn btn-primary" onClick={() => void make()} disabled={!picked.length || busy}>
             {busy ? "요청 중…" : picked.length ? `선택 ${picked.length}개 만들기 · ${intervalText(picked.length)}` : "만들 주제를 골라 주세요"}
           </button>
-          <small className="auto-meta">고른 개수만큼 24시간을 나눠 간격을 두고 자동 게시돼요. 첫 개는 바로 만들어요.</small>
+          <small className="auto-meta">고른 개수만큼 24시간을 나눠 간격을 두고 자동 게시돼요. 첫 개는 바로 만들어요. 아무것도 안 고르면 07:30 에 1번이 자동으로 나가요.</small>
         </div>
       ) : null}
 

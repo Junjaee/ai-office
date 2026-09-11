@@ -12,7 +12,8 @@ accounts:
     posts_per_run: 1                         # 실행 1회에 올릴 게시물 수
     candidates_to_llm: 30                    # 소재 후보를 몇 개까지 편집장(모델)에게 보여 줄지
     review_count: 10                         # 매일 검토 칸에 올릴 후보 수
-    next_run: "매일 08:00 후보 · 고르면 24÷N시간 간격으로 게시"
+    auto_pick: 1                             # 07:30 에 예약이 없으면 편집장 1순위부터 이 개수만큼 자동 게시 (0 = 끔)
+    next_run: "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격"
 
 # 글 생성기: 앞에서부터 시도, 실패하면 다음 (전부 무료 경로)
 llm_providers: [claude_cli, gemini]
