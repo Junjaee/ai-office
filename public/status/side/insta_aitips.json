@@ -3,48 +3,49 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 1건, 실패 0건, 누적 3건, 9.3분",
+  "summary": "게시 0건, 실패 0건, 누적 3건, 1.9분",
   "counts": {
-    "new": 1,
+    "new": 0,
     "failed": 0,
     "total": 3
   },
-  "next_run": "매일 08:00 후보 · 고르면 24÷N시간 간격으로 게시",
+  "next_run": "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격",
   "log": [
-    "게시 1건, 실패 0건, 누적 3건, 9.3분",
-    "[예약] 2건 · 12.0시간 간격",
-    "[기사] 오픈AI, 말 끊김 80% 줄인 음성 AI 공개 · 검수 43점",
-    "[게시] https://www.instagram.com/p/DdJtRIjFH2k/"
+    "게시 0건, 실패 0건, 누적 3건, 1.9분",
+    "[후보] 🇺🇸빈자리 Hello Windows, the Gemini app is here! Get quick help with a — IG 🇺🇸 @googlegemini · 좋아요 1.7천 · 댓글 51",
+    "[후보] 요즘 엄청 바이럴되는 뮤직비디오 훔치는 방법 ‍ — IG 🇰🇷 @prompt_what · 좋아요 1.1천 · 댓글 2.0천",
+    "[후보] 옛 중고거래 글에 남긴 연락처, 지운 적 없다면 지금도 검색될 수 있습니다 — IG 🇰🇷 @prompt_what · 좋아요 993 · 댓글 606",
+    "[후보] 🇺🇸빈자리 Yesterday Anthropic released a 150-page report on how people — IG 🇺🇸 @evolving.ai · 좋아요 1.7천 · 댓글 60"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34613867912,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34613867912",
-  "request_id": "req-20260912000344-kkfw",
+  "run_id": 34614953052,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34614953052",
+  "request_id": "req-20260912001432-topics",
   "trigger": "manual",
-  "started_at": "2026-09-12T00:04:40+09:00",
-  "duration_sec": 560,
+  "started_at": "2026-09-12T00:15:38+09:00",
+  "duration_sec": 116,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 10건 · 예약 8건 · 게시 4건"
+      "summary": "후보 10건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
-      "status": "done",
-      "summary": "검수 43점 (claude_cli)"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "card",
-      "status": "done",
-      "summary": "카드 8장"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "upload",
-      "status": "done",
-      "summary": "1건 게시"
+      "status": "idle",
+      "summary": ""
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T00:14:02+09:00"
+  "updated_at": "2026-09-12T00:17:35+09:00"
 }
