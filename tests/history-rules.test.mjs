@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { HISTORY_START, kstToday, shiftDate, clampDate, historyTitle, historyMessage } from "../app/history-rules.ts";
-import { TRIGGER_LABEL } from "../app/status-rules.ts";
+import { TRIGGER_LABEL, secondsText } from "../app/status-rules.ts";
 
 test("kstToday: KST 자정 기준", () => {
   assert.equal(kstToday(Date.parse("2026-09-10T14:59:59Z")), "2026-09-10");
@@ -34,4 +34,10 @@ test("historyMessage: 불러오는 중·실패·연결 없음·빈 날·일부",
 
 test("TRIGGER_LABEL: 이 PC 실행", () => {
   assert.equal(TRIGGER_LABEL.local, "이 PC");
+});
+
+test("secondsText: 초·분·시간", () => {
+  assert.equal(secondsText(45), "45초");
+  assert.equal(secondsText(325), "5.4분");
+  assert.equal(secondsText(51480), "14시간 18분");
 });

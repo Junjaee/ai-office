@@ -16,6 +16,8 @@ export type HistoryItem = {
   completedAt: string | null;
   url: string | null;
   summary: string | null;
+  /** 실제로 걸린 시간(일지). 실행기 대기 시간은 빠진다 */
+  durationSec: number | null;
 };
 
 /** Worker `/api/history` 응답 (worker/run-api.ts HistoryBody 와 같은 모양) */
@@ -60,11 +62,11 @@ function mockHistory(mode: string, ws: WorkspaceConfig, date: string, today: str
     .forEach((a, i) => {
       const id = (n: number) => `${date.replace(/-/g, "")}${i}${n}`;
       const url = (n: number) => `https://github.com/Junjaee/ai-office/actions/runs/${id(n)}`;
-      items.push({ id: id(1), automationId: a.id, status: "completed", conclusion: "success", trigger: "manual", requestId: "req-mock-1", startedAt: at(16, 4 + i), completedAt: at(16, 5 + i), url: url(1), summary: "신규 12건, 실패 0건, 18초" });
-      items.push({ id: id(2), automationId: a.id, status: "completed", conclusion: "success", trigger: "schedule", requestId: null, startedAt: at(9, i), completedAt: at(9, 2 + i), url: url(2), summary: "신규 3건, 확정본 교체 1건, 실패 0건, 1.9분 · 결과가 길면 말줄임으로 보입니다" });
-      items.push({ id: id(3), automationId: a.id, status: "completed", conclusion: "cancelled", trigger: "manual", requestId: "req-mock-2", startedAt: at(8, i), completedAt: at(8, 1 + i), url: url(3), summary: null });
+      items.push({ id: id(1), automationId: a.id, status: "completed", conclusion: "success", trigger: "manual", requestId: "req-mock-1", startedAt: at(16, 4 + i), completedAt: at(16, 5 + i), url: url(1), summary: "신규 12건, 실패 0건, 18초", durationSec: 18 });
+      items.push({ id: id(2), automationId: a.id, status: "completed", conclusion: "success", trigger: "schedule", requestId: null, startedAt: at(9, i), completedAt: at(9, 2 + i), url: url(2), summary: "신규 3건, 확정본 교체 1건, 실패 0건, 1.9분 · 결과가 길면 말줄임으로 보입니다", durationSec: 114 });
+      items.push({ id: id(3), automationId: a.id, status: "completed", conclusion: "cancelled", trigger: "manual", requestId: "req-mock-2", startedAt: at(8, i), completedAt: at(8, 1 + i), url: url(3), summary: null, durationSec: null });
       if (date !== today) {
-        items.push({ id: `local:${a.id}:${at(7, i)}`, automationId: a.id, status: "completed", conclusion: "failure", trigger: "local", requestId: null, startedAt: at(7, i), completedAt: at(7, 3 + i), url: null, summary: "이 PC 에서 직접 실행 · 실패 예시" });
+        items.push({ id: `local:${a.id}:${at(7, i)}`, automationId: a.id, status: "completed", conclusion: "failure", trigger: "local", requestId: null, startedAt: at(7, i), completedAt: at(7, 3 + i), url: null, summary: "이 PC 에서 직접 실행 · 실패 예시", durationSec: 180 });
       }
     });
   items.sort((x, y) => Date.parse(y.startedAt ?? "") - Date.parse(x.startedAt ?? ""));

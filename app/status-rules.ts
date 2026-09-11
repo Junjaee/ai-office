@@ -139,13 +139,20 @@ export function historyLabel(status: string, conclusion: string | null): History
 
 export const TRIGGER_LABEL = { manual: "수동", schedule: "예약", local: "이 PC", other: "기타" } as const;
 
-/** "4.8분" / "45초" / "" */
+/** 걸린 시간 문구: "45초" / "4.8분" / "14시간 18분" */
+export function secondsText(sec: number): string {
+  const s = Math.round(sec);
+  if (s < 60) return `${s}초`;
+  if (s < 3600) return `${(s / 60).toFixed(1)}분`;
+  return `${Math.floor(s / 3600)}시간 ${Math.round((s % 3600) / 60)}분`;
+}
+
+/** 두 시각 사이 → secondsText. 값이 없으면 "" */
 export function durationText(startedAt: string | null | undefined, completedAt: string | null | undefined): string {
   const a = toMs(startedAt);
   const b = toMs(completedAt);
   if (Number.isNaN(a) || Number.isNaN(b) || b < a) return "";
-  const sec = Math.round((b - a) / 1000);
-  return sec < 60 ? `${sec}초` : `${(sec / 60).toFixed(1)}분`;
+  return secondsText((b - a) / 1000);
 }
 
 // ───────────────────────── 시각 헬퍼 (순수, now 주입) ─────────────────────────

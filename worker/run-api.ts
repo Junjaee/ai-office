@@ -1,8 +1,9 @@
 // /api/run · /api/status 순수 로직. vinext/next 를 import 하지 않고, 시간·GitHub·저장소는 deps 로 주입받는다.
 import {
-  DAILY_RUN_LIMIT, HISTORY_CACHE_MAX, HISTORY_PAST_CACHE_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS,
+  DAILY_RUN_LIMIT, HISTORY_CACHE_MAX, HISTORY_GITHUB_DAYS, HISTORY_PAST_CACHE_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS,
   RUNS_PER_PAGE, STATUS_CACHE_MS, TOO_SOON_MS,
 } from "./config.ts";
+import { shiftDate } from "../app/history-rules.ts";
 import { GitHubAuthError, GitHubNotFoundError, GitHubUnavailableError, type GitHubLike, type RunSummary } from "./github.ts";
 
 // ── 사무실 설정(구조만 맞으면 됨 — app/workspaces 의 WorkspaceConfig 와 호환) ──
@@ -103,6 +104,8 @@ export type HistoryItem = {
   completedAt: string | null;
   url: string | null;
   summary: string | null;
+  /** 실제로 걸린 시간(일지). 실행기 대기 시간은 빠진다 */
+  durationSec: number | null;
 };
 
 /** 일지 한 줄 (automations/common/history_log.py 가 쓴다) */
@@ -157,13 +160,14 @@ export function historyFromRuns(runs: RunSummary[], automations: WorkspaceLike["
       completedAt: run.status === "completed" ? run.updated_at : null,
       url: run.html_url || null,
       summary: null,
+      durationSec: null,
     });
   }
   return out;
 }
 
-/** 일지 파일(jsonl) → 그날(KST) 줄만. 깨진 줄은 건너뛴다 */
-export function parseArchive(text: string, automationId: string, date: string): ArchiveLine[] {
+/** 일지 파일(jsonl) → 줄 목록. 깨진 줄은 건너뛴다 */
+export function parseArchive(text: string, automationId: string): ArchiveLine[] {
   const out: ArchiveLine[] = [];
   for (const raw of text.split("\n")) {
     const s = raw.trim();
@@ -175,12 +179,16 @@ export function parseArchive(text: string, automationId: string, date: string): 
       continue;
     }
     if (!line || typeof line !== "object") continue;
-    const when = line.started_at ?? line.recorded_at;
-    const ms = when ? Date.parse(when) : NaN;
-    if (Number.isNaN(ms) || kstDateKey(ms) !== date) continue;
     out.push({ ...line, automation: line.automation ?? automationId });
   }
   return out;
+}
+
+/** 일지 한 줄의 KST 날짜 (스크립트 시작 시각, 없으면 기록 시각) */
+export function archiveDate(line: ArchiveLine): string | null {
+  const when = line.started_at ?? line.recorded_at;
+  const ms = when ? Date.parse(when) : NaN;
+  return Number.isNaN(ms) ? null : kstDateKey(ms);
 }
 
 function archiveKey(line: ArchiveLine): string {
@@ -204,20 +212,32 @@ function itemFromArchive(line: ArchiveLine): HistoryItem {
     completedAt,
     url: line.url ?? null,
     summary: line.summary ?? null,
+    durationSec: typeof line.duration_sec === "number" ? line.duration_sec : null,
   };
 }
 
-/** GitHub 목록 + 일지 → 실행 번호로 합친다 (상태·시각·링크는 GitHub, 요약은 일지). 최신순 */
-export function mergeHistory(fromGithub: HistoryItem[], archive: ArchiveLine[]): HistoryItem[] {
+/**
+ * GitHub 목록 + 일지 → 실행 번호로 합친다 (상태·시각·링크는 GitHub, 요약·걸린 시간은 일지). 최신순.
+ * 실행이 속하는 날은 GitHub(요청해 만든 날)이 정한다 — 실행기가 꺼져 밤새 대기했다가 다음 날 돈 실행도 요청한 날에 한 번만 보인다.
+ * githubAuthoritative 가 false(GitHub 실패·보관 기간 밖)면 그날 일지의 실행을 그대로 보여 준다.
+ */
+export function mergeHistory(fromGithub: HistoryItem[], lines: ArchiveLine[], date: string, githubAuthoritative: boolean): HistoryItem[] {
   const byId = new Map<string, HistoryItem>(fromGithub.map((h) => [h.id, { ...h }]));
-  for (const line of archive) {
+  // 1) 날짜와 상관없이 같은 실행 번호의 요약·걸린 시간을 붙인다
+  for (const line of lines) {
+    if (line.run_id == null) continue;
+    const hit = byId.get(String(line.run_id));
+    if (!hit) continue;
+    if (line.summary) hit.summary = line.summary;
+    if (typeof line.duration_sec === "number") hit.durationSec = line.duration_sec;
+  }
+  // 2) 그날 일지에만 있는 실행: 이 PC 실행은 늘, GitHub 번호가 있는 실행은 GitHub 이 믿을 만하지 않을 때만
+  for (const line of lines) {
+    if (archiveDate(line) !== date) continue;
     const key = archiveKey(line);
-    const hit = byId.get(key);
-    if (hit) {
-      if (line.summary) hit.summary = line.summary;
-    } else {
-      byId.set(key, itemFromArchive(line));
-    }
+    if (byId.has(key)) continue;
+    if (line.run_id != null && githubAuthoritative) continue;
+    byId.set(key, itemFromArchive(line));
   }
   const at = (h: HistoryItem) => (h.startedAt ? Date.parse(h.startedAt) : 0) || 0;
   return [...byId.values()].sort((a, b) => at(b) - at(a) || b.id.localeCompare(a.id, undefined, { numeric: true }));
@@ -512,24 +532,32 @@ export async function buildHistory(ws: string, workspace: WorkspaceLike, date: s
   } catch {
     githubFailed = true;
   }
+  // 그 달 일지 + 일주일 뒤가 다음 달이면 그 달 일지도 (요청한 날 뒤에 돈 실행의 요약을 찾으려고)
   let archiveFailed = false;
-  const month = date.slice(0, 7);
-  const archive = (
+  const months = [...new Set([date.slice(0, 7), shiftDate(date, 7).slice(0, 7)])];
+  const files = workspace.automations
+    .filter((a) => a.workflow)
+    .flatMap((a) => months.map((m) => ({ id: a.id, path: `history/${ws}/${a.id}/${m}.jsonl` })));
+  const lines = (
     await Promise.all(
-      workspace.automations
-        .filter((a) => a.workflow)
-        .map(async (a) => {
-          try {
-            const text = await github.readRepoText(`history/${ws}/${a.id}/${month}.jsonl`);
-            return text ? parseArchive(text, a.id, date) : [];
-          } catch {
-            archiveFailed = true;
-            return [];
-          }
-        }),
+      files.map(async (f) => {
+        try {
+          const text = await github.readRepoText(f.path);
+          return text ? parseArchive(text, f.id) : [];
+        } catch {
+          archiveFailed = true;
+          return [];
+        }
+      }),
     )
   ).flat();
-  return { ...base, items: mergeHistory(fromGithub, archive), source: githubFailed ? "archive" : "github", partial: githubFailed || archiveFailed };
+  const authoritative = !githubFailed && date >= shiftDate(base.today, -(HISTORY_GITHUB_DAYS - 1));
+  return {
+    ...base,
+    items: mergeHistory(fromGithub, lines, date, authoritative),
+    source: githubFailed ? "archive" : "github",
+    partial: githubFailed || archiveFailed,
+  };
 }
 
 export async function handleHistory(request: Request, deps: RunApiDeps): Promise<Response> {

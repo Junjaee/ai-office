@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { WORKSPACE } from "../../company.config";
 import { WORKSPACE_LIST } from "../workspaces";
-import { LABELS, STATE_CLASS, TRIGGER_LABEL, durationText, historyLabel, relativeTime, type AutomationView, type TaskState } from "../status-rules";
+import { LABELS, STATE_CLASS, TRIGGER_LABEL, durationText, historyLabel, relativeTime, secondsText, type AutomationView, type TaskState } from "../status-rules";
 import { useLiveStatus } from "../status";
 import { useHistory } from "../history";
 import { HISTORY_START, clampDate, historyMessage, historyTitle, shiftDate } from "../history-rules";
@@ -381,7 +381,7 @@ export default function OfficeApp() {
                           <td className="history-summary" title={h.summary ?? undefined}>
                             {h.summary ?? "–"}
                           </td>
-                          <td>{durationText(h.startedAt, h.completedAt)}</td>
+                          <td>{h.durationSec != null ? secondsText(h.durationSec) : durationText(h.startedAt, h.completedAt)}</td>
                           <td>
                             {h.url ? (
                               <a href={h.url} target="_blank" rel="noreferrer">

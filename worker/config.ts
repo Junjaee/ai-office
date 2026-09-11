@@ -19,3 +19,5 @@ export const HISTORY_PAST_CACHE_MS = 600_000;
 export const HISTORY_CACHE_MAX = 100;
 export const HISTORY_RUNS_PER_PAGE = 100;
 export const HISTORY_MAX_PAGES = 3;
+/** GitHub 이 실행 목록을 확실히 가진 기간(로그 보관 90일). 이 안의 날은 실행이 속한 날을 GitHub 이 정한다 */
+export const HISTORY_GITHUB_DAYS = 90;

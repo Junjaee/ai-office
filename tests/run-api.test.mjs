@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   decideRun, parseRequestId, latestValidRunByWorkflow, kstDateKey, dailyCount, addDailyCount,
-  createRunApiStores, handleRun, handleStatus, isCrossOrigin, handleHistory, isValidDate, kstDayRangeUtc, historyFromRuns, parseArchive, mergeHistory,
+  createRunApiStores, handleRun, handleStatus, isCrossOrigin, handleHistory, isValidDate, kstDayRangeUtc, historyFromRuns, parseArchive, archiveDate, mergeHistory,
 } from "../worker/run-api.ts";
 import { GitHubClient, GitHubAuthError, GitHubUnavailableError, GitHubNotFoundError } from "../worker/github.ts";
 import { DAILY_RUN_LIMIT, STATUS_CACHE_MS, TOO_SOON_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS, HISTORY_PAST_CACHE_MS } from "../worker/config.ts";
@@ -416,7 +416,7 @@ test("historyFromRuns: 이 사무실 자동화 run 만, 방식 분류, 요약 �
   assert.equal(h[1].completedAt, null);
 });
 
-test("parseArchive: 그날(KST) 줄만, 깨진 줄은 건너뜀", () => {
+test("parseArchive · archiveDate: 깨진 줄은 건너뛰고, 날짜는 KST", () => {
   const text = [
     JSON.stringify({ run_id: 1, automation: "minutes", started_at: "2026-09-10T23:59:00+09:00", ok: true, summary: "어제" }),
     "{깨진 줄",
@@ -424,9 +424,10 @@ test("parseArchive: 그날(KST) 줄만, 깨진 줄은 건너뜀", () => {
     JSON.stringify({ automation: "minutes", recorded_at: "2026-09-11T08:00:00+09:00", trigger: "local", ok: false, summary: "이 PC" }),
     "",
   ].join("\n");
-  const lines = parseArchive(text, "minutes", "2026-09-11");
-  assert.deepEqual(lines.map((l) => l.summary), ["오늘 00:30", "이 PC"]);
-  assert.equal(lines[0].automation, "minutes");
+  const lines = parseArchive(text, "minutes");
+  assert.deepEqual(lines.map((l) => l.summary), ["어제", "오늘 00:30", "이 PC"]);
+  assert.equal(lines[1].automation, "minutes");
+  assert.deepEqual(lines.map(archiveDate), ["2026-09-10", "2026-09-11", "2026-09-11"]);
 });
 
 test("mergeHistory: GitHub 상태 + 일지 요약, 일지에만 있는 실행, 최신순", () => {
@@ -439,13 +440,24 @@ test("mergeHistory: GitHub 상태 + 일지 요약, 일지에만 있는 실행, �
     { run_id: 9, automation: "minutes", trigger: "schedule", started_at: "2026-09-11T08:00:00+09:00", duration_sec: 90, ok: false, summary: "실패", url: "u9" },
     { automation: "minutes", trigger: "local", started_at: "2026-09-11T11:00:00+09:00", ok: true, summary: "이 PC" },
   ];
-  const m = mergeHistory(gh, archive);
+  const m = mergeHistory(gh, archive, "2026-09-11", false);
   assert.deepEqual(m.map((x) => x.id), ["local:minutes:2026-09-11T11:00:00+09:00", "11", "10", "9"]);
   assert.equal(m[2].summary, "신규 3건");
   assert.equal(m[2].url, "https://github.com/Junjaee/ai-office/actions/runs/10");
   assert.equal(m[1].summary, null);
   assert.deepEqual([m[3].status, m[3].conclusion, m[3].trigger, m[3].completedAt], ["completed", "failure", "schedule", "2026-09-10T23:01:30.000Z"]);
   assert.equal(m[0].url, null);
+  assert.equal(m[3].durationSec, 90);
+  // GitHub 이 믿을 만하면(성공·90일 안) 그날 목록에 없는 실행 번호는 다른 날(만든 날) 것이다
+  assert.deepEqual(mergeHistory(gh, archive, "2026-09-11", true).map((x) => x.id), ["local:minutes:2026-09-11T11:00:00+09:00", "11", "10"]);
+});
+
+test("mergeHistory: 밤새 대기한 실행 — 요청한 날(GitHub)에 요약·걸린 시간을 붙이고 다음 날에는 안 보인다", () => {
+  const lines = [{ run_id: 50, automation: "minutes", trigger: "manual", started_at: "2026-09-11T08:56:49+09:00", duration_sec: 325, ok: true, summary: "신규 5건" }];
+  const created = historyFromRuns([run({ id: 50, run_started_at: "2026-09-10T09:44:58Z", updated_at: "2026-09-11T00:02:56Z" })], workspaces.assembly.automations);
+  assert.deepEqual(mergeHistory(created, lines, "2026-09-10", true).map((x) => [x.id, x.summary, x.durationSec]), [["50", "신규 5건", 325]]);
+  assert.deepEqual(mergeHistory([], lines, "2026-09-11", true), []);
+  assert.equal(mergeHistory([], lines, "2026-09-11", false).length, 1); // GitHub 실패·보관 기간 밖이면 일지대로
 });
 
 function historyRequest(query) {
@@ -499,6 +511,24 @@ test("handleHistory: 캐시 — 오늘 30초, 지난 날 10분", async () => {
   now += HISTORY_PAST_CACHE_MS;
   await handleHistory(historyRequest("ws=assembly&date=2026-09-10"), deps);
   assert.equal(github.calls.listRunsBetween.length, 4);
+});
+
+test("handleHistory: 월말이면 다음 달 일지도 읽는다 (요청한 날 뒤에 돈 실행의 요약)", async () => {
+  const github = fakeGithub();
+  await handleHistory(historyRequest("ws=assembly&date=2026-09-28"), makeDeps({ github, now: () => Date.parse("2026-09-30T03:00:00Z") }));
+  assert.deepEqual([...github.calls.readRepoText].sort(), [
+    "history/assembly/mail/2026-09.jsonl", "history/assembly/mail/2026-10.jsonl",
+    "history/assembly/minutes/2026-09.jsonl", "history/assembly/minutes/2026-10.jsonl",
+  ]);
+});
+
+test("handleHistory: GitHub 보관 기간(90일) 밖의 날은 일지의 실행을 그대로 보여 준다", async () => {
+  const line = JSON.stringify({ run_id: 77, automation: "minutes", started_at: "2026-09-15T09:00:00+09:00", ok: true, summary: "옛 실행" });
+  const texts = { "history/assembly/minutes/2026-09.jsonl": line };
+  const old = await (await handleHistory(historyRequest("ws=assembly&date=2026-09-15"), makeDeps({ github: fakeGithub({ texts }), now: () => Date.parse("2026-12-31T03:00:00Z") }))).json();
+  assert.deepEqual(old.items.map((x) => x.summary), ["옛 실행"]);
+  const recent = await (await handleHistory(historyRequest("ws=assembly&date=2026-09-15"), makeDeps({ github: fakeGithub({ texts }), now: () => Date.parse("2026-09-20T03:00:00Z") }))).json();
+  assert.deepEqual(recent.items, []); // 90일 안: GitHub 이 이 실행을 만든 날에 둔다
 });
 
 test("handleStatus: history 는 보내지 않는다 (표는 /api/history)", async () => {
