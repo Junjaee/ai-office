@@ -8,8 +8,9 @@
 }
 status: queued(예약) → making(만드는 중) → done(게시됨) | failed(실패)
 
-예약 간격(사용자 결정 2026-09-11): 고른 개수 N → 24÷N 시간 간격. 첫 개는 바로, 나머지는 정각으로 올림.
-자동 선택(사용자 결정 2026-09-12): 매일 07:30 KST 에 예약이 하나도 없으면 편집장 1순위 후보를 바로 만들어 게시한다(auto_pick).
+예약 시각(사용자 결정 2026-09-12): 고정 시간대 SLOTS(07:30 · 12:30 · 18:30 KST). 고른 주제는 **다음 빈 시간대부터 차례로** 들어간다(하루 3건이 자연히 상한).
+  (구버전 24÷N 간격 방식은 schedule_times 로 남겨 두었고, slots 를 안 주면 그 방식으로 돈다.)
+자동 선택(사용자 결정 2026-09-12): 매일 첫 시간대(07:30)에 예약이 하나도 없으면 편집장 1순위 후보를 바로 만들어 게시한다(auto_pick).
   사용자가 미리 골라 뒀으면(예약 있음) 자동 선택은 건너뛴다.
 """
 from __future__ import annotations
@@ -89,6 +90,34 @@ def schedule_times(n: int, now: datetime, *, max_per_day: int = 0, start: dateti
     return out
 
 
+DEFAULT_SLOTS = ("07:30", "12:30", "18:30")
+
+
+def slot_times(n: int, now: datetime, *, slots=DEFAULT_SLOTS, taken: list[datetime] | None = None, grace_min: int = 5) -> list[datetime]:
+    """오늘부터 날짜를 넘겨 가며 아직 안 지난(지금+grace 분 이후) 빈 시간대를 n개 고른다. taken(이미 예약된 시각)과 겹치면 건너뛴다."""
+    if n <= 0:
+        return []
+    base = now.astimezone(KST)
+    used = {t.astimezone(KST).replace(second=0, microsecond=0) for t in (taken or [])}
+    out: list[datetime] = []
+    for day in range(0, 60):
+        d = (base + timedelta(days=day)).date()
+        for hm in slots:
+            h, m = (int(x) for x in str(hm).split(":"))
+            t = datetime(d.year, d.month, d.day, h, m, tzinfo=KST)
+            if t < base + timedelta(minutes=grace_min) or t in used:
+                continue
+            out.append(t)
+            if len(out) == n:
+                return out
+    return out
+
+
+def active_dues(data: dict) -> list[datetime]:
+    ts = [_parse(q.get("due")) for q in data.get("queue", []) if q.get("status") in ACTIVE]
+    return [t for t in ts if t]
+
+
 def last_due(data: dict) -> datetime | None:
     """예약·진행 중인 항목 중 가장 늦은 시각."""
     ts = [_parse(q.get("due")) for q in data.get("queue", []) if q.get("status") in ACTIVE]
@@ -96,9 +125,9 @@ def last_due(data: dict) -> datetime | None:
     return max(ts) if ts else None
 
 
-def enqueue(data: dict, pick_ids: list[str], *, now: datetime, max_per_day: int = 0) -> tuple[dict, list[dict]]:
+def enqueue(data: dict, pick_ids: list[str], *, now: datetime, max_per_day: int = 0, slots=None) -> tuple[dict, list[dict]]:
     """고른 후보 id 들을 예약에 넣는다. 이미 예약·진행 중이거나 없는 id 는 건너뛴다. (파일, 새로 넣은 항목) 반환.
-    max_per_day 가 있으면 하루 상한 간격을 지키고, 이미 예약이 있으면 그 마지막 예약 뒤 간격만큼 띄워 시작한다(몰아 올리기 방지)."""
+    slots(고정 시간대)가 있으면 다음 빈 시간대부터 차례로 배정한다(기본 운영 방식). 없으면 24÷N 간격(max_per_day 상한)."""
     by_id = {c["id"]: c for c in data.get("candidates", [])}
     busy = active_keys(data)
     chosen = []
@@ -117,7 +146,8 @@ def enqueue(data: dict, pick_ids: list[str], *, now: datetime, max_per_day: int 
             if start > now:                                   # 정각으로 올림 (이미 정각이면 그대로)
                 r = start.replace(minute=0, second=0, microsecond=0)
                 start = r if r == start else r + timedelta(hours=1)
-    times = schedule_times(len(chosen), now, max_per_day=max_per_day, start=start)
+    times = slot_times(len(chosen), now, slots=slots, taken=active_dues(data)) if slots else \
+        schedule_times(len(chosen), now, max_per_day=max_per_day, start=start)
     added = []
     for c, t in zip(chosen, times):
         item = {"id": c["id"], "key": c["key"], "title": c["title"], "link": c["link"], "source": c.get("source", ""),
@@ -129,7 +159,8 @@ def enqueue(data: dict, pick_ids: list[str], *, now: datetime, max_per_day: int 
     return data, added
 
 
-def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, max_age_days: int = 2, max_per_day: int = 0) -> tuple[dict, list[dict]]:
+def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, max_age_days: int = 2, max_per_day: int = 0,
+              slots=None) -> tuple[dict, list[dict]]:
     """아무도 안 골랐으면 후보 앞에서 n개를 예약(첫 개는 지금). 예약·진행 중이 있거나 후보가 오래됐으면 아무것도 안 한다."""
     if n <= 0 or active_keys(data) or not data.get("candidates"):
         return data, []
@@ -137,7 +168,18 @@ def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, 
     if made and now - made > timedelta(days=max_age_days):
         return data, []
     ids = [c["id"] for c in data["candidates"] if c.get("key") not in exclude_keys][:n]
-    return enqueue(data, ids, now=now, max_per_day=max_per_day)
+    data, added = enqueue(data, ids, now=now, max_per_day=max_per_day, slots=slots)
+    for q in added[:1]:                      # 자동 선택의 첫 개는 지금 시간대 것이므로 바로 만든다
+        q["due"] = now.isoformat(timespec="seconds")
+    return data, added
+
+
+def is_first_slot(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 59) -> bool:
+    """지금이 하루 첫 시간대(07:30) 창 안인가 — 매시 확인 실행이 이때 자동 선택을 한다."""
+    h, m = (int(x) for x in str(slots[0]).split(":"))
+    t = now.astimezone(KST)
+    start = t.replace(hour=h, minute=m, second=0, microsecond=0)
+    return start <= t < start + timedelta(minutes=window_min)
 
 
 def parse_edits(text: str) -> list[tuple[str, str]]:

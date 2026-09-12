@@ -25,6 +25,28 @@ def test_schedule_spreads_24h_over_n_and_rounds_to_hour():
     assert [t.strftime("%H:%M") for t in five] == ["09:17", "15:00", "19:00", "00:00", "05:00"]
 
 
+def test_slots_assign_next_free_fixed_times_and_skip_taken():
+    # 09:17 에 4개 → 12:30, 18:30, 다음 날 07:30, 12:30
+    four = review.slot_times(4, NOW)
+    assert [t.strftime("%d %H:%M") for t in four] == ["12 12:30", "12 18:30", "13 07:30", "13 12:30"]
+    # 12:30 이 이미 예약돼 있으면 건너뛴다 / 07:28 이면 07:30 은 유예(5분) 때문에 건너뛴다
+    taken = [datetime(2026, 9, 12, 12, 30, tzinfo=KST)]
+    assert [t.strftime("%H:%M") for t in review.slot_times(2, NOW, taken=taken)] == ["18:30", "07:30"]
+    assert review.slot_times(1, datetime(2026, 9, 12, 7, 28, tzinfo=KST))[0].strftime("%H:%M") == "12:30"
+    data = review.set_candidates({"queue": []}, cands(3), now=NOW)
+    ids = [c["id"] for c in data["candidates"]]
+    data, a = review.enqueue(data, ids[:2], now=NOW, slots=review.DEFAULT_SLOTS)
+    assert [x["due"][11:16] for x in a] == ["12:30", "18:30"]
+    data, b = review.enqueue(data, ids[2:], now=NOW, slots=review.DEFAULT_SLOTS)
+    assert b[0]["due"].startswith("2026-09-13T07:30"), "이미 찬 칸은 건너뛰고 다음 날 첫 칸"
+    # 07:30 창 판정과 자동 선택(첫 개는 바로)
+    assert review.is_first_slot(datetime(2026, 9, 12, 7, 31, tzinfo=KST)) and not review.is_first_slot(datetime(2026, 9, 12, 8, 30, tzinfo=KST))
+    fresh = review.set_candidates({"queue": []}, cands(2), now=NOW)
+    at = datetime(2026, 9, 12, 7, 32, tzinfo=KST)
+    fresh, auto = review.auto_pick(fresh, exclude_keys=set(), now=at, slots=review.DEFAULT_SLOTS)
+    assert len(auto) == 1 and auto[0]["due"] == at.isoformat(timespec="seconds")
+
+
 def test_daily_cap_spreads_over_days_and_starts_after_existing_queue():
     five = review.schedule_times(5, NOW, max_per_day=3)                    # 8시간 간격으로 5개 → 이틀에 걸침
     assert [t.strftime("%d %H:%M") for t in five] == ["12 09:17", "12 18:00", "13 02:00", "13 10:00", "13 18:00"]

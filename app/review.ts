@@ -51,6 +51,8 @@ const REFRESH_MS = 60_000;
 
 /** 하루 게시 상한 (automations/insta/config.actions.yaml 의 max_per_day 와 같게) */
 export const MAX_PER_DAY = 3;
+/** 고정 게시 시간대 (config.actions.yaml 의 slots 와 같게, 사용자 결정 2026-09-12) */
+export const SLOTS = ["07:30", "12:30", "18:30"];
 
 /** 고른 개수 N → 24÷N 시간 간격, 단 하루 상한보다 촘촘해지지 않는다 (사용자 결정 2026-09-11 · 상한 2026-09-12). 소수 첫째 자리까지 */
 export function intervalHours(n: number, maxPerDay = MAX_PER_DAY): number {
@@ -61,9 +63,9 @@ export function intervalHours(n: number, maxPerDay = MAX_PER_DAY): number {
 /** 간격 설명 문구: 1개면 "바로 게시", 3개면 "바로 1개 + 8시간마다", 상한을 넘으면 "하루 3개씩 · N일"  */
 export function intervalText(n: number, maxPerDay = MAX_PER_DAY): string {
   if (n <= 0) return "";
-  if (n === 1) return "바로 게시";
-  if (n > maxPerDay) return `하루 ${maxPerDay}개씩 ${intervalHours(n, maxPerDay)}시간 간격 · ${Math.ceil(n / maxPerDay)}일에 걸쳐`;
-  return `바로 1개 + ${intervalHours(n, maxPerDay)}시간마다`;
+  void maxPerDay;
+  const days = Math.ceil(n / SLOTS.length);
+  return n === 1 ? "다음 빈 시간대에 게시" : `다음 빈 시간대부터 차례로 (${days}일)`;
 }
 
 export const QUEUE_LABEL: Record<ReviewQueueItem["status"], { text: string; cls: string }> = {

@@ -355,7 +355,7 @@ def do_queue(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args
     data = review.load(path)
     ids = [x.strip() for x in (args.picks or "").split(",") if x.strip()]
     now = datetime.now(KST)
-    data, added = review.enqueue(data, ids, now=now, max_per_day=int(acct.get("max_per_day", 3)))
+    data, added = review.enqueue(data, ids, now=now, max_per_day=int(acct.get("max_per_day", 3)), slots=slots_of(acct))
     if not added:
         raise RuntimeError("예약할 후보가 없습니다 (이미 예약됐거나 후보 목록이 바뀌었어요 — 사이트를 새로 고쳐 주세요)")
     review.save(path, data)
@@ -407,7 +407,7 @@ def do_auto(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args,
     data = review.load(path)
     now = datetime.now(KST)
     posted = {r.get("key", "") for r in load_posted(args.account)}
-    data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=n, max_per_day=int(acct.get("max_per_day", 3)))
+    data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=n, max_per_day=int(acct.get("max_per_day", 3)), slots=slots_of(acct))
     if added:
         review.save(path, data)
         commit_paths([path], f"insta({args.account}): 자동 선택 {len(added)}건 {now:%Y-%m-%d %H:%M}")
@@ -421,11 +421,24 @@ def do_auto(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args,
     return result
 
 
+def slots_of(acct: dict) -> tuple:
+    """계정 설정의 고정 게시 시간대 (기본 07:30·12:30·18:30)."""
+    return tuple(str(x) for x in (acct.get("slots") or review.DEFAULT_SLOTS))
+
+
 def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args, progress) -> dict:
-    """예약 시각이 된 항목을 하나씩 기사→카드→게시. 결과는 검토 파일에 표시."""
+    """예약 시각이 된 항목을 하나씩 기사→카드→게시. 결과는 검토 파일에 표시. 첫 시간대(07:30) 창이면 예약이 없을 때 1순위를 자동 선택."""
     path = review_file(cfg, args.account)
     data = review.load(path)
     now = datetime.now(KST)
+    if review.is_first_slot(now, slots_of(acct)) and int(acct.get("auto_pick", 1)) > 0:
+        posted = {r.get("key", "") for r in load_posted(args.account)}
+        data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=int(acct.get("auto_pick", 1)), slots=slots_of(acct))
+        if added:
+            review.save(path, data)
+            commit_paths([path], f"insta({args.account}): 자동 선택 {len(added)}건 {now:%Y-%m-%d %H:%M}")
+            for q in added:
+                progress(f"자동 선택(07:30) — {q['title'][:50]}")
     due = review.due_items(data, now)
     tasks: dict[str, tuple[bool, str]] = {"topic": (True, review.summarize(data))}
     lines: list[str] = []
