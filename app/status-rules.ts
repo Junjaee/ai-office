@@ -89,6 +89,8 @@ export const RUNNER_WAIT_MS = 90 * 1000;
 export const RESULT_WAIT_MS: Record<StatusSource, number> = { github: 5 * 60 * 1000, static: 15 * 60 * 1000 };
 /** 구버전 running:true 파일의 기본 예상 실행 시간(초) (규칙 7) */
 export const LEGACY_DEFAULT_DURATION_SEC = 300;
+/** 이보다 짧게 끝난 성공 run 은 "할 일 없이 끝난 확인 실행"(예약 확인·예약 수정)으로 보고 결과 파일을 요구하지 않는다 (규칙 6a, 2026-09-12) */
+export const NOOP_RUN_MS = 90 * 1000;
 
 // ───────────────────────── 2.5 확정 문구 ─────────────────────────
 
@@ -228,7 +230,10 @@ function judge(def: AutomationDef, file: RealStatus | null, run: RunInfo | null,
       // 6. 성공했는데 파일이 이 run 것이 아님 (run_id 가 없는 구버전 파일은 updated_at ≥ startedAt 이면 같은 run 으로 본다)
       if (run.conclusion === "success") {
         const fileIsOlder = !file || (!sameRun(file, run) && toMs(file.updated_at) < toMs(run.startedAt));
-        if (fileIsOlder) {
+        // 6a. 90초 안에 끝난 성공 run = 만들 것이 없어 바로 끝난 예약 확인(매시 정각)이나 예약 수정 — 결과 파일이 없는 게 정상이므로 파일 규칙(7~11)으로 넘어간다
+        const took = run.completedAt ? toMs(run.completedAt) - toMs(run.startedAt) : NaN;
+        const noop = Number.isFinite(took) && took >= 0 && took < NOOP_RUN_MS;
+        if (fileIsOlder && !noop) {
           const elapsed = ageMs(run.completedAt ?? run.startedAt, now);
           if (elapsed < RESULT_WAIT_MS[source]) return { phase: "finishing", sub: SUBTITLES.finishing };
           return { phase: "error", sub: SUBTITLES.resultMissing };

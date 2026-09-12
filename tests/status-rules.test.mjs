@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import {
+import { NOOP_RUN_MS,
   deriveDeptStatus,
   summarize,
   STALE_HOURS,
@@ -209,6 +209,19 @@ test("규칙 6: 성공 run 인데 파일이 이전 run 것 → github 5분 안�
   const b = deriveAutomationView(def, oldFile, late, null, now, "github");
   assert.equal(b.phase, "error");
   assert.equal(b.sub, "결과가 올라오지 않았어요 · 자세한 기록 보기");
+});
+
+test("규칙 6a: 90초 안에 끝난 성공 run(할 일 없는 예약 확인·예약 수정)은 결과 파일 없어도 오류가 아니다 → 파일 상태 유지", () => {
+  const oldFile = { ...fileV2, run_id: 99, updated_at: iso(-2 * HOUR) };
+  const quick = runOf({ id: 100, startedAt: iso(-30 * MIN), completedAt: iso(-30 * MIN + 11 * 1000) });
+  const v = deriveAutomationView(def, oldFile, quick, null, now, "github");
+  assert.equal(v.phase, "done", "이전 파일이 성공이면 그대로 끝남");
+  assert.equal(v.sub, oldFile.summary);
+  // 파일이 아예 없으면 규칙 8(한 번도 안 돌았음)
+  assert.equal(deriveAutomationView(def, null, quick, null, now, "github").phase, "idle");
+  // 90초를 넘긴 run 은 종전대로 결과를 기다린다
+  const slow = runOf({ id: 100, startedAt: iso(-30 * MIN), completedAt: iso(-30 * MIN + NOOP_RUN_MS + 1000) });
+  assert.equal(deriveAutomationView(def, oldFile, slow, null, now, "github").phase, "error");
 });
 
 test("규칙 6: static 소스는 T=15분", () => {
