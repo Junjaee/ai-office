@@ -3,35 +3,37 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초",
+  "summary": "신규 2건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
   "counts": {
-    "new": 0,
+    "new": 2,
     "replaced": 0,
     "skip": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초"
+    "신규 2건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
+    "[추가] 2026년 9월 9/12 서울올림픽기념국 2,700원 (생활비)",
+    "[추가] 2026년 9월 9/12 하하호호놀이터방 4,000원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 34665956895,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34665956895",
+  "run_id": 34686494242,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34686494242",
   "trigger": "schedule",
-  "started_at": "2026-09-12T10:50:08+09:00",
-  "duration_sec": 0,
+  "started_at": "2026-09-12T18:41:27+09:00",
+  "duration_sec": 3,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 0건 확인, 결제 0건"
+      "summary": "메일 2건 확인, 결제 2건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 0 · 취소 0 · 건너뜀 0"
+      "summary": "추가 2 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-12T10:50:10+09:00"
+  "updated_at": "2026-09-12T18:41:32+09:00"
 }
