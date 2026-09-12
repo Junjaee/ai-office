@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 9건, 3.2분",
+  "summary": "게시 0건, 실패 0건, 누적 9건, 7.8분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,24 +11,21 @@
   },
   "next_run": "매일 06:30 후보 · 07:30 · 12:30 · 18:30 게시(07:30 은 안 고르면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 9건, 3.2분",
-    "[후보] 🇺🇸빈자리 This might be one of the best uses of an AI agent yet — IG 🇺🇸 @evolving.ai · 좋아요 1.3만 · 댓글 251",
-    "[후보] AI 영상의 제작 방식이 바뀌고 있습니다 — IG 🇰🇷 @prompt_what · 좋아요 2.7천 · 댓글 1.1천",
-    "[후보] 요즘 엄청 바이럴되는 뮤직비디오 훔치는 방법 ‍ — IG 🇰🇷 @prompt_what · 좋아요 1.6천 · 댓글 2.6천",
-    "[후보] 🇺🇸빈자리 Yesterday Anthropic released a 150-page report on how people — IG 🇺🇸 @evolving.ai · 좋아요 5.2천 · 댓글 194"
+    "게시 0건, 실패 0건, 누적 9건, 7.8분",
+    "[대기] 인스타 요청 한도 — 00:00 에 다시 시도: Recreating a 70-year love story frame by",
+    "[실패] Recreating a 70-year love story frame by — RuntimeError"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34675719337,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34675719337",
-  "request_id": "req-20260912142940-rvrh",
-  "trigger": "manual",
-  "started_at": "2026-09-12T14:30:59+09:00",
-  "duration_sec": 189,
+  "run_id": 34695089100,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34695089100",
+  "trigger": "schedule",
+  "started_at": "2026-09-12T21:58:35+09:00",
+  "duration_sec": 465,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 사이트에서 골라 주세요"
+      "summary": "후보 20건 · 예약 10건 · 게시 10건"
     },
     {
       "id": "write",
@@ -47,5 +44,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T14:34:10+09:00"
+  "updated_at": "2026-09-12T22:06:20+09:00"
 }
