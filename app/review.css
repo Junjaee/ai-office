@@ -3,6 +3,13 @@
 .review-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
 .review-head h4 { margin: 0; font-size: 14px; }
 .review-head h4 small { font-weight: 500; color: var(--ink-soft); }
+/* 탭: 주제 선정 · 예약 관리 · 완료 목록 */
+.review-tabs { display: flex; gap: 4px; margin-bottom: 10px; border-bottom: 1.5px solid var(--c-gray200); }
+.review-tab { appearance: none; border: 0; background: transparent; padding: 6px 10px 8px; font: inherit; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); cursor: pointer; border-bottom: 2.5px solid transparent; margin-bottom: -1.5px; display: inline-flex; align-items: center; gap: 6px; }
+.review-tab:hover { color: var(--ink); }
+.review-tab.on { color: var(--ink); border-bottom-color: var(--ink); }
+.review-count { display: inline-flex; min-width: 18px; height: 18px; padding: 0 5px; align-items: center; justify-content: center; border-radius: 999px; background: var(--c-gray200); color: var(--ink); font-size: 10.5px; font-weight: 800; }
+.review-tab.on .review-count { background: var(--ink); color: #fff; }
 .review-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .review-item label { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; border: 1.5px solid var(--c-gray200); border-radius: 10px; background: #fff; cursor: pointer; }
 .review-item.on label { border-color: var(--ink); background: var(--mint); }
@@ -18,10 +25,9 @@
 .review-gap { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: #ffe9b3; color: #7a4b00; font-size: 10.5px; font-weight: 800; vertical-align: 2px; white-space: nowrap; }
 .review-actions { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
 .review-actions .btn-primary { align-self: flex-start; }
-.review-queue { margin-top: 10px; padding-top: 8px; border-top: 1.5px solid var(--c-gray200); }
-.review-queue h5 { margin: 0 0 6px; font-size: 12px; color: var(--ink-soft); }
+.review-queue { display: flex; flex-direction: column; gap: 6px; }
 .review-queue ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 12.5px; }
-.review-queue li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.review-queue li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 6px 8px; border: 1.5px solid var(--c-gray200); border-radius: 10px; background: #fff; }
 .review-due { font-variant-numeric: tabular-nums; color: var(--ink-soft); }
 .review-qtitle { flex: 1 1 200px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .review-queue a { color: var(--c-500); font-weight: 700; }
