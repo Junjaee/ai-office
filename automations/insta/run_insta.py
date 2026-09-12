@@ -337,6 +337,12 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
             "tasks": {"topic": (True, f"후보 {len(chosen)}건 · 사이트에서 골라 주세요")}}
 
 
+def is_rate_limited(error: str) -> bool:
+    """인스타 API 앱 호출 한도(code 4 'Application request limit reached') 인가."""
+    e = (error or "").lower()
+    return "request limit" in e or "(code 4)" in e or "rate limit" in e
+
+
 def video_mod():
     import insta_video
 
@@ -440,10 +446,18 @@ def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, ar
         if res["ok"]:
             made += 1
             data = review.mark(data, q["id"], "done", now=now, permalink=res.get("permalink", ""))
+            msg = "게시"
+        elif is_rate_limited(res.get("error", "")):
+            # 앱 시간당 호출 한도 — 글은 이미 써 뒀으니(out/ 에 남음) 실패로 두지 않고 1시간 뒤 다시 시도
+            retry = (now + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+            data = review.mark(data, q["id"], "queued", now=now, due=retry.isoformat(timespec="seconds"), error="")
+            lines.append(f"[대기] 인스타 요청 한도 — {retry:%H:%M} 에 다시 시도: {q['title'][:40]}")
+            msg = "한도 대기"
         else:
             failed += 1
             data = review.mark(data, q["id"], "failed", now=now, error=res.get("error", ""))
-        review.save(path, data); commit_paths([path], f"insta({args.account}): {'게시' if res['ok'] else '실패'} {q['title'][:40]}")
+            msg = "실패"
+        review.save(path, data); commit_paths([path], f"insta({args.account}): {msg} {q['title'][:40]}")
         tasks.update(res.get("tasks", {}))
         lines += res.get("lines", [])
     tasks["topic"] = (True, review.summarize(data))

@@ -97,7 +97,9 @@ class Instagram:
             params["cover_url"] = cover_url
         return self._req("POST", f"{self.user_id}/media", **params)["id"]
 
-    def wait_ready(self, container_id: str, *, tries: int = 20, delay: float = 3.0) -> None:
+    def wait_ready(self, container_id: str, *, tries: int = 20, delay: float = 6.0) -> None:
+        """컨테이너가 FINISHED 될 때까지 기다린다. 앱 시간당 호출 한도(code 4)를 아끼려고 처음 delay 만큼 쉬고 나서 확인한다."""
+        time.sleep(delay)
         for _ in range(tries):
             st = self._req("GET", container_id, fields="status_code,status")
             code = st.get("status_code")
@@ -151,7 +153,7 @@ def publish_reel(ig: Instagram, video_url: str, caption: str, cover_url: str = "
     """영상 공개 URL → 릴스 게시(피드에도 표시). 영상 처리에 1~3분 걸리므로 오래 기다린다. (media_id, permalink) 반환."""
     container = ig.create_reel(video_url, caption, cover_url)
     progress("릴스 컨테이너 처리 중 (영상 변환)")
-    ig.wait_ready(container, tries=60, delay=5.0)
+    ig.wait_ready(container, tries=40, delay=10.0)
     media_id = ig.publish(container)
     return {"media_id": media_id, "permalink": ig.permalink(media_id)}
 

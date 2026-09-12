@@ -90,3 +90,9 @@ def test_has_due_reads_file(tmp_path):
     data, _ = review.enqueue(data, [data["candidates"][0]["id"]], now=NOW)
     review.save(path, data)
     assert review.has_due(path, NOW) is True and review.has_due(path, NOW - timedelta(hours=1)) is False
+
+
+def test_rate_limit_detection():
+    import run_insta
+    assert run_insta.is_rate_limited("RuntimeError: Instagram 오류 403: Application request limit reached (code 4)")
+    assert not run_insta.is_rate_limited("RuntimeError: Instagram 오류 400: Invalid parameter (code 100)")
