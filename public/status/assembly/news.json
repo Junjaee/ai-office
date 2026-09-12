@@ -3,37 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 11초",
+  "summary": "신규 2건, 실패 0건, 11초",
   "counts": {
-    "new": 3,
+    "new": 2,
     "failed": 0,
-    "total": 352
+    "total": 354
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 11초",
-    "[신규] 이우일의 만화 그리스로마 신화 3: 오뒷세우스 — brunch.co.kr",
-    "[신규] 순천시의회 예결위, 결산 넘어 내년도 예산까지 들여다본다 — 광주in",
-    "[신규] 장상기 의원 \"서울시 전출금 늦어 학교공사 차질…5천억 불용 우려\" — gukjenews.com"
+    "신규 2건, 실패 0건, 11초",
+    "[신규] [포토] 이계철 화성특례시의회 의장과 시의원들, 호남향우회연합회 한마음 대축제 참석 — 수도권지역뉴스",
+    "[신규] 현재 단계가 헷갈릴 때 보는 토토로 인형 가격 상태 안내 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34708486240,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34708486240",
+  "run_id": 34715367778,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34715367778",
   "trigger": "schedule",
-  "started_at": "2026-09-13T02:31:55+09:00",
+  "started_at": "2026-09-13T04:51:34+09:00",
   "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 37건"
+      "summary": "검색어 5개에서 38건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 3건 (신규 3건) · brunch.co.kr 1건, gukjenews.com 1건, 광주in 1건"
+      "summary": "오늘 5건 (신규 2건) · Calgary Roughnecks 1건, brunch.co.kr 1건, gukjenews.com 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-13T02:32:07+09:00"
+  "updated_at": "2026-09-13T04:51:46+09:00"
 }
