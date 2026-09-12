@@ -359,6 +359,39 @@ def do_queue(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args
     return result
 
 
+def do_stats(cfg: dict, acct: dict, args, progress) -> dict:
+    """올린 게시물의 실제 지표와 계정 팔로워 수를 받아 data/insta/<계정>/stats.json 에 저장·커밋 (성과 확인용)."""
+    import insta_publisher as pub
+
+    token, user_id = pub.account_env(args.account)
+    ig = pub.Instagram(token, user_id)
+    info = ig.account()
+    rows = []
+    for r in load_posted(args.account):
+        if not r.get("media_id"):
+            continue
+        try:
+            m = ig.metrics(r["media_id"])
+        except Exception as exc:  # noqa: BLE001
+            m = {"error": str(exc)[:120]}
+        rows.append({"date": r.get("date"), "title": r.get("hook") or r.get("title"), "permalink": r.get("permalink"),
+                     "kind": r.get("kind", "carousel"), **{k: m.get(k) for k in ("media_type", "views", "reach", "saved", "shares", "total_interactions",
+                                                                                  "like_count", "comments_count", "insights_error", "error")}})
+    now = datetime.now(KST)
+    out = {"checked_at": now.isoformat(timespec="seconds"), "account": {k: info.get(k) for k in ("username", "followers_count", "follows_count", "media_count")},
+           "posts": rows}
+    path = posted_path(args.account).with_name("stats.json")
+    path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    commit_paths([path], f"insta({args.account}): 지표 {now:%Y-%m-%d %H:%M}")
+    lines = [f"[계정] 팔로워 {info.get('followers_count')} · 게시물 {info.get('media_count')}"]
+    for r in rows:
+        lines.append(f"[지표] 조회 {r.get('views')} · 도달 {r.get('reach')} · 저장 {r.get('saved')} · 공유 {r.get('shares')} · 좋아요 {r.get('like_count')} · 댓글 {r.get('comments_count')} — {str(r.get('title'))[:30]}")
+    for ln in lines:
+        progress(ln)
+    return {"counts": {"new": 0, "failed": 0, "total": len(rows)}, "lines": lines,
+            "tasks": {"upload": (True, f"팔로워 {info.get('followers_count')} · 지표 {len(rows)}건")}}
+
+
 def do_auto(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args, progress) -> dict:
     """매일 07:30 KST — 아무도 안 골랐으면 편집장 1순위 후보(auto_pick 개수)를 바로 만들어 게시. 예약이 있으면 그냥 publish."""
     n = int(acct.get("auto_pick", 1))
@@ -485,6 +518,8 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         return do_publish(cfg, acct, p, refs, llm, args, progress)
     if args.mode == "auto":
         return do_auto(cfg, acct, p, refs, llm, args, progress)
+    if args.mode == "stats":
+        return do_stats(cfg, acct, args, progress)
     today = args.date or datetime.now(KST).strftime("%Y-%m-%d")
     out = HERE / "out" / args.account / today
     out.mkdir(parents=True, exist_ok=True)
@@ -565,7 +600,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--revise", action="store_true", help="지난 검수 지적을 반영해 기사를 다시 쓴다(--resume 과 함께)")
     p.add_argument("--feedback", default="", help="다듬기에 넣을 사용자 지적(--revise 와 함께). 줄바꿈 가능")
     p.add_argument("--date", default="", help="출력 폴더 날짜 (기본 오늘)")
-    p.add_argument("--mode", choices=["run", "topics", "queue", "publish", "auto"], default=os.environ.get("INSTA_MODE", "run"),
+    p.add_argument("--mode", choices=["run", "topics", "queue", "publish", "auto", "stats"], default=os.environ.get("INSTA_MODE", "run"),
                    help="run=1건 자동 게시(시험) / topics=후보 저장 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시")
     p.add_argument("--picks", default=os.environ.get("INSTA_PICKS", ""), help="queue 방식에서 고른 후보 id (쉼표)")
     a = p.parse_args(argv)

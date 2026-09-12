@@ -115,14 +115,21 @@ class Instagram:
         return self._req("GET", media_id, fields="permalink").get("permalink", "")
 
     def metrics(self, media_id: str) -> dict:
-        base = self._req("GET", media_id, fields="like_count,comments_count,permalink,timestamp")
-        try:
-            ins = self._req("GET", f"{media_id}/insights", metric="saved,shares,reach")
-            for row in ins.get("data", []):
-                base[row["name"]] = (row.get("values") or [{}])[0].get("value")
-        except RuntimeError:
-            pass
+        """게시물 지표: 좋아요·댓글 + 인사이트(views 조회, reach 도달, saved 저장, shares 공유, total_interactions)."""
+        base = self._req("GET", media_id, fields="like_count,comments_count,permalink,timestamp,media_type")
+        for metric in ("views,reach,saved,shares,total_interactions", "reach,saved,shares"):   # 옛 게시물·타입에 따라 일부 지표가 거부되면 줄여서 재시도
+            try:
+                ins = self._req("GET", f"{media_id}/insights", metric=metric)
+                for row in ins.get("data", []):
+                    base[row["name"]] = (row.get("values") or [{}])[0].get("value")
+                break
+            except RuntimeError as exc:
+                base["insights_error"] = str(exc)[:120]
         return base
+
+    def account(self) -> dict:
+        """계정 요약: 팔로워·팔로잉·게시물 수."""
+        return self._req("GET", "me", fields="user_id,username,followers_count,follows_count,media_count")
 
 
 def publish_carousel(ig: Instagram, image_urls: list[str], caption: str, alt_text: str = "", progress=print) -> dict:

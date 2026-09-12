@@ -17,7 +17,7 @@ on:
       mode:
         description: "topics=후보 뽑기 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시 / auto=07:30 자동 선택 / edit=예약 취소·시각 변경 / run=1건 자동 게시(시험)"
         type: choice
-        options: [topics, queue, publish, auto, edit, run]
+        options: [topics, queue, publish, auto, edit, stats, run]
         default: "topics"
       picks:
         description: "queue 방식에서 고른 후보 id (쉼표). 사이트 검토 칸이 채운다"
