@@ -32,9 +32,11 @@ PICK_SCHEMA = {
 
 ARTICLE_SCHEMA = {
     "type": "object",
-    "required": ["title", "subtitle", "paragraphs", "caption", "hashtags", "alt_text", "sources", "claims"],
+    "required": ["title", "subtitle", "paragraphs", "caption", "hashtags", "alt_text", "sources", "claims", "dm_keyword", "dm_text"],
     "properties": {
         "title": {"type": "string", "minLength": 6, "maxLength": 40},
+        "dm_keyword": {"type": "string", "minLength": 1, "maxLength": 12},
+        "dm_text": {"type": "string", "minLength": 60, "maxLength": 950},
         "subtitle": {"type": "string", "maxLength": 70},
         "paragraphs": {
             "type": "array", "minItems": 4, "maxItems": 8,
@@ -174,7 +176,10 @@ def _article_rules(p: Profile) -> str:
         f"- 독자: {p.audience}",
         f"- 말투: {p.tone}",
         "- 결과물은 인스타그램 카드뉴스의 바탕이 되는 **기사 한 편**이다. 카드 문구가 아니라 완결된 글로 쓴다.",
-        f"- 제목(title): 스크롤을 멈추게 하는 제목. 다만 사실을 벗어난 낚시는 금지. 패턴 예: {' / '.join(pats)}. 20자 안팎.",
+        f"- 제목(title): **엄지를 멈추게 하는 제목**이 이 글의 절반이다. 사실을 벗어난 낚시는 금지지만, 밋밋한 요약 제목('~출시', '~업데이트')은 실패다. "
+        "반드시 다음 중 하나를 쓴다: ① 숫자+대비('프롬프트 3개로 내 정보 싹 지웠어요', '22초 vs 177초') ② 독자에게 직접 말 걸기('여러분, 지금 당장 카톡 켜세요', '아직 이거 손으로 하세요?') "
+        "③ 손해·놓침 자극('나만 몰랐던', '모르면 한 달 손해') ④ 결과 먼저('사진 한 장이 그림이 됐어요') ⑤ 반전·의문('AI한테 마우스를 넘겨준 첫날 풍경'). "
+        f"구체적인 명사·숫자가 들어가야 하고 '혁신'·'주목'·'화제' 같은 빈말은 금지. 패턴 예: {' / '.join(pats)}. 20자 안팎(표지에 두 줄).",
         "- 본문에 인상적인 **숫자·대비**(예: 22초 vs 177초, 8배, 무료, 하루 100장)가 있으면 제목이나 부제에 반드시 끌어온다. '완결편'·'총정리' 같은 밋밋한 말에만 기대지 않는다.",
         "- 부제(subtitle): 제목이 약속한 이득을 한 줄로.",
         f"- 문단(paragraphs) {p.paragraphs}개. **문단 하나 = 소주제 하나**. heading 은 그 소주제를 12자 안팎으로, text 는 3~4줄(90~200자) 완결된 문장.",
@@ -190,7 +195,11 @@ def _article_rules(p: Profile) -> str:
         "- 모든 사실 주장은 claims 에 {text, source(URL)} 로 넣는다(공식 출처 우선). **인스타그램·스레드 등 SNS 게시물 주소는 출처로 쓸 수 없다** — "
         "소재가 다른 계정의 인스타 글이면 그 글은 '이런 주제가 반응이 좋았다'는 힌트일 뿐이고, 사실은 아래 관련 글·공식 페이지에서 찾아 그 주소를 단다. 못 찾은 세부는 쓰지 않는다.",
         "- 남의 글을 옮겨 쓰지 않는다: 참고 계정 글의 문장·표현을 그대로 쓰거나, 그 계정의 체험('실제로 돌려봤더니', '~해 봤어요')을 우리 체험처럼 쓰지 않는다. 우리가 직접 한 것이 아니면 '~할 수 있어요', '~된다고 해요' 로 쓴다.",
-        "- caption: 인스타 본문. 300~500자, 3문단(첫 줄 = 제목 반복 → 핵심 요약 → 저장·공유 유도). 해시태그는 hashtags 배열로.",
+        "- caption: 인스타 본문. 300~500자, 3문단(첫 줄 = 제목 반복 → 핵심 요약 → 저장·공유 유도). 해시태그는 hashtags 배열로. "
+        "마지막 줄은 반드시 댓글 유도: \"💬 댓글에 '<dm_keyword>' 라고 남기면 <무엇>을 DM 으로 보내드려요\" (다른 AI 계정들이 전부 쓰는 방식 — 댓글이 3~10배 늘어 노출이 커진다).",
+        "- dm_keyword: 댓글로 남길 짧은 한글 말(2~6자, 예 '프롬프트', '지우기', '레시피'). 글 주제와 이어지는 말.",
+        "- dm_text: 댓글 단 사람에게 DM 으로 보낼 **실제 쓸모 있는 것** — 이 글의 프롬프트 전문(복붙해서 바로 쓰는 문장 1~3개), 없으면 따라 하는 순서 5줄. "
+        "인사 한 줄 → 내용 → '저장해 두고 써 보세요' 한 줄. 950자 안. 링크·해시태그 없음. 원문에 없는 기능을 지어내지 않는다.",
         f"- hashtags: 기본 {', '.join(p.hashtags_base)} 중 3개 + 소재에 맞는 2개.",
         "- alt_text: 시각장애인용 한 문장.",
     ])
@@ -275,6 +284,13 @@ def local_checks(p: Profile, article: dict) -> list[str]:
         elif n > 260:
             problems.append(f"{i}번 문단이 너무 김({n}자) — 3~4줄(90~200자)")
     article["hashtags"] = ["#" + str(h).strip().lstrip("#") for h in article.get("hashtags", []) if str(h).strip()]
+    # 댓글 유도 줄: 키워드가 캡션에 없으면 마지막에 붙인다 (모델이 빠뜨려도 게시 규칙은 지킨다)
+    kw = str(article.get("dm_keyword") or "").strip().strip("'\"")
+    article["dm_keyword"] = kw
+    if kw and article.get("dm_text") and kw not in str(article.get("caption", "")):
+        article["caption"] = str(article.get("caption", "")).rstrip() + f"\n\n💬 댓글에 '{kw}' 라고 남기면 이 글의 프롬프트를 DM 으로 보내드려요"
+    if article.get("dm_text") and len(str(article["dm_text"])) < 60:
+        problems.append("dm_text 가 너무 짧음 — 프롬프트 전문이나 따라 하는 순서를 60자 이상으로")
     return problems
 
 

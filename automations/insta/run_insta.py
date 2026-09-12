@@ -237,6 +237,7 @@ def step_upload_reel(cfg: dict, acct: dict, out: Path, written: dict, reel: dict
     res = pub.publish_reel(ig, urls[0], caption, cover_url=urls[1] if len(urls) > 1 else "", progress=progress)
     row = {"date": today, "account": args.account, "key": item["candidate"]["key"], "title": item["candidate"]["title"],
            "hook": post["title"], "media_id": res["media_id"], "permalink": res["permalink"], "video_url": urls[0],
+           "posted_at": datetime.now(KST).isoformat(timespec="seconds"), "dm_keyword": post.get("dm_keyword", ""), "dm_text": post.get("dm_text", ""),
            "kind": "reel", "credit": reel["credit"], "provider": item.get("provider", "")}
     append_posted(args.account, row)
     progress(f"릴스 게시 완료 {res['permalink']}")
@@ -261,6 +262,7 @@ def step_upload(cfg: dict, acct: dict, out: Path, written: dict, rendered: dict,
         res = pub.publish_carousel(ig, urls, caption, post.get("alt_text", ""), progress=progress)
         row = {"date": today, "account": args.account, "key": item["candidate"]["key"],
                "title": item["candidate"]["title"], "hook": post["title"], "media_id": res["media_id"],
+               "posted_at": datetime.now(KST).isoformat(timespec="seconds"), "dm_keyword": post.get("dm_keyword", ""), "dm_text": post.get("dm_text", ""),
                "permalink": res["permalink"], "image_urls": urls, "provider": item.get("provider", "")}
         append_posted(args.account, row)
         results.append(row)
