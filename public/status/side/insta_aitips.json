@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 9건, 11.0분",
+  "summary": "게시 0건, 실패 0건, 누적 9건, 5.2분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,16 +11,16 @@
   },
   "next_run": "매일 06:30 후보 · 07:30 · 12:30 · 18:30 게시(07:30 은 안 고르면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 9건, 11.0분",
-    "[대기] 인스타 요청 한도 — 05:00 에 다시 시도: Recreating a 70-year love story frame by",
+    "게시 0건, 실패 0건, 누적 9건, 5.2분",
+    "[대기] 인스타 요청 한도 — 08:00 에 다시 시도: Recreating a 70-year love story frame by",
     "[실패] Recreating a 70-year love story frame by — RuntimeError"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34711513383,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34711513383",
+  "run_id": 34720200391,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34720200391",
   "trigger": "schedule",
-  "started_at": "2026-09-13T03:33:44+09:00",
-  "duration_sec": 658,
+  "started_at": "2026-09-13T06:32:42+09:00",
+  "duration_sec": 309,
   "tasks": [
     {
       "id": "topic",
@@ -44,5 +44,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-13T03:44:44+09:00"
+  "updated_at": "2026-09-13T06:37:52+09:00"
 }
