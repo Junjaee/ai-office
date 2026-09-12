@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 12초",
+  "summary": "신규 10건, 실패 0건, 11초",
   "counts": {
-    "new": 15,
+    "new": 10,
     "failed": 0,
-    "total": 339
+    "total": 349
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 12초",
-    "[신규] 이준석, 김동관 한화 부회장과 하버드 인연 공개…\"제일 똑똑한 재벌\" — v.daum.net",
-    "[신규] 이준석 \"동관이형, 만난 재벌 중 제일 똑똑…나라면 한화 주식 몰빵\" — 뉴시스",
-    "[신규] 5년 무이자에도 안 팔린다…경기 공공택지 상업·업무용지 '찬바람' — v.daum.net",
-    "[신규] 원희룡 vs 이준석, ‘尹 정리’ 발언 진실공방 — 채널A"
+    "신규 10건, 실패 0건, 11초",
+    "[신규] 이준석 “나라면 한화 주식에 몰빵…동관이형 재벌 중 제일 똑똑” — edaily.co.kr",
+    "[신규] 암 투병 김미영 대표 “범우파, 부정선거·5.18 진실 외면 말아야…한동훈·이준석 절대 안 돼” — 프리진뉴스",
+    "[신규] 릴이 확장되는 기능이 있다면 읽어볼 오즈 카지노 — Histoire pour tous",
+    "[신규] “선생님과 판사와의 대화: 교육활동 보호를 위한 사법적 대안 모색”:동아경제신문 & daenews.co.kr — 동아경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34680746822,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34680746822",
+  "run_id": 34693855230,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34693855230",
   "trigger": "schedule",
-  "started_at": "2026-09-12T16:27:03+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-12T21:30:44+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 75건"
+      "summary": "검색어 5개에서 42건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 48건 (신규 15건) · Histoire pour tous 15건, histoire-pour-tous.fr 6건, citizenadmnews.co.kr 4건"
+      "summary": "오늘 58건 (신규 10건) · Histoire pour tous 17건, histoire-pour-tous.fr 6건, v.daum.net 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-12T16:27:17+09:00"
+  "updated_at": "2026-09-12T21:30:56+09:00"
 }
