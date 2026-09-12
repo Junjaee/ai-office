@@ -244,7 +244,7 @@ function PickTab({ candidates, queue, taken, checked, showAll, canRun, busy, pic
           <button className="btn btn-primary" onClick={onMake} disabled={!pickedCount || busy}>
             {busy ? "요청 중…" : pickedCount ? `선택 ${pickedCount}개 만들기 · ${intervalText(pickedCount)}` : "만들 주제를 골라 주세요"}
           </button>
-          <small className="auto-meta">고른 개수만큼 24시간을 나눠 간격을 두고 자동 게시돼요. 첫 개는 바로 만들어요. 아무것도 안 고르면 07:30 에 1번이 자동으로 나가요. 시각은 "예약 관리" 탭에서 바꿀 수 있어요.</small>
+          <small className="auto-meta">하루 최대 3개, 8시간 간격으로 자동 게시돼요(더 고르면 다음 날로). 예약이 비어 있으면 첫 개는 바로 만들어요. 아무것도 안 고르면 07:30 에 1번이 자동으로 나가요. 시각은 "예약 관리" 탭에서 바꿀 수 있어요.</small>
         </div>
       ) : null}
     </>

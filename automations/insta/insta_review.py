@@ -70,11 +70,15 @@ def set_candidates(data: dict, rows: list[dict], *, now: datetime) -> dict:
             "count": len(cands), "candidates": cands, "queue": keep}
 
 
-def schedule_times(n: int, now: datetime) -> list[datetime]:
-    """N개를 24÷N 시간 간격으로. 첫 개는 지금, 나머지는 다음 정각으로 올림."""
+def schedule_times(n: int, now: datetime, *, max_per_day: int = 0, start: datetime | None = None) -> list[datetime]:
+    """N개를 24÷N 시간 간격으로. 첫 개는 지금(start 가 있으면 그 시각), 나머지는 다음 정각으로 올림.
+    max_per_day(>0)가 있으면 간격이 24÷max_per_day 보다 좁아지지 않아 남는 것은 다음 날로 넘어간다 (하루 상한)."""
     if n <= 0:
         return []
     step = 24.0 / n
+    if max_per_day > 0:
+        step = max(step, 24.0 / max_per_day)
+    now = start or now
     out = [now]
     for i in range(1, n):
         t = now + timedelta(hours=step * i)
@@ -85,8 +89,16 @@ def schedule_times(n: int, now: datetime) -> list[datetime]:
     return out
 
 
-def enqueue(data: dict, pick_ids: list[str], *, now: datetime) -> tuple[dict, list[dict]]:
-    """고른 후보 id 들을 예약에 넣는다. 이미 예약·진행 중이거나 없는 id 는 건너뛴다. (파일, 새로 넣은 항목) 반환."""
+def last_due(data: dict) -> datetime | None:
+    """예약·진행 중인 항목 중 가장 늦은 시각."""
+    ts = [_parse(q.get("due")) for q in data.get("queue", []) if q.get("status") in ACTIVE]
+    ts = [t for t in ts if t]
+    return max(ts) if ts else None
+
+
+def enqueue(data: dict, pick_ids: list[str], *, now: datetime, max_per_day: int = 0) -> tuple[dict, list[dict]]:
+    """고른 후보 id 들을 예약에 넣는다. 이미 예약·진행 중이거나 없는 id 는 건너뛴다. (파일, 새로 넣은 항목) 반환.
+    max_per_day 가 있으면 하루 상한 간격을 지키고, 이미 예약이 있으면 그 마지막 예약 뒤 간격만큼 띄워 시작한다(몰아 올리기 방지)."""
     by_id = {c["id"]: c for c in data.get("candidates", [])}
     busy = active_keys(data)
     chosen = []
@@ -97,7 +109,15 @@ def enqueue(data: dict, pick_ids: list[str], *, now: datetime) -> tuple[dict, li
             continue
         seen.add(c["key"])
         chosen.append(c)
-    times = schedule_times(len(chosen), now)
+    start = None
+    if max_per_day > 0:
+        tail = last_due(data)
+        if tail:
+            start = max(now, tail + timedelta(hours=24.0 / max_per_day))
+            if start > now:                                   # 정각으로 올림 (이미 정각이면 그대로)
+                r = start.replace(minute=0, second=0, microsecond=0)
+                start = r if r == start else r + timedelta(hours=1)
+    times = schedule_times(len(chosen), now, max_per_day=max_per_day, start=start)
     added = []
     for c, t in zip(chosen, times):
         item = {"id": c["id"], "key": c["key"], "title": c["title"], "link": c["link"], "source": c.get("source", ""),
@@ -105,11 +125,11 @@ def enqueue(data: dict, pick_ids: list[str], *, now: datetime) -> tuple[dict, li
                 "status": "queued", "added_at": now.isoformat(timespec="seconds")}
         added.append(item)
     data = {**data, "queue": list(data.get("queue", [])) + added,
-            "interval_hours": round(24.0 / len(chosen), 2) if chosen else data.get("interval_hours")}
+            "interval_hours": round(max(24.0 / len(chosen), 24.0 / max_per_day if max_per_day > 0 else 0), 2) if chosen else data.get("interval_hours")}
     return data, added
 
 
-def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, max_age_days: int = 2) -> tuple[dict, list[dict]]:
+def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, max_age_days: int = 2, max_per_day: int = 0) -> tuple[dict, list[dict]]:
     """아무도 안 골랐으면 후보 앞에서 n개를 예약(첫 개는 지금). 예약·진행 중이 있거나 후보가 오래됐으면 아무것도 안 한다."""
     if n <= 0 or active_keys(data) or not data.get("candidates"):
         return data, []
@@ -117,7 +137,7 @@ def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, 
     if made and now - made > timedelta(days=max_age_days):
         return data, []
     ids = [c["id"] for c in data["candidates"] if c.get("key") not in exclude_keys][:n]
-    return enqueue(data, ids, now=now)
+    return enqueue(data, ids, now=now, max_per_day=max_per_day)
 
 
 def parse_edits(text: str) -> list[tuple[str, str]]:

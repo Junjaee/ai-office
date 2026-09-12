@@ -49,17 +49,21 @@ export type ReviewState = { data: ReviewFile | null; loading: boolean; error: bo
 
 const REFRESH_MS = 60_000;
 
-/** 고른 개수 N → 24÷N 시간 간격 (사용자 결정 2026-09-11). 소수 첫째 자리까지 */
-export function intervalHours(n: number): number {
+/** 하루 게시 상한 (automations/insta/config.actions.yaml 의 max_per_day 와 같게) */
+export const MAX_PER_DAY = 3;
+
+/** 고른 개수 N → 24÷N 시간 간격, 단 하루 상한보다 촘촘해지지 않는다 (사용자 결정 2026-09-11 · 상한 2026-09-12). 소수 첫째 자리까지 */
+export function intervalHours(n: number, maxPerDay = MAX_PER_DAY): number {
   if (n <= 0) return 0;
-  return Math.round((24 / n) * 10) / 10;
+  return Math.round(Math.max(24 / n, 24 / maxPerDay) * 10) / 10;
 }
 
-/** 간격 설명 문구: 1개면 "바로 게시", 3개면 "바로 1개 + 8시간마다" */
-export function intervalText(n: number): string {
+/** 간격 설명 문구: 1개면 "바로 게시", 3개면 "바로 1개 + 8시간마다", 상한을 넘으면 "하루 3개씩 · N일"  */
+export function intervalText(n: number, maxPerDay = MAX_PER_DAY): string {
   if (n <= 0) return "";
   if (n === 1) return "바로 게시";
-  return `바로 1개 + ${intervalHours(n)}시간마다`;
+  if (n > maxPerDay) return `하루 ${maxPerDay}개씩 ${intervalHours(n, maxPerDay)}시간 간격 · ${Math.ceil(n / maxPerDay)}일에 걸쳐`;
+  return `바로 1개 + ${intervalHours(n, maxPerDay)}시간마다`;
 }
 
 export const QUEUE_LABEL: Record<ReviewQueueItem["status"], { text: string; cls: string }> = {

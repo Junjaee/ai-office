@@ -355,7 +355,7 @@ def do_queue(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args
     data = review.load(path)
     ids = [x.strip() for x in (args.picks or "").split(",") if x.strip()]
     now = datetime.now(KST)
-    data, added = review.enqueue(data, ids, now=now)
+    data, added = review.enqueue(data, ids, now=now, max_per_day=int(acct.get("max_per_day", 3)))
     if not added:
         raise RuntimeError("예약할 후보가 없습니다 (이미 예약됐거나 후보 목록이 바뀌었어요 — 사이트를 새로 고쳐 주세요)")
     review.save(path, data)
@@ -407,7 +407,7 @@ def do_auto(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args,
     data = review.load(path)
     now = datetime.now(KST)
     posted = {r.get("key", "") for r in load_posted(args.account)}
-    data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=n)
+    data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=n, max_per_day=int(acct.get("max_per_day", 3)))
     if added:
         review.save(path, data)
         commit_paths([path], f"insta({args.account}): 자동 선택 {len(added)}건 {now:%Y-%m-%d %H:%M}")

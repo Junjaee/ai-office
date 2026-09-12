@@ -25,6 +25,17 @@ def test_schedule_spreads_24h_over_n_and_rounds_to_hour():
     assert [t.strftime("%H:%M") for t in five] == ["09:17", "15:00", "19:00", "00:00", "05:00"]
 
 
+def test_daily_cap_spreads_over_days_and_starts_after_existing_queue():
+    five = review.schedule_times(5, NOW, max_per_day=3)                    # 8시간 간격으로 5개 → 이틀에 걸침
+    assert [t.strftime("%d %H:%M") for t in five] == ["12 09:17", "12 18:00", "13 02:00", "13 10:00", "13 18:00"]
+    data = review.set_candidates({"queue": []}, cands(4), now=NOW)
+    ids = [c["id"] for c in data["candidates"]]
+    data, a = review.enqueue(data, ids[:2], now=NOW, max_per_day=3)          # 2개 → 12시간 간격: 09:17, 22:00
+    assert data["interval_hours"] == 12.0 and [x["due"][11:16] for x in a] == ["09:17", "22:00"]
+    data, b = review.enqueue(data, ids[2:], now=NOW + timedelta(minutes=10), max_per_day=3)   # 이미 예약 있음 → 22:00 + 8h = 06:00 부터
+    assert [x["due"][8:16] for x in b] == ["13T06:00", "13T18:00"], "몰아 올리지 않고 마지막 예약 뒤에 이어 붙는다"
+
+
 def test_enqueue_skips_unknown_and_already_queued_and_marks_due():
     data = review.set_candidates({"queue": []}, cands(4), now=NOW)
     ids = [c["id"] for c in data["candidates"]]
