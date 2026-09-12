@@ -767,6 +767,18 @@
    "added_at": "2026-09-12T01:30:31+09:00",
    "error": "검수 미달 34점",
    "finished_at": "2026-09-12T01:36:40+09:00"
+  },
+  {
+   "id": "37c81a71",
+   "key": "https://www.youtube.com/shorts/cmn6xvuled4",
+   "title": "GPT-6 Astra turned London into a game",
+   "link": "https://www.youtube.com/shorts/cmN6XVuLEd4",
+   "source": "OpenAI 유튜브",
+   "summary": "",
+   "angle": "GPT-6 아스트라의 창의적 활용 데모 소개",
+   "due": "2026-09-12T12:32:19+09:00",
+   "status": "queued",
+   "added_at": "2026-09-12T12:32:19+09:00"
   }
  ],
  "interval_hours": 24.0
