@@ -1,51 +1,51 @@
 {
   "name": "인스타 게시글 · aitips",
   "dept": "research",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "게시 1건, 실패 2건, 누적 9건, 20.0분",
+  "summary": "게시 0건, 실패 0건, 누적 9건, 3.2분",
   "counts": {
-    "new": 1,
-    "failed": 2,
+    "new": 0,
+    "failed": 0,
     "total": 9
   },
-  "next_run": "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격",
+  "next_run": "매일 06:30 후보 · 07:30 · 12:30 · 18:30 게시(07:30 은 안 고르면 1순위 자동)",
   "log": [
-    "게시 1건, 실패 2건, 누적 9건, 20.0분",
-    "[예약] 1건 · 24.0시간 간격",
-    "[기사] 시각장애 형제, 챗GPT로 일상 바꿔요 · 검수 46점",
-    "[게시] https://www.instagram.com/p/DdLCYa9HDyi/",
-    "[실패] “이제 글쓰기도 클로드 대신 GPT로?” — RuntimeError"
+    "게시 0건, 실패 0건, 누적 9건, 3.2분",
+    "[후보] 🇺🇸빈자리 This might be one of the best uses of an AI agent yet — IG 🇺🇸 @evolving.ai · 좋아요 1.3만 · 댓글 251",
+    "[후보] AI 영상의 제작 방식이 바뀌고 있습니다 — IG 🇰🇷 @prompt_what · 좋아요 2.7천 · 댓글 1.1천",
+    "[후보] 요즘 엄청 바이럴되는 뮤직비디오 훔치는 방법 ‍ — IG 🇰🇷 @prompt_what · 좋아요 1.6천 · 댓글 2.6천",
+    "[후보] 🇺🇸빈자리 Yesterday Anthropic released a 150-page report on how people — IG 🇺🇸 @evolving.ai · 좋아요 5.2천 · 댓글 194"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34670582280,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34670582280",
-  "request_id": "req-20260912123106-1mrn",
+  "run_id": 34675719337,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34675719337",
+  "request_id": "req-20260912142940-rvrh",
   "trigger": "manual",
-  "started_at": "2026-09-12T12:32:19+09:00",
-  "duration_sec": 1201,
+  "started_at": "2026-09-12T14:30:59+09:00",
+  "duration_sec": 189,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 8건 · 게시 10건"
+      "summary": "후보 20건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
-      "status": "done",
-      "summary": "검수 46점 (claude_cli)"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "card",
-      "status": "done",
-      "summary": "카드 8장"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "upload",
-      "status": "done",
-      "summary": "1건 게시"
+      "status": "idle",
+      "summary": ""
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T12:52:21+09:00"
+  "updated_at": "2026-09-12T14:34:10+09:00"
 }
