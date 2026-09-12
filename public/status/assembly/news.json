@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 11초",
+  "summary": "신규 7건, 실패 0건, 11초",
   "counts": {
-    "new": 4,
+    "new": 7,
     "failed": 0,
-    "total": 317
+    "total": 324
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 11초",
-    "[신규] 한 번에 이해되지 않는 표현을 풀어 쓴 카지노 비밀작전 — Histoire pour tous",
-    "[신규] \"후원계좌 지웠습니다\"…돈보다 '이것' 채운 국회의원 명함 [여의도는 지금] — 한국경제",
-    "[신규] 카지노 안전한 사이트 배당표에 나오는 기호 설명 — Histoire pour tous",
-    "[신규] 李대통령 지지율 전주보다 2%p 하락한 38%…최저치 경신[한국갤럽] — 연합뉴스"
+    "신규 7건, 실패 0건, 11초",
+    "[신규] 이준석, “동관이형 재벌 중에 제일 똑똑…나라면 한화 주식에 몰빵” — 문화일보",
+    "[신규] 서울국제학교 학생들이 달린 '희망의 마라톤'…나눔 가치 되새겨 — v.daum.net",
+    "[신규] 비루트랩, 국내외 바이오 전시회 참가…미세조류 소재 사업화·글로벌 시장 확대 속도 — 한경매거진&북",
+    "[신규] 무차별 돌팔매질…용혜인, 왜 표적이 되는가 | — 세상을 바꾸는 시민언론 민들레"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34655888129,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34655888129",
+  "run_id": 34666779129,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34666779129",
   "trigger": "schedule",
-  "started_at": "2026-09-12T07:53:36+09:00",
+  "started_at": "2026-09-12T11:07:39+09:00",
   "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 97건"
+      "summary": "검색어 5개에서 82건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 26건 (신규 4건) · Histoire pour tous 11건, citizenadmnews.co.kr 4건, 시민행정신문 4건"
+      "summary": "오늘 33건 (신규 7건) · Histoire pour tous 11건, histoire-pour-tous.fr 6건, citizenadmnews.co.kr 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-12T07:53:48+09:00"
+  "updated_at": "2026-09-12T11:07:51+09:00"
 }
