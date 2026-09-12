@@ -1,38 +1,39 @@
 {
   "name": "인스타 게시글 · aitips",
   "dept": "research",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "게시 2건, 실패 0건, 누적 8건, 15.3분",
+  "summary": "게시 1건, 실패 2건, 누적 9건, 20.0분",
   "counts": {
-    "new": 2,
-    "failed": 0,
-    "total": 8
+    "new": 1,
+    "failed": 2,
+    "total": 9
   },
   "next_run": "매일 06:30 후보 · 07:30 첫 게시(안 고르면 1순위 자동) · 고르면 24÷N시간 간격",
   "log": [
-    "게시 2건, 실패 0건, 누적 8건, 15.3분",
-    "[기사] 월 200달러 프로, 가입 정지됐어요 · 검수 40점",
-    "[게시] https://www.instagram.com/p/DdKtR-nFYc4/",
-    "[기사] 챗GPT 이미지, 50% 빨라지고 1위 등극 · 검수 43점",
-    "[게시] https://www.instagram.com/p/DdKuMrwlVXo/"
+    "게시 1건, 실패 2건, 누적 9건, 20.0분",
+    "[예약] 1건 · 24.0시간 간격",
+    "[기사] 시각장애 형제, 챗GPT로 일상 바꿔요 · 검수 46점",
+    "[게시] https://www.instagram.com/p/DdLCYa9HDyi/",
+    "[실패] “이제 글쓰기도 클로드 대신 GPT로?” — RuntimeError"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34661543514,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34661543514",
-  "trigger": "schedule",
-  "started_at": "2026-09-12T09:26:05+09:00",
-  "duration_sec": 918,
+  "run_id": 34670582280,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34670582280",
+  "request_id": "req-20260912123106-1mrn",
+  "trigger": "manual",
+  "started_at": "2026-09-12T12:32:19+09:00",
+  "duration_sec": 1201,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 10건 · 게시 9건"
+      "summary": "후보 20건 · 예약 8건 · 게시 10건"
     },
     {
       "id": "write",
       "status": "done",
-      "summary": "검수 43점 (claude_cli)"
+      "summary": "검수 46점 (claude_cli)"
     },
     {
       "id": "card",
@@ -46,5 +47,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-12T09:41:24+09:00"
+  "updated_at": "2026-09-12T12:52:21+09:00"
 }
