@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 9건, 15.2분",
+  "summary": "게시 0건, 실패 0건, 누적 9건, 26.2분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,18 +11,18 @@
   },
   "next_run": "매일 06:30 후보 · 07:30 · 12:30 · 18:30 게시(07:30 은 안 고르면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 9건, 15.2분",
-    "[대기] 인스타 요청 한도 — 11:00 에 다시 시도: Hungry for some dinner inspo? Screenshot",
-    "[실패] Hungry for some dinner inspo? Screenshot — RuntimeError",
-    "[대기] 인스타 요청 한도 — 11:00 에 다시 시도: Recreating a 70-year love story frame by",
-    "[실패] Recreating a 70-year love story frame by — RuntimeError"
+    "게시 0건, 실패 0건, 누적 9건, 26.2분",
+    "[대기] 인스타 요청 한도 — 16:00 에 다시 시도: Recreating a 70-year love story frame by",
+    "[실패] Recreating a 70-year love story frame by — RuntimeError",
+    "[대기] 인스타 요청 한도 — 16:00 에 다시 시도: Hungry for some dinner inspo? Screenshot",
+    "[실패] Hungry for some dinner inspo? Screenshot — RuntimeError"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34727054107,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34727054107",
+  "run_id": 34739377641,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34739377641",
   "trigger": "schedule",
-  "started_at": "2026-09-13T09:06:32+09:00",
-  "duration_sec": 909,
+  "started_at": "2026-09-13T14:05:42+09:00",
+  "duration_sec": 1571,
   "tasks": [
     {
       "id": "topic",
@@ -46,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-13T09:21:41+09:00"
+  "updated_at": "2026-09-13T14:31:54+09:00"
 }
