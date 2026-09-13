@@ -3,38 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 8초",
+  "summary": "신규 2건, 실패 0건, 8초",
   "counts": {
-    "new": 9,
+    "new": 2,
     "failed": 0,
-    "total": 428
+    "total": 430
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 8초",
-    "[신규] 배당선이 표시되지 않을 때 찾는 이준석 경마장역 설명 — Histoire pour tous",
-    "[신규] 박용갑 의원, 장애인을 위한 ‘쉬운 판결문’ 법제화 추진 — 시민행정신문",
-    "[신규] 강승규 의원, 동물학대 처벌 강화? 현실은 최근 5년 실형 29명뿐 — 시민행정신문",
-    "[신규] 설명서의 예시가 실제 규칙과 어떻게 연결될까? 템파 카지노 — Calgary Roughnecks"
+    "신규 2건, 실패 0건, 8초",
+    "[신규] [오늘의 정치일정] 9월 14일(월) — 뉴스핌",
+    "[신규] 릴이 멈춘 뒤 이어지는 카지노 크랩 스 결과 확인 단계 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34772623783,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34772623783",
+  "run_id": 34779346345,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34779346345",
   "trigger": "schedule",
-  "started_at": "2026-09-14T02:47:51+09:00",
+  "started_at": "2026-09-14T04:59:47+09:00",
   "duration_sec": 8,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 70건"
+      "summary": "검색어 5개에서 69건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 9건 (신규 9건) · Calgary Roughnecks 3건, 시민행정신문 2건, Histoire pour tous 1건"
+      "summary": "오늘 11건 (신규 2건) · Calgary Roughnecks 3건, Histoire pour tous 2건, 시민행정신문 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-14T02:48:00+09:00"
+  "updated_at": "2026-09-14T04:59:56+09:00"
 }
