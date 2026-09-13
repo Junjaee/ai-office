@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 13건, 실패 0건, 8초",
+  "summary": "신규 27건, 실패 0건, 10초",
   "counts": {
-    "new": 13,
+    "new": 27,
     "failed": 0,
-    "total": 372
+    "total": 399
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 13건, 실패 0건, 8초",
-    "[신규] \"국회의원 아니었으면 몰빵\"…이준석이 콕 집은 '이 종목' — 한국경제",
-    "[신규] 화성특례시의회 \"여러분은 오늘의 화성을 함께 만든 분들\" — 경기타임스 e",
-    "[신규] 심벌이 겹쳐 보일 때 읽는 드레이크 카지노 프로모션 시각 안내 — Calgary Roughnecks",
-    "[신규] '큰형님 리더십' 강상태 성남시의장, 신상진에 \"청년정책 협치하자\" — v.daum.net"
+    "신규 27건, 실패 0건, 10초",
+    "[신규] 이준석 \"동관이형, 재벌 중 제일 똑똑해…한화 주식 몰빵 하고파\" — 머니투데이, 네이트",
+    "[신규] [속보] ‘차기 보수리더’ 한동훈 15.4% 장동혁 14.7% 이진숙 13.3% 오세훈 10.5% 순 [모노리서치] — v.daum.net, dt.co.kr",
+    "[신규] 이재용·최태원 모두 아니다...이준석이 꼽은 '가장 똑똑한 한국 재벌' — 위키트리",
+    "[신규] 연천군, 중소벤처기업진흥공단과 경기북부 그린바이오 산업 활성화 협력체계 구축 — 산경일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34732060135,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34732060135",
+  "run_id": 34746022352,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34746022352",
   "trigger": "schedule",
-  "started_at": "2026-09-13T11:04:05+09:00",
-  "duration_sec": 8,
+  "started_at": "2026-09-13T16:45:59+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 51건"
+      "summary": "검색어 5개에서 72건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 23건 (신규 13건) · Histoire pour tous 6건, Calgary Roughnecks 3건, v.daum.net 2건"
+      "summary": "오늘 50건 (신규 27건) · Histoire pour tous 10건, Calgary Roughnecks 8건, 네이트 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-13T11:04:14+09:00"
+  "updated_at": "2026-09-13T16:46:10+09:00"
 }
