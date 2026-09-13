@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 11초",
+  "summary": "신규 13건, 실패 0건, 8초",
   "counts": {
-    "new": 5,
+    "new": 13,
     "failed": 0,
-    "total": 359
+    "total": 372
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 11초",
-    "[신규] 호이안 카지노 리조트 일반 진행과 추가 라운드 구분 — Histoire pour tous",
-    "[신규] [오늘의 주요일정] 정치·정부 (13일, 일) — 네이트",
-    "[신규] 설명에 없는 기능을 찾고 있다면? 마작 1번가 갤 정보 점검 — Histoire pour tous",
-    "[신규] [365 인물전망대] 9월 12일-장동혁 국민의힘 대표 — sideview.co.kr"
+    "신규 13건, 실패 0건, 8초",
+    "[신규] \"국회의원 아니었으면 몰빵\"…이준석이 콕 집은 '이 종목' — 한국경제",
+    "[신규] 화성특례시의회 \"여러분은 오늘의 화성을 함께 만든 분들\" — 경기타임스 e",
+    "[신규] 심벌이 겹쳐 보일 때 읽는 드레이크 카지노 프로모션 시각 안내 — Calgary Roughnecks",
+    "[신규] '큰형님 리더십' 강상태 성남시의장, 신상진에 \"청년정책 협치하자\" — v.daum.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34723474446,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34723474446",
+  "run_id": 34732060135,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34732060135",
   "trigger": "schedule",
-  "started_at": "2026-09-13T07:43:13+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-09-13T11:04:05+09:00",
+  "duration_sec": 8,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 40건"
+      "summary": "검색어 5개에서 51건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 5건) · Histoire pour tous 3건, Calgary Roughnecks 1건, brunch.co.kr 1건"
+      "summary": "오늘 23건 (신규 13건) · Histoire pour tous 6건, Calgary Roughnecks 3건, v.daum.net 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-13T07:43:25+09:00"
+  "updated_at": "2026-09-13T11:04:14+09:00"
 }
