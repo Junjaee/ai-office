@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 9건, 3.1분",
+  "summary": "게시 0건, 실패 0건, 누적 9건, 15.2분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,23 +11,23 @@
   },
   "next_run": "매일 06:30 후보 · 07:30 · 12:30 · 18:30 게시(07:30 은 안 고르면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 9건, 3.1분",
-    "[후보] 🇺🇸빈자리 A man says he got a call from his wife asking for his credit — IG 🇺🇸 @evolving.ai · 좋아요 9.1천 · 댓글 179",
-    "[후보] 🇺🇸빈자리 This might be one of the best uses of an AI agent yet — IG 🇺🇸 @evolving.ai · 좋아요 1.8만 · 댓글 317",
-    "[후보] 아니 이 영화 대체 어디서 보는 거예요? — IG 🇰🇷 @ai.trend.kr · 좋아요 2.7만 · 댓글 88",
-    "[후보] 🇺🇸빈자리 Hello Windows, the Gemini app is here! 👋 Get quick help with — Gemini 유튜브"
+    "게시 0건, 실패 0건, 누적 9건, 15.2분",
+    "[대기] 인스타 요청 한도 — 11:00 에 다시 시도: Hungry for some dinner inspo? Screenshot",
+    "[실패] Hungry for some dinner inspo? Screenshot — RuntimeError",
+    "[대기] 인스타 요청 한도 — 11:00 에 다시 시도: Recreating a 70-year love story frame by",
+    "[실패] Recreating a 70-year love story frame by — RuntimeError"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34724845062,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34724845062",
+  "run_id": 34727054107,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34727054107",
   "trigger": "schedule",
-  "started_at": "2026-09-13T08:14:51+09:00",
-  "duration_sec": 186,
+  "started_at": "2026-09-13T09:06:32+09:00",
+  "duration_sec": 909,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 사이트에서 골라 주세요"
+      "summary": "후보 20건 · 예약 10건 · 게시 10건"
     },
     {
       "id": "write",
@@ -46,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-13T08:17:58+09:00"
+  "updated_at": "2026-09-13T09:21:41+09:00"
 }
