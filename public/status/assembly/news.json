@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 27건, 실패 0건, 10초",
+  "summary": "신규 20건, 실패 0건, 11초",
   "counts": {
-    "new": 27,
+    "new": 20,
     "failed": 0,
-    "total": 399
+    "total": 419
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 27건, 실패 0건, 10초",
-    "[신규] 이준석 \"동관이형, 재벌 중 제일 똑똑해…한화 주식 몰빵 하고파\" — 머니투데이, 네이트",
-    "[신규] [속보] ‘차기 보수리더’ 한동훈 15.4% 장동혁 14.7% 이진숙 13.3% 오세훈 10.5% 순 [모노리서치] — v.daum.net, dt.co.kr",
-    "[신규] 이재용·최태원 모두 아니다...이준석이 꼽은 '가장 똑똑한 한국 재벌' — 위키트리",
-    "[신규] 연천군, 중소벤처기업진흥공단과 경기북부 그린바이오 산업 활성화 협력체계 구축 — 산경일보"
+    "신규 20건, 실패 0건, 11초",
+    "[신규] ‘차기 보수리더’ 한동훈 15.4% 장동혁 14.7% 이진숙 13.3% 오세훈 10.5% 순 [모노리서치] — v.daum.net",
+    "[신규] 여러 창을 열었을 때 주의할 oneshot 홀덤 이용 상태 — Calgary Roughnecks",
+    "[신규] ‘대통령감’ 한동훈 17.1%로 급등, 김민석 16.7%·오세훈 12.6%…장동혁 제친 이진숙 — v.daum.net",
+    "[신규] 화성특례시의회, 제4회 ‘행복한 아동 사진전’ 참석 — 한국미디어뉴스, 경기탑뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34746022352,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34746022352",
+  "run_id": 34760095663,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34760095663",
   "trigger": "schedule",
-  "started_at": "2026-09-13T16:45:59+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-09-13T22:32:11+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 72건"
+      "summary": "검색어 5개에서 67건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 50건 (신규 27건) · Histoire pour tous 10건, Calgary Roughnecks 8건, 네이트 4건"
+      "summary": "오늘 70건 (신규 20건) · Histoire pour tous 10건, Calgary Roughnecks 9건, 뉴시스 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-13T16:46:10+09:00"
+  "updated_at": "2026-09-13T22:32:23+09:00"
 }
