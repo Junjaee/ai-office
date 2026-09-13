@@ -3,36 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 실패 0건, 8초",
+  "summary": "신규 2건, 실패 0건, 11초",
   "counts": {
     "new": 2,
     "failed": 0,
-    "total": 430
+    "total": 432
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 2건, 실패 0건, 8초",
-    "[신규] [오늘의 정치일정] 9월 14일(월) — 뉴스핌",
-    "[신규] 릴이 멈춘 뒤 이어지는 카지노 크랩 스 결과 확인 단계 — Histoire pour tous"
+    "신규 2건, 실패 0건, 11초",
+    "[신규] \"개혁신당, 좀 더 강한 모습 보여줄 필요...기존 정치권이 쉽게 꺼내지 못하는 급진적 개혁안 제시할 수 있어야\" — 전북의소리",
+    "[신규] 딱지·갭투자·영끌까지…장관 후보자 ‘부동산 청문회’ 예고 [청문 슈퍼위크] — 이투데이"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34779346345,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34779346345",
+  "run_id": 34787637945,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34787637945",
   "trigger": "schedule",
-  "started_at": "2026-09-14T04:59:47+09:00",
-  "duration_sec": 8,
+  "started_at": "2026-09-14T07:43:59+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 69건"
+      "summary": "검색어 5개에서 64건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 2건) · Calgary Roughnecks 3건, Histoire pour tous 2건, 시민행정신문 2건"
+      "summary": "오늘 13건 (신규 2건) · Calgary Roughnecks 3건, Histoire pour tous 2건, 시민행정신문 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-14T04:59:56+09:00"
+  "updated_at": "2026-09-14T07:44:12+09:00"
 }
