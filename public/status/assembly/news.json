@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 11초",
+  "summary": "신규 9건, 실패 0건, 8초",
   "counts": {
-    "new": 20,
+    "new": 9,
     "failed": 0,
-    "total": 419
+    "total": 428
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 11초",
-    "[신규] ‘차기 보수리더’ 한동훈 15.4% 장동혁 14.7% 이진숙 13.3% 오세훈 10.5% 순 [모노리서치] — v.daum.net",
-    "[신규] 여러 창을 열었을 때 주의할 oneshot 홀덤 이용 상태 — Calgary Roughnecks",
-    "[신규] ‘대통령감’ 한동훈 17.1%로 급등, 김민석 16.7%·오세훈 12.6%…장동혁 제친 이진숙 — v.daum.net",
-    "[신규] 화성특례시의회, 제4회 ‘행복한 아동 사진전’ 참석 — 한국미디어뉴스, 경기탑뉴스"
+    "신규 9건, 실패 0건, 8초",
+    "[신규] 배당선이 표시되지 않을 때 찾는 이준석 경마장역 설명 — Histoire pour tous",
+    "[신규] 박용갑 의원, 장애인을 위한 ‘쉬운 판결문’ 법제화 추진 — 시민행정신문",
+    "[신규] 강승규 의원, 동물학대 처벌 강화? 현실은 최근 5년 실형 29명뿐 — 시민행정신문",
+    "[신규] 설명서의 예시가 실제 규칙과 어떻게 연결될까? 템파 카지노 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34760095663,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34760095663",
+  "run_id": 34772623783,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34772623783",
   "trigger": "schedule",
-  "started_at": "2026-09-13T22:32:11+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-09-14T02:47:51+09:00",
+  "duration_sec": 8,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 67건"
+      "summary": "검색어 5개에서 70건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 70건 (신규 20건) · Histoire pour tous 10건, Calgary Roughnecks 9건, 뉴시스 8건"
+      "summary": "오늘 9건 (신규 9건) · Calgary Roughnecks 3건, 시민행정신문 2건, Histoire pour tous 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-13T22:32:23+09:00"
+  "updated_at": "2026-09-14T02:48:00+09:00"
 }
