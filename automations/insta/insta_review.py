@@ -166,7 +166,7 @@ def _grams(text: str) -> set[str]:
     return {t[i:i + 2] for i in range(len(t) - 1)} if len(t) > 1 else {t}
 
 
-def similar(a: str, b: str, threshold: float = 0.6) -> bool:
+def similar(a: str, b: str, threshold: float = 0.5) -> bool:
     """두 제목이 같은 주제인가 — 2글자 조각(bigram)이 짧은 쪽 기준으로 threshold 이상 겹치면 같은 주제.
     '챗GPT로 내 개인정보 지우기' vs '챗GPT 프롬프트 3개로 내 정보 지우기' 같은 것을 잡는다."""
     ga, gb = _grams(a), _grams(b)
