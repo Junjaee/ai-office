@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 47건, 실패 0건, 12초",
+  "summary": "신규 9건, 실패 0건, 11초",
   "counts": {
-    "new": 47,
+    "new": 9,
     "failed": 0,
-    "total": 587
+    "total": 596
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 47건, 실패 0건, 12초",
-    "[신규] [단독]‘이기인 비대위’에 또 내홍…친이준석계 \"사전 논의 일체 없었다\" — v.daum.net, joongang.co.kr",
-    "[신규] [쎈터뷰] 김철근, 천하람 비판 이기인 비대위원장 지명, 상식적으로 납득 안돼 — 아주경제",
-    "[신규] 이기인 비대위 뜨자 개혁신당 ‘두 동강’ 위기…김철근 “상식 밖, 결자해지하라” — ilyoseoul.co.kr",
-    "[신규] '이기인 비대위' 닻 올렸지만…개혁신당, 돌파구 안 보여 — 더팩트"
+    "신규 9건, 실패 0건, 11초",
+    "[신규] ‘송영길·권칠승·이준석 총출동’… 화성특례시 호남향우회 축제 달궜다 — 미담플러스",
+    "[신규] 개혁신당, 19일 만 이기인 비대위…'조응천 불발' 왜? : 정치 — 재경일보",
+    "[신규] [쎈터뷰] 김철근, 천하람 비판 이기인 개혁신당 비대위원장 지명, 상식적으로 납득 안돼 — 아주경제",
+    "[신규] 천하란 개혁신당 대표 권한대행 '비상대책위원장은 이기인 사무총장' — 뉴스1"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34862023094,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34862023094",
+  "run_id": 34897262115,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34897262115",
   "trigger": "schedule",
-  "started_at": "2026-09-15T00:25:43+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-15T06:10:42+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 227건"
+      "summary": "검색어 5개에서 222건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 47건 (신규 47건) · citizenadmnews.co.kr 4건, newsis.com 4건, v.daum.net 4건"
+      "summary": "오늘 56건 (신규 9건) · v.daum.net 6건, citizenadmnews.co.kr 4건, newsis.com 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-15T00:25:56+09:00"
+  "updated_at": "2026-09-15T06:10:55+09:00"
 }
