@@ -22,10 +22,10 @@ hashtags_base: ["#정부지원금", "#지원금신청", "#청년지원", "#환�
 
 watch_accounts: []
 watch_foreign: []
-sources: [bing_benefit_apply, bing_benefit_youth, bing_benefit_refund, bing_benefit_gov, bing_benefit_card]
-source_caps: {}
+sources: [bing_benefit_apply, bing_benefit_youth, bing_benefit_refund, bing_benefit_gov, bing_benefit_card, yna_economy, yna_society]
+source_caps: { yna_economy: 10, yna_society: 8 }
 source_signals: ["신청", "지급", "환급", "지원금", "혜택", "마감", "확대", "인상", "무료", "할인", "청년", "소상공인", "이번 달", "오늘부터"]
-max_age_hours: 48
+max_age_hours: 72
 template: dark_code
 theme: { bg: "#0f1b2d", fg: "#f5f7fb", muted: "#9fb0c8", accent: "#5ee0a0", card: "#16263d", code_bg: "#0a1220" }
 
