@@ -39,7 +39,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: insta-${{ github.event_name == 'schedule' && 'schedule' || inputs.account }}
+  # 게시가 일어날 수 있는 실행(예약·예약 시계 account=all·queue/publish/auto)은 한 줄로 세운다 — 두 실행이 같은 예약 글을 동시에 올리지 않게 (2026-09-14)
+  group: insta-${{ (github.event_name == 'schedule' || inputs.account == 'all' || inputs.mode == 'queue' || inputs.mode == 'publish' || inputs.mode == 'auto') && 'publish' || inputs.account }}
   cancel-in-progress: false
 
 jobs:
@@ -60,6 +61,10 @@ jobs:
       PYTHONUTF8: "1"
     steps:
       - uses: actions/checkout@v4
+
+      # 줄 서서 기다린 실행은 트리거 시점의 옛 파일을 받으므로, 시작할 때 최신 상태(예약·게시 기록)를 다시 받는다
+      - name: 최신 상태 받기
+        run: git pull -q --rebase origin main || git pull -q origin main
 
       - uses: actions/setup-python@v5
         with:
