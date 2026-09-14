@@ -18,6 +18,33 @@ accounts:
     reels: true                              # 소재에 영상(공식 유튜브·X·공식 페이지 mp4)이 있으면 카드 대신 릴스로 게시 (출처 표기)
     next_run: "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)"
 
+  parent:                                    # 육아 꿀팁·혜택 (2026-09-14 추가) — 계정 개설·토큰 등록 전까지는 후보만 뽑고 게시는 건너뛴다
+    profile: parent
+    handle: "@momtips.kr"                    # 실제 계정을 만들면 그 사용자 이름으로 (프로필 yaml 도 같이)
+    dept: strategy2
+    result_link: "https://www.instagram.com/"
+    posts_per_run: 1
+    candidates_to_llm: 40
+    review_count: 20
+    auto_pick: 1
+    slots: ["07:30", "12:30", "18:30"]
+    max_per_day: 3
+    reels: true
+    next_run: "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시"
+  benefit:                                   # 돈 되는 정책·혜택 알림 (2026-09-14 추가)
+    profile: benefit
+    handle: "@benefit.kr"
+    dept: brand
+    result_link: "https://www.instagram.com/"
+    posts_per_run: 1
+    candidates_to_llm: 40
+    review_count: 20
+    auto_pick: 1
+    slots: ["07:30", "12:30", "18:30"]
+    max_per_day: 3
+    reels: true
+    next_run: "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시"
+
 # 글 생성기: 앞에서부터 시도, 실패하면 다음 (전부 무료 경로)
 llm_providers: [claude_cli, gemini]
 gemini_model: gemini-2.5-flash

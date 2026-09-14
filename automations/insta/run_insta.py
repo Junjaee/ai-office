@@ -445,11 +445,20 @@ def slots_of(acct: dict) -> tuple:
     return tuple(str(x) for x in (acct.get("slots") or review.DEFAULT_SLOTS))
 
 
+def has_token(account: str) -> bool:
+    return bool(os.environ.get(f"INSTA_{account.upper()}_TOKEN", "").strip())
+
+
 def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args, progress) -> dict:
-    """예약 시각이 된 항목을 하나씩 기사→카드→게시. 결과는 검토 파일에 표시. 첫 시간대(07:30) 창이면 예약이 없을 때 1순위를 자동 선택."""
+    """예약 시각이 된 항목을 하나씩 기사→카드→게시. 결과는 검토 파일에 표시. 시간대 창이면 예약이 없을 때 1순위를 자동 선택."""
     path = review_file(cfg, args.account)
     data = review.load(path)
     now = datetime.now(KST)
+    if not has_token(args.account) and not args.dry_run:
+        # 계정은 설정에 있지만 아직 인스타 토큰이 없다(계정 개설 전) — 후보 뽑기는 되고 게시만 건너뛴다
+        progress(f"INSTA_{args.account.upper()}_TOKEN 없음 — 게시 건너뜀 (계정 개설 뒤 토큰 등록)")
+        return {"counts": {"new": 0, "failed": 0, "total": 0}, "lines": ["[대기] 인스타 토큰 없음 — 계정 개설 뒤 토큰을 등록하면 게시가 시작돼요"],
+                "tasks": {"topic": (True, review.summarize(data)), "upload": (True, "토큰 대기")}}
     slot = review.in_slot_window(now, slots_of(acct))
     if slot and int(acct.get("auto_pick", 1)) > 0:      # 시간대 창인데 그 칸이 비어 있으면 편집장 1순위를 자동 선택 (사용자 위임 2026-09-14)
         rows = load_posted(args.account)

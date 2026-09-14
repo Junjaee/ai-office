@@ -338,6 +338,21 @@ def test_watch_foreign_flag_and_cap(monkeypatch):
     assert {"deepmind", "rundown", "testingcatalog", "techcrunch_ai"} <= set(sources.SOURCES)
 
 
+def test_all_profiles_load_and_their_sources_exist():
+    import yaml
+
+    for f in (Path(__file__).resolve().parent.parent / "profiles").glob("*.yaml"):
+        d = yaml.safe_load(f.read_text(encoding="utf-8"))
+        p = writer.Profile.from_dict(d)
+        assert p.name and p.sources, f.name
+        for s in p.sources:
+            assert s in sources.SOURCES, f"{f.name}: 모르는 출처 {s}"
+        if d.get("references"):
+            assert (Path(__file__).resolve().parent.parent / d["references"]).exists(), f.name
+        sys_, _ = writer.pick_prompt(p, "1. x", 3)
+        assert "편집장" in sys_
+
+
 def test_watch_skips_quietly_without_token(monkeypatch):
     monkeypatch.delenv("IG_DISCOVERY_TOKEN", raising=False)
     msgs = []

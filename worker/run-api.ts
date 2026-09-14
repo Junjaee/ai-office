@@ -81,6 +81,22 @@ export function latestValidRunByWorkflow(runs: RunSummary[]): Map<string, RunSum
   return out;
 }
 
+/** 한 워크플로를 여러 자동화(계정)가 나눠 쓸 때: 화면에서 누른 실행(display_title "insta_<계정> · req-…")은 그 계정 것만,
+ *  예약 실행("insta · 예약")은 모든 계정 것으로 본다 (2026-09-14 여러 계정). 단독 워크플로는 전부 자기 것 */
+export function runBelongsTo(run: RunSummary, automationId: string, sharedIds: string[]): boolean {
+  if (sharedIds.length <= 1) return true;
+  const title = run.display_title ?? "";
+  const owner = sharedIds.find((id) => title.startsWith(`${id} ·`) || title.startsWith(`${id} `) || title === id);
+  return owner ? owner === automationId : true;
+}
+
+/** 자동화마다 자기 실행만 골라 최신 유효 run 을 찾는다 */
+export function latestRunFor(runs: RunSummary[], automation: AutomationLike, all: AutomationLike[]): RunSummary | undefined {
+  const shared = all.filter((a) => a.workflow === automation.workflow).map((a) => a.id);
+  const mine = runs.filter((r) => runBelongsTo(r, automation.id, shared));
+  return latestValidRunByWorkflow(mine).get(automation.workflow as string);
+}
+
 export type RunView = {
   id: number;
   status: string;
@@ -143,13 +159,14 @@ function toTrigger(event: string): HistoryTrigger {
 
 /** GitHub run → 이력 한 줄. 이 사무실 자동화의 워크플로가 아니면 뺀다 */
 export function historyFromRuns(runs: RunSummary[], automations: WorkspaceLike["automations"]): HistoryItem[] {
-  const byFile = new Map<string, string>();
-  for (const a of automations) if (a.workflow) byFile.set(a.workflow, a.id);
+  const byFile = new Map<string, string[]>();
+  for (const a of automations) if (a.workflow) byFile.set(a.workflow, [...(byFile.get(a.workflow) ?? []), a.id]);
   const out: HistoryItem[] = [];
   for (const run of runs) {
-    const automationId = byFile.get(workflowFileOf(run));
-    if (!automationId) continue;
-    out.push({
+    const ids = byFile.get(workflowFileOf(run)) ?? [];
+    const owners = ids.filter((id) => runBelongsTo(run, id, ids));
+    if (!owners.length) continue;
+    for (const automationId of owners) out.push({
       id: String(run.id),
       automationId,
       status: run.status,
@@ -483,9 +500,8 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
   if (github) {
     try {
       const allRuns = await github.listRuns(RUNS_PER_PAGE);
-      const latest = latestValidRunByWorkflow(allRuns);
       for (const a of automations) {
-        const run = latest.get(a.workflow as string);
+        const run = latestRunFor(allRuns, a, automations);
         runs[a.id] = run ? toRunView(run) : null;
       }
     } catch (error) {

@@ -31,7 +31,7 @@ export const DEPARTMENTS: readonly Department[] = [
   },
   {
     id: "brand",
-    name: "릴스팀",
+    name: "인스타 게시글 3팀",
     short: "insta.reels",
     icon: "🎞️",
     task: "대본 → 영상 제작 → 업로드",
@@ -121,7 +121,7 @@ export const DEPARTMENTS: readonly Department[] = [
 
 /** 화면에서 숨길 부서. 앞 4칸(플랫폼 팀)만 쓴다. 계정이 늘어 2팀을 열면 여기서 뺀다. */
 export const HIDDEN_DEPARTMENTS: string[] = [
-  "strategy2", "reels", "carousel", "partner", "finance", "review", "ops", "secretary",
+  "reels", "carousel", "partner", "finance", "review", "ops", "secretary",
 ];
 
 /**
@@ -139,6 +139,25 @@ export const AUTOMATIONS: AutomationDef[] = [
       { id: "write", name: "글쓰기", role: "카드 원고·캡션·해시태그 작성과 자동 심사", colors: ["#3a2f1f", "#fbf1d9", "#d99a1e"] },
       { id: "card", name: "카드 제작", role: "1080×1350 카드 8장 렌더링", colors: ["#1f2329", "#e8dcc2", "#f2b544"] },
       { id: "upload", name: "업로드", role: "공개 URL 에 올리고 인스타그램에 게시", colors: ["#4d5157", "#faf8f3", "#e0a52a"] },
+    ] },
+  // 2026-09-14 여러 계정 운영 — 계정마다 카드 하나, 코드는 같은 insta.yml (inputs.account 로 구분). 인스타 토큰을 등록하기 전엔 후보만 뽑는다
+  { id: "insta_parent", dept: "strategy2", name: "인스타 게시글 · parent (육아 꿀팁·혜택)",
+    workflow: "insta.yml", inputs: { account: "parent" }, schedule: "매일 06:30 후보 · 07:30·12:30·18:30 게시",
+    review: { kind: "topics", title: "오늘의 주제 검토" },
+    tasks: [
+      { id: "topic", name: "육아 소재 선정", role: "육아 지원금·제도·방법 후보 20건, 빈 시간대는 1순위 자동", colors: ["#3a2a24", "#ffe9dd", "#ff8a5b"] },
+      { id: "write", name: "육아 글쓰기", role: "대상·금액·기간·근거 기관이 든 기사와 캡션", colors: ["#3a2f1f", "#fbf1d9", "#ff8a5b"] },
+      { id: "card", name: "육아 카드 제작", role: "1080×1350 카드 렌더링(밝은 살구색 테마)", colors: ["#2b2420", "#fff7f0", "#ff8a5b"] },
+      { id: "upload", name: "육아 업로드", role: "공개 URL 에 올리고 인스타그램에 게시", colors: ["#4d5157", "#faf8f3", "#ff8a5b"] },
+    ] },
+  { id: "insta_benefit", dept: "brand", name: "인스타 게시글 · benefit (돈 되는 혜택 알림)",
+    workflow: "insta.yml", inputs: { account: "benefit" }, schedule: "매일 06:30 후보 · 07:30·12:30·18:30 게시",
+    review: { kind: "topics", title: "오늘의 주제 검토" },
+    tasks: [
+      { id: "topic", name: "혜택 소재 선정", role: "지원금·환급·제도 변화 후보 20건, 빈 시간대는 1순위 자동", colors: ["#16263d", "#dff7ea", "#5ee0a0"] },
+      { id: "write", name: "혜택 글쓰기", role: "대상·금액·기간·신청 방법이 든 기사와 캡션", colors: ["#0f1b2d", "#e6f0ff", "#5ee0a0"] },
+      { id: "card", name: "혜택 카드 제작", role: "1080×1350 카드 렌더링(남색·민트 테마)", colors: ["#0a1220", "#f5f7fb", "#5ee0a0"] },
+      { id: "upload", name: "혜택 업로드", role: "공개 URL 에 올리고 인스타그램에 게시", colors: ["#4d5157", "#faf8f3", "#5ee0a0"] },
     ] },
 ];
 

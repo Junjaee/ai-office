@@ -105,7 +105,8 @@ def is_social(url: str) -> bool:
 OFFICIAL_DOMAINS = ("openai.com", "chatgpt.com", "google", "gemini.google", "anthropic.com", "claude.ai", "x.ai", "meta.ai",
                     "ai.meta.com", "microsoft.com", "apple.com", "huggingface.co", "github.com", "notion.so", "adobe.com",
                     "midjourney.com", "perplexity.ai", "mistral.ai", "deepseek.com", "runwayml.com", "elevenlabs.io",
-                    "canva.com", "figma.com", "naver.com", "kakao.com", "samsung.com", "lge.co.kr", "nvidia.com", "amazon.com")
+                    "canva.com", "figma.com", "naver.com", "kakao.com", "samsung.com", "lge.co.kr", "nvidia.com", "amazon.com",
+                    "go.kr", "korea.kr", "gov.kr", "or.kr")   # 정부·공공기관(육아·혜택 계정)
 
 
 def is_korean_source(url: str, title: str = "") -> bool:

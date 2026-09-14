@@ -2,20 +2,20 @@ name: 인스타 게시글
 
 on:
   schedule:
-    # 매일 06:30 KST — 밤사이 미국 소식까지 넣어 후보 10개를 검토 칸에 올림 (UTC 21:30 전날)
+    # 매일 06:30 KST — 밤사이 미국 소식까지 넣어 후보를 검토 칸에 올림 (UTC 21:30 전날) — 모든 계정
     - cron: "30 21 * * *"
     # 매일 11:30 KST — 오전 소식으로 후보 새로 고침 (12:30·18:30 자동 선정용, UTC 02:30)
     - cron: "30 2 * * *"
-    # 매시 30분 — 예약 게시 (게시 시간대 07:30·12:30·18:30 과 맞춤). 07:30 창에서 예약이 없으면 1순위 자동 선택 (사용자 결정 2026-09-12)
+    # 매시 30분 — 댓글 DM → 예약 게시 (게시 시간대 07:30·12:30·18:30 과 맞춤, 빈 칸은 1순위 자동 선정) — 모든 계정
     - cron: "30 * * * *"
   workflow_dispatch:
     inputs:
       account:
-        description: "계정 이름 (config.actions.yaml 의 accounts 키)"
+        description: "계정 이름 (config.actions.yaml 의 accounts 키: aitips / parent / benefit)"
         type: string
         default: "aitips"
       mode:
-        description: "topics=후보 뽑기 / queue=고른 것 예약+첫 개 게시 / publish=예약된 것 게시 / auto=07:30 자동 선택 / edit=예약 취소·시각 변경 / run=1건 자동 게시(시험)"
+        description: "topics=후보 뽑기 / queue=고른 것 예약+게시 / publish=예약된 것 게시 / auto=자동 선택 / edit=예약 수정 / stats=지표 / run=1건(시험)"
         type: choice
         options: [topics, queue, publish, auto, edit, stats, run]
         default: "topics"
@@ -32,20 +32,32 @@ on:
         type: string
         default: ""
 
-# runs API 의 display_title 로 "내가 누른 실행"을 결정적으로 매칭한다 — 바꾸지 말 것
+# runs API 의 display_title 로 "내가 누른 실행"을 결정적으로 매칭한다 — 바꾸지 말 것. 예약 실행은 모든 계정을 한 번에 돈다
 run-name: ${{ github.event_name == 'workflow_dispatch' && format('insta_{0} · {1}', inputs.account, inputs.request_id) || 'insta · 예약' }}
 
 permissions:
   contents: write
 
 concurrency:
-  group: insta-${{ inputs.account || 'aitips' }}
+  group: insta-${{ github.event_name == 'schedule' && 'schedule' || inputs.account }}
   cancel-in-progress: false
 
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
+    env:
+      # 계정별 인스타그램 토큰 — 계정을 더하면 여기에 세 줄씩 추가 (없는 계정은 비어 있고, 코드가 게시만 건너뛴다)
+      INSTA_AITIPS_TOKEN: ${{ secrets.INSTA_AITIPS_TOKEN }}
+      INSTA_AITIPS_USER_ID: ${{ secrets.INSTA_AITIPS_USER_ID }}
+      INSTA_AITIPS_USERNAME: "aitips.kr"
+      INSTA_PARENT_TOKEN: ${{ secrets.INSTA_PARENT_TOKEN }}
+      INSTA_PARENT_USER_ID: ${{ secrets.INSTA_PARENT_USER_ID }}
+      INSTA_PARENT_USERNAME: ${{ vars.INSTA_PARENT_USERNAME }}
+      INSTA_BENEFIT_TOKEN: ${{ secrets.INSTA_BENEFIT_TOKEN }}
+      INSTA_BENEFIT_USER_ID: ${{ secrets.INSTA_BENEFIT_USER_ID }}
+      INSTA_BENEFIT_USERNAME: ${{ vars.INSTA_BENEFIT_USERNAME }}
+      PYTHONUTF8: "1"
     steps:
       - uses: actions/checkout@v4
 
@@ -53,46 +65,56 @@ jobs:
         with:
           python-version: "3.13"
 
-      # 예약(cron) 이면 어느 예약인지로 방식을 정하고, publish 인데 만들 것이 없으면 여기서 끝낸다 (의존성 설치 전 — 실행 시간 절약)
+      # 예약(cron) 이면 모든 계정, 화면에서 누른 실행이면 그 계정 하나. publish 인데 만들 것이 없으면 여기서 끝낸다 (의존성 설치 전 — 실행 시간 절약)
       - name: 실행 방식 정하기
         id: mode
-        env:
-          ACCOUNT: ${{ inputs.account || 'aitips' }}
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
             case "${{ github.event.schedule }}" in
               "30 21 * * *"|"30 2 * * *") MODE=topics ;;
               *) MODE=publish ;;
             esac
+            ACCOUNTS=$(python - <<'PY'
+          import re
+          text = open("automations/insta/config.actions.yaml", encoding="utf-8").read()
+          block = text.split("\naccounts:", 1)[1].split("\n\n", 1)[0]
+          print(" ".join(re.findall(r"^  ([a-z0-9_]+):", block, re.M)))
+          PY
+          )
           else
             MODE="${{ inputs.mode || 'topics' }}"
+            ACCOUNTS="${{ inputs.account || 'aitips' }}"
           fi
           echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "accounts=$ACCOUNTS" >> "$GITHUB_OUTPUT"
+          DUE=false
           if [ "$MODE" = "publish" ]; then
-            DUE=$(python automations/insta/review_due.py --workspace side --automation "insta_$ACCOUNT")
+            for A in $ACCOUNTS; do
+              if [ "$(python automations/insta/review_due.py --workspace side --automation "insta_$A")" = "true" ]; then DUE=true; fi
+              H=$(TZ=Asia/Seoul date +%H%M)
+              # 게시 시간대 창(07:30~08:44 · 12:30~13:44 · 18:30~19:44) 이면 빈 칸 자동 선정을 위해 실행한다
+              case "$H" in 073[0-9]|07[4-5][0-9]|08[0-3][0-9]|084[0-4]|123[0-9]|12[4-5][0-9]|13[0-3][0-9]|134[0-4]|183[0-9]|18[4-5][0-9]|19[0-3][0-9]|194[0-4]) DUE=true ;; esac
+            done
           elif [ "$MODE" = "edit" ]; then
             DUE=false
           else
             DUE=true
           fi
           echo "due=$DUE" >> "$GITHUB_OUTPUT"
-          echo "방식=$MODE 만들 것=$DUE"
+          echo "방식=$MODE 계정=$ACCOUNTS 만들 것=$DUE"
 
-      # 댓글 → DM: 매시 예약 확인 때마다(의존성 없이) 최근 7일 게시물의 댓글을 보고 프롬프트를 DM 으로 보낸다 (사용자 결정 2026-09-12)
+      # 댓글 → DM: 매시 예약 확인 때마다(의존성 없이) 최근 7일 게시물의 댓글을 보고 프롬프트를 DM 으로 보낸다 (사용자 결정 2026-09-12). 계정마다
       - name: 댓글 답장 (DM)
         if: steps.mode.outputs.mode == 'publish' || steps.mode.outputs.mode == 'auto'
-        env:
-          ACCOUNT: ${{ inputs.account || 'aitips' }}
-          INSTA_AITIPS_TOKEN: ${{ secrets.INSTA_AITIPS_TOKEN }}
-          INSTA_AITIPS_USER_ID: ${{ secrets.INSTA_AITIPS_USER_ID }}
-          INSTA_AITIPS_USERNAME: "aitips.kr"
-          PYTHONUTF8: "1"
         run: |
           git config user.name "ai-office-bot"
           git config user.email "ai-office-bot@users.noreply.github.com"
-          python -X utf8 automations/insta/insta_dm.py --account "$ACCOUNT"
+          for A in ${{ steps.mode.outputs.accounts }}; do
+            echo "== $A"
+            python -X utf8 automations/insta/insta_dm.py --account "$A" || echo "댓글 답장 실패($A) — 계속"
+          done
           if ! git diff --quiet -- data/insta; then
-            git add data/insta && git commit -qm "insta($ACCOUNT): 댓글 DM 기록" && git pull -q --rebase origin main && git push -q origin main
+            git add data/insta && git commit -qm "insta: 댓글 DM 기록" && git pull -q --rebase origin main && git push -q origin main
           fi
 
       # 예약 취소·시각 변경: 의존성 없이 검토 파일만 고쳐 커밋 (20초)
@@ -123,37 +145,38 @@ jobs:
           git config user.name "ai-office-bot"
           git config user.email "ai-office-bot@users.noreply.github.com"
 
+      # 계정마다 차례로. 한 계정이 실패해도 나머지는 계속 돌고, 마지막에 실패로 표시한다
       - name: 실행
         if: steps.mode.outputs.due == 'true'
         env:
           # 글 생성: Claude 구독 토큰 (Gemini 예비 키는 두지 않기로 함 — 사용자 결정 2026-09-11)
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          # 이미지 공개 URL (Cloudflare R2)
+          # 이미지 공개 URL (Cloudflare R2) — 계정 공통 (경로가 insta/<계정>/ 으로 나뉜다)
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_PUBLIC_BASE: ${{ secrets.R2_PUBLIC_BASE }}
-          # 참고 계정 읽기(비즈니스 디스커버리) — 페이스북 페이지에 연결된 계정의 장기 토큰
+          # 참고 계정 읽기(비즈니스 디스커버리) — 페이스북 페이지에 연결된 계정의 장기 토큰 (계정 공통)
           IG_DISCOVERY_TOKEN: ${{ secrets.IG_DISCOVERY_TOKEN }}
           IG_DISCOVERY_USER_ID: ${{ secrets.IG_DISCOVERY_USER_ID }}
-          # 계정별 인스타그램 토큰 — 계정을 더하면 여기에 두 줄씩 추가
-          INSTA_AITIPS_TOKEN: ${{ secrets.INSTA_AITIPS_TOKEN }}
-          INSTA_AITIPS_USER_ID: ${{ secrets.INSTA_AITIPS_USER_ID }}
-          INSTA_ACCOUNT: ${{ inputs.account || 'aitips' }}
           INSTA_MODE: ${{ steps.mode.outputs.mode }}
           INSTA_PICKS: ${{ inputs.picks }}
           REQUEST_ID: ${{ inputs.request_id }}
-          PYTHONUTF8: "1"
         run: |
-          python -X utf8 automations/insta/run_insta.py --config automations/insta/config.actions.yaml
+          FAIL=0
+          for A in ${{ steps.mode.outputs.accounts }}; do
+            echo "=============== 계정 $A ==============="
+            INSTA_ACCOUNT=$A python -X utf8 automations/insta/run_insta.py --config automations/insta/config.actions.yaml || FAIL=1
+          done
+          exit $FAIL
 
       - name: 만든 카드 보관 (7일)
         if: always() && steps.mode.outputs.due == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: insta-cards-${{ inputs.account || 'aitips' }}-${{ github.run_id }}
+          name: insta-cards-${{ github.run_id }}
           path: automations/insta/out/
           retention-days: 7
           if-no-files-found: ignore

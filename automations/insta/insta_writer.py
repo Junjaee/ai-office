@@ -116,6 +116,7 @@ class Profile:
     watch_foreign_hours: int = 48
     watch_cap: int = 15                       # 참고 계정 그룹별 후보 상한(좋아요 순)
     watch_per_account: int = 4                # 계정당 후보 상한 (좋아요 많은 계정이 독식하지 않게)
+    pick_rules: str = ""                      # 주제별 편집장 선정 기준(있으면 AI 계정용 기본 기준 대신 쓴다)
     source_caps: dict | None = None            # 출처별 후보 상한 {출처이름: N} (레딧처럼 시끄러운 곳 제한)
     title_patterns: list[str] | None = None
     cc_photos: bool = False             # True 면 사진 없는 카드에 CC 사진(Openverse)을 검색해 넣는다 — 관련 없는 사진이 걸릴 수 있어 기본 끔
@@ -143,6 +144,18 @@ def reel_profile(p: Profile) -> Profile:
 # ───────────────────────── 1) 소재 고르기 / 검색어 ─────────────────────────
 
 def pick_prompt(p: Profile, rows: str, n: int) -> tuple[str, str]:
+    if p.pick_rules:
+        system = (f"당신은 인스타그램 정보 계정 '{p.name}'의 편집장입니다. 독자: {p.audience}\n"
+                  "후보 목록에서 오늘 게시할 소재를 고릅니다. 선정 기준: 독자가 바로 써먹을 수 있는가, 저장·공유하고 싶은가, 새로운가, "
+                  "기사 한 편(문단 5~7개)으로 풀 수 있는가. 광고·모금·행사 안내·기업 실적 뉴스, '#광고'·'제작지원'이 붙은 게시물은 제외.\n"
+                  f"{p.pick_rules.strip()}\n"
+                  "[🎬영상] 표시(공식 유튜브·X 영상)는 릴스로 만들 수 있어 반응이 좋다. 같은 소식을 여러 매체가 다뤘으면 가장 공식적인 출처 하나만 고른다.\n"
+                  "도구를 쓰지 말고 JSON 객체 하나만 출력합니다.")
+        user = (f"후보:\n{rows}\n\n"
+                f"가장 좋은 {n}개를 고르고(좋은 순서대로, 서로 다른 주제로) 각각 index(후보 번호), title_ko(한국어 제목 한 줄, 20자 안팎 — 검토하는 사람이 한눈에 알게), "
+                "reason(선정 이유 한 줄 — 독자에게 왜 도움이 되는지), angle(기사로 풀 때의 각도 한 줄), gap(false)을 적으세요.\n"
+                'JSON: {"picks": [{"index": 3, "title_ko": "...", "reason": "...", "angle": "...", "gap": false}]}')
+        return system, user
     system = (f"당신은 인스타그램 정보 계정 '{p.name}'의 편집장입니다. 독자: {p.audience}\n"
               "후보 목록에서 오늘 게시할 소재를 고릅니다. 선정 기준: 독자가 바로 써먹을 수 있는가, 저장하고 싶은가, 새로운가, "
               "기사 한 편(문단 5~7개)으로 풀 수 있는가. 광고·모금·행사 안내·기업 실적 뉴스, '#광고'·'제작지원'이 붙은 게시물은 제외.\n"
