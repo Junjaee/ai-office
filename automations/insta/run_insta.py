@@ -219,6 +219,16 @@ def step_video(cfg: dict, acct: dict, p: writer.Profile, out: Path, written: dic
     return result
 
 
+def reel_tts_opts(acct: dict, engine: str) -> dict | None:
+    """계정 설정의 말 빠르기(reel_tempo, 기본 1.1)와 감정(reel_emotion, 기본 normal) → 유료 목소리 옵션. 엣지·Supertonic 은 따로 처리."""
+    tempo = float(acct.get("reel_tempo", 1.1))
+    if engine == "typecast":
+        return {"tempo": tempo, "emotion": str(acct.get("reel_emotion", "normal"))}
+    if engine == "google":
+        return {"rate": tempo}
+    return None
+
+
 def step_reel2(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, written: dict, rendered: dict, progress) -> dict | None:
     """카드 기사 → 편집장이 쓰는 말하는 대본 → 자막 싱크 릴스(insta_reel). 실패하면 None (카드뉴스로 게시).
     계정 설정: reel_voice_engine (edge | supertonic | none=음악+자막), reel_voice (엣지 목소리 이름 또는 Supertonic F1~M5), reel_bgm."""
@@ -254,7 +264,7 @@ def step_reel2(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, wr
             voice = "ko-KR-SunHiNeural"
         res = reel.build(script, d / "reel.mp4", theme=p.theme or {}, visuals=visuals, brand=p.brand or cards_brand(),
                          engine=None if engine == "none" else engine, voice=voice or "ko-KR-SunHiNeural",
-                         bgm=bool(acct.get("reel_bgm", True)), progress=progress, **extra)
+                         bgm=bool(acct.get("reel_bgm", True)), tts_opts=reel_tts_opts(acct, engine), progress=progress, **extra)
         thumb = video.thumbnail(res["path"], d / "reel_thumb.jpg", at=0.3)
     except Exception as exc:  # noqa: BLE001
         progress(f"릴스 실패({type(exc).__name__}: {str(exc)[:100]}) — 카드뉴스로")

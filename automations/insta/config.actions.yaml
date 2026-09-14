@@ -19,6 +19,7 @@ accounts:
     post_kind: reel                          # 말하는 대본 + 자막 릴스 (2026-09-14 사용자가 목소리 샘플 6개 중 '필재' 선택 → 켬). carousel 이면 카드뉴스
     reel_voice_engine: typecast              # typecast(타입캐스트, 키 TYPECAST_API_KEY) | edge(무료 엣지) | supertonic(오픈소스) | none(음악+자막만). 실패하면 엣지로 자동 대체
     reel_voice: tc_68257f68bc6e3c161ab5078d  # 타입캐스트 '필재'(남·중년, @to_be_100m 신비한 건축사전이 쓰는 목소리). 엣지면 ko-KR-SunHiNeural 등
+    reel_tempo: 1.25                         # 말 빠르기 배수(타입캐스트 0.5~2.0). 1.1 → 1.25 (2026-09-14 사용자: 조금 빨라질 필요)
     reel_bgm: true                           # 코드로 만든 저작권 없는 배경음악
     next_run: "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)"
 
