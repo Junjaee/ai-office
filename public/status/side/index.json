@@ -1,6 +1,7 @@
 {
   "automations": [
-    "insta_aitips"
+    "insta_aitips",
+    "insta_parent"
   ],
-  "generated_at": "2026-09-14T09:09:02+09:00"
+  "generated_at": "2026-09-14T11:00:25+09:00"
 }
