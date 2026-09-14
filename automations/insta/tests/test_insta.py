@@ -302,6 +302,29 @@ def test_publish_carousel_flow_with_fake_session():
     assert carousel[2]["children"].count(",") == 1
 
 
+def test_publish_verified_recovers_when_publish_errors_but_post_exists(monkeypatch):
+    from datetime import datetime, timezone
+
+    ig = pub.Instagram("t", "1")
+    calls = []
+
+    def fake_req(method, path, **params):
+        calls.append(path)
+        if path.endswith("/media_publish"):
+            raise RuntimeError("Instagram 오류 403: Application request limit reached (code 4)")
+        if path == "me/media":
+            return {"data": [{"id": "999", "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+0000"), "caption": "제목 한 줄\n본문"}]}
+        return {}
+
+    monkeypatch.setattr(ig, "_req", fake_req)
+    monkeypatch.setattr(pub.time, "sleep", lambda s: None)
+    assert ig.publish_verified("c1", "제목 한 줄") == "999"
+    # 방금 올라간 게시물이 없으면 오류가 그대로 난다
+    monkeypatch.setattr(ig, "_req", lambda method, path, **p: (_ for _ in ()).throw(RuntimeError("x (code 4)")) if path.endswith("/media_publish") else {"data": []})
+    with pytest.raises(RuntimeError):
+        ig.publish_verified("c1", "제목")
+
+
 def test_missing_token_is_clear():
     with pytest.raises(pub.MissingInstaToken):
         pub.Instagram("", "1")

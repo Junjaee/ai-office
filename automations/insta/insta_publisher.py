@@ -122,6 +122,30 @@ class Instagram:
     def publish(self, container_id: str) -> str:
         return self._req("POST", f"{self.user_id}/media_publish", creation_id=container_id)["id"]
 
+    def recent_media(self, limit: int = 3) -> list[dict]:
+        return self._req("GET", "me/media", fields="id,timestamp,caption,permalink", limit=limit).get("data", [])
+
+    def publish_verified(self, container_id: str, caption_head: str = "", *, window_sec: int = 300) -> str:
+        """media_publish 를 부르고, 오류가 나도 방금(window_sec 안) 올라간 게시물이 있으면 그 id 를 돌려준다.
+        인스타가 게시는 해 놓고 응답만 'Application request limit reached'(code 4) 로 주는 경우가 있어(2026-09-13 중복 게시 사고) 실패로 보면 다시 올리게 된다."""
+        try:
+            return self.publish(container_id)
+        except RuntimeError as exc:
+            time.sleep(20)
+            try:
+                for m in self.recent_media():
+                    ts = str(m.get("timestamp", "")).replace("+0000", "+00:00")
+                    from datetime import datetime, timezone
+
+                    age = (datetime.now(timezone.utc) - datetime.fromisoformat(ts)).total_seconds() if ts else 1e9
+                    head = str(m.get("caption") or "").split("\n")[0][:30]
+                    if age < window_sec and (not caption_head or head[:20] == caption_head[:20]):
+                        print(f"  · 게시 응답은 오류였지만 방금 올라간 게시물 확인 → 성공 처리 ({m.get('id')})")
+                        return str(m["id"])
+            except RuntimeError:
+                pass
+            raise exc
+
     def permalink(self, media_id: str) -> str:
         """게시물 주소. 조회가 한도에 걸려도 게시는 이미 된 것이므로 빈 문자열을 돌려주고 실패로 만들지 않는다."""
         try:
@@ -158,7 +182,7 @@ def publish_carousel(ig: Instagram, image_urls: list[str], caption: str, alt_tex
             progress(f"컨테이너 {i}/{len(image_urls)}")
         container = ig.create_carousel(children, caption)
     ig.wait_ready(container)
-    media_id = ig.publish(container)                 # 여기서부터는 게시물이 실제로 올라간 상태
+    media_id = ig.publish_verified(container, caption.split("\n")[0])   # 여기서부터는 게시물이 실제로 올라간 상태
     return {"media_id": media_id, "permalink": ig.permalink(media_id)}
 
 
@@ -167,7 +191,7 @@ def publish_reel(ig: Instagram, video_url: str, caption: str, cover_url: str = "
     container = ig.create_reel(video_url, caption, cover_url)
     progress("릴스 컨테이너 처리 중 (영상 변환)")
     ig.wait_ready(container, tries=30, delay=15.0)
-    media_id = ig.publish(container)                 # 여기서부터는 게시물이 실제로 올라간 상태
+    media_id = ig.publish_verified(container, caption.split("\n")[0])   # 여기서부터는 게시물이 실제로 올라간 상태
     return {"media_id": media_id, "permalink": ig.permalink(media_id)}
 
 

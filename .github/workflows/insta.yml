@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       account:
-        description: "계정 이름 (config.actions.yaml 의 accounts 키: aitips / parent / benefit)"
+        description: "계정 이름 (config.actions.yaml 의 accounts 키: aitips / parent / benefit, all=전부)"
         type: string
         default: "aitips"
       mode:
@@ -69,11 +69,15 @@ jobs:
       - name: 실행 방식 정하기
         id: mode
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            case "${{ github.event.schedule }}" in
-              "30 21 * * *"|"30 2 * * *") MODE=topics ;;
-              *) MODE=publish ;;
-            esac
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.account }}" = "all" ]; then
+            if [ "${{ github.event_name }}" = "schedule" ]; then
+              case "${{ github.event.schedule }}" in
+                "30 21 * * *"|"30 2 * * *") MODE=topics ;;
+                *) MODE=publish ;;
+              esac
+            else
+              MODE="${{ inputs.mode || 'publish' }}"     # 예약 시계(insta-cron.yml)가 account=all 로 부른다
+            fi
             ACCOUNTS=$(python - <<'PY'
           import re
           text = open("automations/insta/config.actions.yaml", encoding="utf-8").read()
