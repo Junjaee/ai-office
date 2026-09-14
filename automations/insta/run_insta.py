@@ -416,8 +416,10 @@ def do_auto(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args,
     path = review_file(cfg, args.account)
     data = review.load(path)
     now = datetime.now(KST)
-    posted = {r.get("key", "") for r in load_posted(args.account)}
-    data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=n, max_per_day=int(acct.get("max_per_day", 3)), slots=slots_of(acct))
+    rows = load_posted(args.account)
+    posted = {r.get("key", "") for r in rows}
+    data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=n, max_per_day=int(acct.get("max_per_day", 3)), slots=slots_of(acct),
+                                   posted_titles=recent_titles(rows))   # 손으로 부른 auto 도 같은 주제 재탕은 건너뛴다
     if added:
         review.save(path, data)
         commit_paths([path], f"insta({args.account}): 자동 선택 {len(added)}건 {now:%Y-%m-%d %H:%M}")
