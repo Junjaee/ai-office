@@ -236,7 +236,7 @@ def step_upload_reel(cfg: dict, acct: dict, out: Path, written: dict, reel: dict
     caption = post["caption"].rstrip() + f"\n\n{reel['credit']}\n{reel['source_url']}\n\n" + " ".join(post["hashtags"])
     res = pub.publish_reel(ig, urls[0], caption, cover_url=urls[1] if len(urls) > 1 else "", progress=progress)
     row = {"date": today, "account": args.account, "key": item["candidate"]["key"], "title": item["candidate"]["title"],
-           "hook": post["title"], "media_id": res["media_id"], "permalink": res["permalink"], "video_url": urls[0],
+           "hook": post["title"], "media_id": res["media_id"], "permalink": res["permalink"] or profile_link(acct), "video_url": urls[0],
            "posted_at": datetime.now(KST).isoformat(timespec="seconds"), "dm_keyword": post.get("dm_keyword", ""), "dm_text": post.get("dm_text", ""),
            "kind": "reel", "credit": reel["credit"], "provider": item.get("provider", "")}
     append_posted(args.account, row)
@@ -263,13 +263,18 @@ def step_upload(cfg: dict, acct: dict, out: Path, written: dict, rendered: dict,
         row = {"date": today, "account": args.account, "key": item["candidate"]["key"],
                "title": item["candidate"]["title"], "hook": post["title"], "media_id": res["media_id"],
                "posted_at": datetime.now(KST).isoformat(timespec="seconds"), "dm_keyword": post.get("dm_keyword", ""), "dm_text": post.get("dm_text", ""),
-               "permalink": res["permalink"], "image_urls": urls, "provider": item.get("provider", "")}
+               "permalink": res["permalink"] or profile_link(acct), "image_urls": urls, "provider": item.get("provider", "")}
         append_posted(args.account, row)
+        commit_data(args.account, today)             # 게시 직후 바로 기록·커밋 — 뒤에서 무슨 오류가 나도 다시 올리지 않게
         results.append(row)
         progress(f"게시 완료 {res['permalink']}")
     commit_data(args.account, today)
     (out / "upload.json").write_text(json.dumps(results, ensure_ascii=False, indent=1), encoding="utf-8")
     return {"published": results}
+
+
+def profile_link(acct: dict) -> str:
+    return str(acct.get("result_link") or "https://www.instagram.com/")
 
 
 def commit_paths(paths: list[Path], message: str) -> None:
@@ -447,6 +452,12 @@ def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, ar
         lines.append("[예약] 지금 만들 것 없음")
         return {"counts": {"new": 0, "failed": 0, "total": len(load_posted(args.account))}, "lines": lines, "tasks": tasks}
     for q in due:
+        already = next((r for r in load_posted(args.account) if r.get("key") == q.get("key")), None)
+        if already:                                  # 이미 올린 소재 — 다시 만들지 않는다 (중복 게시 사고 2026-09-13 재발 방지)
+            data = review.mark(data, q["id"], "done", now=now, permalink=already.get("permalink", ""))
+            review.save(path, data); commit_paths([path], f"insta({args.account}): 이미 게시됨 {q['title'][:40]}")
+            lines.append(f"[건너뜀] 이미 올린 소재 — {q['title'][:40]}")
+            continue
         data = review.mark(data, q["id"], "making", now=now)
         review.save(path, data); commit_paths([path], f"insta({args.account}): 만드는 중 {q['title'][:40]}")
         cand = {k: q.get(k, "") for k in ("key", "title", "link", "source", "summary", "angle")}
@@ -460,11 +471,12 @@ def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, ar
             made += 1
             data = review.mark(data, q["id"], "done", now=now, permalink=res.get("permalink", ""))
             msg = "게시"
-        elif is_rate_limited(res.get("error", "")):
-            # 앱 시간당 호출 한도 — 글은 이미 써 뒀으니(out/ 에 남음) 실패로 두지 않고 1시간 뒤 다시 시도
-            retry = (now + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
-            data = review.mark(data, q["id"], "queued", now=now, due=retry.isoformat(timespec="seconds"), error="")
-            lines.append(f"[대기] 인스타 요청 한도 — {retry:%H:%M} 에 다시 시도: {q['title'][:40]}")
+        elif is_rate_limited(res.get("error", "")) and int(q.get("retries", 0)) < 2:
+            # 앱 호출 한도(게시 전 단계에서 걸림) — 최대 2번까지 다음 시간대에 다시 시도. 게시 뒤 오류는 publisher 가 삼키므로 여기 오지 않는다
+            slots = slots_of(acct)
+            retry = review.slot_times(1, now + timedelta(minutes=30), slots=slots, taken=review.active_dues(data))[0]
+            data = review.mark(data, q["id"], "queued", now=now, due=retry.isoformat(timespec="seconds"), error="", retries=int(q.get("retries", 0)) + 1)
+            lines.append(f"[대기] 인스타 요청 한도 — {retry:%m/%d %H:%M} 에 다시 시도({int(q.get('retries', 0)) + 1}/2): {q['title'][:40]}")
             msg = "한도 대기"
         else:
             failed += 1

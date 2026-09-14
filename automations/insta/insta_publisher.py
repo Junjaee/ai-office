@@ -97,7 +97,7 @@ class Instagram:
             params["cover_url"] = cover_url
         return self._req("POST", f"{self.user_id}/media", **params)["id"]
 
-    def wait_ready(self, container_id: str, *, tries: int = 20, delay: float = 6.0) -> None:
+    def wait_ready(self, container_id: str, *, tries: int = 12, delay: float = 15.0) -> None:
         """컨테이너가 FINISHED 될 때까지 기다린다. 앱 시간당 호출 한도(code 4)를 아끼려고 처음 delay 만큼 쉬고 나서 확인한다."""
         time.sleep(delay)
         for _ in range(tries):
@@ -114,7 +114,11 @@ class Instagram:
         return self._req("POST", f"{self.user_id}/media_publish", creation_id=container_id)["id"]
 
     def permalink(self, media_id: str) -> str:
-        return self._req("GET", media_id, fields="permalink").get("permalink", "")
+        """게시물 주소. 조회가 한도에 걸려도 게시는 이미 된 것이므로 빈 문자열을 돌려주고 실패로 만들지 않는다."""
+        try:
+            return self._req("GET", media_id, fields="permalink").get("permalink", "")
+        except RuntimeError:
+            return ""
 
     def metrics(self, media_id: str) -> dict:
         """게시물 지표: 좋아요·댓글 + 인사이트(views 조회, reach 도달, saved 저장, shares 공유, total_interactions)."""
@@ -145,7 +149,7 @@ def publish_carousel(ig: Instagram, image_urls: list[str], caption: str, alt_tex
             progress(f"컨테이너 {i}/{len(image_urls)}")
         container = ig.create_carousel(children, caption)
     ig.wait_ready(container)
-    media_id = ig.publish(container)
+    media_id = ig.publish(container)                 # 여기서부터는 게시물이 실제로 올라간 상태
     return {"media_id": media_id, "permalink": ig.permalink(media_id)}
 
 
@@ -153,8 +157,8 @@ def publish_reel(ig: Instagram, video_url: str, caption: str, cover_url: str = "
     """영상 공개 URL → 릴스 게시(피드에도 표시). 영상 처리에 1~3분 걸리므로 오래 기다린다. (media_id, permalink) 반환."""
     container = ig.create_reel(video_url, caption, cover_url)
     progress("릴스 컨테이너 처리 중 (영상 변환)")
-    ig.wait_ready(container, tries=40, delay=10.0)
-    media_id = ig.publish(container)
+    ig.wait_ready(container, tries=30, delay=15.0)
+    media_id = ig.publish(container)                 # 여기서부터는 게시물이 실제로 올라간 상태
     return {"media_id": media_id, "permalink": ig.permalink(media_id)}
 
 

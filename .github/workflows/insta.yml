@@ -83,6 +83,7 @@ jobs:
           ACCOUNT: ${{ inputs.account || 'aitips' }}
           INSTA_AITIPS_TOKEN: ${{ secrets.INSTA_AITIPS_TOKEN }}
           INSTA_AITIPS_USER_ID: ${{ secrets.INSTA_AITIPS_USER_ID }}
+          INSTA_AITIPS_USERNAME: "aitips.kr"
           PYTHONUTF8: "1"
         run: |
           git config user.name "ai-office-bot"

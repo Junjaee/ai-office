@@ -176,14 +176,19 @@ def main() -> int:
     posted = load_jsonl(data_dir / "posted.jsonl")
     log_path = data_dir / "dm_log.jsonl"
     log = load_jsonl(log_path)
-    try:
-        me = api("GET", "me", token, {"fields": "user_id,username"})
-    except ApiError as exc:
-        print(f"계정 확인 실패: {exc}")
+    if not posted or not any(r.get("dm_text") for r in posted):
+        print("댓글 답장: DM 글이 있는 게시물 없음 — 호출 안 함")
         return 0
-    user_id = user_id or str(me.get("user_id", ""))
+    own = os.environ.get(f"INSTA_{up}_USERNAME", "").strip() or args.account
+    if not user_id:                                   # 호출 한도를 아끼려고 me 조회는 id 가 없을 때만
+        try:
+            me = api("GET", "me", token, {"fields": "user_id,username"})
+            user_id, own = str(me.get("user_id", "")), str(me.get("username", own))
+        except ApiError as exc:
+            print(f"계정 확인 실패: {exc}")
+            return 0
     call = (lambda m, p, t, params=None, body=None: api(m, p, t, params) if m == "GET" else {"dry": True}) if args.dry_run else api
-    new, summary = run(posted=posted, log=log, token=token, user_id=user_id, own_username=str(me.get("username", "")),
+    new, summary = run(posted=posted, log=log, token=token, user_id=user_id, own_username=own,
                        now=datetime.now(timezone.utc), call=call)
     if new and not args.dry_run:
         data_dir.mkdir(parents=True, exist_ok=True)
