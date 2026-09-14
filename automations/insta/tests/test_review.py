@@ -137,6 +137,9 @@ def test_similar_titles_are_treated_as_repeats():
                                                 {"key": "k2", "title": "Win", "title_ko": "윈도우 제미나이 앱", "link": "l2", "source": "s"}], now=NOW)
     _, added = review.auto_pick(data, exclude_keys=set(), now=NOW, slots=review.DEFAULT_SLOTS, posted_titles=["챗GPT 프롬프트 3개로 내 정보 지우기"])
     assert [a["title"] for a in added] == ["Win"], "비슷한 주제는 건너뛰고 다음 후보"
+    # 방금 올린 글이 있으면(3시간 안) 자동 선택 안 함 — 예약 실행이 늦게 두 번 오는 경우 대비
+    assert review.auto_pick(data, exclude_keys=set(), now=NOW, slots=review.DEFAULT_SLOTS, last_post=NOW - timedelta(minutes=50))[1] == []
+    assert review.in_slot_window(datetime(2026, 9, 12, 8, 40, tzinfo=KST)) == "07:30", "예약 실행이 1시간쯤 늦어도 07:30 창으로 본다"
 
 
 def test_rate_limit_detection():

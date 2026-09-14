@@ -184,9 +184,12 @@ def is_repeat(cand: dict, posted_titles: list[str]) -> bool:
 
 
 def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, max_age_days: int = 2, max_per_day: int = 0,
-              slots=None, posted_titles: list[str] | None = None) -> tuple[dict, list[dict]]:
+              slots=None, posted_titles: list[str] | None = None, last_post: datetime | None = None, min_gap_hours: float = 3.0) -> tuple[dict, list[dict]]:
     """아무도 안 골랐으면 후보 앞에서 n개를 예약(첫 개는 지금). 예약·진행 중이 있거나 후보가 오래됐으면 아무것도 안 한다."""
     if n <= 0 or not data.get("candidates"):
+        return data, []
+    # 방금(min_gap 안에) 올린 글이 있으면 안 한다 — GitHub 예약 실행이 최대 1시간 늦게 두 번 겹쳐 와도 한 시간대에 두 번 올리지 않게
+    if last_post and now - last_post < timedelta(hours=min_gap_hours):
         return data, []
     # 이 시간대에 이미 예약·진행 중인 것(지금 만들 차례이거나 60분 안에 예정)이 있으면 안 한다 — 뒤 시간대 예약은 상관없다
     soon = [t for t in active_dues(data) if t <= now + timedelta(minutes=60)]
@@ -203,7 +206,7 @@ def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, 
     return data, added
 
 
-def in_slot_window(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 59) -> str:
+def in_slot_window(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 75) -> str:
     """지금이 어느 게시 시간대 창(시작~59분) 안이면 그 시간대("07:30"), 아니면 빈 문자열. 매시 확인 실행이 이때 자동 선택을 한다(전 시간대, 사용자 위임 2026-09-14)."""
     t = now.astimezone(KST)
     for hm in slots:
@@ -214,7 +217,7 @@ def in_slot_window(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 59) -> 
     return ""
 
 
-def is_first_slot(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 59) -> bool:
+def is_first_slot(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 75) -> bool:
     return in_slot_window(now, slots, window_min) == str(slots[0])
 
 

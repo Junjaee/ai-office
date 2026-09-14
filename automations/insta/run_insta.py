@@ -454,8 +454,9 @@ def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, ar
     if slot and int(acct.get("auto_pick", 1)) > 0:      # 시간대 창인데 그 칸이 비어 있으면 편집장 1순위를 자동 선택 (사용자 위임 2026-09-14)
         rows = load_posted(args.account)
         posted = {r.get("key", "") for r in rows}
+        last = max((review._parse(r.get("posted_at")) for r in rows if r.get("posted_at")), default=None)
         data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=int(acct.get("auto_pick", 1)), slots=slots_of(acct),
-                                       posted_titles=recent_titles(rows))
+                                       posted_titles=recent_titles(rows), last_post=last)
         if added:
             review.save(path, data)
             commit_paths([path], f"insta({args.account}): 자동 선택 {len(added)}건 {now:%Y-%m-%d %H:%M}")
