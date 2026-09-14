@@ -26,6 +26,8 @@ sources: [bing_benefit_apply, bing_benefit_youth, bing_benefit_refund, bing_bene
 source_caps: { yna_economy: 10, yna_society: 8 }
 source_signals: ["신청", "지급", "환급", "지원금", "혜택", "마감", "확대", "인상", "무료", "할인", "청년", "소상공인", "이번 달", "오늘부터"]
 max_age_hours: 72
+signal_required: [yna_economy, yna_society]   # 넓은 피드는 신호 단어(신청·지급·환급·지원금…)가 있는 글만
+exclude_words: ["[인사]", "[부고]", "동정", "군수", "군민", "읍면", "면장", "구청장", "취임", "간담회", "협약", "포럼", "세미나", "정기예금 금리", "주가", "실적"]
 template: dark_code
 theme: { bg: "#0f1b2d", fg: "#f5f7fb", muted: "#9fb0c8", accent: "#5ee0a0", card: "#16263d", code_bg: "#0a1220" }
 

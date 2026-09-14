@@ -116,8 +116,12 @@ def fetch_source(name: str, *, timeout: int = 30, session: requests.Session | No
 
 
 def collect(source_names: list[str], *, max_age_hours: float, signals: list[str], exclude_keys: set[str],
-            now: datetime | None = None, timeout: int = 30, progress=print) -> tuple[list[Candidate], list[str]]:
-    """출처마다 받아 나이·중복을 거르고 신호 단어를 표시한다. 한 출처 실패는 기록만 하고 계속."""
+            now: datetime | None = None, timeout: int = 30, progress=print,
+            signal_required: list[str] | None = None, exclude_words: list[str] | None = None) -> tuple[list[Candidate], list[str]]:
+    """출처마다 받아 나이·중복을 거르고 신호 단어를 표시한다. 한 출처 실패는 기록만 하고 계속.
+    signal_required 에 든 출처(연합뉴스처럼 넓은 피드)는 신호 단어가 하나라도 있어야 남기고, exclude_words 가 제목에 있으면 버린다."""
+    need = set(signal_required or [])
+    bad = [w.lower() for w in (exclude_words or []) if w]
     now = now or datetime.now(timezone.utc)
     sess = requests.Session()
     found: list[Candidate] = []
@@ -138,6 +142,10 @@ def collect(source_names: list[str], *, max_age_hours: float, signals: list[str]
                 continue
             text = f"{c.title} {c.summary}".lower()
             c.signals = [s for s in signals if s.lower() in text]
+            if name in need and not c.signals:
+                continue
+            if bad and any(w in c.title.lower() for w in bad):
+                continue
             seen.add(c.key)
             found.append(c)
             kept += 1

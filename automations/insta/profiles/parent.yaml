@@ -27,6 +27,8 @@ sources: [bing_parent_support, bing_parent_allowance, bing_parent_tips, bing_par
 source_caps: { babynews: 8, yna_society: 8 }
 source_signals: ["신청", "지원", "지급", "무료", "확대", "인상", "방법", "체크", "꿀팁", "병원", "어린이집", "유치원", "수당", "급여"]
 max_age_hours: 96
+signal_required: [yna_society, babynews]      # 넓은 피드는 신호 단어(신청·지원·수당·어린이집…)가 있는 글만
+exclude_words: ["[인사]", "[부고]", "동정", "군수", "군민", "읍면", "면장", "구청장", "취임", "간담회", "협약", "포럼", "세미나"]
 template: dark_code
 theme: { bg: "#fff7f0", fg: "#2b2420", muted: "#8a7a70", accent: "#ff8a5b", card: "#ffffff", code_bg: "#fdebe0" }
 

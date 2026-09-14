@@ -310,7 +310,8 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
     foreign, ffailed = watch.collect_watch(list(p.watch_foreign or []), flag="🇺🇸", max_age_hours=p.watch_foreign_hours,
                                            exclude_keys=exclude, cap=p.watch_cap, per_account=p.watch_per_account, progress=progress)
     cands, failed = sources.collect(p.sources, max_age_hours=p.max_age_hours, signals=p.source_signals,
-                                    exclude_keys=exclude, progress=progress)
+                                    exclude_keys=exclude, progress=progress,
+                                    signal_required=p.signal_required, exclude_words=p.exclude_words)
     cands = sources.cap_by_source(cands, p.source_caps or {})
     cands = foreign + watched + cands                       # 미국 원출처(IG) → 한국 참고 계정 → RSS
     failed = ffailed + wfailed + failed

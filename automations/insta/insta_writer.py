@@ -117,6 +117,8 @@ class Profile:
     watch_cap: int = 15                       # 참고 계정 그룹별 후보 상한(좋아요 순)
     watch_per_account: int = 4                # 계정당 후보 상한 (좋아요 많은 계정이 독식하지 않게)
     pick_rules: str = ""                      # 주제별 편집장 선정 기준(있으면 AI 계정용 기본 기준 대신 쓴다)
+    signal_required: list[str] | None = None  # 이 출처들은 신호 단어가 있는 글만 후보로 (연합뉴스처럼 넓은 피드)
+    exclude_words: list[str] | None = None    # 제목에 이 말이 있으면 후보에서 뺀다 (인사·부고·군 단위 소식 등)
     source_caps: dict | None = None            # 출처별 후보 상한 {출처이름: N} (레딧처럼 시끄러운 곳 제한)
     title_patterns: list[str] | None = None
     cc_photos: bool = False             # True 면 사진 없는 카드에 CC 사진(Openverse)을 검색해 넣는다 — 관련 없는 사진이 걸릴 수 있어 기본 끔
