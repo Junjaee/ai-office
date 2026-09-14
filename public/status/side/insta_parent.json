@@ -3,7 +3,7 @@
   "dept": "strategy2",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 0건, 22초",
+  "summary": "게시 0건, 실패 0건, 누적 0건, 0초",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,21 +11,21 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 0건, 22초",
-    "[후보] [건강뉴스] 국립중앙의료원·한국영유아보육교육진흥원, 영유아 보호자 대상 ‘달빛클래스’ 外 — 베이비뉴스",
-    "[후보] 영유아보육교육진흥원 베페 베이비페 참가…양육정책 수요 청취 — 뉴스 · 육아 지원금"
+    "게시 0건, 실패 0건, 누적 0건, 0초",
+    "[대기] 인스타 토큰 없음 — 계정 개설 뒤 토큰을 등록하면 게시가 시작돼요"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 34820800063,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34820800063",
-  "trigger": "schedule",
-  "started_at": "2026-09-14T17:08:28+09:00",
-  "duration_sec": 22,
+  "run_id": 34829904787,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34829904787",
+  "request_id": "check-202609140948",
+  "trigger": "manual",
+  "started_at": "2026-09-14T19:00:06+09:00",
+  "duration_sec": 0,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 2건 · 사이트에서 골라 주세요"
+      "summary": "후보 2건 · 예약 0건 · 게시 0건"
     },
     {
       "id": "write",
@@ -39,10 +39,10 @@
     },
     {
       "id": "upload",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "토큰 대기"
     }
   ],
   "id": "insta_parent",
-  "updated_at": "2026-09-14T17:08:51+09:00"
+  "updated_at": "2026-09-14T19:00:07+09:00"
 }
