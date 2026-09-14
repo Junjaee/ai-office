@@ -2,7 +2,7 @@
 
 v1(insta_slideshow)은 카드 글을 그대로 읽어 부자연스러웠다(사용자 지적 → 중지). v2 는 한국 정보 릴스의 실제 방식을 따른다
 (research/릴스_나레이션_리서치_2026-09-14.md):
-1) 편집장이 카드와 별도로 **말하는 대본**을 쓴다 — 훅(3초 안) → 핵심 2~4 → 행동. 20~35초. (script_prompt, REEL_SCRIPT_SCHEMA)
+1) 편집장이 카드와 별도로 **말하는 대본**을 쓴다 — 인기 정보 쇼츠 실제 대본을 분석한 규칙(합쇼체, 결론+숫자 훅 → 공감 → 번호 → 조건 → 공유 유도), 35~55초. (script_prompt, REEL_SCRIPT_SCHEMA)
 2) 대본을 구간별로 TTS 로 읽고 단어 시각을 받는다(엣지 음성은 단어 시각을 주고, 없으면 글자 수로 나눠 추정).
 3) 장면 = 테마 배경(카드 사진이 있으면 흐리게 깔고 가운데 크게) + 큰 강조 문구. 자막 = 지금 말하는 구절이 1초 남짓마다 바뀌고 강조어는 색.
    Pillow 로 프레임을 만들고 ffmpeg concat 으로 잇는다(프레임이 수십 장뿐이라 빠르다).
@@ -32,12 +32,12 @@ REEL_SCRIPT_SCHEMA = {
     "properties": {
         "hook": {"type": "object", "required": ["say", "big"],
                  "properties": {"say": {"type": "string", "maxLength": 70}, "big": {"type": "string", "maxLength": 26}}},
-        "segments": {"type": "array", "minItems": 2, "maxItems": 4,
+        "segments": {"type": "array", "minItems": 3, "maxItems": 5,
                      "items": {"type": "object", "required": ["say", "big"],
-                               "properties": {"say": {"type": "string", "maxLength": 130}, "big": {"type": "string", "maxLength": 22},
+                               "properties": {"say": {"type": "string", "maxLength": 170}, "big": {"type": "string", "maxLength": 22},
                                               "card": {"type": "integer"}, "keywords": {"type": "array", "items": {"type": "string"}}}}},
         "cta": {"type": "object", "required": ["say", "big"],
-                "properties": {"say": {"type": "string", "maxLength": 80}, "big": {"type": "string", "maxLength": 22}}},
+                "properties": {"say": {"type": "string", "maxLength": 120}, "big": {"type": "string", "maxLength": 22}}},
     },
 }
 
@@ -45,20 +45,27 @@ REEL_SCRIPT_SCHEMA = {
 # ───────────────────────── 1) 말하는 대본 ─────────────────────────
 
 def script_prompt(profile_name: str, audience: str, article: dict, slides: list[dict], dm_keyword: str = "") -> tuple[str, str]:
-    system = (f"당신은 인스타그램 정보 계정 '{profile_name}'의 릴스 대본 작가입니다. 독자: {audience}\n"
-              "카드뉴스로 쓴 기사를 **귀로 듣는 20~35초 릴스 나레이션**으로 다시 씁니다. 카드 문장을 그대로 옮기지 않습니다.\n"
-              "말투 규칙:\n"
-              "- 친구에게 말하듯 자연스러운 구어체 존댓말(~해요/~거든요/~더라고요). 한 문장 25자 안팎, 쉼표로 호흡을 끊는다.\n"
+    # 말투·구조는 조회수 100만~800만 한국 정보 쇼츠 6개의 실제 나레이션을 받아 적어 분석한 것(research/릴스_대본_리서치_2026-09-14.md).
+    # 공통점: 합쇼체로 짧게 끊어 단정 → 결론+숫자+대상 훅 → 공감·문제 → 반전 → '첫 번째·두 번째' 번호 → 손해·조건 → 공유 유도.
+    system = (f"당신은 인스타그램 정보 계정 '{profile_name}'의 릴스 나레이션 작가입니다. 독자: {audience}\n"
+              "카드뉴스로 쓴 기사를 **귀로 듣는 35~55초 릴스 나레이션**으로 다시 씁니다. 카드 문장을 그대로 옮기지 않습니다.\n"
+              "말투(한국 인기 정보 쇼츠의 실제 말투):\n"
+              "- 합쇼체로 짧고 단정하게: '~습니다', '~입니다', '~하세요'. 한 문장 8~25자. 명사로 끊는 문장도 좋다('신청은 단 한 번.').\n"
+              "- 친구 말투(~거든요/~더라고요/~잖아요)와 설명조 긴 문장은 쓰지 않는다. 궁금증은 질문 한 번('~일까요?', '~알고 계셨나요?')으로.\n"
+              "- 핵심 숫자는 두 번 말한다(훅에서 한 번, 설명에서 한 번). 숫자는 소리 내 읽기 쉽게('1,000원' → '천 원', '47%' → '47퍼센트').\n"
               "- 괄호·영문 병기·가운뎃점·슬래시·이모지 금지(예: '제미나이(Gemini)' → '제미나이'). 단축키는 'Alt 키랑 스페이스바'처럼 말로.\n"
-              "- 숫자는 소리 내 읽기 쉽게('1,000원' → '천 원', '47%' → '47퍼센트'). 날짜는 꼭 필요할 때만.\n"
-              "- 사실은 기사 안의 것만. 과장·감탄사 남발 금지.\n"
-              "구성:\n"
-              "- hook: 첫 3초 안에 끝나는 한 문장(15~28자). 시청자에게 직접 말 걸기, 결과 먼저, 숫자·손해 자극 중 하나. 제목을 그대로 읽지 않는다.\n"
-              "- segments 2~4개: 각 1~2문장. 핵심만(무엇이 되는지 → 어떻게 하는지 → 조건). big 은 그 구간 화면에 크게 뜰 8~14자 요약, "
-              "keywords 는 자막에서 색으로 강조할 단어 1~2개, card 는 그 구간에 보여 줄 카드 번호(아래 목록에서 사진 있는 카드), 없으면 0.\n"
-              "- cta: 한 문장. " + (f"댓글 키워드는 반드시 '{dm_keyword}' 그대로 쓴다(바꾸지 않는다): \"댓글에 '{dm_keyword}' 남기면 ~을 DM으로 보내드려요\" 꼴"
-                                    if dm_keyword else "저장·공유 유도") + ".\n"
-              "- 전체 말 분량(hook+segments+cta 의 say 합) 180~260자(25~35초). segments 는 3개가 기본.\n"
+              "- 사실은 기사 안의 것만. '속보' 같은 거짓 긴박감, 정답을 숨기는 낚시('화면 두 번 누르면 공개')는 금지 — 인스타는 참여 유도 낚시를 노출에서 뺀다.\n"
+              "구조:\n"
+              "- hook: 결론+숫자+대상을 한 문장에(15~28자, 첫 3초). 형식 예: '<대상>이라면 <결과>, 모르면 <손해>입니다' / '<무엇>, 이제 <바뀐 점>입니다'. 제목을 그대로 읽지 않는다.\n"
+              "- segments 3~5개(각 1~3문장): ① 공감·문제 한두 문장('요즘 ~죠. 그런데 대부분 모르고 지나갑니다.') "
+              "② 반전·핵심('하지만 이번엔 다릅니다.') ③ '첫 번째', '두 번째'처럼 번호를 붙여 방법·혜택을 하나씩, 구체적인 숫자·순서로 "
+              "④ 조건·손해 한 문장('단, ~는 안 됩니다' / '이거 안 하면 ~ 손해입니다'). "
+              "big 은 그 구간 화면에 크게 뜰 8~14자 요약, keywords 는 자막에서 색으로 강조할 단어 1~2개, "
+              "card 는 그 구간에 보여 줄 카드 번호(아래 목록에서 사진 있는 카드), 없으면 0.\n"
+              "- cta: 공유 유도 + 댓글 키워드. 예 '필요한 분께 꼭 보내 주세요.' 뒤에 " +
+              (f"'댓글에 '{dm_keyword}' 남기시면 ~를 DM으로 보내드립니다.' — 댓글 키워드는 반드시 '{dm_keyword}' 그대로(바꾸지 않는다)"
+               if dm_keyword else "'저장해 두세요.'") + ".\n"
+              "- 전체 말 분량(hook+segments+cta 의 say 합) 250~380자(35~55초).\n"
               "도구를 쓰지 말고 JSON 객체 하나만 출력합니다.")
     cards = "\n".join(f"{i}. [{s.get('kind')}] {str(s.get('title', '')).replace(chr(10), ' ')[:40]}{' (사진 있음)' if s.get('image_path') else ''}"
                       for i, s in enumerate(slides) if s.get("kind") != "cta")
@@ -84,7 +91,7 @@ def enforce_cta(script: dict, dm_keyword: str) -> dict:
         return script
     cta = dict(script.get("cta") or {})
     if kw not in str(cta.get("say", "")):
-        cta["say"] = f"댓글에 '{kw}' 남겨 주시면, 정리한 내용을 DM으로 보내드려요."
+        cta["say"] = f"필요한 분께 꼭 보내 주세요. 댓글에 '{kw}' 남기시면 정리한 내용을 DM으로 보내드립니다."
         cta["big"] = f"댓글에 '{kw}'"
     return {**script, "cta": cta}
 
@@ -142,8 +149,45 @@ def estimate_words(text: str, dur: float) -> list[tuple[float, float, str]]:
     return out
 
 
+def typecast_tts(text: str, out: Path, *, voice_id: str, emotion: str = "normal", intensity: float = 1.0, tempo: float = 1.1,
+                 model: str = "ssfm-v30", api_key: str = "") -> None:
+    """타입캐스트 API (한국 쇼츠·릴스에서 가장 많이 쓰는 AI 성우). 환경변수 TYPECAST_API_KEY. 무료 월 1만5천 자, Lite 월 $15 20만 자."""
+    import os
+
+    import requests
+
+    key = api_key or os.environ.get("TYPECAST_API_KEY", "").strip()
+    if not key:
+        raise RuntimeError("TYPECAST_API_KEY 없음")
+    body = {"voice_id": voice_id, "text": text, "model": model, "language": "kor",
+            "prompt": {"emotion_type": "preset", "emotion_preset": emotion, "emotion_intensity": intensity},
+            "output": {"volume": 100, "audio_pitch": 0, "audio_tempo": tempo, "audio_format": "wav"}}
+    r = requests.post("https://api.typecast.ai/v1/text-to-speech", headers={"X-API-KEY": key, "Content-Type": "application/json"},
+                      json=body, timeout=120)
+    if not r.ok:
+        raise RuntimeError(f"Typecast {r.status_code}: {r.text[:200]}")
+    Path(out).write_bytes(r.content)
+
+
+def google_tts(text: str, out: Path, *, voice: str = "ko-KR-Chirp3-HD-Kore", rate: float = 1.1, api_key: str = "") -> None:
+    """구글 클라우드 Chirp 3 HD (월 100만 자 무료). 환경변수 GOOGLE_TTS_API_KEY."""
+    import base64
+    import os
+
+    import requests
+
+    key = api_key or os.environ.get("GOOGLE_TTS_API_KEY", "").strip()
+    if not key:
+        raise RuntimeError("GOOGLE_TTS_API_KEY 없음")
+    body = {"input": {"text": text}, "voice": {"languageCode": "ko-KR", "name": voice}, "audioConfig": {"audioEncoding": "MP3", "speakingRate": rate}}
+    r = requests.post("https://texttospeech.googleapis.com/v1/text:synthesize", params={"key": key}, json=body, timeout=60)
+    if not r.ok:
+        raise RuntimeError(f"Google TTS {r.status_code}: {r.text[:200]}")
+    Path(out).write_bytes(base64.b64decode(r.json()["audioContent"]))
+
+
 def speak(parts: list[dict], work: Path, *, engine: str = "edge", voice: str = "ko-KR-SunHiNeural", rate: str = "+20%",
-          supertonic=None) -> None:
+          supertonic=None, tts_opts: dict | None = None) -> None:
     """구간마다 음성 파일(p['audio'])과 길이(p['dur'])와 단어 시각(p['words'])을 채운다."""
     work.mkdir(parents=True, exist_ok=True)
     for i, p in enumerate(parts):
@@ -155,6 +199,16 @@ def speak(parts: list[dict], work: Path, *, engine: str = "edge", voice: str = "
             wav = work / f"say{i:02d}.wav"
             supertonic(p["say"], wav)
             p["audio"] = str(wav)
+            p["words"] = []
+        elif engine == "typecast":
+            wav = work / f"say{i:02d}.wav"
+            typecast_tts(p["say"], wav, voice_id=voice, **(tts_opts or {}))
+            p["audio"] = str(wav)
+            p["words"] = []
+        elif engine == "google":
+            gm = work / f"say{i:02d}.mp3"
+            google_tts(p["say"], gm, voice=voice or "ko-KR-Chirp3-HD-Kore", **(tts_opts or {}))
+            p["audio"] = str(gm)
             p["words"] = []
         else:
             raise ValueError(f"모르는 TTS: {engine}")
@@ -402,13 +456,13 @@ def make_bgm(seconds: float, out: Path, *, bpm: int = 84, gain: float = 0.32) ->
 
 def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | None = None, brand: str = "AI TIPS",
           engine: str | None = "edge", voice: str = "ko-KR-SunHiNeural", rate: str = "+20%", bgm: bool = True,
-          bgm_gain: float = 0.32, supertonic=None, progress=print) -> dict:
+          bgm_gain: float = 0.32, supertonic=None, tts_opts: dict | None = None, progress=print) -> dict:
     """대본 → mp4. engine=None 이면 목소리 없이 음악 + 자막. visuals = {카드 번호: 사진 경로}."""
     work = out.parent / (out.stem + "_work")
     work.mkdir(parents=True, exist_ok=True)
     parts = parts_of(script)
     if engine:
-        speak(parts, work, engine=engine, voice=voice, rate=rate, supertonic=supertonic)
+        speak(parts, work, engine=engine, voice=voice, rate=rate, supertonic=supertonic, tts_opts=tts_opts)
     else:
         silent_timing(parts)
     visuals = visuals or {}

@@ -12,15 +12,16 @@ import insta_reel as reel  # noqa: E402
 
 SCRIPT = {"hook": {"say": "제미나이(Gemini) 쓰려고 탭 뒤지지 마세요", "big": "탭 대신 단축키"},
           "segments": [{"say": "Alt 키랑 스페이스바면 바로 떠요.", "big": "Alt 스페이스", "keywords": ["스페이스바"], "card": 1},
+                       {"say": "설치는 무료입니다.", "big": "무료 설치", "card": 0},
                        {"say": "지메일·드라이브도 찾아 줘요.", "big": "메일 속 정보", "keywords": ["지메일"], "card": 0}],
           "cta": {"say": "저장해 두세요.", "big": "저장"}}
 
 
 def test_parts_and_speech_cleanup():
     parts = reel.parts_of(SCRIPT)
-    assert [p["kind"] for p in parts] == ["hook", "seg", "seg", "cta"]
+    assert [p["kind"] for p in parts] == ["hook", "seg", "seg", "seg", "cta"]
     assert "(Gemini)" not in parts[0]["say"] and parts[0]["say"].startswith("제미나이 쓰려고")
-    assert parts[2]["say"].startswith("지메일, 드라이브도")
+    assert parts[3]["say"].startswith("지메일, 드라이브도")
 
 
 def test_chunk_words_and_keyword_highlight():
@@ -42,7 +43,7 @@ def test_enforce_cta_keeps_dm_keyword_exact():
 def test_prompt_mentions_spoken_rules_and_keyword():
     s, u = reel.script_prompt("AI 꿀팁", "직장인", {"title": "t", "subtitle": "s", "paragraphs": [{"heading": "h", "text": "x"}]},
                               [{"kind": "cover", "title": "표지", "image_path": "a.jpg"}, {"kind": "cta", "title": "끝"}], dm_keyword="단축키")
-    assert "구어체" in s and "'단축키' 그대로" in s and "0. [cover] 표지 (사진 있음)" in u and "[cta]" not in u
+    assert "합쇼체" in s and "'단축키' 그대로" in s and "0. [cover] 표지 (사진 있음)" in u and "[cta]" not in u
 
 
 @pytest.mark.skipif(not shutil.which("ffmpeg"), reason="ffmpeg 없음")
@@ -55,6 +56,6 @@ def test_build_with_voice_and_music_and_silent(tmp_path):
     info = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=width,height,codec_type", "-of", "csv=p=0", voiced["path"]],
                           capture_output=True, text=True).stdout
     assert "1080,1920" in info and "audio" in info
-    assert 4.0 <= voiced["duration"] <= 6.5, voiced["duration"]              # 1초×4구간 + 쉼
+    assert 5.0 <= voiced["duration"] <= 7.8, voiced["duration"]              # 1초×5구간 + 쉼
     silent = reel.build(SCRIPT, tmp_path / "s.mp4", theme=theme, engine=None, bgm=True, progress=lambda m: None)
-    assert silent["duration"] >= 4 * 2.2 - 0.5
+    assert silent["duration"] >= 5 * 2.2 - 0.5
