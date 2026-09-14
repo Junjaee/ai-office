@@ -308,9 +308,10 @@
    "summary": "“이제 글쓰기도 클로드 대신 GPT로?” 😲 오픈AI가 챗GPT 워크에 ‘문체 학습’ 기능을 추가했어요! 구글 메일·구글 드라이브·슬랙만 연결하면, 내 말투와 습관까지 GPT가 알아서 배운대요. 업무 메일이나 사내 메신저까지 AI 티 안 나게 완성할 수 있겠는데요? 👀 카드뉴스를 넘기며 자세한 내용과 사용방법까지 살펴보세요! :) AI 소식 놓치지 않으려면? 👉🏻 ai_freaks.kr",
    "angle": "구글 메일·드라이브·슬랙 연결로 문체 학습을 켜는 방법을 단계별로 안내하고, 켜기 전과 후의 메일 초안을 비교하며 개인정보 주의점도 짚는다",
    "due": "2026-09-14T10:00:00+09:00",
-   "status": "queued",
+   "status": "cancelled",
    "added_at": "2026-09-11T23:39:17+09:00",
-   "error": ""
+   "error": "중복 게시 사고로 일시 중지 2026-09-14",
+   "finished_at": "2026-09-14T00:28:31+00:00"
   },
   {
    "id": "24deca78",
@@ -321,9 +322,10 @@
    "summary": "“안 보던 사진도, 감성 그림으로 부활” 🎨 갤러리에 잠만 자던 사진들 많으시죠? 그 사진, 감성 엽서로 바꿔줄 프롬프트 6종을 준비했어요! 챗GPT에 사진 올리고 원하는 프롬프트만 붙여넣으면 끝이에요. 댓글 남기고 수채화, 색연필, 펜화, 빈티지 잉크, 마커, 우표까지 바로 쓸 수 있는 프롬프트 받아가세요. 💌 댓글 남겨주시면 프롬프트를 보내드려요. :) 👉🏻 AI 소식 놓치지 않으려면? ai_freaks.kr",
    "angle": "수채화·색연필·펜화·빈티지·마커·우표 6가지 스타일의 프롬프트를 전부 공개하고, 같은 사진으로 만든 결과를 한 장씩 보여 준다",
    "due": "2026-09-14T10:00:00+09:00",
-   "status": "queued",
+   "status": "cancelled",
    "added_at": "2026-09-11T23:39:17+09:00",
-   "error": ""
+   "error": "중복 게시 사고로 일시 중지 2026-09-14",
+   "finished_at": "2026-09-14T00:28:31+00:00"
   },
   {
    "id": "4d4e7920",
@@ -334,8 +336,10 @@
    "summary": "Meet the Data agent in ChatGPT Work. Connect company data, uncover insights, and build interactive dashboards with AI using natural language.",
    "angle": "ChatGPT Work의 데이터 에이전트로 데이터를 연결하고, 질문하고, 대시보드를 만드는 흐름을 업무 예시 하나로 따라가 본다",
    "due": "2026-09-14T18:30:00+09:00",
-   "status": "queued",
-   "added_at": "2026-09-11T23:39:17+09:00"
+   "status": "cancelled",
+   "added_at": "2026-09-11T23:39:17+09:00",
+   "finished_at": "2026-09-14T00:28:31+00:00",
+   "error": "중복 게시 사고로 일시 중지 2026-09-14"
   },
   {
    "id": "6f6eb2bc",
@@ -346,8 +350,10 @@
    "summary": "“한국도 곧 지원할 메타의 무료 AI 비서” 👩‍💼 메타가 만든 개인용 AI 에이전트 ‘뮤즈’, 스스로 계획 짜는 내 비서를 무료로 쓸 수 있어요! 예약, 쇼핑, 이메일까지 알아서 처리하는데 심지어 대화창을 닫아도 뒤에서 계속 일하죠. 한국 사용자들은 대기명단을 받고 있다고 하는데요? 카드뉴스를 넘기며 자세한 내용 살펴보세요! 💌 댓글에 ‘ai’ 남겨주시면, ‘뮤즈 대기 명단’ 등록 링크 전송 :) 👉🏻 AI 소식 놓치지 않으려면? ai_freaks.kr",
    "angle": "뮤즈가 할 수 있는 일과 챗GPT와의 차이, 한국 대기명단 신청 방법, 미리 알아 둘 주의점을 정리한다",
    "due": "2026-09-15T12:30:00+09:00",
-   "status": "queued",
-   "added_at": "2026-09-11T23:39:17+09:00"
+   "status": "cancelled",
+   "added_at": "2026-09-11T23:39:17+09:00",
+   "finished_at": "2026-09-14T00:28:31+00:00",
+   "error": "중복 게시 사고로 일시 중지 2026-09-14"
   },
   {
    "id": "ada2f646",
@@ -358,9 +364,10 @@
    "summary": "An elderly couple sitting in a movie theater. Overlayed are \"Teulluride Film Festival\" and \"Love, Rendered\"",
    "angle": "구글이 만든 70년 부부 사랑 이야기 복원 영상 제작 과정과 AI 활용 포인트 소개",
    "due": "2026-09-14T10:00:00+09:00",
-   "status": "queued",
+   "status": "cancelled",
    "added_at": "2026-09-12T00:04:40+09:00",
-   "error": ""
+   "error": "중복 게시 사고로 일시 중지 2026-09-14",
+   "finished_at": "2026-09-14T00:28:31+00:00"
   },
   {
    "id": "d7510e71",
@@ -371,9 +378,10 @@
    "summary": "",
    "angle": "스크린샷 프롬프트를 그대로 캡처해 올리고 결과 예시를 보여주는 실습형 카드",
    "due": "2026-09-14T10:00:00+09:00",
-   "status": "queued",
+   "status": "cancelled",
    "added_at": "2026-09-12T00:48:09+09:00",
-   "error": ""
+   "error": "중복 게시 사고로 일시 중지 2026-09-14",
+   "finished_at": "2026-09-14T00:28:31+00:00"
   },
   {
    "id": "540933cd",
@@ -412,9 +420,10 @@
    "summary": "Hello Windows, the Gemini app is here! 👋 Get quick help with a simple keyboard shortcut on your PC.",
    "angle": "단축키 설정법과 활용 장면을 짧게 보여주는 영상 기반 튜토리얼",
    "due": "2026-09-14T11:00:00+09:00",
-   "status": "queued",
+   "status": "cancelled",
    "added_at": "2026-09-12T01:06:40+09:00",
-   "error": ""
+   "error": "중복 게시 사고로 일시 중지 2026-09-14",
+   "finished_at": "2026-09-14T00:28:31+00:00"
   },
   {
    "id": "a6add69c",
@@ -425,8 +434,10 @@
    "summary": "OpenAI launches ChatGPT for Financial Services with GPT-6 Astra, built-in premium data, firm templates, and enterprise controls.",
    "angle": "무엇이 새로 추가됐고 일반 챗GPT와 뭐가 다른지 실무자 관점에서 비교",
    "due": "2026-09-14T12:30:00+09:00",
-   "status": "queued",
-   "added_at": "2026-09-12T01:06:40+09:00"
+   "status": "cancelled",
+   "added_at": "2026-09-12T01:06:40+09:00",
+   "finished_at": "2026-09-14T00:28:31+00:00",
+   "error": "중복 게시 사고로 일시 중지 2026-09-14"
   },
   {
    "id": "01415994",
@@ -437,8 +448,10 @@
    "summary": "César de la Fuente’s lab uses Codex and ChatGPT to search living and extinct genomes for antimicrobial candidates to fight drug-resistant infections.",
    "angle": "연구자가 Codex와 챗GPT로 신약 후보를 탐색하는 과정을 스토리로 풀기",
    "due": "2026-09-15T07:30:00+09:00",
-   "status": "queued",
-   "added_at": "2026-09-12T01:06:40+09:00"
+   "status": "cancelled",
+   "added_at": "2026-09-12T01:06:40+09:00",
+   "finished_at": "2026-09-14T00:28:31+00:00",
+   "error": "중복 게시 사고로 일시 중지 2026-09-14"
   },
   {
    "id": "37c81a71",
@@ -449,9 +462,10 @@
    "summary": "",
    "angle": "GPT-6 아스트라의 창의적 활용 데모 소개",
    "due": "2026-09-15T18:30:00+09:00",
-   "status": "queued",
+   "status": "cancelled",
    "added_at": "2026-09-12T12:32:19+09:00",
-   "error": ""
+   "error": "중복 게시 사고로 일시 중지 2026-09-14",
+   "finished_at": "2026-09-14T00:28:31+00:00"
   }
  ],
  "interval_hours": 24.0
