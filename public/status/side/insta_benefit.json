@@ -3,7 +3,7 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 0건, 48초",
+  "summary": "게시 0건, 실패 0건, 누적 0건, 0초",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,21 +11,21 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 0건, 48초",
-    "[후보] 김해시, 추석 전 10만원 민생지원금 지급…17일부터 신청 — 뉴스 · 지원금 신청",
-    "[후보] 🇺🇸빈자리 '공무원 희생에 보상 강화'…연금지급률 인상·재활급여 강화 — 연합뉴스 경제"
+    "게시 0건, 실패 0건, 누적 0건, 0초",
+    "[대기] 인스타 토큰 없음 — 계정 개설 뒤 토큰을 등록하면 게시가 시작돼요"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 34820800063,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34820800063",
-  "trigger": "schedule",
-  "started_at": "2026-09-14T17:08:53+09:00",
-  "duration_sec": 48,
+  "run_id": 34829904787,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34829904787",
+  "request_id": "check-202609140948",
+  "trigger": "manual",
+  "started_at": "2026-09-14T19:00:08+09:00",
+  "duration_sec": 0,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 2건 · 사이트에서 골라 주세요"
+      "summary": "후보 2건 · 예약 0건 · 게시 0건"
     },
     {
       "id": "write",
@@ -39,10 +39,10 @@
     },
     {
       "id": "upload",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "토큰 대기"
     }
   ],
   "id": "insta_benefit",
-  "updated_at": "2026-09-14T17:09:42+09:00"
+  "updated_at": "2026-09-14T19:00:09+09:00"
 }
