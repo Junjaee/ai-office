@@ -3,47 +3,47 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 1건, 실패 0건, 누적 16건, 10.0분",
+  "summary": "게시 1건, 실패 0건, 누적 17건, 16.9분",
   "counts": {
     "new": 1,
     "failed": 0,
-    "total": 16
+    "total": 17
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 1건, 실패 0건, 누적 16건, 10.0분",
-    "[기사] 요즘 엄청 바이럴되는 뮤비, 사진 2장이면 훔쳐요 · 검수 38점",
-    "[게시] https://www.instagram.com/p/DdQ3qUxoCNB/"
+    "게시 1건, 실패 0건, 누적 17건, 16.9분",
+    "[기사] 1편 반응이 뜨거워서 가져온 2편, 4967만 뷰 찍었어요 · 검수 41점",
+    "[릴스] 카드 8장 나레이션 37초",
+    "[게시] https://www.instagram.com/reel/DdSUt4oiRnB/"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34829904787,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34829904787",
-  "request_id": "check-202609140948",
-  "trigger": "manual",
-  "started_at": "2026-09-14T18:50:03+09:00",
-  "duration_sec": 600,
+  "run_id": 34907965301,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34907965301",
+  "trigger": "schedule",
+  "started_at": "2026-09-15T08:16:09+09:00",
+  "duration_sec": 1015,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 0건 · 게시 2건"
+      "summary": "후보 20건 · 예약 0건 · 게시 3건"
     },
     {
       "id": "write",
       "status": "done",
-      "summary": "검수 38점 (claude_cli)"
+      "summary": "검수 41점 (claude_cli)"
     },
     {
       "id": "card",
       "status": "done",
-      "summary": "카드 8장"
+      "summary": "카드 8장 → 릴스 37초"
     },
     {
       "id": "upload",
       "status": "done",
-      "summary": "1건 게시"
+      "summary": "1건 게시(릴스)"
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-14T19:00:04+09:00"
+  "updated_at": "2026-09-15T08:33:05+09:00"
 }
