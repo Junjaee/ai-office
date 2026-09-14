@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 9건, 46.7분",
+  "summary": "게시 0건, 실패 0건, 누적 9건, 3.2분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,23 +11,23 @@
   },
   "next_run": "매일 06:30 후보 · 07:30 · 12:30 · 18:30 게시(07:30 은 안 고르면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 9건, 46.7분",
-    "[대기] 인스타 요청 한도 — 10:00 에 다시 시도: “안 보던 사진도, 감성 그림으로 부활”",
-    "[실패] “안 보던 사진도, 감성 그림으로 부활” — RuntimeError",
-    "[대기] 인스타 요청 한도 — 10:00 에 다시 시도: “이제 글쓰기도 클로드 대신 GPT로?”",
-    "[실패] “이제 글쓰기도 클로드 대신 GPT로?” — RuntimeError"
+    "게시 0건, 실패 0건, 누적 9건, 3.2분",
+    "[후보] 옛 중고거래 글에 남긴 연락처, 지운 적 없다면 지금도 검색될 수 있습니다 — IG 🇰🇷 @prompt_what · 좋아요 1.3천 · 댓글 769",
+    "[후보] 🇺🇸빈자리 His wife called asking for his credit card — IG 🇺🇸 @chatgptricks · 좋아요 3.0천 · 댓글 110",
+    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.1천 · 댓글 626",
+    "[후보] GPT-6 Astra can now work directly inside After Effects inste — IG 🇺🇸 @evolving.ai · 좋아요 2.9만 · 댓글 553"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34789222370,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34789222370",
+  "run_id": 34789621688,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34789621688",
   "trigger": "schedule",
-  "started_at": "2026-09-14T08:17:49+09:00",
-  "duration_sec": 2802,
+  "started_at": "2026-09-14T09:05:47+09:00",
+  "duration_sec": 194,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 10건 · 게시 10건"
+      "summary": "후보 20건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
@@ -46,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-14T09:04:32+09:00"
+  "updated_at": "2026-09-14T09:09:02+09:00"
 }
