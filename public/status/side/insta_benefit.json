@@ -15,11 +15,10 @@
     "[대기] 인스타 토큰 없음 — 계정 개설 뒤 토큰을 등록하면 게시가 시작돼요"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 34829904787,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34829904787",
-  "request_id": "check-202609140948",
-  "trigger": "manual",
-  "started_at": "2026-09-14T19:00:08+09:00",
+  "run_id": 34907965301,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34907965301",
+  "trigger": "schedule",
+  "started_at": "2026-09-15T08:33:08+09:00",
   "duration_sec": 0,
   "tasks": [
     {
@@ -44,5 +43,5 @@
     }
   ],
   "id": "insta_benefit",
-  "updated_at": "2026-09-14T19:00:09+09:00"
+  "updated_at": "2026-09-15T08:33:09+09:00"
 }
