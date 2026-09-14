@@ -103,6 +103,40 @@ def load_jsonl(path: Path) -> list[dict]:
     return [json.loads(ln) for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()]
 
 
+def _shortcode(link: str) -> str:
+    import re
+
+    m = re.search(r"instagram\.com/(?:p|reel|reels|tv)/([A-Za-z0-9_-]+)", str(link or ""))
+    return m.group(1) if m else ""
+
+
+def resolve_media_ids(posted: list[dict], token: str, user_id: str, now: datetime, *, call=api, progress=print) -> int:
+    """DM 글인데 게시물 번호(media_id)가 빈 최근 기록(손으로 적은 기록 등)을 최근 게시물 목록의 주소로 찾아 채운다.
+    채울 것이 없으면 호출하지 않는다. 반환: 채운 개수."""
+    cutoff = now - timedelta(days=WINDOW_DAYS)
+    need = []
+    for r in posted:
+        when = _parse(r.get("posted_at") or f"{r.get('date')}T00:00:00+09:00")
+        if r.get("dm_text") and not r.get("media_id") and _shortcode(r.get("permalink", "")) and not (when and when < cutoff):
+            need.append(r)
+    if not need:
+        return 0
+    try:
+        data = call("GET", f"{user_id or 'me'}/media", token, {"fields": "id,permalink", "limit": 50})
+    except ApiError as exc:
+        progress(f"게시물 번호 찾기 실패: {exc}")
+        return 0
+    ids = {_shortcode(m.get("permalink", "")): str(m.get("id", "")) for m in data.get("data", []) if m.get("id")}
+    filled = 0
+    for r in need:
+        mid = ids.get(_shortcode(r["permalink"]))
+        if mid:
+            r["media_id"] = mid
+            filled += 1
+    progress(f"게시물 번호 채움 {filled}/{len(need)}")
+    return filled
+
+
 def run(*, posted: list[dict], log: list[dict], token: str, user_id: str, own_username: str, now: datetime,
         call=api, public_reply: str = PUBLIC_REPLY, max_per_run: int = MAX_PER_RUN, progress=print) -> tuple[list[dict], dict]:
     """최근 7일 게시물의 댓글을 보고 답장. 반환: (새 로그 항목들, 요약 {checked, sent, skipped, failed, permission})."""
@@ -187,6 +221,8 @@ def main() -> int:
         except ApiError as exc:
             print(f"계정 확인 실패: {exc}")
             return 0
+    if resolve_media_ids(posted, token, user_id, datetime.now(timezone.utc)) and not args.dry_run:
+        (data_dir / "posted.jsonl").write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in posted), encoding="utf-8")
     call = (lambda m, p, t, params=None, body=None: api(m, p, t, params) if m == "GET" else {"dry": True}) if args.dry_run else api
     new, summary = run(posted=posted, log=log, token=token, user_id=user_id, own_username=own,
                        now=datetime.now(timezone.utc), call=call)

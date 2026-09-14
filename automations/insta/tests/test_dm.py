@@ -65,3 +65,23 @@ def test_window_uses_posted_at_when_present():
     call = fake_api({"m1": [{"id": "c9", "text": "yo", "username": "b"}]})
     new, s = dm.run(posted=posted, log=[], token="t", user_id="u", own_username="me", now=NOW, call=call, progress=lambda m: None)
     assert s["sent"] == 1
+
+
+def test_resolve_media_ids_fills_blank_ids_by_permalink_once():
+    """손으로 적은 게시 기록(게시물 번호 없음)도 주소로 번호를 찾아 DM 대상이 된다. 채울 게 없으면 호출하지 않는다."""
+    calls = []
+
+    def call(method, path, token, params=None, body=None):
+        calls.append((method, path, params))
+        return {"data": [{"id": "111", "permalink": "https://www.instagram.com/p/AAA/"},
+                         {"id": "222", "permalink": "https://www.instagram.com/reel/CCC/"}]}
+
+    iso = NOW.isoformat()
+    posted = [{"permalink": "https://www.instagram.com/p/AAA/", "media_id": "", "dm_text": "x", "posted_at": iso},
+              {"permalink": "https://www.instagram.com/p/BBB/", "media_id": "m9", "dm_text": "y", "posted_at": iso},
+              {"permalink": "https://www.instagram.com/reel/CCC/", "media_id": "", "dm_text": "", "posted_at": iso},        # DM 글 아님
+              {"permalink": "https://www.instagram.com/p/DDD/", "media_id": "", "dm_text": "z", "date": "2026-08-01"}]     # 7일 지남
+    assert dm.resolve_media_ids(posted, "t", "u", NOW, call=call, progress=lambda m: None) == 1
+    assert posted[0]["media_id"] == "111" and posted[2]["media_id"] == "" and posted[3]["media_id"] == ""
+    assert calls == [("GET", "u/media", {"fields": "id,permalink", "limit": 50})]
+    assert dm.resolve_media_ids(posted, "t", "u", NOW, call=call, progress=lambda m: None) == 0 and len(calls) == 1
