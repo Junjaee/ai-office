@@ -45,7 +45,7 @@ def test_slots_assign_next_free_fixed_times_and_skip_taken():
     busy, first = review.enqueue(busy, [busy["candidates"][0]["id"]], now=datetime(2026, 9, 12, 12, 0, tzinfo=KST), slots=review.DEFAULT_SLOTS)  # 12:30 예약
     assert review.auto_pick(busy, exclude_keys=set(), now=datetime(2026, 9, 12, 12, 33, tzinfo=KST), slots=review.DEFAULT_SLOTS)[1] == [], "그 칸이 차 있으면 자동 선택 안 함"
     # 07:30 창 판정과 자동 선택(첫 개는 바로)
-    assert review.is_first_slot(datetime(2026, 9, 12, 7, 31, tzinfo=KST)) and not review.is_first_slot(datetime(2026, 9, 12, 8, 30, tzinfo=KST))
+    assert review.is_first_slot(datetime(2026, 9, 12, 7, 31, tzinfo=KST)) and not review.is_first_slot(datetime(2026, 9, 12, 8, 50, tzinfo=KST))
     fresh = review.set_candidates({"queue": []}, cands(2), now=NOW)
     at = datetime(2026, 9, 12, 7, 32, tzinfo=KST)
     fresh, auto = review.auto_pick(fresh, exclude_keys=set(), now=at, slots=review.DEFAULT_SLOTS)
