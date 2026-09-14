@@ -97,6 +97,7 @@ def step_topic(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, ar
             c = cands[i]
             chosen.append({"key": c.key, "title": c.title, "link": c.link, "source": c.source,
                            "summary": c.summary, "angle": pk.get("angle", ""), "reason": pk.get("reason", "")})
+    chosen = [c for c in chosen if not review.is_repeat(c, recent)] or chosen
     if not chosen:
         raise RuntimeError("편집장이 고른 번호가 후보 범위를 벗어났습니다")
     data = {"candidates": rows, "chosen": chosen, "failed_sources": failed, "n_candidates": len(cands),
@@ -317,7 +318,10 @@ def do_topics(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, args, progress
         raise RuntimeError("소재 후보가 없습니다 (출처 전부 실패: " + "; ".join(failed[:3]) + ")")
     limit = int(acct.get("candidates_to_llm", 30)) + len(watched) + len(foreign)
     want = int(acct.get("review_count", 10))
+    recent = recent_titles(load_posted(args.account))
     rows = sources.as_prompt_rows(cands, limit)
+    if recent:
+        rows += "\n\n[이미 올린 주제 — 같은 내용·같은 소식은 고르지 않는다]\n" + "\n".join(f"- {t}" for t in recent[-40:])
     s_, u_ = writer.pick_prompt(p, rows, want)
     picks = llm.json(system=s_, user=u_, schema=writer.PICK_SCHEMA)["picks"]
     chosen = []
@@ -426,6 +430,16 @@ def do_auto(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, args,
     return result
 
 
+def recent_titles(rows: list[dict], days: int = 21) -> list[str]:
+    """최근 올린 글의 제목·소재 제목 — 같은 주제를 또 고르지 않게 편집장·자동 선택에 준다."""
+    cutoff = (datetime.now(KST) - timedelta(days=days)).strftime("%Y-%m-%d")
+    out: list[str] = []
+    for r in rows:
+        if str(r.get("date", "")) >= cutoff:
+            out += [str(r.get("hook") or ""), str(r.get("title") or "")]
+    return [t for t in out if t]
+
+
 def slots_of(acct: dict) -> tuple:
     """계정 설정의 고정 게시 시간대 (기본 07:30·12:30·18:30)."""
     return tuple(str(x) for x in (acct.get("slots") or review.DEFAULT_SLOTS))
@@ -438,8 +452,10 @@ def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, ar
     now = datetime.now(KST)
     slot = review.in_slot_window(now, slots_of(acct))
     if slot and int(acct.get("auto_pick", 1)) > 0:      # 시간대 창인데 그 칸이 비어 있으면 편집장 1순위를 자동 선택 (사용자 위임 2026-09-14)
-        posted = {r.get("key", "") for r in load_posted(args.account)}
-        data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=int(acct.get("auto_pick", 1)), slots=slots_of(acct))
+        rows = load_posted(args.account)
+        posted = {r.get("key", "") for r in rows}
+        data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=int(acct.get("auto_pick", 1)), slots=slots_of(acct),
+                                       posted_titles=recent_titles(rows))
         if added:
             review.save(path, data)
             commit_paths([path], f"insta({args.account}): 자동 선택 {len(added)}건 {now:%Y-%m-%d %H:%M}")

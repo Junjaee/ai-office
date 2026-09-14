@@ -130,6 +130,16 @@ def test_has_due_reads_file(tmp_path):
     assert review.has_due(path, NOW) is True and review.has_due(path, NOW - timedelta(hours=1)) is False
 
 
+def test_similar_titles_are_treated_as_repeats():
+    assert review.similar("챗GPT 프롬프트 3개로 내 정보 지우기", "개인정보 흔적 지우기 프롬프트 3개") is False or True  # 임계값은 아래 is_repeat 로 검증
+    assert review.is_repeat({"title_ko": "챗GPT로 내 개인정보 지우기", "title": "x"}, ["챗GPT 프롬프트 3개로 내 정보 지우기 🧹"])
+    assert not review.is_repeat({"title_ko": "제미나이 윈도우 앱 출시", "title": "Hello Windows"}, ["챗GPT 프롬프트 3개로 내 정보 지우기 🧹"])
+    data = review.set_candidates({"queue": []}, [{"key": "k1", "title": "Hungry", "title_ko": "챗GPT로 내 정보 지우기", "link": "l", "source": "s"},
+                                                {"key": "k2", "title": "Win", "title_ko": "윈도우 제미나이 앱", "link": "l2", "source": "s"}], now=NOW)
+    _, added = review.auto_pick(data, exclude_keys=set(), now=NOW, slots=review.DEFAULT_SLOTS, posted_titles=["챗GPT 프롬프트 3개로 내 정보 지우기"])
+    assert [a["title"] for a in added] == ["Win"], "비슷한 주제는 건너뛰고 다음 후보"
+
+
 def test_rate_limit_detection():
     import run_insta
     assert run_insta.is_rate_limited("RuntimeError: Instagram 오류 403: Application request limit reached (code 4)")

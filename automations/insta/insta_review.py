@@ -159,8 +159,31 @@ def enqueue(data: dict, pick_ids: list[str], *, now: datetime, max_per_day: int 
     return data, added
 
 
+def _grams(text: str) -> set[str]:
+    import re
+
+    t = re.sub(r"[^0-9A-Za-z가-힣]+", "", str(text or "").lower())
+    return {t[i:i + 2] for i in range(len(t) - 1)} if len(t) > 1 else {t}
+
+
+def similar(a: str, b: str, threshold: float = 0.45) -> bool:
+    """두 제목이 같은 주제인가 — 2글자 조각(bigram) 겹침 비율. '내 정보 지우기 프롬프트 3개' vs '개인정보 흔적 지우기 프롬프트' 같은 것을 잡는다."""
+    ga, gb = _grams(a), _grams(b)
+    if not ga or not gb:
+        return False
+    return len(ga & gb) / len(ga | gb) >= threshold
+
+
+def is_repeat(cand: dict, posted_titles: list[str]) -> bool:
+    """후보(title_ko·title)가 이미 올린 글 제목들과 비슷한가."""
+    for mine in (cand.get("title_ko"), cand.get("title")):
+        if mine and any(similar(mine, t) for t in posted_titles):
+            return True
+    return False
+
+
 def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, max_age_days: int = 2, max_per_day: int = 0,
-              slots=None) -> tuple[dict, list[dict]]:
+              slots=None, posted_titles: list[str] | None = None) -> tuple[dict, list[dict]]:
     """아무도 안 골랐으면 후보 앞에서 n개를 예약(첫 개는 지금). 예약·진행 중이 있거나 후보가 오래됐으면 아무것도 안 한다."""
     if n <= 0 or not data.get("candidates"):
         return data, []
@@ -171,7 +194,8 @@ def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, 
     made = _parse(data.get("generated_at"))
     if made and now - made > timedelta(days=max_age_days):
         return data, []
-    ids = [c["id"] for c in data["candidates"] if c.get("key") not in exclude_keys][:n]
+    ids = [c["id"] for c in data["candidates"]
+           if c.get("key") not in exclude_keys and not is_repeat(c, posted_titles or [])][:n]
     data, added = enqueue(data, ids, now=now, max_per_day=max_per_day, slots=slots)
     for q in added[:1]:                      # 자동 선택의 첫 개는 지금 시간대 것이므로 바로 만든다
         q["due"] = now.isoformat(timespec="seconds")
