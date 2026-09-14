@@ -165,6 +165,8 @@ def step_card(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, wri
     """기사 → 카드 계획(문단마다 한 장으로 요약 + 사진 번호) → 렌더."""
     import insta_cards as cards
 
+    if p.brand:                                   # 계정별 브랜드 라벨 (육아·혜택 계정 카드에 'AI TIPS' 가 찍히지 않게)
+        cards.BRAND = p.brand
     topic = json.loads((out / "topic.json").read_text(encoding="utf-8"))
     result = []
     for i, item in enumerate(written["posts"], 1):
@@ -213,6 +215,52 @@ def step_video(cfg: dict, acct: dict, p: writer.Profile, out: Path, written: dic
         return None
     result = {"dir": str(d), "file": reel["path"], "thumb": str(thumb), "duration": reel["duration"], "credit": credit,
               "source_url": meta.get("page") or meta["url"], "video_url": meta["url"], "kind": found["kind"]}
+    (out / "reel.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
+    return result
+
+
+def step_reel2(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, written: dict, rendered: dict, progress) -> dict | None:
+    """카드 기사 → 편집장이 쓰는 말하는 대본 → 자막 싱크 릴스(insta_reel). 실패하면 None (카드뉴스로 게시).
+    계정 설정: reel_voice_engine (edge | supertonic | none=음악+자막), reel_voice (엣지 목소리 이름 또는 Supertonic F1~M5), reel_bgm."""
+    import insta_reel as reel
+    import insta_video as video
+
+    if not video.tools_ok():
+        progress("ffmpeg 없음 — 릴스 건너뜀")
+        return None
+    card = rendered["cards"][0]
+    d = Path(card["dir"])
+    try:
+        slides = json.loads((d / "slides.json").read_text(encoding="utf-8")) if (d / "slides.json").exists() else []
+        art = written["posts"][0]["article"]
+        kw = str(art.get("dm_keyword") or "")
+        s_, u_ = reel.script_prompt(p.name, p.audience, art, slides, dm_keyword=kw)
+        script = reel.enforce_cta(llm.json(system=s_, user=u_, schema=reel.REEL_SCRIPT_SCHEMA), kw)
+        (out / "reel_script.json").write_text(json.dumps(script, ensure_ascii=False, indent=1), encoding="utf-8")
+        visuals = {i: str(Path(s["image_path"])) for i, s in enumerate(slides) if s.get("image_path") and Path(s["image_path"]).exists()}
+        visuals[-1] = visuals.get(0, "")
+        engine = str(acct.get("reel_voice_engine", "edge"))
+        voice = str(acct.get("reel_voice", "") or "")
+        extra = {}
+        if engine == "supertonic":
+            import insta_supertonic as st
+
+            if st.available():
+                extra["supertonic"] = st.make_speaker(voice or "F1", speed=float(acct.get("reel_speed", 1.2)))
+            else:
+                progress("Supertonic 준비 안 됨 — 엣지 음성으로")
+                engine, voice = "edge", ""
+        if engine == "edge" and not voice.startswith("ko-KR"):
+            voice = "ko-KR-SunHiNeural"
+        res = reel.build(script, d / "reel.mp4", theme=p.theme or {}, visuals=visuals, brand=p.brand or cards_brand(),
+                         engine=None if engine == "none" else engine, voice=voice or "ko-KR-SunHiNeural",
+                         bgm=bool(acct.get("reel_bgm", True)), progress=progress, **extra)
+        thumb = video.thumbnail(res["path"], d / "reel_thumb.jpg", at=0.3)
+    except Exception as exc:  # noqa: BLE001
+        progress(f"릴스 실패({type(exc).__name__}: {str(exc)[:100]}) — 카드뉴스로")
+        return None
+    result = {"dir": str(d), "file": res["path"], "thumb": str(thumb), "duration": res["duration"], "credit": "", "source_url": "",
+              "video_url": "", "kind": "reel2", "script": script}
     (out / "reel.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
     return result
 
@@ -590,9 +638,9 @@ def make_post(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, can
     rendered = step_card(cfg, acct, p, llm, out, written, progress)
     tasks["card"] = (True, f"카드 {len(rendered['cards'][0]['files'])}장")
     # 카드 → 나레이션 릴스 (기본 게시 형태, 사용자 결정 2026-09-14: 팔로워 0 계정은 릴스만 비팔로워에게 배포된다)
-    if str(acct.get("post_kind", "reel")) == "reel":
-        progress("나레이션 릴스 만드는 중")
-        show = step_slideshow(cfg, acct, p, out, rendered, progress)
+    if str(acct.get("post_kind", "carousel")) == "reel":
+        progress("릴스 만드는 중 (말하는 대본 + 자막)")
+        show = step_reel2(cfg, acct, p, llm, out, written, rendered, progress)
         if show:
             tasks["card"] = (True, f"카드 {len(rendered['cards'][0]['files'])}장 → 릴스 {show['duration']:.0f}초")
             lines.append(f"[릴스] 카드 {len(rendered['cards'][0]['files'])}장 나레이션 {show['duration']:.0f}초")

@@ -17,6 +17,9 @@ accounts:
     max_per_day: 3                           # (slots 가 없을 때만) 24÷N 간격의 하루 상한
     reels: true                              # 소재에 영상(공식 유튜브·X·공식 페이지 mp4)이 있으면 카드 대신 릴스로 게시 (출처 표기)
     post_kind: carousel                      # 나레이션 릴스 일시 중지 (2026-09-14 사용자 지적: 나레이션 품질) — 리서치 뒤 다시 켠다
+    reel_voice_engine: edge                  # reel 로 켤 때 목소리: edge(무료 엣지) | supertonic(오픈소스) | none(음악+자막만)
+    reel_voice: ko-KR-SunHiNeural            # 엣지면 ko-KR-SunHiNeural/InJoonNeural/HyunsuMultilingualNeural, supertonic 이면 F1~F5·M1~M5
+    reel_bgm: true                           # 코드로 만든 저작권 없는 배경음악
     next_run: "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)"
 
   parent:                                    # 육아 꿀팁·혜택 (2026-09-14 추가) — 계정 개설·토큰 등록 전까지는 후보만 뽑고 게시는 건너뛴다
