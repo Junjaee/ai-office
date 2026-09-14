@@ -20,7 +20,7 @@ accounts:
 
   parent:                                    # 육아 꿀팁·혜택 (2026-09-14 추가) — 계정 개설·토큰 등록 전까지는 후보만 뽑고 게시는 건너뛴다
     profile: parent
-    handle: "@momtips.kr"                    # 실제 계정을 만들면 그 사용자 이름으로 (프로필 yaml 도 같이)
+    handle: "@yugatips.kr"                   # 실제 계정을 만들면 그 사용자 이름으로 (프로필 yaml 도 같이). 성별 중립 이름
     dept: strategy2
     result_link: "https://www.instagram.com/"
     posts_per_run: 1
