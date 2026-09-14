@@ -81,3 +81,16 @@ def test_paid_voice_failure_falls_back_to_edge(tmp_path, monkeypatch):
     with pytest.raises(RuntimeError):                                   # 무료 엔진 오류는 숨기지 않는다
         monkeypatch.setattr(reel, "_edge", lambda *a: (_ for _ in ()).throw(RuntimeError("x")))
         reel.speak(reel.parts_of(SCRIPT), tmp_path / "e", engine="edge")
+
+
+@pytest.mark.skipif(not shutil.which("ffmpeg"), reason="ffmpeg 없음")
+def test_tighten_shortens_long_pause_but_keeps_speech(tmp_path):
+    """3초 소리 중 0.8~2.0초를 무음으로 만든 파일: 1.2초 쉼이 0.32초로 줄어 약 2.1초가 된다."""
+    wav = tmp_path / "a.wav"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=300:duration=3",
+                    "-af", "volume=enable='between(t,0.8,2.0)':volume=0", str(wav)], check=True)
+    before = reel.duration_of(wav)
+    reel.tighten(wav)
+    after = reel.duration_of(wav)
+    assert 2.9 <= before <= 3.1 and 1.8 <= after <= 2.5, (before, after)
+    assert not (tmp_path / "a_t.wav").exists()

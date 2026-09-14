@@ -186,6 +186,27 @@ def google_tts(text: str, out: Path, *, voice: str = "ko-KR-Chirp3-HD-Kore", rat
     Path(out).write_bytes(base64.b64decode(r.json()["audioContent"]))
 
 
+TIGHTEN = ("silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05,areverse,"
+           "silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.08,areverse,"
+           "silenceremove=stop_periods=-1:stop_duration=0.32:stop_threshold=-45dB:stop_silence=0.32")
+
+
+def tighten(path) -> None:
+    """유료 목소리(타입캐스트 등)의 앞뒤 무음을 자르고, 0.32초보다 긴 쉼을 0.32초로 줄인다.
+    필재 샘플 실측: 말소리 길이는 그대로, 전체 약 9% 짧아짐. 쇼츠 제작 강의도 문장 사이 공백을 없애라고 권한다.
+    실패하거나 원본의 60% 밑으로 줄면(말이 잘린 것) 원본을 그대로 둔다."""
+    src = Path(path)
+    tmp = src.with_name(src.stem + "_t" + src.suffix)
+    try:
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-af", TIGHTEN, str(tmp)], check=True, capture_output=True)
+        if duration_of(tmp) >= 0.6 * duration_of(src):
+            tmp.replace(src)
+    except Exception:  # noqa: BLE001
+        pass
+    finally:
+        tmp.unlink(missing_ok=True)
+
+
 def speak(parts: list[dict], work: Path, *, engine: str = "edge", voice: str = "ko-KR-SunHiNeural", rate: str = "+20%",
           supertonic=None, tts_opts: dict | None = None, progress=print) -> str:
     """구간마다 음성 파일(p['audio'])과 길이(p['dur'])와 단어 시각(p['words'])을 채우고, 실제로 쓴 엔진 이름을 돌려준다.
@@ -217,11 +238,13 @@ def _speak_once(parts: list[dict], work: Path, *, engine: str, voice: str, rate:
         elif engine == "typecast":
             wav = work / f"say{i:02d}.wav"
             typecast_tts(p["say"], wav, voice_id=voice, **(tts_opts or {}))
+            tighten(wav)
             p["audio"] = str(wav)
             p["words"] = []
         elif engine == "google":
             gm = work / f"say{i:02d}.mp3"
             google_tts(p["say"], gm, voice=voice or "ko-KR-Chirp3-HD-Kore", **(tts_opts or {}))
+            tighten(gm)
             p["audio"] = str(gm)
             p["words"] = []
         else:
