@@ -217,6 +217,30 @@ def step_video(cfg: dict, acct: dict, p: writer.Profile, out: Path, written: dic
     return result
 
 
+def step_slideshow(cfg: dict, acct: dict, p: writer.Profile, out: Path, rendered: dict, progress) -> dict | None:
+    """렌더한 카드들 → 나레이션 릴스(mp4 + 대표 화면). 실패하면 None (카드뉴스로 게시)."""
+    import insta_slideshow as ss
+    import insta_video as video
+
+    if not video.tools_ok():
+        progress("ffmpeg 없음 — 릴스 건너뜀")
+        return None
+    card = rendered["cards"][0]
+    d = Path(card["dir"])
+    try:
+        slides = json.loads((d / "slides.json").read_text(encoding="utf-8")) if (d / "slides.json").exists() else []
+        res = ss.build([Path(f) for f in card["files"]], slides, d / "reel.mp4", voice=str(getattr(p, "tts_voice", "") or ss.DEFAULT_VOICE),
+                       cta_prefix="", progress=progress)
+        thumb = video.thumbnail(res["path"], d / "reel_thumb.jpg", at=0.5)
+    except Exception as exc:  # noqa: BLE001
+        progress(f"나레이션 릴스 실패({type(exc).__name__}: {str(exc)[:80]})")
+        return None
+    result = {"dir": str(d), "file": res["path"], "thumb": str(thumb), "duration": res["duration"], "credit": "", "source_url": "",
+              "video_url": "", "kind": "slideshow", "narration": res.get("narration", [])}
+    (out / "reel.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
+    return result
+
+
 def cards_brand() -> str:
     import insta_cards as cards
 
@@ -234,12 +258,13 @@ def step_upload_reel(cfg: dict, acct: dict, out: Path, written: dict, reel: dict
     stamp = datetime.now(KST).strftime("%H%M%S")
     urls = pub.upload_public([Path(reel["file"]), Path(reel["thumb"])], f"insta/{args.account}/{today}-{stamp}")
     progress("영상 공개 URL 준비")
-    caption = post["caption"].rstrip() + f"\n\n{reel['credit']}\n{reel['source_url']}\n\n" + " ".join(post["hashtags"])
+    credit_block = f"\n\n{reel['credit']}\n{reel['source_url']}" if reel.get("credit") else ""
+    caption = post["caption"].rstrip() + credit_block + "\n\n" + " ".join(post["hashtags"])
     res = pub.publish_reel(ig, urls[0], caption, cover_url=urls[1] if len(urls) > 1 else "", progress=progress)
     row = {"date": today, "account": args.account, "key": item["candidate"]["key"], "title": item["candidate"]["title"],
            "hook": post["title"], "media_id": res["media_id"], "permalink": res["permalink"] or profile_link(acct), "video_url": urls[0],
            "posted_at": datetime.now(KST).isoformat(timespec="seconds"), "dm_keyword": post.get("dm_keyword", ""), "dm_text": post.get("dm_text", ""),
-           "kind": "reel", "credit": reel["credit"], "provider": item.get("provider", "")}
+           "kind": reel.get("kind") or "reel", "credit": reel.get("credit", ""), "provider": item.get("provider", "")}
     append_posted(args.account, row)
     progress(f"릴스 게시 완료 {res['permalink']}")
     commit_data(args.account, today)
@@ -564,6 +589,23 @@ def make_post(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, can
     progress("카드 만드는 중")
     rendered = step_card(cfg, acct, p, llm, out, written, progress)
     tasks["card"] = (True, f"카드 {len(rendered['cards'][0]['files'])}장")
+    # 카드 → 나레이션 릴스 (기본 게시 형태, 사용자 결정 2026-09-14: 팔로워 0 계정은 릴스만 비팔로워에게 배포된다)
+    if str(acct.get("post_kind", "reel")) == "reel":
+        progress("나레이션 릴스 만드는 중")
+        show = step_slideshow(cfg, acct, p, out, rendered, progress)
+        if show:
+            tasks["card"] = (True, f"카드 {len(rendered['cards'][0]['files'])}장 → 릴스 {show['duration']:.0f}초")
+            lines.append(f"[릴스] 카드 {len(rendered['cards'][0]['files'])}장 나레이션 {show['duration']:.0f}초")
+            if args.dry_run:
+                lines.append(f"[릴스] {show['file']} (dry-run: 게시 안 함)")
+                return {"ok": True, "permalink": "", "tasks": tasks, "lines": lines}
+            progress("릴스 올리는 중")
+            uploaded = step_upload_reel(cfg, acct, out, written, show, args, progress)
+            n = len(uploaded["published"])
+            tasks["upload"] = (n > 0, f"{n}건 게시(릴스)")
+            lines += [f"[게시] {r['permalink']}" for r in uploaded["published"]]
+            return {"ok": n > 0, "permalink": uploaded["published"][0]["permalink"] if n else "", "tasks": tasks, "lines": lines}
+        lines.append("[릴스] 나레이션 실패 — 카드뉴스로 게시")
     if args.dry_run:
         lines.append(f"[카드] {rendered['cards'][0]['preview']} (dry-run: 게시 안 함)")
         return {"ok": True, "permalink": "", "tasks": tasks, "lines": lines}
