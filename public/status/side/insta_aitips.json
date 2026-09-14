@@ -3,47 +3,49 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 1건, 실패 0건, 누적 17건, 16.9분",
+  "summary": "게시 0건, 실패 0건, 누적 17건, 2.6분",
   "counts": {
-    "new": 1,
+    "new": 0,
     "failed": 0,
     "total": 17
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 1건, 실패 0건, 누적 17건, 16.9분",
-    "[기사] 1편 반응이 뜨거워서 가져온 2편, 4967만 뷰 찍었어요 · 검수 41점",
-    "[릴스] 카드 8장 나레이션 37초",
-    "[게시] https://www.instagram.com/reel/DdSUt4oiRnB/"
+    "게시 0건, 실패 0건, 누적 17건, 2.6분",
+    "[후보] 영상 만들 때 열어 볼 자료실 3곳이 전부 무료입니다 — IG 🇰🇷 @prompt_what · 좋아요 1.9천 · 댓글 2.0천",
+    "[후보] 🇺🇸빈자리 BREAKING: Apple is rolling out iOS 27 to all users today, an — IG 🇺🇸 @evolving.ai · 좋아요 9.8천 · 댓글 307",
+    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.3천 · 댓글 717",
+    "[후보] ”연동 없이 다 뚫는 AI 브라우저 윈도우 버전 출시“ — IG 🇰🇷 @ai_freaks.kr · 좋아요 620 · 댓글 996"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34907965301,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34907965301",
-  "trigger": "schedule",
-  "started_at": "2026-09-15T08:16:09+09:00",
-  "duration_sec": 1015,
+  "run_id": 34910958641,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34910958641",
+  "request_id": "cron-202609142355",
+  "trigger": "manual",
+  "started_at": "2026-09-15T08:56:03+09:00",
+  "duration_sec": 153,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 0건 · 게시 3건"
+      "summary": "후보 20건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
-      "status": "done",
-      "summary": "검수 41점 (claude_cli)"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "card",
-      "status": "done",
-      "summary": "카드 8장 → 릴스 37초"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "upload",
-      "status": "done",
-      "summary": "1건 게시(릴스)"
+      "status": "idle",
+      "summary": ""
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-15T08:33:05+09:00"
+  "updated_at": "2026-09-15T08:58:37+09:00"
 }
