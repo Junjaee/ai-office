@@ -3,48 +3,47 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 15건, 3.6분",
+  "summary": "게시 1건, 실패 0건, 누적 16건, 10.0분",
   "counts": {
-    "new": 0,
+    "new": 1,
     "failed": 0,
-    "total": 15
+    "total": 16
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 15건, 3.6분",
-    "[후보] 요즘 엄청 바이럴되는 뮤직비디오 훔치는 방법 ‍ — IG 🇰🇷 @prompt_what · 좋아요 2.7천 · 댓글 3.5천",
-    "[후보] 1편 반응이 뜨거워서 2편을 가져왔는데요, 이건 벌써 4967만 명이 봤습니다 — IG 🇰🇷 @ai.trend.kr · 좋아요 1.4만 · 댓글 108",
-    "[후보] 🇺🇸빈자리 Flylock is a demo built on a whole-brain simulation of the f — IG 🇺🇸 @evolving.ai · 좋아요 1.2만 · 댓글 172",
-    "[후보] 🇺🇸빈자리 In 1991, Terminator 2 showed two machines having a conversat — IG 🇺🇸 @evolving.ai · 좋아요 8.7천 · 댓글 226"
+    "게시 1건, 실패 0건, 누적 16건, 10.0분",
+    "[기사] 요즘 엄청 바이럴되는 뮤비, 사진 2장이면 훔쳐요 · 검수 38점",
+    "[게시] https://www.instagram.com/p/DdQ3qUxoCNB/"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34820800063,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34820800063",
-  "trigger": "schedule",
-  "started_at": "2026-09-14T17:04:51+09:00",
-  "duration_sec": 214,
+  "run_id": 34829904787,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34829904787",
+  "request_id": "check-202609140948",
+  "trigger": "manual",
+  "started_at": "2026-09-14T18:50:03+09:00",
+  "duration_sec": 600,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 사이트에서 골라 주세요"
+      "summary": "후보 20건 · 예약 0건 · 게시 2건"
     },
     {
       "id": "write",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "검수 38점 (claude_cli)"
     },
     {
       "id": "card",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "카드 8장"
     },
     {
       "id": "upload",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "1건 게시"
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-14T17:08:27+09:00"
+  "updated_at": "2026-09-14T19:00:04+09:00"
 }
