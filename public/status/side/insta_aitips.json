@@ -3,32 +3,32 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 15건, 5.2분",
+  "summary": "게시 0건, 실패 0건, 누적 10건, 4초",
   "counts": {
     "new": 0,
     "failed": 0,
-    "total": 15
+    "total": 10
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 15건, 5.2분",
-    "[후보] 요즘 엄청 바이럴되는 뮤직비디오 훔치는 방법 ‍ — IG 🇰🇷 @prompt_what · 좋아요 2.7천 · 댓글 3.5천",
-    "[후보] 1편 반응이 뜨거워서 2편을 가져왔는데요, 이건 벌써 4967만 명이 봤습니다 — IG 🇰🇷 @ai.trend.kr · 좋아요 1.4만 · 댓글 107",
-    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.2천 · 댓글 667",
-    "[후보] Flylock is a demo built on a whole-brain simulation of the f — IG 🇺🇸 @evolving.ai · 좋아요 1.2만 · 댓글 171"
+    "게시 0건, 실패 0건, 누적 10건, 4초",
+    "[계정] 팔로워 3 · 게시물 13",
+    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 챗GPT 프롬프트 3개로 내 정보 지우기",
+    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 카페 사진 한 장, 화보로 바꾸는 법",
+    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 오픈AI, 말 끊김 80% 줄인 음성 AI 공개"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34810866552,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34810866552",
-  "request_id": "req-20260914144635-16te",
+  "run_id": 34815370614,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34815370614",
+  "request_id": "req-20260914155338-stats",
   "trigger": "manual",
-  "started_at": "2026-09-14T14:47:53+09:00",
-  "duration_sec": 313,
+  "started_at": "2026-09-14T15:55:15+09:00",
+  "duration_sec": 4,
   "tasks": [
     {
       "id": "topic",
-      "status": "done",
-      "summary": "후보 20건 · 사이트에서 골라 주세요"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "write",
@@ -42,10 +42,10 @@
     },
     {
       "id": "upload",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "팔로워 3 · 지표 10건"
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-14T14:53:06+09:00"
+  "updated_at": "2026-09-14T15:55:19+09:00"
 }
