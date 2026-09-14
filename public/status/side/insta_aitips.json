@@ -1,38 +1,38 @@
 {
   "name": "인스타 게시글 · aitips",
   "dept": "research",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 1건, 누적 14건, 8.1분",
+  "summary": "게시 0건, 실패 0건, 누적 14건, 8.7분",
   "counts": {
     "new": 0,
-    "failed": 1,
+    "failed": 0,
     "total": 14
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 1건, 누적 14건, 8.1분",
+    "게시 0건, 실패 0건, 누적 14건, 8.7분",
     "[자동 선택] 1건 · 07:30 첫 게시",
-    "[기사] 프롬프트 3개면 옛 연락처 지울 수 있어요 · 검수 34점",
-    "[보류] 핵심 문제: 기사 전체가 '챗GPT 워크 모드'라는 특정 기능명을 기정사실처럼 반복 사용하는데, claims에 이 기능(명칭·존재·웹검색으로 표 생성·매주 자동 재검색)을 뒷받침하"
+    "[대기] 인스타 요청 한도 — 09/14 18:30 에 다시 시도(1/2): His wife called asking for his credit ca",
+    "[실패] His wife called asking for his credit ca — RuntimeError"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34807790130,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34807790130",
-  "request_id": "req-20260914135534-autonow",
+  "run_id": 34808405638,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34808405638",
+  "request_id": "req-20260914140617-autonow2",
   "trigger": "manual",
-  "started_at": "2026-09-14T13:56:42+09:00",
-  "duration_sec": 483,
+  "started_at": "2026-09-14T14:07:17+09:00",
+  "duration_sec": 519,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 0건 · 게시 3건"
+      "summary": "후보 20건 · 예약 1건 · 게시 3건"
     },
     {
       "id": "write",
-      "status": "error",
-      "summary": "검수 34점 (claude_cli)"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "card",
@@ -46,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-14T14:04:45+09:00"
+  "updated_at": "2026-09-14T14:15:57+09:00"
 }
