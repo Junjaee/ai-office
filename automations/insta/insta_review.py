@@ -166,12 +166,13 @@ def _grams(text: str) -> set[str]:
     return {t[i:i + 2] for i in range(len(t) - 1)} if len(t) > 1 else {t}
 
 
-def similar(a: str, b: str, threshold: float = 0.45) -> bool:
-    """두 제목이 같은 주제인가 — 2글자 조각(bigram) 겹침 비율. '내 정보 지우기 프롬프트 3개' vs '개인정보 흔적 지우기 프롬프트' 같은 것을 잡는다."""
+def similar(a: str, b: str, threshold: float = 0.6) -> bool:
+    """두 제목이 같은 주제인가 — 2글자 조각(bigram)이 짧은 쪽 기준으로 threshold 이상 겹치면 같은 주제.
+    '챗GPT로 내 개인정보 지우기' vs '챗GPT 프롬프트 3개로 내 정보 지우기' 같은 것을 잡는다."""
     ga, gb = _grams(a), _grams(b)
-    if not ga or not gb:
+    if len(ga) < 4 or len(gb) < 4:
         return False
-    return len(ga & gb) / len(ga | gb) >= threshold
+    return len(ga & gb) / min(len(ga), len(gb)) >= threshold
 
 
 def is_repeat(cand: dict, posted_titles: list[str]) -> bool:

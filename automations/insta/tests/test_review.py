@@ -131,7 +131,6 @@ def test_has_due_reads_file(tmp_path):
 
 
 def test_similar_titles_are_treated_as_repeats():
-    assert review.similar("챗GPT 프롬프트 3개로 내 정보 지우기", "개인정보 흔적 지우기 프롬프트 3개") is False or True  # 임계값은 아래 is_repeat 로 검증
     assert review.is_repeat({"title_ko": "챗GPT로 내 개인정보 지우기", "title": "x"}, ["챗GPT 프롬프트 3개로 내 정보 지우기 🧹"])
     assert not review.is_repeat({"title_ko": "제미나이 윈도우 앱 출시", "title": "Hello Windows"}, ["챗GPT 프롬프트 3개로 내 정보 지우기 🧹"])
     data = review.set_candidates({"queue": []}, [{"key": "k1", "title": "Hungry", "title_ko": "챗GPT로 내 정보 지우기", "link": "l", "source": "s"},
