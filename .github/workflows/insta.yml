@@ -4,6 +4,8 @@ on:
   schedule:
     # 매일 06:30 KST — 밤사이 미국 소식까지 넣어 후보 10개를 검토 칸에 올림 (UTC 21:30 전날)
     - cron: "30 21 * * *"
+    # 매일 11:30 KST — 오전 소식으로 후보 새로 고침 (12:30·18:30 자동 선정용, UTC 02:30)
+    - cron: "30 2 * * *"
     # 매시 30분 — 예약 게시 (게시 시간대 07:30·12:30·18:30 과 맞춤). 07:30 창에서 예약이 없으면 1순위 자동 선택 (사용자 결정 2026-09-12)
     - cron: "30 * * * *"
   workflow_dispatch:
@@ -59,7 +61,7 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
             case "${{ github.event.schedule }}" in
-              "30 21 * * *") MODE=topics ;;
+              "30 21 * * *"|"30 2 * * *") MODE=topics ;;
               *) MODE=publish ;;
             esac
           else

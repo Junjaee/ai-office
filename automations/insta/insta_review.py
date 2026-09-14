@@ -162,7 +162,11 @@ def enqueue(data: dict, pick_ids: list[str], *, now: datetime, max_per_day: int 
 def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, max_age_days: int = 2, max_per_day: int = 0,
               slots=None) -> tuple[dict, list[dict]]:
     """아무도 안 골랐으면 후보 앞에서 n개를 예약(첫 개는 지금). 예약·진행 중이 있거나 후보가 오래됐으면 아무것도 안 한다."""
-    if n <= 0 or active_keys(data) or not data.get("candidates"):
+    if n <= 0 or not data.get("candidates"):
+        return data, []
+    # 이 시간대에 이미 예약·진행 중인 것(지금 만들 차례이거나 60분 안에 예정)이 있으면 안 한다 — 뒤 시간대 예약은 상관없다
+    soon = [t for t in active_dues(data) if t <= now + timedelta(minutes=60)]
+    if soon:
         return data, []
     made = _parse(data.get("generated_at"))
     if made and now - made > timedelta(days=max_age_days):
@@ -174,12 +178,19 @@ def auto_pick(data: dict, *, exclude_keys: set[str], now: datetime, n: int = 1, 
     return data, added
 
 
-def is_first_slot(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 59) -> bool:
-    """지금이 하루 첫 시간대(07:30) 창 안인가 — 매시 확인 실행이 이때 자동 선택을 한다."""
-    h, m = (int(x) for x in str(slots[0]).split(":"))
+def in_slot_window(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 59) -> str:
+    """지금이 어느 게시 시간대 창(시작~59분) 안이면 그 시간대("07:30"), 아니면 빈 문자열. 매시 확인 실행이 이때 자동 선택을 한다(전 시간대, 사용자 위임 2026-09-14)."""
     t = now.astimezone(KST)
-    start = t.replace(hour=h, minute=m, second=0, microsecond=0)
-    return start <= t < start + timedelta(minutes=window_min)
+    for hm in slots:
+        h, m = (int(x) for x in str(hm).split(":"))
+        start = t.replace(hour=h, minute=m, second=0, microsecond=0)
+        if start <= t < start + timedelta(minutes=window_min):
+            return str(hm)
+    return ""
+
+
+def is_first_slot(now: datetime, slots=DEFAULT_SLOTS, window_min: int = 59) -> bool:
+    return in_slot_window(now, slots, window_min) == str(slots[0])
 
 
 def parse_edits(text: str) -> list[tuple[str, str]]:

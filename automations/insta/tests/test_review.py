@@ -39,6 +39,11 @@ def test_slots_assign_next_free_fixed_times_and_skip_taken():
     assert [x["due"][11:16] for x in a] == ["12:30", "18:30"]
     data, b = review.enqueue(data, ids[2:], now=NOW, slots=review.DEFAULT_SLOTS)
     assert b[0]["due"].startswith("2026-09-13T07:30"), "이미 찬 칸은 건너뛰고 다음 날 첫 칸"
+    # 시간대 창 판정: 12:30 창도 자동 선택 대상 (전 시간대 자동, 2026-09-14)
+    assert review.in_slot_window(datetime(2026, 9, 12, 12, 35, tzinfo=KST)) == "12:30" and review.in_slot_window(datetime(2026, 9, 12, 10, 0, tzinfo=KST)) == ""
+    busy = review.set_candidates({"queue": []}, cands(2), now=NOW)
+    busy, first = review.enqueue(busy, [busy["candidates"][0]["id"]], now=datetime(2026, 9, 12, 12, 0, tzinfo=KST), slots=review.DEFAULT_SLOTS)  # 12:30 예약
+    assert review.auto_pick(busy, exclude_keys=set(), now=datetime(2026, 9, 12, 12, 33, tzinfo=KST), slots=review.DEFAULT_SLOTS)[1] == [], "그 칸이 차 있으면 자동 선택 안 함"
     # 07:30 창 판정과 자동 선택(첫 개는 바로)
     assert review.is_first_slot(datetime(2026, 9, 12, 7, 31, tzinfo=KST)) and not review.is_first_slot(datetime(2026, 9, 12, 8, 30, tzinfo=KST))
     fresh = review.set_candidates({"queue": []}, cands(2), now=NOW)

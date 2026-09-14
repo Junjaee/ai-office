@@ -27,15 +27,18 @@ def discovery_env() -> tuple[str, str]:
     return os.environ.get("IG_DISCOVERY_TOKEN", "").strip(), os.environ.get("IG_DISCOVERY_USER_ID", "").strip()
 
 
-def fetch_account(username: str, *, token: str, user_id: str, limit: int = 12, timeout: int = 30,
+def fetch_account(username: str, *, token: str, user_id: str, limit: int = 8, timeout: int = 30,
                   session: requests.Session | None = None) -> list[dict]:
     """계정 하나의 최근 게시물 [{caption, permalink, timestamp, like_count, comments_count, media_type}]."""
     sess = session or requests.Session()
     fields = f"business_discovery.username({username}){{{FIELDS.format(limit=limit)}}}"
     r = sess.get(f"{GRAPH}/{user_id}", params={"fields": fields, "access_token": token},
                  headers={"User-Agent": UA}, timeout=timeout)
+    usage = r.headers.get("X-App-Usage")
+    if usage and any(x in usage for x in ('"call_count":9', '"total_time":9', '"total_cputime":9', '"call_count":8')):
+        print(f"  ⚠ 참고 계정 조회 API 사용량 높음 {usage}")
     if not r.ok:
-        raise RuntimeError(f"{username}: HTTP {r.status_code} {r.text[:120]}")
+        raise RuntimeError(f"{username}: HTTP {r.status_code} {r.text[:120]}" + (f" 사용량 {usage}" if usage else ""))
     data = r.json().get("business_discovery", {}).get("media", {}).get("data", [])
     return [d for d in data if d.get("caption")]
 

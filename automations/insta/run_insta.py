@@ -436,14 +436,15 @@ def do_publish(cfg: dict, acct: dict, p: writer.Profile, refs: str, llm: LLM, ar
     path = review_file(cfg, args.account)
     data = review.load(path)
     now = datetime.now(KST)
-    if review.is_first_slot(now, slots_of(acct)) and int(acct.get("auto_pick", 1)) > 0:
+    slot = review.in_slot_window(now, slots_of(acct))
+    if slot and int(acct.get("auto_pick", 1)) > 0:      # 시간대 창인데 그 칸이 비어 있으면 편집장 1순위를 자동 선택 (사용자 위임 2026-09-14)
         posted = {r.get("key", "") for r in load_posted(args.account)}
         data, added = review.auto_pick(data, exclude_keys=posted, now=now, n=int(acct.get("auto_pick", 1)), slots=slots_of(acct))
         if added:
             review.save(path, data)
             commit_paths([path], f"insta({args.account}): 자동 선택 {len(added)}건 {now:%Y-%m-%d %H:%M}")
             for q in added:
-                progress(f"자동 선택(07:30) — {q['title'][:50]}")
+                progress(f"자동 선택({slot}) — {q['title'][:50]}")
     due = review.due_items(data, now)
     tasks: dict[str, tuple[bool, str]] = {"topic": (True, review.summarize(data))}
     lines: list[str] = []

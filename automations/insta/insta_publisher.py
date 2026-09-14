@@ -62,17 +62,26 @@ class Instagram:
         self.timeout = timeout
         self.user_id = user_id.strip() or self.me()["user_id"]
 
+    last_usage: dict = {}     # 마지막 응답의 사용량 헤더 (X-App-Usage / X-Business-Use-Case-Usage) — 한도 진단용
+
     def _req(self, method: str, path: str, **params) -> dict:
         params["access_token"] = self.token
         r = self.s.request(method, f"{GRAPH}/{path}", params=params if method == "GET" else None,
                            data=params if method != "GET" else None, timeout=self.timeout)
+        hdrs = getattr(r, "headers", None) or {}
+        usage = {k: hdrs.get(k) for k in ("X-App-Usage", "X-Business-Use-Case-Usage") if hdrs.get(k)}
+        if usage:
+            Instagram.last_usage = usage
+            if any(x in str(usage) for x in ('"call_count":9', '"call_count":8', '"total_time":9', '"total_cputime":9')):
+                print(f"  ⚠ 인스타 API 사용량 높음 {usage}")
         try:
             data = r.json()
         except ValueError:
             raise RuntimeError(f"Instagram HTTP {r.status_code}: {r.text[:200]}")
         if not r.ok or "error" in data:
             err = data.get("error", {})
-            raise RuntimeError(f"Instagram 오류 {r.status_code}: {err.get('message', r.text[:200])} (code {err.get('code')})")
+            raise RuntimeError(f"Instagram 오류 {r.status_code}: {err.get('message', r.text[:200])} (code {err.get('code')})"
+                               + (f" 사용량 {Instagram.last_usage}" if Instagram.last_usage else ""))
         return data
 
     def me(self) -> dict:
