@@ -366,7 +366,7 @@ def test_collect_signal_required_and_exclude_words(monkeypatch):
              cand("중흥그룹 추석 협력사 대금 지급", 1, "https://x.test/c")]
     monkeypatch.setattr(sources, "fetch_source", lambda name, **kw: items)
     found, _ = sources.collect(["yna_society"], max_age_hours=72, signals=["무료", "신청"], exclude_keys=set(), progress=lambda m: None,
-                               signal_required=["yna_society"], exclude_words=["[인사]"])
+                               signal_required=["yna_society"], exclude_words=["[인사]"], now=NOW)
     assert [c.title for c in found] == ["강원도 독감 무료 예방접종 확대"], "신호 없는 글·제외어 글은 빠진다"
 
 

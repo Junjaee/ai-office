@@ -187,8 +187,22 @@ def google_tts(text: str, out: Path, *, voice: str = "ko-KR-Chirp3-HD-Kore", rat
 
 
 def speak(parts: list[dict], work: Path, *, engine: str = "edge", voice: str = "ko-KR-SunHiNeural", rate: str = "+20%",
-          supertonic=None, tts_opts: dict | None = None) -> None:
-    """구간마다 음성 파일(p['audio'])과 길이(p['dur'])와 단어 시각(p['words'])을 채운다."""
+          supertonic=None, tts_opts: dict | None = None, progress=print) -> str:
+    """구간마다 음성 파일(p['audio'])과 길이(p['dur'])와 단어 시각(p['words'])을 채우고, 실제로 쓴 엔진 이름을 돌려준다.
+    유료 목소리(typecast·google)가 실패하면(크레딧 소진·키 오류 등) 한 편 안에서 목소리가 섞이지 않게 전체를 엣지 음성으로 다시 만든다."""
+    try:
+        _speak_once(parts, work, engine=engine, voice=voice, rate=rate, supertonic=supertonic, tts_opts=tts_opts)
+        return engine
+    except Exception as exc:  # noqa: BLE001
+        if engine not in ("typecast", "google"):
+            raise
+        progress(f"{engine} 목소리 실패({type(exc).__name__}: {str(exc)[:80]}) — 엣지 음성으로 대신")
+        _speak_once(parts, work, engine="edge", voice="ko-KR-SunHiNeural", rate=rate)
+        return "edge"
+
+
+def _speak_once(parts: list[dict], work: Path, *, engine: str, voice: str, rate: str = "+20%",
+                supertonic=None, tts_opts: dict | None = None) -> None:
     work.mkdir(parents=True, exist_ok=True)
     for i, p in enumerate(parts):
         mp3 = work / f"say{i:02d}.mp3"
@@ -462,7 +476,7 @@ def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | Non
     work.mkdir(parents=True, exist_ok=True)
     parts = parts_of(script)
     if engine:
-        speak(parts, work, engine=engine, voice=voice, rate=rate, supertonic=supertonic, tts_opts=tts_opts)
+        engine = speak(parts, work, engine=engine, voice=voice, rate=rate, supertonic=supertonic, tts_opts=tts_opts, progress=progress)
     else:
         silent_timing(parts)
     visuals = visuals or {}
@@ -511,6 +525,9 @@ def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | Non
         else:
             filt.append(f"[{bi}:a]aresample=48000[mix]")
             amap = "[mix]"
+    if amap:                                          # 목소리마다 음량이 달라서(평균 -19~-24dB) 인스타 권장 수준(-14 LUFS)으로 맞춘다
+        filt.append(f"{amap}loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[out]")
+        amap = "[out]"
     cmd = ["ffmpeg", "-y", "-v", "error", *inputs]
     if filt:
         cmd += ["-filter_complex", ";".join(filt)]

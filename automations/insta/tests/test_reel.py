@@ -59,3 +59,25 @@ def test_build_with_voice_and_music_and_silent(tmp_path):
     assert 5.0 <= voiced["duration"] <= 7.8, voiced["duration"]              # 1초×5구간 + 쉼
     silent = reel.build(SCRIPT, tmp_path / "s.mp4", theme=theme, engine=None, bgm=True, progress=lambda m: None)
     assert silent["duration"] >= 5 * 2.2 - 0.5
+
+
+@pytest.mark.skipif(not shutil.which("ffmpeg"), reason="ffmpeg 없음")
+def test_paid_voice_failure_falls_back_to_edge(tmp_path, monkeypatch):
+    """타입캐스트 크레딧이 떨어져도 릴스는 엣지 음성으로 끝까지 만들어진다(한 편 안에서 목소리가 섞이지 않게 전부 다시)."""
+    def broken(*a, **k):
+        raise RuntimeError("HTTP 402 크레딧 부족")
+
+    async def fake_edge(text, voice, rate, out):
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=300:duration=0.8", str(out)], check=True)
+        return []
+
+    monkeypatch.setattr(reel, "typecast_tts", broken)
+    monkeypatch.setattr(reel, "_edge", fake_edge)
+    logs = []
+    parts = reel.parts_of(SCRIPT)
+    used = reel.speak(parts, tmp_path, engine="typecast", voice="tc_x", progress=logs.append)
+    assert used == "edge" and all(p["audio"].endswith(".mp3") and p["dur"] > 0.5 for p in parts)
+    assert any("엣지 음성으로 대신" in m for m in logs)
+    with pytest.raises(RuntimeError):                                   # 무료 엔진 오류는 숨기지 않는다
+        monkeypatch.setattr(reel, "_edge", lambda *a: (_ for _ in ()).throw(RuntimeError("x")))
+        reel.speak(reel.parts_of(SCRIPT), tmp_path / "e", engine="edge")
