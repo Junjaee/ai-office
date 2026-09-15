@@ -265,7 +265,8 @@ def silent_timing(parts: list[dict], per_char: float = 0.085, minimum: float = 2
         p["audio"] = ""
 
 
-BOUND_WORDS = ("살", "시간", "가지", "게", "수", "것", "때", "명", "년", "개", "번", "분", "초", "점", "원", "달", "주", "배", "퍼센트", "날", "동안")
+BOUND_WORDS = ("살", "시간", "가지", "게", "수", "것", "때", "명", "년", "개", "번", "분", "초", "점", "원", "달", "주", "배", "퍼센트", "날", "동안",
+               "준", "줄", "줘")                            # 틀어 '준' 날, 해 '줄' 수 — 앞 동사와 한 덩어리
 
 
 def _is_bound(word: str) -> bool:
@@ -301,11 +302,15 @@ def chunk_words(words: list[tuple[float, float, str]], max_chars: int = 13) -> l
             sent_start = len(out)
 
     for s_, e_, w in words:
-        if cur and len(text(cur + [(s_, e_, w)])) > max_chars:
+        n = len(text(cur + [(s_, e_, w)]))
+        ends_clause = w.rstrip("'\"”’)").endswith((",", ".", "?", "!", "…"))
+        if cur and n > max_chars and not (ends_clause and n <= max_chars + 4):   # 마디 끝 한 단어는 조금 넘쳐도 같은 자막에
             if _is_bound(w) and len(cur) > 1:          # '다섯 / 살' 로 갈라지지 않게 앞말을 함께 넘긴다
-                carry = cur.pop()
+                carry = [cur.pop()]
+                while len(cur) > 1 and _is_bound(carry[0][2]):   # '틀어 준 날' 처럼 이어진 것도 통째로
+                    carry.insert(0, cur.pop())
                 flush()
-                cur = [carry]
+                cur = carry
             else:
                 flush()
         cur.append((s_, e_, w))

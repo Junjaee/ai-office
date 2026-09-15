@@ -150,3 +150,4 @@ def test_chunk_words_keeps_counters_and_merges_short_tail():
     assert not any(t.endswith(" 한") for t in b), b
     c = [c[2] for c in reel.chunk_words(w("아이한테 영상 틀어 준 날, 괜히 미안하셨죠? 그런데 연구 결과는 조금 뜻밖입니다."))]
     assert any(t.startswith("그런데") for t in c) and all(t.endswith("?") or "?" not in t for t in c), c
+    assert not any(t.endswith("틀어") for t in c), c          # '틀어 / 준 날' 로 갈라지지 않음
