@@ -20,9 +20,12 @@
  "id": "20260915-1808-f880af",
  "account": "parent",
  "due": "2026-09-15T18:08+09:00",
- "status": "queued",
- "tries": 0,
+ "status": "done",
+ "tries": 1,
  "video": "reel-20260915-1808-f880af.mp4",
  "thumb": "thumb-20260915-1808-f880af.jpg",
- "added_at": "2026-09-15T18:08:21+09:00"
+ "added_at": "2026-09-15T18:08:21+09:00",
+ "posted_at": "2026-09-15T18:08:40+09:00",
+ "permalink": "https://www.instagram.com/reel/DdTWrGjkXYo/",
+ "media_id": "18021433835744158"
 }
