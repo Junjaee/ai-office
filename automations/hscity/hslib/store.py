@@ -67,8 +67,12 @@ class DriveStore(BaseStore):
 
     def __init__(self, client, parent_id: str, folder_name: str):
         self.client = client
-        found = client.find(parent_id, folder_name)
-        self.root_id = found["id"] if found else client.create_folder(parent_id, folder_name)
+        # folder_name 은 "07. 동탄 지역현안/공고수집" 처럼 중첩 경로일 수 있다 — 세그먼트별로 찾고 없으면 만든다
+        cur = parent_id
+        for seg in (s for s in folder_name.strip("/").split("/") if s):
+            found = client.find(cur, seg)
+            cur = found["id"] if found else client.create_folder(cur, seg)
+        self.root_id = cur
         self._folder_ids: dict[str, str] = {"": self.root_id}
 
     def folder_link(self) -> str:

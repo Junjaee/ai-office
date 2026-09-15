@@ -13,8 +13,8 @@ dry_max_pages: 1            # --dry-run 시 게시판당 1페이지만
 
 # 결과 저장 위치(Google Drive). drive_parent_id = 상위 폴더 ID(브라우저에서 폴더 열면 URL 끝의 문자열).
 # 이 상위 폴더 안에 drive_folder_name 폴더를 만들어 연도/게시판/글폴더 구조로 저장한다.
-drive_parent_id: "PUT_DRIVE_PARENT_ID"
-drive_folder_name: "공고수집"
+drive_parent_id: "1v4HQgeaGstU3Arwr7Kr5D7uUYzk5Amdp"   # 01. 의정활동
+drive_folder_name: "07. 동탄 지역현안/공고수집"          # 기존 로컬 저장 위치와 동일
 
 boards:
   - {id: gosi,     name: "고시",           adapter: gosi,  list_path: "/www/gosi/BD_notice.do",           detail_path: "/www/gosi/BD_selectNoticeDetail.do", id_param: q_notAncmtMgtNo}
