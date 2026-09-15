@@ -156,7 +156,7 @@ def run(*, posted: list[dict], log: list[dict], token: str, user_id: str, own_us
             summary["failed"] += 1
             if exc.permission:
                 summary["permission"] = True
-                progress(PERMISSION_HINT)
+                progress(f"{PERMISSION_HINT} (Instagram 응답: {exc})")   # 원인 확인용 — 오류 문구에는 토큰이 없다
                 return new, summary
             progress(f"댓글 조회 실패 — {row.get('hook', '')[:30]}: {exc}")
             continue
@@ -187,7 +187,7 @@ def run(*, posted: list[dict], log: list[dict], token: str, user_id: str, own_us
                 summary["failed"] += 1
                 if exc.permission:
                     summary["permission"] = True
-                    progress(PERMISSION_HINT)
+                    progress(f"{PERMISSION_HINT} (Instagram 응답: {exc})")   # 원인 확인용 — 오류 문구에는 토큰이 없다
                     new.append(entry)
                     return new, summary
                 progress(f"DM 실패 → @{c.get('username', '')}: {exc}")
