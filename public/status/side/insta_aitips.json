@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 17건, 2.6분",
+  "summary": "게시 0건, 실패 0건, 누적 17건, 2.9분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,18 +11,18 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 17건, 2.6분",
-    "[후보] 🇺🇸빈자리 BREAKING: Apple is rolling out iOS 27 to all users today, an — IG 🇺🇸 @evolving.ai · 좋아요 9.9천 · 댓글 309",
+    "게시 0건, 실패 0건, 누적 17건, 2.9분",
+    "[후보] 🇺🇸빈자리 BREAKING: Apple is rolling out iOS 27 to all users today, an — IG 🇺🇸 @evolving.ai · 좋아요 1.7만 · 댓글 484",
     "[후보] 영상 만들 때 열어 볼 자료실 3곳이 전부 무료입니다 — IG 🇰🇷 @prompt_what · 좋아요 1.9천 · 댓글 2.0천",
-    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.3천 · 댓글 718",
-    "[후보] 🇺🇸빈자리 ChatGPT can find relatives you never knew existed — IG 🇺🇸 @chatgptricks · 좋아요 3.6천 · 댓글 143"
+    "[후보] 🇺🇸빈자리 If your iPhone feels like it aged overnight after installing — IG 🇺🇸 @evolving.ai · 좋아요 1.1만 · 댓글 152",
+    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.4천 · 댓글 736"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34911130001,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34911130001",
+  "run_id": 34944452247,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34944452247",
   "trigger": "schedule",
-  "started_at": "2026-09-15T09:01:18+09:00",
-  "duration_sec": 155,
+  "started_at": "2026-09-15T16:59:48+09:00",
+  "duration_sec": 172,
   "tasks": [
     {
       "id": "topic",
@@ -46,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-15T09:03:54+09:00"
+  "updated_at": "2026-09-15T17:02:41+09:00"
 }
