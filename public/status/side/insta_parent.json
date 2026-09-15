@@ -1,22 +1,48 @@
 {
   "name": "인스타 게시글 · parent",
   "dept": "strategy2",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "실행 중 문제가 생겼어요",
-  "counts": {},
+  "summary": "게시 0건, 실패 0건, 누적 0건, 0초",
+  "counts": {
+    "new": 0,
+    "failed": 0,
+    "total": 0
+  },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "실행 중 문제가 생겼어요",
-    "FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ai-office/ai-office/data/insta/parent/stats.json'"
+    "게시 0건, 실패 0건, 누적 0건, 0초",
+    "[계정] 팔로워 0 · 게시물 0"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 34922725271,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34922725271",
-  "request_id": "parent-token-025035",
+  "run_id": 34923017408,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34923017408",
+  "request_id": "parent-stats2-025512",
   "trigger": "manual",
-  "started_at": "2026-09-15T11:52:38+09:00",
+  "started_at": "2026-09-15T11:56:17+09:00",
   "duration_sec": 0,
+  "tasks": [
+    {
+      "id": "topic",
+      "status": "idle",
+      "summary": ""
+    },
+    {
+      "id": "write",
+      "status": "idle",
+      "summary": ""
+    },
+    {
+      "id": "card",
+      "status": "idle",
+      "summary": ""
+    },
+    {
+      "id": "upload",
+      "status": "done",
+      "summary": "팔로워 0 · 지표 0건"
+    }
+  ],
   "id": "insta_parent",
-  "updated_at": "2026-09-15T11:52:39+09:00"
+  "updated_at": "2026-09-15T11:56:23+09:00"
 }
