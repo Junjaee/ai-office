@@ -399,3 +399,10 @@ def test_cap_by_source_limits_noisy_sources():
     items.append(cand("o", 1, "https://x.test/o"))
     out = sources.cap_by_source(items, {"reddit_chatgpt": 2})
     assert [c.title for c in out] == ["r0", "r1", "o"]
+
+
+def test_pick_prompt_favors_share_and_tag_topics():
+    """보내고 태그할 거리 가점 규칙이 주제 고르기 두 갈래(기본·주제별 기준) 모두에 들어간다 (2026-09-15 사용자 판단)."""
+    import inspect
+    assert "누구에게 보낼까" in writer.SHARE_RULE and "조롱" in writer.SHARE_RULE
+    assert inspect.getsource(writer.pick_prompt).count("SHARE_RULE") == 2
