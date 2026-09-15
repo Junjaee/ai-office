@@ -3,7 +3,7 @@
   "dept": "strategy2",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 0건, 0초",
+  "summary": "게시 0건, 실패 0건, 누적 0건, 31초",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,21 +11,20 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 0건, 0초",
-    "[계정] 팔로워 0 · 게시물 0"
+    "게시 0건, 실패 0건, 누적 0건, 31초",
+    "[후보] 서산시, 시민 아이디어가 행정 혁신 이끈다 — 뉴스 · 육아 지원금"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 34923017408,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34923017408",
-  "request_id": "parent-stats2-025512",
-  "trigger": "manual",
-  "started_at": "2026-09-15T11:56:17+09:00",
-  "duration_sec": 0,
+  "run_id": 34944452247,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34944452247",
+  "trigger": "schedule",
+  "started_at": "2026-09-15T17:02:43+09:00",
+  "duration_sec": 31,
   "tasks": [
     {
       "id": "topic",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "후보 1건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
@@ -39,10 +38,10 @@
     },
     {
       "id": "upload",
-      "status": "done",
-      "summary": "팔로워 0 · 지표 0건"
+      "status": "idle",
+      "summary": ""
     }
   ],
   "id": "insta_parent",
-  "updated_at": "2026-09-15T11:56:23+09:00"
+  "updated_at": "2026-09-15T17:03:15+09:00"
 }
