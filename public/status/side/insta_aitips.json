@@ -3,31 +3,29 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 17건, 2.9분",
+  "summary": "게시 0건, 실패 0건, 누적 18건, 0초",
   "counts": {
     "new": 0,
     "failed": 0,
-    "total": 17
+    "total": 18
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 17건, 2.9분",
-    "[후보] 🇺🇸빈자리 BREAKING: Apple is rolling out iOS 27 to all users today, an — IG 🇺🇸 @evolving.ai · 좋아요 1.7만 · 댓글 484",
-    "[후보] 영상 만들 때 열어 볼 자료실 3곳이 전부 무료입니다 — IG 🇰🇷 @prompt_what · 좋아요 1.9천 · 댓글 2.0천",
-    "[후보] 🇺🇸빈자리 If your iPhone feels like it aged overnight after installing — IG 🇺🇸 @evolving.ai · 좋아요 1.1만 · 댓글 152",
-    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.4천 · 댓글 736"
+    "게시 0건, 실패 0건, 누적 18건, 0초",
+    "[예약] 지금 만들 것 없음"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34944452247,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34944452247",
-  "trigger": "schedule",
-  "started_at": "2026-09-15T16:59:48+09:00",
-  "duration_sec": 172,
+  "run_id": 34957493136,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34957493136",
+  "request_id": "cron-202609151021",
+  "trigger": "manual",
+  "started_at": "2026-09-15T19:23:11+09:00",
+  "duration_sec": 0,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 사이트에서 골라 주세요"
+      "summary": "후보 20건 · 예약 0건 · 게시 3건"
     },
     {
       "id": "write",
@@ -46,5 +44,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-15T17:02:41+09:00"
+  "updated_at": "2026-09-15T19:23:12+09:00"
 }
