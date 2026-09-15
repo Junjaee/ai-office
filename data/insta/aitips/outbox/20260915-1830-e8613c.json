@@ -20,9 +20,12 @@
  "id": "20260915-1830-e8613c",
  "account": "aitips",
  "due": "2026-09-15T18:30+09:00",
- "status": "queued",
- "tries": 0,
+ "status": "done",
+ "tries": 1,
  "video": "reel-20260915-1830-e8613c.mp4",
  "thumb": "thumb-20260915-1830-e8613c.jpg",
- "added_at": "2026-09-15T13:43:08+09:00"
+ "added_at": "2026-09-15T13:43:08+09:00",
+ "posted_at": "2026-09-15T19:21:31+09:00",
+ "permalink": "https://www.instagram.com/reel/DdTfAhAjlru/",
+ "media_id": "18093833993535503"
 }
