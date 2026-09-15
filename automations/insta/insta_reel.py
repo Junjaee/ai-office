@@ -511,25 +511,40 @@ def _is_key(word: str, keywords: list[str]) -> bool:
     return False
 
 
+CAPTION_SIZE = 86                                      # 2026-09-15 사용자 지시 "자막 폰트 좀 더 크게" (66 → 86)
+CAPTION_MAX_W = 900                                    # 오른쪽 좋아요·댓글 단추를 피하는 폭
+CAPTION_BOTTOM = 1500                                  # 자막 아래 끝(이보다 아래는 인스타 글·계정 이름이 덮는다)
+
+
+def caption_layout(draw, text: str, size: int = CAPTION_SIZE) -> tuple:
+    """자막 글꼴·크기·줄. 두 줄에 안 들어가면 글자를 조금씩 줄여 잘리는 말이 없게 한다."""
+    while True:
+        fnt = font(size, 800)
+        lines = wrap(draw, text, fnt, CAPTION_MAX_W)
+        if len(lines) <= 2 or size <= 56:
+            return fnt, size, lines
+        size -= 4
+
+
 def caption(base, text: str, keywords: list[str], theme: dict):
     """장면 위에 자막(흰 글자 + 검은 테두리, 강조어는 색)을 얹은 새 이미지."""
     from PIL import ImageDraw
 
     img = base.copy()
     d = ImageDraw.Draw(img)
-    fnt = font(66, 800)
+    fnt, size, lines = caption_layout(d, text)
     accent = _hex(theme.get("caption_accent", "#ffd84d"), (255, 216, 77))
-    lines = wrap(d, text, fnt, 900)[:2]
-    y = 1395 - (len(lines) - 1) * 44
+    lh = int(size * 1.33)
+    y = CAPTION_BOTTOM - size - (len(lines) - 1) * lh
     for ln in lines:
         x = (W - d.textlength(ln, font=fnt)) / 2
         for w in re.split(r"(\s+)", ln):
             if not w:
                 continue
             col = accent if _is_key(w, keywords) else (255, 255, 255)
-            d.text((x, y), w, font=fnt, fill=col, stroke_width=8, stroke_fill=(0, 0, 0))
+            d.text((x, y), w, font=fnt, fill=col, stroke_width=max(8, size // 9), stroke_fill=(0, 0, 0))
             x += d.textlength(w, font=fnt)
-        y += 88
+        y += lh
     return img
 
 

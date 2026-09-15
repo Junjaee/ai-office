@@ -151,3 +151,15 @@ def test_chunk_words_keeps_counters_and_merges_short_tail():
     c = [c[2] for c in reel.chunk_words(w("아이한테 영상 틀어 준 날, 괜히 미안하셨죠? 그런데 연구 결과는 조금 뜻밖입니다."))]
     assert any(t.startswith("그런데") for t in c) and all(t.endswith("?") or "?" not in t for t in c), c
     assert not any(t.endswith("틀어") for t in c), c          # '틀어 / 준 날' 로 갈라지지 않음
+
+
+def test_caption_is_big_and_never_drops_words():
+    """자막은 큰 글씨(86)로, 두 줄에 안 들어가는 긴 자막은 글자를 줄여 말이 잘리지 않는다 (2026-09-15 사용자 지시)."""
+    from PIL import Image, ImageDraw
+    d = ImageDraw.Draw(Image.new("RGB", (reel.W, reel.H)))
+    _, size, lines = reel.caption_layout(d, "아이한테 영상 틀어 준 날,")
+    assert size == reel.CAPTION_SIZE >= 80 and len(lines) <= 2
+    long = "미국소아과학회는 이렇게 권합니다. 다섯 살 무렵부터 일곱 살까지,"
+    _, size2, lines2 = reel.caption_layout(d, long)
+    assert size2 < reel.CAPTION_SIZE and len(lines2) <= 2
+    assert " ".join(lines2).split() == long.split()
