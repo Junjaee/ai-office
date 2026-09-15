@@ -3,36 +3,37 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
+  "summary": "신규 2건, 취소 0건, 건너뜀 0건, 실패 0건, 4초",
   "counts": {
-    "new": 1,
+    "new": 2,
     "replaced": 0,
     "skip": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
-    "[추가] 2026년 9월 9/15 쿠팡(쿠페이) 5,700원 (생활비)"
+    "신규 2건, 취소 0건, 건너뜀 0건, 실패 0건, 4초",
+    "[추가] 2026년 9월 9/15 서울특별시송파구 1,200원 (생활비)",
+    "[추가] 2026년 9월 9/15 하하호호놀이터장 3,000원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 34919970633,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34919970633",
+  "run_id": 34958696754,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34958696754",
   "trigger": "schedule",
-  "started_at": "2026-09-15T11:08:00+09:00",
-  "duration_sec": 3,
+  "started_at": "2026-09-15T19:35:25+09:00",
+  "duration_sec": 4,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 1건 확인, 결제 1건"
+      "summary": "메일 2건 확인, 결제 2건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 1 · 취소 0 · 건너뜀 0"
+      "summary": "추가 2 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-15T11:08:05+09:00"
+  "updated_at": "2026-09-15T19:35:31+09:00"
 }
