@@ -94,3 +94,20 @@ def test_tighten_shortens_long_pause_but_keeps_speech(tmp_path):
     after = reel.duration_of(wav)
     assert 2.9 <= before <= 3.1 and 1.8 <= after <= 2.5, (before, after)
     assert not (tmp_path / "a_t.wav").exists()
+
+
+@pytest.mark.skipif(not shutil.which("ffmpeg"), reason="ffmpeg 없음")
+def test_build_over_source_video_loops_and_shows_video(tmp_path):
+    """영상 해설형: 원본(3초)이 해설 길이만큼 반복되고, 가운데 상자에 원본이 비친다(검은 화면 아님)."""
+    src = tmp_path / "src.mp4"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "testsrc=size=640x360:rate=30:duration=3", str(src)], check=True)
+
+    def fake_speaker(text, out_wav):
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i", "sine=frequency=300:duration=1.0", "-ar", "48000", str(out_wav)], check=True)
+
+    res = reel.build(SCRIPT, tmp_path / "v.mp4", theme={}, engine="supertonic", supertonic=fake_speaker, bgm=True,
+                     video={"path": str(src), "credit": "Source · u/test / Reddit"}, progress=lambda m: None)
+    assert 5.0 <= res["duration"] <= 7.8, res["duration"]
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", "4.5", "-i", res["path"], "-frames:v", "1", "-vf", "crop=600:300:240:810,scale=60:30",
+                          "-f", "rawvideo", "-pix_fmt", "gray", "-"], capture_output=True, check=True).stdout
+    assert len(raw) == 1800 and sum(raw) / len(raw) > 60, sum(raw) / max(len(raw), 1)

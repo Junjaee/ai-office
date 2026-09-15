@@ -397,6 +397,37 @@ def scene(part: dict, theme: dict, *, visual: str = "", brand: str = "AI TIPS", 
     return img
 
 
+def overlay_scene(part: dict, theme: dict, *, brand: str = "AI TIPS", idx: int = 0, total: int = 1, credit: str = ""):
+    """영상 해설형 릴스의 글자 층(투명 바탕, 2026-09-15 사용자 결정 '해설형 재가공'): 위아래 어둠 띠 + 브랜드·진행 표시 + 큰 문구 + 출처.
+    가운데(600~1320)는 비워 두어 아래 깔린 원본 영상이 보이게 한다."""
+    from PIL import Image, ImageDraw
+
+    accent = _hex(theme.get("accent", "#f2b544"), (242, 181, 68))
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(img)
+    for y in range(0, 600):                            # 위 띠: 위로 갈수록 진하게 (큰 문구가 읽히게)
+        sd.line([(0, y), (W, y)], fill=(0, 0, 0, int(40 + 190 * (1 - y / 600))))
+    for y in range(1320, H):                           # 아래 띠: 자막·출처 자리
+        sd.line([(0, y), (W, y)], fill=(0, 0, 0, int(60 + 170 * (y - 1320) / (H - 1320))))
+    d = ImageDraw.Draw(img)
+    fb = font(34, 800)
+    tw = d.textlength(brand, font=fb)
+    d.rounded_rectangle((70, 210, 70 + tw + 48, 270), radius=30, fill=accent)
+    d.text((70 + 24, 240), brand, font=fb, fill=_on(accent), anchor="lm")
+    for k in range(total):
+        x = 1010 - (total - 1 - k) * 26
+        d.rounded_rectangle((x - (14 if k == idx else 5), 236, x + 5, 245), radius=5, fill=accent if k == idx else (120, 120, 120))
+    hook = part["kind"] == "hook"
+    fnt = font(100 if hook else 88, 900)
+    y = 320
+    for ln in wrap(d, part.get("big") or "", fnt, 940)[:2]:
+        d.text((70, y), ln, font=fnt, fill=(255, 255, 255), anchor="lt", stroke_width=6, stroke_fill=(0, 0, 0))
+        y += 118 if hook else 106
+    if credit:
+        d.text((W // 2, 1590), credit, font=font(34, 700), fill=(225, 225, 225), anchor="mt", stroke_width=3, stroke_fill=(0, 0, 0))
+    return img
+
+
 def _is_key(word: str, keywords: list[str]) -> bool:
     """자막 단어가 강조어(여러 단어일 수 있음)의 일부인가. 조사가 붙어도('윈도우 앱을') 앞부분이 맞으면 강조."""
     w = re.sub(r"[.,!?…'\"]", "", word.strip())
@@ -505,7 +536,7 @@ def make_bgm(seconds: float, out: Path, *, bpm: int = 84, gain: float = 0.32) ->
 
 def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | None = None, brand: str = "AI TIPS",
           engine: str | None = "edge", voice: str = "ko-KR-SunHiNeural", rate: str = "+20%", bgm: bool = True,
-          bgm_gain: float = 0.32, supertonic=None, tts_opts: dict | None = None, progress=print) -> dict:
+          bgm_gain: float = 0.32, supertonic=None, tts_opts: dict | None = None, video: dict | None = None, progress=print) -> dict:
     """대본 → mp4. engine=None 이면 목소리 없이 음악 + 자막. visuals = {카드 번호: 사진 경로}."""
     work = out.parent / (out.stem + "_work")
     work.mkdir(parents=True, exist_ok=True)
@@ -518,7 +549,7 @@ def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | Non
     frames: list[tuple[Path, float]] = []
     t0 = 0.0
     for i, p in enumerate(parts):
-        base = scene(p, theme, visual=visuals.get(int(p.get("card") or 0), "") if p["kind"] == "seg" else
+        base = overlay_scene(p, theme, brand=brand, idx=i, total=len(parts), credit=str(video.get("credit") or "")) if video else scene(p, theme, visual=visuals.get(int(p.get("card") or 0), "") if p["kind"] == "seg" else
                      (visuals.get(-1, "") if p["kind"] in ("hook", "cta") else ""), brand=brand, idx=i, total=len(parts))
         seg_len = p["dur"] + GAP
         chunks = chunk_words(p["words"]) if engine else [(0.0, p["dur"], p["say"])]
@@ -539,20 +570,21 @@ def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | Non
         lines += [f"file '{f.as_posix()}'", f"duration {d:.3f}"]
     lines.append(f"file '{frames[-1][0].as_posix()}'")
     lst.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    inputs = ["-f", "concat", "-safe", "0", "-i", str(lst)]
+    off = 2 if video else 1                            # 영상 해설형이면 0번 입력 = 원본 영상(반복), 1번 = 글자 층
+    inputs = (["-stream_loop", "-1", "-i", str(video["path"])] if video else []) + ["-f", "concat", "-safe", "0", "-i", str(lst)]
     filt: list[str] = []
     amap = None
     if engine:
         # 목소리 이어 붙이기(구간 사이 GAP)
         for p in parts:
             inputs += ["-i", p["audio"]]
-        vparts = "".join(f"[{1 + i}:a]aresample=48000,apad=pad_dur={GAP}[s{i}];" for i in range(len(parts)))
+        vparts = "".join(f"[{off + i}:a]aresample=48000,apad=pad_dur={GAP}[s{i}];" for i in range(len(parts)))
         filt.append(vparts + "".join(f"[s{i}]" for i in range(len(parts))) + f"concat=n={len(parts)}:v=0:a=1[voice]")
         amap = "[voice]"
     if bgm:
         wav = make_bgm(total + 1, work / "bgm.wav", gain=bgm_gain)
         inputs += ["-i", str(wav)]
-        bi = 1 + (len(parts) if engine else 0)
+        bi = off + (len(parts) if engine else 0)
         if engine:
             filt.append(f"[voice]asplit[v1][v2];[{bi}:a]aresample=48000,volume=0.55[b];[b][v2]sidechaincompress=threshold=0.03:ratio=10:attack=15:release=350[bd];"
                         f"[v1][bd]amix=inputs=2:duration=first:normalize=0[mix]")
@@ -563,11 +595,17 @@ def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | Non
     if amap:                                          # 목소리마다 음량이 달라서(평균 -19~-24dB) 인스타 권장 수준(-14 LUFS)으로 맞춘다
         filt.append(f"{amap}loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[out]")
         amap = "[out]"
+    vmap, vf = "0:v", ["-vf", f"fps={FPS},format=yuv420p"]
+    if video:                                          # 흐린 원본(화면 꽉 채움) + 선명한 원본(가운데 상자) + 글자 층
+        filt.append("[0:v]split=2[va][vb];[va]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=24:2,"
+                    "eq=brightness=-0.28[bg];[vb]scale=1000:720:force_original_aspect_ratio=decrease[fg];"
+                    f"[bg][fg]overlay=(W-w)/2:600+(720-h)/2[base];[1:v]format=rgba[ov];[base][ov]overlay=0:0,fps={FPS},format=yuv420p[v]")
+        vmap, vf = "[v]", []
     cmd = ["ffmpeg", "-y", "-v", "error", *inputs]
     if filt:
         cmd += ["-filter_complex", ";".join(filt)]
-    cmd += ["-map", "0:v"] + (["-map", amap] if amap else []) + [
-        "-vf", f"fps={FPS},format=yuv420p", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+    cmd += ["-map", vmap] + (["-map", amap] if amap else []) + [
+        *vf, "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
         "-c:a", "aac", "-b:a", "160k", "-ar", "48000", "-t", f"{total:.2f}", "-movflags", "+faststart", str(out)]
     subprocess.run(cmd, check=True, capture_output=True, text=True)
     progress(f"릴스 v2 {total:.0f}초 · 구간 {len(parts)} · 자막 {len(frames)}장 · 목소리 {engine or '없음'} · 음악 {'있음' if bgm else '없음'}")
