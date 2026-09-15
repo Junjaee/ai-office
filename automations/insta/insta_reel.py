@@ -397,6 +397,27 @@ def scene(part: dict, theme: dict, *, visual: str = "", brand: str = "AI TIPS", 
     return img
 
 
+def _dims(path) -> tuple[int, int]:
+    """영상 가로·세로 픽셀 (ffprobe). 모르면 16:9 로 본다."""
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", str(path)],
+                       capture_output=True, text=True)
+    try:
+        w, h = (int(x) for x in r.stdout.strip().split(",")[:2])
+        return w, h
+    except ValueError:
+        return 16, 9
+
+
+def video_chain(w: int, h: int) -> str:
+    """원본 영상 → [base] 필터. 세로 원본(9:16 쪽)은 화면 전체를 선명하게 채우고(가운데 작은 띠로 줄지 않게, 2026-09-15 샘플 확인),
+    가로·정사각 원본은 흐린 원본으로 전체를 채운 뒤 가운데(600~1320) 상자에 선명한 원본을 넣는다."""
+    if h >= w * 1.3:
+        return "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1[base];"
+    return ("[0:v]split=2[va][vb];[va]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=24:2,"
+            "eq=brightness=-0.28[bg];[vb]scale=1000:720:force_original_aspect_ratio=decrease[fg];"
+            "[bg][fg]overlay=(W-w)/2:600+(720-h)/2,setsar=1[base];")
+
+
 def overlay_scene(part: dict, theme: dict, *, brand: str = "AI TIPS", idx: int = 0, total: int = 1, credit: str = ""):
     """영상 해설형 릴스의 글자 층(투명 바탕, 2026-09-15 사용자 결정 '해설형 재가공'): 위아래 어둠 띠 + 브랜드·진행 표시 + 큰 문구 + 출처.
     가운데(600~1320)는 비워 두어 아래 깔린 원본 영상이 보이게 한다."""
@@ -596,10 +617,8 @@ def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | Non
         filt.append(f"{amap}loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[out]")
         amap = "[out]"
     vmap, vf = "0:v", ["-vf", f"fps={FPS},format=yuv420p"]
-    if video:                                          # 흐린 원본(화면 꽉 채움) + 선명한 원본(가운데 상자) + 글자 층
-        filt.append("[0:v]split=2[va][vb];[va]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=24:2,"
-                    "eq=brightness=-0.28[bg];[vb]scale=1000:720:force_original_aspect_ratio=decrease[fg];"
-                    f"[bg][fg]overlay=(W-w)/2:600+(720-h)/2[base];[1:v]format=rgba[ov];[base][ov]overlay=0:0,fps={FPS},format=yuv420p[v]")
+    if video:                                          # 원본 영상 바탕 + 글자 층 (세로 원본은 화면 전체, 가로·정사각은 흐린 전체 + 가운데 상자)
+        filt.append(video_chain(*_dims(video["path"])) + f"[1:v]format=rgba[ov];[base][ov]overlay=0:0,fps={FPS},format=yuv420p[v]")
         vmap, vf = "[v]", []
     cmd = ["ffmpeg", "-y", "-v", "error", *inputs]
     if filt:

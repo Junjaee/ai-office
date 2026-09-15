@@ -111,3 +111,8 @@ def test_build_over_source_video_loops_and_shows_video(tmp_path):
     raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", "4.5", "-i", res["path"], "-frames:v", "1", "-vf", "crop=600:300:240:810,scale=60:30",
                           "-f", "rawvideo", "-pix_fmt", "gray", "-"], capture_output=True, check=True).stdout
     assert len(raw) == 1800 and sum(raw) / len(raw) > 60, sum(raw) / max(len(raw), 1)
+
+
+def test_video_chain_vertical_fills_screen_and_landscape_uses_box():
+    assert "boxblur" not in reel.video_chain(720, 1280) and "crop=1080:1920" in reel.video_chain(720, 1280)
+    assert "boxblur" in reel.video_chain(1920, 1080) and "boxblur" in reel.video_chain(720, 720)
