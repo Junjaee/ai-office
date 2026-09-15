@@ -3,7 +3,7 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 0건, 0초",
+  "summary": "게시 0건, 실패 0건, 누적 0건, 58초",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,21 +11,22 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 0건, 0초",
-    "[대기] 인스타 토큰 없음 — 계정 개설 뒤 토큰을 등록하면 게시가 시작돼요"
+    "게시 0건, 실패 0건, 누적 0건, 58초",
+    "[후보] 청년 정규직 뽑으면 최대 4천500만원…서울 강소기업 42곳 선정 — 연합뉴스 경제",
+    "[후보] \"오늘부터 휴대전화 요금 25% 추가 할인\"…사실 아냐 — 연합뉴스 경제"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 34957493136,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34957493136",
-  "request_id": "cron-202609151021",
+  "run_id": 35036276574,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35036276574",
+  "request_id": "cron-202609152334",
   "trigger": "manual",
-  "started_at": "2026-09-15T19:23:15+09:00",
-  "duration_sec": 0,
+  "started_at": "2026-09-16T08:39:27+09:00",
+  "duration_sec": 58,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 7건 · 예약 0건 · 게시 0건"
+      "summary": "후보 2건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
@@ -39,10 +40,10 @@
     },
     {
       "id": "upload",
-      "status": "done",
-      "summary": "토큰 대기"
+      "status": "idle",
+      "summary": ""
     }
   ],
   "id": "insta_benefit",
-  "updated_at": "2026-09-15T19:23:15+09:00"
+  "updated_at": "2026-09-16T08:40:26+09:00"
 }
