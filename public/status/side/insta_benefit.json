@@ -3,7 +3,7 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 0건, 1.2분",
+  "summary": "게시 0건, 실패 0건, 누적 0건, 0초",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,23 +11,21 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 0건, 1.2분",
-    "[후보] '여행가는 달' 기차타고 인구감소지역 방문 인증시 운임 전액환급 — 연합뉴스 사회",
-    "[후보] “모두에게 10만 원씩 지급”… 추석 앞두고 ‘민생지원금’ 신청 접수 시작 — 뉴스 · 지원금 신청",
-    "[후보] 부산은행·부산시, 소상공인 특별 민생 금융지원 시행 — 연합뉴스 경제",
-    "[후보] 청년 창업기업·피지컬AI 특허도 한달이면 '끝'…초고속심사 도입 — 연합뉴스 경제"
+    "게시 0건, 실패 0건, 누적 0건, 0초",
+    "[대기] 인스타 토큰 없음 — 계정 개설 뒤 토큰을 등록하면 게시가 시작돼요"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 34944452247,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34944452247",
-  "trigger": "schedule",
-  "started_at": "2026-09-15T17:03:17+09:00",
-  "duration_sec": 71,
+  "run_id": 34957493136,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34957493136",
+  "request_id": "cron-202609151021",
+  "trigger": "manual",
+  "started_at": "2026-09-15T19:23:15+09:00",
+  "duration_sec": 0,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 7건 · 사이트에서 골라 주세요"
+      "summary": "후보 7건 · 예약 0건 · 게시 0건"
     },
     {
       "id": "write",
@@ -41,10 +39,10 @@
     },
     {
       "id": "upload",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "토큰 대기"
     }
   ],
   "id": "insta_benefit",
-  "updated_at": "2026-09-15T17:04:29+09:00"
+  "updated_at": "2026-09-15T19:23:15+09:00"
 }
