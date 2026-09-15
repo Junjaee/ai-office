@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 12초",
+  "summary": "신규 9건, 실패 0건, 12초",
   "counts": {
-    "new": 14,
+    "new": 9,
     "failed": 0,
-    "total": 707
+    "total": 716
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 12초",
-    "[신규] 충남대-한양대, 전기 에너지 활용한 다기능 공기정화 기술 개발...환경과학 분야 국제 학술지 ‘Journal of Hazardous Materials’ 논문 게재 — usline.kr",
-    "[신규] 더불어민주당 원내대책회의 — 뉴스핌",
-    "[신규] [신성식의 시시각각] 얼마나 얕잡아 봤으면… — v.daum.net",
-    "[신규] 박은정 특별시의원 \"무상 교복, 실제 입는지부터 살펴야\" — 뉴스핌"
+    "신규 9건, 실패 0건, 12초",
+    "[신규] [속보] 李대통령, 오는 18일 7번째 기자회견…현안에 직접 답한다 — 뉴스핌",
+    "[신규] 일본 보드게임 직구 보너스 선택 화면의 구성 — Histoire pour tous",
+    "[신규] 강성찬 전남광주시의원 '청년소상공인 육성 조례안' 상임위 통과 — 뉴스핌",
+    "[신규] 고우람 전남광주 남구의원, '지역목재 이용 활성화' 조례안 발의 — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35008353275,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35008353275",
+  "run_id": 35035061126,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35035061126",
   "trigger": "schedule",
-  "started_at": "2026-09-16T03:35:14+09:00",
+  "started_at": "2026-09-16T08:18:56+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 120건"
+      "summary": "검색어 5개에서 113건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 14건 (신규 14건) · v.daum.net 2건, 뉴스핌 2건, JTBC 1건"
+      "summary": "오늘 23건 (신규 9건) · 뉴스핌 6건, Histoire pour tous 3건, v.daum.net 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-16T03:35:26+09:00"
+  "updated_at": "2026-09-16T08:19:09+09:00"
 }
