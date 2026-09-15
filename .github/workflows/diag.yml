@@ -12,6 +12,13 @@ jobs:
             code=$(curl -s -o /dev/null -w "%{http_code} %{time_total}s" --max-time 25 -A "Mozilla/5.0" "$u" || echo "FAIL")
             echo "$u -> $code"
           done
+      - name: GitHub 서버에서 레딧 RSS·영상 받기 확인 (인스타 해설형 릴스용, 2026-09-15)
+        run: |
+          code=$(curl -s -o /tmp/r.xml -w "%{http_code}" --max-time 25 -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128.0" "https://www.reddit.com/r/aivideo/top/.rss?t=week" || echo FAIL)
+          echo "reddit rss -> $code, 영상 글 $(grep -o 'v.redd.it' /tmp/r.xml 2>/dev/null | wc -l)"
+          python3 -m pip install --quiet yt-dlp >/dev/null 2>&1
+          python3 -m yt_dlp -s --no-warnings --print "%(duration)s초 %(width)sx%(height)s" "https://www.reddit.com/r/aivideo/comments/1wdrs0v/what_do_you_sell_at_the_strangest_flea_market/" 2>&1 | tail -2 | sed 's/^/reddit 영상 -> /'
+
   office-runner:
     runs-on: [self-hosted, windows, kr-office]
     timeout-minutes: 5
