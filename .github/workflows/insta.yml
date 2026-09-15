@@ -128,6 +128,29 @@ jobs:
             git add data/insta && git commit -qm "insta: 댓글 DM 기록" && git pull -q --rebase origin main && git push -q origin main
           fi
 
+      # 대기 릴스: 이 PC 에서 만든 완성 릴스(해설형 영상 등)를 게시 시각이 되면 올린다 (insta_outbox.py, 사용자 결정 2026-09-15).
+      # 영상·표지는 GitHub 릴리스 'outbox-<계정>' 첨부에서 받고, 게시 뒤 지운다. 대기 목록이 있는 계정만 부품을 설치한다
+      - name: 대기 릴스 게시
+        if: steps.mode.outputs.mode == 'publish' || steps.mode.outputs.mode == 'auto'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_PUBLIC_BASE: ${{ secrets.R2_PUBLIC_BASE }}
+        run: |
+          for A in ${{ steps.mode.outputs.accounts }}; do
+            if ls data/insta/$A/outbox/*.json >/dev/null 2>&1; then
+              python -m pip install --quiet --disable-pip-version-check boto3 requests
+              echo "== $A"
+              python -X utf8 automations/insta/insta_outbox.py publish --account "$A" || echo "대기 릴스 게시 실패($A) — 계속"
+            fi
+          done
+          if [ -n "$(git status --porcelain -- data/insta)" ]; then
+            git add data/insta && git commit -qm "insta: 대기 릴스 게시 기록" && git pull -q --rebase origin main && git push -q origin main
+          fi
+
       # 예약 취소·시각 변경: 의존성 없이 검토 파일만 고쳐 커밋 (20초)
       - name: 예약 수정
         if: steps.mode.outputs.mode == 'edit'
