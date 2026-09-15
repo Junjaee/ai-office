@@ -1,49 +1,22 @@
 {
   "name": "인스타 게시글 · parent",
   "dept": "strategy2",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 0건, 44초",
-  "counts": {
-    "new": 0,
-    "failed": 0,
-    "total": 0
-  },
+  "summary": "실행 중 문제가 생겼어요",
+  "counts": {},
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 0건, 44초",
-    "[후보] ‘영츠하이머(Youngzheimer)’, 정말 젊은 치매일까? — 뉴스 · 육아 지원금",
-    "[후보] [팩트체크] 14만원 탁구채 논란…'환불불가' 표시 있다면 환불 안된다? — 연합뉴스 사회",
-    "[후보] 버스·여객선 늘리고 지하철 심야운행…인천시 추석 교통대책 — 연합뉴스 사회"
+    "실행 중 문제가 생겼어요",
+    "FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ai-office/ai-office/data/insta/parent/stats.json'"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 34911130001,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34911130001",
-  "trigger": "schedule",
-  "started_at": "2026-09-15T09:03:55+09:00",
-  "duration_sec": 44,
-  "tasks": [
-    {
-      "id": "topic",
-      "status": "done",
-      "summary": "후보 3건 · 사이트에서 골라 주세요"
-    },
-    {
-      "id": "write",
-      "status": "idle",
-      "summary": ""
-    },
-    {
-      "id": "card",
-      "status": "idle",
-      "summary": ""
-    },
-    {
-      "id": "upload",
-      "status": "idle",
-      "summary": ""
-    }
-  ],
+  "run_id": 34922725271,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34922725271",
+  "request_id": "parent-token-025035",
+  "trigger": "manual",
+  "started_at": "2026-09-15T11:52:38+09:00",
+  "duration_sec": 0,
   "id": "insta_parent",
-  "updated_at": "2026-09-15T09:04:40+09:00"
+  "updated_at": "2026-09-15T11:52:39+09:00"
 }
