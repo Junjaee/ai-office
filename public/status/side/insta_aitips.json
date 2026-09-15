@@ -3,31 +3,32 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 18건, 3.7분",
+  "summary": "게시 0건, 실패 0건, 누적 15건, 5초",
   "counts": {
     "new": 0,
     "failed": 0,
-    "total": 18
+    "total": 15
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 18건, 3.7분",
-    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.5천 · 댓글 752",
-    "[후보] 🇺🇸빈자리 Gemini 3.8 Live and 3.8 Live Extended Thinking are our best  — IG 🇺🇸 @googledeepmind · 좋아요 2.3천 · 댓글 52",
-    "[후보] 영상 만들 때 열어 볼 자료실 3곳이 전부 무료입니다 — IG 🇰🇷 @prompt_what · 좋아요 2.0천 · 댓글 2.1천",
-    "[후보] ”연동 없이 다 뚫는 AI 브라우저 윈도우 버전 출시“ — IG 🇰🇷 @ai_freaks.kr · 좋아요 926 · 댓글 1.6천"
+    "게시 0건, 실패 0건, 누적 15건, 5초",
+    "[계정] 팔로워 4 · 게시물 15",
+    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 챗GPT 프롬프트 3개로 내 정보 지우기",
+    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 카페 사진 한 장, 화보로 바꾸는 법",
+    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 오픈AI, 말 끊김 80% 줄인 음성 AI 공개"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 35036563011,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35036563011",
-  "trigger": "schedule",
-  "started_at": "2026-09-16T08:41:35+09:00",
-  "duration_sec": 221,
+  "run_id": 35037830844,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35037830844",
+  "request_id": "stats-202609152356",
+  "trigger": "manual",
+  "started_at": "2026-09-16T08:57:12+09:00",
+  "duration_sec": 5,
   "tasks": [
     {
       "id": "topic",
-      "status": "done",
-      "summary": "후보 20건 · 사이트에서 골라 주세요"
+      "status": "idle",
+      "summary": ""
     },
     {
       "id": "write",
@@ -41,10 +42,10 @@
     },
     {
       "id": "upload",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "팔로워 4 · 지표 15건"
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-16T08:45:17+09:00"
+  "updated_at": "2026-09-16T08:57:19+09:00"
 }
