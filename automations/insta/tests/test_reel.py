@@ -137,3 +137,16 @@ def test_overlay_is_clean_by_default_and_keeps_only_credit():
     assert box is not None and box[1] > 1500
     old_style = reel.overlay_scene({"kind": "hook", "big": "제목"}, {}, clean=False)
     assert old_style.getbbox() is not None and old_style.getbbox()[1] < 300
+
+
+def test_chunk_words_keeps_counters_and_merges_short_tail():
+    """'다섯 / 살'·'한 / 시간' 처럼 갈라지지 않고, 문장 끝 짧은 꼬리('끄기.')는 앞 자막에 붙는다."""
+    def w(txt):
+        return [(i * 0.3, i * 0.3 + 0.3, x) for i, x in enumerate(txt.split())]
+    a = [c[2] for c in reel.chunk_words(w("노르웨이 연구진이 다섯 살 무렵부터 일곱 살까지, 아이들이 아는 단어를 검사했습니다."))]
+    assert not any(t.endswith("다섯") or t.endswith("일곱") for t in a), a
+    b = [c[2] for c in reel.chunk_words(w("둘째, 잠들기 한 시간 전에는 온 가족이 폰 끄기."))]
+    assert not any(t.rstrip(".") in ("끄기", "폰 끄기") for t in b[1:]) or len(b) == 1, b
+    assert not any(t.endswith(" 한") for t in b), b
+    c = [c[2] for c in reel.chunk_words(w("아이한테 영상 틀어 준 날, 괜히 미안하셨죠? 그런데 연구 결과는 조금 뜻밖입니다."))]
+    assert any(t.startswith("그런데") for t in c) and all(t.endswith("?") or "?" not in t for t in c), c

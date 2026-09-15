@@ -265,25 +265,56 @@ def silent_timing(parts: list[dict], per_char: float = 0.085, minimum: float = 2
         p["audio"] = ""
 
 
+BOUND_WORDS = ("살", "시간", "가지", "게", "수", "것", "때", "명", "년", "개", "번", "분", "초", "점", "원", "달", "주", "배", "퍼센트", "날", "동안")
+
+
+def _is_bound(word: str) -> bool:
+    """앞말에 붙어 다니는 말(다섯 '살', 한 '시간', 열 '가지를', 볼 '게' …)인가."""
+    w = word.strip("'\"”’(),.?!…")
+    return any(w == b or (w.startswith(b) and len(w) - len(b) <= 2) for b in BOUND_WORDS)
+
+
 def chunk_words(words: list[tuple[float, float, str]], max_chars: int = 13) -> list[tuple[float, float, str]]:
-    """단어들을 자막 한 줄(13자 안팎) 단위로 묶는다.
-    문장이 끝나면(. ? ! …) 반드시 끊어 새 문장이 자막 첫머리에 오게 하고, 쉼표(말 마디)에서도 끊는다
-    (2026-09-15 사용자 지적: 문장이 자막 중간에서 시작해 어색함)."""
-    out, cur, start, end = [], [], 0.0, 0.0
-    for s, e, w in words:
-        if cur and len(" ".join(cur + [w])) > max_chars:
-            out.append((start, end, " ".join(cur)))
-            cur = []
+    """단어들을 자막 한 조각(13자 안팎, 화면에서는 두 줄까지) 단위로 묶는다 (2026-09-15 사용자 지적 반영).
+    - 문장이 끝나면(. ? ! …) 반드시 끊어 새 문장이 자막 첫머리에 오게 하고, 쉼표(말 마디)에서도 끊는다
+    - 숫자·꾸밈말과 뒤에 붙는 말(다섯 살, 한 시간, 볼 게) 사이에서는 끊지 않는다
+    - 문장 끝 조각이 4글자 이하로 짧으면 앞 자막에 붙인다"""
+    out: list[tuple[float, float, str]] = []
+    cur: list[tuple[float, float, str]] = []
+    sent_start = 0                                     # 지금 문장이 out 의 몇 번째 조각부터인가
+
+    def text(ws):
+        return " ".join(w for _, _, w in ws)
+
+    def flush(end_of_sentence: bool = False):
+        nonlocal cur, sent_start
         if not cur:
-            start = s
-        cur.append(w)
-        end = e
+            return
+        piece = (cur[0][0], cur[-1][1], text(cur))
+        if end_of_sentence and len(out) > sent_start and len(piece[2].rstrip(".?!…,")) <= 4 \
+                and len(out[-1][2]) + 1 + len(piece[2]) <= max_chars + 8:
+            prev = out.pop()                           # 짧은 꼬리('끄기.')는 앞 자막에 붙인다
+            piece = (prev[0], piece[1], prev[2] + " " + piece[2])
+        out.append(piece)
+        cur = []
+        if end_of_sentence:
+            sent_start = len(out)
+
+    for s_, e_, w in words:
+        if cur and len(text(cur + [(s_, e_, w)])) > max_chars:
+            if _is_bound(w) and len(cur) > 1:          # '다섯 / 살' 로 갈라지지 않게 앞말을 함께 넘긴다
+                carry = cur.pop()
+                flush()
+                cur = [carry]
+            else:
+                flush()
+        cur.append((s_, e_, w))
         tail = w.rstrip("'\"”’)")
-        if tail.endswith((".", "?", "!", "…")) or (tail.endswith(",") and len(" ".join(cur)) >= 5):
-            out.append((start, end, " ".join(cur)))
-            cur = []
-    if cur:
-        out.append((start, end, " ".join(cur)))
+        if tail.endswith((".", "?", "!", "…")):
+            flush(end_of_sentence=True)
+        elif tail.endswith(",") and len(text(cur)) >= 5:
+            flush()
+    flush(end_of_sentence=True)
     return out
 
 
