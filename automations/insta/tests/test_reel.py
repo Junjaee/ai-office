@@ -43,7 +43,7 @@ def test_enforce_cta_keeps_dm_keyword_exact():
 def test_prompt_mentions_spoken_rules_and_keyword():
     s, u = reel.script_prompt("AI 꿀팁", "직장인", {"title": "t", "subtitle": "s", "paragraphs": [{"heading": "h", "text": "x"}]},
                               [{"kind": "cover", "title": "표지", "image_path": "a.jpg"}, {"kind": "cta", "title": "끝"}], dm_keyword="단축키")
-    assert "합쇼체" in s and "'단축키' 그대로" in s and "0. [cover] 표지 (사진 있음)" in u and "[cta]" not in u
+    assert "번역투 금지" in s and "합쇼체" in s and "'단축키' 그대로" in s and "0. [cover] 표지 (사진 있음)" in u and "[cta]" not in u
 
 
 @pytest.mark.skipif(not shutil.which("ffmpeg"), reason="ffmpeg 없음")
