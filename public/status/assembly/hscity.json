@@ -1,0 +1,41 @@
+{
+  "name": "화성시 공고 수집",
+  "dept": "review",
+  "ok": true,
+  "running": false,
+  "summary": "신규 25건, 전송 0건, 실패 0건, 15.4분",
+  "counts": {
+    "new": 25,
+    "sent": 0,
+    "failed": 0
+  },
+  "next_run": "매일 08:00·18:00",
+  "log": [
+    "신규 25건, 전송 0건, 실패 0건, 15.4분",
+    "[신규]⭐ [고시] 2026년 민방위 사이버교육(보충1차) 훈련 통지서 반송에 따른 공시송달",
+    "[첨부실패] 화성시 의료법인 등 설립 및 운영 지침 일부개정(20260820시행).pdf: SSLError",
+    "[신규] [고시] 화성시 의료법인 등 설립 및 운영지침 일부 개정",
+    "[신규] [고시] 기흥CC 도시관리계획(지구단위계획구역, 지구단위계획) 결정(경미한 변경)"
+  ],
+  "link": "",
+  "run_id": 34916635056,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34916635056",
+  "request_id": "migration-test",
+  "trigger": "manual",
+  "started_at": "2026-09-15T10:17:20+09:00",
+  "duration_sec": 924,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "신규 25건, 첨부 35건"
+    },
+    {
+      "id": "notify",
+      "status": "done",
+      "summary": "초기 25건 요약 1건, 무음 5건"
+    }
+  ],
+  "id": "hscity",
+  "updated_at": "2026-09-15T10:32:45+09:00"
+}

@@ -1,0 +1,1 @@
+{"automation": "hscity", "run_id": 34916635056, "request_id": "migration-test", "trigger": "manual", "started_at": "2026-09-15T10:17:20+09:00", "duration_sec": 924, "ok": true, "summary": "신규 25건, 전송 0건, 실패 0건, 15.4분", "url": "https://github.com/Junjaee/ai-office/actions/runs/34916635056", "recorded_at": "2026-09-15T10:32:45+09:00"}
