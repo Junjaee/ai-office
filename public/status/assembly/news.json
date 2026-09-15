@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 11초",
+  "summary": "신규 23건, 실패 0건, 11초",
   "counts": {
-    "new": 9,
+    "new": 23,
     "failed": 0,
-    "total": 596
+    "total": 619
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 11초",
-    "[신규] ‘송영길·권칠승·이준석 총출동’… 화성특례시 호남향우회 축제 달궜다 — 미담플러스",
-    "[신규] 개혁신당, 19일 만 이기인 비대위…'조응천 불발' 왜? : 정치 — 재경일보",
-    "[신규] [쎈터뷰] 김철근, 천하람 비판 이기인 개혁신당 비대위원장 지명, 상식적으로 납득 안돼 — 아주경제",
-    "[신규] 천하란 개혁신당 대표 권한대행 '비상대책위원장은 이기인 사무총장' — 뉴스1"
+    "신규 23건, 실패 0건, 11초",
+    "[신규] 개혁신당 '이기인 비대위'에 내부 반발…\"창당정신 사라져\" — v.daum.net, 연합뉴스",
+    "[신규] 대표 없는 이준석, 이준석 없는 대표 — 일요시사",
+    "[신규] 개혁신당 ‘이기인 비대위’ 출발부터 반발…김철근 “천하람의 쿠데타” — 경북매일",
+    "[신규] 개혁신당 비상대책의 새로운 얼굴 이기인, 당의 개혁 방향은? — 공감신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34897262115,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34897262115",
+  "run_id": 34921180183,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34921180183",
   "trigger": "schedule",
-  "started_at": "2026-09-15T06:10:42+09:00",
+  "started_at": "2026-09-15T11:26:48+09:00",
   "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 222건"
+      "summary": "검색어 5개에서 156건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 56건 (신규 9건) · v.daum.net 6건, citizenadmnews.co.kr 4건, newsis.com 4건"
+      "summary": "오늘 79건 (신규 23건) · 시민행정신문 11건, v.daum.net 7건, citizenadmnews.co.kr 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-15T06:10:55+09:00"
+  "updated_at": "2026-09-15T11:27:00+09:00"
 }
