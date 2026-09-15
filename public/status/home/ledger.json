@@ -3,38 +3,35 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 취소 0건, 건너뜀 0건, 실패 0건, 5초",
+  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초",
   "counts": {
-    "new": 3,
+    "new": 0,
     "replaced": 0,
     "skip": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 3건, 취소 0건, 건너뜀 0건, 실패 0건, 5초",
-    "[추가] 2026년 9월 9/15 네이버페이 376,200원 (생활비)",
-    "[추가] 2026년 9월 9/15 네이버페이 376,200원 (생활비)",
-    "[추가] 2026년 9월 9/15 찰찰보리식빵거여 3,800원 (생활비)"
+    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 34990832426,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34990832426",
+  "run_id": 35020231608,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35020231608",
   "trigger": "schedule",
-  "started_at": "2026-09-16T00:48:31+09:00",
-  "duration_sec": 5,
+  "started_at": "2026-09-16T05:32:38+09:00",
+  "duration_sec": 0,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 3건 확인, 결제 3건"
+      "summary": "메일 0건 확인, 결제 0건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 3 · 취소 0 · 건너뜀 0"
+      "summary": "추가 0 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-16T00:48:36+09:00"
+  "updated_at": "2026-09-16T05:32:39+09:00"
 }
