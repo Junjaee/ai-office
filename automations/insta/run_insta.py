@@ -483,6 +483,7 @@ def do_stats(cfg: dict, acct: dict, args, progress) -> dict:
     out = {"checked_at": now.isoformat(timespec="seconds"), "account": {k: info.get(k) for k in ("username", "followers_count", "follows_count", "media_count")},
            "posts": rows}
     path = posted_path(args.account).with_name("stats.json")
+    path.parent.mkdir(parents=True, exist_ok=True)       # 게시물이 아직 없는 새 계정은 폴더가 없다 (2026-09-15 parent 첫 실행)
     path.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     commit_paths([path], f"insta({args.account}): 지표 {now:%Y-%m-%d %H:%M}")
     lines = [f"[계정] 팔로워 {info.get('followers_count')} · 게시물 {info.get('media_count')}"]
