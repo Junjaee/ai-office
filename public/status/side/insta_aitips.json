@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 18건, 0초",
+  "summary": "게시 0건, 실패 0건, 누적 18건, 2.7분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,21 +11,24 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 18건, 0초",
-    "[예약] 지금 만들 것 없음"
+    "게시 0건, 실패 0건, 누적 18건, 2.7분",
+    "[후보] ”연동 없이 다 뚫는 AI 브라우저 윈도우 버전 출시“ — IG 🇰🇷 @ai_freaks.kr · 좋아요 926 · 댓글 1.6천",
+    "[후보] 🇺🇸빈자리 Gemini 3.8 Live and 3.8 Live Extended Thinking are our best  — IG 🇺🇸 @googledeepmind · 좋아요 2.3천 · 댓글 52",
+    "[후보] 영상 만들 때 열어 볼 자료실 3곳이 전부 무료입니다 — IG 🇰🇷 @prompt_what · 좋아요 2.0천 · 댓글 2.1천",
+    "[후보] 🇺🇸빈자리 Former TikTok execs built an app that uses AI to teach you h — TechCrunch"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34957493136,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34957493136",
-  "request_id": "cron-202609151021",
+  "run_id": 35036276574,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35036276574",
+  "request_id": "cron-202609152334",
   "trigger": "manual",
-  "started_at": "2026-09-15T19:23:11+09:00",
-  "duration_sec": 0,
+  "started_at": "2026-09-16T08:35:45+09:00",
+  "duration_sec": 159,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 0건 · 게시 3건"
+      "summary": "후보 20건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
@@ -44,5 +47,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-15T19:23:12+09:00"
+  "updated_at": "2026-09-16T08:38:24+09:00"
 }
