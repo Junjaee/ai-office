@@ -12,18 +12,17 @@
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
     "게시 0건, 실패 0건, 누적 17건, 2.6분",
+    "[후보] 🇺🇸빈자리 BREAKING: Apple is rolling out iOS 27 to all users today, an — IG 🇺🇸 @evolving.ai · 좋아요 9.9천 · 댓글 309",
     "[후보] 영상 만들 때 열어 볼 자료실 3곳이 전부 무료입니다 — IG 🇰🇷 @prompt_what · 좋아요 1.9천 · 댓글 2.0천",
-    "[후보] 🇺🇸빈자리 BREAKING: Apple is rolling out iOS 27 to all users today, an — IG 🇺🇸 @evolving.ai · 좋아요 9.8천 · 댓글 307",
-    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.3천 · 댓글 717",
-    "[후보] ”연동 없이 다 뚫는 AI 브라우저 윈도우 버전 출시“ — IG 🇰🇷 @ai_freaks.kr · 좋아요 620 · 댓글 996"
+    "[후보] AI가 이제 수능까지 만점이네요 — IG 🇰🇷 @ai.trend.kr · 좋아요 3.3천 · 댓글 718",
+    "[후보] 🇺🇸빈자리 ChatGPT can find relatives you never knew existed — IG 🇺🇸 @chatgptricks · 좋아요 3.6천 · 댓글 143"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 34910958641,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34910958641",
-  "request_id": "cron-202609142355",
-  "trigger": "manual",
-  "started_at": "2026-09-15T08:56:03+09:00",
-  "duration_sec": 153,
+  "run_id": 34911130001,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34911130001",
+  "trigger": "schedule",
+  "started_at": "2026-09-15T09:01:18+09:00",
+  "duration_sec": 155,
   "tasks": [
     {
       "id": "topic",
@@ -47,5 +46,5 @@
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-15T08:58:37+09:00"
+  "updated_at": "2026-09-15T09:03:54+09:00"
 }
