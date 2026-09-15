@@ -266,7 +266,9 @@ def silent_timing(parts: list[dict], per_char: float = 0.085, minimum: float = 2
 
 
 def chunk_words(words: list[tuple[float, float, str]], max_chars: int = 13) -> list[tuple[float, float, str]]:
-    """단어들을 자막 한 줄(13자 안팎) 단위로 묶는다."""
+    """단어들을 자막 한 줄(13자 안팎) 단위로 묶는다.
+    문장이 끝나면(. ? ! …) 반드시 끊어 새 문장이 자막 첫머리에 오게 하고, 쉼표(말 마디)에서도 끊는다
+    (2026-09-15 사용자 지적: 문장이 자막 중간에서 시작해 어색함)."""
     out, cur, start, end = [], [], 0.0, 0.0
     for s, e, w in words:
         if cur and len(" ".join(cur + [w])) > max_chars:
@@ -276,6 +278,10 @@ def chunk_words(words: list[tuple[float, float, str]], max_chars: int = 13) -> l
             start = s
         cur.append(w)
         end = e
+        tail = w.rstrip("'\"”’)")
+        if tail.endswith((".", "?", "!", "…")) or (tail.endswith(",") and len(" ".join(cur)) >= 5):
+            out.append((start, end, " ".join(cur)))
+            cur = []
     if cur:
         out.append((start, end, " ".join(cur)))
     return out
@@ -421,13 +427,18 @@ def video_chain(w: int, h: int) -> str:
             "[bg][fg]overlay=(W-w)/2:600+(720-h)/2,setsar=1[base];")
 
 
-def overlay_scene(part: dict, theme: dict, *, brand: str = "AI TIPS", idx: int = 0, total: int = 1, credit: str = ""):
+def overlay_scene(part: dict, theme: dict, *, brand: str = "AI TIPS", idx: int = 0, total: int = 1, credit: str = "", clean: bool = True):
     """영상 해설형 릴스의 글자 층(투명 바탕, 2026-09-15 사용자 결정 '해설형 재가공'): 위아래 어둠 띠 + 브랜드·진행 표시 + 큰 문구 + 출처.
     가운데(600~1320)는 비워 두어 아래 깔린 원본 영상이 보이게 한다."""
     from PIL import Image, ImageDraw
 
     accent = _hex(theme.get("accent", "#f2b544"), (242, 181, 68))
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    if clean:                                          # 2026-09-15 사용자 지시: 영상 위에는 자막만 (띠·제목·브랜드 알약·진행 점·AI 표시 없음)
+        if credit:                                     # 남의 영상 출처 표기는 규칙이라 남긴다
+            ImageDraw.Draw(img).text((W // 2, 1590), credit, font=font(34, 700), fill=(235, 235, 235), anchor="mt",
+                                     stroke_width=3, stroke_fill=(0, 0, 0))
+        return img
     sd = ImageDraw.Draw(img)
     for y in range(0, 600):                            # 위 띠: 위로 갈수록 진하게 (큰 문구가 읽히게)
         sd.line([(0, y), (W, y)], fill=(0, 0, 0, int(40 + 190 * (1 - y / 600))))
@@ -573,7 +584,7 @@ def build(script: dict, out: Path, *, theme: dict, visuals: dict[int, str] | Non
     frames: list[tuple[Path, float]] = []
     t0 = 0.0
     for i, p in enumerate(parts):
-        base = overlay_scene(p, theme, brand=brand, idx=i, total=len(parts), credit=str(video.get("credit") or "")) if video else scene(p, theme, visual=visuals.get(int(p.get("card") or 0), "") if p["kind"] == "seg" else
+        base = overlay_scene(p, theme, brand=brand, idx=i, total=len(parts), credit=str(video.get("credit") or ""), clean=bool(video.get("clean", True))) if video else scene(p, theme, visual=visuals.get(int(p.get("card") or 0), "") if p["kind"] == "seg" else
                      (visuals.get(-1, "") if p["kind"] in ("hook", "cta") else ""), brand=brand, idx=i, total=len(parts))
         seg_len = p["dur"] + GAP
         chunks = chunk_words(p["words"]) if engine else [(0.0, p["dur"], p["say"])]

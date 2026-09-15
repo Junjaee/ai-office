@@ -116,3 +116,24 @@ def test_build_over_source_video_loops_and_shows_video(tmp_path):
 def test_video_chain_vertical_fills_screen_and_landscape_uses_box():
     assert "boxblur" not in reel.video_chain(720, 1280) and "crop=1080:1920" in reel.video_chain(720, 1280)
     assert "boxblur" in reel.video_chain(1920, 1080) and "boxblur" in reel.video_chain(720, 720)
+
+
+def test_chunk_words_starts_new_sentence_at_caption_start():
+    """새 문장은 자막 첫머리에서 시작하고(물음표 뒤에 이어 붙지 않음), 쉼표에서도 끊는다 (2026-09-15 사용자 지적)."""
+    words = [(0.0, 0.3, "영상"), (0.3, 0.6, "틀어"), (0.6, 0.9, "준"), (0.9, 1.2, "날,"), (1.2, 1.5, "괜히"),
+             (1.5, 1.8, "미안하셨죠?"), (1.8, 2.1, "그런데"), (2.1, 2.4, "연구"), (2.4, 2.7, "결과는")]
+    texts = [c[2] for c in reel.chunk_words(words)]
+    assert texts[0] == "영상 틀어 준 날,"
+    assert any(t.startswith("그런데") for t in texts)
+    assert all(t.endswith("?") or "?" not in t for t in texts)
+
+
+def test_overlay_is_clean_by_default_and_keeps_only_credit():
+    """영상 위 글자층은 기본이 자막만(완전히 투명). 남의 영상 출처 표기만 아래에 남는다."""
+    empty = reel.overlay_scene({"kind": "seg", "big": "큰 문구"}, {"accent": "#F29A00"}, brand="육아 꿀팁")
+    assert empty.getbbox() is None
+    credited = reel.overlay_scene({"kind": "seg", "big": "x"}, {}, credit="Source · @someone")
+    box = credited.getbbox()
+    assert box is not None and box[1] > 1500
+    old_style = reel.overlay_scene({"kind": "hook", "big": "제목"}, {}, clean=False)
+    assert old_style.getbbox() is not None and old_style.getbbox()[1] < 300
