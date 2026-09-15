@@ -12,7 +12,7 @@ accounts:
     posts_per_run: 1                         # 실행 1회에 올릴 게시물 수
     candidates_to_llm: 40                    # 소재 후보를 몇 개까지 편집장(모델)에게 보여 줄지
     review_count: 20                         # 매일 검토 칸에 올릴 후보 수 (사용자 결정 2026-09-12: 최대 20)
-    auto_pick: 1                             # 첫 시간대(07:30)에 예약이 없으면 편집장 1순위부터 이 개수만큼 자동 게시 (0 = 끔)
+    auto_pick: 0                             # 자동 게시 멈춤 (2026-09-15 사용자: 릴스 고도화 뒤 다시 켠다). 1 = 빈 칸에 편집장 1순위 자동 게시
     slots: ["07:30", "12:30", "18:30"]       # 고정 게시 시간대(KST) — 고른 주제는 다음 빈 시간대부터 차례로 (사용자 결정 2026-09-12). 하루 3건이 상한
     max_per_day: 3                           # (slots 가 없을 때만) 24÷N 간격의 하루 상한
     reels: true                              # 소재에 영상(공식 유튜브·X·공식 페이지 mp4)이 있으면 카드 대신 릴스로 게시 (출처 표기)
@@ -31,7 +31,7 @@ accounts:
     posts_per_run: 1
     candidates_to_llm: 40
     review_count: 20
-    auto_pick: 1
+    auto_pick: 0                             # 자동 게시 멈춤 (2026-09-15 사용자: 릴스 고도화 뒤 다시 켠다). 1 = 빈 칸에 편집장 1순위 자동 게시
     slots: ["07:30", "12:30", "18:30"]
     max_per_day: 3
     reels: true
@@ -47,7 +47,7 @@ accounts:
     posts_per_run: 1
     candidates_to_llm: 40
     review_count: 20
-    auto_pick: 1
+    auto_pick: 0                             # 자동 게시 멈춤 (2026-09-15 사용자: 릴스 고도화 뒤 다시 켠다). 1 = 빈 칸에 편집장 1순위 자동 게시
     slots: ["07:30", "12:30", "18:30"]
     max_per_day: 3
     reels: true
