@@ -348,6 +348,10 @@ def scene(part: dict, theme: dict, *, visual: str = "", brand: str = "AI TIPS", 
         img.paste(cover, (0, 0))
     if vis:
         fg = (255, 255, 255)                           # 흐린 사진 위에는 밝은 테마여도 흰 글씨
+    else:                                              # 사진이 없으면 강조색이 은은하게 번지는 배경 (평평한 검은 화면 방지, 2026-09-15)
+        mix = tuple(int(bg[i] * 0.55 + accent[i] * 0.45) for i in range(3))
+        ImageDraw.Draw(img).ellipse((W // 2 - 560, 520, W // 2 + 560, 1400), fill=mix)
+        img = img.filter(ImageFilter.GaussianBlur(170))
     d = ImageDraw.Draw(img)
     # 브랜드 알약 + 진행 표시
     fb = font(34, 800)
@@ -367,6 +371,14 @@ def scene(part: dict, theme: dict, *, visual: str = "", brand: str = "AI TIPS", 
             d.text((W // 2, y), ln, font=fnt, fill=fg, anchor="mt")
             y += 134
         d.rectangle((W // 2 - 90, y + 20, W // 2 + 90, y + 30), fill=accent)
+    elif not vis:                                       # 사진 없는 장면: 큰 문구를 화면 가운데에 (빈 가운데 방지)
+        fnt = font(104, 900)
+        lines = wrap(d, big, fnt, 940)[:3]
+        y = 800 - len(lines) * 62
+        for ln in lines:
+            d.text((W // 2, y), ln, font=fnt, fill=fg, anchor="mt")
+            y += 124
+        d.rectangle((W // 2 - 70, y + 18, W // 2 + 70, y + 27), fill=accent)
     else:
         fnt = font(92 if part["kind"] != "cta" else 88, 900)
         lines = wrap(d, big, fnt, 940)[:2]

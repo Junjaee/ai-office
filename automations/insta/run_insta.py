@@ -247,7 +247,8 @@ def step_reel2(cfg: dict, acct: dict, p: writer.Profile, llm: LLM, out: Path, wr
         s_, u_ = reel.script_prompt(p.name, p.audience, art, slides, dm_keyword=kw)
         script = reel.enforce_cta(llm.json(system=s_, user=u_, schema=reel.REEL_SCRIPT_SCHEMA), kw)
         (out / "reel_script.json").write_text(json.dumps(script, ensure_ascii=False, indent=1), encoding="utf-8")
-        visuals = {i: str(Path(s["image_path"])) for i, s in enumerate(slides) if s.get("image_path") and Path(s["image_path"]).exists()}
+        visuals = {i: str(Path(s["image_path"])) for i, s in enumerate(slides) if s.get("image_path") and Path(s["image_path"]).exists()
+                   and (s.get("image") or {}).get("kind") != "screenshot"}   # 웹사이트 캡처는 폰 화면에서 안 읽히고 남의 화면을 붙인 것처럼 보여 뺀다 (2026-09-15 사용자 지적)
         visuals[-1] = visuals.get(0, "")
         engine = str(acct.get("reel_voice_engine", "edge"))
         voice = str(acct.get("reel_voice", "") or "")
