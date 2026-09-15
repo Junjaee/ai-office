@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 36건, 실패 0건, 15초",
+  "summary": "신규 38건, 실패 0건, 12초",
   "counts": {
-    "new": 36,
+    "new": 38,
     "failed": 0,
-    "total": 655
+    "total": 693
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 36건, 실패 0건, 15초",
-    "[신규] 청문회 질의하는 이준석 의원 — 뉴스1",
-    "[신규] [심층분석]‘이기인 비대위’ 출범, ‘불협화음’으로 떠난 개혁신당 정치인의 현 주소는? — everynews.co.kr",
-    "[신규] \"이준석한테도 말 안했다는데\" 김철근, '이기인 비대위' 지명에 거듭 회의론 [정국 기상대] — 데일리안",
-    "[신규] 이기인 비대위 출범부터 삐걱…“천하람 쿠데타·창당정신 사라져” — v.daum.net, 강원도민일보"
+    "신규 38건, 실패 0건, 12초",
+    "[신규] 이준석, 경제부총리 후보자에 물었다…\"李대통령 매도인 대출 문제 없나요?\" — 뉴스1",
+    "[신규] 이형일 부총리 후보자 \"실거주 예외요건, 합리적 보완책 적극 검토\" — 한국세정신문",
+    "[신규] 부가 기능 없이도 이해할 수 있는 이준석 경마장역 기본 흐름 — Histoire pour tous",
+    "[신규] 이형일, 李 근저당 논란에 “케이스 바이 케이스”… ETF 사태엔 “국민들께 송구” — 에너지경제신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 34945409813,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34945409813",
+  "run_id": 34978501939,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34978501939",
   "trigger": "schedule",
-  "started_at": "2026-09-15T17:09:47+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-09-15T22:58:56+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 135건"
+      "summary": "검색어 5개에서 144건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 115건 (신규 36건) · 시민행정신문 12건, v.daum.net 11건, 뉴스1 8건"
+      "summary": "오늘 153건 (신규 38건) · 시민행정신문 20건, v.daum.net 16건, 뉴스1 12건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-15T17:10:03+09:00"
+  "updated_at": "2026-09-15T22:59:09+09:00"
 }
