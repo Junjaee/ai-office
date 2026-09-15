@@ -17,3 +17,5 @@ edge-tts>=7.0
 numpy>=1.26
 fonttools>=4.50
 brotli>=1.1
+pypdf>=4.0
+olefile>=0.47

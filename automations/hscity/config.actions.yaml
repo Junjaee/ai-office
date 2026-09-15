@@ -1,0 +1,44 @@
+# 화성시 공고 수집 — GitHub Actions 실행용 설정. 비밀값(텔레그램·구글 토큰)은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
+
+base_url: "https://www.hscity.go.kr"
+download_base: "https://eminwon.hscity.go.kr/emwp/jsp/ofr/FileDown.jsp"
+
+request_delay: 1.0
+retries: 3
+timeout: 30
+max_pages_per_board: 5      # 평상시(이미 수집 이력 있음): 게시판당 최근 5페이지만
+bootstrap_max_pages: 20     # 최초 실행(manifest 없음): 게시판당 최대 20페이지
+bootstrap_since: "2025-01-01"
+dry_max_pages: 1            # --dry-run 시 게시판당 1페이지만
+
+# 결과 저장 위치(Google Drive). drive_parent_id = 상위 폴더 ID(브라우저에서 폴더 열면 URL 끝의 문자열).
+# 이 상위 폴더 안에 drive_folder_name 폴더를 만들어 연도/게시판/글폴더 구조로 저장한다.
+drive_parent_id: "PUT_DRIVE_PARENT_ID"
+drive_folder_name: "공고수집"
+
+boards:
+  - {id: gosi,     name: "고시",           adapter: gosi,  list_path: "/www/gosi/BD_notice.do",           detail_path: "/www/gosi/BD_selectNoticeDetail.do", id_param: q_notAncmtMgtNo}
+  - {id: gonggo,   name: "일반공고",       adapter: gosi,  list_path: "/www/gosi/BD_selectGosiList.do",    detail_path: "/www/gosi/BD_selectGosiDetail.do",   id_param: q_notAncmtMgtNo}
+  - {id: bid,      name: "입찰공고",       adapter: gosi,  list_path: "/www/gosi/BD_bidding.do",           detail_path: "/www/gosi/BD_selectBiddingDetail.do", id_param: q_notAncmtMgtNo}
+  - {id: lawmake,  name: "입법예고",       adapter: gosi,  list_path: "/www/gosi/BD_lawmake.do",           detail_path: "/www/gosi/BD_selectLawmakeDetail.do", id_param: q_notAncmtMgtNo}
+  - {id: etcorg,   name: "타기관공고고시", adapter: bbs,   list_path: "/www/user/bbs/BD_selectBbsList.do", detail_path: "/www/user/bbs/BD_selectBbs.do", id_param: q_bbscttSn, bbs_code: "1088"}
+  - {id: cityinfo, name: "시정알림방",     adapter: bbs,   list_path: "/www/user/bbs/BD_selectBbsList.do", detail_path: "/www/user/bbs/BD_selectBbs.do", id_param: q_bbscttSn, bbs_code: "1019"}
+  - {id: banshoe,  name: "반상회보",       adapter: bbs,   list_path: "/www/user/bbs/BD_selectBbsList.do", detail_path: "/www/user/bbs/BD_selectBbs.do", id_param: q_bbscttSn, bbs_code: "1022"}
+  - {id: gnews,    name: "도정소식",       adapter: gnews, list_path: "/www/gnews/BD_selectGnewsList.do",  detail_path: "/www/gnews/BD_selectGnewsDetail.do", id_param: q_caCode, be_code: "C001"}
+
+filter:
+  include_keywords: [동탄, 영천동, 청계동, 오산동, 신동, 목동, 산척동, 장지동, 송동, 방교동, 금곡동, 동탄2신도시, 동탄테크노밸리, 동탄호수공원]
+  exclude_dong: [반송동, 석우동, 능동, 중동]
+  star_keywords: [동탄4동, 동탄6동, 동탄7동, 동탄8동, 동탄9동, 청계동, 장지동, 방교동, 산척동]
+  citywide_markers: ["화성시 전역", "관내 전역", "화성특례시 전역"]
+
+# 텔레그램 알림에서 제외할 행정 루틴(제목 매칭). 파일 수집·저장은 계속하되 알림만 안 보냄.
+notify_exclude: [공시송달, 반송, 민방위, 거주불명, 무단전출, 무연고, 위탁내역, 개인정보, 계량기, "공인 폐기", 독촉고지, 납세고지, 직권조치]
+
+# 상태 보고: 저장소 루트에 커밋
+office_repo: "."
+office_workspace: "assembly"
+next_run: "매일 08:00·18:00"
+result_link: ""
+
+tasks: [collect, notify]

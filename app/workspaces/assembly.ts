@@ -178,6 +178,12 @@ export const AUTOMATIONS: AutomationDef[] = [
     ] },
   { id: "filing", dept: "review", name: "자료 분류",
     tasks: [{ id: "sort", name: "자료 분류", role: "받은 자료를 회의 날짜별 폴더로 분류" }] },
+  { id: "hscity", dept: "review", name: "화성시 공고 수집",
+    workflow: "hscity.yml", schedule: "매일 08:00·18:00",
+    tasks: [
+      { id: "collect", name: "공고 수집", role: "화성시청 8개 게시판에서 동탄(화성시을) 공고 수집·드라이브 저장", colors: ["#2f4858", "#e8eef2", "#0f766e"] },
+      { id: "notify", name: "알림 발송", role: "새 공고를 동탄 전용 텔레그램으로 알림(공시송달 등 행정 루틴 제외)", colors: ["#3b2f4a", "#efe7f7", "#229ed9"] },
+    ] },
 ];
 
 export const workspace: WorkspaceConfig = {
