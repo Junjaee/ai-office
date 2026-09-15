@@ -3,39 +3,38 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 25건, 전송 0건, 실패 0건, 15.4분",
+  "summary": "신규 5건, 전송 3건, 실패 0건, 1.8분",
   "counts": {
-    "new": 25,
-    "sent": 0,
+    "new": 5,
+    "sent": 3,
     "failed": 0
   },
   "next_run": "매일 08:00·18:00",
   "log": [
-    "신규 25건, 전송 0건, 실패 0건, 15.4분",
-    "[신규]⭐ [고시] 2026년 민방위 사이버교육(보충1차) 훈련 통지서 반송에 따른 공시송달",
-    "[첨부실패] 화성시 의료법인 등 설립 및 운영 지침 일부개정(20260820시행).pdf: SSLError",
-    "[신규] [고시] 화성시 의료법인 등 설립 및 운영지침 일부 개정",
-    "[신규] [고시] 기흥CC 도시관리계획(지구단위계획구역, 지구단위계획) 결정(경미한 변경)"
+    "신규 5건, 전송 3건, 실패 0건, 1.8분",
+    "[신규] [고시] 동탄(2)택지개발지구 도시계획시설(공원) 실시계획(변경) 작성 고시[동부",
+    "[첨부실패] 2026년 민방위 집합교육(보충2차) 훈련 통지서 반송에 따른 공시송달 공고(동탄9동).hwpx: SSLError",
+    "[신규]⭐ [고시] 2026년 민방위 집합교육(보충2차) 훈련 통지서 반송에 따른 공시송달 ",
+    "[신규] [입찰공고] 주택건설공사 감리자(건축)  개찰 결과 공고 [동탄(1) M1-1-2블록"
   ],
   "link": "",
-  "run_id": 34916635056,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34916635056",
-  "request_id": "migration-test",
-  "trigger": "manual",
-  "started_at": "2026-09-15T10:17:20+09:00",
-  "duration_sec": 924,
+  "run_id": 34979712494,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34979712494",
+  "trigger": "schedule",
+  "started_at": "2026-09-15T23:09:39+09:00",
+  "duration_sec": 106,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 25건, 첨부 35건"
+      "summary": "신규 5건, 첨부 6건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "초기 25건 요약 1건, 무음 5건"
+      "summary": "3건 발송, 무음 2건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-09-15T10:32:45+09:00"
+  "updated_at": "2026-09-15T23:11:26+09:00"
 }
