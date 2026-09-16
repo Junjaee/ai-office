@@ -649,12 +649,12 @@ test("GitHubClient.readRepoText: raw 글자, 404 → null, 5xx → Unavailable",
 test("runBelongsTo/latestRunFor: 누른 실행은 그 계정만, 예약 실행은 모두의 것", async () => {
   const { runBelongsTo, latestRunFor } = await import("../worker/run-api.ts");
   const mk = (id, title) => ({ id, path: ".github/workflows/insta.yml", display_title: title, status: "completed", conclusion: "success", event: "schedule", run_started_at: "2026-09-14T00:00:00Z", updated_at: "2026-09-14T00:05:00Z", html_url: "" });
-  const runs = [mk(3, "insta_parent · req-1"), mk(2, "insta · 예약"), mk(1, "insta_aitips · req-0")];
-  const auto = [{ id: "insta_aitips", workflow: "insta.yml" }, { id: "insta_parent", workflow: "insta.yml" }, { id: "news", workflow: "news.yml" }];
-  assert.equal(runBelongsTo(runs[0], "insta_aitips", ["insta_aitips", "insta_parent"]), false);
-  assert.equal(runBelongsTo(runs[1], "insta_aitips", ["insta_aitips", "insta_parent"]), true);
+  const runs = [mk(3, "insta_parent · req-1"), mk(2, "insta · 예약"), mk(1, "insta_policy · req-0")];
+  const auto = [{ id: "insta_policy", workflow: "insta.yml" }, { id: "insta_parent", workflow: "insta.yml" }, { id: "news", workflow: "news.yml" }];
+  assert.equal(runBelongsTo(runs[0], "insta_policy", ["insta_policy", "insta_parent"]), false);
+  assert.equal(runBelongsTo(runs[1], "insta_policy", ["insta_policy", "insta_parent"]), true);
   assert.equal(runBelongsTo(runs[0], "news", ["news"]), true, "단독 워크플로는 전부 자기 것");
-  assert.equal(latestRunFor(runs, auto[0], auto).id, 2, "aitips 의 최신 = 예약 실행(2)");
+  assert.equal(latestRunFor(runs, auto[0], auto).id, 2, "policy 의 최신 = 예약 실행(2)");
   assert.equal(latestRunFor(runs, auto[1], auto).id, 3);
 });
 

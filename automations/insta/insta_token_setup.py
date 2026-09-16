@@ -43,7 +43,7 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("token_file")
     ap.add_argument("--app-secret-file", default="")
-    ap.add_argument("--account", default="aitips")
+    ap.add_argument("--account", default="policy")
     ap.add_argument("--set-secret", action="store_true")
     a = ap.parse_args(argv)
     token = read_secret(a.token_file)

@@ -61,7 +61,7 @@ for (const ws of WORKSPACE_LIST) {
   });
   test(`${ws.id}: workflow 자동화의 Python 설정 tasks 와 사무실 설정 tasks 일치`, () => {
     for (const a of ws.automations.filter((x) => x.workflow)) {
-      // 계정별 자동화(insta_aitips 처럼 `<플랫폼>_<계정>`)는 플랫폼 폴더(automations/insta) 하나를 같이 쓴다
+      // 계정별 자동화(insta_policy 처럼 `<플랫폼>_<계정>`)는 플랫폼 폴더(automations/insta) 하나를 같이 쓴다
       let file = path.join(ROOT, "automations", a.id, "config.actions.yaml");
       if (!fs.existsSync(file)) file = path.join(ROOT, "automations", a.id.split("_")[0], "config.actions.yaml");
       assert.ok(fs.existsSync(file), `${file} 없음`);

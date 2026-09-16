@@ -7,8 +7,8 @@
 - 이미 올린 key 면 게시하지 않고 done 처리(중복 게시 방지). 게시 직후 posted.jsonl 에 dm_keyword·dm_text 까지 기록 → 매시 댓글 DM.
 
 사용:
-  python insta_outbox.py add --account aitips --dir <reel.mp4·thumb.jpg·meta.json 폴더> --due 2026-09-15T18:30   (이 PC, gh 로그인 필요)
-  python insta_outbox.py publish --account aitips                                                               (GitHub 게시 실행, 매시)
+  python insta_outbox.py add --account policy --dir <reel.mp4·thumb.jpg·meta.json 폴더> --due 2026-09-15T18:30   (이 PC, gh 로그인 필요)
+  python insta_outbox.py publish --account policy                                                               (GitHub 게시 실행, 매시)
 """
 from __future__ import annotations
 

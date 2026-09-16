@@ -9,7 +9,7 @@
 - 기록: data/insta/<계정>/dm_log.jsonl (comment_id 별 1회, 실패도 기록해 재시도 폭주 방지)
 - 권한: 토큰에 instagram_business_manage_messages, instagram_business_manage_comments 가 있어야 한다. 없으면 한 줄 안내하고 끝.
 
-사용: python insta_dm.py --account aitips   (환경변수 INSTA_<계정>_TOKEN / INSTA_<계정>_USER_ID)
+사용: python insta_dm.py --account policy   (환경변수 INSTA_<계정>_TOKEN / INSTA_<계정>_USER_ID)
 """
 from __future__ import annotations
 
@@ -198,7 +198,7 @@ def run(*, posted: list[dict], log: list[dict], token: str, user_id: str, own_us
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--account", default=os.environ.get("INSTA_ACCOUNT", "aitips"))
+    ap.add_argument("--account", default=os.environ.get("INSTA_ACCOUNT", "policy"))
     ap.add_argument("--dry-run", action="store_true", help="댓글만 읽고 보내지 않는다")
     args = ap.parse_args()
     up = args.account.upper()

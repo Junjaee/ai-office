@@ -1,6 +1,6 @@
 """예약 수정(표준 라이브러리만) — 사이트에서 예약 항목을 취소하거나 시각을 바꾼다. 워크플로 mode=edit 가 의존성 설치 없이 부른다.
 
-사용: python review_edit.py --workspace side --automation insta_aitips --edits "0123abcd=cancel,89ef0123=15:30,4567cdef=2026-09-13T07:30"
+사용: python review_edit.py --workspace side --automation insta_policy --edits "0123abcd=cancel,89ef0123=15:30,4567cdef=2026-09-13T07:30"
   id=cancel      예약 취소 (queued 만)
   id=HH:MM       다음에 오는 그 시각(KST). 이미 지난 시각이면 내일
   id=ISO 시각     그 시각으로

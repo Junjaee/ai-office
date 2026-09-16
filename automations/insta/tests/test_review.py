@@ -122,7 +122,7 @@ def test_apply_edits_cancels_and_reschedules_queued_only():
 
 
 def test_has_due_reads_file(tmp_path):
-    path = tmp_path / "public" / "review" / "side" / "insta_aitips.json"
+    path = tmp_path / "public" / "review" / "side" / "insta_policy.json"
     assert review.has_due(path) is False
     data = review.set_candidates({"queue": []}, cands(1), now=NOW)
     data, _ = review.enqueue(data, [data["candidates"][0]["id"]], now=NOW)

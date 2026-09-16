@@ -14,8 +14,8 @@ def test_reel_tts_opts_from_account_settings():
     assert run_insta.reel_tts_opts({"reel_tempo": 1.2}, "edge") is None
 
 
-def test_aitips_config_is_faster_piljae():
+def test_policy_config_is_faster_piljae():
     import yaml
 
-    acct = yaml.safe_load((Path(run_insta.__file__).parent / "config.actions.yaml").read_text(encoding="utf-8"))["accounts"]["aitips"]
+    acct = yaml.safe_load((Path(run_insta.__file__).parent / "config.actions.yaml").read_text(encoding="utf-8"))["accounts"]["policy"]
     assert acct["reel_voice_engine"] == "typecast" and float(acct["reel_tempo"]) > 1.1

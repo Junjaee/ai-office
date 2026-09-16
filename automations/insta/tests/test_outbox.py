@@ -65,41 +65,41 @@ def folder(tmp_path, caption="세상에 없는 벼룩시장. 댓글에 '벼룩�
 
 def test_add_uploads_assets_and_saves_queued_item(tmp_path):
     run = FakeGh(release_exists=False)
-    item = ob.add("aitips", folder(tmp_path), "2026-09-15T18:30", run=run, root=tmp_path / "data", progress=lambda m: None)
+    item = ob.add("policy", folder(tmp_path), "2026-09-15T18:30", run=run, root=tmp_path / "data", progress=lambda m: None)
     assert item["status"] == "queued" and item["due"] == "2026-09-15T18:30+09:00" and item["video"].startswith("reel-20260915-1830-")
     assert [c[:2] for c in run.calls] == [("release", "view"), ("release", "create"), ("release", "upload")]
-    assert (tmp_path / "data" / "aitips" / "outbox" / f"{item['id']}.json").exists()
+    assert (tmp_path / "data" / "policy" / "outbox" / f"{item['id']}.json").exists()
 
 
 def test_publish_only_when_due_then_records_and_cleans_up(tmp_path):
     root, run, pub = tmp_path / "data", FakeGh(release_exists=True), FakePub()
-    ob.add("aitips", folder(tmp_path), "2026-09-15T18:30", run=run, root=root, progress=lambda m: None)
+    ob.add("policy", folder(tmp_path), "2026-09-15T18:30", run=run, root=root, progress=lambda m: None)
     early = datetime(2026, 9, 15, 18, 0, tzinfo=KST)
-    assert ob.publish("aitips", now=early, pub=pub, run=run, root=root, workdir=tmp_path / "w", progress=lambda m: None) is None
+    assert ob.publish("policy", now=early, pub=pub, run=run, root=root, workdir=tmp_path / "w", progress=lambda m: None) is None
     assert pub.calls == []
     late = datetime(2026, 9, 15, 18, 31, tzinfo=KST)
-    row = ob.publish("aitips", now=late, pub=pub, run=run, root=root, workdir=tmp_path / "w", progress=lambda m: None)
+    row = ob.publish("policy", now=late, pub=pub, run=run, root=root, workdir=tmp_path / "w", progress=lambda m: None)
     assert row is not None
     assert row["media_id"] == "m1" and row["dm_keyword"] == "벼룩시장" and row["kind"] == "reel_commentary"
     assert pub.calls[1][2].endswith("#AI영상") and pub.calls[1][3] == "https://r2.test/t.jpg"
     assert sum(1 for c in run.calls if c[:2] == ("release", "delete-asset")) == 2
-    saved = json.loads(next((root / "aitips" / "outbox").glob("*.json")).read_text(encoding="utf-8"))
+    saved = json.loads(next((root / "policy" / "outbox").glob("*.json")).read_text(encoding="utf-8"))
     assert saved["status"] == "done" and saved["permalink"].endswith("/abc/")
-    assert ob.publish("aitips", now=late, pub=pub, run=run, root=root, workdir=tmp_path / "w", progress=lambda m: None) is None
+    assert ob.publish("policy", now=late, pub=pub, run=run, root=root, workdir=tmp_path / "w", progress=lambda m: None) is None
     assert len([c for c in pub.calls if c[0] == "publish"]) == 1                      # 두 번 올리지 않는다
 
 
 def test_already_posted_key_is_marked_done_without_publishing(tmp_path):
     root, run, pub = tmp_path / "data", FakeGh(release_exists=True), FakePub()
-    item = ob.add("aitips", folder(tmp_path), "2026-09-15T18:30", run=run, root=root, progress=lambda m: None)
-    (root / "aitips" / "posted.jsonl").write_text(json.dumps({"key": item["key"]}) + chr(10), encoding="utf-8")
-    assert ob.publish("aitips", now=datetime(2026, 9, 15, 19, 0, tzinfo=KST), pub=pub, run=run, root=root, progress=lambda m: None) is None
-    assert pub.calls == [] and json.loads((root / "aitips" / "outbox" / f"{item['id']}.json").read_text(encoding="utf-8"))["status"] == "done"
+    item = ob.add("policy", folder(tmp_path), "2026-09-15T18:30", run=run, root=root, progress=lambda m: None)
+    (root / "policy" / "posted.jsonl").write_text(json.dumps({"key": item["key"]}) + chr(10), encoding="utf-8")
+    assert ob.publish("policy", now=datetime(2026, 9, 15, 19, 0, tzinfo=KST), pub=pub, run=run, root=root, progress=lambda m: None) is None
+    assert pub.calls == [] and json.loads((root / "policy" / "outbox" / f"{item['id']}.json").read_text(encoding="utf-8"))["status"] == "done"
 
 
 def test_caption_without_dm_keyword_is_rejected(tmp_path):
     with pytest.raises(ValueError):
-        ob.add("aitips", folder(tmp_path, caption="키워드 없음"), "2026-09-15T18:30", run=FakeGh(), root=tmp_path / "data", progress=lambda m: None)
+        ob.add("policy", folder(tmp_path, caption="키워드 없음"), "2026-09-15T18:30", run=FakeGh(), root=tmp_path / "data", progress=lambda m: None)
 
 
 class FakeCardPub(FakePub):

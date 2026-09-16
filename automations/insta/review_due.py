@@ -1,5 +1,5 @@
 """예약 확인 — 지금 만들 주제가 있으면 true, 없으면 false 를 찍는다. 표준 라이브러리만 쓴다(워크플로가 의존성 설치 전에 부른다).
-사용: python automations/insta/review_due.py --workspace side --automation insta_aitips [--repo .]"""
+사용: python automations/insta/review_due.py --workspace side --automation insta_policy [--repo .]"""
 from __future__ import annotations
 
 import argparse

@@ -8,10 +8,10 @@
   run      (예전 방식) 후보 중 1건을 골라 바로 게시. 이 PC 시험용
 
 사용:
-  python run_insta.py --account aitips                  # 실제 실행 (게시 + 상태 파일 커밋·push)
-  python run_insta.py --account aitips --dry-run        # 게시·보고 없이 카드까지만 만들어 out/ 에 저장
-  python run_insta.py --account aitips --until write    # 해당 단계까지만 (topic | write | card | upload). write 뒤에 out/…/article.md 를 읽고 확인
-  python run_insta.py --account aitips --resume         # out/<계정>/<날짜>/ 에 남은 중간 결과를 이어서
+  python run_insta.py --account policy                  # 실제 실행 (게시 + 상태 파일 커밋·push)
+  python run_insta.py --account policy --dry-run        # 게시·보고 없이 카드까지만 만들어 out/ 에 저장
+  python run_insta.py --account policy --until write    # 해당 단계까지만 (topic | write | card | upload). write 뒤에 out/…/article.md 를 읽고 확인
+  python run_insta.py --account policy --resume         # out/<계정>/<날짜>/ 에 남은 중간 결과를 이어서
   옵션: --config 경로, --pick N (후보 N번을 강제로 고름), --date YYYY-MM-DD
 
 코드는 플랫폼당 한 벌이고 계정별 차이는 config.actions.yaml 의 accounts 와 profiles/<이름>.yaml 에 있다.

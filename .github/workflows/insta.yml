@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       account:
-        description: "계정 이름 (config.actions.yaml 의 accounts 키: aitips / parent / benefit, all=전부)"
+        description: "계정 이름 (config.actions.yaml 의 accounts 키: policy / parent / benefit, all=전부)"
         type: string
-        default: "aitips"
+        default: "policy"
       mode:
         description: "topics=후보 뽑기 / queue=고른 것 예약+게시 / publish=예약된 것 게시 / auto=자동 선택 / edit=예약 수정 / stats=지표 / run=1건(시험)"
         type: choice
@@ -49,9 +49,9 @@ jobs:
     timeout-minutes: 90
     env:
       # 계정별 인스타그램 토큰 — 계정을 더하면 여기에 세 줄씩 추가 (없는 계정은 비어 있고, 코드가 게시만 건너뛴다)
-      INSTA_AITIPS_TOKEN: ${{ secrets.INSTA_AITIPS_TOKEN }}
-      INSTA_AITIPS_USER_ID: ${{ secrets.INSTA_AITIPS_USER_ID }}
-      INSTA_AITIPS_USERNAME: "today.policy.kr"   # 2026-09-16 아이디 변경 (댓글 DM 이 우리 계정 댓글을 건너뛰는 데 쓴다)
+      INSTA_POLICY_TOKEN: ${{ secrets.INSTA_POLICY_TOKEN }}
+      INSTA_POLICY_USER_ID: ${{ secrets.INSTA_POLICY_USER_ID }}
+      INSTA_POLICY_USERNAME: ${{ vars.INSTA_POLICY_USERNAME }}   # today.policy.kr (댓글 DM 이 우리 계정 댓글을 건너뛰는 데 쓴다)
       INSTA_PARENT_TOKEN: ${{ secrets.INSTA_PARENT_TOKEN }}
       INSTA_PARENT_USER_ID: ${{ secrets.INSTA_PARENT_USER_ID }}
       INSTA_PARENT_USERNAME: ${{ vars.INSTA_PARENT_USERNAME }}
@@ -96,7 +96,7 @@ jobs:
           )
           else
             MODE="${{ inputs.mode || 'topics' }}"
-            ACCOUNTS="${{ inputs.account || 'aitips' }}"
+            ACCOUNTS="${{ inputs.account || 'policy' }}"
           fi
           echo "mode=$MODE" >> "$GITHUB_OUTPUT"
           echo "accounts=$ACCOUNTS" >> "$GITHUB_OUTPUT"
@@ -157,7 +157,7 @@ jobs:
       - name: 예약 수정
         if: steps.mode.outputs.mode == 'edit'
         env:
-          ACCOUNT: ${{ inputs.account || 'aitips' }}
+          ACCOUNT: ${{ inputs.account || 'policy' }}
           EDITS: ${{ inputs.edits }}
         run: |
           git config user.name "ai-office-bot"

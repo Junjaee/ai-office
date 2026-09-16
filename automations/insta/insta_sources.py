@@ -33,7 +33,7 @@ SOURCES: dict[str, dict] = {
     "babynews":              {"kind": "rss", "url": "https://www.ibabynews.com/rss/allArticle.xml", "label": "베이비뉴스"},
     "yna_society":           {"kind": "rss", "url": "https://www.yna.co.kr/rss/society.xml", "label": "연합뉴스 사회"},
     "yna_economy":           {"kind": "rss", "url": "https://www.yna.co.kr/rss/economy.xml", "label": "연합뉴스 경제"},
-    # 정책·정치(aitips 계정, 2026-09-16 컨셉 전환) — 국회 의안 API + 정치·정책 뉴스
+    # 정책·정치(policy 계정 = @today.policy.kr, 2026-09-16 컨셉 전환) — 국회 의안 API + 정치·정책 뉴스
     "assembly_bills": {"kind": "bills", "url": "https://open.assembly.go.kr/portal/openapi/nzmimeepazxkubdpn",
                        "api": "nzmimeepazxkubdpn", "age": 22, "size": 80, "label": "국회 의안"},
     "yna_politics":   {"kind": "rss", "url": "https://www.yna.co.kr/rss/politics.xml", "label": "연합뉴스 정치"},
