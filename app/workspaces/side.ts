@@ -131,7 +131,7 @@ export const HIDDEN_DEPARTMENTS: string[] = [
  */
 export const AUTOMATIONS: AutomationDef[] = [
   // 계정 = 자동화. 코드는 automations/insta 한 벌, 계정은 inputs.account 로 구분한다.
-  { id: "insta_aitips", dept: "research", name: "인스타 게시글 · aitips (AI 툴·프롬프트 꿀팁)",
+  { id: "insta_aitips", dept: "research", name: "인스타 게시글 · 오늘정책 (지원금·세금·제도)",
     workflow: "insta.yml", inputs: { account: "aitips" }, schedule: "매일 06:30 후보 · 07:30·12:30·18:30 게시",
     review: { kind: "topics", title: "오늘의 주제 검토" },
     tasks: [
