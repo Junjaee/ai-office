@@ -3,30 +3,31 @@
   "dept": "strategy2",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 1건, 1초",
+  "summary": "게시 0건, 실패 0건, 누적 2건, 1.8분",
   "counts": {
     "new": 0,
     "failed": 0,
-    "total": 1
+    "total": 2
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 1건, 1초",
-    "[계정] 팔로워 0 · 게시물 1",
-    "[지표] 조회 136 · 도달 125 · 저장 1 · 공유 0 · 좋아요 3 · 댓글 0 — 아이 747명을 3년 동안 지켜봤더니"
+    "게시 0건, 실패 0건, 누적 2건, 1.8분",
+    "[후보] 주말에는 예약없이 갈 수 있어요 — IG 🇰🇷 @moms.map · 좋아요 655 · 댓글 5.1천",
+    "[후보] 서울에 이런 곳이 — IG 🇰🇷 @moms.map · 좋아요 746 · 댓글 4.8천",
+    "[후보] 내일 9월 15일 오전 10시 예약오픈이에요! — IG 🇰🇷 @moms.map · 좋아요 264 · 댓글 1.2천",
+    "[후보] 입장료와 예약 없이 즐길 수 있는 — IG 🇰🇷 @momdadmap_incheon · 좋아요 124 · 댓글 8"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 35037815074,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35037815074",
-  "request_id": "parent-stats-085554",
-  "trigger": "manual",
-  "started_at": "2026-09-16T08:56:58+09:00",
-  "duration_sec": 1,
+  "run_id": 35070685124,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35070685124",
+  "trigger": "schedule",
+  "started_at": "2026-09-16T16:55:29+09:00",
+  "duration_sec": 108,
   "tasks": [
     {
       "id": "topic",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "후보 8건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
@@ -40,10 +41,10 @@
     },
     {
       "id": "upload",
-      "status": "done",
-      "summary": "팔로워 0 · 지표 1건"
+      "status": "idle",
+      "summary": ""
     }
   ],
   "id": "insta_parent",
-  "updated_at": "2026-09-16T08:56:59+09:00"
+  "updated_at": "2026-09-16T16:57:17+09:00"
 }
