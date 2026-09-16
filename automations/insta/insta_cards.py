@@ -38,7 +38,7 @@ def build_slides(plan: dict, handle: str) -> list[dict]:
                        "image": c.get("image") or None, "image_caption": c.get("image_caption", ""),
                        "n": i, "total": total, "handle": handle, "idx": i - 1})
     slides.append({"kind": "cta", "cta": plan.get("cta", ""), "title": cover.get("title", ""), "n": total, "total": total,
-                   "handle": handle, "image": None})
+                   "handle": handle, "image": plan.get("cta_image") or None})   # 전면 그림 템플릿은 마무리 카드에도 배경을 쓴다
     return slides
 
 
@@ -122,6 +122,9 @@ def render_cards(plan: dict, out_dir: Path, *, template: str, theme: dict | None
             slide["image"], slide["image_path"] = None, ""
             for k, img in enumerate(x for x in tries if x):
                 ref = img["url"] if isinstance(img, dict) else str(img)
+                if not ref.startswith("http") and Path(ref).exists():      # 우리가 만든 그림 파일은 그대로 쓴다
+                    slide["image"], slide["image_path"], slide["credit"] = img, ref, ""
+                    break
                 path = prepare_image(browser, ref, media_dir, f"{slide['n']:02d}{'' if k == 0 else chr(96 + k)}", progress)
                 if path:
                     slide["image"], slide["image_path"] = img, path

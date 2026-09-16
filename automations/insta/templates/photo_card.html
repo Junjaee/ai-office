@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<style>
+  /* 전면 그림 + 글자 얹기 (2026-09-16 사용자 선택) — 육아 계정 카드뉴스용.
+     릴스 자막과 같은 느낌으로 맞춰 계정이 한 덩어리로 보이게 한다. */
+  @font-face { font-family: "Pretendard"; src: url("{{ font_url }}") format("woff2"); font-weight: 100 900; font-display: block; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: {{ width }}px; height: {{ height }}px; overflow: hidden; }
+  body { font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; background: #111; color: #fff; }
+  .kr { word-break: keep-all; overflow-wrap: anywhere; white-space: pre-line; }
+  .balance { text-wrap: balance; }
+  .card { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 28%; }
+  .noimg { position: absolute; inset: 0; background: {{ theme.bg }}; }
+  /* 위는 살짝, 아래는 진하게 — 글자가 어디서든 읽히도록 */
+  .scrim { position: absolute; inset: 0; background:
+      linear-gradient(180deg, rgba(0,0,0,.50) 0%, rgba(0,0,0,.12) 22%, rgba(0,0,0,0) 38%,
+                      rgba(0,0,0,.55) 62%, rgba(0,0,0,.88) 82%, rgba(0,0,0,.94) 100%); }
+  .brand { position: absolute; top: 58px; left: 80px; color: rgba(255,255,255,.9); font-size: 30px; font-weight: 800; letter-spacing: .12em; z-index: 2; }
+  .pageno { position: absolute; top: 58px; right: 80px; color: rgba(255,255,255,.8); font-size: 28px; font-weight: 700; z-index: 2; }
+  .bottom { position: absolute; left: 80px; right: 80px; bottom: 132px; z-index: 2; }
+  .pill { display: inline-block; padding: 12px 28px; border-radius: 999px; background: {{ theme.accent }}; color: #1b1208;
+          font-size: 28px; font-weight: 800; letter-spacing: .04em; margin-bottom: 28px; }
+  .hook { font-size: 96px; line-height: 1.16; font-weight: 900; letter-spacing: -.02em; text-shadow: 0 6px 28px rgba(0,0,0,.6); }
+  .sub { margin-top: 26px; font-size: 38px; line-height: 1.45; color: rgba(255,255,255,.88); text-shadow: 0 3px 16px rgba(0,0,0,.6); }
+  .title { font-size: 72px; line-height: 1.2; font-weight: 900; letter-spacing: -.02em; text-shadow: 0 6px 28px rgba(0,0,0,.6); }
+  .lines { list-style: none; margin-top: 30px; font-size: 40px; line-height: 1.5; text-shadow: 0 3px 16px rgba(0,0,0,.7); }
+  .lines li { margin-bottom: 16px; padding-left: 30px; position: relative; color: rgba(255,255,255,.94); }
+  .lines li::before { content: ""; position: absolute; left: 0; top: 24px; width: 14px; height: 14px; border-radius: 50%; background: {{ theme.accent }}; }
+  .lines b.hl { color: {{ theme.accent }}; font-weight: 800; }
+  .big { font-size: 84px; line-height: 1.2; font-weight: 900; letter-spacing: -.02em; text-shadow: 0 6px 28px rgba(0,0,0,.6); }
+  .dots { position: absolute; left: 0; right: 0; bottom: 62px; display: flex; justify-content: center; gap: 12px; z-index: 2; }
+  .dots i { display: block; width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,.32); }
+  .dots i.on { background: {{ theme.accent }}; width: 34px; border-radius: 6px; }
+  .foot { position: absolute; left: 80px; bottom: 50px; color: rgba(255,255,255,.75); font-size: 26px; z-index: 2; }
+  .swipe { position: absolute; right: 80px; bottom: 50px; color: rgba(255,255,255,.75); font-size: 26px; z-index: 2; }
+</style>
+</head>
+<body>
+{% set brand = slide.brand or "육아 TIPS" %}
+<div class="card">
+  {% if slide.image %}<img class="bg" src="{{ slide.image }}" alt="">{% else %}<div class="noimg"></div>{% endif %}
+  <div class="scrim"></div>
+  <div class="brand">{{ brand }}</div>
+  <div class="pageno">{{ slide.n }} / {{ slide.total }}</div>
+
+  <div class="bottom" id="fitbox">
+    {% if slide.kind == "cover" %}
+      {% if slide.category %}<div class="pill">{{ slide.category }}</div>{% endif %}
+      <div class="hook kr balance">{{ slide.title }}</div>
+      {% if slide.sub %}<div class="sub kr">{{ slide.sub }}</div>{% endif %}
+    {% elif slide.kind == "cta" %}
+      <div class="big kr balance">{{ slide.cta }}</div>
+    {% else %}
+      <div class="title kr balance">{{ slide.title }}</div>
+      {% if slide.lines_html %}
+      <ul class="lines kr">
+        {% for line in slide.lines_html %}<li>{{ line }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="dots">{% for i in range(slide.total) %}<i class="{{ 'on' if i + 1 == slide.n else '' }}"></i>{% endfor %}</div>
+  <div class="foot">{{ slide.handle }}</div>
+  {% if slide.n < slide.total %}<div class="swipe">밀어서 확인하기 →</div>{% endif %}
+</div>
+<script>
+  // 글자가 카드 위쪽으로 넘치면 조금씩 줄인다 (render_cards 가 불러 준다)
+  window.__fit = function () {
+    var box = document.getElementById("fitbox");
+    if (!box) return;
+    var limit = 300;                      // 브랜드 줄 아래로 넘지 않게
+    for (var i = 0; i < 24; i++) {
+      var top = box.getBoundingClientRect().top;
+      if (top >= limit) break;
+      var s = parseFloat(getComputedStyle(box).fontSize) || 16;
+      box.style.zoom = (box.style.zoom ? parseFloat(box.style.zoom) : 1) - 0.04;
+    }
+  };
+</script>
+</body>
+</html>
