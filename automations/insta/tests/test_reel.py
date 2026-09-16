@@ -171,3 +171,10 @@ def test_prompt_demands_a_scroll_stopping_first_line():
                               [{"kind": "cover", "title": "표지"}], dm_keyword="독감")
     assert "첫 문장이 전부" in s and "인사" in s and "알아보겠습니다" in s
     assert "독자가 가장 아끼는" in s and "내 아이" in s        # 통계가 아니라 독자 관심사로 열기 (2026-09-16)
+
+
+def test_prompt_bans_report_style_korean():
+    """보고서·통계 말투 금지 규칙이 대본 프롬프트에 있다 (2026-09-16 사용자 지적)."""
+    s, _ = reel.script_prompt("육아 꿀팁", "부모", {"title": "t", "subtitle": "s", "paragraphs": [{"heading": "h", "text": "x"}]},
+                              [{"kind": "cover", "title": "표지"}], dm_keyword="독감")
+    assert "보고서" in s and "소리 내어 읽어" in s and "목록체" in s
