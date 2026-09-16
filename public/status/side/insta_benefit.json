@@ -3,7 +3,7 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 0건, 1.3분",
+  "summary": "게시 0건, 실패 0건, 누적 0건, 39초",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,16 +11,17 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 0건, 1.3분",
+    "게시 0건, 실패 0건, 누적 0건, 39초",
     "[후보] 내달 7일부터 청년미래적금 2차 신청…가입심사 시스템 개선도 — 연합뉴스 경제",
-    "[후보] 🇺🇸빈자리 경남도, 통영·거제 수해민에 재난지원금 추석 전 지급 추진 — 연합뉴스 사회"
+    "[후보] 경남도, 통영·거제 수해민에 재난지원금 추석 전 지급 추진 — 연합뉴스 사회"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 35070685124,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35070685124",
-  "trigger": "schedule",
-  "started_at": "2026-09-16T16:57:19+09:00",
-  "duration_sec": 75,
+  "run_id": 35070686526,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35070686526",
+  "request_id": "cron-202609160751",
+  "trigger": "manual",
+  "started_at": "2026-09-16T17:05:26+09:00",
+  "duration_sec": 39,
   "tasks": [
     {
       "id": "topic",
@@ -44,5 +45,5 @@
     }
   ],
   "id": "insta_benefit",
-  "updated_at": "2026-09-16T16:58:35+09:00"
+  "updated_at": "2026-09-16T17:06:05+09:00"
 }
