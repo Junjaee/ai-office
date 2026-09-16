@@ -3,38 +3,36 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 취소 0건, 건너뜀 0건, 실패 0건, 4초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 2초",
   "counts": {
-    "new": 3,
+    "new": 1,
     "replaced": 0,
     "skip": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 3건, 취소 0건, 건너뜀 0건, 실패 0건, 4초",
-    "[추가] 2026년 9월 9/16 아이파킹주식회사 5,000원 (생활비)",
-    "[추가] 2026년 9월 9/16 쿠팡(쿠페이) 17,150원 (생활비)",
-    "[추가] 2026년 9월 9/16 스마일페이G마켓 23,700원 (생활비)"
+    "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 2초",
+    "[추가] 2026년 9월 9/16 아이스크림살래포 5,400원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 35084690099,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35084690099",
+  "run_id": 35116831853,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35116831853",
   "trigger": "schedule",
-  "started_at": "2026-09-16T19:24:11+09:00",
-  "duration_sec": 4,
+  "started_at": "2026-09-17T00:40:04+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 3건 확인, 결제 3건"
+      "summary": "메일 1건 확인, 결제 1건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 3 · 취소 0 · 건너뜀 0"
+      "summary": "추가 1 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-16T19:24:16+09:00"
+  "updated_at": "2026-09-17T00:40:07+09:00"
 }
