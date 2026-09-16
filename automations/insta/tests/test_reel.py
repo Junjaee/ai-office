@@ -170,3 +170,4 @@ def test_prompt_demands_a_scroll_stopping_first_line():
     s, _ = reel.script_prompt("육아 꿀팁", "부모", {"title": "t", "subtitle": "s", "paragraphs": [{"heading": "h", "text": "x"}]},
                               [{"kind": "cover", "title": "표지"}], dm_keyword="독감")
     assert "첫 문장이 전부" in s and "인사" in s and "알아보겠습니다" in s
+    assert "독자가 가장 아끼는" in s and "내 아이" in s        # 통계가 아니라 독자 관심사로 열기 (2026-09-16)
