@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 18건, 0초",
+  "summary": "게시 0건, 실패 0건, 누적 18건, 2.6분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,20 +11,24 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 18건, 0초",
-    "[예약] 지금 만들 것 없음"
+    "게시 0건, 실패 0건, 누적 18건, 2.6분",
+    "[후보] [서미숙의 집수다] '토허구역+대출규제 확대' 11개월…내몰리는 임차인들 — 연합뉴스 경제",
+    "[후보] 합병가액 '시가→공정가액' 전환…외부평가 의무·공시 확대 - 연합뉴스 — 구글뉴스 국무회의",
+    "[후보] \"농협銀, 보이스피싱 대응 인력·예산 확대에도 피해액 2배\" — 연합뉴스 정치",
+    "[후보] 지난 9일 교육부가 발표한 '2026년 1차 학교폭력 실태조사'에 따르면 학교폭력 피해 응답률이 2.9%로  — IG 🇰🇷 @newneek.official · 좋아요 138 · 댓글 2"
   ],
   "link": "https://www.instagram.com/today.policy.kr/",
-  "run_id": 35160708710,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35160708710",
-  "trigger": "schedule",
-  "started_at": "2026-09-17T08:06:46+09:00",
-  "duration_sec": 0,
+  "run_id": 35163433689,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35163433689",
+  "request_id": "cron-202609162341",
+  "trigger": "manual",
+  "started_at": "2026-09-17T08:43:00+09:00",
+  "duration_sec": 158,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 20건 · 예약 0건 · 게시 2건"
+      "summary": "후보 20건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
@@ -43,5 +47,5 @@
     }
   ],
   "id": "insta_policy",
-  "updated_at": "2026-09-17T08:06:47+09:00"
+  "updated_at": "2026-09-17T08:45:39+09:00"
 }
