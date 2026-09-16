@@ -6,9 +6,9 @@ default_account: aitips
 accounts:
   aitips:
     profile: politics                        # profiles/<이름>.yaml — 2026-09-16 컨셉 전환: AI 꿀팁 → 정책·정치 브리핑(계정 키는 그대로 두어 토큰·자동화 유지)
-    handle: "@aitips.kr"                  # 카드에 찍히는 표시 (실제 인스타 사용자 이름)
+    handle: "@today.policy.kr"            # 카드에 찍히는 표시 (2026-09-16 아이디 변경: aitips.kr → today.policy.kr)
     dept: research                           # 사무실 설정의 부서 id (인스타 게시글팀)
-    result_link: "https://www.instagram.com/aitips.kr/"
+    result_link: "https://www.instagram.com/today.policy.kr/"
     posts_per_run: 1                         # 실행 1회에 올릴 게시물 수
     candidates_to_llm: 40                    # 소재 후보를 몇 개까지 편집장(모델)에게 보여 줄지
     review_count: 20                         # 매일 검토 칸에 올릴 후보 수 (사용자 결정 2026-09-12: 최대 20)

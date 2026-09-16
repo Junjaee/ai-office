@@ -51,7 +51,7 @@ jobs:
       # 계정별 인스타그램 토큰 — 계정을 더하면 여기에 세 줄씩 추가 (없는 계정은 비어 있고, 코드가 게시만 건너뛴다)
       INSTA_AITIPS_TOKEN: ${{ secrets.INSTA_AITIPS_TOKEN }}
       INSTA_AITIPS_USER_ID: ${{ secrets.INSTA_AITIPS_USER_ID }}
-      INSTA_AITIPS_USERNAME: "aitips.kr"
+      INSTA_AITIPS_USERNAME: "today.policy.kr"   # 2026-09-16 아이디 변경 (댓글 DM 이 우리 계정 댓글을 건너뛰는 데 쓴다)
       INSTA_PARENT_TOKEN: ${{ secrets.INSTA_PARENT_TOKEN }}
       INSTA_PARENT_USER_ID: ${{ secrets.INSTA_PARENT_USER_ID }}
       INSTA_PARENT_USERNAME: ${{ vars.INSTA_PARENT_USERNAME }}
