@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 12초",
+  "summary": "신규 19건, 실패 0건, 9초",
   "counts": {
-    "new": 9,
+    "new": 19,
     "failed": 0,
-    "total": 716
+    "total": 735
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 12초",
-    "[신규] [속보] 李대통령, 오는 18일 7번째 기자회견…현안에 직접 답한다 — 뉴스핌",
-    "[신규] 일본 보드게임 직구 보너스 선택 화면의 구성 — Histoire pour tous",
-    "[신규] 강성찬 전남광주시의원 '청년소상공인 육성 조례안' 상임위 통과 — 뉴스핌",
-    "[신규] 고우람 전남광주 남구의원, '지역목재 이용 활성화' 조례안 발의 — 뉴스핌"
+    "신규 19건, 실패 0건, 9초",
+    "[신규] 파주융합회, 9월 월례회 개최 … 기업인 교류·현안 논의 — 파주타임스",
+    "[신규] 문정복 의원, 19세 이하 무면허 교통사고 매년 1천건 이상…5년간 6,349건 — citizenadmnews.co.kr",
+    "[신규] 충남대·한양대 연구팀, VOCs 제거·바이오에어로졸 제어 통합 전기화 촉매 필터 개발 — 데일리한국",
+    "[신규] 이재정 의원, 숙박할인권 이용자 60대 이상은 5% 불과… 선착순·온라인 중심에 고령층은 ‘소외’ — citizenadmnews.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35035061126,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35035061126",
+  "run_id": 35047580585,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35047580585",
   "trigger": "schedule",
-  "started_at": "2026-09-16T08:18:56+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-16T11:20:36+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 113건"
+      "summary": "검색어 5개에서 115건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 23건 (신규 9건) · 뉴스핌 6건, Histoire pour tous 3건, v.daum.net 2건"
+      "summary": "오늘 42건 (신규 19건) · 뉴스핌 8건, Histoire pour tous 5건, v.daum.net 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-16T08:19:09+09:00"
+  "updated_at": "2026-09-16T11:20:46+09:00"
 }
