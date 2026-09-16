@@ -19,6 +19,7 @@ except ImportError:  # pragma: no cover - requests 없는 환경
 MSG_SITE = "국회 사이트에 연결할 수 없어요"
 MSG_NEWS = "뉴스 목록을 받아오지 못했어요"
 MSG_CALENDAR = "구글 캘린더를 읽지 못했어요 (권한·캘린더 확인)"
+MSG_MAIL = "지메일을 읽거나 정리하지 못했어요 (권한 확인)"
 MSG_TELEGRAM = "텔레그램으로 보내지 못했어요"
 MSG_TELEGRAM_SETUP = "텔레그램 봇·받는 분 설정이 없어요"
 MSG_GOOGLE = "구글 드라이브 인증이 없거나 만료됐어요"
@@ -47,6 +48,9 @@ def to_korean(exc: BaseException) -> str:
     # 주말 일정 알림: 캘린더 권한·텔레그램 (weekend)
     if isinstance(exc, RuntimeError) and "캘린더 읽기 실패" in msg:
         return MSG_CALENDAR
+    # 상임위 메일 (mail): 지메일 권한·호출 실패
+    if isinstance(exc, RuntimeError) and "메일 읽기 실패" in msg:
+        return MSG_MAIL
     if isinstance(exc, RuntimeError) and "텔레그램 설정 없음" in msg:
         return MSG_TELEGRAM_SETUP
     if isinstance(exc, RuntimeError) and "텔레그램 전송 실패" in msg:

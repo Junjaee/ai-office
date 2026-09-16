@@ -23,9 +23,9 @@ import yaml
 # AI 오피스 공통 모듈 (automations/common): 오류 문구, 상태 보고
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
 from errors import to_korean  # noqa: E402
+from telegram_bot import list_chats, send_message, telegram_env  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from weekend_calendar import build_message, calendar_service, describe, fetch_events, to_events, upcoming_weekend  # noqa: E402
-from weekend_telegram import list_chats, send_message, telegram_env  # noqa: E402
 try:
     from report_status import report as report_status  # noqa: E402
 except ImportError:  # 보고 모듈이 없으면 보고 없이 동작

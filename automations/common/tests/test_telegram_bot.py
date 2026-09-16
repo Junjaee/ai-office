@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 import requests
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from weekend_telegram import list_chats, send_message, telegram_env  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "common"))
+from telegram_bot import list_chats, send_message, telegram_env  # noqa: E402
 
 TOKEN = "123456:SECRET-TOKEN"
 

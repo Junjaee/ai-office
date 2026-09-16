@@ -1,0 +1,30 @@
+# 상임위 메일 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
+#   GOOGLE_*(공용 토큰, gmail.modify 권한 포함) · TELEGRAM_BOT_TOKEN · TELEGRAM_CHAT_ID_MAIL(받는 사람)
+
+# 지켜볼 위원회. label = 지메일에 붙일 라벨 이름(없으면 만든다) = 받은편지함에서 옮겨 갈 폴더 이름
+#   query 는 지메일 검색어 그대로. {a b} 는 "a 또는 b" 라는 뜻이다.
+#   이미 그 라벨이 붙은 메일은 처리 끝으로 보고 건너뛴다(중복 알림 방지) — build_query() 가 붙인다.
+committees:
+  - label: "재경위"
+    # 재정경제기획위원회 행정실 (2026-09-16 확인: 이 주소에서만 온다)
+    query: "from:fec@assembly.go.kr"
+  - label: "예결위"
+    # 예산결산특별위원회 — 2026-09-16 기준 받은 메일이 아직 없어 주소를 모른다.
+    # 국회 도메인에서 오는 예결위 메일을 제목·본문으로 잡는다. 실제 주소를 알게 되면 from: 으로 바꾼다
+    query: "from:assembly.go.kr {예결위 예산결산특별위원회}"
+
+lookback_days: 7    # 며칠 안의 메일만 본다 (오래된 메일을 뒤늦게 라벨링하지 않도록)
+max_per_run: 20     # 한 번에 처리할 최대 메일 수 (위원회마다)
+retries: 3          # 텔레그램 전송 재시도
+timeout: 30
+
+# 결과물 위치 (지메일 라벨로 정리하는 자동화라 드라이브 폴더 없음)
+result_link: ""
+
+# 상태 보고: 저장소 루트(체크아웃 위치)에 커밋. 새 메일이 없는 실행은 커밋하지 않는다(5분마다 돌기 때문)
+office_repo: "."
+office_workspace: "assembly"   # 상태 파일을 쓸 사무실 (public/status/<id>/)
+next_run: "5분마다"             # 카드에 보일 다음 실행 문구
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts 의 automations[].tasks[] (테스트로 일치 강제)
+tasks: [check, notify]

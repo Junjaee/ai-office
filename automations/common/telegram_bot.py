@@ -1,4 +1,4 @@
-"""텔레그램 봇으로 글 보내기·대화방 찾기.
+"""텔레그램 봇으로 글 보내기·대화방 찾기 (자동화 공통).
 
 봇 토큰은 환경변수로만 받고, 오류 문구에도 남기지 않는다(`***` 로 가림) —
 오류 문구는 상태 파일·실행 기록에 그대로 남기 때문이다.
@@ -13,11 +13,15 @@ import requests
 API = "https://api.telegram.org/bot{token}/{method}"
 
 
-def telegram_env() -> tuple[str, str]:
-    """(봇 토큰, 받는 분 대화방 번호). 하나라도 없으면 RuntimeError."""
+def telegram_env(chat_key: str = "TELEGRAM_CHAT_ID") -> tuple[str, str]:
+    """(봇 토큰, 받는 분 대화방 번호). 하나라도 없으면 RuntimeError.
+
+    받는 사람이 자동화마다 다르므로 대화방 환경변수 이름을 골라 쓴다
+    (주말 일정=TELEGRAM_CHAT_ID, 상임위 메일=TELEGRAM_CHAT_ID_MAIL). 폴백은 없다 — 엉뚱한 사람에게 갈 수 있다.
+    """
     token = (os.environ.get("TELEGRAM_BOT_TOKEN") or "").strip()
-    chat = (os.environ.get("TELEGRAM_CHAT_ID") or "").strip()
-    missing = [k for k, v in (("TELEGRAM_BOT_TOKEN", token), ("TELEGRAM_CHAT_ID", chat)) if not v]
+    chat = (os.environ.get(chat_key) or "").strip()
+    missing = [k for k, v in (("TELEGRAM_BOT_TOKEN", token), (chat_key, chat)) if not v]
     if missing:
         raise RuntimeError(f"텔레그램 설정 없음: {', '.join(missing)}")
     return token, chat

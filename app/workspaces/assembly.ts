@@ -51,7 +51,7 @@ export const DEPARTMENTS: readonly Department[] = [
     short: "mail.desk",
     icon: "✉️",
     task: "상임위 메일 확인·텔레그램 알림",
-    report: "메일 확인 스킬을 붙이면 새 메일을 요약해 알립니다.",
+    report: "재경위·예결위 새 메일을 5분마다 보고 알린 뒤 라벨로 정리합니다.",
   },
   {
     id: "strategy2",
@@ -150,10 +150,12 @@ export const AUTOMATIONS: AutomationDef[] = [
       { id: "facebook", name: "페이스북 확인", role: "페이스북 새 게시글 확인·알림" },
       { id: "instagram", name: "인스타 확인", role: "인스타그램 새 게시글 확인·알림" },
     ] },
-  { id: "mail", dept: "qa", name: "상임위 메일",
+  // 5분마다 돌지만 schedule 은 비워 둔다 — 새 메일이 없는 실행은 상태 파일을 쓰지 않아
+  // "예약 놓침" 으로 잘못 보일 수 있다(다음 실행 문구는 config.actions.yaml 의 next_run).
+  { id: "mail", dept: "qa", name: "상임위 메일", workflow: "mail.yml",
     tasks: [
-      { id: "summary", name: "메일 요약 알림", role: "상임위 메일 요약해 텔레그램 전송" },
-      { id: "attach", name: "첨부 저장", role: "메일 첨부파일을 드라이브 수신함에 저장" },
+      { id: "check", name: "새 메일 확인", role: "재경위·예결위에서 온 새 메일 찾기" },
+      { id: "notify", name: "알림·정리", role: "텔레그램으로 알리고 지메일 라벨로 정리" },
     ] },
   { id: "question", dept: "strategy2", name: "질의서",
     tasks: [
