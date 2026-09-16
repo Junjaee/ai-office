@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 11초",
+  "summary": "신규 8건, 실패 0건, 12초",
   "counts": {
-    "new": 10,
+    "new": 8,
     "failed": 0,
-    "total": 860
+    "total": 868
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 11초",
-    "[신규] 화면 확대 전에 확인하는 보 무료 돌고래 슬롯 글자 크기 — Histoire pour tous",
-    "[신규] 강신철 \"철거민 보상은 정당\"…아들 의혹에 고성도 — 연합뉴스",
-    "[신규] 청문회서 '부자 카톡프사' 공개 천하람 \"4스타 아버지, 특혜 없었겠나\" - 머니투데이 — mt.co.kr",
-    "[신규] [김종석의 왜]강신철 “전쟁 중이라 몰랐다” 진실은? — ichannela.com"
+    "신규 8건, 실패 0건, 12초",
+    "[신규] [아시안게임] 여자축구·배구·근대5종 출격…韓 선수단, 나고야 출국 — 싱글리스트",
+    "[신규] 처음 진입한 보너스 화면을 읽는 바카라 뒷발 조작 안내 — Histoire pour tous",
+    "[신규] 신정훈의원, 외국인노동자 산재사망 369명… ‘6월 발표’ 정부 대책 어디로 — citizenadmnews.co.kr",
+    "[신규] 이 대통령 새 지지층 34%만 ‘공소 취소’ 찬성…국힘 비영남·비수도권 ‘실망 이탈’ 많아 — supple.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35135078623,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35135078623",
+  "run_id": 35162075458,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35162075458",
   "trigger": "schedule",
-  "started_at": "2026-09-17T03:33:30+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-09-17T08:23:52+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 120건"
+      "summary": "검색어 5개에서 123건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 10건) · Histoire pour tous 3건, 연합뉴스 2건, KBS 뉴스 1건"
+      "summary": "오늘 18건 (신규 8건) · Histoire pour tous 5건, 연합뉴스 2건, KBS 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-17T03:33:42+09:00"
+  "updated_at": "2026-09-17T08:24:05+09:00"
 }
