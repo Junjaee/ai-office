@@ -19,7 +19,6 @@
       linear-gradient(180deg, rgba(0,0,0,.50) 0%, rgba(0,0,0,.12) 22%, rgba(0,0,0,0) 38%,
                       rgba(0,0,0,.55) 62%, rgba(0,0,0,.88) 82%, rgba(0,0,0,.94) 100%); }
   .brand { position: absolute; top: 58px; left: 80px; color: rgba(255,255,255,.9); font-size: 30px; font-weight: 800; letter-spacing: .12em; z-index: 2; }
-  .pageno { position: absolute; top: 58px; right: 80px; color: rgba(255,255,255,.8); font-size: 28px; font-weight: 700; z-index: 2; }
   .bottom { position: absolute; left: 80px; right: 80px; bottom: 132px; z-index: 2; }
   .pill { display: inline-block; padding: 12px 28px; border-radius: 999px; background: {{ theme.accent }}; color: #1b1208;
           font-size: 28px; font-weight: 800; letter-spacing: .04em; margin-bottom: 28px; }
@@ -44,7 +43,6 @@
   {% if slide.image %}<img class="bg" src="{{ slide.image }}" alt="">{% else %}<div class="noimg"></div>{% endif %}
   <div class="scrim"></div>
   <div class="brand">{{ brand }}</div>
-  <div class="pageno">{{ slide.n }} / {{ slide.total }}</div>
 
   <div class="bottom" id="fitbox">
     {% if slide.kind == "cover" %}
