@@ -3,32 +3,32 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 15건, 5초",
+  "summary": "게시 0건, 실패 0건, 누적 18건, 4.5분",
   "counts": {
     "new": 0,
     "failed": 0,
-    "total": 15
+    "total": 18
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)",
   "log": [
-    "게시 0건, 실패 0건, 누적 15건, 5초",
-    "[계정] 팔로워 4 · 게시물 15",
-    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 챗GPT 프롬프트 3개로 내 정보 지우기",
-    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 카페 사진 한 장, 화보로 바꾸는 법",
-    "[지표] 조회 0 · 도달 0 · 저장 0 · 공유 0 · 좋아요 1 · 댓글 0 — 오픈AI, 말 끊김 80% 줄인 음성 AI 공개"
+    "게시 0건, 실패 0건, 누적 18건, 4.5분",
+    "[후보] 집주인과 달리 보호받지 못하는 임차인을 위한 5개 법안 국회 본회의 통과 - 데일리뉴스 — 구글뉴스 국회",
+    "[후보] ①내년부터 코인에 세금…누가, 얼마를 내게 될까 - 택스워치 — 구글뉴스 제도",
+    "[후보] 내달 7일부터 청년미래적금 2차 신청…가입심사 시스템 개선도 — 연합뉴스 경제",
+    "[후보] 與권칠승 \"토지거래허가 실거주 의무, 내년까지 유예 연장 필요\" — 연합뉴스 정치"
   ],
   "link": "https://www.instagram.com/aitips.kr/",
-  "run_id": 35037830844,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35037830844",
-  "request_id": "stats-202609152356",
+  "run_id": 35065038622,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35065038622",
+  "request_id": "politics-202609160643",
   "trigger": "manual",
-  "started_at": "2026-09-16T08:57:12+09:00",
-  "duration_sec": 5,
+  "started_at": "2026-09-16T15:44:34+09:00",
+  "duration_sec": 268,
   "tasks": [
     {
       "id": "topic",
-      "status": "idle",
-      "summary": ""
+      "status": "done",
+      "summary": "후보 20건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
@@ -42,10 +42,10 @@
     },
     {
       "id": "upload",
-      "status": "done",
-      "summary": "팔로워 4 · 지표 15건"
+      "status": "idle",
+      "summary": ""
     }
   ],
   "id": "insta_aitips",
-  "updated_at": "2026-09-16T08:57:19+09:00"
+  "updated_at": "2026-09-16T15:49:03+09:00"
 }
