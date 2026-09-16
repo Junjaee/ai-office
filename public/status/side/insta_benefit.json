@@ -3,7 +3,7 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 0건, 45초",
+  "summary": "게시 0건, 실패 0건, 누적 0건, 1.3분",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,16 +11,16 @@
   },
   "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
   "log": [
-    "게시 0건, 실패 0건, 누적 0건, 45초",
-    "[후보] \"오늘부터 휴대전화 요금 25% 추가 할인\"…사실 아냐 — 연합뉴스 경제",
-    "[후보] 청년 정규직 뽑으면 최대 4천500만원…서울 강소기업 42곳 선정 — 연합뉴스 경제"
+    "게시 0건, 실패 0건, 누적 0건, 1.3분",
+    "[후보] 내달 7일부터 청년미래적금 2차 신청…가입심사 시스템 개선도 — 연합뉴스 경제",
+    "[후보] 🇺🇸빈자리 경남도, 통영·거제 수해민에 재난지원금 추석 전 지급 추진 — 연합뉴스 사회"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 35036563011,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35036563011",
+  "run_id": 35070685124,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35070685124",
   "trigger": "schedule",
-  "started_at": "2026-09-16T08:47:18+09:00",
-  "duration_sec": 45,
+  "started_at": "2026-09-16T16:57:19+09:00",
+  "duration_sec": 75,
   "tasks": [
     {
       "id": "topic",
@@ -44,5 +44,5 @@
     }
   ],
   "id": "insta_benefit",
-  "updated_at": "2026-09-16T08:48:04+09:00"
+  "updated_at": "2026-09-16T16:58:35+09:00"
 }
