@@ -3,26 +3,26 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 60건, 실패 0건, 13초",
+  "summary": "신규 10건, 실패 0건, 11초",
   "counts": {
-    "new": 60,
+    "new": 10,
     "failed": 0,
-    "total": 850
+    "total": 860
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 60건, 실패 0건, 13초",
-    "[신규] ‘이기인 비대위’ 두고 개혁신당 내분 조짐 — 조선일보",
-    "[신규] 단국치대 동창회 “달리고, 즐기고, 뭉쳤다” — 치의신보",
-    "[신규] “李 회견서 공소취소 언급?…‘사법절차 따라야’ 정도일 것”[정치를 부탁해] — v.daum.net",
-    "[신규] 복기왕 의원, 홍지선 장관후보자 “여야 국회의원 적극 설득하겠다” — 시민행정신문"
+    "신규 10건, 실패 0건, 11초",
+    "[신규] 화면 확대 전에 확인하는 보 무료 돌고래 슬롯 글자 크기 — Histoire pour tous",
+    "[신규] 강신철 \"철거민 보상은 정당\"…아들 의혹에 고성도 — 연합뉴스",
+    "[신규] 청문회서 '부자 카톡프사' 공개 천하람 \"4스타 아버지, 특혜 없었겠나\" - 머니투데이 — mt.co.kr",
+    "[신규] [김종석의 왜]강신철 “전쟁 중이라 몰랐다” 진실은? — ichannela.com"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35104683520,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35104683520",
+  "run_id": 35135078623,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35135078623",
   "trigger": "schedule",
-  "started_at": "2026-09-16T22:52:29+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-09-17T03:33:30+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
@@ -32,9 +32,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 157건 (신규 60건) · v.daum.net 15건, Histoire pour tous 13건, 뉴스핌 11건"
+      "summary": "오늘 10건 (신규 10건) · Histoire pour tous 3건, 연합뉴스 2건, KBS 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-16T22:52:43+09:00"
+  "updated_at": "2026-09-17T03:33:42+09:00"
 }
