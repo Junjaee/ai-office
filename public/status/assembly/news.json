@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 55건, 실패 0건, 9초",
+  "summary": "신규 60건, 실패 0건, 13초",
   "counts": {
-    "new": 55,
+    "new": 60,
     "failed": 0,
-    "total": 790
+    "total": 850
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 55건, 실패 0건, 9초",
-    "[신규] 개혁신당 비대위 체제, 시작 전부터 내부 반발 — v.daum.net",
-    "[신규] 박지원 의원, 디지털 문화유산 배리어프리 특별전 개최 — 뉴스핌",
-    "[신규] 대전 서구의원들, 추석 앞두고 복지시설 나눔 실천 — 뉴스핌",
-    "[신규] 강신철 청문회 철거민 특별공급 도마...천하람 \"강신철거민 들어봤나\" [뉴스ON] — YTN"
+    "신규 60건, 실패 0건, 13초",
+    "[신규] ‘이기인 비대위’ 두고 개혁신당 내분 조짐 — 조선일보",
+    "[신규] 단국치대 동창회 “달리고, 즐기고, 뭉쳤다” — 치의신보",
+    "[신규] “李 회견서 공소취소 언급?…‘사법절차 따라야’ 정도일 것”[정치를 부탁해] — v.daum.net",
+    "[신규] 복기왕 의원, 홍지선 장관후보자 “여야 국회의원 적극 설득하겠다” — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35071699846,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35071699846",
+  "run_id": 35104683520,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35104683520",
   "trigger": "schedule",
-  "started_at": "2026-09-16T17:03:41+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-09-16T22:52:29+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 113건"
+      "summary": "검색어 5개에서 120건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 97건 (신규 55건) · 뉴스핌 11건, v.daum.net 9건, Histoire pour tous 8건"
+      "summary": "오늘 157건 (신규 60건) · v.daum.net 15건, Histoire pour tous 13건, 뉴스핌 11건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-16T17:03:50+09:00"
+  "updated_at": "2026-09-16T22:52:43+09:00"
 }
