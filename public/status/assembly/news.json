@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 19건, 실패 0건, 9초",
+  "summary": "신규 55건, 실패 0건, 9초",
   "counts": {
-    "new": 19,
+    "new": 55,
     "failed": 0,
-    "total": 735
+    "total": 790
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 19건, 실패 0건, 9초",
-    "[신규] 파주융합회, 9월 월례회 개최 … 기업인 교류·현안 논의 — 파주타임스",
-    "[신규] 문정복 의원, 19세 이하 무면허 교통사고 매년 1천건 이상…5년간 6,349건 — citizenadmnews.co.kr",
-    "[신규] 충남대·한양대 연구팀, VOCs 제거·바이오에어로졸 제어 통합 전기화 촉매 필터 개발 — 데일리한국",
-    "[신규] 이재정 의원, 숙박할인권 이용자 60대 이상은 5% 불과… 선착순·온라인 중심에 고령층은 ‘소외’ — citizenadmnews.co.kr"
+    "신규 55건, 실패 0건, 9초",
+    "[신규] 개혁신당 비대위 체제, 시작 전부터 내부 반발 — v.daum.net",
+    "[신규] 박지원 의원, 디지털 문화유산 배리어프리 특별전 개최 — 뉴스핌",
+    "[신규] 대전 서구의원들, 추석 앞두고 복지시설 나눔 실천 — 뉴스핌",
+    "[신규] 강신철 청문회 철거민 특별공급 도마...천하람 \"강신철거민 들어봤나\" [뉴스ON] — YTN"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35047580585,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35047580585",
+  "run_id": 35071699846,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35071699846",
   "trigger": "schedule",
-  "started_at": "2026-09-16T11:20:36+09:00",
+  "started_at": "2026-09-16T17:03:41+09:00",
   "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 115건"
+      "summary": "검색어 5개에서 113건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 42건 (신규 19건) · 뉴스핌 8건, Histoire pour tous 5건, v.daum.net 4건"
+      "summary": "오늘 97건 (신규 55건) · 뉴스핌 11건, v.daum.net 9건, Histoire pour tous 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-16T11:20:46+09:00"
+  "updated_at": "2026-09-16T17:03:50+09:00"
 }
