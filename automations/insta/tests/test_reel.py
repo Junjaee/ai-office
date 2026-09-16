@@ -163,3 +163,10 @@ def test_caption_is_big_and_never_drops_words():
     _, size2, lines2 = reel.caption_layout(d, long)
     assert size2 < reel.CAPTION_SIZE and len(lines2) <= 2
     assert " ".join(lines2).split() == long.split()
+
+
+def test_prompt_demands_a_scroll_stopping_first_line():
+    """훅 규칙: 첫 문장이 전부 — 인사·예고로 시작하지 않는다 (2026-09-16 사용자 지시)."""
+    s, _ = reel.script_prompt("육아 꿀팁", "부모", {"title": "t", "subtitle": "s", "paragraphs": [{"heading": "h", "text": "x"}]},
+                              [{"kind": "cover", "title": "표지"}], dm_keyword="독감")
+    assert "첫 문장이 전부" in s and "인사" in s and "알아보겠습니다" in s
