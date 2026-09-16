@@ -9,7 +9,7 @@ import html
 import re
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import feedparser
 import requests
@@ -33,6 +33,15 @@ SOURCES: dict[str, dict] = {
     "babynews":              {"kind": "rss", "url": "https://www.ibabynews.com/rss/allArticle.xml", "label": "베이비뉴스"},
     "yna_society":           {"kind": "rss", "url": "https://www.yna.co.kr/rss/society.xml", "label": "연합뉴스 사회"},
     "yna_economy":           {"kind": "rss", "url": "https://www.yna.co.kr/rss/economy.xml", "label": "연합뉴스 경제"},
+    # 정책·정치(aitips 계정, 2026-09-16 컨셉 전환) — 국회 의안 API + 정치·정책 뉴스
+    "assembly_bills": {"kind": "bills", "url": "https://open.assembly.go.kr/portal/openapi/nzmimeepazxkubdpn",
+                       "api": "nzmimeepazxkubdpn", "age": 22, "size": 80, "label": "국회 의안"},
+    "yna_politics":   {"kind": "rss", "url": "https://www.yna.co.kr/rss/politics.xml", "label": "연합뉴스 정치"},
+    "gnews_law":      {"kind": "rss", "url": "https://news.google.com/rss/search?q=%22%EB%82%B4%EB%85%84%EB%B6%80%ED%84%B0%22+OR+%22%EB%8B%A4%EC%9D%8C+%EB%8B%AC%EB%B6%80%ED%84%B0%22+%EC%A0%9C%EB%8F%84+when:3d&hl=ko&gl=KR&ceid=KR:ko", "label": "구글뉴스 제도"},
+    "gnews_assembly": {"kind": "rss", "url": "https://news.google.com/rss/search?q=%22%EA%B5%AD%ED%9A%8C+%EB%B3%B8%ED%9A%8C%EC%9D%98%22+when:3d&hl=ko&gl=KR&ceid=KR:ko", "label": "구글뉴스 국회"},
+    "gnews_cabinet":  {"kind": "rss", "url": "https://news.google.com/rss/search?q=%22%EA%B5%AD%EB%AC%B4%ED%9A%8C%EC%9D%98%22+%EC%9D%98%EA%B2%B0+when:3d&hl=ko&gl=KR&ceid=KR:ko", "label": "구글뉴스 국무회의"},
+    "gnews_notice":   {"kind": "rss", "url": "https://news.google.com/rss/search?q=%EC%9E%85%EB%B2%95%EC%98%88%EA%B3%A0+OR+%22%EC%8B%9C%ED%96%89%EB%A0%B9+%EA%B0%9C%EC%A0%95%22+when:3d&hl=ko&gl=KR&ceid=KR:ko", "label": "구글뉴스 입법예고"},
+    "gnews_budget":   {"kind": "rss", "url": "https://news.google.com/rss/search?q=%22%EC%A0%95%EB%B6%80+%EC%98%88%EC%82%B0%EC%95%88%22+OR+%22%EC%84%B8%EB%B2%95+%EA%B0%9C%EC%A0%95%22+when:3d&hl=ko&gl=KR&ceid=KR:ko", "label": "구글뉴스 예산·세금"},
     "bing_benefit_apply":    {"kind": "rss", "url": "https://www.bing.com/news/search?q=%EC%A7%80%EC%9B%90%EA%B8%88+%EC%8B%A0%EC%B2%AD&format=rss&setlang=ko&cc=KR&qft=sortbydate%3d%221%22", "label": "뉴스 · 지원금 신청"},
     "bing_benefit_youth":    {"kind": "rss", "url": "https://www.bing.com/news/search?q=%EC%B2%AD%EB%85%84+%EC%A7%80%EC%9B%90+%EC%8B%A0%EC%B2%AD&format=rss&setlang=ko&cc=KR&qft=sortbydate%3d%221%22", "label": "뉴스 · 청년 지원"},
     "bing_benefit_refund":   {"kind": "rss", "url": "https://www.bing.com/news/search?q=%ED%99%98%EA%B8%89+%EC%8B%A0%EC%B2%AD+%EB%B0%A9%EB%B2%95&format=rss&setlang=ko&cc=KR&qft=sortbydate%3d%221%22", "label": "뉴스 · 환급"},
@@ -94,11 +103,53 @@ def _youtube_descriptions(xml: bytes) -> dict[str, str]:
     return out
 
 
+def _day(text: str) -> datetime | None:
+    """'2026-09-15' → 그날 09:00 KST (UTC 기준으로 보관)."""
+    t = str(text or "").strip()[:10]
+    if not re.match(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", t):
+        return None
+    y, m, d = (int(x) for x in t.split("-"))
+    return datetime(y, m, d, 0, 0, tzinfo=timezone(timedelta(hours=9))).astimezone(timezone.utc)
+
+
+def _fetch_bills(spec: dict, *, timeout: int = 30, session=None) -> list["Candidate"]:
+    """열린국회정보 의안 목록 API → 후보 (2026-09-16 정책 계정용).
+    환경변수 OPEN_API_KEY 가 있어야 하고, 브라우저 User-Agent 가 없으면 400 을 돌려준다."""
+    import os
+
+    key = os.environ.get("OPEN_API_KEY", "").strip()
+    if not key:
+        raise RuntimeError("OPEN_API_KEY 가 없습니다 (국회 의안 API)")
+    sess = session or requests.Session()
+    params = {"KEY": key, "Type": "json", "pIndex": 1, "pSize": int(spec.get("size", 80)), "AGE": int(spec.get("age", 22))}
+    r = sess.get(spec["url"], params=params, headers={"User-Agent": UA}, timeout=timeout)
+    r.raise_for_status()
+    data = r.json()
+    blocks = data.get(spec.get("api", "")) or []
+    rows = next((b["row"] for b in blocks if isinstance(b, dict) and "row" in b), [])
+    out: list[Candidate] = []
+    for row in rows:
+        title = str(row.get("BILL_NAME") or "").strip()
+        link = str(row.get("DETAIL_LINK") or "").strip()
+        if not title or not link:
+            continue
+        result = str(row.get("PROC_RESULT") or "").strip()
+        when = _day(row.get("PROC_DT") or row.get("PROPOSE_DT") or "")
+        bits = [str(row.get("PROPOSER") or "").strip(), str(row.get("COMMITTEE") or "").strip(), ("처리: " + result) if result else "심사 중"]
+        bill_id = str(row.get("BILL_ID") or row.get("BILL_NO") or "").strip()
+        # 의안 링크는 주소가 같고 물음표 뒤 번호만 달라서(normalize_key 가 잘라낸다) 의안 번호를 열쇠로 쓴다
+        out.append(Candidate(key=f"bill:{bill_id}" if bill_id else normalize_key(link), title=title, link=link,
+                             source=spec["label"], published=when, summary=" · ".join(x for x in bits if x)))
+    return out
+
+
 def fetch_source(name: str, *, timeout: int = 30, session: requests.Session | None = None) -> list[Candidate]:
     spec = SOURCES.get(name)
     if not spec:
         raise KeyError(f"모르는 출처: {name}")
     sess = session or requests.Session()
+    if spec.get("kind") == "bills":                       # 국회 의안 API (RSS 가 아님)
+        return _fetch_bills(spec, timeout=timeout, session=sess)
     r = sess.get(spec["url"], headers={"User-Agent": UA}, timeout=timeout)
     r.raise_for_status()
     feed = feedparser.parse(r.content)

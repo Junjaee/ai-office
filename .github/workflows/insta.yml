@@ -58,6 +58,8 @@ jobs:
       INSTA_BENEFIT_TOKEN: ${{ secrets.INSTA_BENEFIT_TOKEN }}
       INSTA_BENEFIT_USER_ID: ${{ secrets.INSTA_BENEFIT_USER_ID }}
       INSTA_BENEFIT_USERNAME: ${{ vars.INSTA_BENEFIT_USERNAME }}
+      # 국회 열린데이터 (정책 계정 소재: 의안·법률안) — 브라우저 User-Agent 없으면 400
+      OPEN_API_KEY: ${{ secrets.OPEN_API_KEY }}
       # 릴스 목소리 (타입캐스트 · 구글 Chirp 3 HD) — 비어 있으면 무료 엣지 음성으로
       TYPECAST_API_KEY: ${{ secrets.TYPECAST_API_KEY }}
       GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}

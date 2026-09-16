@@ -5,7 +5,7 @@ default_account: aitips
 
 accounts:
   aitips:
-    profile: aitips                          # profiles/<이름>.yaml
+    profile: politics                        # profiles/<이름>.yaml — 2026-09-16 컨셉 전환: AI 꿀팁 → 정책·정치 브리핑(계정 키는 그대로 두어 토큰·자동화 유지)
     handle: "@aitips.kr"                  # 카드에 찍히는 표시 (실제 인스타 사용자 이름)
     dept: research                           # 사무실 설정의 부서 id (인스타 게시글팀)
     result_link: "https://www.instagram.com/aitips.kr/"
