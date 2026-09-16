@@ -99,30 +99,42 @@ def add(account: str, folder: Path, due: str, *, run=gh, root: Path | None = Non
     """완성 릴스 폴더를 대기열에 넣는다: 영상·표지는 릴리스 첨부로 올리고 게시 정보 json 을 저장한다(커밋은 부르는 쪽이)."""
     meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
     check_meta(meta)
-    for name in ("reel.mp4", "thumb.jpg"):
-        if not (folder / name).exists():
-            raise FileNotFoundError(str(folder / name))
+    card_files = sorted(folder.glob("[0-9][0-9].jpg"))          # 카드뉴스 폴더면 01.jpg, 02.jpg …
+    if not card_files:
+        for name in ("reel.mp4", "thumb.jpg"):
+            if not (folder / name).exists():
+                raise FileNotFoundError(str(folder / name))
     when = parse_due(due)
     item_id = when.strftime("%Y%m%d-%H%M") + "-" + hashlib.sha1(str(meta["key"]).encode("utf-8")).hexdigest()[:6]
     video, thumb = f"reel-{item_id}.mp4", f"thumb-{item_id}.jpg"
+    cards = [f"card-{item_id}-{i:02d}.jpg" for i in range(1, len(card_files) + 1)]
     tag = tag_of(account)
     if run("release", "view", tag, check=False).returncode != 0:
-        run("release", "create", tag, "--prerelease", "--title", f"인스타 대기 릴스 ({account})",
-            "--notes", "게시 전 완성 릴스 보관함. 게시되면 첨부 파일을 지운다 (automations/insta/insta_outbox.py).")
+        run("release", "create", tag, "--prerelease", "--title", f"인스타 대기 게시물 ({account})",
+            "--notes", "게시 전 완성 릴스·카드 보관함. 게시되면 첨부 파일을 지운다 (automations/insta/insta_outbox.py).")
     with tempfile.TemporaryDirectory() as tmp:
-        tv, tt = Path(tmp) / video, Path(tmp) / thumb
-        shutil.copy(folder / "reel.mp4", tv)
-        shutil.copy(folder / "thumb.jpg", tt)
-        run("release", "upload", tag, str(tv), str(tt), "--clobber")
+        if card_files:
+            copies = []
+            for src, name in zip(card_files, cards):
+                dst = Path(tmp) / name
+                shutil.copy(src, dst)
+                copies.append(str(dst))
+            run("release", "upload", tag, *copies, "--clobber")
+        else:
+            tv, tt = Path(tmp) / video, Path(tmp) / thumb
+            shutil.copy(folder / "reel.mp4", tv)
+            shutil.copy(folder / "thumb.jpg", tt)
+            run("release", "upload", tag, str(tv), str(tt), "--clobber")
     item = {**meta, "id": item_id, "account": account, "due": when.isoformat(timespec="minutes"), "status": "queued", "tries": 0,
-            "video": video, "thumb": thumb, "added_at": (now or datetime.now(KST)).isoformat(timespec="seconds")}
+            "added_at": (now or datetime.now(KST)).isoformat(timespec="seconds")}
+    item.update({"cards": cards} if card_files else {"video": video, "thumb": thumb})
     save_item(account, item, root)
     progress(f"대기열에 넣음 {item_id} · 게시 {item['due']}")
     return item
 
 
 def _cleanup(account: str, item: dict, run) -> None:
-    for asset in (item.get("video"), item.get("thumb")):
+    for asset in [item.get("video"), item.get("thumb"), *(item.get("cards") or [])]:
         if asset:
             run("release", "delete-asset", tag_of(account), asset, "--yes", check=False)
 
@@ -156,15 +168,22 @@ def publish(account: str, *, now: datetime | None = None, pub=None, run=gh, root
         return None
     save_item(account, item, root)
     work = workdir or Path(tempfile.mkdtemp())
-    run("release", "download", tag_of(account), "-p", item["video"], "-p", item["thumb"], "-D", str(work), "--clobber")
+    assets = list(item.get("cards") or [item["video"], item["thumb"]])
+    picks = [x for a in assets for x in ("-p", a)]
+    run("release", "download", tag_of(account), *picks, "-D", str(work), "--clobber")
     ig = pub.Instagram(token, user_id)
-    urls = pub.upload_public([work / item["video"], work / item["thumb"]], f"insta/{account}/{now.strftime('%Y-%m-%d-%H%M%S')}-outbox")
-    progress("영상 공개 URL 준비")
-    res = pub.publish_reel(ig, urls[0], build_caption(item), cover_url=urls[1], progress=progress)
+    urls = pub.upload_public([work / a for a in assets], f"insta/{account}/{now.strftime('%Y-%m-%d-%H%M%S')}-outbox")
+    if item.get("cards"):
+        progress(f"카드 {len(urls)}장 공개 URL 준비")
+        res = pub.publish_carousel(ig, urls, build_caption(item), progress=progress)
+    else:
+        progress("영상 공개 URL 준비")
+        res = pub.publish_reel(ig, urls[0], build_caption(item), cover_url=urls[1], progress=progress)
     row = {"date": now.strftime("%Y-%m-%d"), "account": account, "key": item["key"], "title": item["title"], "hook": item["hook"],
            "media_id": res["media_id"], "permalink": res.get("permalink") or "https://www.instagram.com/", "video_url": urls[0],
            "posted_at": now.isoformat(timespec="seconds"), "dm_keyword": item["dm_keyword"], "dm_text": item["dm_text"],
-           "kind": "reel_commentary", "credit": item.get("credit", ""), "source_url": item.get("source_url", ""), "provider": "outbox"}
+           "kind": "carousel" if item.get("cards") else "reel_commentary",
+           "credit": item.get("credit", ""), "source_url": item.get("source_url", ""), "provider": "outbox"}
     pp = posted_path(account, root)
     pp.parent.mkdir(parents=True, exist_ok=True)
     with pp.open("a", encoding="utf-8") as f:                # 게시 직후 바로 기록 — 뒤에서 무슨 오류가 나도 다시 올리지 않게

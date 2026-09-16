@@ -100,3 +100,38 @@ def test_already_posted_key_is_marked_done_without_publishing(tmp_path):
 def test_caption_without_dm_keyword_is_rejected(tmp_path):
     with pytest.raises(ValueError):
         ob.add("aitips", folder(tmp_path, caption="키워드 없음"), "2026-09-15T18:30", run=FakeGh(), root=tmp_path / "data", progress=lambda m: None)
+
+
+class FakeCardPub(FakePub):
+    """카드뉴스용 가짜 게시기: 올린 장수만큼 URL 을 돌려주고 캐러셀로 올린다."""
+
+    def upload_public(self, paths, prefix):
+        self.calls.append(("upload", [p.name for p in paths]))
+        return [f"https://r2.test/{p.name}" for p in paths]
+
+    def publish_carousel(self, ig, urls, caption, progress=print):
+        self.calls.append(("carousel", list(urls), caption))
+        return {"media_id": "m9", "permalink": "https://www.instagram.com/p/xyz/"}
+
+
+def card_folder(tmp_path):
+    d = tmp_path / "cards"
+    d.mkdir()
+    for i in range(1, 4):
+        (d / f"{i:02d}.jpg").write_bytes(b"c")
+    meta = {"key": "parent-cards-test", "title": "t", "hook": "h", "caption": "카드 설명. 댓글에 '휴직' 남기시면 DM",
+            "hashtags": ["#육아휴직"], "dm_keyword": "휴직", "dm_text": "신청 방법 안내 " * 10}
+    (d / "meta.json").write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
+    return d
+
+
+def test_cards_folder_is_queued_and_published_as_carousel(tmp_path):
+    """카드뉴스 폴더(01.jpg…)도 대기열에 넣고 캐러셀로 게시한다 (2026-09-16)."""
+    root, run, pub = tmp_path / "data", FakeGh(release_exists=True), FakeCardPub()
+    item = ob.add("parent", card_folder(tmp_path), "2026-09-16T18:30", run=run, root=root, progress=lambda m: None)
+    assert len(item["cards"]) == 3 and "video" not in item
+    row = ob.publish("parent", now=datetime(2026, 9, 16, 18, 31, tzinfo=KST), pub=pub, run=run, root=root,
+                     workdir=tmp_path / "w", progress=lambda m: None)
+    assert row is not None and row["kind"] == "carousel" and row["media_id"] == "m9"
+    assert [c[0] for c in pub.calls].count("carousel") == 1 and len(pub.calls[0][1]) == 3
+    assert sum(1 for c in run.calls if c[:2] == ("release", "delete-asset")) == 3
