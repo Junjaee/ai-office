@@ -1,9 +1,10 @@
 {
   "automations": [
     "hscity",
+    "mail",
     "minutes",
     "news",
     "weekend"
   ],
-  "generated_at": "2026-09-17T08:24:05+09:00"
+  "generated_at": "2026-09-17T08:48:04+09:00"
 }
