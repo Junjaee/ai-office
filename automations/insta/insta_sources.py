@@ -122,7 +122,9 @@ def _fetch_bills(spec: dict, *, timeout: int = 30, session=None) -> list["Candid
         raise RuntimeError("OPEN_API_KEY 가 없습니다 (국회 의안 API)")
     sess = session or requests.Session()
     params = {"KEY": key, "Type": "json", "pIndex": 1, "pSize": int(spec.get("size", 80)), "AGE": int(spec.get("age", 22))}
-    r = sess.get(spec["url"], params=params, headers={"User-Agent": UA}, timeout=timeout)
+    # 열린국회정보는 브라우저 User-Agent 가 아니면 400 을 돌려준다 (2026-09-16 서버 실행에서 확인)
+    browser = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36"
+    r = sess.get(spec["url"], params=params, headers={"User-Agent": browser}, timeout=timeout)
     r.raise_for_status()
     data = r.json()
     blocks = data.get(spec.get("api", "")) or []
