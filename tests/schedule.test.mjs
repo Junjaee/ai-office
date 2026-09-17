@@ -47,16 +47,21 @@ test("깨울 것 고르기: 메일은 5분마다", () => {
   assert.deepEqual(due.map((j) => j.workflow), ["mail.yml"]);
 });
 
-test("같은 분에 여러 개면 워크플로마다 하나만 — 인스타 후보가 게시 확인을 이긴다", () => {
-  // 21:30 UTC = KST 06:30 — "30 21 * * *"(후보)와 "30 * * * *"(게시 확인)이 둘 다 맞는다
-  const due = dueJobs(SCHEDULES, at("2026-09-17T21:30:00Z"));
-  const insta = due.filter((j) => j.workflow === "insta.yml");
-  assert.equal(insta.length, 1);
-  assert.deepEqual(insta[0].inputs, { account: "all", mode: "topics" });
+test("같은 분에 같은 워크플로가 여러 번 맞으면 앞선 항목 하나만", () => {
+  const jobs = [
+    { workflow: "x.yml", cron: "30 21 * * *", inputs: { mode: "topics" }, note: "특정 시각" },
+    { workflow: "x.yml", cron: "30 * * * *", inputs: { mode: "publish" }, note: "매시" },
+  ];
+  const both = dueJobs(jobs, at("2026-09-17T21:30:00Z"));   // 둘 다 맞는 시각
+  assert.equal(both.length, 1);
+  assert.deepEqual(both[0].inputs, { mode: "topics" });     // 앞선 것이 이긴다
 
-  // 보통 시각에는 게시 확인
-  const noon = dueJobs(SCHEDULES, at("2026-09-17T03:30:00Z")).filter((j) => j.workflow === "insta.yml");
-  assert.deepEqual(noon[0].inputs, { account: "all", mode: "publish" });
+  const onlyHourly = dueJobs(jobs, at("2026-09-17T03:30:00Z"));
+  assert.deepEqual(onlyHourly[0].inputs, { mode: "publish" });
+});
+
+test("인스타는 예약에서 빠졌다 (사용자 결정 2026-09-17 — 사이트 ▶ 시작으로만)", () => {
+  assert.equal(SCHEDULES.some((j) => j.workflow === "insta.yml"), false);
 });
 
 test("여러 자동화가 같은 분에 걸리면 모두 깨운다", () => {

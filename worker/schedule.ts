@@ -27,13 +27,7 @@ export const SCHEDULES: ScheduledJob[] = [
   { workflow: "hscity.yml", cron: "0 23 * * *", note: "화성시 — KST 08:00" },
   { workflow: "hscity.yml", cron: "0 9 * * *", note: "화성시 — KST 18:00" },
   { workflow: "weekend.yml", cron: "0 8 * * 4", note: "주말 일정 — 목 KST 17:00" },
-  // 인스타: 후보 뽑기가 먼저 온다 — 같은 분(06:30·11:30)에 게시 확인과 겹치면 후보 뽑기를 쓴다
-  { workflow: "insta.yml", cron: "30 21 * * *", inputs: { account: "all", mode: "topics" },
-    note: "인스타 후보 — KST 06:30" },
-  { workflow: "insta.yml", cron: "30 2 * * *", inputs: { account: "all", mode: "topics" },
-    note: "인스타 후보 — KST 11:30" },
-  { workflow: "insta.yml", cron: "30 * * * *", inputs: { account: "all", mode: "publish" },
-    note: "인스타 게시 확인 — 매시 30분" },
+  // 인스타(후보 뽑기·게시 확인)는 예약에서 뺐다 — 사이트 ▶ 시작으로만 돈다 (사용자 결정 2026-09-17)
 ];
 
 function matchesField(field: string, value: number, min: number, max: number): boolean {
