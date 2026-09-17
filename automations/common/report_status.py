@@ -51,7 +51,12 @@ def run_meta() -> dict:
     if request_id:
         out["request_id"] = request_id
     event = (os.environ.get("GITHUB_EVENT_NAME") or "").strip()
-    out["trigger"] = _TRIGGERS.get(event, "local")
+    # 예약은 Cloudflare 시계가 workflow_dispatch 로 깨우므로 event 만 보면 수동과 구분되지 않는다.
+    # 요청 번호가 cron- 으로 시작하면 예약으로 남긴다 (worker/schedule.ts 의 cronRequestId, 2026-09-17)
+    if request_id.startswith("cron-"):
+        out["trigger"] = "schedule"
+    else:
+        out["trigger"] = _TRIGGERS.get(event, "local")
     return out
 
 

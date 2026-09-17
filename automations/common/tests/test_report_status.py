@@ -120,6 +120,18 @@ def test_env_maps_to_run_id_url_request_trigger(monkeypatch):
     assert isinstance(meta["run_id"], int)
 
 
+def test_cron_request_id_is_scheduled_not_manual(monkeypatch):
+    """예약은 Cloudflare 시계가 workflow_dispatch 로 깨우므로 요청 번호로 가린다 (2026-09-17)."""
+    monkeypatch.setenv("GITHUB_RUN_ID", "7")
+    monkeypatch.setenv("GITHUB_SERVER_URL", "https://github.com")
+    monkeypatch.setenv("GITHUB_REPOSITORY", "o/r")
+    monkeypatch.setenv("GITHUB_EVENT_NAME", "workflow_dispatch")
+    monkeypatch.setenv("REQUEST_ID", "cron-202609170706")
+    assert run_meta()["trigger"] == "schedule"
+    monkeypatch.setenv("REQUEST_ID", "req-20260917090001-ab")
+    assert run_meta()["trigger"] == "manual"
+
+
 def test_env_schedule_trigger_without_request_id(monkeypatch):
     monkeypatch.setenv("GITHUB_RUN_ID", "5")
     monkeypatch.setenv("GITHUB_SERVER_URL", "https://github.com")

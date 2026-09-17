@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   decideRun, parseRequestId, latestValidRunByWorkflow, kstDateKey, dailyCount, addDailyCount,
   createRunApiStores, handleRun, handleStatus, isCrossOrigin, handleHistory, isValidDate, kstDayRangeUtc, historyFromRuns, parseArchive, archiveDate, mergeHistory,
-  handleReview, parseRunInputs,
+  handleReview, parseRunInputs, isCronRequest,
 } from "../worker/run-api.ts";
 import { GitHubClient, GitHubAuthError, GitHubUnavailableError, GitHubNotFoundError } from "../worker/github.ts";
 import { DAILY_RUN_LIMIT, STATUS_CACHE_MS, TOO_SOON_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS, HISTORY_PAST_CACHE_MS } from "../worker/config.ts";
@@ -423,6 +423,18 @@ test("historyFromRuns: 이 사무실 자동화 run 만, 방식 분류, 요약 �
   assert.deepEqual(h.map((x) => [x.id, x.automationId, x.trigger]), [["1", "minutes", "schedule"], ["3", "mail", "other"]]);
   assert.equal(h[0].summary, null);
   assert.equal(h[1].completedAt, null);
+});
+
+test("historyFromRuns: Cloudflare 시계가 깨운 실행은 예약으로 본다 (2026-09-17)", () => {
+  // 예약은 workflow_dispatch 로 온다 — 요청 번호가 cron- 이면 수동이 아니라 예약
+  const h = historyFromRuns([
+    run({ id: 10, event: "workflow_dispatch", display_title: "minutes · cron-202609170706" }),
+    run({ id: 11, event: "workflow_dispatch", display_title: "minutes · req-20260917090001-ab" }),
+  ], workspaces.assembly.automations);
+  assert.deepEqual(h.map((x) => [x.trigger, x.requestId]), [
+    ["schedule", "cron-202609170706"],
+    ["manual", "req-20260917090001-ab"],
+  ]);
 });
 
 test("parseArchive · archiveDate: 깨진 줄은 건너뛰고, 날짜는 KST", () => {

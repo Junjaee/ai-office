@@ -58,8 +58,13 @@ export function addDailyCount(store: DailyCounterStore, ws: string, nowMs: numbe
 // ── runs 가공 ──
 /** display_title("수집 · req-2026…-a1b2")에서 requestId 추출. 없으면 null */
 export function parseRequestId(displayTitle: string | null | undefined): string | null {
-  const m = /req-[A-Za-z0-9-]+/.exec(displayTitle ?? "");
+  const m = /(?:req|cron)-[A-Za-z0-9-]+/.exec(displayTitle ?? "");
   return m ? m[0] : null;
+}
+
+/** Cloudflare 시계가 깨운 실행인가 — 요청 번호가 `cron-…` 이다 (사람이 누른 것은 `req-…`) */
+export function isCronRequest(requestId: string | null | undefined): boolean {
+  return (requestId ?? "").startsWith("cron-");
 }
 
 function workflowFileOf(run: RunSummary): string {
@@ -153,7 +158,10 @@ export function kstDayRangeUtc(date: string): { from: string; to: string } {
   return { from: iso(start), to: iso(start + 86_400_000 - 1000) };
 }
 
-function toTrigger(event: string): HistoryTrigger {
+function toTrigger(event: string, requestId?: string | null): HistoryTrigger {
+  // 예약은 Cloudflare 가 workflow_dispatch 로 깨우므로 GitHub 이 알려주는 event 만으로는 수동과 구분되지 않는다.
+  // 요청 번호가 cron- 으로 시작하면 예약으로 본다 (worker/schedule.ts 의 cronRequestId).
+  if (isCronRequest(requestId)) return "schedule";
   return event === "workflow_dispatch" ? "manual" : event === "schedule" ? "schedule" : "other";
 }
 
@@ -171,7 +179,7 @@ export function historyFromRuns(runs: RunSummary[], automations: WorkspaceLike["
       automationId,
       status: run.status,
       conclusion: run.conclusion,
-      trigger: toTrigger(run.event),
+      trigger: toTrigger(run.event, parseRequestId(run.display_title)),
       requestId: parseRequestId(run.display_title),
       startedAt: run.run_started_at,
       completedAt: run.status === "completed" ? run.updated_at : null,
