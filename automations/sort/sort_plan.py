@@ -37,10 +37,15 @@ SCHEMA = {"anyOf": [
 ]}
 
 
-def build_prompt(committee: str, folders: list, files: list[tuple[str, int, str]]) -> str:
-    """committee: 위원회 이름, folders: Folder 목록, files: (이름, 크기KB, 본문앞부분)."""
+def build_prompt(committee: str, folders: list, files: list[tuple[str, int, str]],
+                 rules: list[str] | None = None) -> str:
+    """committee: 위원회 이름, folders: Folder 목록, files: (이름, 크기KB, 본문앞부분),
+    rules: 이 위원회에만 적용할 추가 규칙(설정 파일의 `rules`). 일반 규칙보다 우선한다."""
     lines = [f"위원회: {committee}", "", "## 이미 있는 폴더"]
     lines += [f"- {f.name} (안에 {f.count}개)" for f in folders] or ["- (없음)"]
+    if rules:
+        lines += ["", "## 꼭 지킬 규칙 (위의 일반 규칙보다 우선)"]
+        lines += [f"- {r}" for r in rules]
     lines += ["", "## 수신함에 있는 파일"]
     for name, kb, text in files:
         lines.append(f"### {name} ({kb}KB)")

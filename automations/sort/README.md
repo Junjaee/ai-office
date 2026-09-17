@@ -29,6 +29,9 @@
 
 ## 설정 (`config.actions.yaml`)
 
+- `rules`: 모든 위원회에 적용할 규칙(일반 규칙보다 우선). 사용자가 "이런 자료는 저기로"라고 정할 때마다
+  여기에 한 줄 더한다 — 코드는 고치지 않는다. 예: 국정감사 자료는 `_참고자료` 로(2026-09-17).
+  위원회마다 다르게 주려면 `committees[].rules`.
 - `committees[]`: `label`(위원회), `inbox_id`(수신함 폴더), `parent_id`(회의 폴더들이 있는 위원회 폴더),
   `allow_new_folders`(새 폴더를 만들어도 되는지).
 - `llm_providers`: `[claude_cli, gemini]` — 앞의 것부터. CI 에서는 `CLAUDE_CODE_OAUTH_TOKEN` 을 쓴다.

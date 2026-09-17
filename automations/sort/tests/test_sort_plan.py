@@ -65,3 +65,12 @@ def test_prompt_shows_folders_and_file_text():
     assert "위원회: 재경위" in text
     assert "- 20260917_공청회 (안에 7개)" in text
     assert "### 자료집.pdf (804KB)" in text and "제439회국회 공청회 자료" in text
+    assert "꼭 지킬 규칙" not in text          # 규칙이 없으면 그 자리도 없다
+
+
+def test_prompt_carries_user_rules():
+    """사용자가 정한 규칙(예: 국정감사 자료는 _참고자료)을 프롬프트에 싣는다 — 2026-09-17."""
+    text = build_prompt("재경위", [F("1", "_참고자료", 3)], [("국정감사계획서.hwp", 40, "")],
+                        rules=["국정감사 관련 자료는 `_참고자료` 폴더로 옮긴다."])
+    assert "## 꼭 지킬 규칙 (위의 일반 규칙보다 우선)" in text
+    assert "- 국정감사 관련 자료는 `_참고자료` 폴더로 옮긴다." in text

@@ -12,6 +12,11 @@ committees:
     parent_id: "1mhM1PQ57FGQReEItbSWu5WBS8om-bWQl"  # 예결위
     allow_new_folders: true
 
+# 모든 위원회에 적용할 규칙 (일반 규칙보다 우선). 위원회마다 다르게 주려면 committees[].rules 에 적는다
+rules:
+  # 사용자 결정 2026-09-17
+  - "국정감사 관련 자료(국정감사계획서, 국정감사 요구자료, 증인·참고인 명단 등)는 `_참고자료` 폴더로 옮긴다."
+
 # 분류 판단에 쓸 모델 — 앞의 것부터 시도한다(claude 구독 CLI → 제미나이)
 llm_providers: [claude_cli, gemini]
 

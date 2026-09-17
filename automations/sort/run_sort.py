@@ -50,7 +50,7 @@ def drive_service():
     return DriveClient().svc
 
 
-def sort_one(service, rule: dict, llm: LLM, dry_run: bool, progress) -> dict:
+def sort_one(service, rule: dict, llm: LLM, dry_run: bool, progress, rules: list[str] | None = None) -> dict:
     """위원회 하나의 수신함을 정리한다. {"files": n, "moved": n, "left": n, "new_folders": n}."""
     label = (rule.get("label") or "").strip()
     inbox_id = (rule.get("inbox_id") or "").strip()
@@ -67,7 +67,8 @@ def sort_one(service, rule: dict, llm: LLM, dry_run: bool, progress) -> dict:
     progress(f"{label} 수신함 {len(items)}개, 폴더 {len(folders)}개")
 
     texts = [(it.name, it.size // 1024, read_text(service, it)) for it in items]
-    plan = llm.json(system=SYSTEM, user=build_prompt(label, folders, texts), schema=SCHEMA)  # dict 또는 list
+    prompt = build_prompt(label, folders, texts, (rules or []) + list(rule.get("rules") or []))
+    plan = llm.json(system=SYSTEM, user=prompt, schema=SCHEMA)  # dict 또는 list
     moves = clean_plan(plan, [it.name for it in items], [f.name for f in folders],
                        allow_new=bool(rule.get("allow_new_folders", True)))
     progress(f"{label} 옮길 것 {len(moves)}개, 둘 것 {len(items) - len(moves)}개")
@@ -107,7 +108,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     for rule in rules:
         label = (rule.get("label") or "").strip()
         try:
-            got = sort_one(service, rule, llm, args.dry_run, progress)
+            got = sort_one(service, rule, llm, args.dry_run, progress, list(cfg.get("rules") or []))
         except LLMError as exc:
             progress(f"{label} 정리 실패 — {str(exc)[:60]}")
             failed.append(label)
