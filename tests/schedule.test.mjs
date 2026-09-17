@@ -1,6 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { SCHEDULES, cronRequestId, dueJobs, matchesCron } from "../worker/schedule.ts";
+// Node 의 타입 제거 실행은 확장자 없는 상대 import 를 못 읽으므로 사무실 파일을 직접 읽는다
+import { workspace as assembly } from "../app/workspaces/assembly.ts";
+import { workspace as home } from "../app/workspaces/home.ts";
+import { workspace as side } from "../app/workspaces/side.ts";
+
+const WORKSPACE_LIST = [assembly, home, side];
 
 const at = (iso) => new Date(iso);
 
@@ -85,4 +91,18 @@ test("요청 번호는 분 단위로 같다", () => {
   assert.equal(cronRequestId(at("2026-09-17T05:25:00Z")), "cron-202609170525");
   assert.equal(cronRequestId(at("2026-09-17T05:25:59Z")), "cron-202609170525");
   assert.notEqual(cronRequestId(at("2026-09-17T05:26:00Z")), "cron-202609170525");
+});
+
+
+test("카드의 예약 문구와 실제 예약표가 어긋나지 않는다", () => {
+  // 사무실 카드에 schedule 문구가 있으면 그 워크플로가 예약표에 있어야 한다.
+  // (없으면 화면은 "예약"이라 하는데 아무도 깨우지 않고, "예약 놓침" 경고까지 뜬다)
+  const scheduled = new Set(SCHEDULES.map((j) => j.workflow));
+  for (const ws of WORKSPACE_LIST) {
+    for (const def of ws.automations) {
+      if (!def.schedule) continue;
+      assert.ok(scheduled.has(def.workflow ?? ""),
+        `${ws.id}/${def.id}: 카드에 "${def.schedule}" 이라 적혀 있는데 worker/schedule.ts 에 예약이 없다`);
+    }
+  }
 });

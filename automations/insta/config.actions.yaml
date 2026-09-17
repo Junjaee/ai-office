@@ -21,7 +21,7 @@ accounts:
     reel_voice: tc_68257f68bc6e3c161ab5078d  # 타입캐스트 '필재'(남·중년, @to_be_100m 신비한 건축사전이 쓰는 목소리). 엣지면 ko-KR-SunHiNeural 등
     reel_tempo: 1.25                         # 말 빠르기 배수(타입캐스트 0.5~2.0). 1.1 → 1.25 (2026-09-14 사용자: 조금 빨라질 필요)
     reel_bgm: true                           # 코드로 만든 저작권 없는 배경음악
-    next_run: "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시(비어 있으면 1순위 자동)"
+    next_run: "없음 (▶ 시작으로 수동 실행)"
 
   parent:                                    # 육아 꿀팁·혜택 (2026-09-14 추가) — 계정 개설·토큰 등록 전까지는 후보만 뽑고 게시는 건너뛴다
     profile: parent
@@ -38,7 +38,7 @@ accounts:
     post_kind: carousel
     reel_voice_engine: typecast              # 릴스로 켤 때 목소리 (계정 개설 뒤 post_kind: reel)
     reel_voice: tc_68257f68bc6e3c161ab5078d  # 타입캐스트 '필재'
-    next_run: "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시"
+    next_run: "없음 (▶ 시작으로 수동 실행)"
   benefit:                                   # 돈 되는 정책·혜택 알림 (2026-09-14 추가)
     profile: benefit
     handle: "@benefit.kr"
@@ -54,7 +54,7 @@ accounts:
     post_kind: carousel
     reel_voice_engine: typecast              # 릴스로 켤 때 목소리 (계정 개설 뒤 post_kind: reel)
     reel_voice: tc_68257f68bc6e3c161ab5078d  # 타입캐스트 '필재'
-    next_run: "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시"
+    next_run: "없음 (▶ 시작으로 수동 실행)"
 
 # 글 생성기: 앞에서부터 시도, 실패하면 다음 (전부 무료 경로)
 llm_providers: [claude_cli, gemini]
