@@ -3,35 +3,34 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 전송 1건, 실패 0건, 41초",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 15초",
   "counts": {
-    "new": 1,
-    "sent": 1,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 08:00·18:00",
   "log": [
-    "신규 1건, 전송 1건, 실패 0건, 41초",
-    "[신규] [시정알림방] 2026년 사회적 장애인식개선 문화공연 개최 안내 「 가을 밤 하모니, "
+    "신규 0건, 전송 0건, 실패 0건, 15초"
   ],
   "link": "",
-  "run_id": 35105708316,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35105708316",
+  "run_id": 35169677046,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35169677046",
   "trigger": "schedule",
-  "started_at": "2026-09-16T23:01:48+09:00",
-  "duration_sec": 41,
+  "started_at": "2026-09-17T10:13:17+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 1건, 첨부 1건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "1건 발송, 무음 0건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-09-16T23:02:30+09:00"
+  "updated_at": "2026-09-17T10:13:33+09:00"
 }
