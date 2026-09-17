@@ -33,18 +33,24 @@ class LLMError(RuntimeError):
     """모든 제공자가 실패했다."""
 
 
-def extract_json(text: str) -> dict:
-    """응답 본문에서 첫 JSON 객체를 꺼낸다. ```json 울타리·앞뒤 설명이 있어도 된다."""
+def extract_json(text: str) -> dict | list:
+    """응답 본문에서 JSON 을 꺼낸다. ```json 울타리·앞뒤 설명이 있어도 된다.
+
+    객체({...})를 먼저 찾고, 없으면 배열([...])을 찾는다 — 목록을 부탁하면 배열로 답하는 모델이 있다.
+    """
     if not text:
         raise ValueError("빈 응답")
-    fence = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.S)
-    candidate = fence.group(1) if fence else None
-    if candidate is None:
-        start, end = text.find("{"), text.rfind("}")
-        if start < 0 or end <= start:
-            raise ValueError("JSON 객체를 찾지 못함")
-        candidate = text[start:end + 1]
-    return json.loads(candidate)
+    fence = re.search(r"```(?:json)?\s*(\{.*\}|\[.*\])\s*```", text, re.S)
+    if fence:
+        return json.loads(fence.group(1))
+    for open_ch, close_ch in (("{", "}"), ("[", "]")):
+        start, end = text.find(open_ch), text.rfind(close_ch)
+        if 0 <= start < end:
+            try:
+                return json.loads(text[start:end + 1])
+            except json.JSONDecodeError:
+                continue
+    raise ValueError("JSON 을 찾지 못함")
 
 
 def validate(data: dict, schema: dict | None) -> None:

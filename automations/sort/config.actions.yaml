@@ -1,0 +1,27 @@
+# 수신함 정리 — 위원회 수신함에 쌓인 자료를 회의 폴더로 나눠 넣는다.
+# 비밀값은 환경변수(GitHub Secrets): GOOGLE_*(공용 토큰, 드라이브 권한) · CLAUDE_CODE_OAUTH_TOKEN
+
+# 정리할 위원회. inbox_id = 수신함 폴더, parent_id = 회의 폴더들이 있는 위원회 폴더
+committees:
+  - label: "재경위"
+    inbox_id: "1dNwHu2iEAoMnp2NxOPfe8O866kE84tBr"   # 재경위/_수신함
+    parent_id: "1sSVVZfZqJPpWpp2H3E5xDo8F1EbdibnY"  # 재경위
+    allow_new_folders: true      # 딱 맞는 폴더가 없으면 새로 만들어도 된다(20260917_공청회 식)
+  - label: "예결위"
+    inbox_id: "1rFQ5_cZWEKbjXmbfYqCwRBAiKoG9VwIQ"   # 예결위/_수신함
+    parent_id: "1mhM1PQ57FGQReEItbSWu5WBS8om-bWQl"  # 예결위
+    allow_new_folders: true
+
+# 분류 판단에 쓸 모델 — 앞의 것부터 시도한다(claude 구독 CLI → 제미나이)
+llm_providers: [claude_cli, gemini]
+
+# 결과물 위치 — 카드의 "결과 폴더 열기" (위원회 폴더 모음)
+result_link: "https://drive.google.com/drive/folders/1E7pUQ5hFNCq2NnLkJxPW1hb8lTJLaheQ"
+
+# 상태 보고. 정리할 파일이 없으면 커밋하지 않는다
+office_repo: "."
+office_workspace: "assembly"
+next_run: "새 자료가 오면"
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts
+tasks: [plan, move]

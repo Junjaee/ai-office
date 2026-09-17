@@ -15,7 +15,7 @@ import insta_research as research  # noqa: E402
 import insta_sources as sources  # noqa: E402
 import insta_watch as watch  # noqa: E402
 import insta_writer as writer  # noqa: E402
-from insta_llm import LLM, LLMError, extract_json  # noqa: E402
+from llm import LLM, LLMError, extract_json  # noqa: E402
 
 NOW = datetime(2026, 9, 11, 9, 0, tzinfo=timezone.utc)
 

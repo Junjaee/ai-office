@@ -38,7 +38,7 @@ import insta_review as review  # noqa: E402
 import insta_sources as sources  # noqa: E402
 import insta_watch as watch  # noqa: E402
 import insta_writer as writer  # noqa: E402
-from insta_llm import LLM, LLMError  # noqa: E402
+from llm import LLM, LLMError  # noqa: E402
 try:
     from report_status import report as report_status  # noqa: E402
 except ImportError:

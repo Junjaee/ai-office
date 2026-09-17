@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+import os
 import sys
 import time
 import traceback
@@ -258,6 +259,12 @@ def run(argv: list[str], work=None) -> int:
     counts = dict(result.get("counts") or {})
     lines = list(result.get("lines") or [])
     task_results = dict(result.get("tasks") or {})
+    # 드라이브 수신함에 새 자료가 들어갔으면 워크플로가 이어서 '수신함 정리'를 돌린다
+    out_path = (os.environ.get("GITHUB_OUTPUT") or "").strip()
+    if out_path:
+        with open(out_path, "a", encoding="utf-8") as fh:
+            fh.write(f"saved={counts.get('saved', 0)}
+")
     ok = counts.get("failed", 0) == 0 and all(v[0] for v in task_results.values())
     summary = build_summary(counts, time.monotonic() - started)
     print(summary)

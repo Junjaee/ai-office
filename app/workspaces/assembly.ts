@@ -99,7 +99,7 @@ export const DEPARTMENTS: readonly Department[] = [
     short: "archive.box",
     icon: "🗂️",
     task: "드라이브 자료 분류",
-    report: "받은 자료를 회의 폴더로 나눠 넣습니다.",
+    report: "수신함 자료를 읽고 회의 폴더로 나눠 넣습니다. 애매하면 그대로 둡니다.",
   },
   {
     id: "ops",
@@ -157,6 +157,12 @@ export const AUTOMATIONS: AutomationDef[] = [
       { id: "check", name: "새 메일 확인", role: "재경위·예결위에서 온 새 메일 찾기" },
       { id: "notify", name: "알림·정리", role: "텔레그램으로 알리고 지메일 라벨로 정리" },
     ] },
+  // 새 자료가 수신함에 들어왔을 때만 돈다(상임위 메일 실행이 이어서 깨운다) — 예약 없음
+  { id: "sort", dept: "review", name: "수신함 정리", workflow: "sort.yml",
+    tasks: [
+      { id: "plan", name: "자료 분류", role: "파일 내용을 읽고 어느 회의 폴더인지 정하기" },
+      { id: "move", name: "폴더 정리", role: "정한 폴더로 옮기고 기록 남기기" },
+    ] },
   { id: "question", dept: "strategy2", name: "질의서",
     tasks: [
       { id: "draft", name: "질의서 초안", role: "회의 자료 기반 질의서 초안 작성" },
@@ -178,8 +184,6 @@ export const AUTOMATIONS: AutomationDef[] = [
       { id: "fetch", name: "주말 일정 모으기", role: "530호 비공개 캘린더에서 이번 주 토·일 일정 읽기", colors: ["#2e3a4f", "#e6eef7", "#2563eb"] },
       { id: "send", name: "텔레그램 보내기", role: "정리한 주말 일정을 받는 분 텔레그램으로 전송", colors: ["#3b2f4a", "#efe7f7", "#229ed9"] },
     ] },
-  { id: "filing", dept: "review", name: "자료 분류",
-    tasks: [{ id: "sort", name: "자료 분류", role: "받은 자료를 회의 날짜별 폴더로 분류" }] },
   { id: "hscity", dept: "review", name: "화성시 공고 수집",
     workflow: "hscity.yml", schedule: "매일 08:00·18:00",
     tasks: [

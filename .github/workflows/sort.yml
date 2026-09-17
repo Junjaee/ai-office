@@ -1,0 +1,56 @@
+name: 수신함 정리
+
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: "화면에서 누른 요청 id (비워도 됨)"
+        type: string
+        default: ""
+      dry_run:
+        description: "시험 실행 — 옮기지 않고 어떻게 옮길지만 실행 기록에 찍기"
+        type: boolean
+        default: false
+
+# runs API 의 display_title 로 "내가 누른 실행"을 결정적으로 매칭한다 — 바꾸지 말 것
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('sort · {0}', inputs.request_id) || 'sort · 예약' }}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sort
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 의존성 설치
+        run: |
+          python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
+          npm install -g @anthropic-ai/claude-code
+
+      - name: git 사용자 설정 (상태 파일 커밋용)
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+
+      - name: 실행
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/sort/run_sort.py --config automations/sort/config.actions.yaml ${{ inputs.dry_run && '--dry-run' || '' }}

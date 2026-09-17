@@ -4,7 +4,7 @@
 
 | 사무실 | 주소 | 용도 | 팔레트 |
 |---|---|---|---|
-| 국회 | `/assembly` | 의원실 자동화 (국회회의록 수집, 기사 수집, 상임위 메일, 주말 일정 알림 등) | 국회 CI (네이비·블루·틸) |
+| 국회 | `/assembly` | 의원실 자동화 (국회회의록 수집, 기사 수집, 상임위 메일, 수신함 정리, 주말 일정 알림 등) | 국회 CI (네이비·블루·틸) |
 | 홈 | `/home` | 가정 자동화 (지출·정산 등) | 블루·화이트·그레이 |
 | 부업 | `/side` | 콘텐츠 자동화 (인스타 게시글·릴스, 쇼츠, 블로그). 팀 = 플랫폼, 자동화 = 계정 | 차콜·앰버 |
 | 주식 | `/stock` (예정) | 주식 자동화 | 미정 |
@@ -55,7 +55,7 @@
 - `app/status-rules.ts` 상태 규칙(순수), `app/status.ts` 조회·폴링 훅.
 - `app/game/` 픽셀 사무실: `world.ts`(4열 가변 배치·라운지) `pathfinding.ts` `staff.ts` `office-model.ts`(상태→자리·자세) `engine.ts` `OfficeWorld.tsx`.
 - `worker/` Cloudflare Worker (`/api/run`, `/api/status`, GitHub 클라이언트).
-- `automations/` 자동화 코드(`minutes` 국회회의록, `news` 기사 수집, `mail` 상임위 메일, `common` 상태 보고·오류 문구·Drive·텔레그램), `automations/runner` 실행기 설치.
+- `automations/` 자동화 코드(`minutes` 국회회의록, `news` 기사 수집, `mail` 상임위 메일, `sort` 수신함 정리, `common` 상태 보고·오류 문구·Drive·텔레그램·클로드), `automations/runner` 실행기 설치.
 - `public/status/<사무실>/` 자동화가 커밋하는 상태 파일(v2: `run_id`·`request_id`·`tasks[]` 포함).
 
 ## 이 PC에서 실행 (Windows ARM)

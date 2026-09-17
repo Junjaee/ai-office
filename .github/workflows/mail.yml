@@ -46,6 +46,7 @@ jobs:
           git config user.email "ai-office-bot@users.noreply.github.com"
 
       - name: 실행
+        id: mail
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
@@ -56,3 +57,21 @@ jobs:
           PYTHONUTF8: "1"
         run: |
           python -X utf8 automations/mail/run_mail.py --config automations/mail/config.actions.yaml ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      # 드라이브 수신함에 새 자료가 들어왔을 때만 — 클로드가 회의 폴더로 나눠 넣는다
+      - name: 클로드 설치 (새 자료가 있을 때만)
+        if: steps.mail.outputs.saved != '' && steps.mail.outputs.saved != '0'
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: 수신함 정리 (새 자료가 있을 때만)
+        if: steps.mail.outputs.saved != '' && steps.mail.outputs.saved != '0'
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/sort/run_sort.py --config automations/sort/config.actions.yaml

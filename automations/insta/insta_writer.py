@@ -13,7 +13,7 @@ import json
 import re
 from dataclasses import dataclass, replace
 
-from insta_llm import LLM
+from llm import LLM
 
 QUERY_SCHEMA = {
     "type": "object", "required": ["queries"],
