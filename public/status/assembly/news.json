@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 14초",
+  "summary": "신규 11건, 실패 0건, 12초",
   "counts": {
-    "new": 20,
+    "new": 11,
     "failed": 0,
-    "total": 1118
+    "total": 1129
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 14초",
-    "[신규] 테크볼에 인생 걸었다… 이준석, AG 남자 단식 4강 진출 — 중앙일보",
-    "[신규] 테크볼 이준석-이태빈, 남자 복식 패자부활전 탈락[AG] — 뉴스1",
-    "[신규] 경기 펼치는 이준석 — v.daum.net",
-    "[신규] \"축구야, 탁구야?\" 테크볼 AG 첫선…이준석, 한일전 잡고 '5연승' - 머니투데이 — mt.co.kr"
+    "신규 11건, 실패 0건, 12초",
+    "[신규] 테크볼 남자 복식 예선 경기 치르는 이준석-이태빈 — v.daum.net",
+    "[신규] 테크볼 한일전 경기 펼치는 이준석 — 연합뉴스",
+    "[신규] '생업까지 접었다' 조영욱과 축구하던 '무명' 이준석, 테크볼 '에이스'로 우뚝...첫 AG 메달까지 단 1승 남았다[나고야 LIVE] — 스포츠조선",
+    "[신규] ‘발로 하는 탁구’ 테크볼, 아이치·나고야 AG서 첫선…한국, 이준석 앞세워 쾌조의 출발 — v.daum.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35237356872,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35237356872",
-  "request_id": "cron-202609171500",
+  "run_id": 35256160930,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35256160930",
+  "request_id": "cron-202609171800",
   "trigger": "schedule",
-  "started_at": "2026-09-18T00:00:50+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-09-18T03:00:53+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 283건"
+      "summary": "검색어 5개에서 287건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 20건 (신규 20건) · mt.co.kr 4건, 뉴스1 3건, v.daum.net 2건"
+      "summary": "오늘 31건 (신규 11건) · v.daum.net 5건, mt.co.kr 4건, 뉴스1 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-18T00:01:06+09:00"
+  "updated_at": "2026-09-18T03:01:06+09:00"
 }
