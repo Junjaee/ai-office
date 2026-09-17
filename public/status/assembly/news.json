@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 83건, 실패 0건, 9초",
+  "summary": "신규 67건, 실패 0건, 9초",
   "counts": {
-    "new": 83,
+    "new": 67,
     "failed": 0,
-    "total": 951
+    "total": 1018
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 83건, 실패 0건, 9초",
-    "[신규] [김창권의 썸타는 뉴스] ‘헤어질 결심’ 앞에 선 이준석과 천하람 — 뉴스인",
-    "[신규] 이기인 \"천하람·이주영, 경기 남부 출마 결단하라...지도부 비례 출마 금지\" — 뉴스핌",
-    "[신규] 이기인 \"천하람·이주영, 경기남부 지역구 출마하라\" — v.daum.net",
-    "[신규] [속보]개혁신당, 이준석 경기남부 전략 잇는다…\"천하람·이주영 결단 요구\" — edaily.co.kr"
+    "신규 67건, 실패 0건, 9초",
+    "[신규] [아시안게임] 이준석, 테크볼 남자단식 '무실세트' 5연승으로 8강 진출 — 연합뉴스",
+    "[신규] “천하람-이주영 경기남부로” 이준석에 손내민 개혁신당 — 중앙일보",
+    "[신규] 아시안게임 첫선 테크볼... 한국 이준석, 10세트 전승으로 8강행 — chosun.com",
+    "[신규] 한 세트도 안 내줬다…이준석, 테크볼 5연승 질주 ‘8강행’ — 알파경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35174270687,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35174270687",
-  "trigger": "schedule",
-  "started_at": "2026-09-17T11:24:34+09:00",
+  "run_id": 35188043388,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35188043388",
+  "request_id": "cron-202609170600",
+  "trigger": "manual",
+  "started_at": "2026-09-17T15:01:43+09:00",
   "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 186건"
+      "summary": "검색어 5개에서 228건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 101건 (신규 83건) · v.daum.net 16건, 뉴시스 7건, Histoire pour tous 6건"
+      "summary": "오늘 168건 (신규 67건) · v.daum.net 29건, 뉴스1 17건, 뉴시스 12건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-17T11:24:44+09:00"
+  "updated_at": "2026-09-17T15:01:53+09:00"
 }
