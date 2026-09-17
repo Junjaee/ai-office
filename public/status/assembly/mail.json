@@ -3,38 +3,38 @@
   "dept": "qa",
   "ok": true,
   "running": false,
-  "summary": "새 메일 1건, 알림 1건, 실패 0건, 첨부 1건, 드라이브 저장 1건, 7초",
+  "summary": "새 메일 2건, 알림 1건, 실패 0건, 첨부 2건, 드라이브 저장 2건, 12초",
   "counts": {
-    "new": 1,
+    "new": 2,
     "sent": 1,
     "failed": 0,
-    "files": 1,
-    "saved": 1
+    "files": 2,
+    "saved": 2
   },
-  "next_run": "5분마다",
+  "next_run": "새 메일이 오면 (1분마다 확인)",
   "log": [
-    "새 메일 1건, 알림 1건, 실패 0건, 첨부 1건, 드라이브 저장 1건, 7초",
-    "재경위 1건"
+    "새 메일 2건, 알림 1건, 실패 0건, 첨부 2건, 드라이브 저장 2건, 12초",
+    "재경위 2건"
   ],
   "link": "https://drive.google.com/drive/folders/1dNwHu2iEAoMnp2NxOPfe8O866kE84tBr",
-  "run_id": 35172900152,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35172900152",
-  "request_id": "req-20260917110257-hdvy",
+  "run_id": 35192892356,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35192892356",
+  "request_id": "cron-202609170706",
   "trigger": "manual",
-  "started_at": "2026-09-17T11:03:29+09:00",
-  "duration_sec": 7,
+  "started_at": "2026-09-17T16:06:45+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "check",
       "status": "done",
-      "summary": "새 메일 1건"
+      "summary": "새 메일 2건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "알림 1건, 정리 1건, 첨부 1개(드라이브 1개)"
+      "summary": "알림 2건, 정리 2건, 첨부 2개(드라이브 2개)"
     }
   ],
   "id": "mail",
-  "updated_at": "2026-09-17T11:03:36+09:00"
+  "updated_at": "2026-09-17T16:06:58+09:00"
 }
