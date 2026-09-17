@@ -25,11 +25,11 @@ import yaml
 # AI 오피스 공통 모듈 (automations/common): 오류 문구, 텔레그램, 상태 보고
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
 from errors import to_korean  # noqa: E402
-from telegram_bot import send_message, telegram_env  # noqa: E402
+from telegram_bot import send_document, send_message, telegram_env  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from mail_gmail import (  # noqa: E402
-    build_notice, build_query, ensure_label, file_message, gmail_service,
-    message_meta, safe_lines, search_messages,
+    build_notice, build_query, download_attachment, ensure_label, file_message,
+    gmail_service, message_meta, safe_lines, search_messages,
 )
 try:
     from report_status import report as report_status  # noqa: E402
@@ -68,6 +68,34 @@ def find_mails(service, rules: list[dict], days: int, limit: int, progress) -> l
     return sorted(found, key=lambda m: m.ts)
 
 
+def send_attachments(service, token: str, chat: str, mails: list, limit_mb: int, progress) -> tuple[int, int]:
+    """메일마다 첨부를 파일로 보낸다. (보낸 수, 건너뛴 수).
+
+    한 파일이 한도를 넘으면 그 파일만 건너뛰고 알려 준다(텔레그램 봇 업로드 한도는 50MB).
+    """
+    from googleapiclient.errors import HttpError
+
+    sent = skipped = 0
+    for m in mails:
+        for att in m.attachments:
+            if att.size > limit_mb * 1024 * 1024:
+                progress(f"첨부 건너뜀(너무 큼) {att.size // (1024 * 1024)}MB")
+                skipped += 1
+                continue
+            try:
+                data = download_attachment(service, m.id, att.part_id)
+            except HttpError as exc:
+                status = getattr(getattr(exc, "resp", None), "status", "?")
+                progress(f"첨부 내려받기 실패 HTTP {status}")
+                skipped += 1
+                continue
+            send_document(token, chat, att.name, data)
+            sent += 1
+    if skipped:
+        send_message(token, chat, f"첨부 {skipped}개는 보내지 못했어요(너무 크거나 받기 실패). 지메일에서 확인해 주세요.")
+    return sent, skipped
+
+
 def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     """새 메일 찾기 → 텔레그램 알림 → 라벨 붙이고 받은편지함에서 빼기."""
     from googleapiclient.errors import HttpError
@@ -75,6 +103,8 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     rules = list(cfg.get("committees") or [])
     days = int(cfg.get("lookback_days") or 7)
     limit = int(cfg.get("max_per_run") or 20)
+    with_files = bool(cfg.get("send_attachments", True))
+    limit_mb = int(cfg.get("max_attachment_mb") or 45)
 
     progress("지메일 확인")
     service = gmail_service()
@@ -88,10 +118,13 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         # (커밋 288개/일 방지). 카드는 마지막으로 메일을 처리한 때를 계속 보여 준다.
         return {"counts": {"new": 0, "sent": 0}, "lines": lines, "tasks": tasks, "skip_report": True}
 
-    notice = build_notice(mails)
+    notice = build_notice(mails, with_files)
+    files = sum(len(m.attachments) for m in mails)
     if args.dry_run:
         print("─── 보낼 글(시험 실행) ───")
         print(notice)
+        if with_files and files:
+            print(f"─── 첨부 {files}개를 파일로 보냅니다(시험 실행이라 보내지 않음) ───")
         tasks["notify"] = (True, "시험 실행 — 보내지 않음")
         return {"counts": {"new": len(mails), "sent": 0}, "lines": lines, "tasks": tasks}
 
@@ -100,6 +133,10 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     send_message(token, chat, notice, retries=int(cfg.get("retries") or 3),
                  timeout=int(cfg.get("timeout") or 30))
     progress(f"텔레그램 전송 {len(mails)}건")
+
+    if with_files and files:
+        ok_files, skipped = send_attachments(service, token, chat, mails, limit_mb, progress)
+        progress(f"첨부 전송 {ok_files}개" + (f", 건너뜀 {skipped}개" if skipped else ""))
 
     cache: dict = {}
     filed = 0
@@ -112,9 +149,12 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
             progress(f"라벨 정리 실패 HTTP {status}")
     progress(f"라벨 정리 {filed}건")
 
-    tasks["notify"] = (filed == len(mails), f"알림 {len(mails)}건, 정리 {filed}건")
-    return {"counts": {"new": len(mails), "sent": 1, "failed": len(mails) - filed},
-            "lines": lines, "tasks": tasks}
+    note = f"알림 {len(mails)}건, 정리 {filed}건" + (f", 첨부 {files}개" if with_files and files else "")
+    tasks["notify"] = (filed == len(mails), note)
+    counts = {"new": len(mails), "sent": 1, "failed": len(mails) - filed}
+    if with_files and files:
+        counts["files"] = files
+    return {"counts": counts, "lines": lines, "tasks": tasks}
 
 
 # ───────────────────────── 아래는 템플릿 그대로 ─────────────────────────
@@ -134,7 +174,7 @@ def load_config(path: str) -> dict:
 def build_summary(counts: dict, elapsed_sec: float) -> str:
     """카드 부제 한 줄. counts 의 알려진 키를 한국어로 잇는다."""
     names = {"new": "새 메일", "replaced": "교체", "failed": "실패", "skip": "건너뜀",
-             "sent": "알림", "updated": "갱신"}
+             "sent": "알림", "updated": "갱신", "files": "첨부"}
     parts = [f"{names[k]} {v}건" for k, v in counts.items() if k in names]
     parts.append(f"{elapsed_sec / 60:.1f}분" if elapsed_sec >= 60 else f"{int(elapsed_sec)}초")
     return ", ".join(parts)

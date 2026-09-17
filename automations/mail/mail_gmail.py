@@ -16,7 +16,13 @@ KST = timezone(timedelta(hours=9))
 
 TELEGRAM_LIMIT = 4096
 CUT_NOTE = "… 너무 길어 일부만 보냈어요"
-THREAD_URL = "https://mail.google.com/mail/u/0/#all/{thread_id}"
+
+
+@dataclass(frozen=True)
+class Attachment:
+    name: str
+    part_id: str   # Gmail attachmentId — 본문을 받을 때 쓴다
+    size: int      # 바이트
 
 
 @dataclass(frozen=True)
@@ -27,7 +33,7 @@ class Mail:
     when: str                  # "09:41" 처럼 보낸 시각(KST)
     sender: str                # 보낸 사람 이름
     subject: str
-    attachments: tuple[str, ...] = field(default=())
+    attachments: tuple[Attachment, ...] = field(default=())
     ts: int = 0                # 받은 시각(밀리초). 여러 위원회를 섞어 시간순으로 세울 때 쓴다
 
 
@@ -50,20 +56,46 @@ def _clean_sender(raw: str) -> str:
     return raw.strip().strip('"').strip() or "(보낸사람 없음)"
 
 
-def describe(m: Mail) -> list[str]:
-    """텔레그램에 보일 한 메일의 줄들."""
-    lines = [f"[{m.label}] {m.subject or '(제목 없음)'}",
+def strip_label_prefix(subject: str, label: str) -> str:
+    """제목 맨 앞의 머리말 덩어리가 라벨과 겹치면 뗀다 — 줄 앞에 [재경위] 를 붙이기 때문.
+
+    "[재경위 행정실] 국가데이터…" · "(국회 재경위 행정실) 제439회…" → 앞 덩어리를 뗀 나머지.
+    겹치지 않는 머리말([긴급] 등)은 그대로 둔다. 다 떼면 원래 제목을 쓴다.
+    """
+    text = (subject or "").strip()
+    if not label:
+        return text
+    while text and text[0] in "[(":
+        close = ")" if text[0] == "(" else "]"
+        end = text.find(close)
+        if end < 0:
+            break
+        head, rest = text[1:end], text[end + 1:].strip()
+        if label not in head:
+            break
+        if not rest:
+            break
+        text = rest
+    return text or (subject or "").strip()
+
+
+def describe(m: Mail, with_files: bool = False) -> list[str]:
+    """텔레그램에 보일 한 메일의 줄들. 지메일 링크는 넣지 않는다(사용자 결정 2026-09-17).
+
+    with_files 면 첨부를 뒤이어 파일로 보내므로 이름을 늘어놓지 않는다.
+    """
+    lines = [f"[{m.label}] {strip_label_prefix(m.subject, m.label) or '(제목 없음)'}",
              f"· {m.when}  {_clean_sender(m.sender)}"]
     if m.attachments:
-        lines.append(f"· 첨부 {len(m.attachments)}개: " + ", ".join(m.attachments))
-    lines.append(THREAD_URL.format(thread_id=m.thread_id))
+        names = ", ".join(a.name for a in m.attachments)
+        lines.append(f"· 첨부 {len(m.attachments)}개" + ("" if with_files else f": {names}"))
     return lines
 
 
-def build_notice(mails: list[Mail]) -> str:
+def build_notice(mails: list[Mail], with_files: bool = False) -> str:
     """텔레그램으로 보낼 글. 4096자를 넘으면 메일 단위로 잘라 표시."""
     head = f"새 상임위 메일 {len(mails)}건"
-    blocks = [[head]] + [describe(m) for m in mails]
+    blocks = [[head]] + [describe(m, with_files) for m in mails]
     text = "\n\n".join("\n".join(b) for b in blocks)
     if len(text) <= TELEGRAM_LIMIT:
         return text
@@ -119,12 +151,13 @@ def search_messages(service, query: str, limit: int = 20) -> list[str]:
     return [m["id"] for m in (res.get("messages") or [])]
 
 
-def _attachment_names(part: dict, out: list[str]) -> None:
+def _attachments(part: dict, out: list[Attachment]) -> None:
     name = (part.get("filename") or "").strip()
-    if name:
-        out.append(name)
+    body = part.get("body") or {}
+    if name and body.get("attachmentId"):
+        out.append(Attachment(name, body["attachmentId"], int(body.get("size") or 0)))
     for child in part.get("parts") or []:
-        _attachment_names(child, out)
+        _attachments(child, out)
 
 
 def _hhmm(date_header: str) -> str:
@@ -142,8 +175,8 @@ def message_meta(service, message_id: str) -> Mail:
     """메시지 하나의 제목·보낸사람·시각·첨부 이름. 라벨은 뒤에서 채운다."""
     data = service.users().messages().get(userId="me", id=message_id, format="full").execute()
     headers = {h["name"]: h["value"] for h in (data.get("payload") or {}).get("headers", [])}
-    names: list[str] = []
-    _attachment_names(data.get("payload") or {}, names)
+    names: list[Attachment] = []
+    _attachments(data.get("payload") or {}, names)
     return Mail(
         id=message_id,
         thread_id=data.get("threadId") or message_id,
@@ -154,6 +187,15 @@ def message_meta(service, message_id: str) -> Mail:
         attachments=tuple(names),
         ts=int(data.get("internalDate") or 0),
     )
+
+
+def download_attachment(service, message_id: str, attachment_id: str) -> bytes:
+    """첨부 본문(바이트). Gmail 은 base64url 로 준다."""
+    import base64
+
+    data = service.users().messages().attachments().get(
+        userId="me", messageId=message_id, id=attachment_id).execute()
+    return base64.urlsafe_b64decode(data.get("data") or "")
 
 
 def ensure_label(service, name: str, cache: dict | None = None) -> str:

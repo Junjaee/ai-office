@@ -13,6 +13,9 @@ committees:
     # 국회 도메인에서 오는 예결위 메일을 제목·본문으로 잡는다. 실제 주소를 알게 되면 from: 으로 바꾼다
     query: "from:assembly.go.kr {예결위 예산결산특별위원회}"
 
+send_attachments: true   # 첨부파일도 텔레그램으로 보낸다 (사용자 결정 2026-09-17)
+max_attachment_mb: 45    # 한 파일 한도 (텔레그램 봇 업로드 한도 50MB). 넘으면 그 파일만 건너뛰고 알린다
+
 lookback_days: 7    # 며칠 안의 메일만 본다 (오래된 메일을 뒤늦게 라벨링하지 않도록)
 max_per_run: 20     # 한 번에 처리할 최대 메일 수 (위원회마다)
 retries: 3          # 텔레그램 전송 재시도

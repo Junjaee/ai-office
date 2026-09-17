@@ -53,7 +53,7 @@ def to_korean(exc: BaseException) -> str:
         return MSG_MAIL
     if isinstance(exc, RuntimeError) and "텔레그램 설정 없음" in msg:
         return MSG_TELEGRAM_SETUP
-    if isinstance(exc, RuntimeError) and "텔레그램 전송 실패" in msg:
+    if isinstance(exc, RuntimeError) and ("텔레그램 전송 실패" in msg or "텔레그램 파일 전송 실패" in msg):
         return MSG_TELEGRAM
     # 뉴스 RSS: google_news 가 재시도 끝에 던지는 RuntimeError("뉴스 요청 실패 ...") — 국회 사이트보다 먼저 본다
     if isinstance(exc, RuntimeError) and "뉴스 요청 실패" in msg:

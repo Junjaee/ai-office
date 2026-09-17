@@ -64,6 +64,41 @@ def send_message(token: str, chat_id: str, text: str, *, session=None, retries: 
     raise RuntimeError(f"텔레그램 전송 실패: {last}")
 
 
+def send_document(token: str, chat_id: str, filename: str, data: bytes, *, caption: str = "",
+                  session=None, retries: int = 3, delay: float = 1.0, timeout: int = 120) -> dict:
+    """파일 보내기(sendDocument). 텔레그램 봇 업로드 한도는 50MB.
+
+    4xx(파일이 너무 큼·형식 거부 등)는 다시 해도 같으므로 바로 실패, 연결 문제·5xx 는 재시도.
+    """
+    s = session or requests.Session()
+    url = API.format(token=token, method="sendDocument")
+    body = {"chat_id": chat_id}
+    if caption:
+        body["caption"] = caption[:1024]
+    last = ""
+    for attempt in range(retries):
+        try:
+            res = s.post(url, data=body, files={"document": (filename, data)}, timeout=timeout)
+        except requests.exceptions.RequestException as exc:
+            last = _hide(f"{type(exc).__name__}: {exc}", token)
+            if attempt < retries - 1:
+                time.sleep(delay * (attempt + 1))
+            continue
+        try:
+            payload = res.json()
+        except ValueError:
+            payload = {}
+        if res.status_code == 200 and payload.get("ok"):
+            return payload.get("result") or {}
+        desc = _hide(str(payload.get("description") or f"HTTP {res.status_code}"), token)
+        if res.status_code < 500 and res.status_code != 429:
+            raise RuntimeError(f"텔레그램 파일 전송 실패: {desc}")
+        last = desc
+        if attempt < retries - 1:
+            time.sleep(delay * (attempt + 1))
+    raise RuntimeError(f"텔레그램 파일 전송 실패: {last}")
+
+
 def list_chats(token: str, *, session=None, timeout: int = 30) -> list[dict]:
     """봇에게 최근 말을 건 대화방 목록(getUpdates). 받는 분이 봇에서 '시작'을 누른 뒤에 쓴다."""
     s = session or requests.Session()
