@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { SCHEDULES, cronRequestId, dueJobs, matchesCron } from "../worker/schedule.ts";
+import { MAIL_JOB, SCHEDULES, cronRequestId, dueJobs, matchesCron } from "../worker/schedule.ts";
 // Node 의 타입 제거 실행은 확장자 없는 상대 import 를 못 읽으므로 사무실 파일을 직접 읽는다
 import { workspace as assembly } from "../app/workspaces/assembly.ts";
 import { workspace as home } from "../app/workspaces/home.ts";
@@ -45,12 +45,13 @@ test("cron: 형식이 틀리면 false (예약을 멋대로 돌리지 않는다)"
 });
 
 test("깨울 것 고르기: 안 맞으면 빈 목록", () => {
-  assert.deepEqual(dueJobs(SCHEDULES, at("2026-09-17T05:23:00Z")), []);   // 5분 배수도 30분도 아님
+  assert.deepEqual(dueJobs(SCHEDULES, at("2026-09-17T05:23:00Z")), []);
 });
 
-test("깨울 것 고르기: 메일은 5분마다", () => {
-  const due = dueJobs(SCHEDULES, at("2026-09-17T05:25:00Z"));
-  assert.deepEqual(due.map((j) => j.workflow), ["mail.yml"]);
+test("상임위 메일은 예약표에 없다 — 새 메일이 왔을 때만 돈다 (사용자 결정 2026-09-17)", () => {
+  assert.equal(SCHEDULES.some((j) => j.workflow === "mail.yml"), false);
+  assert.equal(MAIL_JOB.workflow, "mail.yml");
+  assert.equal(MAIL_JOB.cron, "");          // 시각이 아니라 지메일 확인 결과로 깨운다
 });
 
 test("같은 분에 같은 워크플로가 여러 번 맞으면 앞선 항목 하나만", () => {
@@ -71,17 +72,17 @@ test("인스타는 예약에서 빠졌다 (사용자 결정 2026-09-17 — 사�
 });
 
 test("여러 자동화가 같은 분에 걸리면 모두 깨운다", () => {
-  // 00:00 UTC(KST 09:00): 메일(5분마다)·화성시·기사 수집(3시간마다)·가계부(6시간마다) 가 한꺼번에
+  // 00:00 UTC(KST 09:00): 화성시·기사 수집(3시간마다)·가계부(6시간마다) 가 한꺼번에
   const morning = dueJobs(SCHEDULES, at("2026-09-17T00:00:00Z")).map((j) => j.workflow);
-  assert.deepEqual(morning.sort(), ["hscity.yml", "ledger.yml", "mail.yml", "news.yml"]);
+  assert.deepEqual(morning.sort(), ["hscity.yml", "ledger.yml", "news.yml"]);
 
-  // 09:00 UTC(KST 18:00): 메일·기사 수집만 (화성시는 이제 아침 한 번뿐)
+  // 09:00 UTC(KST 18:00): 기사 수집만 (화성시는 아침 한 번, 가계부는 UTC 0/6/12/18)
   const evening = dueJobs(SCHEDULES, at("2026-09-17T09:00:00Z")).map((j) => j.workflow);
-  assert.deepEqual(evening.sort(), ["mail.yml", "news.yml"]);
+  assert.deepEqual(evening, ["news.yml"]);
 
-  // 12:00 UTC(KST 21:00): 메일·기사 수집·가계부
+  // 12:00 UTC(KST 21:00): 기사 수집·가계부
   const night = dueJobs(SCHEDULES, at("2026-09-17T12:00:00Z")).map((j) => j.workflow);
-  assert.deepEqual(night.sort(), ["ledger.yml", "mail.yml", "news.yml"]);
+  assert.deepEqual(night.sort(), ["ledger.yml", "news.yml"]);
 });
 
 test("예약표의 cron 은 전부 형식이 맞다", () => {

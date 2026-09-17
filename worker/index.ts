@@ -4,12 +4,17 @@ import handler from "vinext/server/app-router-entry";
 import { WORKSPACES } from "../app/workspaces/index";
 import { GitHubClient } from "./github.ts";
 import { createRunApiStores, handleHistory, handleReview, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
-import { SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
+import { MAIL_JOB, SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
+import { accessToken, coolEnough, googleCreds, newMailCount } from "./gmail.ts";
 
 interface Env {
   ASSETS: Fetcher;
   /** fine-grained PAT (Cloudflare Secret / .dev.vars). 값은 절대 응답·로그에 내보내지 않는다 */
   GITHUB_TOKEN?: string;
+  /** 공용 구글 토큰 — 1분마다 지메일에 새 상임위 메일이 있는지만 확인한다 (worker/gmail.ts) */
+  GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_SECRET?: string;
+  GOOGLE_REFRESH_TOKEN?: string;
   IMAGES?: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -29,6 +34,22 @@ function depsFor(env: Env): RunApiDeps {
     workspaces: WORKSPACES,
     github: env.GITHUB_TOKEN ? new GitHubClient(env.GITHUB_TOKEN) : null,
   };
+}
+
+/** 마지막으로 메일 워크플로를 깨운 시각 — 실행이 도는 동안 또 깨우지 않는다(같은 isolate 안에서만 기억) */
+let lastMailDispatchMs: number | null = null;
+
+/** 새 상임위 메일이 있는지. 토큰이 없거나 확인에 실패하면 false(예약 처리는 그대로 진행한다). */
+async function hasNewCommitteeMail(env: Env, nowMs: number): Promise<boolean> {
+  const creds = googleCreds(env as unknown as Record<string, unknown>);
+  if (!creds || !coolEnough(lastMailDispatchMs, nowMs)) return false;
+  try {
+    const token = await accessToken(creds, fetch, nowMs);
+    return (await newMailCount(token, fetch)) > 0;
+  } catch (err) {
+    console.error(`메일 확인 실패 — ${err instanceof Error ? err.message : String(err)}`);
+    return false;
+  }
 }
 
 const worker = {
@@ -79,6 +100,10 @@ const worker = {
     }
     const now = new Date(controller.scheduledTime);
     const jobs = dueJobs(SCHEDULES, now);
+
+    // 상임위 메일은 시각이 아니라 "새 메일이 왔을 때" 돈다 — 매분 지메일만 가볍게 확인한다
+    if (await hasNewCommitteeMail(env, now.getTime())) jobs.push(MAIL_JOB);
+
     if (jobs.length === 0) return;
 
     const github = new GitHubClient(env.GITHUB_TOKEN);
@@ -86,6 +111,7 @@ const worker = {
     for (const job of jobs) {
       try {
         await github.dispatch(job.workflow, { request_id: requestId, ...(job.inputs ?? {}) });
+        if (job.workflow === MAIL_JOB.workflow) lastMailDispatchMs = now.getTime();
         console.log(`예약 실행 요청: ${job.workflow} (${job.note}) ${requestId}`);
       } catch (err) {
         // 하나가 실패해도 나머지는 계속한다. 다음 분에 다시 기회가 온다

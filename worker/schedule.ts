@@ -19,9 +19,12 @@ export type ScheduledJob = {
   note: string;
 };
 
-/** 같은 분에 여러 항목이 맞으면 **앞의 것이 이긴다**(아래 인스타 06:30·11:30 처럼 겹치는 경우). */
+/** 같은 분에 여러 항목이 맞으면 **앞의 것이 이긴다**.
+ *
+ * 상임위 메일(mail.yml)은 여기 없다 — 시각이 아니라 **새 메일이 왔을 때** 돈다.
+ * Worker 가 1분마다 지메일을 확인해 깨운다(worker/gmail.ts, 사용자 결정 2026-09-17).
+ */
 export const SCHEDULES: ScheduledJob[] = [
-  { workflow: "mail.yml", cron: "*/5 * * * *", note: "상임위 메일 — 5분마다" },
   { workflow: "news.yml", cron: "0 */3 * * *", note: "기사 수집 — 3시간마다(KST 00·03·06…)" },
   { workflow: "ledger.yml", cron: "0 */6 * * *", note: "가계부 — 6시간마다(KST 09·15·21·03)" },
   { workflow: "hscity.yml", cron: "0 0 * * *", note: "화성시 — KST 09:00 (사용자 결정 2026-09-17)" },
@@ -73,6 +76,13 @@ export function dueJobs(jobs: ScheduledJob[], date: Date): ScheduledJob[] {
   }
   return out;
 }
+
+/** 새 메일이 왔을 때 깨울 워크플로 (예약표가 아니라 worker/gmail.ts 의 확인 결과로 실행한다) */
+export const MAIL_JOB: ScheduledJob = {
+  workflow: "mail.yml",
+  cron: "",
+  note: "상임위 메일 — 새 메일이 오면(1분마다 확인)",
+};
 
 /** 예약 실행의 요청 번호 — 같은 분에 두 번 깨워도 같은 값이라 화면에서 한 건으로 보인다. */
 export function cronRequestId(date: Date): string {

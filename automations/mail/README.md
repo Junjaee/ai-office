@@ -4,7 +4,9 @@
 받은편지함에서 빼 준다(= 그 라벨 폴더로 정리).
 
 - 사무실: 국회(`/assembly`) · 부서 `qa`(상임위 메일팀) · 직원 `check`(새 메일 확인) `notify`(알림·정리)
-- 실행: GitHub 서버(`ubuntu-latest`), `.github/workflows/mail.yml`, 예약 `*/5 * * * *`
+- 실행: GitHub 서버(`ubuntu-latest`), `.github/workflows/mail.yml`. **예약(cron)은 없다** —
+  Cloudflare Worker 가 1분마다 지메일을 확인해 *정리 안 된 국회 메일이 있을 때만* 깨운다(`worker/gmail.ts`).
+  5분마다 무조건 돌리면 빈 실행이 하루 288건, 1분이면 1,440건 쌓여 실행 이력이 묻힌다(사용자 결정 2026-09-17).
 - 개인 메모: `ai-assembly/04_상임위메일/README.md`
 
 ## 어떻게 도는가
