@@ -38,7 +38,7 @@ notify_exclude: [공시송달, 반송, 민방위, 거주불명, 무단전출, �
 # 상태 보고: 저장소 루트에 커밋
 office_repo: "."
 office_workspace: "assembly"
-next_run: "매일 08:00·18:00"
+next_run: "매일 09:00"
 result_link: ""
 
 tasks: [collect, notify]

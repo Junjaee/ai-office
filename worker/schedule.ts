@@ -24,8 +24,7 @@ export const SCHEDULES: ScheduledJob[] = [
   { workflow: "mail.yml", cron: "*/5 * * * *", note: "상임위 메일 — 5분마다" },
   { workflow: "news.yml", cron: "0 */3 * * *", note: "기사 수집 — 3시간마다(KST 00·03·06…)" },
   { workflow: "ledger.yml", cron: "0 */6 * * *", note: "가계부 — 6시간마다(KST 09·15·21·03)" },
-  { workflow: "hscity.yml", cron: "0 23 * * *", note: "화성시 — KST 08:00" },
-  { workflow: "hscity.yml", cron: "0 9 * * *", note: "화성시 — KST 18:00" },
+  { workflow: "hscity.yml", cron: "0 0 * * *", note: "화성시 — KST 09:00 (사용자 결정 2026-09-17)" },
   { workflow: "weekend.yml", cron: "0 8 * * 4", note: "주말 일정 — 목 KST 17:00" },
   // 인스타(후보 뽑기·게시 확인)는 예약에서 뺐다 — 사이트 ▶ 시작으로만 돈다 (사용자 결정 2026-09-17)
 ];

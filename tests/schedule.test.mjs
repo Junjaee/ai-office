@@ -71,9 +71,13 @@ test("인스타는 예약에서 빠졌다 (사용자 결정 2026-09-17 — 사�
 });
 
 test("여러 자동화가 같은 분에 걸리면 모두 깨운다", () => {
-  // 09:00 UTC(KST 18:00): 메일(5분마다)·화성시 저녁·기사 수집(3시간마다). 가계부는 UTC 0/6/12/18 이라 아님
+  // 00:00 UTC(KST 09:00): 메일(5분마다)·화성시·기사 수집(3시간마다)·가계부(6시간마다) 가 한꺼번에
+  const morning = dueJobs(SCHEDULES, at("2026-09-17T00:00:00Z")).map((j) => j.workflow);
+  assert.deepEqual(morning.sort(), ["hscity.yml", "ledger.yml", "mail.yml", "news.yml"]);
+
+  // 09:00 UTC(KST 18:00): 메일·기사 수집만 (화성시는 이제 아침 한 번뿐)
   const evening = dueJobs(SCHEDULES, at("2026-09-17T09:00:00Z")).map((j) => j.workflow);
-  assert.deepEqual(evening.sort(), ["hscity.yml", "mail.yml", "news.yml"]);
+  assert.deepEqual(evening.sort(), ["mail.yml", "news.yml"]);
 
   // 12:00 UTC(KST 21:00): 메일·기사 수집·가계부
   const night = dueJobs(SCHEDULES, at("2026-09-17T12:00:00Z")).map((j) => j.workflow);
