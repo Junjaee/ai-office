@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 12초",
+  "summary": "신규 83건, 실패 0건, 9초",
   "counts": {
-    "new": 8,
+    "new": 83,
     "failed": 0,
-    "total": 868
+    "total": 951
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 12초",
-    "[신규] [아시안게임] 여자축구·배구·근대5종 출격…韓 선수단, 나고야 출국 — 싱글리스트",
-    "[신규] 처음 진입한 보너스 화면을 읽는 바카라 뒷발 조작 안내 — Histoire pour tous",
-    "[신규] 신정훈의원, 외국인노동자 산재사망 369명… ‘6월 발표’ 정부 대책 어디로 — citizenadmnews.co.kr",
-    "[신규] 이 대통령 새 지지층 34%만 ‘공소 취소’ 찬성…국힘 비영남·비수도권 ‘실망 이탈’ 많아 — supple.kr"
+    "신규 83건, 실패 0건, 9초",
+    "[신규] [김창권의 썸타는 뉴스] ‘헤어질 결심’ 앞에 선 이준석과 천하람 — 뉴스인",
+    "[신규] 이기인 \"천하람·이주영, 경기 남부 출마 결단하라...지도부 비례 출마 금지\" — 뉴스핌",
+    "[신규] 이기인 \"천하람·이주영, 경기남부 지역구 출마하라\" — v.daum.net",
+    "[신규] [속보]개혁신당, 이준석 경기남부 전략 잇는다…\"천하람·이주영 결단 요구\" — edaily.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35162075458,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35162075458",
+  "run_id": 35174270687,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35174270687",
   "trigger": "schedule",
-  "started_at": "2026-09-17T08:23:52+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-17T11:24:34+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 123건"
+      "summary": "검색어 5개에서 186건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 18건 (신규 8건) · Histoire pour tous 5건, 연합뉴스 2건, KBS 뉴스 1건"
+      "summary": "오늘 101건 (신규 83건) · v.daum.net 16건, 뉴시스 7건, Histoire pour tous 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-17T08:24:05+09:00"
+  "updated_at": "2026-09-17T11:24:44+09:00"
 }
