@@ -8,8 +8,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "common")
 import run_mail  # noqa: E402
 
 CFG = {
-    "committees": [{"label": "재경위", "query": "from:fec@assembly.go.kr"},
-                   {"label": "예결위", "query": "from:assembly.go.kr {예결위}"}],
+    "committees": [{"label": "재경위", "query": "from:fec@assembly.go.kr", "folder_id": "FOLDER-재경위"},
+                   {"label": "예결위", "query": "from:assembly.go.kr {예결위}"}],   # 예결위는 저장 폴더 없음
     "lookback_days": 7, "max_per_run": 20, "tasks": ["check", "notify"],
 }
 
@@ -106,6 +106,21 @@ class FakeSend:
         return {}
 
 
+class FakeDrive:
+    """DriveClient 흉내 — 올린 것과 이미 있는 것만 기억한다."""
+
+    def __init__(self, existing=()):
+        self.uploaded = []                       # (폴더, 이름, 바이트, mime)
+        self.existing = set(existing)            # (폴더, 이름)
+
+    def find(self, parent_id, name):
+        return {"id": "old"} if (parent_id, name) in self.existing else None
+
+    def upload(self, parent_id, name, data, mime, file_id=None):
+        self.uploaded.append((parent_id, name, data, mime))
+        return "new-id"
+
+
 class FakeSendDoc:
     def __init__(self):
         self.files = []
@@ -115,7 +130,7 @@ class FakeSendDoc:
         return {}
 
 
-def setup(monkeypatch, gmail, *, chat="9999"):
+def setup(monkeypatch, gmail, *, chat="9999", existing=()):
     sent = FakeSend()
     asked = []
     monkeypatch.setattr(run_mail, "gmail_service", lambda: gmail)
@@ -123,6 +138,9 @@ def setup(monkeypatch, gmail, *, chat="9999"):
     docs = FakeSendDoc()
     monkeypatch.setattr(run_mail, "send_document", docs)
     sent.docs = docs
+    drive = FakeDrive(existing=existing)
+    monkeypatch.setattr(run_mail, "DriveClient", lambda: drive)
+    sent.drive = drive
     monkeypatch.setattr(run_mail, "telegram_env",
                         lambda chat_key, token_key: (asked.append((chat_key, token_key)), ("tok", chat))[1])
     sent.asked = asked
@@ -153,9 +171,12 @@ def test_finds_notifies_and_files_new_mail(monkeypatch):
     # 첨부도 파일로 보낸다 (사용자 결정 2026-09-17)
     assert [f[1] for f in sent.docs.files] == ["의사일정(안).hwp", "의사일정(안).hwp"]
     assert sent.docs.files[0][2] == b"HWP-CONTENT"
-    assert out["counts"] == {"new": 2, "sent": 1, "failed": 0, "files": 2}
+    # 재경위 첨부만 드라이브 수신함에 저장한다(예결위는 folder_id 가 없다) — 사용자 결정 2026-09-17
+    assert [(f[0], f[1]) for f in sent.drive.uploaded] == [("FOLDER-재경위", "의사일정(안).hwp")]
+    assert sent.drive.uploaded[0][2] == b"HWP-CONTENT"
+    assert out["counts"] == {"new": 2, "sent": 1, "failed": 0, "files": 2, "saved": 1}
     assert out["lines"] == ["재경위 1건", "예결위 1건"]      # 제목 없음 (공개 저장소)
-    assert out["tasks"]["notify"] == (True, "알림 2건, 정리 2건, 첨부 2개")
+    assert out["tasks"]["notify"] == (True, "알림 2건, 정리 2건, 첨부 2개(드라이브 1개)")
 
 
 def test_existing_label_is_reused_and_query_skips_labelled(monkeypatch):
@@ -200,7 +221,7 @@ def test_label_failure_is_reported_but_keeps_going(monkeypatch):
 
     assert [mid for mid, _a, _r in gmail.modified] == ["m2"]
     assert out["counts"]["failed"] == 1
-    assert out["tasks"]["notify"] == (False, "알림 2건, 정리 1건, 첨부 2개")
+    assert out["tasks"]["notify"] == (False, "알림 2건, 정리 1건, 첨부 2개(드라이브 2개)")
 
 
 def test_big_attachment_is_skipped_with_a_note(monkeypatch):
@@ -212,7 +233,8 @@ def test_big_attachment_is_skipped_with_a_note(monkeypatch):
 
     out = run_mail.do_work({**CFG, "max_attachment_mb": 45}, work(), lambda m: None)
 
-    assert sent.docs.files == [] and gmail.downloaded == []
+    assert sent.docs.files == []                       # 텔레그램으로는 못 보내지만
+    assert [f[1] for f in sent.drive.uploaded] == ["의사일정(안).hwp"]   # 드라이브에는 저장된다
     assert "보내지 못했어요" in sent.sent[-1][1]
     assert out["tasks"]["notify"][0] is True          # 알림·정리 자체는 성공
 
@@ -224,8 +246,20 @@ def test_attachments_can_be_turned_off(monkeypatch):
     out = run_mail.do_work({**CFG, "send_attachments": False}, work(), lambda m: None)
 
     assert sent.docs.files == []
-    assert "files" not in out["counts"]
+    assert [f[1] for f in sent.drive.uploaded] == ["의사일정(안).hwp"]   # 드라이브 저장은 계속
     assert "의사일정(안).hwp" in sent.sent[0][1]      # 대신 글에 파일 이름이 남는다
+
+
+def test_same_file_is_not_uploaded_twice(monkeypatch):
+    """같은 자료가 여러 메일에 붙어 오므로, 수신함에 같은 이름이 있으면 건너뛴다."""
+    gmail = FakeGmail({"fec@assembly.go.kr": [message("m1", "자료 재송부", 100)]})
+    sent = setup(monkeypatch, gmail, existing=[("FOLDER-재경위", "의사일정(안).hwp")])
+
+    out = run_mail.do_work(CFG, work(), lambda m: None)
+
+    assert sent.drive.uploaded == []
+    assert out["counts"]["saved"] == 0
+    assert [f[1] for f in sent.docs.files] == ["의사일정(안).hwp"]   # 텔레그램으로는 그대로 온다
 
 
 def test_gmail_error_becomes_korean_message(monkeypatch):

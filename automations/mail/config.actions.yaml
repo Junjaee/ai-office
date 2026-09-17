@@ -8,12 +8,16 @@ committees:
   - label: "재경위"
     # 재정경제기획위원회 행정실 (2026-09-16 확인: 이 주소에서만 온다)
     query: "from:fec@assembly.go.kr"
+    # 첨부를 저장할 드라이브 폴더: 직장/국회/01. 의정활동/02. 위원회_회의/재경위/_수신함
+    folder_id: "1dNwHu2iEAoMnp2NxOPfe8O866kE84tBr"
   - label: "예결위"
+    # folder_id: 예결위 수신함 폴더를 만들면 여기에 적는다 (없으면 텔레그램으로만 보낸다)
     # 예산결산특별위원회 — 2026-09-16 기준 받은 메일이 아직 없어 주소를 모른다.
     # 국회 도메인에서 오는 예결위 메일을 제목·본문으로 잡는다. 실제 주소를 알게 되면 from: 으로 바꾼다
     query: "from:assembly.go.kr {예결위 예산결산특별위원회}"
 
-send_attachments: true   # 첨부파일도 텔레그램으로 보낸다 (사용자 결정 2026-09-17)
+send_attachments: true   # 첨부파일을 텔레그램으로도 보낸다 (사용자 결정 2026-09-17).
+                         # false 로 두면 드라이브 저장만 한다 (folder_id 가 있는 위원회)
 max_attachment_mb: 45    # 한 파일 한도 (텔레그램 봇 업로드 한도 50MB). 넘으면 그 파일만 건너뛰고 알린다
 
 lookback_days: 7    # 며칠 안의 메일만 본다 (오래된 메일을 뒤늦게 라벨링하지 않도록)
@@ -21,8 +25,8 @@ max_per_run: 20     # 한 번에 처리할 최대 메일 수 (위원회마다)
 retries: 3          # 텔레그램 전송 재시도
 timeout: 30
 
-# 결과물 위치 (지메일 라벨로 정리하는 자동화라 드라이브 폴더 없음)
-result_link: ""
+# 결과물 위치 — 카드의 "결과 폴더 열기" 버튼 (재경위 수신함)
+result_link: "https://drive.google.com/drive/folders/1dNwHu2iEAoMnp2NxOPfe8O866kE84tBr"
 
 # 상태 보고: 저장소 루트(체크아웃 위치)에 커밋. 새 메일이 없는 실행은 커밋하지 않는다(5분마다 돌기 때문)
 office_repo: "."
