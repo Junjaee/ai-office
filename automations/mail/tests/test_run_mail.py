@@ -93,9 +93,12 @@ class FakeSend:
 
 def setup(monkeypatch, gmail, *, chat="9999"):
     sent = FakeSend()
+    asked = []
     monkeypatch.setattr(run_mail, "gmail_service", lambda: gmail)
     monkeypatch.setattr(run_mail, "send_message", sent)
-    monkeypatch.setattr(run_mail, "telegram_env", lambda key: ("tok", chat))
+    monkeypatch.setattr(run_mail, "telegram_env",
+                        lambda chat_key, token_key: (asked.append((chat_key, token_key)), ("tok", chat))[1])
+    sent.asked = asked
     return sent
 
 
@@ -112,6 +115,8 @@ def test_finds_notifies_and_files_new_mail(monkeypatch):
 
     # 두 위원회를 합쳐 받은 시각 순(오래된 것 먼저)으로 한 번에 알린다
     assert len(sent.sent) == 1
+    # 캘린더 봇이 아니라 메일 전용 봇으로 보낸다 (사용자 결정 2026-09-17)
+    assert sent.asked == [("TELEGRAM_CHAT_ID_MAIL", "MAIL_TELEGRAM_BOT_TOKEN")]
     chat, text = sent.sent[0]
     assert chat == "9999"
     assert text.index("예결위 자료") < text.index("의사일정(안) 송부")

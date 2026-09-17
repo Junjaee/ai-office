@@ -41,7 +41,7 @@
 ## 비밀값 (GitHub 저장소 Settings → Secrets and variables → Actions)
 
 - `GOOGLE_CLIENT_ID` · `GOOGLE_CLIENT_SECRET` · `GOOGLE_REFRESH_TOKEN` 공용 구글 토큰(`gmail.modify` 권한 포함)
-- `TELEGRAM_BOT_TOKEN` 보내는 봇
+- `MAIL_TELEGRAM_BOT_TOKEN` 보내는 봇 — **메일 전용 봇**. 캘린더 봇(`TELEGRAM_BOT_TOKEN`)은 주말 일정 전송에만 쓴다(사용자 결정 2026-09-17)
 - `TELEGRAM_CHAT_ID_MAIL` 받는 사람의 대화방 번호 — 주말 일정 알림(`TELEGRAM_CHAT_ID`)과 **다른 사람**이라 따로 둔다
 
 ## 시험해 보기

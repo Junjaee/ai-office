@@ -41,7 +41,8 @@ AUTOMATION_ID = "mail"
 AUTOMATION_NAME = "상임위 메일"
 DEPT = "qa"
 HERE = Path(__file__).resolve().parent
-CHAT_KEY = "TELEGRAM_CHAT_ID_MAIL"   # 받는 사람이 주말 알림과 다르다
+CHAT_KEY = "TELEGRAM_CHAT_ID_MAIL"        # 받는 사람이 주말 알림과 다르다
+TOKEN_KEY = "MAIL_TELEGRAM_BOT_TOKEN"     # 보내는 봇도 따로 — 캘린더 봇은 캘린더 전송 전용 (사용자 결정 2026-09-17)
 
 
 # ───────────────────────── 여기만 채운다 ─────────────────────────
@@ -94,7 +95,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         return {"counts": {"new": len(mails), "sent": 0}, "lines": lines, "tasks": tasks}
 
     # 알림을 먼저 보내고 라벨을 붙인다 — 보내기에 실패하면 라벨이 안 붙어 다음 실행에서 다시 시도한다
-    token, chat = telegram_env(CHAT_KEY)
+    token, chat = telegram_env(CHAT_KEY, TOKEN_KEY)
     send_message(token, chat, notice, retries=int(cfg.get("retries") or 3),
                  timeout=int(cfg.get("timeout") or 30))
     progress(f"텔레그램 전송 {len(mails)}건")

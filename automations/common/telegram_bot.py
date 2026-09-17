@@ -13,15 +13,17 @@ import requests
 API = "https://api.telegram.org/bot{token}/{method}"
 
 
-def telegram_env(chat_key: str = "TELEGRAM_CHAT_ID") -> tuple[str, str]:
+def telegram_env(chat_key: str = "TELEGRAM_CHAT_ID",
+                 token_key: str = "TELEGRAM_BOT_TOKEN") -> tuple[str, str]:
     """(봇 토큰, 받는 분 대화방 번호). 하나라도 없으면 RuntimeError.
 
-    받는 사람이 자동화마다 다르므로 대화방 환경변수 이름을 골라 쓴다
-    (주말 일정=TELEGRAM_CHAT_ID, 상임위 메일=TELEGRAM_CHAT_ID_MAIL). 폴백은 없다 — 엉뚱한 사람에게 갈 수 있다.
+    보내는 봇과 받는 사람이 자동화마다 다르므로 환경변수 이름을 골라 쓴다
+    (주말 일정=TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID — 캘린더 전송 전용 봇,
+     상임위 메일=MAIL_TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID_MAIL). 폴백은 없다 — 엉뚱한 봇·사람으로 갈 수 있다.
     """
-    token = (os.environ.get("TELEGRAM_BOT_TOKEN") or "").strip()
+    token = (os.environ.get(token_key) or "").strip()
     chat = (os.environ.get(chat_key) or "").strip()
-    missing = [k for k, v in (("TELEGRAM_BOT_TOKEN", token), (chat_key, chat)) if not v]
+    missing = [k for k, v in ((token_key, token), (chat_key, chat)) if not v]
     if missing:
         raise RuntimeError(f"텔레그램 설정 없음: {', '.join(missing)}")
     return token, chat
