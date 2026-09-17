@@ -14,6 +14,9 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
+  // 자동화 예약 시계 — 1분마다 깨어나 worker/schedule.ts 의 예약표대로 GitHub 워크플로를 실행한다.
+  // (GitHub 자체 예약은 부하 때 버려져서 2026-09-17 에 이쪽으로 옮겼다)
+  triggers: { crons: ["* * * * *"] },
   // Worker 코드(/api/status 정적 폴백, 이미지 최적화)가 env.ASSETS 로 정적 파일을 읽는다
   assets: { binding: "ASSETS" },
   d1_databases: d1

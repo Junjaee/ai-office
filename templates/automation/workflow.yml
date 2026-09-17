@@ -1,8 +1,8 @@
 name: __NAME__
 
+# 예약은 여기 적지 않는다 — Cloudflare Worker 가 시계를 맡는다(worker/schedule.ts 의 SCHEDULES 에 한 줄).
+# GitHub 의 schedule 은 부하가 높으면 지연되거나 버려진다(공식 문서, 2026-09-17 사용자 결정으로 전부 옮김).
 on:
-  schedule:
-    - cron: "__CRON__"        # UTC 로 적는다. KST 09:00 = "0 0 * * *". 예약이 없으면 schedule 블록을 지운다
   workflow_dispatch:
     inputs:
       request_id:

@@ -51,12 +51,12 @@ cp templates/automation/workflow.yml .github/workflows/<id>.yml
 touch automations/<id>/tests/__init__.py
 ```
 
-치환 자리: `__ID__`(자동화 id) `__NAME__`(카드 제목) `__DEPT__`(부서 id) `__WORKSPACE__`(사무실 id) `__CRON__`(UTC cron, 예 KST 09:00 = `0 0 * * *`) `__RUNS_ON__`(기본 `ubuntu-latest`, 사무실 PC 면 `[self-hosted, windows, kr-office]`) `__NEXT_RUN__`(화면 문구, 예 `매일 09:00`). 파이썬 한 줄로 전부 바꾼다:
+치환 자리: `__ID__`(자동화 id) `__NAME__`(카드 제목) `__DEPT__`(부서 id) `__WORKSPACE__`(사무실 id) `__RUNS_ON__`(기본 `ubuntu-latest`, 사무실 PC 면 `[self-hosted, windows, kr-office]`) `__NEXT_RUN__`(화면 문구, 예 `매일 09:00`). 파이썬 한 줄로 전부 바꾼다:
 
 ```bash
 python - <<'PY'
 import pathlib,re
-rep={"__ID__":"<id>","__NAME__":"<이름>","__DEPT__":"<부서>","__WORKSPACE__":"<사무실>","__CRON__":"0 0 * * *","__RUNS_ON__":"ubuntu-latest","__NEXT_RUN__":"매일 09:00"}
+rep={"__ID__":"<id>","__NAME__":"<이름>","__DEPT__":"<부서>","__WORKSPACE__":"<사무실>","__RUNS_ON__":"ubuntu-latest","__NEXT_RUN__":"매일 09:00"}
 for p in [*pathlib.Path("automations/<id>").rglob("*"), pathlib.Path(".github/workflows/<id>.yml")]:
     if p.is_file():
         s=p.read_text(encoding="utf-8")
@@ -96,7 +96,7 @@ PY
 
 자동으로 다 만들지 않고 **사용자가 사이트에서 골라야** 하는 자동화(인스타 주제처럼)는 `automations/insta/` 의 검토 방식을 그대로 쓴다.
 1. 자동화가 후보를 `public/review/<사무실>/<id>.json` 에 쓴다(모양·예약 규칙은 `automations/insta/insta_review.py` — 그대로 import 해 쓴다).
-2. 워크플로 `workflow_dispatch` 에 `mode`(topics/queue/publish)·`picks` 입력을 두고, 예약(cron)으로 후보 뽑기와 예약 확인을 돈다(`.github/workflows/insta.yml` 복사).
+2. 워크플로 `workflow_dispatch` 에 `mode`(topics/queue/publish)·`picks` 입력을 두고, 후보 뽑기·예약 확인 시각은 `worker/schedule.ts` 에 적는다(`.github/workflows/insta.yml` 복사).
 3. 사무실 설정의 자동화에 `review: { kind: "topics", title: "…" }` 를 넣으면 카드에 검토 칸이 생긴다(대시보드 코드 수정 없음).
 
 ## 5. 비밀값·실행기
@@ -143,7 +143,7 @@ bash scripts/npm.sh test && bash scripts/npm.sh tsc && bash scripts/npm.sh build
 - 사무실 PC 에 `pwsh` 없음 → 워크플로 셸은 Windows PowerShell.
 - PC 의 PowerShell 프로필이 작업 위치를 다른 폴더로 옮김(`Set-Location`) → 상대 경로가 깨짐. 워크플로 `shell:` 의 `-NoProfile` 을 지우지 말 것.
 - fine-grained 토큰의 Repository access 에 저장소가 없으면 GitHub 가 404 → 화면에 "토큰이 ai-office 저장소를 못 봐요" 배너.
-- 예약(cron)은 UTC 로 적는다. KST 09:00 = `0 0 * * *`.
+- **예약은 워크플로가 아니라 `worker/schedule.ts` 의 `SCHEDULES` 에 UTC cron 으로 적는다**(KST 09:00 = `0 0 * * *`). GitHub 의 schedule 은 부하가 높으면 지연되고 일부는 버려진다 — 2026-09-17 실측으로 5분 예약이 4시간 43분에 1번만 돌아 전부 Cloudflare 로 옮겼다.
 - Open API(열린국회정보)는 브라우저 User-Agent 가 없으면 400.
 - 임시 회의록처럼 "나중에 바뀌는 결과물"은 manifest 에 상태를 두고 다음 실행에서 교체한다.
 - 자동화마다 모듈 이름이 같으면(`store.py` 등) `pytest automations` 에서 서로 가린다 → 모듈 이름에 자동화 id 를 붙인다(예 `news_store.py`).

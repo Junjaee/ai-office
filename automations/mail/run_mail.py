@@ -263,8 +263,8 @@ def run(argv: list[str], work=None) -> int:
     out_path = (os.environ.get("GITHUB_OUTPUT") or "").strip()
     if out_path:
         with open(out_path, "a", encoding="utf-8") as fh:
-            fh.write(f"saved={counts.get('saved', 0)}
-")
+            fh.write("saved={}\n".format(counts.get("saved", 0)))
+
     ok = counts.get("failed", 0) == 0 and all(v[0] for v in task_results.values())
     summary = build_summary(counts, time.monotonic() - started)
     print(summary)

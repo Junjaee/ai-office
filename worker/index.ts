@@ -4,6 +4,7 @@ import handler from "vinext/server/app-router-entry";
 import { WORKSPACES } from "../app/workspaces/index";
 import { GitHubClient } from "./github.ts";
 import { createRunApiStores, handleHistory, handleReview, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
+import { SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
 
 interface Env {
   ASSETS: Fetcher;
@@ -63,6 +64,34 @@ const worker = {
     }
 
     return handler.fetch(request, env, ctx);
+  },
+
+  /** 1분마다 깨어나 "지금 돌 차례"인 자동화를 GitHub 에 요청한다.
+   *
+   * GitHub 의 예약(cron)은 부하가 높으면 지연되거나 버려져서(공식 문서, 실측 5분 예약이 4시간에 1번)
+   * 시계를 이쪽으로 옮겼다 — 예약표는 worker/schedule.ts (사용자 결정 2026-09-17).
+   * 하루 실행 상한(/api/run)은 사람이 누르는 버튼용이라 여기서는 적용하지 않는다.
+   */
+  async scheduled(controller: ScheduledController, env: Env, _ctx: ExecutionContext): Promise<void> {
+    if (!env.GITHUB_TOKEN) {
+      console.error("예약: GITHUB_TOKEN 이 없어 건너뜀");
+      return;
+    }
+    const now = new Date(controller.scheduledTime);
+    const jobs = dueJobs(SCHEDULES, now);
+    if (jobs.length === 0) return;
+
+    const github = new GitHubClient(env.GITHUB_TOKEN);
+    const requestId = cronRequestId(now);
+    for (const job of jobs) {
+      try {
+        await github.dispatch(job.workflow, { request_id: requestId, ...(job.inputs ?? {}) });
+        console.log(`예약 실행 요청: ${job.workflow} (${job.note}) ${requestId}`);
+      } catch (err) {
+        // 하나가 실패해도 나머지는 계속한다. 다음 분에 다시 기회가 온다
+        console.error(`예약 실행 실패: ${job.workflow} — ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }
   },
 };
 

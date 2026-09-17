@@ -1,13 +1,9 @@
 name: 인스타 게시글
 
+# 예약은 Cloudflare Worker 가 맡는다 (worker/schedule.ts, 1분마다 확인 → workflow_dispatch).
+# GitHub 의 schedule 은 부하가 높으면 지연되거나 버려져서(공식 문서) 2026-09-17 에 걷어냈다.
+# 예약이 부르면 account=all, mode=topics(06:30·11:30) 또는 publish(매시 30분) 로 온다.
 on:
-  schedule:
-    # 매일 06:30 KST — 밤사이 미국 소식까지 넣어 후보를 검토 칸에 올림 (UTC 21:30 전날) — 모든 계정
-    - cron: "30 21 * * *"
-    # 매일 11:30 KST — 오전 소식으로 후보 새로 고침 (12:30·18:30 자동 선정용, UTC 02:30)
-    - cron: "30 2 * * *"
-    # 매시 30분 — 댓글 DM → 예약 게시 (게시 시간대 07:30·12:30·18:30 과 맞춤, 빈 칸은 1순위 자동 선정) — 모든 계정
-    - cron: "30 * * * *"
   workflow_dispatch:
     inputs:
       account:

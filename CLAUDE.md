@@ -35,6 +35,15 @@
 5. 실행기: 워크플로의 `runs-on` 라벨이 맞는 실행기가 켜져 있어야 한다(아래 "실행 위치", `automations/runner/README.md`).
 6. **끝났다고 말하기 전에** 스킬의 완료 체크리스트를 전부 통과시킨다(테스트, 로컬 1회 실행, 사이트에서 시작 버튼 1회).
 
+## 예약 (시계는 Cloudflare 가 맡는다)
+
+- **워크플로에 `schedule:`(cron)을 넣지 않는다.** 예약은 `worker/schedule.ts` 의 `SCHEDULES` 에 UTC cron 한 줄로 적고,
+  Worker 가 1분마다 깨어나(`vite.config.ts` 의 `triggers.crons`) 그 시각에 맞는 워크플로를 `workflow_dispatch` 로 실행한다.
+- 이유(2026-09-17 사용자 결정): GitHub 예약은 "부하가 높으면 지연되고 **일부는 버려진다**"고 공식 문서에 적혀 있다.
+  실측으로 5분 예약이 4시간 43분 동안 1번, 매시 예약이 하루 24회 중 4회만 돌았다. 러너 대기가 아니라 트리거 자체가 안 생긴다.
+- 같은 분에 같은 워크플로가 여러 번 맞으면 **예약표에서 앞선 것 하나만** 실행한다(인스타 06:30 후보 vs 매시 게시 확인).
+- 예약 실행의 요청 번호는 `cron-YYYYMMDDHHmm`(UTC). 하루 실행 상한(사무실당 50회)은 사람이 누르는 `/api/run` 에만 적용되고 예약은 거치지 않는다.
+
 ## 절대 규칙
 
 - 부서 `id` 12개(`research brand strategy1 qa strategy2 reels carousel partner finance review ops secretary`)는 바꾸지 않는다. 안 쓰는 부서는 `HIDDEN_DEPARTMENTS` 로 숨긴다.

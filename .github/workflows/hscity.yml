@@ -1,9 +1,8 @@
 name: 화성시 공고 수집
 
+# 예약은 Cloudflare Worker 가 맡는다 (worker/schedule.ts, 1분마다 확인 → workflow_dispatch).
+# GitHub 의 schedule 은 부하가 높으면 지연되거나 버려져서(공식 문서) 2026-09-17 에 걷어냈다.
 on:
-  schedule:
-    - cron: "0 23 * * *"   # UTC 23:00 = KST 08:00
-    - cron: "0 9 * * *"    # UTC 09:00 = KST 18:00
   workflow_dispatch:
     inputs:
       request_id:

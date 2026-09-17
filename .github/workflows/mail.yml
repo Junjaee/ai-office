@@ -1,8 +1,8 @@
 name: 상임위 메일
 
+# 예약은 Cloudflare Worker 가 맡는다 (worker/schedule.ts, 1분마다 확인 → workflow_dispatch).
+# GitHub 의 schedule 은 부하가 높으면 지연되거나 버려져서(공식 문서) 2026-09-17 에 걷어냈다.
 on:
-  schedule:
-    - cron: "*/5 * * * *"      # 5분마다 (GitHub 예약의 최소 간격. 몰리는 시간에는 몇 분 늦을 수 있다)
   workflow_dispatch:
     inputs:
       request_id:
