@@ -11,10 +11,11 @@ committees:
     # 첨부를 저장할 드라이브 폴더: 직장/국회/01. 의정활동/02. 위원회_회의/재경위/_수신함
     folder_id: "1dNwHu2iEAoMnp2NxOPfe8O866kE84tBr"
   - label: "예결위"
-    # folder_id: 예결위 수신함 폴더를 만들면 여기에 적는다 (없으면 텔레그램으로만 보낸다)
     # 예산결산특별위원회 — 2026-09-16 기준 받은 메일이 아직 없어 주소를 모른다.
     # 국회 도메인에서 오는 예결위 메일을 제목·본문으로 잡는다. 실제 주소를 알게 되면 from: 으로 바꾼다
     query: "from:assembly.go.kr {예결위 예산결산특별위원회}"
+    # 첨부를 저장할 드라이브 폴더: 직장/국회/01. 의정활동/02. 위원회_회의/예결위/_수신함
+    folder_id: "1rFQ5_cZWEKbjXmbfYqCwRBAiKoG9VwIQ"
 
 send_attachments: true   # 첨부파일을 텔레그램으로도 보낸다 (사용자 결정 2026-09-17).
                          # false 로 두면 드라이브 저장만 한다 (folder_id 가 있는 위원회)
