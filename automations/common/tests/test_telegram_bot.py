@@ -92,10 +92,10 @@ def test_telegram_env_picks_named_bot_and_chat(monkeypatch):
     """자동화마다 다른 봇·받는 사람을 쓴다. 없으면 기본값으로 떨어지지 않고 실패한다."""
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", TOKEN)
     monkeypatch.setenv("TELEGRAM_CHAT_ID", "42")
-    monkeypatch.setenv("MAIL_TELEGRAM_BOT_TOKEN", "999:MAIL")
+    monkeypatch.setenv("NOTICE_530_BOT_TOKEN", "999:NOTICE")
     monkeypatch.setenv("TELEGRAM_CHAT_ID_MAIL", "77")
-    assert telegram_env("TELEGRAM_CHAT_ID_MAIL", "MAIL_TELEGRAM_BOT_TOKEN") == ("999:MAIL", "77")
+    assert telegram_env("TELEGRAM_CHAT_ID_MAIL", "NOTICE_530_BOT_TOKEN") == ("999:NOTICE", "77")
 
-    monkeypatch.delenv("MAIL_TELEGRAM_BOT_TOKEN")
-    with pytest.raises(RuntimeError, match="MAIL_TELEGRAM_BOT_TOKEN"):
-        telegram_env("TELEGRAM_CHAT_ID_MAIL", "MAIL_TELEGRAM_BOT_TOKEN")
+    monkeypatch.delenv("NOTICE_530_BOT_TOKEN")
+    with pytest.raises(RuntimeError, match="NOTICE_530_BOT_TOKEN"):
+        telegram_env("TELEGRAM_CHAT_ID_MAIL", "NOTICE_530_BOT_TOKEN")
