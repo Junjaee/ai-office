@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 67건, 실패 0건, 9초",
+  "summary": "신규 55건, 실패 0건, 12초",
   "counts": {
-    "new": 67,
+    "new": 55,
     "failed": 0,
-    "total": 1018
+    "total": 1073
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 67건, 실패 0건, 9초",
-    "[신규] [아시안게임] 이준석, 테크볼 남자단식 '무실세트' 5연승으로 8강 진출 — 연합뉴스",
-    "[신규] “천하람-이주영 경기남부로” 이준석에 손내민 개혁신당 — 중앙일보",
-    "[신규] 아시안게임 첫선 테크볼... 한국 이준석, 10세트 전승으로 8강행 — chosun.com",
-    "[신규] 한 세트도 안 내줬다…이준석, 테크볼 5연승 질주 ‘8강행’ — 알파경제"
+    "신규 55건, 실패 0건, 12초",
+    "[신규] \"축구야, 탁구야?\" 테크볼 AG 첫선…이준석, 한일전 잡고 '5연승' — 머니투데이",
+    "[신규] [2026AG] 이준석, 테크볼 남자단식 '무실 세트' 6연승으로 4강 진출 — 뉴스핌",
+    "[신규] ‘발 탁구’ 테크볼 이준석, 무실세트 6연승 아시안게임 준결승행 — 한겨레",
+    "[신규] 이준석, 테크볼 남자 단식 준결승 진출…'무실세트' 6연승 질주(종합)[나고야AG] — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35188043388,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35188043388",
-  "request_id": "cron-202609170600",
-  "trigger": "manual",
-  "started_at": "2026-09-17T15:01:43+09:00",
-  "duration_sec": 9,
+  "run_id": 35202771229,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35202771229",
+  "request_id": "cron-202609170900",
+  "trigger": "schedule",
+  "started_at": "2026-09-17T18:01:08+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 228건"
+      "summary": "검색어 5개에서 252건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 168건 (신규 67건) · v.daum.net 29건, 뉴스1 17건, 뉴시스 12건"
+      "summary": "오늘 223건 (신규 55건) · v.daum.net 38건, 뉴스1 23건, 뉴시스 14건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-17T15:01:53+09:00"
+  "updated_at": "2026-09-17T18:01:21+09:00"
 }
