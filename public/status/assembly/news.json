@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 10초",
+  "summary": "신규 35건, 실패 0건, 12초",
   "counts": {
-    "new": 14,
+    "new": 35,
     "failed": 0,
-    "total": 1200
+    "total": 1235
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 10초",
-    "[신규] 이준석, 테크볼 남자 단식 준결승 진출…‘무실세트’ 6연승 질주 — 동아일보",
-    "[신규] '비장의 카드' 꺼낸 천하람···개혁신당은 다시 살아날까 — CNB뉴스",
-    "[신규] 개혁신당 연일 파열음… ‘경기남부 출마요구’ 에 천하람·이주영 반발 — 문화일보",
-    "[신규] 개혁신당 '인적쇄신' 본격화⋯당직자노조 전 조합원 일괄 사표 — 아이뉴스24"
+    "신규 35건, 실패 0건, 12초",
+    "[신규] 뉴스테이 분양전환 입법 공백 논란, 이준석 의원 국회서 투명한 해법 촉구 — 화성신문",
+    "[신규] 조국·이준석 빈자리 채울까…신장식·천하람, '간판' 도약 시험대 — 민주신문",
+    "[신규] 축구공 튀기는 탁구·오락실 '뿌요뿌요'도 메달 — MBC 뉴스",
+    "[신규] 이것도 정식 종목? 이색 스포츠가 온다 [권종오의 IMAGINE 나고야] — 경기일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35313064155,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35313064155",
-  "request_id": "cron-202609180600",
+  "run_id": 35327236505,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35327236505",
+  "request_id": "cron-202609180900",
   "trigger": "schedule",
-  "started_at": "2026-09-18T15:01:00+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-09-18T18:00:37+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 172건"
+      "summary": "검색어 5개에서 132건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 102건 (신규 14건) · v.daum.net 18건, 뉴스1 9건, 연합뉴스 7건"
+      "summary": "오늘 137건 (신규 35건) · v.daum.net 25건, 뉴스1 13건, 시민행정신문 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-18T15:01:12+09:00"
+  "updated_at": "2026-09-18T18:00:50+09:00"
 }
