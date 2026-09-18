@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 12초",
+  "summary": "신규 20건, 실패 0건, 16초",
   "counts": {
-    "new": 15,
+    "new": 20,
     "failed": 0,
-    "total": 1250
+    "total": 1270
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 12초",
-    "[신규] 국힘, 이준석과 30일 수도권 부동산 포럼 창립 총회 — 연합뉴스TV",
-    "[신규] 국힘, 이준석과 수도권 부동산 포럼 출범키로…30일 창립총회 — 연합뉴스",
-    "[신규] 국힘, 이준석과 '수도권 부동산 포럼' 구성…30일 창립총회 — 뉴시스",
-    "[신규] 이름도 생소한 테크볼 이준석, 아시안게임 메달 보인다 — 세계일보"
+    "신규 20건, 실패 0건, 16초",
+    "[신규] [단독] '부동산'으로 손잡은 국힘-이준석...연대 시동? — YTN",
+    "[신규] 이준석, 조정훈·유의동·권영세 등과 정책모임 만든다 — 동아일보",
+    "[신규] “지금 무직입니다!”…생업 접고 ‘테크볼 조별리그’ 전승한 이준석 — Radio Seoul",
+    "[신규] '부동산'으로 손잡은 국힘-이준석...연대 시동? — YTN"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35342394989,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35342394989",
-  "request_id": "cron-202609181200",
+  "run_id": 35359721924,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35359721924",
+  "request_id": "cron-202609181500",
   "trigger": "schedule",
-  "started_at": "2026-09-18T21:00:36+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-19T00:00:43+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 112건"
+      "summary": "검색어 5개에서 127건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 152건 (신규 15건) · v.daum.net 25건, 뉴스1 14건, 시민행정신문 10건"
+      "summary": "오늘 20건 (신규 20건) · 뉴스1 3건, YTN 2건, 기호일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-18T21:00:49+09:00"
+  "updated_at": "2026-09-19T00:00:59+09:00"
 }
