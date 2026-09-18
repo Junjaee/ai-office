@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 12초",
+  "summary": "신규 10건, 실패 0건, 12초",
   "counts": {
-    "new": 5,
+    "new": 10,
     "failed": 0,
-    "total": 1275
+    "total": 1285
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 12초",
-    "[신규] 국힘-이준석, 부동산 연대 시동… ‘수도권 주거 포럼’ 30일 창립 — 동아일보",
-    "[신규] 안태준 의원, 무허가·규정위반 드론 과태료 5년간 무려 21억...연간 부과액 4년 새 5배, 5년 연속 지속적 증가 — 시민행정신문",
-    "[신규] 김종민 의원 “대통령 ‘경제·행정 2수도’ 구상 환영... 행정수도특별법 연내 제정해야” — 시민행정신문",
-    "[신규] 여러 창을 열었을 때 주의할 토토미축제 이용 상태 — Histoire pour tous"
+    "신규 10건, 실패 0건, 12초",
+    "[신규] 베트남 테크볼 팀, 아시안게임 20에서 동메달 확보 — Vietnam.vn",
+    "[신규] 개혁신당 사무처 일괄 사표…“거취 판단 비대위에 맡긴다” — 쿠키뉴스",
+    "[신규] 대전시의회 예결위, 7조9029억 원 추경안 의결 — 뉴스파고",
+    "[신규] 충북도의회 예결위, 도 3회 추경 22억원 삭감 — 충청리뷰"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35377615951,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35377615951",
-  "request_id": "cron-202609181800",
+  "run_id": 35394464888,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35394464888",
+  "request_id": "cron-202609182100",
   "trigger": "schedule",
-  "started_at": "2026-09-19T03:00:41+09:00",
+  "started_at": "2026-09-19T06:00:40+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 132건"
+      "summary": "검색어 5개에서 130건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 25건 (신규 5건) · 뉴스1 3건, YTN 2건, 기호일보 2건"
+      "summary": "오늘 35건 (신규 10건) · 뉴스1 3건, YTN 2건, v.daum.net 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-19T03:00:55+09:00"
+  "updated_at": "2026-09-19T06:00:53+09:00"
 }
