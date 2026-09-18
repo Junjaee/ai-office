@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 16초",
+  "summary": "신규 5건, 실패 0건, 12초",
   "counts": {
-    "new": 20,
+    "new": 5,
     "failed": 0,
-    "total": 1270
+    "total": 1275
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 16초",
-    "[신규] [단독] '부동산'으로 손잡은 국힘-이준석...연대 시동? — YTN",
-    "[신규] 이준석, 조정훈·유의동·권영세 등과 정책모임 만든다 — 동아일보",
-    "[신규] “지금 무직입니다!”…생업 접고 ‘테크볼 조별리그’ 전승한 이준석 — Radio Seoul",
-    "[신규] '부동산'으로 손잡은 국힘-이준석...연대 시동? — YTN"
+    "신규 5건, 실패 0건, 12초",
+    "[신규] 국힘-이준석, 부동산 연대 시동… ‘수도권 주거 포럼’ 30일 창립 — 동아일보",
+    "[신규] 안태준 의원, 무허가·규정위반 드론 과태료 5년간 무려 21억...연간 부과액 4년 새 5배, 5년 연속 지속적 증가 — 시민행정신문",
+    "[신규] 김종민 의원 “대통령 ‘경제·행정 2수도’ 구상 환영... 행정수도특별법 연내 제정해야” — 시민행정신문",
+    "[신규] 여러 창을 열었을 때 주의할 토토미축제 이용 상태 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35359721924,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35359721924",
-  "request_id": "cron-202609181500",
+  "run_id": 35377615951,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35377615951",
+  "request_id": "cron-202609181800",
   "trigger": "schedule",
-  "started_at": "2026-09-19T00:00:43+09:00",
-  "duration_sec": 16,
+  "started_at": "2026-09-19T03:00:41+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 127건"
+      "summary": "검색어 5개에서 132건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 20건 (신규 20건) · 뉴스1 3건, YTN 2건, 기호일보 2건"
+      "summary": "오늘 25건 (신규 5건) · 뉴스1 3건, YTN 2건, 기호일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-19T00:00:59+09:00"
+  "updated_at": "2026-09-19T03:00:55+09:00"
 }
