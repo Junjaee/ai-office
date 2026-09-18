@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 39건, 실패 0건, 12초",
+  "summary": "신규 14건, 실패 0건, 10초",
   "counts": {
-    "new": 39,
+    "new": 14,
     "failed": 0,
-    "total": 1186
+    "total": 1200
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 39건, 실패 0건, 12초",
-    "[신규] [이재윤 칼럼] 김부겸·유승민·유시민·이준석 — 영남일보",
-    "[신규] ◇내일의 아시안게임(19·20일) — 연합뉴스",
-    "[신규] \"인생에서 가장 열심히 살았다\" 대기업 정규직 포기→사비 헝가리행...이준석, 韓 테크볼 첫 메달 보인다 — 머니투데이",
-    "[신규] 개혁신당 사무처 당직자들 ‘일괄 사표’…“거취 판단 비대위에 맡긴다” — 경기일보, v.daum.net"
+    "신규 14건, 실패 0건, 10초",
+    "[신규] 이준석, 테크볼 남자 단식 준결승 진출…‘무실세트’ 6연승 질주 — 동아일보",
+    "[신규] '비장의 카드' 꺼낸 천하람···개혁신당은 다시 살아날까 — CNB뉴스",
+    "[신규] 개혁신당 연일 파열음… ‘경기남부 출마요구’ 에 천하람·이주영 반발 — 문화일보",
+    "[신규] 개혁신당 '인적쇄신' 본격화⋯당직자노조 전 조합원 일괄 사표 — 아이뉴스24"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35301548317,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35301548317",
-  "request_id": "cron-202609180300",
+  "run_id": 35313064155,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35313064155",
+  "request_id": "cron-202609180600",
   "trigger": "schedule",
-  "started_at": "2026-09-18T12:01:02+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-18T15:01:00+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 211건"
+      "summary": "검색어 5개에서 172건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 88건 (신규 39건) · v.daum.net 16건, 뉴스1 8건, 시민행정신문 6건"
+      "summary": "오늘 102건 (신규 14건) · v.daum.net 18건, 뉴스1 9건, 연합뉴스 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-18T12:01:15+09:00"
+  "updated_at": "2026-09-18T15:01:12+09:00"
 }
