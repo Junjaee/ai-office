@@ -3,39 +3,37 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 9초",
+  "summary": "신규 2건, 실패 0건, 12초",
   "counts": {
-    "new": 5,
+    "new": 2,
     "failed": 0,
-    "total": 1417
+    "total": 1419
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 9초",
-    "[신규] '부상' 기권한 선수 위해 세리머니 자제하고, 찾아가 악수하고...'테크볼 첫 결승행' 이준석이 보여준 승자의 품격[나고야 LIVE] — 스포츠조선",
-    "[신규] '이런 기적이' 대기업 포기→국가대표→초대 챔피언 도전, 무명 축구선수 일냈다…\"엄마 테크볼 훈련을 해보고 싶어요\" [MD나고야] — 마이데일리",
-    "[신규] 같은 테마의 다른 게임과 보는 이준석 경마장역 공통점 — Histoire pour tous",
-    "[신규] 정점식, “민주당과 이재명 정부는 3대 국정 기조 전환해야” — 영등포시대"
+    "신규 2건, 실패 0건, 12초",
+    "[신규] 이준석의 ‘환호’ ‘환호’ ‘환호’…아시안게임 한국 최초 테크볼 은메달 확보 [화보] — khan.co.kr",
+    "[신규] [단독]\"로밍보다 싸\" 해외 e심 썼는데 내 정보가 중국으로?…정부 조사 — supple.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35459805399,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35459805399",
-  "request_id": "cron-202609191800",
+  "run_id": 35469094795,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35469094795",
+  "request_id": "cron-202609192100",
   "trigger": "schedule",
-  "started_at": "2026-09-20T03:00:51+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-09-20T06:00:52+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 142건"
+      "summary": "검색어 5개에서 143건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 5건) · Histoire pour tous 1건, mediaboot.co.kr 1건, stnsports.co.kr 1건"
+      "summary": "오늘 13건 (신규 2건) · supple.kr 2건, Histoire pour tous 1건, khan.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-20T03:01:00+09:00"
+  "updated_at": "2026-09-20T06:01:05+09:00"
 }
