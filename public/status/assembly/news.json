@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 9초",
   "counts": {
-    "new": 10,
+    "new": 11,
     "failed": 0,
-    "total": 1285
+    "total": 1296
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 12초",
-    "[신규] 베트남 테크볼 팀, 아시안게임 20에서 동메달 확보 — Vietnam.vn",
-    "[신규] 개혁신당 사무처 일괄 사표…“거취 판단 비대위에 맡긴다” — 쿠키뉴스",
-    "[신규] 대전시의회 예결위, 7조9029억 원 추경안 의결 — 뉴스파고",
-    "[신규] 충북도의회 예결위, 도 3회 추경 22억원 삭감 — 충청리뷰"
+    "신규 11건, 실패 0건, 9초",
+    "[신규] 아시안게임 오늘 개막…6연승 이준석, AG 첫선 ‘테크볼’ 메달 도전 — 문화일보",
+    "[신규] [오늘의 아시안게임] 16일의 열전 화려한 개막…한국 핸드볼·테크볼 출격 — 연합뉴스",
+    "[신규] 48억 아시아인의 축제 막 오른다, 16일 열전 시작…19일 하이라이트[AG] — 뉴스1, v.daum.net",
+    "[신규] 진행 속도를 바꿀 수 있나요? 바카라 대패 디시 기능 확인 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35394464888,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35394464888",
-  "request_id": "cron-202609182100",
+  "run_id": 35407893712,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35407893712",
+  "request_id": "cron-202609190000",
   "trigger": "schedule",
-  "started_at": "2026-09-19T06:00:40+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-19T09:02:06+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 130건"
+      "summary": "검색어 5개에서 134건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 35건 (신규 10건) · 뉴스1 3건, YTN 2건, v.daum.net 2건"
+      "summary": "오늘 46건 (신규 11건) · 시민행정신문 5건, 뉴스1 4건, Histoire pour tous 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-19T06:00:53+09:00"
+  "updated_at": "2026-09-19T09:02:16+09:00"
 }
