@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 10초",
+  "summary": "신규 5건, 실패 0건, 9초",
   "counts": {
-    "new": 6,
+    "new": 5,
     "failed": 0,
-    "total": 1412
+    "total": 1417
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 10초",
-    "[신규] \"정규직 앞두고 사표\"…테크볼 이준석, 아시안게임 테크볼 은메달 확보 — stnsports.co.kr",
-    "[신규] \"메달 없는 미래 너무 무서웠다, 결승? 하던대로 하면 승산 있다\"…韓 테크볼 '최초' AG 銀 확보→이준석 정말 간절했다 [현장인터뷰] — xportsnews.com",
-    "[신규] 2026 아시안게임 코리아하우스 개관식 — 뉴시스",
-    "[신규] [이준석 4시간 작심토로] 이 타이밍에 정부조직법 건드는 더 바보짓을… — 신동아"
+    "신규 5건, 실패 0건, 9초",
+    "[신규] '부상' 기권한 선수 위해 세리머니 자제하고, 찾아가 악수하고...'테크볼 첫 결승행' 이준석이 보여준 승자의 품격[나고야 LIVE] — 스포츠조선",
+    "[신규] '이런 기적이' 대기업 포기→국가대표→초대 챔피언 도전, 무명 축구선수 일냈다…\"엄마 테크볼 훈련을 해보고 싶어요\" [MD나고야] — 마이데일리",
+    "[신규] 같은 테마의 다른 게임과 보는 이준석 경마장역 공통점 — Histoire pour tous",
+    "[신규] 정점식, “민주당과 이재명 정부는 3대 국정 기조 전환해야” — 영등포시대"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35450444034,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35450444034",
-  "request_id": "cron-202609191500",
+  "run_id": 35459805399,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35459805399",
+  "request_id": "cron-202609191800",
   "trigger": "schedule",
-  "started_at": "2026-09-20T00:00:48+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-09-20T03:00:51+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 136건"
+      "summary": "검색어 5개에서 142건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 6건 (신규 6건) · mediaboot.co.kr 1건, stnsports.co.kr 1건, supple.kr 1건"
+      "summary": "오늘 11건 (신규 5건) · Histoire pour tous 1건, mediaboot.co.kr 1건, stnsports.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-20T00:00:59+09:00"
+  "updated_at": "2026-09-20T03:01:00+09:00"
 }
