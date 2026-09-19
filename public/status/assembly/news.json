@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 18건, 실패 0건, 13초",
+  "summary": "신규 61건, 실패 0건, 11초",
   "counts": {
-    "new": 18,
+    "new": 61,
     "failed": 0,
-    "total": 1314
+    "total": 1375
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 18건, 실패 0건, 13초",
-    "[신규] 2026 아이치·나고야 아시안게임 개막…테크볼 이준석, 한국 첫 메달 도전 — v.daum.net",
-    "[신규] 2026 하계 아시안게임, 한국 테크볼 첫 메달 도전 '이준석의 결승 진출 가능성은?' — 공감신문",
-    "[신규] [주말의 아시안게임] 여자 핸드볼 19일 첫 출격…사격 반효진, 20일 그랜드슬램 도전 — 한겨레",
-    "[신규] ◇오늘의 아시안게임(19일) — 연합뉴스"
+    "신규 61건, 실패 0건, 11초",
+    "[신규] [아시안게임] 테크볼 결승 진출한 이준석 \"앞길 막막했는데…희망 발견\" — 연합뉴스",
+    "[신규] [아시안게임] 테크볼 이준석, 상대 선수 부상으로 결승 진출‥은메달 확보 — MBC 뉴스, 연합뉴스",
+    "[신규] 테크볼 이준석 결승행… 한국 첫 메달 확보 — 조선일보",
+    "[신규] 이준석, 테크볼 결승행…한국 첫 메달 확보 — v.daum.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35417354403,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35417354403",
-  "request_id": "cron-202609190300",
+  "run_id": 35425482301,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35425482301",
+  "request_id": "cron-202609190600",
   "trigger": "schedule",
-  "started_at": "2026-09-19T12:01:48+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-09-19T15:01:41+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 114건"
+      "summary": "검색어 5개에서 144건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 64건 (신규 18건) · v.daum.net 5건, 시민행정신문 5건, 연합뉴스 5건"
+      "summary": "오늘 125건 (신규 61건) · 연합뉴스 8건, v.daum.net 7건, 뉴스1 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-19T12:02:01+09:00"
+  "updated_at": "2026-09-19T15:01:53+09:00"
 }
