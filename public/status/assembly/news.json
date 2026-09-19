@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 61건, 실패 0건, 11초",
+  "summary": "신규 25건, 실패 0건, 9초",
   "counts": {
-    "new": 61,
+    "new": 25,
     "failed": 0,
-    "total": 1375
+    "total": 1400
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 61건, 실패 0건, 11초",
-    "[신규] [아시안게임] 테크볼 결승 진출한 이준석 \"앞길 막막했는데…희망 발견\" — 연합뉴스",
-    "[신규] [아시안게임] 테크볼 이준석, 상대 선수 부상으로 결승 진출‥은메달 확보 — MBC 뉴스, 연합뉴스",
-    "[신규] 테크볼 이준석 결승행… 한국 첫 메달 확보 — 조선일보",
-    "[신규] 이준석, 테크볼 결승행…한국 첫 메달 확보 — v.daum.net"
+    "신규 25건, 실패 0건, 9초",
+    "[신규] [아시안게임] 테크볼 이준석, 은메달 확보…이 종목 한국 선수 첫 메달 — 기호일보",
+    "[신규] AG 신생 종목 테크볼 이준석, 상대 부상으로 銀 확보 — asiatoday.co.kr",
+    "[신규] 대기업 퇴사→국가대표→생애 첫 메달…테크볼 이준석의 꿈★은 이루어진다 — 서울신문",
+    "[신규] 직장 그만두고 테크볼 첫 메달리스트로…이준석 \"꿈꾸던 순간\" — 조선일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35425482301,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35425482301",
-  "request_id": "cron-202609190600",
+  "run_id": 35433514960,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35433514960",
+  "request_id": "cron-202609190900",
   "trigger": "schedule",
-  "started_at": "2026-09-19T15:01:41+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-09-19T18:00:58+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 144건"
+      "summary": "검색어 5개에서 145건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 125건 (신규 61건) · 연합뉴스 8건, v.daum.net 7건, 뉴스1 7건"
+      "summary": "오늘 150건 (신규 25건) · v.daum.net 15건, 연합뉴스 8건, 뉴스1 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-19T15:01:53+09:00"
+  "updated_at": "2026-09-19T18:01:08+09:00"
 }
