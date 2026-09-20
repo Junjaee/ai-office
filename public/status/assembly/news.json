@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 17건, 실패 0건, 12초",
+  "summary": "신규 10건, 실패 0건, 9초",
   "counts": {
-    "new": 17,
+    "new": 10,
     "failed": 0,
-    "total": 1648
+    "total": 1658
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 17건, 실패 0건, 12초",
-    "[신규] 축구→족구→테크볼...금빛 ‘인생역전’ 이준석 — JTBC",
-    "[신규] 몰랐던 종목… 金과 함께 터진 엄마의 눈물 — 조선일보",
-    "[신규] 맨땅에 헤딩 금메달 캤다 — 경향신문",
-    "[신규] 혜리, 이준석 금메달→수영 100m 은·동 차지..아시안게임 선수들 응원 — starnewskorea.com"
+    "신규 10건, 실패 0건, 9초",
+    "[신규] 이준석, 대기업도 관두고 ‘테크볼 하이킥’ — 동아일보",
+    "[신규] \"엄마! 나 금메달 땄어\" '무명'의 축구 선수→아시아 최고의 테크볼 선수로...생업까지 포기한 이준석의 인생역전 \"실업팀 생겼으면\" — 조선일보",
+    "[신규] \"준석이가 테크볼 테이블 사달라고…\" 엄마의 뒷바라지, 아들은 역사를 썼다 — 한국일보",
+    "[신규] 이준석 AG 신규 종목 ‘테크볼’ 초대 챔피언 주인공 [백효은기자의 백점만점 나고야] — kyeongin.com"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35527637324,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35527637324",
-  "request_id": "cron-202609201800",
+  "run_id": 35537303111,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35537303111",
+  "request_id": "cron-202609202100",
   "trigger": "schedule",
-  "started_at": "2026-09-21T03:00:40+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-21T06:01:11+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 155건"
+      "summary": "검색어 5개에서 159건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 41건 (신규 17건) · 시민행정신문 7건, v.daum.net 6건, edaily.co.kr 2건"
+      "summary": "오늘 51건 (신규 10건) · 시민행정신문 7건, v.daum.net 6건, 뉴시스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-21T03:00:53+09:00"
+  "updated_at": "2026-09-21T06:01:21+09:00"
 }
