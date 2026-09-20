@@ -1,22 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "뉴스 목록을 받아오지 못했어요",
-  "counts": {},
+  "summary": "신규 17건, 실패 0건, 12초",
+  "counts": {
+    "new": 17,
+    "failed": 0,
+    "total": 1443
+  },
   "next_run": "3시간마다",
   "log": [
-    "뉴스 목록을 받아오지 못했어요",
-    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
+    "신규 17건, 실패 0건, 12초",
+    "[신규] 이준석, 초대 테크볼 금메달 도전…상대는 이라크 — 연합뉴스TV",
+    "[신규] 이준석 “어머니가 없는 살림에...” 감동 발언 — 문화일보",
+    "[신규] 이것이 족구의 민족이다! 이준석 테크볼 최초 결승 진출 [나고야 직캠] — programs.sbs.co.kr",
+    "[신규] 먼발치에서 아들 이준석의 테크볼 경기를 지켜보는 어머니 — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35485470682,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35485470682",
-  "request_id": "cron-202609200300",
+  "run_id": 35493131638,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35493131638",
+  "request_id": "cron-202609200600",
   "trigger": "schedule",
-  "started_at": "2026-09-20T12:01:18+09:00",
-  "duration_sec": 129,
+  "started_at": "2026-09-20T15:01:40+09:00",
+  "duration_sec": 12,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 50건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 37건 (신규 17건) · Histoire pour tous 4건, v.daum.net 4건, 뉴시스 3건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-09-20T12:03:28+09:00"
+  "updated_at": "2026-09-20T15:01:53+09:00"
 }
