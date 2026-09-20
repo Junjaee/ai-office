@@ -3,37 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 실패 0건, 12초",
+  "summary": "신규 7건, 실패 0건, 13초",
   "counts": {
-    "new": 2,
+    "new": 7,
     "failed": 0,
-    "total": 1419
+    "total": 1426
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 2건, 실패 0건, 12초",
-    "[신규] 이준석의 ‘환호’ ‘환호’ ‘환호’…아시안게임 한국 최초 테크볼 은메달 확보 [화보] — khan.co.kr",
-    "[신규] [단독]\"로밍보다 싸\" 해외 e심 썼는데 내 정보가 중국으로?…정부 조사 — supple.kr"
+    "신규 7건, 실패 0건, 13초",
+    "[신규] 발로 하는 탁구 '테크볼' 사상 첫 은메달 확보! 이준석이 쓴 나고야의 기적 — v.daum.net, 파이낸셜뉴스",
+    "[신규] [오늘의 아시안게임] 근대5종·테크볼·농구 金도전…반효진 생일에 금메달 기대감 — 연합뉴스",
+    "[신규] 먼발치에서 아들 이준석의 테크볼 경기를 지켜보는 가족 — 뉴시스",
+    "[신규] 부족한 살림에도 200만원 테이블 지원…'테크볼 메달' 만든 母 헌신[AG] — 뉴스1"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35469094795,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35469094795",
-  "request_id": "cron-202609192100",
+  "run_id": 35477646779,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35477646779",
+  "request_id": "cron-202609200000",
   "trigger": "schedule",
-  "started_at": "2026-09-20T06:00:52+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-20T09:01:37+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 143건"
+      "summary": "검색어 5개에서 148건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 2건) · supple.kr 2건, Histoire pour tous 1건, khan.co.kr 1건"
+      "summary": "오늘 20건 (신규 7건) · v.daum.net 3건, supple.kr 2건, 뉴시스 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-20T06:01:05+09:00"
+  "updated_at": "2026-09-20T09:01:50+09:00"
 }
