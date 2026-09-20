@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 17건, 실패 0건, 12초",
+  "summary": "신규 103건, 실패 0건, 9초",
   "counts": {
-    "new": 17,
+    "new": 103,
     "failed": 0,
-    "total": 1443
+    "total": 1546
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 17건, 실패 0건, 12초",
-    "[신규] 이준석, 초대 테크볼 금메달 도전…상대는 이라크 — 연합뉴스TV",
-    "[신규] 이준석 “어머니가 없는 살림에...” 감동 발언 — 문화일보",
-    "[신규] 이것이 족구의 민족이다! 이준석 테크볼 최초 결승 진출 [나고야 직캠] — programs.sbs.co.kr",
-    "[신규] 먼발치에서 아들 이준석의 테크볼 경기를 지켜보는 어머니 — 뉴시스"
+    "신규 103건, 실패 0건, 9초",
+    "[신규] 정규직 포기하고 인생 건 보람 있었다…테크볼 이준석 AG 金 — 중앙일보",
+    "[신규] 테크볼 이준석, 남자 단식 우승... 韓 3번째 金 — 조선일보",
+    "[신규] [속보] 이준석, 아시안게임 테크볼 초대 ’금메달’ — 연합뉴스TV",
+    "[신규] [속보] 테크볼 이준석, 아시안게임 한국 선수단 세 번째 금메달 — 강원일보, 천지일보, 매일경제, news.sbs.co.kr, 부산일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35493131638,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35493131638",
-  "request_id": "cron-202609200600",
+  "run_id": 35501146338,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35501146338",
+  "request_id": "cron-202609200900",
   "trigger": "schedule",
-  "started_at": "2026-09-20T15:01:40+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-20T18:02:12+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 50건"
+      "summary": "검색어 5개에서 132건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 37건 (신규 17건) · Histoire pour tous 4건, v.daum.net 4건, 뉴시스 3건"
+      "summary": "오늘 140건 (신규 103건) · 뉴시스 17건, 뉴스1 16건, v.daum.net 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-20T15:01:53+09:00"
+  "updated_at": "2026-09-20T18:02:21+09:00"
 }
