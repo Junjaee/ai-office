@@ -3,38 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 전송 1건, 실패 0건, 2.5분",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 12초",
   "counts": {
-    "new": 1,
-    "sent": 1,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 1건, 전송 1건, 실패 0건, 2.5분",
-    "[첨부실패] 실시계획(변경)조건.hwpx: ConnectTimeout",
-    "[첨부실패] 고시문[손바닥공원 리모델링 사업].hwpx: ConnectTimeout",
-    "[신규] [고시] 동탄(1)택지개발지구 도시계획시설(공원) 실시계획(변경) 작성 고시[손바"
+    "신규 0건, 전송 0건, 실패 0건, 12초"
   ],
   "link": "",
-  "run_id": 35407896379,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35407896379",
-  "request_id": "cron-202609190000",
+  "run_id": 35477648490,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35477648490",
+  "request_id": "cron-202609200000",
   "trigger": "schedule",
-  "started_at": "2026-09-19T09:02:10+09:00",
-  "duration_sec": 152,
+  "started_at": "2026-09-20T09:01:34+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 1건, 첨부 2건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "1건 발송, 무음 0건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-09-19T09:04:43+09:00"
+  "updated_at": "2026-09-20T09:01:48+09:00"
 }
