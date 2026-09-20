@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 61건, 실패 0건, 9초",
+  "summary": "신규 24건, 실패 0건, 9초",
   "counts": {
-    "new": 61,
+    "new": 24,
     "failed": 0,
-    "total": 1607
+    "total": 1631
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 61건, 실패 0건, 9초",
-    "[신규] 한국 3번째 금…이준석, AG 최초 테크볼 금메달리스트 역사 — 한겨레",
-    "[신규] 이준석, 신생 종목 ‘테크볼’ 초대 챔피언 — 조선일보",
-    "[신규] 사표 쓰고 테크볼 ‘올인’···‘축구 선수 출신’ 이준석, 종목 첫 금메달로 증명했다 — 경향신문",
-    "[신규] [2026 아시안게임]테크볼 이준석, 아시안게임 한국 선수단 세 번째 금메달 — 강원일보"
+    "신규 24건, 실패 0건, 9초",
+    "[신규] 대기업도 포기하고 올인…테크볼 이준석, 눈물의 금메달 — v.daum.net, news.sbs.co.kr",
+    "[신규] 이준석, 테크볼 초대 챔피언...김영범, 100m 은메달 — YTN",
+    "[신규] 대기업 정규직 포기…불굴 집념 이준석 ‘발탁구 금’ 쐈다 — 한겨레",
+    "[신규] “나는 무직”이라던 이준석, 테크볼 초대 챔피언 등극 — v.daum.net, 동아일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35509425459,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35509425459",
-  "request_id": "cron-202609201200",
+  "run_id": 35518189979,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35518189979",
+  "request_id": "cron-202609201500",
   "trigger": "schedule",
-  "started_at": "2026-09-20T21:01:35+09:00",
+  "started_at": "2026-09-21T00:00:37+09:00",
   "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 144건"
+      "summary": "검색어 5개에서 147건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 201건 (신규 61건) · 뉴시스 19건, news1.kr 18건, 뉴스1 17건"
+      "summary": "오늘 24건 (신규 24건) · v.daum.net 5건, newsis.com 2건, newspim.com 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-20T21:01:45+09:00"
+  "updated_at": "2026-09-21T00:00:47+09:00"
 }
