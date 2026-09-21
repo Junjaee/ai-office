@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 89건, 실패 0건, 12초",
+  "summary": "신규 43건, 실패 0건, 12초",
   "counts": {
-    "new": 89,
+    "new": 43,
     "failed": 0,
-    "total": 1747
+    "total": 1790
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 89건, 실패 0건, 12초",
-    "[신규] [현장영상] 불모지서 ‘금 캐낸’ 이준석 “뺨 때려봤는데 꿈 아니더라” — v.daum.net",
-    "[신규] 대기업 내려놓고 태극마크…이준석, 테크볼 ‘최초 금메달’ — JTBC",
-    "[신규] 근대5종 성승민 “집에서 푹 쉬고 싶다”…테크볼 이준석 “실업팀 생겼으면…” — 한겨레",
-    "[신규] 테크볼 이준석 · 근대5종 성승민 ‘金’[2026 아이치·나고야 아시안게임] — 문화일보"
+    "신규 43건, 실패 0건, 12초",
+    "[신규] [영상] 테크볼 초대 챔피언 이준석, 목이 쉬도록 소리지른 이유는? — KBS 뉴스",
+    "[신규] [아시안게임] 테크볼 이준석의 기적 \"일어나서 뺨 때려봤다…꿈 아니더라\" — 연합뉴스",
+    "[신규] “나도 쫓겨날 수 있다”…이준석, 동탄 전셋집 첫 공개하며 부동산 작심 발언 — v.daum.net, 경기일보",
+    "[신규] 대기업 퇴사하고 테크볼 금메달 이준석 “뺨 때려봤어요, 아직 꿈 같아” — hani.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35556027250,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35556027250",
-  "request_id": "cron-202609210300",
+  "run_id": 35566624515,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35566624515",
+  "request_id": "cron-202609210600",
   "trigger": "schedule",
-  "started_at": "2026-09-21T12:01:05+09:00",
+  "started_at": "2026-09-21T15:00:39+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 205건"
+      "summary": "검색어 5개에서 211건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 140건 (신규 89건) · 시민행정신문 13건, v.daum.net 12건, 연합뉴스 11건"
+      "summary": "오늘 183건 (신규 43건) · v.daum.net 17건, 연합뉴스 16건, 시민행정신문 13건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-21T12:01:18+09:00"
+  "updated_at": "2026-09-21T15:00:52+09:00"
 }
