@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 34건, 실패 0건, 11초",
+  "summary": "신규 21건, 실패 0건, 13초",
   "counts": {
-    "new": 34,
+    "new": 21,
     "failed": 0,
-    "total": 1824
+    "total": 1845
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 34건, 실패 0건, 11초",
-    "[신규] 한양대 이준석 공동연구팀, 저전력 다기능 전기화 촉매 필터 개발 — 뉴스H",
-    "[신규] ‘테크볼 첫 금메달’ 이준석 “뺨 때렸더니 꿈 아니더라···내년엔 실업팀 생겼으면” — khan.co.kr",
-    "[신규] [2026AG] 대한체육회, 이준석 金 계기로 테크볼 진천선수촌 훈련 지원 추진 — 뉴스핌",
-    "[신규] \"선수촌에서 훈련하고 싶어요\" 이준석의 꿈이 이루어졌다!...대한체육회, 진천선수촌서 테크볼 훈련 지원 추진[오피셜] — 조선일보"
+    "신규 21건, 실패 0건, 13초",
+    "[신규] 장성규, 이준석 테크볼 첫 금메달에 격한 환호…\"역사의 시작\" — 뉴스1",
+    "[신규] ‘테크볼’ 이준석, 대기업 사표 던지고 목에 건 금메달 — 채널A",
+    "[신규] '이준석, 기적의 금메달' 대한체육회, 테크볼 진천선수촌 훈련 추진 — v.daum.net",
+    "[신규] [영상] 테크볼 금메달 이준석 “뺨 때려보니 꿈 아니더라” [아시안게임] — 경기일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35580864300,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35580864300",
-  "request_id": "cron-202609210900",
+  "run_id": 35597061640,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35597061640",
+  "request_id": "cron-202609211200",
   "trigger": "schedule",
-  "started_at": "2026-09-21T18:00:48+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-09-21T21:00:50+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 192건"
+      "summary": "검색어 5개에서 185건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 217건 (신규 34건) · v.daum.net 21건, 연합뉴스 17건, 시민행정신문 13건"
+      "summary": "오늘 238건 (신규 21건) · v.daum.net 26건, 연합뉴스 17건, 뉴시스 15건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-21T18:01:00+09:00"
+  "updated_at": "2026-09-21T21:01:04+09:00"
 }
