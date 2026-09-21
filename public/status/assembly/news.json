@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 22건, 실패 0건, 12초",
+  "summary": "신규 8건, 실패 0건, 13초",
   "counts": {
-    "new": 22,
+    "new": 8,
     "failed": 0,
-    "total": 1867
+    "total": 1875
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 22건, 실패 0건, 12초",
-    "[신규] ‘일어나서 뺨까지 때려봤다’ 테크볼 이준석의 기적 뒷 이야기 — KBS 뉴스",
-    "[신규] '선수촌 문 열린다'‥테크볼 이준석, 금메달 걸고 '금의환향' — MBC 뉴스",
-    "[신규] “뺨 때려보니 꿈 아니더라…실업팀 생기는 게 진짜 꿈” — 경향신문",
-    "[신규] 불모지서 ‘금 캐낸’ 이준석 “뺨 때려봤는데 꿈 아니더라” [현장영상] — KBS 뉴스"
+    "신규 8건, 실패 0건, 13초",
+    "[신규] '금의환향' 이준석 \"테크볼도 선수촌 들어오래요\" — v.daum.net, news.sbs.co.kr",
+    "[신규] [2026 나고야] 생업 포기하고 선택한 테크볼...실패한 축구 선수 이준석, 선구자로 우뚝 — 일간스포츠",
+    "[신규] 취재진 질문에 답하는 '테크볼 금메달' 이준석 — 뉴스1",
+    "[신규] '금의환향' 이준석, '금메달 갖고 왔어요' — v.daum.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35616066998,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35616066998",
-  "request_id": "cron-202609211500",
+  "run_id": 35635647277,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35635647277",
+  "request_id": "cron-202609211800",
   "trigger": "schedule",
-  "started_at": "2026-09-22T00:01:38+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-22T03:01:29+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 183건"
+      "summary": "검색어 5개에서 178건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 22건 (신규 22건) · mt.co.kr 12건, KBS 뉴스 2건, v.daum.net 2건"
+      "summary": "오늘 30건 (신규 8건) · mt.co.kr 12건, v.daum.net 4건, KBS 뉴스 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-22T00:01:50+09:00"
+  "updated_at": "2026-09-22T03:01:43+09:00"
 }
