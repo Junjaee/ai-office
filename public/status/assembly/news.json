@@ -1,41 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 9초",
-  "counts": {
-    "new": 10,
-    "failed": 0,
-    "total": 1658
-  },
+  "summary": "뉴스 목록을 받아오지 못했어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 9초",
-    "[신규] 이준석, 대기업도 관두고 ‘테크볼 하이킥’ — 동아일보",
-    "[신규] \"엄마! 나 금메달 땄어\" '무명'의 축구 선수→아시아 최고의 테크볼 선수로...생업까지 포기한 이준석의 인생역전 \"실업팀 생겼으면\" — 조선일보",
-    "[신규] \"준석이가 테크볼 테이블 사달라고…\" 엄마의 뒷바라지, 아들은 역사를 썼다 — 한국일보",
-    "[신규] 이준석 AG 신규 종목 ‘테크볼’ 초대 챔피언 주인공 [백효은기자의 백점만점 나고야] — kyeongin.com"
+    "뉴스 목록을 받아오지 못했어요",
+    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35537303111,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35537303111",
-  "request_id": "cron-202609202100",
+  "run_id": 35546281298,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35546281298",
+  "request_id": "cron-202609210000",
   "trigger": "schedule",
-  "started_at": "2026-09-21T06:01:11+09:00",
-  "duration_sec": 9,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 159건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 51건 (신규 10건) · 시민행정신문 7건, v.daum.net 6건, 뉴시스 3건"
-    }
-  ],
+  "started_at": "2026-09-21T09:01:01+09:00",
+  "duration_sec": 131,
   "id": "news",
-  "updated_at": "2026-09-21T06:01:21+09:00"
+  "updated_at": "2026-09-21T09:03:14+09:00"
 }
