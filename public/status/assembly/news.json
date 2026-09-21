@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 43건, 실패 0건, 12초",
+  "summary": "신규 34건, 실패 0건, 11초",
   "counts": {
-    "new": 43,
+    "new": 34,
     "failed": 0,
-    "total": 1790
+    "total": 1824
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 43건, 실패 0건, 12초",
-    "[신규] [영상] 테크볼 초대 챔피언 이준석, 목이 쉬도록 소리지른 이유는? — KBS 뉴스",
-    "[신규] [아시안게임] 테크볼 이준석의 기적 \"일어나서 뺨 때려봤다…꿈 아니더라\" — 연합뉴스",
-    "[신규] “나도 쫓겨날 수 있다”…이준석, 동탄 전셋집 첫 공개하며 부동산 작심 발언 — v.daum.net, 경기일보",
-    "[신규] 대기업 퇴사하고 테크볼 금메달 이준석 “뺨 때려봤어요, 아직 꿈 같아” — hani.co.kr"
+    "신규 34건, 실패 0건, 11초",
+    "[신규] 한양대 이준석 공동연구팀, 저전력 다기능 전기화 촉매 필터 개발 — 뉴스H",
+    "[신규] ‘테크볼 첫 금메달’ 이준석 “뺨 때렸더니 꿈 아니더라···내년엔 실업팀 생겼으면” — khan.co.kr",
+    "[신규] [2026AG] 대한체육회, 이준석 金 계기로 테크볼 진천선수촌 훈련 지원 추진 — 뉴스핌",
+    "[신규] \"선수촌에서 훈련하고 싶어요\" 이준석의 꿈이 이루어졌다!...대한체육회, 진천선수촌서 테크볼 훈련 지원 추진[오피셜] — 조선일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35566624515,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35566624515",
-  "request_id": "cron-202609210600",
+  "run_id": 35580864300,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35580864300",
+  "request_id": "cron-202609210900",
   "trigger": "schedule",
-  "started_at": "2026-09-21T15:00:39+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-21T18:00:48+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 211건"
+      "summary": "검색어 5개에서 192건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 183건 (신규 43건) · v.daum.net 17건, 연합뉴스 16건, 시민행정신문 13건"
+      "summary": "오늘 217건 (신규 34건) · v.daum.net 21건, 연합뉴스 17건, 시민행정신문 13건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-21T15:00:52+09:00"
+  "updated_at": "2026-09-21T18:01:00+09:00"
 }
