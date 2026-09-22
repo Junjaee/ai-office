@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 14초",
   "counts": {
-    "new": 7,
+    "new": 4,
     "failed": 0,
-    "total": 2017
+    "total": 2021
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 12초",
-    "[신규] [1보] 펜싱 송세라, 아시안게임 여자 에페 개인전 금메달 — 연합뉴스",
-    "[신규] [아시안게임] 펜싱 2관왕 후보 송세라, 여자 에페 개인전 금메달(종합) — 연합뉴스",
-    "[신규] '드디어 한 풀었다' 펜싱 에페 송세라, 종합 대회 첫 금메달 쾌거... '韓 펜싱 대회 첫 金' [아이치 나고야 AG] — 머니투데이",
-    "[신규] 마작 이랑 비슷한 보드 게임 라운드 종료 후 남는 화면 정보 — Calgary Roughnecks"
+    "신규 4건, 실패 0건, 14초",
+    "[신규] 모바일 도움말의 스크롤 영역, 엔포커 환전 화면 사용법 — Calgary Roughnecks",
+    "[신규] [엠빅뉴스] 활짝 웃은 손흥민·이강인…모레노호 첫 공개훈련 분위기는? — MBC 뉴스",
+    "[신규] 유시민 “文·조국 공격, 李 지지율만 하락” [정치오늘] — sisaon.co.kr",
+    "[신규] 심벌 조합은 어디서 확인하나요? 파워볼 한국 세금 도움말 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35744367972,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35744367972",
-  "request_id": "cron-202609221500",
+  "run_id": 35764405769,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35764405769",
+  "request_id": "cron-202609221800",
   "trigger": "schedule",
-  "started_at": "2026-09-23T00:01:36+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-23T03:01:56+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 139건"
+      "summary": "검색어 5개에서 140건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 7건 (신규 7건) · 연합뉴스 2건, Calgary Roughnecks 1건, 머니투데이 1건"
+      "summary": "오늘 11건 (신규 4건) · Calgary Roughnecks 2건, 연합뉴스 2건, Histoire pour tous 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-23T00:01:49+09:00"
+  "updated_at": "2026-09-23T03:02:11+09:00"
 }
