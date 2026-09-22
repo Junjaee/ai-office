@@ -1,0 +1,51 @@
+name: 카드문자 전달 앱 빌드
+
+# 대시보드 카드가 아니다(사무실 자동화 아님). 손으로만 돌린다: gh workflow run cardsms-app.yml
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: "platforms;android-34 build-tools;34.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: 서명키 복원 (GitHub Secrets → 임시 파일)
+        env:
+          KS_B64: ${{ secrets.CARDSMS_KEYSTORE_B64 }}
+        run: |
+          test -n "$KS_B64" || { echo "CARDSMS_KEYSTORE_B64 가 없습니다"; exit 1; }
+          echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/cardsms.jks"
+
+      - name: 테스트 + 서명된 APK
+        working-directory: android/cardsms
+        env:
+          CARDSMS_KEYSTORE_FILE: ${{ runner.temp }}/cardsms.jks
+          CARDSMS_KEYSTORE_PASSWORD: ${{ secrets.CARDSMS_KEYSTORE_PASSWORD }}
+          CARDSMS_KEY_ALIAS: ${{ secrets.CARDSMS_KEY_ALIAS }}
+          CARDSMS_KEY_PASSWORD: ${{ secrets.CARDSMS_KEY_PASSWORD }}
+        run: gradle --no-daemon --console=plain test assembleRelease
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cardsms-apk
+          path: android/cardsms/app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
+          if-no-files-found: error
