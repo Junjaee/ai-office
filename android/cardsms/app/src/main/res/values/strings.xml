@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">카드문자 전달</string>
+    <string name="load_settings">설정 파일 불러오기</string>
+    <string name="keywords_label">골라낼 단어 (쉼표로 구분)</string>
+    <string name="save">저장</string>
+    <string name="test_send">테스트 전송</string>
+    <string name="grant_sms">문자 권한 허용</string>
+    <string name="battery">배터리 최적화 제외</string>
+    <string name="refresh">기록 새로고침</string>
+    <string name="recent">최근 전송 기록</string>
 </resources>
