@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 45건, 실패 0건, 13초",
+  "summary": "신규 23건, 실패 0건, 13초",
   "counts": {
-    "new": 45,
+    "new": 23,
     "failed": 0,
-    "total": 1943
+    "total": 1966
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 45건, 실패 0건, 13초",
-    "[신규] 설움 딛고 따낸 금‥신생 종목에 선수촌 '활짝' — MBC 뉴스",
-    "[신규] '테크볼' 이준석과 리센느의 공통점 [이브닝 브리핑] — news.sbs.co.kr",
-    "[신규] [나고야 NOW]도전의 금메달 품은 테크볼 이준석 위해 체육회도 움직인다…진천선수촌 훈련 지원 방안 마련 — SPOTV NEWS",
-    "[신규] [2026 나고야] 선구자 이준석이 높인 테크볼 위상...대한체육회 \"진천선수촌 훈련 지원 방안 모색\" — 일간스포츠"
+    "신규 23건, 실패 0건, 13초",
+    "[신규] 유창한 영어실력 이준석 '누나가 영어강사라' — starnewskorea.com",
+    "[신규] 국힘 김문수·민주 이재명 등 7명 후보 등록 — 미주조선일보",
+    "[신규] 화성동탄경찰서, 방교초 일대서 어린이 교통안전 캠페인 — pressian.com",
+    "[신규] 개혁신당 이주영 \"수원정 조직위원장 지원…강요에 의한 선택 아냐\" — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35681613069,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35681613069",
-  "request_id": "cron-202609220300",
+  "run_id": 35692983502,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35692983502",
+  "request_id": "cron-202609220600",
   "trigger": "schedule",
-  "started_at": "2026-09-22T12:01:57+09:00",
+  "started_at": "2026-09-22T15:01:30+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 184건"
+      "summary": "검색어 5개에서 162건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 98건 (신규 45건) · v.daum.net 13건, mt.co.kr 12건, 시민행정신문 8건"
+      "summary": "오늘 121건 (신규 23건) · v.daum.net 17건, mt.co.kr 12건, yna.co.kr 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-22T12:02:11+09:00"
+  "updated_at": "2026-09-22T15:01:45+09:00"
 }
