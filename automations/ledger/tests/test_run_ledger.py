@@ -96,3 +96,77 @@ def test_card_detect_from_header_not_merchant():
 def test_year_boundary():
     assert mod.month_key(12, dt.date(2027, 1, 3)) == "2026-12"   # 연초에 처리한 연말 결제
     assert mod.month_key(9, dt.date(2026, 9, 10)) == "2026-09"
+
+
+# ── 라벨 규칙 ──
+import types
+
+
+class _Call:
+    def __init__(self, sink, mid, body):
+        self.sink, self.mid, self.body = sink, mid, body
+
+    def execute(self):
+        self.sink.append((self.mid, tuple(self.body["addLabelIds"])))
+        return {}
+
+
+class _Messages:
+    def __init__(self, sink):
+        self.sink = sink
+
+    def modify(self, userId, id, body):
+        return _Call(self.sink, id, body)
+
+
+class FakeGmail:
+    def __init__(self):
+        self.labeled = []
+        self._m = _Messages(self.labeled)
+
+    def users(self):
+        return self
+
+    def messages(self):
+        return self._m
+
+
+def _wire(monkeypatch, gmail, bodies, dry_run=False):
+    monkeypatch.setattr(mod, "get_services", lambda p: (gmail, object()))
+    monkeypatch.setattr(mod, "ensure_label", lambda g: "L1")
+    monkeypatch.setattr(mod, "fetch_messages", lambda g: [{"id": k} for k in bodies])
+    monkeypatch.setattr(mod, "get_body_text", lambda g, mid: bodies[mid])
+    monkeypatch.setattr(mod, "get_sheet_id", lambda s, tab: 1)
+    monkeypatch.setattr(mod, "insert_transaction", lambda *a: 6)
+    monkeypatch.setattr(mod, "dt", types.SimpleNamespace(
+        date=types.SimpleNamespace(today=lambda: dt.date(2026, 9, 22))))
+    return types.SimpleNamespace(dry_run=dry_run, token=None)
+
+
+APPROVE = _sms("[Web발신]", "현대 Amex Gold 승인", "신*재", "24,000원 일시불",
+               "09/10 12:07", "보승회관여의도", "누적4,049,905원")
+
+
+def test_unparsable_mail_is_labeled_so_it_is_not_seen_again(monkeypatch):
+    g = FakeGmail()
+    args = _wire(monkeypatch, g, {"bad": "{sms_message}", "good": APPROVE})
+    result = mod.do_work({}, args, lambda m: None)
+    assert result["counts"] == {"new": 1, "replaced": 0, "skip": 1, "failed": 0}
+    assert sorted(g.labeled) == [("bad", ("L1",)), ("good", ("L1",))]
+
+
+def test_dry_run_labels_nothing(monkeypatch):
+    g = FakeGmail()
+    args = _wire(monkeypatch, g, {"bad": "{sms_message}", "good": APPROVE}, dry_run=True)
+    mod.do_work({}, args, lambda m: None)
+    assert g.labeled == []
+
+
+def test_missing_month_tab_is_not_labeled(monkeypatch):
+    g = FakeGmail()
+    dec = _sms("[Web발신]", "현대 Amex Gold 승인", "신*재", "1,000원 일시불",
+               "12/01 10:00", "어딘가", "누적1원")
+    args = _wire(monkeypatch, g, {"dec": dec})
+    result = mod.do_work({}, args, lambda m: None)
+    assert result["lines"] == ["[대기] 월 탭 없음 2026-12"]
+    assert g.labeled == []

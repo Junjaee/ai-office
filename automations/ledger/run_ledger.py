@@ -288,14 +288,22 @@ def do_work(cfg, args, progress):
     today = dt.date.today()
     added = removed = skipped = 0
     lines, sheet_ids = [], {}
+
+    def mark_done(mid):
+        gmail.users().messages().modify(
+            userId="me", id=mid, body={"addLabelIds": [label_id]}).execute()
+
     for mid, txn in parsed:
         if not txn:
             skipped += 1
+            # 파싱 못 한 메일도 라벨 — 다음 실행(과 Worker 의 1분 감시)이 같은 메일을 다시 집지 않게
+            if not args.dry_run:
+                mark_done(mid)
             continue
         tab = MONTH_TAB.get(month_key(txn["month"], today))
         if not tab:
             lines.append(f"[대기] 월 탭 없음 {month_key(txn['month'], today)}")
-            continue
+            continue                      # 라벨 없이 둔다 — 탭이 생기면 처리
         if args.dry_run:
             lines.append(f"[예정:{txn['kind']}] {txn['month']}/{txn['day']} "
                          f"{txn['detail']} {txn['amount']:,}원 ({txn['card']})")
@@ -317,8 +325,7 @@ def do_work(cfg, args, progress):
             added += 1
             lines.append(f"[추가] {tab} {txn['month']}/{txn['day']} "
                          f"{txn['detail']} {txn['amount']:,}원 ({classify_item(txn['detail'])})")
-        gmail.users().messages().modify(
-            userId="me", id=mid, body={"addLabelIds": [label_id]}).execute()
+        mark_done(mid)
         progress(f"기록 {added + removed}건")
 
     collect_txt = f"메일 {len(msgs)}건 확인, 결제 {added + removed}건"
