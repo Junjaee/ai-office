@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 13초",
+  "summary": "신규 26건, 실패 0건, 10초",
   "counts": {
-    "new": 23,
+    "new": 26,
     "failed": 0,
-    "total": 1966
+    "total": 1992
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 13초",
-    "[신규] 유창한 영어실력 이준석 '누나가 영어강사라' — starnewskorea.com",
-    "[신규] 국힘 김문수·민주 이재명 등 7명 후보 등록 — 미주조선일보",
-    "[신규] 화성동탄경찰서, 방교초 일대서 어린이 교통안전 캠페인 — pressian.com",
-    "[신규] 개혁신당 이주영 \"수원정 조직위원장 지원…강요에 의한 선택 아냐\" — 뉴시스"
+    "신규 26건, 실패 0건, 10초",
+    "[신규] [윤웅의 나고야, 1초의 시선] 곡면에 꽂힌 이준석의 테크볼 — 국민일보",
+    "[신규] 테크볼 '첫 금메달' 이준석 효과…대한체육회, 선수촌 훈련 추진 - 머니투데이 — mt.co.kr",
+    "[신규] “뺨 때렸더니 꿈 아니더라” 테크볼 첫 AG 금메달리스트 이준석 — 스포츠경향",
+    "[신규] \"테크볼도 선수촌에서\"…대한체육회, 훈련지원 추진 — v.daum.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35692983502,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35692983502",
-  "request_id": "cron-202609220600",
+  "run_id": 35707988871,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35707988871",
+  "request_id": "cron-202609220900",
   "trigger": "schedule",
-  "started_at": "2026-09-22T15:01:30+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-09-22T18:01:35+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 162건"
+      "summary": "검색어 5개에서 147건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 121건 (신규 23건) · v.daum.net 17건, mt.co.kr 12건, yna.co.kr 8건"
+      "summary": "오늘 147건 (신규 26건) · v.daum.net 24건, mt.co.kr 13건, 연합뉴스 10건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-22T15:01:45+09:00"
+  "updated_at": "2026-09-22T18:01:46+09:00"
 }
