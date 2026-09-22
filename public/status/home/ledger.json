@@ -3,36 +3,36 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 취소 0건, 건너뜀 1건, 실패 0건, 1초",
+  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 2초",
   "counts": {
     "new": 0,
     "replaced": 0,
-    "skip": 1,
+    "skip": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 0건, 취소 0건, 건너뜀 1건, 실패 0건, 1초"
+    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 2초"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 35704042041,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35704042041",
-  "request_id": "cron-202609220817",
+  "run_id": 35724733281,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35724733281",
+  "request_id": "cron-202609221200",
   "trigger": "schedule",
-  "started_at": "2026-09-22T17:18:21+09:00",
-  "duration_sec": 1,
+  "started_at": "2026-09-22T21:02:03+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 1건 확인, 결제 0건"
+      "summary": "메일 0건 확인, 결제 0건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 0 · 취소 0 · 건너뜀 1"
+      "summary": "추가 0 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-22T17:18:23+09:00"
+  "updated_at": "2026-09-22T21:02:06+09:00"
 }
