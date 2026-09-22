@@ -77,3 +77,4 @@ python -m pytest -q automations
 - `automations/insta/` 인스타 게시글(콘텐츠 제작·게시형의 표준 구현: 소재→글→카드→업로드, 주제 프로필·계정별 자동화). 새 계정·새 플랫폼은 `automations/insta/README.md` 참고.
 - `automations/` 파이썬 자동화와 공통 모듈, `.github/workflows/` 실행 워크플로, `public/status/<사무실>/` 상태 파일. `history/<사무실>/<자동화>/<YYYY-MM>.jsonl` 실행 일지(영구 기록) — `report()` 가 실행마다 한 줄씩 더하고, 지난 기록 복원은 `python automations/common/history_log.py --backfill`(여러 번 돌려도 같은 결과). 화면의 실행 이력은 이 일지와 GitHub 날짜별 실행 목록을 합쳐 보여 준다(`/api/history`).
 - `scripts/npm.sh` npm 명령을 드라이브 밖 로컬 작업 폴더에서 돌리는 도구. `scripts/npm.cmd` 는 명령 프롬프트·미리보기 도구(`.claude/launch.json`)용 — 그냥 `bash` 라고 부르면 WSL 이 잡히므로 Git Bash 를 찾아 npm.sh 를 부른다. `templates/automation/` 새 자동화 뼈대. `.claude/skills/new-automation/` 새 자동화 절차.
+- `android/cardsms/` 카드문자 전달 안드로이드 앱(MacroDroid 대체, 2026-09-22). 문자를 지메일 `[카드SMS]` 로 넣고 Worker 가 1분마다 확인해 가계부를 깨운다. 빌드는 `scripts/gradle.sh`(드라이브 밖) 또는 `cardsms-app.yml`(서명 APK). 설치·재발급은 `android/cardsms/README.md`.
