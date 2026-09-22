@@ -3,31 +3,27 @@
   "dept": "partner",
   "ok": true,
   "running": false,
-  "summary": "주말 일정 6건, 전송 1건, 1초",
+  "summary": "주말 일정 0건, 전송 1건, 4초",
   "counts": {
-    "events": 6,
+    "events": 0,
     "sent": 1
   },
   "next_run": "매주 목 17:00",
   "log": [
-    "주말 일정 6건, 전송 1건, 1초",
-    "[9/12] 행사 일정",
-    "[9/12] 동탄4동 청계온마을 축제",
-    "[9/12] 동탄8동 지역축제",
-    "[9/12] 동탄맨 콘텐츠 촬영"
+    "주말 일정 0건, 전송 1건, 4초"
   ],
   "link": "",
-  "run_id": 34568074426,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/34568074426",
-  "request_id": "req-20260911145927-send3",
-  "trigger": "manual",
-  "started_at": "2026-09-11T14:59:47+09:00",
-  "duration_sec": 1,
+  "run_id": 35197403551,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35197403551",
+  "request_id": "cron-202609170800",
+  "trigger": "schedule",
+  "started_at": "2026-09-17T17:01:21+09:00",
+  "duration_sec": 4,
   "tasks": [
     {
       "id": "fetch",
       "status": "done",
-      "summary": "토 5건 · 일 1건"
+      "summary": "토 0건 · 일 0건"
     },
     {
       "id": "send",
@@ -36,5 +32,5 @@
     }
   ],
   "id": "weekend",
-  "updated_at": "2026-09-11T14:59:50+09:00"
+  "updated_at": "2026-09-17T17:01:26+09:00"
 }

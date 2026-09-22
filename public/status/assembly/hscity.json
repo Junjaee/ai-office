@@ -3,35 +3,36 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 전송 0건, 실패 0건, 13초",
+  "summary": "신규 1건, 전송 1건, 실패 0건, 40초",
   "counts": {
-    "new": 0,
-    "sent": 0,
+    "new": 1,
+    "sent": 1,
     "failed": 0
   },
-  "next_run": "매일 08:00·18:00",
+  "next_run": "매일 09:00",
   "log": [
-    "신규 0건, 전송 0건, 실패 0건, 13초"
+    "신규 1건, 전송 1건, 실패 0건, 40초",
+    "[신규] [도정소식] [추석 명절 종합대책] ① 민생안정"
   ],
   "link": "",
-  "run_id": 35170909739,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35170909739",
-  "request_id": "req-20260917103145-x37c",
-  "trigger": "manual",
-  "started_at": "2026-09-17T10:32:13+09:00",
-  "duration_sec": 13,
+  "run_id": 35670165309,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35670165309",
+  "request_id": "cron-202609220000",
+  "trigger": "schedule",
+  "started_at": "2026-09-22T09:02:06+09:00",
+  "duration_sec": 40,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 0건"
+      "summary": "신규 1건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "0건 발송"
+      "summary": "1건 발송, 무음 0건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-09-17T10:32:27+09:00"
+  "updated_at": "2026-09-22T09:02:48+09:00"
 }

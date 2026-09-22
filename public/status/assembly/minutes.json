@@ -3,40 +3,36 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 확정본 교체 1건, 실패 0건, PDF없음 0건, 건너뜀 591건, 6.1분",
+  "summary": "신규 0건, 확정본 교체 0건, 실패 0건, PDF없음 0건, 건너뜀 649건, 5.4분",
   "counts": {
-    "new": 3,
-    "replaced": 1,
+    "new": 0,
+    "replaced": 0,
     "failed": 0,
-    "total": 5915
+    "total": 5942
   },
   "next_run": "없음 (▶ 시작으로 수동 실행)",
   "log": [
-    "신규 3건, 확정본 교체 1건, 실패 0건, PDF없음 0건, 건너뜀 591건, 6.1분",
-    "[신규] 제22대/국회본회의/제22대국회 제439회(정기회) 제8차 국회본회의(전체회의) (2026.09.14.).pdf",
-    "[신규] 제22대/특별위원회/대법관(김성수)임명동의에관한인사청문특별위원회/제22대국회 제439회(정기회) 제2차 대법관(김성수)임명동의에관한인사청문특별위원회(전체회의) (2026.09.14.).pdf",
-    "[신규] 제22대/상임위원회/보건복지위원회/제22대국회 제439회(정기회) 제1차 보건복지위원회(전체회의) (2026.09.11.).pdf",
-    "[교체] 제22대/상임위원회/법제사법위원회/제22대국회 제437회(임시회) 제8차 법제사법위원회(법안심사제1소위원회) (2026.07.27.).pdf"
+    "신규 0건, 확정본 교체 0건, 실패 0건, PDF없음 0건, 건너뜀 649건, 5.4분"
   ],
   "link": "https://drive.google.com/drive/folders/10G_Rbp4a_P0UayGqAcTyQPyv6ohqOqpI",
-  "run_id": 35170961094,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35170961094",
-  "request_id": "req-20260917103232-4rhx",
+  "run_id": 35565753619,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35565753619",
+  "request_id": "req-20260921144529-p7fk",
   "trigger": "manual",
-  "started_at": "2026-09-17T10:33:07+09:00",
-  "duration_sec": 398,
+  "started_at": "2026-09-21T14:46:15+09:00",
+  "duration_sec": 335,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 3건"
+      "summary": "신규 0건"
     },
     {
       "id": "replace",
       "status": "done",
-      "summary": "교체 1건"
+      "summary": "교체 0건"
     }
   ],
   "id": "minutes",
-  "updated_at": "2026-09-17T10:39:48+09:00"
+  "updated_at": "2026-09-21T14:51:52+09:00"
 }
