@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { MAIL_JOB, SCHEDULES, cronRequestId, dueJobs, matchesCron } from "../worker/schedule.ts";
+import { LEDGER_WATCH_JOB, MAIL_JOB, SCHEDULES, cronRequestId, dueJobs, matchesCron } from "../worker/schedule.ts";
 // Node 의 타입 제거 실행은 확장자 없는 상대 import 를 못 읽으므로 사무실 파일을 직접 읽는다
 import { workspace as assembly } from "../app/workspaces/assembly.ts";
 import { workspace as home } from "../app/workspaces/home.ts";
@@ -110,4 +110,11 @@ test("카드의 예약 문구와 실제 예약표가 어긋나지 않는다", ()
         `${ws.id}/${def.id}: 카드에 "${def.schedule}" 이라 적혀 있는데 worker/schedule.ts 에 예약이 없다`);
     }
   }
+});
+
+test("카드 문자 감시는 예약표 밖에서 ledger.yml 을 깨운다 (6시간 예약은 그대로)", () => {
+  assert.equal(LEDGER_WATCH_JOB.workflow, "ledger.yml");
+  assert.equal(LEDGER_WATCH_JOB.cron, "");
+  assert.ok(LEDGER_WATCH_JOB.note);
+  assert.ok(SCHEDULES.some((j) => j.workflow === "ledger.yml"), "6시간 예약이 사라졌다");
 });

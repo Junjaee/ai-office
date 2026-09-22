@@ -4,8 +4,11 @@ import handler from "vinext/server/app-router-entry";
 import { WORKSPACES } from "../app/workspaces/index";
 import { GitHubClient } from "./github.ts";
 import { createRunApiStores, handleHistory, handleReview, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
-import { MAIL_JOB, SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
-import { accessToken, coolEnough, googleCreds, newMailCount } from "./gmail.ts";
+import { LEDGER_WATCH_JOB, MAIL_JOB, SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
+import {
+  LEDGER_COOLDOWN_MS, LEDGER_WATCH_QUERY, MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY,
+  accessToken, coolEnough, googleCreds, newMailCount, shouldWake,
+} from "./gmail.ts";
 
 interface Env {
   ASSETS: Fetcher;
@@ -36,19 +39,20 @@ function depsFor(env: Env): RunApiDeps {
   };
 }
 
-/** 마지막으로 메일 워크플로를 깨운 시각 — 실행이 도는 동안 또 깨우지 않는다(같은 isolate 안에서만 기억) */
+/** 마지막으로 깨운 시각 — 실행이 도는 동안 또 깨우지 않는다(같은 isolate 안에서만 기억) */
 let lastMailDispatchMs: number | null = null;
+let lastLedgerDispatchMs: number | null = null;
 
-/** 새 상임위 메일이 있는지. 토큰이 없거나 확인에 실패하면 false(예약 처리는 그대로 진행한다). */
-async function hasNewCommitteeMail(env: Env, nowMs: number): Promise<boolean> {
+/** 검색어에 맞는 미처리 메일 수. 토큰이 없거나 실패하면 0(예약 처리는 그대로 진행한다). */
+async function unreadCount(env: Env, query: string, nowMs: number): Promise<number> {
   const creds = googleCreds(env as unknown as Record<string, unknown>);
-  if (!creds || !coolEnough(lastMailDispatchMs, nowMs)) return false;
+  if (!creds) return 0;
   try {
     const token = await accessToken(creds, fetch, nowMs);
-    return (await newMailCount(token, fetch)) > 0;
+    return await newMailCount(token, fetch, query);
   } catch (err) {
     console.error(`메일 확인 실패 — ${err instanceof Error ? err.message : String(err)}`);
-    return false;
+    return 0;
   }
 }
 
@@ -101,8 +105,19 @@ const worker = {
     const now = new Date(controller.scheduledTime);
     const jobs = dueJobs(SCHEDULES, now);
 
-    // 상임위 메일은 시각이 아니라 "새 메일이 왔을 때" 돈다 — 매분 지메일만 가볍게 확인한다
-    if (await hasNewCommitteeMail(env, now.getTime())) jobs.push(MAIL_JOB);
+    const nowMs = now.getTime();
+    // 상임위 메일·카드 문자는 시각이 아니라 "새 메일이 왔을 때" 돈다 — 매분 지메일만 가볍게 확인한다
+    // (쉬는 시간 안이면 지메일을 아예 부르지 않는다)
+    if (coolEnough(lastMailDispatchMs, nowMs, MAIL_COOLDOWN_MS)
+        && shouldWake(await unreadCount(env, MAIL_WATCH_QUERY, nowMs), lastMailDispatchMs, nowMs, MAIL_COOLDOWN_MS)) {
+      jobs.push(MAIL_JOB);
+    }
+    // 6시간 예약과 같은 분이면 예약 쪽 하나만 깨운다
+    if (!jobs.some((j) => j.workflow === LEDGER_WATCH_JOB.workflow)
+        && coolEnough(lastLedgerDispatchMs, nowMs, LEDGER_COOLDOWN_MS)
+        && shouldWake(await unreadCount(env, LEDGER_WATCH_QUERY, nowMs), lastLedgerDispatchMs, nowMs, LEDGER_COOLDOWN_MS)) {
+      jobs.push(LEDGER_WATCH_JOB);
+    }
 
     if (jobs.length === 0) return;
 
@@ -112,6 +127,8 @@ const worker = {
       try {
         await github.dispatch(job.workflow, { request_id: requestId, ...(job.inputs ?? {}) });
         if (job.workflow === MAIL_JOB.workflow) lastMailDispatchMs = now.getTime();
+        // 6시간 예약으로 깨웠을 때도 기록 — 그 뒤 10분은 감시가 쉰다
+        if (job.workflow === LEDGER_WATCH_JOB.workflow) lastLedgerDispatchMs = now.getTime();
         console.log(`예약 실행 요청: ${job.workflow} (${job.note}) ${requestId}`);
       } catch (err) {
         // 하나가 실패해도 나머지는 계속한다. 다음 분에 다시 기회가 온다

@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY, accessToken, coolEnough, countMessages, googleCreds,
-  newMailCount, resetTokenCache,
+  LEDGER_COOLDOWN_MS, LEDGER_WATCH_QUERY, MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY, accessToken, coolEnough,
+  countMessages, googleCreds, newMailCount, resetTokenCache, shouldWake,
 } from "../worker/gmail.ts";
 
 const CREDS = { clientId: "id", clientSecret: "secret", refreshToken: "refresh" };
@@ -91,4 +91,18 @@ test("새 메일이 없으면 0", async () => {
 test("지메일 오류는 예외", async () => {
   const impl = fakeFetch([{ status: 403, body: {} }]);
   await assert.rejects(() => newMailCount("TOK", impl), /지메일 확인 실패 \(HTTP 403\)/);
+});
+
+test("카드 문자 검색어: [카드SMS] 제목이고 가계부가 라벨을 붙인 것은 뺀다", () => {
+  assert.match(LEDGER_WATCH_QUERY, /subject:"\[카드SMS\]"/);
+  assert.match(LEDGER_WATCH_QUERY, /-label:카드동기화완료/);
+  assert.match(LEDGER_WATCH_QUERY, /newer_than:2d/);
+});
+
+test("가계부 깨우기: 새 메일이 있고 쉬는 시간이 지났을 때만 (쉬는 시간 10분)", () => {
+  assert.equal(LEDGER_COOLDOWN_MS, 10 * 60 * 1000);
+  assert.equal(shouldWake(1, null, 1_000, LEDGER_COOLDOWN_MS), true);
+  assert.equal(shouldWake(0, null, 1_000, LEDGER_COOLDOWN_MS), false);
+  assert.equal(shouldWake(3, 1_000, 1_000 + LEDGER_COOLDOWN_MS - 1, LEDGER_COOLDOWN_MS), false);
+  assert.equal(shouldWake(3, 1_000, 1_000 + LEDGER_COOLDOWN_MS, LEDGER_COOLDOWN_MS), true);
 });

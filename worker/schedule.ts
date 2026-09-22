@@ -29,6 +29,7 @@ export const SCHEDULES: ScheduledJob[] = [
   { workflow: "ledger.yml", cron: "0 */6 * * *", note: "가계부 — 6시간마다(KST 09·15·21·03)" },
   { workflow: "hscity.yml", cron: "0 0 * * *", note: "화성시 — KST 09:00 (사용자 결정 2026-09-17)" },
   { workflow: "weekend.yml", cron: "0 8 * * 4", note: "주말 일정 — 목 KST 17:00" },
+  { workflow: "stock.yml", cron: "30 21 * * 1-5", note: "주식 신호 — 화~토 KST 06:30 (미국 장 마감 뒤, 사용자 결정 2026-09-22)" },
   // 인스타(후보 뽑기·게시 확인)는 예약에서 뺐다 — 사이트 ▶ 시작으로만 돈다 (사용자 결정 2026-09-17)
 ];
 
@@ -82,6 +83,13 @@ export const MAIL_JOB: ScheduledJob = {
   workflow: "mail.yml",
   cron: "",
   note: "상임위 메일 — 새 메일이 오면(1분마다 확인)",
+};
+
+/** 카드 문자가 오면 깨울 워크플로 (예약표의 6시간 항목과 별개. 같은 분에 둘 다면 하나만 — worker/index.ts) */
+export const LEDGER_WATCH_JOB: ScheduledJob = {
+  workflow: "ledger.yml",
+  cron: "",
+  note: "가계부 — 새 카드 문자가 오면(1분마다 확인)",
 };
 
 /** 예약 실행의 요청 번호 — 같은 분에 두 번 깨워도 같은 값이라 화면에서 한 건으로 보인다. */

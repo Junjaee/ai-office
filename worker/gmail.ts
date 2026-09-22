@@ -14,6 +14,18 @@ export const MAIL_WATCH_QUERY = 'from:assembly.go.kr -label:"재경위" -label:"
 /** 실행이 이미 돌고 있는데 또 깨우지 않도록 쉬는 시간 */
 export const MAIL_COOLDOWN_MS = 3 * 60 * 1000;
 
+/** 카드 승인 문자(앱이 넣은 [카드SMS] 메일) 중 가계부가 아직 라벨을 안 붙인 것. 파이썬은 파싱 못 한 것에도 라벨을 붙인다. */
+export const LEDGER_WATCH_QUERY = 'subject:"[카드SMS]" -label:카드동기화완료 newer_than:2d';
+
+/** 카드 문자는 쇼핑 한 번에 여러 통 오므로 10분 안의 것은 한 번에 처리한다(실행 분 절약, 실패 반복도 하루 144회로 제한) */
+export const LEDGER_COOLDOWN_MS = 10 * 60 * 1000;
+
+/** 새 메일이 있고 쉬는 시간도 지났을 때만 깨운다 */
+export function shouldWake(count: number, lastDispatchMs: number | null, nowMs: number,
+                           cooldownMs: number): boolean {
+  return count > 0 && coolEnough(lastDispatchMs, nowMs, cooldownMs);
+}
+
 export type GoogleCreds = { clientId: string; clientSecret: string; refreshToken: string };
 export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 
