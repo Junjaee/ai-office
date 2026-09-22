@@ -93,9 +93,9 @@ def test_telegram_env_picks_named_bot_and_chat(monkeypatch):
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", TOKEN)
     monkeypatch.setenv("TELEGRAM_CHAT_ID", "42")
     monkeypatch.setenv("NOTICE_530_BOT_TOKEN", "999:NOTICE")
-    monkeypatch.setenv("TELEGRAM_CHAT_ID_MAIL", "77")
-    assert telegram_env("TELEGRAM_CHAT_ID_MAIL", "NOTICE_530_BOT_TOKEN") == ("999:NOTICE", "77")
+    monkeypatch.setenv("NOTICE_530_CHAT_ID", "77")
+    assert telegram_env("NOTICE_530_CHAT_ID", "NOTICE_530_BOT_TOKEN") == ("999:NOTICE", "77")
 
     monkeypatch.delenv("NOTICE_530_BOT_TOKEN")
     with pytest.raises(RuntimeError, match="NOTICE_530_BOT_TOKEN"):
-        telegram_env("TELEGRAM_CHAT_ID_MAIL", "NOTICE_530_BOT_TOKEN")
+        telegram_env("NOTICE_530_CHAT_ID", "NOTICE_530_BOT_TOKEN")

@@ -43,7 +43,7 @@ AUTOMATION_ID = "mail"
 AUTOMATION_NAME = "상임위 메일"
 DEPT = "qa"
 HERE = Path(__file__).resolve().parent
-CHAT_KEY = "TELEGRAM_CHAT_ID_MAIL"        # 받는 사람이 주말 알림과 다르다
+CHAT_KEY = "NOTICE_530_CHAT_ID"           # 530호 알림 공용 대화방 (메일 전용이 아니다, 2026-09-22)
 TOKEN_KEY = "NOTICE_530_BOT_TOKEN"        # 보내는 봇 = @notice_530_bot (530호 알림 공용).
                                           # 캘린더 봇(TELEGRAM_BOT_TOKEN)은 주말 일정 전송 전용 (사용자 결정 2026-09-17)
 

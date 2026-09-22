@@ -1,5 +1,5 @@
 # 상임위 메일 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
-#   GOOGLE_*(공용 토큰, gmail.modify 권한 포함) · TELEGRAM_BOT_TOKEN · TELEGRAM_CHAT_ID_MAIL(받는 사람)
+#   GOOGLE_*(공용 토큰, gmail.modify 권한 포함) · NOTICE_530_BOT_TOKEN · NOTICE_530_CHAT_ID(530호 알림 공용 대화방)
 
 # 지켜볼 위원회. label = 지메일에 붙일 라벨 이름(없으면 만든다) = 받은편지함에서 옮겨 갈 폴더 이름
 #   query 는 지메일 검색어 그대로. {a b} 는 "a 또는 b" 라는 뜻이다.

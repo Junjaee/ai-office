@@ -19,7 +19,8 @@ def telegram_env(chat_key: str = "TELEGRAM_CHAT_ID",
 
     보내는 봇과 받는 사람이 자동화마다 다르므로 환경변수 이름을 골라 쓴다
     (주말 일정=TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID — 캘린더 전송 전용 봇,
-     상임위 메일=NOTICE_530_BOT_TOKEN/TELEGRAM_CHAT_ID_MAIL — @notice_530_bot, 530호 알림 공용).
+     530호 알림=NOTICE_530_BOT_TOKEN/NOTICE_530_CHAT_ID — @notice_530_bot, 의원실 알림 공용).
+    530호 알림은 메일뿐 아니라 앞으로 만드는 알림들이 함께 쓴다(사용자 결정 2026-09-22).
     폴백은 없다 — 엉뚱한 봇·사람으로 갈 수 있다.
     """
     token = (os.environ.get(token_key) or "").strip()

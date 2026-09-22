@@ -52,7 +52,8 @@
 - `GOOGLE_CLIENT_ID` · `GOOGLE_CLIENT_SECRET` · `GOOGLE_REFRESH_TOKEN` 공용 구글 토큰(`gmail.modify` 권한 포함)
 - `NOTICE_530_BOT_TOKEN` 보내는 봇 — **@notice_530_bot**(530호 알림 공용). 캘린더 봇(`TELEGRAM_BOT_TOKEN`)은 주말 일정 전송에만 쓴다(사용자 결정 2026-09-17).
   앞으로 530호 알림 자동화를 더 만들면 같은 봇을 쓰고, 받는 사람만 `TELEGRAM_CHAT_ID_*` 로 나눈다
-- `TELEGRAM_CHAT_ID_MAIL` 받는 사람의 대화방 번호 — 주말 일정 알림(`TELEGRAM_CHAT_ID`)과 **다른 사람**이라 따로 둔다
+- `NOTICE_530_CHAT_ID` 받는 대화방 — **530호 알림 공용**(메일뿐 아니라 앞으로 만드는 알림도 같은 곳으로).
+  주말 일정 알림(`TELEGRAM_CHAT_ID`)과는 받는 사람이 달라 따로 둔다
 
 ## 시험해 보기
 

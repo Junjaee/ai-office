@@ -161,7 +161,7 @@ def test_finds_notifies_and_files_new_mail(monkeypatch):
     # 두 위원회를 합쳐 받은 시각 순(오래된 것 먼저)으로 한 번에 알린다
     assert len(sent.sent) == 1
     # 캘린더 봇이 아니라 메일 전용 봇으로 보낸다 (사용자 결정 2026-09-17)
-    assert sent.asked == [("TELEGRAM_CHAT_ID_MAIL", "NOTICE_530_BOT_TOKEN")]
+    assert sent.asked == [("NOTICE_530_CHAT_ID", "NOTICE_530_BOT_TOKEN")]
     chat, text = sent.sent[0]
     assert chat == "9999"
     assert text.index("예결위 자료") < text.index("의사일정(안) 송부")

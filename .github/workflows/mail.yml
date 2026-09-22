@@ -52,7 +52,7 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
           NOTICE_530_BOT_TOKEN: ${{ secrets.NOTICE_530_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID_MAIL: ${{ secrets.TELEGRAM_CHAT_ID_MAIL }}
+          NOTICE_530_CHAT_ID: ${{ secrets.NOTICE_530_CHAT_ID }}
           REQUEST_ID: ${{ inputs.request_id }}
           PYTHONUTF8: "1"
         run: |
