@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 14초",
+  "summary": "신규 6건, 실패 0건, 12초",
   "counts": {
-    "new": 4,
+    "new": 6,
     "failed": 0,
-    "total": 2021
+    "total": 2027
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 14초",
-    "[신규] 모바일 도움말의 스크롤 영역, 엔포커 환전 화면 사용법 — Calgary Roughnecks",
-    "[신규] [엠빅뉴스] 활짝 웃은 손흥민·이강인…모레노호 첫 공개훈련 분위기는? — MBC 뉴스",
-    "[신규] 유시민 “文·조국 공격, 李 지지율만 하락” [정치오늘] — sisaon.co.kr",
-    "[신규] 심벌 조합은 어디서 확인하나요? 파워볼 한국 세금 도움말 — Histoire pour tous"
+    "신규 6건, 실패 0건, 12초",
+    "[신규] 尹 “이 XX야, 네가 책임져!”…9시간 술친구 장제원에 온 전화 — 중앙일보, v.daum.net",
+    "[신규] 조 1위, 엄청난 반응속도를 보여준 김승원 [수영 여자 배영 50m 예선] — sbs.co.kr",
+    "[신규] 이준석 경마장역 디지털 시대 웹사이트 구축: 기초 지식과 고급 기술 — Calgary Roughnecks",
+    "[신규] 257회 — MBC"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35764405769,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35764405769",
-  "request_id": "cron-202609221800",
+  "run_id": 35783965121,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35783965121",
+  "request_id": "cron-202609222100",
   "trigger": "schedule",
-  "started_at": "2026-09-23T03:01:56+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-09-23T06:01:25+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 140건"
+      "summary": "검색어 5개에서 141건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 4건) · Calgary Roughnecks 2건, 연합뉴스 2건, Histoire pour tous 1건"
+      "summary": "오늘 17건 (신규 6건) · Calgary Roughnecks 3건, 연합뉴스 2건, Histoire pour tous 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-23T03:02:11+09:00"
+  "updated_at": "2026-09-23T06:01:39+09:00"
 }
