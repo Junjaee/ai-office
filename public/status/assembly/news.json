@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 24건, 실패 0건, 9초",
+  "summary": "신규 22건, 실패 0건, 13초",
   "counts": {
-    "new": 24,
+    "new": 22,
     "failed": 0,
-    "total": 2099
+    "total": 2121
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 24건, 실패 0건, 9초",
-    "[신규] 이준석 의원실, 동탄4·6·7·8·9동 주민 1,019명 대상 생활시설 주민조사 실시 — 수도권지역뉴스",
-    "[신규] 황선우의 더위 탈출법, 그냥 합시다! [스브스상담소] — sbs.co.kr",
-    "[신규] 이준석 ‘축구 레전드 푸욜에게 받는 축하’[포토] — xportsnews.com",
-    "[신규] '대법관 재제청' 요청 거부…\"헌법적 근거 없어\" — news.sbs.co.kr"
+    "신규 22건, 실패 0건, 13초",
+    "[신규] 명지대 미래교육원 이준석, 아시안게임 테크볼 금메달…이보미는 종합격투기 동메달 — 아시아투데이",
+    "[신규] [조원C&I] 차기 대선 후보 적합도 한동훈 18.1%·김민석 14.8%·오세훈 12.6% — 폴리뉴스 Polinews",
+    "[신규] [野圈의 길을 묻다①] 유승민 “탄핵 넘어 통합·혁신으로…보수, 다시 국민 선택받아야” — v.daum.net",
+    "[신규] 연습량이 느껴지는 받아치기! 3게임도 승리하는 임종훈 [탁구 조별예선 대한민국 vs 예멘] — sbs.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35824786305,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35824786305",
-  "request_id": "cron-202609230600",
+  "run_id": 35840384990,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35840384990",
+  "request_id": "cron-202609230900",
   "trigger": "schedule",
-  "started_at": "2026-09-23T15:00:57+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-09-23T18:00:50+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 113건"
+      "summary": "검색어 5개에서 110건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 89건 (신규 24건) · news1.kr 10건, v.daum.net 10건, 뉴시스 7건"
+      "summary": "오늘 111건 (신규 22건) · v.daum.net 16건, news1.kr 10건, 뉴스1 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-23T15:01:08+09:00"
+  "updated_at": "2026-09-23T18:01:03+09:00"
 }
