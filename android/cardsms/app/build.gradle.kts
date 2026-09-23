@@ -8,6 +8,11 @@ plugins {
 // 서명: CI 가 GitHub Secrets 를 환경변수로 준다. 없으면(로컬) debug 키로 서명해 설치는 되게 한다.
 val keystoreFile: String? = System.getenv("CARDSMS_KEYSTORE_FILE")
 
+// 구글 OAuth 클라이언트(설치형 앱용). 저장소에는 없고 빌드 때만 환경변수로 들어온다
+// (CI = GitHub Secrets, 로컬 = scripts/gradle.sh 가 개인 폴더의 client_secret.json 에서 읽음).
+val googleClientId: String = System.getenv("CARDSMS_GOOGLE_CLIENT_ID") ?: ""
+val googleClientSecret: String = System.getenv("CARDSMS_GOOGLE_CLIENT_SECRET") ?: ""
+
 android {
     namespace = "dev.aioffice.cardsms"
     compileSdk = 34
@@ -16,9 +21,13 @@ android {
         applicationId = "dev.aioffice.cardsms"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
+        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"$googleClientId\"")
+        buildConfigField("String", "GOOGLE_CLIENT_SECRET", "\"$googleClientSecret\"")
     }
+
+    buildFeatures { buildConfig = true }
 
     signingConfigs {
         create("release") {

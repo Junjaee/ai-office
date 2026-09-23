@@ -7,24 +7,41 @@
         <TextView android:id="@+id/status" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:textSize="15sp" android:lineSpacingExtra="4dp" />
 
-        <Button android:id="@+id/loadSettings" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" android:text="@string/load_settings" />
+        <Button android:id="@+id/connect" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:text="@string/connect" />
         <Button android:id="@+id/grantSms" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/grant_sms" />
         <Button android:id="@+id/battery" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="@string/battery" />
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" android:text="@string/keywords_label" />
+            android:layout_marginTop="20dp" android:text="@string/senders" android:textStyle="bold" android:textSize="16sp" />
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <EditText android:id="@+id/senderInput" android:layout_width="0dp" android:layout_weight="1.2"
+                android:layout_height="wrap_content" android:inputType="phone" android:hint="@string/sender_hint" />
+            <EditText android:id="@+id/memoInput" android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:inputType="text" android:hint="@string/memo_hint" />
+            <Button android:id="@+id/addSender" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/add" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/senderList" android:orientation="vertical"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+
+        <CheckBox android:id="@+id/forwardAll" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" android:text="@string/forward_all" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="@string/keywords_label" />
         <EditText android:id="@+id/keywords" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:inputType="text" />
-        <Button android:id="@+id/save" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="@string/save" />
-        <Button android:id="@+id/testSend" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="@string/test_send" />
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <Button android:id="@+id/save" android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="@string/save" />
+            <Button android:id="@+id/testSend" android:layout_width="0dp" android:layout_weight="1"
+                android:layout_height="wrap_content" android:text="@string/test_send" />
+        </LinearLayout>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" android:text="@string/recent" android:textStyle="bold" />
+            android:layout_marginTop="16dp" android:text="@string/recent" android:textStyle="bold" android:textSize="16sp" />
         <TextView android:id="@+id/log" android:layout_width="match_parent" android:layout_height="wrap_content"
             android:fontFamily="monospace" android:textSize="12sp" />
         <Button android:id="@+id/refresh" android:layout_width="match_parent" android:layout_height="wrap_content"

@@ -33,5 +33,13 @@ MSYS_NO_PATHCONV=1 robocopy "$(cygpath -w "$REPO/android/cardsms")" "$(cygpath -
 if [ "$rc" -ge 8 ]; then echo "소스 복사 실패 (robocopy 코드 $rc)" >&2; exit "$rc"; fi
 printf 'sdk.dir=%s\n' "$(cygpath -m "$ANDROID_HOME")" > "$WORK/local.properties"
 
+# 구글 OAuth 클라이언트 값(설치형 앱용)을 개인 폴더의 client_secret.json 에서 읽어 빌드에 넣는다(화면에 찍지 않는다)
+CS="$REPO/ai-home/01_가계부/client_secret.json"
+if [ -f "$CS" ]; then
+  eval "$(python -c "import json,sys;d=json.load(open(sys.argv[1],encoding='utf-8'));d=d.get('installed') or d.get('web');print('export CARDSMS_GOOGLE_CLIENT_ID=%s CARDSMS_GOOGLE_CLIENT_SECRET=%s'%(d['client_id'],d['client_secret']))" "$CS")"
+else
+  echo "  · 주의: $CS 가 없어 구글 연결 버튼이 동작하지 않는 빌드가 됩니다" >&2
+fi
+
 cd "$WORK"
 exec "$GRADLE_HOME/bin/gradle" --no-daemon -q --console=plain "$cmd" "$@"
