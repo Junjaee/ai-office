@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 22건, 실패 0건, 13초",
+  "summary": "신규 10건, 실패 0건, 15초",
   "counts": {
-    "new": 22,
+    "new": 10,
     "failed": 0,
-    "total": 2121
+    "total": 2131
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 22건, 실패 0건, 13초",
-    "[신규] 명지대 미래교육원 이준석, 아시안게임 테크볼 금메달…이보미는 종합격투기 동메달 — 아시아투데이",
-    "[신규] [조원C&I] 차기 대선 후보 적합도 한동훈 18.1%·김민석 14.8%·오세훈 12.6% — 폴리뉴스 Polinews",
-    "[신규] [野圈의 길을 묻다①] 유승민 “탄핵 넘어 통합·혁신으로…보수, 다시 국민 선택받아야” — v.daum.net",
-    "[신규] 연습량이 느껴지는 받아치기! 3게임도 승리하는 임종훈 [탁구 조별예선 대한민국 vs 예멘] — sbs.co.kr"
+    "신규 10건, 실패 0건, 15초",
+    "[신규] 명지대 미래교육원 이준석, 아시안게임 금…이보미 동메달 — 중앙일보",
+    "[신규] \"견제 심해 당황했지만\"…'개인전 2연패' 달성한 오상욱, 결승 직후 인터뷰 — news.sbs.co.kr",
+    "[신규] 차기 대선후보 적합도 한동훈 18.1%·김민석 14.8%...3.3%p 차 — KBC광주방송",
+    "[신규] 한동훈, 차기 대통령 후보 적합도 첫 1위…김민석은 2위 — v.daum.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35840384990,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35840384990",
-  "request_id": "cron-202609230900",
+  "run_id": 35857828821,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35857828821",
+  "request_id": "cron-202609231200",
   "trigger": "schedule",
-  "started_at": "2026-09-23T18:00:50+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-09-23T21:01:17+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 110건"
+      "summary": "검색어 5개에서 94건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 111건 (신규 22건) · v.daum.net 16건, news1.kr 10건, 뉴스1 7건"
+      "summary": "오늘 121건 (신규 10건) · v.daum.net 19건, news1.kr 10건, 뉴스1 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-23T18:01:03+09:00"
+  "updated_at": "2026-09-23T21:01:33+09:00"
 }
