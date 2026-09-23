@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 13초",
+  "summary": "신규 8건, 실패 0건, 13초",
   "counts": {
-    "new": 5,
+    "new": 8,
     "failed": 0,
-    "total": 2144
+    "total": 2152
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 13초",
-    "[신규] 'K4 출신 이준석의 쾌거' 대한체육회, 테크볼 진천 훈련 지원 검토 — 풋볼리스트",
-    "[신규] 그림 대신 방송 장비… 지금 ACS는 ‘금메달 모드’ — 조선일보",
-    "[신규] 김민석 제친 한동훈, 차기 대선주자 첫 1위…국힘 지지층도 선두 — 주간조선",
-    "[신규] 이기인 개혁신당 비상대책위원장, 첫 비대위 회의 참석 — 뉴스1"
+    "신규 8건, 실패 0건, 13초",
+    "[신규] 추석에 아이 아프면 어디로…경기 일부지역 '연휴 소아진료 공백' — v.daum.net",
+    "[신규] 임미애 의원, 치료받으러 타지로 떠나는 경북도민… 관내 의료 이용률 5년 연속 전국 최하위 — 시민행정신문",
+    "[신규] 순한 맛으로 돌아온 ‘파이어 포테이토’ 장우진 [겜터뷰] — sbs.co.kr",
+    "[신규] 한동훈·오세훈·김민석 3강... 조국·강훈식 뒤이어 — edaily.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35899482461,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35899482461",
-  "request_id": "cron-202609231800",
+  "run_id": 35919675000,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35919675000",
+  "request_id": "cron-202609232100",
   "trigger": "schedule",
-  "started_at": "2026-09-24T03:00:52+09:00",
+  "started_at": "2026-09-24T06:01:08+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 104건"
+      "summary": "검색어 5개에서 109건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 5건) · TV조선뉴스 1건, donga.com 1건, jigeumjeju.com 1건"
+      "summary": "오늘 21건 (신규 8건) · 뉴스1 2건, TV조선뉴스 1건, donga.com 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-24T03:01:06+09:00"
+  "updated_at": "2026-09-24T06:01:22+09:00"
 }
