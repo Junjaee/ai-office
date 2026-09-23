@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 40건, 실패 0건, 9초",
+  "summary": "신규 24건, 실패 0건, 9초",
   "counts": {
-    "new": 40,
+    "new": 24,
     "failed": 0,
-    "total": 2075
+    "total": 2099
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 40건, 실패 0건, 9초",
-    "[신규] [시선집중] 테크볼 이준석 “금메달 땄지만 다시 생계 알아봐야 할 수도...실업팀 창단 절실” — v.daum.net",
-    "[신규] 이준석 \"동탄 주민 가장 필요한 생활시설은 수영장\"…37.8%가 희망 — news1.kr",
-    "[신규] 이준석 \"동탄주민 가장 원하는 시설은 수영장과 보건소\" — 뉴시스",
-    "[신규] 이준석 의원, 동탄 생활시설 주민조사 발표…수영장 37.8%로 가장 높아 — 여성종합뉴스"
+    "신규 24건, 실패 0건, 9초",
+    "[신규] 이준석 의원실, 동탄4·6·7·8·9동 주민 1,019명 대상 생활시설 주민조사 실시 — 수도권지역뉴스",
+    "[신규] 황선우의 더위 탈출법, 그냥 합시다! [스브스상담소] — sbs.co.kr",
+    "[신규] 이준석 ‘축구 레전드 푸욜에게 받는 축하’[포토] — xportsnews.com",
+    "[신규] '대법관 재제청' 요청 거부…\"헌법적 근거 없어\" — news.sbs.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35812606320,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35812606320",
-  "request_id": "cron-202609230300",
+  "run_id": 35824786305,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35824786305",
+  "request_id": "cron-202609230600",
   "trigger": "schedule",
-  "started_at": "2026-09-23T12:00:57+09:00",
+  "started_at": "2026-09-23T15:00:57+09:00",
   "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 107건"
+      "summary": "검색어 5개에서 113건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 65건 (신규 40건) · news1.kr 10건, 뉴시스 7건, v.daum.net 5건"
+      "summary": "오늘 89건 (신규 24건) · news1.kr 10건, v.daum.net 10건, 뉴시스 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-23T12:01:07+09:00"
+  "updated_at": "2026-09-23T15:01:08+09:00"
 }
