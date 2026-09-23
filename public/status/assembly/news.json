@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 12초",
+  "summary": "신규 8건, 실패 0건, 9초",
   "counts": {
-    "new": 6,
+    "new": 8,
     "failed": 0,
-    "total": 2027
+    "total": 2035
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 12초",
-    "[신규] 尹 “이 XX야, 네가 책임져!”…9시간 술친구 장제원에 온 전화 — 중앙일보, v.daum.net",
-    "[신규] 조 1위, 엄청난 반응속도를 보여준 김승원 [수영 여자 배영 50m 예선] — sbs.co.kr",
-    "[신규] 이준석 경마장역 디지털 시대 웹사이트 구축: 기초 지식과 고급 기술 — Calgary Roughnecks",
-    "[신규] 257회 — MBC"
+    "신규 8건, 실패 0건, 9초",
+    "[신규] '드디어 한 풀었다' 펜싱 에페 송세라, 종합 대회 첫 금메달 쾌거... '韓 펜싱 대회 첫 金' [아이치 나고야 AG] - 머니투데이 — mt.co.kr",
+    "[신규] \"카바디 선수들 미안합니다. 여러분도 자랑스러운 국가대표입니다\" 유승민 대한체육회장, 테크볼 이어 카바디 찾아 지원 약속 — 조선일보",
+    "[신규] [스트레이트뉴스 여론조사] 차기 대선주자 한동훈 18.1%로 상승…김민석 14.8%·오세훈 12.6% — 스트레이트뉴스",
+    "[신규] 차기 적합도서 한동훈 18.1%로 1위…2위 김민석 14.8%[조원씨앤아이] — v.daum.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35783965121,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35783965121",
-  "request_id": "cron-202609222100",
+  "run_id": 35800063811,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35800063811",
+  "request_id": "cron-202609230000",
   "trigger": "schedule",
-  "started_at": "2026-09-23T06:01:25+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-23T09:00:53+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 141건"
+      "summary": "검색어 5개에서 111건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 17건 (신규 6건) · Calgary Roughnecks 3건, 연합뉴스 2건, Histoire pour tous 1건"
+      "summary": "오늘 25건 (신규 8건) · Calgary Roughnecks 3건, news1.kr 2건, v.daum.net 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-23T06:01:39+09:00"
+  "updated_at": "2026-09-23T09:01:03+09:00"
 }
