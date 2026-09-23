@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 13초",
+  "summary": "신규 5건, 실패 0건, 13초",
   "counts": {
-    "new": 8,
+    "new": 5,
     "failed": 0,
-    "total": 2139
+    "total": 2144
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 13초",
-    "[신규] 정점식 \"한동훈·이준석, 보수의 한 축…연대·합당 시점은 지켜봐야\" — TV조선뉴스",
-    "[신규] “성남라인도 등급 있어…정진상이 가장 위, 김용-김현지는 그 다음”[정치를 부탁해] — 동아일보",
-    "[신규] 한동훈과 이준석, 두 길은 만날 수 있는가 — 브런치",
-    "[신규] 정점식 \"한동훈 복당, 당원·의원 뜻 결집될 때 가능…시일 두고 지켜봐야\" — 뉴시스"
+    "신규 5건, 실패 0건, 13초",
+    "[신규] 'K4 출신 이준석의 쾌거' 대한체육회, 테크볼 진천 훈련 지원 검토 — 풋볼리스트",
+    "[신규] 그림 대신 방송 장비… 지금 ACS는 ‘금메달 모드’ — 조선일보",
+    "[신규] 김민석 제친 한동훈, 차기 대선주자 첫 1위…국힘 지지층도 선두 — 주간조선",
+    "[신규] 이기인 개혁신당 비상대책위원장, 첫 비대위 회의 참석 — 뉴스1"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35878345836,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35878345836",
-  "request_id": "cron-202609231500",
+  "run_id": 35899482461,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35899482461",
+  "request_id": "cron-202609231800",
   "trigger": "schedule",
-  "started_at": "2026-09-24T00:01:02+09:00",
+  "started_at": "2026-09-24T03:00:52+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 102건"
+      "summary": "검색어 5개에서 104건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 8건 (신규 8건) · TV조선뉴스 1건, jigeumjeju.com 1건, 뉴시스 1건"
+      "summary": "오늘 13건 (신규 5건) · TV조선뉴스 1건, donga.com 1건, jigeumjeju.com 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-24T00:01:16+09:00"
+  "updated_at": "2026-09-24T03:01:06+09:00"
 }
