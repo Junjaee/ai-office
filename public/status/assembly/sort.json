@@ -3,23 +3,23 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "정리 1건, 보류 0건, 9초",
+  "summary": "정리 1건, 보류 0건, 12초",
   "counts": {
     "moved": 1,
     "skip": 0
   },
   "next_run": "새 자료가 오면",
   "log": [
-    "정리 1건, 보류 0건, 9초",
+    "정리 1건, 보류 0건, 12초",
     "재경위 1건 정리, 0건 보류"
   ],
   "link": "https://drive.google.com/drive/folders/1E7pUQ5hFNCq2NnLkJxPW1hb8lTJLaheQ",
-  "run_id": 35840087313,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35840087313",
-  "request_id": "cron-202609230857",
+  "run_id": 35842643844,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35842643844",
+  "request_id": "cron-202609230923",
   "trigger": "schedule",
-  "started_at": "2026-09-23T17:58:06+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-09-23T18:24:10+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "plan",
@@ -33,5 +33,5 @@
     }
   ],
   "id": "sort",
-  "updated_at": "2026-09-23T17:58:16+09:00"
+  "updated_at": "2026-09-23T18:24:23+09:00"
 }
