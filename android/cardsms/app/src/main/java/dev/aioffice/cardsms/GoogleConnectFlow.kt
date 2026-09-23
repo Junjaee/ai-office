@@ -4,57 +4,55 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import dev.aioffice.cardsms.core.GoogleOAuth
-import dev.aioffice.cardsms.core.LoopbackListener
 
-/** "구글 계정 연결" 흐름.
+/** "구글 계정 연결" 흐름 (안드로이드 OAuth 클라이언트 + PKCE).
  *
- * 폰 안에서 잠깐 http://127.0.0.1:포트/ 를 듣는 작은 서버(LoopbackListener)를 열고 브라우저로 구글 동의 화면을 띄운다.
- * 사용자가 허용하면 브라우저가 그 주소로 되돌아오고, 서버가 코드를 받아 토큰으로 바꾼다.
- * (설치형 앱용 OAuth 클라이언트의 표준 방식 — 구글 콘솔에 폰 앱을 따로 등록할 필요가 없다)
+ * [연결] → 브라우저에 구글 동의 화면 → 허용 → 구글이 브라우저를 이 앱의 스킴으로 보냄 → 안드로이드가 앱을 열며
+ * 주소를 넘김 → 코드를 토큰으로 바꿔 저장. 앱이 뒤에서 정리돼도 다시 켜지므로 PKCE 값은 저장소에 둔다.
  */
-class GoogleConnectFlow(private val onResult: (Result<GoogleAccount>) -> Unit) {
-    private var listener: LoopbackListener? = null
+class GoogleConnectFlow(private val store: SettingsStore) {
 
-    /** 브라우저를 띄운다. 클라이언트 값이 빌드에 없으면 false */
-    fun start(ctx: Context): Boolean {
-        if (BuildConfig.GOOGLE_CLIENT_ID.isEmpty() || BuildConfig.GOOGLE_CLIENT_SECRET.isEmpty()) {
-            onResult(Result.failure(IllegalStateException("이 설치 파일에는 구글 클라이언트 값이 없습니다(빌드 설정)")))
-            return false
-        }
-        stop()
-        val l = LoopbackListener()
-        listener = l
+    /** 브라우저를 띄운다. 문제가 있으면 사람에게 보여 줄 문구를 돌려준다 */
+    fun start(ctx: Context): String? {
+        val cid = BuildConfig.GOOGLE_ANDROID_CLIENT_ID
+        val redirect = GoogleOAuth.redirectUriFor(cid)
+            ?: return "이 설치 파일에는 구글 클라이언트 값이 없습니다(빌드 설정)"
         val verifier = GoogleOAuth.newVerifier()
         val state = GoogleOAuth.newState()
-        val redirect = l.redirectUri
-        Thread({ run(l, verifier, state, redirect) }, "cardsms-oauth").apply { isDaemon = true }.start()
-        val url = GoogleOAuth.authUrl(BuildConfig.GOOGLE_CLIENT_ID, redirect, GoogleOAuth.challenge(verifier), state)
-        ctx.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        store.savePending(verifier, state)
+        val url = GoogleOAuth.authUrl(cid, redirect, GoogleOAuth.challenge(verifier), state)
+        return try {
+            ctx.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            null
+        } catch (e: Exception) {
+            "브라우저를 열 수 없습니다: ${e.message}"
+        }
+    }
+
+    /** 앱을 연 주소가 구글 되돌아오기면 처리하고 true. 아니면 false */
+    fun handleRedirect(uri: String?, onResult: (Result<GoogleAccount>) -> Unit): Boolean {
+        val scheme = GoogleOAuth.schemeFor(BuildConfig.GOOGLE_ANDROID_CLIENT_ID) ?: return false
+        if (uri == null || !uri.startsWith("$scheme:")) return false
+        val cb = GoogleOAuth.parseRedirect(uri) ?: return false
+        val pending = store.pending()
+        store.clearPending()
+        when {
+            pending == null -> onResult(Result.failure(IllegalStateException("연결 시작 기록이 없습니다 — [구글 계정 연결]을 다시 누르세요")))
+            cb.error != null -> onResult(Result.failure(IllegalStateException("구글이 거부했습니다: ${cb.error}")))
+            cb.state != pending.second -> onResult(Result.failure(IllegalStateException("되돌아온 요청이 이 앱의 것이 아닙니다")))
+            cb.code == null -> onResult(Result.failure(IllegalStateException("동의 코드가 없습니다")))
+            else -> Thread({ exchange(cb.code, pending.first, onResult) }, "cardsms-oauth").start()
+        }
         return true
     }
 
-    fun stop() {
-        listener?.close()
-        listener = null
-    }
-
-    private fun run(l: LoopbackListener, verifier: String, state: String, redirect: String) {
-        val cb = l.await()
-        if (listener === l) listener = null
-        when {
-            cb == null -> onResult(Result.failure(IllegalStateException("연결 대기가 끝났습니다(5분). 다시 눌러 주세요")))
-            cb.error != null -> onResult(Result.failure(IllegalStateException("구글이 거부했습니다: ${cb.error}")))
-            cb.state != state -> onResult(Result.failure(IllegalStateException("되돌아온 요청이 이 앱의 것이 아닙니다")))
-            cb.code == null -> onResult(Result.failure(IllegalStateException("동의 코드가 없습니다")))
-            else -> exchange(cb.code, verifier, redirect)
-        }
-    }
-
-    private fun exchange(code: String, verifier: String, redirect: String) {
+    private fun exchange(code: String, verifier: String, onResult: (Result<GoogleAccount>) -> Unit) {
+        val redirect = GoogleOAuth.redirectUriFor(BuildConfig.GOOGLE_ANDROID_CLIENT_ID) ?: return
         val (status, json) = GmailClient.exchange(code, verifier, redirect)
         val refresh = json?.optString("refresh_token", "").orEmpty()
         if (status !in 200..299 || refresh.isEmpty()) {
-            onResult(Result.failure(IllegalStateException("토큰 받기 실패 (HTTP $status)")))
+            val why = json?.optString("error_description", "").orEmpty().ifEmpty { json?.optString("error", "").orEmpty() }
+            onResult(Result.failure(IllegalStateException("토큰 받기 실패 (HTTP $status${if (why.isEmpty()) "" else ", $why"})")))
             return
         }
         val email = GoogleOAuth.emailFromIdToken(json?.optString("id_token", "").orEmpty()) ?: "(이메일 확인 불가)"

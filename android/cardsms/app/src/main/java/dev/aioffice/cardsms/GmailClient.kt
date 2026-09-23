@@ -9,12 +9,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-/** 구글 토큰 갱신·교환 + 지메일 insert. 값(토큰)은 로그에 남기지 않는다. */
+/** 구글 토큰 갱신·교환 + 지메일 insert. 값(토큰)은 로그에 남기지 않는다. 안드로이드 클라이언트라 비밀값이 없다. */
 class GmailClient(private val refreshToken: String) {
 
     /** 리프레시 토큰으로 액세스 토큰. 실패면 null 과 상태 */
     fun accessToken(): Pair<String?, Int> {
-        val form = listOf("client_id" to BuildConfig.GOOGLE_CLIENT_ID, "client_secret" to BuildConfig.GOOGLE_CLIENT_SECRET,
+        val form = listOf("client_id" to BuildConfig.GOOGLE_ANDROID_CLIENT_ID,
             "refresh_token" to refreshToken, "grant_type" to "refresh_token")
             .joinToString("&") { (k, v) -> k + "=" + URLEncoder.encode(v, "UTF-8") }
         val (status, text) = post(GoogleOAuth.TOKEN_ENDPOINT, "application/x-www-form-urlencoded", form.toByteArray())
@@ -33,7 +33,7 @@ class GmailClient(private val refreshToken: String) {
     companion object {
         /** 동의 코드 → 토큰. @return (상태, 응답 json 또는 null) */
         fun exchange(code: String, verifier: String, redirectUri: String): Pair<Int, JSONObject?> {
-            val body = GoogleOAuth.tokenBody(BuildConfig.GOOGLE_CLIENT_ID, BuildConfig.GOOGLE_CLIENT_SECRET, code, verifier, redirectUri)
+            val body = GoogleOAuth.tokenBody(BuildConfig.GOOGLE_ANDROID_CLIENT_ID, code, verifier, redirectUri)
             val (status, text) = post(GoogleOAuth.TOKEN_ENDPOINT, "application/x-www-form-urlencoded", body.toByteArray())
             return status to runCatching { JSONObject(text) }.getOrNull()
         }

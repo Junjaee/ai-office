@@ -24,4 +24,15 @@ class SettingsStore(ctx: Context) {
     fun saveAccount(a: GoogleAccount) { p.edit().putString("g_email", a.email).putString("g_refresh", a.refreshToken).apply() }
 
     fun clearAccount() { p.edit().remove("g_email").remove("g_refresh").apply() }
+
+    /** 연결 진행 중 값(PKCE 검증자·state). 앱이 정리됐다 다시 켜져도 이어 가려고 저장한다 */
+    fun savePending(verifier: String, state: String) { p.edit().putString("o_verifier", verifier).putString("o_state", state).apply() }
+
+    fun pending(): Pair<String, String>? {
+        val v = p.getString("o_verifier", null) ?: return null
+        val s = p.getString("o_state", null) ?: return null
+        return v to s
+    }
+
+    fun clearPending() { p.edit().remove("o_verifier").remove("o_state").apply() }
 }
