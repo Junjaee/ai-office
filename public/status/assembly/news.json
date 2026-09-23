@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 9초",
+  "summary": "신규 40건, 실패 0건, 9초",
   "counts": {
-    "new": 8,
+    "new": 40,
     "failed": 0,
-    "total": 2035
+    "total": 2075
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 9초",
-    "[신규] '드디어 한 풀었다' 펜싱 에페 송세라, 종합 대회 첫 금메달 쾌거... '韓 펜싱 대회 첫 金' [아이치 나고야 AG] - 머니투데이 — mt.co.kr",
-    "[신규] \"카바디 선수들 미안합니다. 여러분도 자랑스러운 국가대표입니다\" 유승민 대한체육회장, 테크볼 이어 카바디 찾아 지원 약속 — 조선일보",
-    "[신규] [스트레이트뉴스 여론조사] 차기 대선주자 한동훈 18.1%로 상승…김민석 14.8%·오세훈 12.6% — 스트레이트뉴스",
-    "[신규] 차기 적합도서 한동훈 18.1%로 1위…2위 김민석 14.8%[조원씨앤아이] — v.daum.net"
+    "신규 40건, 실패 0건, 9초",
+    "[신규] [시선집중] 테크볼 이준석 “금메달 땄지만 다시 생계 알아봐야 할 수도...실업팀 창단 절실” — v.daum.net",
+    "[신규] 이준석 \"동탄 주민 가장 필요한 생활시설은 수영장\"…37.8%가 희망 — news1.kr",
+    "[신규] 이준석 \"동탄주민 가장 원하는 시설은 수영장과 보건소\" — 뉴시스",
+    "[신규] 이준석 의원, 동탄 생활시설 주민조사 발표…수영장 37.8%로 가장 높아 — 여성종합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35800063811,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35800063811",
-  "request_id": "cron-202609230000",
+  "run_id": 35812606320,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35812606320",
+  "request_id": "cron-202609230300",
   "trigger": "schedule",
-  "started_at": "2026-09-23T09:00:53+09:00",
+  "started_at": "2026-09-23T12:00:57+09:00",
   "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 111건"
+      "summary": "검색어 5개에서 107건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 25건 (신규 8건) · Calgary Roughnecks 3건, news1.kr 2건, v.daum.net 2건"
+      "summary": "오늘 65건 (신규 40건) · news1.kr 10건, 뉴시스 7건, v.daum.net 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-23T09:01:03+09:00"
+  "updated_at": "2026-09-23T12:01:07+09:00"
 }
