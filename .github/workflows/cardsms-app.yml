@@ -41,8 +41,6 @@ jobs:
           CARDSMS_KEYSTORE_PASSWORD: ${{ secrets.CARDSMS_KEYSTORE_PASSWORD }}
           CARDSMS_KEY_ALIAS: ${{ secrets.CARDSMS_KEY_ALIAS }}
           CARDSMS_KEY_PASSWORD: ${{ secrets.CARDSMS_KEY_PASSWORD }}
-          # 구글 OAuth "안드로이드" 클라이언트 ID(비밀값 아님, PKCE) — 앱의 [구글 계정 연결]이 쓴다
-          CARDSMS_GOOGLE_ANDROID_CLIENT_ID: ${{ secrets.CARDSMS_GOOGLE_ANDROID_CLIENT_ID }}
         run: gradle --no-daemon --console=plain test assembleRelease
 
       - uses: actions/upload-artifact@v4

@@ -11,17 +11,10 @@
         android:allowBackup="false"
         android:theme="@style/Theme.AppCompat.DayNight">
 
-        <!-- singleTop: 구글 허용 뒤 브라우저가 이 앱의 스킴(${oauthScheme})으로 되돌려 보낼 때 화면을 새로 쌓지 않는다 -->
-        <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="${oauthScheme}" />
             </intent-filter>
         </activity>
 

@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import dev.aioffice.cardsms.core.AccountJson
 import dev.aioffice.cardsms.core.SmsFilter
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -26,7 +27,19 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
     private lateinit var store: SettingsStore
     private lateinit var log: ForwardLog
-    private lateinit var connect: GoogleConnectFlow
+
+    /** PC 에서 만든 설정 파일(json) 고르기 — 드라이브 앱에서 바로 고를 수 있다 */
+    private val pickFile = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+        val text = runCatching { contentResolver.openInputStream(uri)?.bufferedReader()?.readText() ?: "" }.getOrDefault("")
+        try {
+            store.saveAccount(AccountJson.parse(text))
+            toast("설정 파일 불러옴")
+        } catch (e: IllegalArgumentException) {
+            toast("설정 파일 오류: ${e.message}")
+        }
+        render()
+    }
 
     private val askSms = registerForActivityResult(ActivityResultContracts.RequestPermission()) { render() }
 
@@ -35,9 +48,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         store = SettingsStore(this)
         log = ForwardLog(this)
-        connect = GoogleConnectFlow(store)
 
-        findViewById<Button>(R.id.connect).setOnClickListener { onConnectClicked() }
+        findViewById<Button>(R.id.connect).setOnClickListener {
+            if (store.account() != null) { store.clearAccount(); toast("설정 파일 지움"); render() }
+            else pickFile.launch(arrayOf("application/json", "text/plain", "*/*"))
+        }
         findViewById<Button>(R.id.grantSms).setOnClickListener { askSms.launch(Manifest.permission.RECEIVE_SMS) }
         findViewById<Button>(R.id.battery).setOnClickListener {
             startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName")))
@@ -59,45 +74,15 @@ class MainActivity : AppCompatActivity() {
             store.save(s); toast("저장됨"); render()
         }
         findViewById<Button>(R.id.testSend).setOnClickListener {
-            if (store.account() == null) { toast("먼저 구글 계정을 연결하세요"); return@setOnClickListener }
+            if (store.account() == null) { toast("먼저 설정 파일을 불러오세요"); return@setOnClickListener }
             val now = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(Date())
             ForwardWorker.enqueue(this, ForwardWorker.TEST_SUBJECT, "카드문자 전달 앱 연결 확인 $now", "테스트")
             toast("테스트 전송 예약됨 — 잠시 후 기록을 새로고침하세요")
         }
         findViewById<Button>(R.id.refresh).setOnClickListener { render() }
-
-        handleRedirect(intent)
     }
-
-    /** 브라우저가 구글 되돌아오기 주소로 앱을 다시 열 때(singleTop) */
-    override fun onNewIntent(intent: Intent?) { super.onNewIntent(intent); handleRedirect(intent) }
 
     override fun onResume() { super.onResume(); render() }
-
-    private fun handleRedirect(intent: Intent?) {
-        val uri = intent?.data?.toString() ?: return
-        val handled = connect.handleRedirect(uri) { result ->
-            runOnUiThread {
-                result.onSuccess { store.saveAccount(it); log.add("구글연결", "연결 성공", true, it.email); toast("연결됨: ${it.email}") }
-                    .onFailure { log.add("구글연결", "연결 실패", false, it.message ?: ""); toast(it.message ?: "연결 실패") }
-                render()
-            }
-        }
-        if (handled) { intent.data = null; toast("구글 응답 확인 중…") }
-    }
-
-    private fun onConnectClicked() {
-        val current = store.account()
-        if (current != null) {
-            store.clearAccount()
-            Thread { GmailClient.revoke(current.refreshToken) }.start()
-            toast("연결 해제됨"); render(); return
-        }
-        val problem = connect.start(this)
-        if (problem != null) { log.add("구글연결", "시작 실패", false, problem); toast(problem) }
-        else { log.add("구글연결", "시작", true, "브라우저에서 허용 대기"); toast("브라우저에서 계정을 고르고 허용을 누르세요") }
-        render()
-    }
 
     private fun render() {
         val s = store.load()
@@ -107,7 +92,8 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.status).text = listOf(
             "${getString(R.string.app_name)} v${BuildConfig.VERSION_NAME}",
-            (if (account != null) "✓ 구글 계정: ${account.email}" else "✗ 구글 계정: 연결 안 됨 — 아래 [구글 계정 연결]"),
+            (if (account != null) "✓ 구글 계정: 설정 파일 불러옴${if (account.email.isEmpty()) "" else " (${account.email})"}"
+             else "✗ 구글 계정: 없음 — [설정 파일 불러오기]"),
             (if (smsOk) "✓ 문자 권한: 허용" else "✗ 문자 권한: 없음 — [문자 권한 허용]"),
             (if (batteryOk) "✓ 배터리 최적화: 제외됨" else "✗ 배터리 최적화: 켜져 있음 — 제외해야 안 멈춤"),
             (if (s.senders.isEmpty()) "✗ 발신번호: 없음 — 카드사 번호를 추가하세요(없으면 아무것도 안 보냄)" else "✓ 발신번호: ${s.senders.size}개"),

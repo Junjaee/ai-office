@@ -33,13 +33,5 @@ MSYS_NO_PATHCONV=1 robocopy "$(cygpath -w "$REPO/android/cardsms")" "$(cygpath -
 if [ "$rc" -ge 8 ]; then echo "소스 복사 실패 (robocopy 코드 $rc)" >&2; exit "$rc"; fi
 printf 'sdk.dir=%s\n' "$(cygpath -m "$ANDROID_HOME")" > "$WORK/local.properties"
 
-# 구글 OAuth "안드로이드" 클라이언트 ID(비밀값 아님)를 개인 폴더 파일에서 읽어 빌드에 넣는다. 없으면 연결 버튼이 동작하지 않는 빌드가 된다.
-AID="$REPO/ai-home/01_가계부/cardsms-android-client-id.txt"
-if [ -f "$AID" ]; then
-  export CARDSMS_GOOGLE_ANDROID_CLIENT_ID="$(tr -d '[:space:]' < "$AID")"
-else
-  echo "  · 주의: $AID 가 없어 [구글 계정 연결]이 동작하지 않는 빌드가 됩니다" >&2
-fi
-
 cd "$WORK"
 exec "$GRADLE_HOME/bin/gradle" --no-daemon -q --console=plain "$cmd" "$@"
