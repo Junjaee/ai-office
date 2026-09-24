@@ -3,36 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 9초",
+  "summary": "신규 6건, 실패 0건, 10초",
   "counts": {
-    "new": 1,
+    "new": 6,
     "failed": 0,
-    "total": 2175
+    "total": 2181
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 9초",
-    "[신규] [비례의원 추석나기] \"갈비 굽고 민심 듣고 국감 준비\"…지역 의원보다 '바쁘다 바빠' — newspim.com"
+    "신규 6건, 실패 0건, 10초",
+    "[신규] 이재오 \"李대통령, 공소취소 밑장 깔기 안 돼...실패로 가는 길, 성공한 대통령 되면 다 해결\"[여의도 중진대담] — KBC광주방송",
+    "[신규] [인터뷰]윤상현 \"김현지 정진상 '비선 라인' 뭔가 있다\"[시사쇼] — 아시아경제",
+    "[신규] [정치家] 개혁신당 ㅣ ‘이기인 비대위’ 쇄신 시동…총선 10석·경기남부 승부수 — CBC뉴스",
+    "[신규] 윤석열에겐 김건희, 이재명에겐 사법 리스크 — 한국NGO신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35962546058,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35962546058",
-  "request_id": "cron-202609240600",
+  "run_id": 35978584319,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35978584319",
+  "request_id": "cron-202609240900",
   "trigger": "schedule",
-  "started_at": "2026-09-24T15:01:59+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-09-24T18:00:42+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 59건"
+      "summary": "검색어 5개에서 44건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 44건 (신규 1건) · mnews.sbs.co.kr 3건, 뉴시스 3건, 뉴스1 2건"
+      "summary": "오늘 50건 (신규 6건) · mnews.sbs.co.kr 3건, 뉴시스 3건, 뉴스1 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-24T15:02:09+09:00"
+  "updated_at": "2026-09-24T18:00:53+09:00"
 }
