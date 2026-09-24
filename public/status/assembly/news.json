@@ -3,39 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 12초",
+  "summary": "신규 1건, 실패 0건, 9초",
   "counts": {
-    "new": 14,
+    "new": 1,
     "failed": 0,
-    "total": 2174
+    "total": 2175
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 12초",
-    "[신규] \"방산·조선 넘어 우주·AI로\" 김동관 한화 수석부회장, 경영 보폭 '확대' — 뉴시스",
-    "[신규] 갑자기 등장해 활주로 질주…'제트' 이름 붙인 사연 — mnews.sbs.co.kr",
-    "[신규] 배 열자 투명한 막에 아기…기괴한 '임산부 인형' — mnews.sbs.co.kr",
-    "[신규] 한동훈 복당론 다시 불붙었다… 국힘 지지층 53.5% 찬성에도 지도부는 ‘불가’ — JIBS제주방송"
+    "신규 1건, 실패 0건, 9초",
+    "[신규] [비례의원 추석나기] \"갈비 굽고 민심 듣고 국감 준비\"…지역 의원보다 '바쁘다 바빠' — newspim.com"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35949683379,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35949683379",
-  "request_id": "cron-202609240300",
+  "run_id": 35962546058,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35962546058",
+  "request_id": "cron-202609240600",
   "trigger": "schedule",
-  "started_at": "2026-09-24T12:01:44+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-24T15:01:59+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 79건"
+      "summary": "검색어 5개에서 59건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 43건 (신규 14건) · mnews.sbs.co.kr 3건, 뉴시스 3건, 뉴스1 2건"
+      "summary": "오늘 44건 (신규 1건) · mnews.sbs.co.kr 3건, 뉴시스 3건, 뉴스1 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-24T12:01:57+09:00"
+  "updated_at": "2026-09-24T15:02:09+09:00"
 }
