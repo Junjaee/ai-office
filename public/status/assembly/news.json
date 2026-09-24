@@ -3,7 +3,7 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 실패 0건, 12초",
+  "summary": "신규 0건, 실패 0건, 13초",
   "counts": {
     "new": 0,
     "failed": 0,
@@ -11,20 +11,20 @@
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 0건, 실패 0건, 12초"
+    "신규 0건, 실패 0건, 13초"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36017066620,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36017066620",
-  "request_id": "cron-202609241500",
+  "run_id": 36038319634,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36038319634",
+  "request_id": "cron-202609241800",
   "trigger": "schedule",
-  "started_at": "2026-09-25T00:01:56+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-25T03:01:39+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 39건"
+      "summary": "검색어 5개에서 34건"
     },
     {
       "id": "digest",
@@ -33,5 +33,5 @@
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-25T00:02:09+09:00"
+  "updated_at": "2026-09-25T03:01:53+09:00"
 }
