@@ -3,27 +3,28 @@
   "dept": "partner",
   "ok": true,
   "running": false,
-  "summary": "주말 일정 0건, 전송 1건, 4초",
+  "summary": "주말 일정 1건, 전송 1건, 2초",
   "counts": {
-    "events": 0,
+    "events": 1,
     "sent": 1
   },
   "next_run": "매주 목 17:00",
   "log": [
-    "주말 일정 0건, 전송 1건, 4초"
+    "주말 일정 1건, 전송 1건, 2초",
+    "[9/27] 기타 일정"
   ],
   "link": "",
-  "run_id": 35197403551,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35197403551",
-  "request_id": "cron-202609170800",
+  "run_id": 35972715757,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35972715757",
+  "request_id": "cron-202609240800",
   "trigger": "schedule",
-  "started_at": "2026-09-17T17:01:21+09:00",
-  "duration_sec": 4,
+  "started_at": "2026-09-24T17:00:43+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "fetch",
       "status": "done",
-      "summary": "토 0건 · 일 0건"
+      "summary": "토 0건 · 일 1건"
     },
     {
       "id": "send",
@@ -32,5 +33,5 @@
     }
   ],
   "id": "weekend",
-  "updated_at": "2026-09-17T17:01:26+09:00"
+  "updated_at": "2026-09-24T17:00:46+09:00"
 }
