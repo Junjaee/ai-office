@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 13초",
+  "summary": "신규 14건, 실패 0건, 12초",
   "counts": {
-    "new": 8,
+    "new": 14,
     "failed": 0,
-    "total": 2160
+    "total": 2174
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 13초",
-    "[신규] 잠잠한 장동혁 사퇴론…반전 노리는 오세훈·몸값 뛴 한동훈·내홍 겪는 이준석 — 뉴시스",
-    "[신규] “서로 감옥 보내려는 검찰 정치·진영 대립이 10년간 韓 사회 지배” — 신동아",
-    "[신규] 안세영 '기선 제압'에도…일본에 져 동메달 — mnews.sbs.co.kr",
-    "[신규] 정점식 국민의힘 원내대표가 ‘한동훈 복당’의 조건으로 내건 것 — 위키트리"
+    "신규 14건, 실패 0건, 12초",
+    "[신규] \"방산·조선 넘어 우주·AI로\" 김동관 한화 수석부회장, 경영 보폭 '확대' — 뉴시스",
+    "[신규] 갑자기 등장해 활주로 질주…'제트' 이름 붙인 사연 — mnews.sbs.co.kr",
+    "[신규] 배 열자 투명한 막에 아기…기괴한 '임산부 인형' — mnews.sbs.co.kr",
+    "[신규] 한동훈 복당론 다시 불붙었다… 국힘 지지층 53.5% 찬성에도 지도부는 ‘불가’ — JIBS제주방송"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35936437815,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35936437815",
-  "request_id": "cron-202609240000",
+  "run_id": 35949683379,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35949683379",
+  "request_id": "cron-202609240300",
   "trigger": "schedule",
-  "started_at": "2026-09-24T09:01:48+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-09-24T12:01:44+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 112건"
+      "summary": "검색어 5개에서 79건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 29건 (신규 8건) · 뉴스1 2건, 뉴시스 2건, TV조선뉴스 1건"
+      "summary": "오늘 43건 (신규 14건) · mnews.sbs.co.kr 3건, 뉴시스 3건, 뉴스1 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-24T09:02:02+09:00"
+  "updated_at": "2026-09-24T12:01:57+09:00"
 }
