@@ -3,39 +3,35 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 10초",
+  "summary": "신규 0건, 실패 0건, 12초",
   "counts": {
-    "new": 6,
+    "new": 0,
     "failed": 0,
     "total": 2187
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 10초",
-    "[신규] 정점식 “한동훈·이준석, 한 축” — 채널A",
-    "[신규] 보수 통합 외친 장동혁, 성과는 아직…오세훈·한동훈·이준석 행보 주목 — 콜뉴스24",
-    "[신규] [속보] 이준석 개혁신당 대표직 사퇴 — 이투데이",
-    "[신규] 도마 예선 1위, 여서정 하이라이트 [기계체조 여자 도마 예선] — sbs.co.kr"
+    "신규 0건, 실패 0건, 12초"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 35996339485,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35996339485",
-  "request_id": "cron-202609241200",
+  "run_id": 36017066620,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36017066620",
+  "request_id": "cron-202609241500",
   "trigger": "schedule",
-  "started_at": "2026-09-24T21:00:42+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-09-25T00:01:56+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 47건"
+      "summary": "검색어 5개에서 39건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 56건 (신규 6건) · mnews.sbs.co.kr 3건, news.sbs.co.kr 3건, newsis.com 3건"
+      "summary": "오늘 0건 (신규 0건)"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-24T21:00:53+09:00"
+  "updated_at": "2026-09-25T00:02:09+09:00"
 }
