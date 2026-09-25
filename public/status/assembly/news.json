@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 11초",
+  "summary": "신규 6건, 실패 0건, 12초",
   "counts": {
-    "new": 11,
+    "new": 6,
     "failed": 0,
-    "total": 2217
+    "total": 2223
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 11초",
-    "[신규] 존재감 키운 한동훈의 복당?...복잡한 국민의힘 [앵커리포트] — YTN",
-    "[신규] 낯선 게임도 요소별로 이해하는 학교 밖 청소년 도박 문제 — Calgary Roughnecks",
-    "[신규] 화면 배치로 비교하는 팝 슬롯 무료 억 칩 PC와 모바일 — Histoire pour tous",
-    "[신규] 처음 보는 효과를 기능과 연결하는 메리트카지노 추천인 화면 읽기 — Histoire pour tous"
+    "신규 6건, 실패 0건, 12초",
+    "[신규] 오늘의 특집 SBS 8뉴스 예고 (9월 25일) — news.sbs.co.kr",
+    "[신규] 3대3 남자농구, '사상 첫 금메달'…여자팀은 동메달 — news.sbs.co.kr",
+    "[신규] [SBS8뉴스] 2026년 09월 25일 - 클로징 — news.sbs.co.kr",
+    "[신규] 우리가 진짜 레드팀이다!! (20260925 금요일 추석특집2) 송영길 김용남 김상욱 — khan.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36132501445,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36132501445",
-  "request_id": "cron-202609251200",
+  "run_id": 36151293910,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36151293910",
+  "request_id": "cron-202609251500",
   "trigger": "schedule",
-  "started_at": "2026-09-25T21:01:02+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-09-26T00:01:01+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 31건"
+      "summary": "검색어 5개에서 34건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 30건 (신규 11건) · news.sbs.co.kr 8건, Histoire pour tous 6건, Calgary Roughnecks 2건"
+      "summary": "오늘 6건 (신규 6건) · news.sbs.co.kr 3건, khan.co.kr 1건, 제주교통복지신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-25T21:01:14+09:00"
+  "updated_at": "2026-09-26T00:01:14+09:00"
 }
