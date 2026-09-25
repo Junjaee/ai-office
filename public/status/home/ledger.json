@@ -3,37 +3,36 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
+  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초",
   "counts": {
-    "new": 1,
+    "new": 0,
     "replaced": 0,
     "skip": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
-    "[추가] 2026년 9월 9/25 하이파킹(주) 1,800원 (생활비)"
+    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36090498811,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36090498811",
-  "request_id": "cron-202609250328",
+  "run_id": 36100976502,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36100976502",
+  "request_id": "cron-202609250600",
   "trigger": "schedule",
-  "started_at": "2026-09-25T12:28:59+09:00",
-  "duration_sec": 3,
+  "started_at": "2026-09-25T15:01:22+09:00",
+  "duration_sec": 0,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 1건 확인, 결제 1건"
+      "summary": "메일 0건 확인, 결제 0건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 1 · 취소 0 · 건너뜀 0"
+      "summary": "추가 0 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-25T12:29:03+09:00"
+  "updated_at": "2026-09-25T15:01:23+09:00"
 }
