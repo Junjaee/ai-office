@@ -3,36 +3,37 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
   "counts": {
-    "new": 0,
+    "new": 1,
     "replaced": 0,
     "skip": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초"
+    "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
+    "[추가] 2026년 9월 9/25 온더브레드복정 32,000원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36132503454,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36132503454",
-  "request_id": "cron-202609251200",
+  "run_id": 36132783377,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36132783377",
+  "request_id": "cron-202609251203",
   "trigger": "schedule",
-  "started_at": "2026-09-25T21:01:06+09:00",
-  "duration_sec": 0,
+  "started_at": "2026-09-25T21:04:02+09:00",
+  "duration_sec": 3,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 0건 확인, 결제 0건"
+      "summary": "메일 1건 확인, 결제 1건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 0 · 취소 0 · 건너뜀 0"
+      "summary": "추가 1 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-25T21:01:08+09:00"
+  "updated_at": "2026-09-25T21:04:06+09:00"
 }
