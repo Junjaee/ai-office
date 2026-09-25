@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 11초",
+  "summary": "신규 4건, 실패 0건, 13초",
   "counts": {
     "new": 4,
     "failed": 0,
-    "total": 2227
+    "total": 2231
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 11초",
-    "[신규] [인터뷰] 윤상현 \"국힘, 강성층만으로 선거 못 이겨…51% 신뢰 얻어야\" — 더팩트",
-    "[신규] 게임 용어를 화면 위치와 연결하는 마리오 슬롯 입문 설명 — Calgary Roughnecks",
-    "[신규] 개혁신당, 대통령의 대법관 제청 개입 비판 — 한국사회복지저널",
-    "[신규] \"11억 들인 '코레일플러스' 앱, 출시前 실사용 평가는 단 20명\" · 주요 내용은? — supple.kr"
+    "신규 4건, 실패 0건, 13초",
+    "[신규] [단독]경찰, 이준석 '기자 도시락 제공' 청탁금지법 불송치 — 노컷뉴스",
+    "[신규] 카지노 존 잘 살아 의 비밀을 풀다: 전문가들이 공유하는 핵심 팁 — Histoire pour tous",
+    "[신규] 어떤 기능부터 익히면 편할까? 토토 범죄도시 입문 질문 — Histoire pour tous",
+    "[신규] 개혁신당, 대법관 제청권·임명권 충돌에 헌법적 경계 촉구 — 한국사회복지저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36170690809,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36170690809",
-  "request_id": "cron-202609251800",
+  "run_id": 36189105543,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36189105543",
+  "request_id": "cron-202609252100",
   "trigger": "schedule",
-  "started_at": "2026-09-26T03:01:02+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-09-26T06:01:01+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 35건"
+      "summary": "검색어 5개에서 37건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 4건) · news.sbs.co.kr 3건, 한국사회복지저널 2건, Calgary Roughnecks 1건"
+      "summary": "오늘 14건 (신규 4건) · news.sbs.co.kr 3건, 한국사회복지저널 3건, Histoire pour tous 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-26T03:01:14+09:00"
+  "updated_at": "2026-09-26T06:01:16+09:00"
 }
