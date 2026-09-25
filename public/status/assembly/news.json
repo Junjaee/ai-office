@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 3건, 실패 0건, 12초",
   "counts": {
-    "new": 4,
+    "new": 3,
     "failed": 0,
-    "total": 2197
+    "total": 2200
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] '동탄 주민 필요시설 1순위는 수영장'… 이준석 의원실 조사 — 미디어와이",
-    "[신규] '최장수 대표' 눈앞 장동혁…당심으로 버텼지만 민심은 제자리 — 뉴스1",
-    "[신규] 내게 필요한 설명부터 찾아보는 파워볼 구매 방법 게임 안내 — Histoire pour tous",
-    "[신규] [헬로이슈토크]박유진 서울시의회 예결위원장에게 듣는다 — news.lghellovision.net"
+    "신규 3건, 실패 0건, 12초",
+    "[신규] [오늘의 주요일정] 정치·정부 (25일, 금) — 뉴스1",
+    "[신규] [소수정당의 추석 ] 돈·사람·조직이 만드는 '존재감' — 더팩트",
+    "[신규] 李대통령, '개혁팔이 반명'에 우려…“선명함 멋있지만 오히려 결과 놓쳐” — etnews.com"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36088633831,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36088633831",
-  "request_id": "cron-202609250300",
+  "run_id": 36100974862,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36100974862",
+  "request_id": "cron-202609250600",
   "trigger": "schedule",
-  "started_at": "2026-09-25T12:01:37+09:00",
+  "started_at": "2026-09-25T15:01:19+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 25건"
+      "summary": "검색어 5개에서 23건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 4건) · Histoire pour tous 3건, v.daum.net 2건, ainews1.co.kr 1건"
+      "summary": "오늘 13건 (신규 3건) · Histoire pour tous 3건, v.daum.net 2건, 뉴스1 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-25T12:01:50+09:00"
+  "updated_at": "2026-09-25T15:01:32+09:00"
 }
