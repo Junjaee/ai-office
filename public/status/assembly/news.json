@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 6,
+    "new": 4,
     "failed": 0,
-    "total": 2193
+    "total": 2197
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 12초",
-    "[신규] “보수층 마음 다시 돌아오나”…차기 적합도 1위에 한동훈, 2위는 김민석 [數싸움] — v.daum.net, 헤럴드경제",
-    "[신규] 무소속 한동훈 ‘우뚝’, 김민석 쫓는 조국·정청래…벌써 주목받는 차기 대권레이스 — 서울경제",
-    "[신규] 여러 심벌을 묶어서 읽는 이병욱 교수 블록 체인 배당표 구성 — Histoire pour tous",
-    "[신규] “일 잘한다” 신화 무너졌나… 이동훈, 이재명 정부 국정 난맥 정면 비판 — ainews1.co.kr"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] '동탄 주민 필요시설 1순위는 수영장'… 이준석 의원실 조사 — 미디어와이",
+    "[신규] '최장수 대표' 눈앞 장동혁…당심으로 버텼지만 민심은 제자리 — 뉴스1",
+    "[신규] 내게 필요한 설명부터 찾아보는 파워볼 구매 방법 게임 안내 — Histoire pour tous",
+    "[신규] [헬로이슈토크]박유진 서울시의회 예결위원장에게 듣는다 — news.lghellovision.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36075558422,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36075558422",
-  "request_id": "cron-202609250000",
+  "run_id": 36088633831,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36088633831",
+  "request_id": "cron-202609250300",
   "trigger": "schedule",
-  "started_at": "2026-09-25T09:01:40+09:00",
+  "started_at": "2026-09-25T12:01:37+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 22건"
+      "summary": "검색어 5개에서 25건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 6건 (신규 6건) · Histoire pour tous 2건, v.daum.net 2건, ainews1.co.kr 1건"
+      "summary": "오늘 10건 (신규 4건) · Histoire pour tous 3건, v.daum.net 2건, ainews1.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-25T09:01:54+09:00"
+  "updated_at": "2026-09-25T12:01:50+09:00"
 }
