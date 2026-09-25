@@ -3,36 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 전송 1건, 실패 0건, 38초",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 17초",
   "counts": {
-    "new": 1,
-    "sent": 1,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 1건, 전송 1건, 실패 0건, 38초",
-    "[신규] [시정알림방] 2026년 통합재가서비스  및 화성형 통합돌봄지원 사업 안내"
+    "신규 0건, 전송 0건, 실패 0건, 17초"
   ],
   "link": "",
-  "run_id": 35936441821,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35936441821",
-  "request_id": "cron-202609240000",
+  "run_id": 36075562159,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36075562159",
+  "request_id": "cron-202609250000",
   "trigger": "schedule",
-  "started_at": "2026-09-24T09:01:56+09:00",
-  "duration_sec": 38,
+  "started_at": "2026-09-25T09:01:42+09:00",
+  "duration_sec": 17,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 1건, 첨부 1건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "1건 발송, 무음 0건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-09-24T09:02:35+09:00"
+  "updated_at": "2026-09-25T09:02:00+09:00"
 }
