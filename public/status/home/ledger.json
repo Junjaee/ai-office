@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 2초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
   "counts": {
     "new": 1,
     "replaced": 0,
@@ -12,16 +12,16 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 2초",
-    "[추가] 2026년 9월 9/25 산전 8,000원 (생활비)"
+    "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
+    "[추가] 2026년 9월 9/25 하이파킹(주) 1,800원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36089075504,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36089075504",
-  "request_id": "cron-202609250307",
+  "run_id": 36090498811,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36090498811",
+  "request_id": "cron-202609250328",
   "trigger": "schedule",
-  "started_at": "2026-09-25T12:07:57+09:00",
-  "duration_sec": 2,
+  "started_at": "2026-09-25T12:28:59+09:00",
+  "duration_sec": 3,
   "tasks": [
     {
       "id": "collect",
@@ -35,5 +35,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-25T12:08:00+09:00"
+  "updated_at": "2026-09-25T12:29:03+09:00"
 }
