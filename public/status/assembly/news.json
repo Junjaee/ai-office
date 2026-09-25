@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 12초",
+  "summary": "신규 6건, 실패 0건, 11초",
   "counts": {
-    "new": 3,
+    "new": 6,
     "failed": 0,
-    "total": 2200
+    "total": 2206
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 12초",
-    "[신규] [오늘의 주요일정] 정치·정부 (25일, 금) — 뉴스1",
-    "[신규] [소수정당의 추석 ] 돈·사람·조직이 만드는 '존재감' — 더팩트",
-    "[신규] 李대통령, '개혁팔이 반명'에 우려…“선명함 멋있지만 오히려 결과 놓쳐” — etnews.com"
+    "신규 6건, 실패 0건, 11초",
+    "[신규] 아시안게임 메달리스트 혜택 뭘까… 연금 군면제 포상금은? — 위키트리",
+    "[신규] 양주서 방화 추정 빌라 화재…1명 사망·6명 부상 — news.sbs.co.kr",
+    "[신규] [바로이뉴스] 화기애애 국빈만찬…붉은색 장식에 선물은 흰머리수리 — news.sbs.co.kr",
+    "[신규] 대주자 송성문, 무안타 1득점…샌디에이고 3년 연속 PS 진출 — news.sbs.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36100974862,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36100974862",
-  "request_id": "cron-202609250600",
+  "run_id": 36116026307,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36116026307",
+  "request_id": "cron-202609250900",
   "trigger": "schedule",
-  "started_at": "2026-09-25T15:01:19+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-25T18:01:02+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 23건"
+      "summary": "검색어 5개에서 24건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 3건) · Histoire pour tous 3건, v.daum.net 2건, 뉴스1 2건"
+      "summary": "오늘 19건 (신규 6건) · Histoire pour tous 3건, news.sbs.co.kr 3건, histoire-pour-tous.fr 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-25T15:01:32+09:00"
+  "updated_at": "2026-09-25T18:01:14+09:00"
 }
