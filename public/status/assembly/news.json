@@ -1,39 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 2건, 실패 0건, 10초",
-  "counts": {
-    "new": 2,
-    "failed": 0,
-    "total": 2253
-  },
+  "summary": "뉴스 목록을 받아오지 못했어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 2건, 실패 0건, 10초",
-    "[신규] 복불복 룰렛 게임 음량 조절 기능의 범위 — Calgary Roughnecks",
-    "[신규] 해운사 인공지능 천차만별…“차별 전략 필요” — v.daum.net"
+    "뉴스 목록을 받아오지 못했어요",
+    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36250471504,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36250471504",
-  "request_id": "cron-202609261500",
+  "run_id": 36261067340,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36261067340",
+  "request_id": "cron-202609261800",
   "trigger": "schedule",
-  "started_at": "2026-09-27T00:01:38+09:00",
-  "duration_sec": 10,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 23건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 2건 (신규 2건) · Calgary Roughnecks 1건, v.daum.net 1건"
-    }
-  ],
+  "started_at": "2026-09-27T03:01:38+09:00",
+  "duration_sec": 125,
   "id": "news",
-  "updated_at": "2026-09-27T00:01:49+09:00"
+  "updated_at": "2026-09-27T03:03:44+09:00"
 }
