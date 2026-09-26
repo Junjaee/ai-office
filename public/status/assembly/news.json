@@ -3,37 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 실패 0건, 12초",
+  "summary": "신규 3건, 실패 0건, 12초",
   "counts": {
-    "new": 2,
+    "new": 3,
     "failed": 0,
-    "total": 2245
+    "total": 2248
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 2건, 실패 0건, 12초",
-    "[신규] 이준석 '기자 도시락 오찬' 청탁금지법 불송치…경찰 \"혐의 인정 어려워\" — 뉴스1",
-    "[신규] 개혁신당 천하람, 순천 대신 ‘송도’ 출마설… 올초 이사후 보폭 넓혀 [인천 정가 레이더] — 경인일보"
+    "신규 3건, 실패 0건, 12초",
+    "[신규] 심벌 교체 기능이 있는지 살펴보는 100명 룰렛 — Calgary Roughnecks",
+    "[신규] 지원 기능을 기준으로 비교하는 온라인경마시행일 게임 목록 — Calgary Roughnecks",
+    "[신규] 사이트추천좀 의 역사와 발전: 과거에서 현재까지 - 전문가의 관점에서 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36222502451,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36222502451",
-  "request_id": "cron-202609260600",
+  "run_id": 36231487721,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36231487721",
+  "request_id": "cron-202609260900",
   "trigger": "schedule",
-  "started_at": "2026-09-26T15:01:57+09:00",
+  "started_at": "2026-09-26T18:01:15+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 32건"
+      "summary": "검색어 5개에서 30건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 28건 (신규 2건) · 더코리아 4건, 한국사회복지저널 4건, news.sbs.co.kr 3건"
+      "summary": "오늘 31건 (신규 3건) · Calgary Roughnecks 4건, 더코리아 4건, 한국사회복지저널 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-26T15:02:10+09:00"
+  "updated_at": "2026-09-26T18:01:28+09:00"
 }
