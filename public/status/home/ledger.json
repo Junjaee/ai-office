@@ -13,14 +13,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 2초",
-    "[추가] 2026년 9월 9/26 구글페이먼트코 33,000원 (생활비)"
+    "[추가] 2026년 9월 9/26 우지커피위례중앙 4,800원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36210160622,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36210160622",
-  "request_id": "cron-202609260157",
+  "run_id": 36212970467,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36212970467",
+  "request_id": "cron-202609260250",
   "trigger": "schedule",
-  "started_at": "2026-09-26T10:58:20+09:00",
+  "started_at": "2026-09-26T11:51:35+09:00",
   "duration_sec": 2,
   "tasks": [
     {
@@ -35,5 +35,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-26T10:58:24+09:00"
+  "updated_at": "2026-09-26T11:51:38+09:00"
 }
