@@ -1,22 +1,39 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "뉴스 목록을 받아오지 못했어요",
-  "counts": {},
+  "summary": "신규 2건, 실패 0건, 12초",
+  "counts": {
+    "new": 2,
+    "failed": 0,
+    "total": 2255
+  },
   "next_run": "3시간마다",
   "log": [
-    "뉴스 목록을 받아오지 못했어요",
-    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
+    "신규 2건, 실패 0건, 12초",
+    "[신규] '청춘의 교과서' 이준석, 대통령이 안아줘야 할 때 [유병철의 스포츠 렉시오] — v.daum.net",
+    "[신규] 진보좌파의 90도 타락 — 모닝포커스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36261067340,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36261067340",
-  "request_id": "cron-202609261800",
+  "run_id": 36271476033,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36271476033",
+  "request_id": "cron-202609262100",
   "trigger": "schedule",
-  "started_at": "2026-09-27T03:01:38+09:00",
-  "duration_sec": 125,
+  "started_at": "2026-09-27T06:01:28+09:00",
+  "duration_sec": 12,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 19건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 4건 (신규 2건) · v.daum.net 2건, Calgary Roughnecks 1건, 모닝포커스 1건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-09-27T03:03:44+09:00"
+  "updated_at": "2026-09-27T06:01:41+09:00"
 }
