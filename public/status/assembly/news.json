@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 9초",
+  "summary": "신규 4건, 실패 0건, 9초",
   "counts": {
-    "new": 8,
+    "new": 4,
     "failed": 0,
-    "total": 2239
+    "total": 2243
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 9초",
-    "[신규] 지선 참패에 자작극까지…벼랑 끝 개혁신당, 총선 앞두고 승부수 통할까 — news1.kr, v.daum.net",
-    "[신규] PC에서 버튼이 작게 보일 때, 스포츠 사이트 추천 화면 점검 — Calgary Roughnecks",
-    "[신규] '지지율 1%대' 개혁신당…경기 남부 출마로 돌파구 찾을까 — 한국경제",
-    "[신규] 뱅가르와 정부, 2027년 예산안에 합의, 9월 29일 파리푸르나로 가져갈 예정 — VOI.ID"
+    "신규 4건, 실패 0건, 9초",
+    "[신규] ‘이준석 없는’ 개혁신당 한달…다음 총선 ‘기호 4번’ 남을까 — 서울신문",
+    "[신규] 이준석 '기자 도시락 오찬' 불송치…\"청탁금지법 위반 인정 부족\" — 뉴시스",
+    "[신규] 이준석 \"법무차관, 3개 선택지 모두 항소 포기…꼰대의 갑질\" | 1min요약 — 중앙일보",
+    "[신규] 개혁신당, 북핵·제재 맞교환 제안에 “순서부터 바로 세워야” — 한국사회복지저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36203198633,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36203198633",
-  "request_id": "cron-202609260000",
+  "run_id": 36213502269,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36213502269",
+  "request_id": "cron-202609260300",
   "trigger": "schedule",
-  "started_at": "2026-09-26T09:01:08+09:00",
+  "started_at": "2026-09-26T12:01:48+09:00",
   "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 29건"
+      "summary": "검색어 5개에서 32건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 22건 (신규 8건) · 더코리아 4건, news.sbs.co.kr 3건, 한국사회복지저널 3건"
+      "summary": "오늘 26건 (신규 4건) · 더코리아 4건, 한국사회복지저널 4건, news.sbs.co.kr 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-26T09:01:18+09:00"
+  "updated_at": "2026-09-26T12:01:58+09:00"
 }
