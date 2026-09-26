@@ -7,34 +7,34 @@
   "counts": {
     "new": 3,
     "failed": 0,
-    "total": 2248
+    "total": 2251
   },
   "next_run": "3시간마다",
   "log": [
     "신규 3건, 실패 0건, 12초",
-    "[신규] 심벌 교체 기능이 있는지 살펴보는 100명 룰렛 — Calgary Roughnecks",
-    "[신규] 지원 기능을 기준으로 비교하는 온라인경마시행일 게임 목록 — Calgary Roughnecks",
-    "[신규] 사이트추천좀 의 역사와 발전: 과거에서 현재까지 - 전문가의 관점에서 — Histoire pour tous"
+    "[신규] 사진탐방 | 추석 끝자락, \"경복궁과 백악산\" — 시민행정신문",
+    "[신규] 국민의힘, 모두가 승리하는 새로운 대선 경선 제안 — 브레이크뉴스",
+    "[신규] 무너진 여야 4강 체제…한동훈, 나홀로 상승세 [여론 뒤집기] — edaily.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36231487721,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36231487721",
-  "request_id": "cron-202609260900",
+  "run_id": 36240591864,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36240591864",
+  "request_id": "cron-202609261200",
   "trigger": "schedule",
-  "started_at": "2026-09-26T18:01:15+09:00",
+  "started_at": "2026-09-26T21:01:21+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 30건"
+      "summary": "검색어 5개에서 25건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 31건 (신규 3건) · Calgary Roughnecks 4건, 더코리아 4건, 한국사회복지저널 4건"
+      "summary": "오늘 34건 (신규 3건) · Calgary Roughnecks 4건, 더코리아 4건, 한국사회복지저널 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-26T18:01:28+09:00"
+  "updated_at": "2026-09-26T21:01:34+09:00"
 }
