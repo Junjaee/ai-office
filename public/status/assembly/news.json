@@ -7,35 +7,35 @@
   "counts": {
     "new": 5,
     "failed": 0,
-    "total": 2260
+    "total": 2265
   },
   "next_run": "3시간마다",
   "log": [
     "신규 5건, 실패 0건, 12초",
-    "[신규] 오세훈·한동훈·이준석·유승민의 독자 행보, 보수 진영의 미래는 어디로 — 공감신문",
-    "[신규] 내년초 본격 등판?…吳·李·韓·劉, 보수재건 외치며 암중모색 — 연합뉴스 한민족센터",
-    "[신규] 이준석, 조진웅 은퇴에 \"대통령은 괜찮고 배우는 은퇴하는 모순\" | 1min요약 — joongang.co.kr",
-    "[신규] 비대위 띄운 개혁신당, 千 순천고수에 '경기남부벨트' 구상 암초 — 연합뉴스 한민족센터, supple.kr, v.daum.net"
+    "[신규] 장동혁 체제 이후 보수 리더십 재편 어디로…오세훈·한동훈·이준석·유승민 각자도생 — 톱스타뉴스",
+    "[신규] 이준석 개혁신당 국회의원의 인터뷰를 읽고 — 브런치",
+    "[신규] 「소강석 목사의 영혼 아포리즘」 “테크볼, 아시안게임에서 금메달을 땄다” — 뉴스파워",
+    "[신규] [정부 주요 일정] 경제·사회부처 주간 일정 (9월 28일 ~ 10월 2일) — 이투데이"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36281157094,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36281157094",
-  "request_id": "cron-202609270000",
+  "run_id": 36290136266,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36290136266",
+  "request_id": "cron-202609270300",
   "trigger": "schedule",
-  "started_at": "2026-09-27T09:00:41+09:00",
+  "started_at": "2026-09-27T12:00:40+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 26건"
+      "summary": "검색어 5개에서 28건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 9건 (신규 5건) · v.daum.net 3건, 연합뉴스 한민족센터 2건, Calgary Roughnecks 1건"
+      "summary": "오늘 14건 (신규 5건) · v.daum.net 3건, 연합뉴스 2건, 연합뉴스 한민족센터 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-27T09:00:54+09:00"
+  "updated_at": "2026-09-27T12:00:53+09:00"
 }
