@@ -3,38 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 12초",
+  "summary": "신규 1건, 실패 0건, 12초",
   "counts": {
-    "new": 3,
+    "new": 1,
     "failed": 0,
-    "total": 2280
+    "total": 2281
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 12초",
-    "[신규] 김선교 의원 , 수산자원 고갈 및 어민 생존권 위협하는 불법어업, 최근 5년여간 총 6,636건 적발! — 시민행정신문",
-    "[신규] 김문수 의원, 특수교육 교사 4,663명 부족...법정 특수교사 정원 준수는 나몰라라? — 시민행정신문",
-    "[신규] 이종욱 의원, 2분기 가계대출 1인당 9,790만원 다중채무자 비중 23.7%…10년 사이 최고 — 시민행정신문"
+    "신규 1건, 실패 0건, 12초",
+    "[신규] 박해철 의원, 건설업 산재 신청 1만건 늘었는데 불승인율은 3배 이상 급증 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36338995893,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36338995893",
-  "request_id": "cron-202609271800",
+  "run_id": 36350063089,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36350063089",
+  "request_id": "cron-202609272100",
   "trigger": "schedule",
-  "started_at": "2026-09-28T03:00:30+09:00",
+  "started_at": "2026-09-28T06:00:30+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 38건"
+      "summary": "검색어 5개에서 36건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 6건 (신규 3건) · 시민행정신문 3건, hanyangeconomy.com 1건, 아주경제 1건"
+      "summary": "오늘 7건 (신규 1건) · 시민행정신문 4건, hanyangeconomy.com 1건, 아주경제 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-28T03:00:43+09:00"
+  "updated_at": "2026-09-28T06:00:43+09:00"
 }
