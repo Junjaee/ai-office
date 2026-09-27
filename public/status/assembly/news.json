@@ -3,35 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 실패 0건, 9초",
+  "summary": "신규 3건, 실패 0건, 15초",
   "counts": {
-    "new": 0,
+    "new": 3,
     "failed": 0,
-    "total": 2274
+    "total": 2277
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 0건, 실패 0건, 9초"
+    "신규 3건, 실패 0건, 15초",
+    "[신규] [2026 한가위, 밥상민심을 읽다] ⑦ 이준석 사퇴 후 첫 명절…‘자강과 쇄신’ 시험대 오른 이기인 비대위 — hanyangeconomy.com",
+    "[신규] 오세훈·한동훈·이준석·유승민 보수재건 외치며 암중모색 — 울산신문",
+    "[신규] 이형일 부총리, 첫 경제현안간담회서 전기차·퇴직연금 개선 논의 — 아주경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36317535054,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36317535054",
-  "request_id": "cron-202609271200",
+  "run_id": 36327931034,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36327931034",
+  "request_id": "cron-202609271500",
   "trigger": "schedule",
-  "started_at": "2026-09-27T21:00:37+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-09-28T00:00:33+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 32건"
+      "summary": "검색어 5개에서 36건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 23건 (신규 0건) · v.daum.net 5건, 경북신문 2건, 연합뉴스 2건"
+      "summary": "오늘 3건 (신규 3건) · hanyangeconomy.com 1건, 아주경제 1건, 울산신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-27T21:00:47+09:00"
+  "updated_at": "2026-09-28T00:00:49+09:00"
 }
