@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 13초",
+  "summary": "신규 16건, 실패 0건, 11초",
   "counts": {
-    "new": 23,
+    "new": 16,
     "failed": 0,
-    "total": 2314
+    "total": 2330
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 13초",
-    "[신규] 명지대 미래교육원 이준석·이보미, 아시안게임 테크볼 금메달·종합격투기 동메달 획득 — 스포트라이트유",
-    "[신규] 화성시동탄아르딤복지관, 동화성지역세무사회 장애인복지사업 후원금 200만원 지원 — 경인신문",
-    "[신규] ‘성적은 인기순 아니잖아요’ 설움 씻은 금메달리스트 — dailian.co.kr",
-    "[신규] 무료 보너스 레지스터 카지노 한국어 게임 화면의 정보 우선순위 — Histoire pour tous"
+    "신규 16건, 실패 0건, 11초",
+    "[신규] 이준석 \"가상자산 규제, 글로벌 시장과 호환돼야\" [이스트포인트 : 서울 2026] — hankyung.com",
+    "[신규] 이준석 \"가상자산, 해외와 '제도적 호환성' 갖춰야…선물 시장도 필요\" — 뉴스1",
+    "[신규] 이준석 \"韓 디지털자산 규제, 글로벌 호환성 갖춰야\" — edaily.co.kr",
+    "[신규] 개혁신당 비대위, 조강특위 가동…\"천하람 지역구, 10월 내 결론\" — 아시아경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36371975434,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36371975434",
-  "request_id": "cron-202609280300",
+  "run_id": 36384356188,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36384356188",
+  "request_id": "cron-202609280600",
   "trigger": "schedule",
-  "started_at": "2026-09-28T12:00:45+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-09-28T15:00:43+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 56건"
+      "summary": "검색어 5개에서 65건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 40건 (신규 23건) · 시민행정신문 11건, 뉴시스 3건, dailian.co.kr 2건"
+      "summary": "오늘 56건 (신규 16건) · 시민행정신문 11건, v.daum.net 6건, edaily.co.kr 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-28T12:00:58+09:00"
+  "updated_at": "2026-09-28T15:00:56+09:00"
 }
