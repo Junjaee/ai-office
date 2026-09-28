@@ -3,7 +3,7 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 전송 0건, 실패 0건, 12초",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 16초",
   "counts": {
     "new": 0,
     "sent": 0,
@@ -11,15 +11,15 @@
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 0건, 전송 0건, 실패 0건, 12초"
+    "신규 0건, 전송 0건, 실패 0건, 16초"
   ],
   "link": "",
-  "run_id": 36281159775,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36281159775",
-  "request_id": "cron-202609270000",
+  "run_id": 36360563187,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36360563187",
+  "request_id": "cron-202609280000",
   "trigger": "schedule",
-  "started_at": "2026-09-27T09:00:42+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-28T09:00:48+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
@@ -33,5 +33,5 @@
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-09-27T09:00:56+09:00"
+  "updated_at": "2026-09-28T09:01:05+09:00"
 }
