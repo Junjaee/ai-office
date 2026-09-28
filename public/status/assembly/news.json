@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 49건, 실패 0건, 14초",
+  "summary": "신규 14건, 실패 0건, 14초",
   "counts": {
-    "new": 49,
+    "new": 14,
     "failed": 0,
-    "total": 2379
+    "total": 2393
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 49건, 실패 0건, 14초",
-    "[신규] 이준석 명지대 미래교육원생, 아시안게임 금메달…이보미는 동메달 — 매일일보",
-    "[신규] 한달만 침묵 깬 이준석 \"지뢰엔 김정은 싫어하는 확성기 처방부터\" — v.daum.net",
-    "[신규] [단독]아시안게임 金 영웅들, '유퀴즈' 뜬다…테크볼 이준석·체조 황서현→女농구팀 총출동 — SPOTV NEWS",
-    "[신규] \"8조원 쏟아붓는다\"…이민근 안산시장, 병원 유치·4호선 지하화 승부수 — v.daum.net"
+    "신규 14건, 실패 0건, 14초",
+    "[신규] 野, DMZ 사고 청문회·국정조사 요구…“北 국선변호인·김정은 비서실장인가” — 서울신문",
+    "[신규] 카지노 몬테레이 accommodation - 2026년 최신판 — calgaryroughnecks.com",
+    "[신규] 국회 국방위, 파주 DMZ 지뢰 폭발 현장 점검 — 경기일보",
+    "[신규] 국회 재경위 출석한 박홍근 기획예산처 장관 — 글로벌뉴스통신GNA"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36400762267,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36400762267",
-  "request_id": "cron-202609280900",
+  "run_id": 36419050469,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36419050469",
+  "request_id": "cron-202609281200",
   "trigger": "schedule",
-  "started_at": "2026-09-28T18:00:44+09:00",
+  "started_at": "2026-09-28T21:00:57+09:00",
   "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 101건"
+      "summary": "검색어 5개에서 117건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 105건 (신규 49건) · 시민행정신문 24건, v.daum.net 12건, edaily.co.kr 7건"
+      "summary": "오늘 119건 (신규 14건) · 시민행정신문 24건, v.daum.net 17건, edaily.co.kr 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-28T18:01:00+09:00"
+  "updated_at": "2026-09-28T21:01:12+09:00"
 }
