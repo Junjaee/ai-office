@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 14초",
+  "summary": "신규 11건, 실패 0건, 15초",
   "counts": {
-    "new": 14,
+    "new": 11,
     "failed": 0,
-    "total": 2393
+    "total": 2404
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 14초",
-    "[신규] 野, DMZ 사고 청문회·국정조사 요구…“北 국선변호인·김정은 비서실장인가” — 서울신문",
-    "[신규] 카지노 몬테레이 accommodation - 2026년 최신판 — calgaryroughnecks.com",
-    "[신규] 국회 국방위, 파주 DMZ 지뢰 폭발 현장 점검 — 경기일보",
-    "[신규] 국회 재경위 출석한 박홍근 기획예산처 장관 — 글로벌뉴스통신GNA"
+    "신규 11건, 실패 0건, 15초",
+    "[신규] 컴백 이준석“지뢰엔 김정은 싫어하는 확성기 처방” — 문화일보",
+    "[신규] 동화성지역세무사회, 장애인 복지 위한 후원금 200만 원 쾌척 — 화성신문",
+    "[신규] “靑비서실장에 ‘추미애 대항마’로 키울 한준호 가능성”[정치를 부탁해] — 동아일보, 네이트",
+    "[신규] 개혁신당 임주영 비대위원, 신뢰 회복·조직 안정 과제 제시 — NANOOM ENERGY"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36419050469,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36419050469",
-  "request_id": "cron-202609281200",
+  "run_id": 36440258166,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36440258166",
+  "request_id": "cron-202609281500",
   "trigger": "schedule",
-  "started_at": "2026-09-28T21:00:57+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-09-29T00:00:48+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 117건"
+      "summary": "검색어 5개에서 124건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 119건 (신규 14건) · 시민행정신문 24건, v.daum.net 17건, edaily.co.kr 8건"
+      "summary": "오늘 11건 (신규 11건) · NANOOM ENERGY 5건, 네이트 1건, 동아일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-28T21:01:12+09:00"
+  "updated_at": "2026-09-29T00:01:04+09:00"
 }
