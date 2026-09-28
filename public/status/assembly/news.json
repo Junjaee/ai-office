@@ -3,36 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 12초",
+  "summary": "신규 10건, 실패 0건, 9초",
   "counts": {
-    "new": 1,
+    "new": 10,
     "failed": 0,
-    "total": 2281
+    "total": 2291
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 12초",
-    "[신규] 박해철 의원, 건설업 산재 신청 1만건 늘었는데 불승인율은 3배 이상 급증 — 시민행정신문"
+    "신규 10건, 실패 0건, 9초",
+    "[신규] 김종인 \"이준석 선대위 복귀 기대 어려워…우리에게 마이너스\" — JTBC",
+    "[신규] 김정재 의원, 주소만 지방으로?…지방이전 공공기관 수도권 사택 29건, 12건은 이전 후 샀다 — 시민행정신문",
+    "[신규] 복기왕 의원, “표 없이 타고 걸려도 배째라” 열차 부정승차 80만건, 징수 수단은 0 — 시민행정신문",
+    "[신규] 김주영 의원, 하루 50만 건 해외직구, 포장재는 통계도 책임도 없다? — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36350063089,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36350063089",
-  "request_id": "cron-202609272100",
+  "run_id": 36360558844,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36360558844",
+  "request_id": "cron-202609280000",
   "trigger": "schedule",
-  "started_at": "2026-09-28T06:00:30+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-28T09:00:43+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 36건"
+      "summary": "검색어 5개에서 40건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 7건 (신규 1건) · 시민행정신문 4건, hanyangeconomy.com 1건, 아주경제 1건"
+      "summary": "오늘 17건 (신규 10건) · 시민행정신문 9건, JTBC 1건, OBC 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-28T06:00:43+09:00"
+  "updated_at": "2026-09-28T09:00:54+09:00"
 }
