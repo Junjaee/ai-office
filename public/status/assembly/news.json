@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 9초",
+  "summary": "신규 23건, 실패 0건, 13초",
   "counts": {
-    "new": 10,
+    "new": 23,
     "failed": 0,
-    "total": 2291
+    "total": 2314
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 9초",
-    "[신규] 김종인 \"이준석 선대위 복귀 기대 어려워…우리에게 마이너스\" — JTBC",
-    "[신규] 김정재 의원, 주소만 지방으로?…지방이전 공공기관 수도권 사택 29건, 12건은 이전 후 샀다 — 시민행정신문",
-    "[신규] 복기왕 의원, “표 없이 타고 걸려도 배째라” 열차 부정승차 80만건, 징수 수단은 0 — 시민행정신문",
-    "[신규] 김주영 의원, 하루 50만 건 해외직구, 포장재는 통계도 책임도 없다? — 시민행정신문"
+    "신규 23건, 실패 0건, 13초",
+    "[신규] 명지대 미래교육원 이준석·이보미, 아시안게임 테크볼 금메달·종합격투기 동메달 획득 — 스포트라이트유",
+    "[신규] 화성시동탄아르딤복지관, 동화성지역세무사회 장애인복지사업 후원금 200만원 지원 — 경인신문",
+    "[신규] ‘성적은 인기순 아니잖아요’ 설움 씻은 금메달리스트 — dailian.co.kr",
+    "[신규] 무료 보너스 레지스터 카지노 한국어 게임 화면의 정보 우선순위 — Histoire pour tous"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36360558844,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36360558844",
-  "request_id": "cron-202609280000",
+  "run_id": 36371975434,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36371975434",
+  "request_id": "cron-202609280300",
   "trigger": "schedule",
-  "started_at": "2026-09-28T09:00:43+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-09-28T12:00:45+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 40건"
+      "summary": "검색어 5개에서 56건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 17건 (신규 10건) · 시민행정신문 9건, JTBC 1건, OBC 뉴스 1건"
+      "summary": "오늘 40건 (신규 23건) · 시민행정신문 11건, 뉴시스 3건, dailian.co.kr 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-28T09:00:54+09:00"
+  "updated_at": "2026-09-28T12:00:58+09:00"
 }
