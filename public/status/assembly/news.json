@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 21건, 실패 0건, 12초",
+  "summary": "신규 25건, 실패 0건, 10초",
   "counts": {
-    "new": 21,
+    "new": 25,
     "failed": 0,
-    "total": 2464
+    "total": 2489
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 21건, 실패 0건, 12초",
-    "[신규] [단독] '12년 만의 AG 농구 金 주역' 이현중, 유재석 만난다…'유퀴즈' 출연 — news1.kr",
-    "[신규] 한국군 훈련 정보 수집 혐의 중국인 2명…인민해방군 출신 — v.daum.net",
-    "[신규] 범보수계 수도권 의원들, 부동산 정책 점검·대안 마련 '포럼' 출범 — 매일일보",
-    "[신규] 野 '지뢰·포로' 쌍끌이 공세…\"李대통령 가짜평화 망상에 軍압박\"(종합) — 연합뉴스"
+    "신규 25건, 실패 0건, 10초",
+    "[신규] 이준석 \"가상자산 규제, 글로벌 시장과 호환돼야\" [이스트포인트 : 서울 2026] By Bloomingbit — Investing.com 한국어",
+    "[신규] 인천·경기 집값 겨냥한 야권 공조…이준석·조정훈 ‘수도권 주거혁신포럼’ 출범 — 인천일보",
+    "[신규] 이준석, 국힘과 손잡고 '수도권 주거혁신포럼' 띄운다…李정부 부동산 겨냥 — 뉴스1",
+    "[신규] 조정훈·이준석, 수도권 부동산 해법 손잡았다...‘주거혁신포럼’ 출범 — m-economynews.com"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36528874368,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36528874368",
-  "request_id": "cron-202609290600",
+  "run_id": 36546336333,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36546336333",
+  "request_id": "cron-202609290900",
   "trigger": "schedule",
-  "started_at": "2026-09-29T15:00:59+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-29T18:00:54+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 142건"
+      "summary": "검색어 5개에서 99건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 71건 (신규 21건) · v.daum.net 10건, NANOOM ENERGY 6건, ksw-news.com 5건"
+      "summary": "오늘 96건 (신규 25건) · v.daum.net 12건, NANOOM ENERGY 6건, ksw-news.com 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-29T15:01:12+09:00"
+  "updated_at": "2026-09-29T18:01:05+09:00"
 }
