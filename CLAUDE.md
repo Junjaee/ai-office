@@ -58,6 +58,7 @@
 
 - Windows 11 ARM. arm64 빌드가 없는 모듈(workerd 등) 때문에 npm 은 x64 Node 로 돌린다 — `scripts/npm.sh` 가 `%LOCALAPPDATA%\node-x64\node` 를 찾아 알아서 쓴다.
 - Python 3.13(requests, bs4, lxml, PyYAML, pytest, google-api-python-client) 있음. `pwsh` 없음(Windows PowerShell 5.1).
+- **이 PC 에서 도는 녹음·백필 자료는 `%USERPROFILE%\ai-office-data\{kis-record,toss-record}`** (2026-09-29). AppData 를 쓰지 않는 이유: Claude 앱(MSIX)이 띄운 프로세스의 `%LOCALAPPDATA%` 쓰기는 앱 전용 폴더(`Packages\…\LocalCache\Local`)로 우회돼 작업 스케줄러 등 밖의 프로세스와 서로 다른 폴더를 본다. **몇 시간 도는 작업은 도구 셸에서 띄우지 말고 작업 스케줄러 작업(`Toss-record`·`Toss-backfill`·`KIS-backfill`)으로 `schtasks /Run`** — 도구 셸이 재시작되면 자식 프로세스가 같이 죽는다(실측). `bash` 는 `/usr/bin/bash` 로 부른다(PATH 순서에 따라 WSL 이 잡힘).
 
 ## 확인 명령 (저장소 폴더에서, Git Bash)
 
