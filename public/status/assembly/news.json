@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 25건, 실패 0건, 10초",
+  "summary": "신규 46건, 실패 0건, 10초",
   "counts": {
-    "new": 25,
+    "new": 46,
     "failed": 0,
-    "total": 2489
+    "total": 2535
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 25건, 실패 0건, 10초",
-    "[신규] 이준석 \"가상자산 규제, 글로벌 시장과 호환돼야\" [이스트포인트 : 서울 2026] By Bloomingbit — Investing.com 한국어",
-    "[신규] 인천·경기 집값 겨냥한 야권 공조…이준석·조정훈 ‘수도권 주거혁신포럼’ 출범 — 인천일보",
-    "[신규] 이준석, 국힘과 손잡고 '수도권 주거혁신포럼' 띄운다…李정부 부동산 겨냥 — 뉴스1",
-    "[신규] 조정훈·이준석, 수도권 부동산 해법 손잡았다...‘주거혁신포럼’ 출범 — m-economynews.com"
+    "신규 46건, 실패 0건, 10초",
+    "[신규] 나경원, 'DMZ 지뢰참사' 진상규명 결의안 대표발의…한동훈·이준석도 동참 — 아시아경제",
+    "[신규] 나경원 'DMZ 지뢰참사' 규명 결의안 발의…한동훈·이준석 동참 — 연합뉴스 한민족센터",
+    "[신규] 나경원 'DMZ 지뢰참사' 진상규명 결의안 발의…한동훈·이준석 동참 — v.daum.net",
+    "[신규] 나경원, DMZ 지뢰사고 국회 진상규명 촉구…한동훈·이준석도 참여 — 아주경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36546336333,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36546336333",
-  "request_id": "cron-202609290900",
+  "run_id": 36565301746,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36565301746",
+  "request_id": "cron-202609291200",
   "trigger": "schedule",
-  "started_at": "2026-09-29T18:00:54+09:00",
+  "started_at": "2026-09-29T21:01:03+09:00",
   "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 99건"
+      "summary": "검색어 5개에서 121건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 96건 (신규 25건) · v.daum.net 12건, NANOOM ENERGY 6건, ksw-news.com 5건"
+      "summary": "오늘 142건 (신규 46건) · 시민행정신문 16건, v.daum.net 13건, NANOOM ENERGY 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-29T18:01:05+09:00"
+  "updated_at": "2026-09-29T21:01:15+09:00"
 }
