@@ -13,7 +13,7 @@
 
 - 조회 한도(공식): 시세 그룹 초당 15건, 차트 초당 20건, 현재가는 한 호출에 200종목. 응답 헤더 `X-RateLimit-Remaining` 이 0 이면 `X-RateLimit-Reset` 초 쉰다. 429 면 `Retry-After`.
 - **허용 IP 필수**: WTS 설정 > Open API 에 이 PC 공인 IP 를 등록해야 한다(아니면 403). IP 가 바뀌면 다시 등록. GitHub 서버에선 못 쓴다.
-- **클라이언트당 토큰 1개**: 새로 발급하면 이전 토큰이 즉시 무효. 그래서 `%LOCALAPPDATA%\toss-record\token.json` 하나를 모든 프로그램이 공유하고, 만료 직전·401 일 때만 재발급한다(재발급 전에 파일을 다시 읽어 다른 프로그램이 먼저 갱신했으면 그것을 쓴다).
+- **클라이언트당 토큰 1개**: 새로 발급하면 이전 토큰이 즉시 무효. 그래서 `%USERPROFILE%\ai-office-data\toss-record\token.json` 하나를 모든 프로그램이 공유하고, 만료 직전·401 일 때만 재발급한다(재발급 전에 파일을 다시 읽어 다른 프로그램이 먼저 갱신했으면 그것을 쓴다).
 - 체결 메시지에 매수/매도 구분·체결강도가 없다. 직전 호가 스냅샷과 대조해(체결가 ≥ 매도1 이면 매수 체결) 추정하는 것은 분석 단계에서 한다.
 - 1분봉은 통합(KRX+NXT) 거래량이고 08:01~20:00 봉이 온다. 저장은 정규장(09:00~15:30 시작 봉)만 기본(`--all-sessions` 로 전부). 토스 timestamp 는 봉 종료 시각이라 봉 시작 시각으로 바꿔 저장한다.
 - 자료는 **본인 매매 목적만, 제3자 배포 금지**(FAQ 데이터 이용 정책). 원자료는 이 PC 에만 두고 저장소에는 건수·집계값만.
@@ -31,14 +31,14 @@
 1. Python 3.11 이상 + `pip install websockets pyarrow pandas pyyaml requests`. (Windows 가 아니어도 됨 — 잠금·절전 방지는 윈도우에서만 켜진다)
 2. 토스 WTS 설정 > Open API > 허용 IP 에 그 PC 의 공인 IP 추가(`curl https://api.ipify.org`). 한투는 IP 등록 없음.
 3. **한 계정의 토스 프로그램은 한 PC 에서만** — 이 PC 의 작업 스케줄러(`Toss-record`)와 백필을 먼저 끈다(`install_task.ps1 -Remove`). 두 PC 가 동시에 돌리면 토큰·연결을 서로 끊는다.
-4. 자료 저장 위치는 그 PC 의 `%LOCALAPPDATA%\toss-record`(리눅스는 홈 아래). 이 PC 에 쌓인 자료(2026-09-29~)는 필요하면 복사.
+4. 자료 저장 위치는 그 PC 의 `%USERPROFILE%\ai-office-data\toss-record`(리눅스는 홈 아래). 이 PC 에 쌓인 자료(2026-09-29~)는 필요하면 복사.
 5. 절전·자동 재부팅 끄고 전원 연결. `install_task.ps1` 로 08:55 등록.
 
 ## 파일
 
 - `toss_rest.py` — 토큰(파일 공유)·유량·재시도, `orderbook()`·`prices()`·`trades()`·`candles()`·`candles_all()`·`daily_series_all()`·`stocks_all()`.
 - `toss_ws.py` — 웹소켓: 선언형 구독, PING 60초, 재연결, 호가 평탄화(`flatten_book`), `split_codes()`.
-- `record_toss.py` — 하루 녹음기(`--codes | --picks 파일 | --auto`(후보 파일 + 시총 범위 안 거래대금 상위), `--mode both|book|trade`, `--minutes` 시험). 저장 `%LOCALAPPDATA%\toss-record\YYYY-MM-DD\run_HHMMSS\{orderbook|trade}_<코드>.parquet`, 요약 두 벌(summary·safe_summary).
+- `record_toss.py` — 하루 녹음기(`--codes | --picks 파일 | --auto`(후보 파일 + 시총 범위 안 거래대금 상위), `--mode both|book|trade`, `--minutes` 시험). 저장 `%USERPROFILE%\ai-office-data\toss-record\YYYY-MM-DD\run_HHMMSS\{orderbook|trade}_<코드>.parquet`, 요약 두 벌(summary·safe_summary).
 - `toss_candles.py` — 1분봉 백필(`--targets csv | --codes | --universe`, `--since/--until`, `--stop-at`, 재시작 가능 `minutes/done.txt`). 저장 `minutes\YYYY-MM-DD\<코드>.parquet`(KIS 열 이름).
 - `toss_flows.py` — 수급 백필(`--codes | --universe | --all-listed`, `--kinds`, `--since`, `--refresh`). 저장 `flows\<종류>\<코드>.parquet`(중첩 필드는 점 연결 이름, 전 열 문자열).
 - `start_backfill.ps1` — 분봉(목표 목록) → 수급(시총 범위 전 종목) 을 숨긴 창으로 차례로. `run_chain.py` 가 순서대로 돌린다(REST 작업은 `rest.lock` 으로 하나만).

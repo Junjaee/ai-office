@@ -1,6 +1,6 @@
 # 밤새 1분봉 백필을 숨긴 창으로 띄운다. 사용: powershell -ExecutionPolicy Bypass -File automations\kis_record\start_backfill.ps1 [-Targets <csv>] [-StopAt 08:30]
 param([string]$Targets = "", [string]$StopAt = "08:30", [string]$Interval = "1.5")
-$base = Join-Path $env:LOCALAPPDATA "kis-record"
+$base = Join-Path $env:USERPROFILE "ai-office-data\kis-record"
 if (-not $Targets) { $Targets = Join-Path $base "minutes\targets_A_2025Q4_2026Q3.csv" }
 $logDir = Join-Path $base "logs"; New-Item -ItemType Directory -Force $logDir | Out-Null
 $script = Join-Path $PSScriptRoot "kis_minutes.py"

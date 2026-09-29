@@ -2,7 +2,7 @@
 
 - 문서: https://openapi.tossinvest.com/openapi-docs/overview.md , 명세 https://openapi.tossinvest.com/openapi-docs/latest/openapi.json (2026-09-29 확인)
 - 토큰: POST /oauth2/token (form, client_credentials). **클라이언트당 유효 토큰 1개** — 새로 발급하면 이전 토큰이 즉시 무효(401 token-revoked).
-  그래서 모든 프로세스가 %LOCALAPPDATA%\\toss-record\\token.json 하나를 공유하고, 만료 60초 전이나 401 일 때만 재발급한다(재발급 직전에 파일을 다시 읽어 다른 프로세스가 먼저 갱신했으면 그것을 쓴다).
+  그래서 모든 프로세스가 %USERPROFILE%\\ai-office-data\\toss-record\\token.json 하나를 공유하고, 만료 60초 전이나 401 일 때만 재발급한다(재발급 직전에 파일을 다시 읽어 다른 프로세스가 먼저 갱신했으면 그것을 쓴다).
 - 유량: 그룹별 초당 한도(MARKET_DATA 15, MARKET_DATA_CHART 20, AUTH 5). 성공 응답에도 X-RateLimit-Remaining 이 오므로 0 이면 X-RateLimit-Reset 초만큼 쉰다. 429 면 Retry-After.
 - 허용 IP: WTS 설정 > Open API 에 등록한 IP 에서만 됨(아니면 403). IP 가 바뀌면 다시 등록.
 - 값(client_id·secret·토큰)은 로그·오류 문구에 넣지 않는다.
@@ -20,7 +20,8 @@ import requests
 
 REST_URL = "https://openapi.tossinvest.com"
 WS_URL = "wss://openapi-ws.tossinvest.com/ws/v1"
-DEFAULT_OUT = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "toss-record"
+# 자료 폴더는 %USERPROFILE%i-office-data	oss-record (AppData 를 피하는 이유는 kis_record/record.py 참고). AI_OFFICE_DATA 로 바꿀 수 있다.
+DEFAULT_OUT = Path(os.environ.get("AI_OFFICE_DATA", str(Path.home() / "ai-office-data"))) / "toss-record"
 TOKEN_FILE = DEFAULT_OUT / "token.json"
 GROUP_RATE = {"MARKET_DATA": 15, "MARKET_DATA_CHART": 20, "AUTH": 5, "ACCOUNT": 1, "ASSET": 5}
 HISTORY_START_KR = "2022-11-23"        # FAQ: 국내 과거 시세 제공 시작일

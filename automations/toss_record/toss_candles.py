@@ -4,7 +4,7 @@
   python automations/toss_record/toss_candles.py --targets <csv(ticker,date)> [--stop-at 08:30]     # KIS 백필과 같은 목표 목록
   python automations/toss_record/toss_candles.py --codes 005930 --since 2025-09-01 --until 2025-09-30
   python automations/toss_record/toss_candles.py --universe --since 2025-10-01                       # 시총 범위 안 종목 전부(kis_universe)
-- 저장: %LOCALAPPDATA%\\toss-record\\minutes\\YYYY-MM-DD\\<ticker>.parquet, 열 = KIS 와 동일(stck_bsop_date·stck_cntg_hour·stck_prpr·stck_oprc·stck_hgpr·stck_lwpr·cntg_vol·acml_tr_pbmn).
+- 저장: %USERPROFILE%\\ai-office-data\\toss-record\\minutes\\YYYY-MM-DD\\<ticker>.parquet, 열 = KIS 와 동일(stck_bsop_date·stck_cntg_hour·stck_prpr·stck_oprc·stck_hgpr·stck_lwpr·cntg_vol·acml_tr_pbmn).
   토스 timestamp 는 봉 '종료' 시각(09:01 봉 = 09:00:00~09:00:59 체결) → stck_cntg_hour 는 봉 시작 시각(HHMM00)으로 바꿔 KIS(봉 시작 기준)와 맞춘다. acml_tr_pbmn 은 토스에 없어 빈 값.
   기본은 정규장(09:00~15:30 시작 봉)만 남긴다(--all-sessions 로 08:01~20:00 전부). KRX+NXT 통합 거래량이라 KIS(KRX 만)보다 크다.
 - 진행: minutes/done.txt (ticker,date). 한 종목의 여러 날짜를 한 번에 받으므로 목표 목록을 종목별로 묶어 호출 수를 줄인다(1년치 ≈ 475호출 ≈ 25초).

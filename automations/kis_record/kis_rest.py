@@ -1,6 +1,6 @@
 """한국투자증권 REST 조회 공통 — 접근토큰 캐시, 호출 간격 제한, 재시도, 오류 분류.
 
-- 토큰: POST /oauth2/tokenP. 24시간 유효. %LOCALAPPDATA%\\kis-record\\token.json 에 만료 시각과 함께 저장해 재사용한다
+- 토큰: POST /oauth2/tokenP. 24시간 유효. %USERPROFILE%\\ai-office-data\\kis-record\\token.json 에 만료 시각과 함께 저장해 재사용한다
   (한투는 1분에 1회만 발급해 주고, 6시간 안 재발급은 같은 토큰을 준다). 값은 로그·오류 문구에 넣지 않는다.
 - 한도: 문서상 실전 1초 20건이지만 2026-09-28 실측(백필 멈춘 상태, 간격별 30회): 간격 2.0·1.5초 → 초과 0회·응답 0.08초, 1.2초 → 6회, 1.0초 → 3회,
   0.8초 → 15회(응답 1.2초로 느려짐). 즉 이 계정은 **약 1.5초에 1건(0.67건/초)** 이 안전선이다. 기본 간격 1.5초, 초과 오류가 오면 1.5초 쉬고 다시. 한도가 풀리면 --interval 을 줄인다.
@@ -18,7 +18,7 @@ from typing import Callable
 import requests
 
 REST_URL = "https://openapi.koreainvestment.com:9443"
-TOKEN_FILE = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "kis-record" / "token.json"
+TOKEN_FILE = Path(os.environ.get("AI_OFFICE_DATA", str(Path.home() / "ai-office-data"))) / "kis-record" / "token.json"
 PATH_ASKING = "/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn"   # 주식현재가 호가/예상체결 [FHKST01010200]
 PATH_MINUTES = "/uapi/domestic-stock/v1/quotations/inquire-time-dailychartprice"  # 주식일별분봉조회 [FHKST03010230], 1년 보관
 TR_ASKING, TR_MINUTES = "FHKST01010200", "FHKST03010230"

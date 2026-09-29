@@ -34,7 +34,7 @@
 ## 파일
 
 - `kis_client.py` — 웹소켓: 접속키 발급(재시도), 구독 메시지, 프레임 해석(폭 학습·암호화/비정상 분류), 열 정렬 점검, 재연결 세션(`run_session`).
-- `kis_rest.py` — REST 공통: 접근토큰 캐시(`%LOCALAPPDATA%\kis-record\token.json`), 간격 제한, 한도 초과·5xx·토큰 만료 재시도, `asking_price()`·`day_minutes()`.
+- `kis_rest.py` — REST 공통: 접근토큰 캐시(`%USERPROFILE%\ai-office-data\kis-record\token.json`), 간격 제한, 한도 초과·5xx·토큰 만료 재시도, `asking_price()`·`day_minutes()`.
 - `record.py` — 웹소켓 하루 실행기(`--mode both|asp`, 잠금, 절전 방지, 휴장 감지, Parquet, 요약, 텔레그램).
 - `kis_snapshot.py` — 호가 스냅샷 실행기(`--n 150`(A층) `--cap-min 300 --cap-max 5000`(억) `--cycle 300`(바퀴 초) `--interval 1.5`, `--candidates` 파일, `--no-tier-b`, `--plan`(대상만 세기), `--sweeps` 시험).
 - `kis_universe.py` — 네이버 종목 목록(시총·거래대금·거래정지)으로 두 층 대상 만들기(`fetch_listing`·`build_universe`·`Universe.sweep_plan`).
@@ -48,7 +48,7 @@
 
 - `ai-home/02_주식신호/config.yaml`(gitignore) 의 `kis_app_key`·`kis_app_secret`. 코드는 환경변수로만 읽고 값을 찍지 않는다. **DEBUG 로깅을 켜지 말 것**. 접속키는 평문 `ws://` 로 오간다(한투 설계).
 - 관심 종목 `kis_watchlist: ["000660", "005930"]`. 텔레그램 `telegram_bot_token`·`telegram_chat_id` 가 있으면 끝날 때 한 줄.
-- 저장 위치 `%LOCALAPPDATA%\kis-record\` — `YYYY-MM-DD\run_HHMMSS\`(웹소켓), `YYYY-MM-DD\snap_HHMMSS\book.parquet`(스냅샷), `minutes\YYYY-MM-DD\<종목>.parquet`(분봉). 종목코드가 든 `summary.json` 은 로컬에만, 저장소·텔레그램에는 `safe_summary.json`(건수만).
+- 저장 위치 `%USERPROFILE%\ai-office-data\kis-record\` — `YYYY-MM-DD\run_HHMMSS\`(웹소켓), `YYYY-MM-DD\snap_HHMMSS\book.parquet`(스냅샷), `minutes\YYYY-MM-DD\<종목>.parquet`(분봉). 종목코드가 든 `summary.json` 은 로컬에만, 저장소·텔레그램에는 `safe_summary.json`(건수만).
 - 용량: 웹소켓 3건 하루 15~40MB, 스냅샷 400종목 하루 약 3만 행 수 MB, 분봉 종목·일당 381행(수십 KB). 드라이브 복사는 첫 주 실측 뒤 결정.
 - PC 조건: 녹음 시간에 로그인 상태(잠금 화면은 됨), 전원 연결. 드라이브(G:)가 늦게 붙어도 10분까지 기다린다.
 

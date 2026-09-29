@@ -6,7 +6,7 @@
   python record.py --codes ... --dry                            # 접속키만 받고 연결은 하지 않음
 
 - 비밀값: --config(기본 ai-home/02_주식신호/config.yaml)의 kis_app_key·kis_app_secret. 값은 어디에도 찍지 않는다.
-- 저장: --out(기본 %LOCALAPPDATA%\\kis-record)/YYYY-MM-DD/run_HHMMSS/<tr_id>_<code>.csv 에 한 줄씩(5초마다 flush),
+- 저장: --out(기본 %USERPROFILE%\\ai-office-data\\kis-record)/YYYY-MM-DD/run_HHMMSS/<tr_id>_<code>.csv 에 한 줄씩(5초마다 flush),
   끝나면 Parquet(zstd, 모든 열 문자열)로 바꾸고 csv 를 지운다. summary.json(로컬용 전체)·safe_summary.json(보고용 건수만)을 남긴다.
   시작할 때 앞선 실행이 남긴 csv 가 있으면 먼저 Parquet 으로 바꾼다.
 - 종목: --codes 직접 지정, 또는 --picks auto(kis_pick.today_picks: 관심 종목 + 거래대금 상위) / --picks 파일(한 줄에 코드 하나).
@@ -34,7 +34,10 @@ import kis_client as kc  # noqa: E402
 
 KST = ZoneInfo("Asia/Seoul")
 DEFAULT_CFG = HERE.parents[1] / "ai-home" / "02_주식신호" / "config.yaml"
-DEFAULT_OUT = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "kis-record"
+# 자료 폴더: AppData 가 아니라 사용자 폴더 아래(%USERPROFILE%i-office-data). 이유(2026-09-29): Claude 앱(MSIX)이 띄운 프로세스는 AppData\Local 쓰기가
+# 앱 전용 폴더(Packages\…\LocalCache\Local)로 우회돼, 작업 스케줄러 등 밖에서 띄운 프로세스와 서로 다른 폴더를 보게 된다. AI_OFFICE_DATA 로 바꿀 수 있다.
+DATA_ROOT = Path(os.environ.get("AI_OFFICE_DATA", str(Path.home() / "ai-office-data")))
+DEFAULT_OUT = DATA_ROOT / "kis-record"
 
 
 def now_kst() -> datetime:

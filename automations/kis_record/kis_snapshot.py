@@ -9,7 +9,7 @@
     B층 = 시총 범위(--cap-min~--cap-max 억, 기본 300~5,000) 안 나머지 종목을 바퀴마다 남는 예산만큼 돌려 가며 조회(한 바퀴 = --cycle 초, 기본 300)
   기본값이면 바퀴당 200건: A층 150 + B층 50 → A층은 5분마다, B층(약 1,500)은 2시간 반에 한 번. 한도가 풀리면 --interval 을 줄이면 B층이 빨라진다.
   --plan 을 주면 대상만 세어 보여 주고 끝난다(KIS 호출·잠금 없음).
-- 저장: %LOCALAPPDATA%\\kis-record\\YYYY-MM-DD\\snap_HHMMSS\\book.csv (한 줄 = 종목 하나의 한 스냅샷: recv_ms·sweep·code + 71개 항목) → 끝나면 Parquet(전 열 문자열).
+- 저장: %USERPROFILE%\\ai-office-data\\kis-record\\YYYY-MM-DD\\snap_HHMMSS\\book.csv (한 줄 = 종목 하나의 한 스냅샷: recv_ms·sweep·code + 71개 항목) → 끝나면 Parquet(전 열 문자열).
 - 잠금(rest.lock, 분봉 수집과 공유)·절전 방지·요약(summary.json/safe_summary.json)·텔레그램 한 줄은 record.py 와 같다.
 """
 from __future__ import annotations

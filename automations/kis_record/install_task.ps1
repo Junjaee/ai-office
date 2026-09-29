@@ -13,7 +13,7 @@ param(
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $python = (Get-Command python).Source
 $runner = Join-Path $PSScriptRoot "run_task.cmd"
-$logDir = Join-Path $env:LOCALAPPDATA "kis-record\logs"
+$logDir = Join-Path $env:USERPROFILE "ai-office-data\kis-record\logs"
 New-Item -ItemType Directory -Force $logDir | Out-Null
 $settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Hours 9) -StartWhenAvailable -WakeToRun `
     -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew
@@ -25,7 +25,8 @@ $jobs = @(
 foreach ($j in $jobs) {
     if ($Only -and $j.Name -ne "KIS-$Only") { continue }
     $recArgs = "`"$runner`" `"$python`" `"$repo`" $($j.Script) `"$($j.Args)`" `"$logDir`""
-    $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c $recArgs" -WorkingDirectory $env:LOCALAPPDATA
+    # cmd /c 는 첫 글자가 따옴표면 첫·끝 따옴표를 떼 버리므로 전체를 한 번 더 감싼다(2026-09-29 토스 작업에서 확인)
+    $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$recArgs`"" -WorkingDirectory $env:USERPROFILE
     $trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday, Tuesday, Wednesday, Thursday, Friday -At $j.At
     Register-ScheduledTask -TaskName $j.Name -Description $j.Desc -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
     Write-Host "Registered '$($j.Name)': weekdays $($j.At) -> $($j.Script) $($j.Args)"

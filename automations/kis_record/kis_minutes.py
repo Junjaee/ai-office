@@ -5,7 +5,7 @@
   python kis_minutes.py --eod                          # 오늘 전 종목(장 마감 뒤, 약 2,575×4 호출 ≈ 3시간)
   python kis_minutes.py --eod --date 20260925 --n 300  # 특정 날짜, 거래대금 상위 300 만
 - 한도 약 1건/초(실측) → 하루 1종목 = 4호출 ≈ 4초. 하룻밤(10시간)에 약 9,000 (종목,날짜) 조각.
-- 저장: %LOCALAPPDATA%\\kis-record\\minutes\\YYYY-MM-DD\\<ticker>.parquet (열: 전부 문자열: stck_bsop_date·stck_cntg_hour·stck_prpr·stck_oprc·stck_hgpr·stck_lwpr·cntg_vol·acml_tr_pbmn).
+- 저장: %USERPROFILE%\\ai-office-data\\kis-record\\minutes\\YYYY-MM-DD\\<ticker>.parquet (열: 전부 문자열: stck_bsop_date·stck_cntg_hour·stck_prpr·stck_oprc·stck_hgpr·stck_lwpr·cntg_vol·acml_tr_pbmn).
   진행 상황은 minutes/done.txt (한 줄 = ticker,date). 이미 있는 조각은 건너뛴다.
 - 목표 목록 만들기: python kis_minutes.py --make-targets events_A.csv --since 20251001 --before 20251001..  (아래 make_targets 참고)
 """

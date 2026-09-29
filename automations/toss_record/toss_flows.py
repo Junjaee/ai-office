@@ -4,7 +4,7 @@
   python automations/toss_record/toss_flows.py --universe                       # 시총 범위 안 종목 전부, 5종 다
   python automations/toss_record/toss_flows.py --codes 005930 --kinds investor-trading,short-selling --since 2020-01-01
   python automations/toss_record/toss_flows.py --all-listed                     # 코스피·코스닥 보통주 전부(토스 종목 목록)
-- 저장: %LOCALAPPDATA%\\toss-record\\flows\\<kind>\\<ticker>.parquet — 한 종목의 전 기간(최신순 아님, 날짜순), 중첩 필드는 평평하게(institution.breakdown.pension 등 → 점 연결 이름), 값은 전부 문자열.
+- 저장: %USERPROFILE%\\ai-office-data\\toss-record\\flows\\<kind>\\<ticker>.parquet — 한 종목의 전 기간(최신순 아님, 날짜순), 중첩 필드는 평평하게(institution.breakdown.pension 등 → 점 연결 이름), 값은 전부 문자열.
 - 호출: 100일/호출·초당 15건. 투자자별 7.5년 ≈ 19호출 → 2,600종목 ≈ 5만 호출 ≈ 55분. 5종 다 하면 약 3~4시간.
 - 진행: flows/done.txt (kind,ticker). 다시 돌리면 이미 받은 종목은 건너뛴다(--refresh 로 다시 받음).
 """

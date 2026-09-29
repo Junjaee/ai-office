@@ -4,7 +4,7 @@
   python automations/toss_record/record_toss.py --codes 005930,000660 --minutes 2          # 시험
   python automations/toss_record/record_toss.py --picks <파일> --until 15:35                 # 하루(한 줄에 코드 하나)
   python automations/toss_record/record_toss.py --auto --until 15:35                        # 후보 파일 + 시총 범위 안 거래대금 상위로 채움
-- 저장: %LOCALAPPDATA%\\toss-record\\YYYY-MM-DD\\run_HHMMSS\\{orderbook|trade}_<코드>.csv → 끝나면 Parquet(전 열 문자열). summary.json(로컬)·safe_summary.json(건수만).
+- 저장: %USERPROFILE%\\ai-office-data\\toss-record\\YYYY-MM-DD\\run_HHMMSS\\{orderbook|trade}_<코드>.csv → 끝나면 Parquet(전 열 문자열). summary.json(로컬)·safe_summary.json(건수만).
 - 잠금(ws.lock): 같은 클라이언트로 두 개를 돌리면 연결 한도(2개)를 서로 빼앗으므로 하나만. 절전 방지·텔레그램은 kis_record 와 같다.
 - 자료는 본인 매매 목적만(제3자 배포 금지) — 원자료는 이 PC 에만 둔다.
 """

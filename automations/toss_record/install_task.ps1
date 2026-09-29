@@ -7,14 +7,15 @@ if ($Remove) { Unregister-ScheduledTask -TaskName $name -Confirm:$false -ErrorAc
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $python = (Get-Command python).Source
 $runner = Join-Path $PSScriptRoot "run_task.cmd"
-$logDir = Join-Path $env:LOCALAPPDATA "toss-record\logs"
+$logDir = Join-Path $env:USERPROFILE "ai-office-data\toss-record\logs"
 New-Item -ItemType Directory -Force $logDir | Out-Null
 $jobArgs = "--auto --until $Until"
 if ($Candidates) { $jobArgs += " --candidates $Candidates" }
 $settings = New-ScheduledTaskSettingsSet -ExecutionTimeLimit (New-TimeSpan -Hours 8) -StartWhenAvailable -WakeToRun `
     -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew
 $recArgs = "`"$runner`" `"$python`" `"$repo`" record_toss.py `"$jobArgs`" `"$logDir`""
-$action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c $recArgs" -WorkingDirectory $env:LOCALAPPDATA
+# cmd /c 는 첫 글자가 따옴표면 첫·끝 따옴표를 떼 버리므로 전체를 한 번 더 감싼다(안 감싸면 "G:\내" 에서 끊겨 '지정된 파일을 찾을 수 없습니다')
+$action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c `"$recArgs`"" -WorkingDirectory $env:USERPROFILE
 $trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday, Tuesday, Wednesday, Thursday, Friday -At "08:55"
 Register-ScheduledTask -TaskName $name -Description "Toss orderbook/trade recording (weekdays 08:55)" -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null
 Write-Host "Registered '$name': weekdays 08:55 -> record_toss.py $jobArgs"
