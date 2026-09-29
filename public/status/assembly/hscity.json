@@ -3,35 +3,38 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 전송 0건, 실패 0건, 16초",
+  "summary": "신규 2건, 전송 1건, 실패 0건, 52초",
   "counts": {
-    "new": 0,
-    "sent": 0,
+    "new": 2,
+    "sent": 1,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 0건, 전송 0건, 실패 0건, 16초"
+    "신규 2건, 전송 1건, 실패 0건, 52초",
+    "[신규] [일반공고] 능동역 숲속모아미래도 아파트 공동주택명 변경에 따른 주민등록 최고 공고",
+    "[첨부실패] 행정상 관리주소 이전 공고문(2차).pdf: SSLError",
+    "[신규] [일반공고] 거주불명 등록자 행정상 관리주소 이전 2차 공고"
   ],
   "link": "",
-  "run_id": 36360563187,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36360563187",
-  "request_id": "cron-202609280000",
+  "run_id": 36500902936,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36500902936",
+  "request_id": "cron-202609290000",
   "trigger": "schedule",
-  "started_at": "2026-09-28T09:00:48+09:00",
-  "duration_sec": 16,
+  "started_at": "2026-09-29T09:00:54+09:00",
+  "duration_sec": 52,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 0건"
+      "summary": "신규 2건, 첨부 2건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "0건 발송"
+      "summary": "1건 발송, 무음 1건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-09-28T09:01:05+09:00"
+  "updated_at": "2026-09-29T09:01:48+09:00"
 }
