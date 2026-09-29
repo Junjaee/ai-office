@@ -28,14 +28,18 @@ const localBindingConfig = {
         },
       ]
     : [],
-  r2_buckets: r2
-    ? [
-        {
-          binding: r2,
-          bucket_name: "site-creator-r2",
-        },
-      ]
-    : [],
+  r2_buckets: [
+    ...(r2
+      ? [
+          {
+            binding: r2,
+            bucket_name: "site-creator-r2",
+          },
+        ]
+      : []),
+    // 이 PC 자동화(호가 녹음)의 살아있음 신호·실시간 자료 — worker/live.ts (/api/live). 버킷은 2026-09-29 생성
+    { binding: "LIVE", bucket_name: "ai-office-live" },
+  ],
 };
 
 export default defineConfig(async () => {

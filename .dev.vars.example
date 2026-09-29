@@ -15,3 +15,9 @@
 #   Expiration: "No expiration" 이 가능하면 그것, 아니면 허용 최대(1년)
 # 만들기: https://github.com/settings/personal-access-tokens/new
 GITHUB_TOKEN=
+
+# ── 실시간 화면 (/api/live) ────────────────────────────────
+# (선택) 이 PC 의 호가 녹음기(automations/toss_record)가 보내는 자료에 자물쇠를 걸고 싶을 때만. 비우면 검사 없이 받는다(사용자 결정 2026-09-29).
+# 넣는다면 아무 긴 무작위 문자열(32자 이상)을 개인 설정 ai-home/02_주식신호/config.yaml 의 live_token 에도 같이 넣는다.
+# R2 버킷 ai-office-live 가 LIVE 로 묶여 있어야 한다(vite.config.ts).
+LIVE_TOKEN=

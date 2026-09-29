@@ -1,0 +1,58 @@
+/* 실시간 호가 전광판 (app/office/LiveBoard.tsx) — /<ws>/live/<automation>. 어두운 바탕(장중 오래 켜 두는 화면) */
+.live-page { --lb-bg: #0f1115; --lb-card: #171a21; --lb-line: #262b36; --lb-fg: #e6e8ee; --lb-dim: #8b93a7; --lb-acc: #4cc38a; --lb-hot: #ff6b6b; --lb-warm: #f5b642; --lb-cold: #6ea8fe;
+  min-height: 100vh; background: var(--lb-bg); color: var(--lb-fg); padding: 14px 16px 24px; font-size: 14px; line-height: 1.5; }
+.live-page .btn-ghost { color: var(--lb-fg); border-color: var(--lb-line); background: var(--lb-card); }
+.live-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.live-head h1 { margin: 0; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+.live-when { color: var(--lb-dim); font-size: 12.5px; }
+.live-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--lb-line); }
+.live-dot.on { background: var(--lb-acc); box-shadow: 0 0 8px var(--lb-acc); animation: live-pulse 1.6s infinite; }
+.live-dot.off { background: var(--lb-hot); }
+@keyframes live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.live-msg { color: var(--lb-dim); padding: 24px 0; text-align: center; }
+.live-stats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.live-stat { background: var(--lb-card); border: 1px solid var(--lb-line); border-radius: 8px; padding: 8px 12px; min-width: 110px; }
+.live-stat b { display: block; font-size: 18px; font-variant-numeric: tabular-nums; }
+.live-stat span { color: var(--lb-dim); font-size: 12px; }
+.live-stat.sub b { font-size: 13px; } .live-stat.sub span { font-size: 11px; max-width: 220px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; font-size: 13px; color: var(--lb-dim); }
+.live-tools select, .live-tools input[type="text"], .live-tools input:not([type]) { font: inherit; background: var(--lb-card); color: var(--lb-fg); border: 1px solid var(--lb-line); border-radius: 6px; padding: 4px 8px; }
+.live-check { display: inline-flex; align-items: center; gap: 4px; }
+.live-count { margin-left: auto; }
+.live-body { display: grid; gap: 12px; grid-template-columns: 1fr; }
+.live-body.with-detail { grid-template-columns: minmax(0, 1fr) 360px; }
+.live-table-wrap { overflow: auto; border: 1px solid var(--lb-line); border-radius: 8px; background: var(--lb-card); max-height: calc(100vh - 230px); }
+.live-table { width: 100%; border-collapse: collapse; }
+.live-table th { position: sticky; top: 0; background: var(--lb-card); text-align: left; color: var(--lb-dim); font-weight: 600; font-size: 12px; padding: 8px 10px; border-bottom: 1px solid var(--lb-line); }
+.live-table td { padding: 7px 10px; border-bottom: 1px solid var(--lb-line); vertical-align: middle; white-space: nowrap; }
+.live-table td small { display: block; color: var(--lb-dim); font-size: 11px; }
+.live-table tbody tr { cursor: pointer; } .live-table tbody tr:hover { background: rgba(255, 255, 255, .04); } .live-table tbody tr.sel { background: rgba(76, 195, 138, .12); }
+.live-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.live-table tr.hot td.strength { color: var(--lb-hot); font-weight: 700; } .live-table tr.warm td.strength { color: var(--lb-warm); font-weight: 700; } .live-table tr.cold td.strength { color: var(--lb-cold); }
+.live-chip { background: #2a1f1f; color: var(--lb-hot); border: 1px solid #4a2a2a; border-radius: 999px; padding: 2px 8px; font-size: 12px; white-space: nowrap; }
+.live-detail { background: var(--lb-card); border: 1px solid var(--lb-line); border-radius: 8px; padding: 12px; align-self: start; position: sticky; top: 12px; max-height: calc(100vh - 40px); overflow: auto; }
+.live-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.live-detail h2 { margin: 0; font-size: 16px; } .live-detail h2 small { color: var(--lb-dim); font-weight: 400; font-size: 12px; }
+.live-detail h3 { margin: 12px 0 6px; font-size: 13px; color: var(--lb-dim); }
+.live-detail-sub { color: var(--lb-dim); font-size: 12px; margin: 4px 0 10px; }
+.live-book { display: grid; gap: 2px; font-variant-numeric: tabular-nums; font-size: 12.5px; }
+.live-book-ts { color: var(--lb-dim); font-size: 11px; margin-bottom: 4px; }
+.live-lv { display: grid; grid-template-columns: 70px 1fr 74px 1fr 70px; align-items: center; gap: 4px; height: 20px; }
+.live-lv .px { text-align: center; color: var(--lb-fg); } .live-lv .px.cur { font-weight: 800; text-decoration: underline; }
+.live-lv .qty { color: var(--lb-dim); } .live-lv.ask .qty:first-child { text-align: right; } .live-lv.bid .qty:last-child { text-align: left; }
+.live-lv .bar { height: 12px; border-radius: 3px; justify-self: end; }
+.live-lv.ask .bar { background: rgba(110, 168, 254, .55); grid-column: 2; }
+.live-lv.bid .bar { background: rgba(255, 107, 107, .55); grid-column: 4; justify-self: start; }
+.live-lv.ask .px { grid-column: 3; } .live-lv.bid .px { grid-column: 3; }
+.live-lv.ask .qty:first-child { grid-column: 1; } .live-lv.ask .qty:last-child { grid-column: 5; }
+.live-lv.bid .qty:first-child { grid-column: 1; } .live-lv.bid .qty:last-child { grid-column: 5; }
+.live-trades { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: 12px; font-variant-numeric: tabular-nums; }
+.live-trades li { display: grid; grid-template-columns: 64px 1fr 70px 36px; gap: 6px; padding: 2px 4px; border-radius: 4px; }
+.live-trades li.buy { background: rgba(255, 107, 107, .12); } .live-trades li.sell { background: rgba(110, 168, 254, .12); }
+.live-trades em { font-style: normal; color: var(--lb-dim); }
+.live-foot { color: var(--lb-dim); font-size: 12px; margin-top: 10px; }
+@media (max-width: 860px) {
+  .live-body.with-detail { grid-template-columns: 1fr; }
+  .live-detail { position: static; max-height: none; }
+  .live-table th:nth-child(4), .live-table td:nth-child(4) { display: none; }
+}

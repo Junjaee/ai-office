@@ -10,6 +10,7 @@ import {
   summarizeTasks,
   type AutomationView,
   type DeptView,
+  type LiveDoc,
   type LocalRequest,
   type RealStatus,
   type RunInfo,
@@ -24,6 +25,8 @@ export type ApiStatus = {
   config: { canRun: boolean; tokenExpiresAt?: string | null; githubError?: null | "auth" | "not_found" | "unavailable" };
   runs: Record<string, RunInfo | null>;
   files: Record<string, RealStatus | null>;
+  /** 이 PC 자동화(local)의 작업별 살아있음 신호 (`/api/live` 저장분, 큰 board 는 뺀 것) */
+  live?: Record<string, LiveDoc | null>;
   source: StatusSource;
 };
 
@@ -203,7 +206,32 @@ function mockStatus(mode: string, defs: AutomationDef[]): ApiStatus {
           files[d.id] = okFile();
       }
     });
-  return { checkedAt: new Date().toISOString(), config: { canRun: mode !== "no_token" && mode !== "empty" }, runs, files, source };
+  // 이 PC 자동화(local): 작업별 신호를 같은 mock 모드로 흉내 낸다 (신호 끊김은 error 모드에서 첫 작업)
+  const live: Record<string, LiveDoc | null> = {};
+  defs
+    .filter((d) => d.local && !d.workflow)
+    .forEach((d) => {
+      const doc: LiveDoc = {};
+      d.tasks.filter((t) => !t.planned).forEach((t, j) => {
+        switch (mode) {
+          case "running": case "queued": case "runner_waiting": case "finishing":
+            doc[t.id] = { state: "running", at: iso(-5000), summary: j === 0 ? "100종목 · 호가 12,345·체결 3,210행" : "진행 40%", started_at: iso(-30 * 60000) };
+            break;
+          case "error":
+            doc[t.id] = j === 0 ? { state: "running", at: iso(-10 * 60000), summary: "100종목" } : { state: "done", at: iso(-20 * 60000), summary: "조각 120개" };
+            break;
+          case "idle": case "empty": case "no_token":
+            break;
+          case "schedule_missed":
+            doc[t.id] = { state: "done", at: iso(-40 * 3600000), summary: "조각 120개" };
+            break;
+          default:
+            doc[t.id] = { state: "done", at: iso(-20 * 60000), summary: j === 0 ? "정상 · 100종목 · 호가 2.1만·체결 0.8만행" : "조각 120개(빈 3)", finished_at: iso(-20 * 60000) };
+        }
+      });
+      live[d.id] = doc;
+    });
+  return { checkedAt: new Date().toISOString(), config: { canRun: mode !== "no_token" && mode !== "empty" }, runs, files, live, source };
 }
 
 // ───────── 판정 (순수) ─────────
@@ -211,7 +239,7 @@ function mockStatus(mode: string, defs: AutomationDef[]): ApiStatus {
 export function buildLiveState(ws: WorkspaceConfig, api: ApiStatus | null, local: Record<string, LocalRequest>, now: Date): LiveState {
   const source: StatusSource | null = api ? api.source : null;
   const views = ws.automations.map((def) =>
-    deriveAutomationView(def, api?.files[def.id] ?? null, api?.runs[def.id] ?? null, local[def.id] ?? null, now, source ?? "static"),
+    deriveAutomationView(def, api?.files[def.id] ?? null, api?.runs[def.id] ?? null, local[def.id] ?? null, now, source ?? "static", api?.live?.[def.id] ?? null),
   );
   const deptViews: Record<string, DeptView> = {};
   for (const dept of ws.departments) {

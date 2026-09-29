@@ -1,9 +1,10 @@
-/** Cloudflare Worker 진입점 — /api/run · /api/status · /api/history · /api/review 만 직접 처리하고 나머지는 vinext 에 넘긴다. */
+/** Cloudflare Worker 진입점 — /api/run · /api/status · /api/history · /api/review · /api/live 만 직접 처리하고 나머지는 vinext 에 넘긴다. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { WORKSPACES } from "../app/workspaces/index";
 import { GitHubClient } from "./github.ts";
 import { createRunApiStores, handleHistory, handleReview, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
+import { handleLive, type R2Like } from "./live.ts";
 import { LEDGER_WATCH_JOB, MAIL_JOB, SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
 import {
   LEDGER_COOLDOWN_MS, LEDGER_WATCH_QUERY, MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY,
@@ -18,6 +19,10 @@ interface Env {
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;
   GOOGLE_REFRESH_TOKEN?: string;
+  /** R2 버킷 ai-office-live — 이 PC 자동화(호가 녹음 등)의 살아있음 신호·실시간 자료 (worker/live.ts) */
+  LIVE?: R2Like;
+  /** 그 자동화가 /api/live 에 보낼 때 쓰는 비밀 토큰(Cloudflare Secret / .dev.vars). 값은 응답·로그에 내보내지 않는다 */
+  LIVE_TOKEN?: string;
   IMAGES?: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -74,6 +79,10 @@ const worker = {
 
     if (url.pathname === "/api/review") {
       return handleReview(request, env, depsFor(env));
+    }
+
+    if (url.pathname === "/api/live") {
+      return handleLive(request, env, { workspaces: WORKSPACES, now: () => Date.now() });
     }
 
     if (url.pathname === "/_vinext/image") {

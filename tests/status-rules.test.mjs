@@ -21,6 +21,10 @@ import { NOOP_RUN_MS,
   RESULT_WAIT_MS,
   historyLabel,
   durationText,
+  deriveLocalView,
+  isRealAutomation,
+  LIVE_TTL_MS,
+  LIVE_SUBTITLES,
 } from "../app/status-rules.ts";
 
 const now = new Date("2026-09-09T15:00:00+09:00");
@@ -451,4 +455,58 @@ test("durationText: 초·분 표기, 값이 없으면 빈 문자열", () => {
   assert.equal(durationText("2026-09-11T00:00:00Z", "2026-09-11T00:04:48Z"), "4.8분");
   assert.equal(durationText("2026-09-11T00:00:00Z", null), "");
   assert.equal(durationText(null, null), "");
+});
+
+// ───────────────────────── 3.7 이 PC 자동화(local) — /api/live 신호 ─────────────────────────
+const localDef = { id: "orderbook", dept: "finance", name: "호가 녹음(토스)", local: true, schedule: "평일 08:55~15:35 (이 PC)",
+  tasks: [{ id: "record", name: "실시간 녹음", role: "" }, { id: "candles", name: "1분봉 백필", role: "" }, { id: "flows", name: "수급 백필", role: "", planned: true }] };
+
+test("local: 신호 없음 → 전원 쉬는 중, 아직 실행한 적 없어요", () => {
+  const v = deriveLocalView(localDef, null, now);
+  assert.equal(v.state, "idle");
+  assert.equal(v.sub, SUBTITLES.neverRan);
+  assert.equal(v.tasks.record.state, "idle");
+  assert.equal(v.tasks.flows.state, "planned");
+  assert.equal(v.nextRun, "평일 08:55~15:35 (이 PC)");
+});
+
+test("local: running 신호가 90초 안이면 일하는 중, 넘으면 신호 끊김(오류), 36시간 넘으면 쉬는 중", () => {
+  const fresh = deriveLocalView(localDef, { record: { state: "running", at: iso(-5000), summary: "100종목 · 호가 1,000행" } }, now);
+  assert.equal(fresh.state, "running");
+  assert.equal(fresh.tasks.record.note, "100종목 · 호가 1,000행");
+  assert.equal(fresh.lastRunAt, iso(-5000));
+  const silent = deriveLocalView(localDef, { record: { state: "running", at: iso(-LIVE_TTL_MS - 1000) } }, now);
+  assert.equal(silent.state, "error");
+  assert.equal(silent.sub, LIVE_SUBTITLES.silent("1분 전"));
+  const old = deriveLocalView(localDef, { record: { state: "running", at: iso(-40 * HOUR) } }, now);
+  assert.equal(old.state, "idle");
+  assert.equal(old.sub, SUBTITLES.lastRun("40시간 전"));
+});
+
+test("local: 작업마다 따로 판정하고 자동화는 가장 심한 상태를 따른다 (error > running > done > idle)", () => {
+  const v = deriveLocalView(localDef, {
+    record: { state: "done", at: iso(-20 * 60000), summary: "정상 · 100종목" },
+    candles: { state: "running", at: iso(-3000), summary: "1분봉 20/709종목" },
+  }, now);
+  assert.equal(v.tasks.record.state, "done");
+  assert.equal(v.tasks.candles.state, "running");
+  assert.equal(v.state, "running");
+  assert.equal(v.sub, "1분봉 20/709종목");
+  const e = deriveLocalView(localDef, { record: { state: "done", at: iso(-60000), summary: "정상" }, candles: { state: "error", at: iso(-60000), summary: "1분봉 실패: TossError" } }, now);
+  assert.equal(e.state, "error");
+  assert.equal(e.sub, "1분봉 실패: TossError");
+});
+
+test("local: deriveAutomationView 는 live 인자를 받아 local 이면 그 규칙을 쓰고, 부서·요약 집계에도 실제 자동화로 센다", () => {
+  const v = deriveAutomationView(localDef, null, null, null, now, "github", { record: { state: "running", at: iso(-1000) } });
+  assert.equal(v.phase, "running");
+  assert.ok(isRealAutomation(localDef));
+  assert.ok(!isRealAutomation({ id: "x" }));
+  const dept = deriveDeptView([localDef], [v]);
+  assert.deepEqual(dept, { state: "running", runningCount: 1, automationIds: ["orderbook"] });
+  const s = summarizeTasks([v], [localDef]);
+  assert.equal(s.automations, 1);
+  assert.equal(s.running, 1);
+  assert.equal(s.counts.running, 1);
+  assert.equal(s.counts.idle, 1);
 });

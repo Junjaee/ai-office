@@ -266,6 +266,61 @@ function judge(def: AutomationDef, file: RealStatus | null, run: RunInfo | null,
   return { phase: "done", sub: file.summary };
 }
 
+// ───────────────────────── 3.7 이 PC 자동화 (local) — /api/live 살아있음 신호 ─────────────────────────
+
+export type LiveTaskState = "running" | "done" | "error" | "idle";
+/** 자동화가 작업(직원)마다 보내는 신호. at = 마지막 신호 시각 */
+export type LiveTaskDoc = { state: LiveTaskState; at: string; summary?: string; started_at?: string; finished_at?: string };
+export type LiveDoc = Record<string, LiveTaskDoc | null | undefined>;
+
+/** running 신호가 이 시간 넘게 끊기면 "신호 끊김"(오류)으로 본다 — PC 가 잠들거나 프로그램이 죽은 것 */
+export const LIVE_TTL_MS = 90 * 1000;
+export const LIVE_SUBTITLES = {
+  running: "일하는 중 (이 PC)",
+  silent: (ago: string) => `신호가 끊겼어요 · 마지막 ${ago}`,
+} as const;
+
+function judgeLiveTask(doc: LiveTaskDoc | null | undefined, now: Date): { state: TaskState; note: string; at?: string } {
+  if (!doc || !doc.at) return { state: "idle", note: SUBTITLES.neverRan };
+  const age = ageMs(doc.at, now);
+  const stale = age > STALE_HOURS * 3600 * 1000;
+  const ago = relativeTime(doc.at, now) || `${STALE_HOURS}시간 전`;
+  if (stale) return { state: "idle", note: SUBTITLES.lastRun(ago), at: doc.at };
+  if (doc.state === "running") {
+    if (age < LIVE_TTL_MS) return { state: "running", note: doc.summary || LIVE_SUBTITLES.running, at: doc.at };
+    return { state: "error", note: LIVE_SUBTITLES.silent(ago), at: doc.at };
+  }
+  if (doc.state === "done") return { state: "done", note: doc.summary || SUBTITLES.lastRun(ago), at: doc.at };
+  if (doc.state === "error") return { state: "error", note: doc.summary || LABELS.error, at: doc.at };
+  return { state: "idle", note: SUBTITLES.lastRun(ago), at: doc.at };
+}
+
+const LIVE_SEVERITY: Record<TaskState, number> = { error: 4, running: 3, done: 2, idle: 1, planned: 0 };
+
+/** local 자동화: 작업마다 신호로 판정하고, 자동화는 그중 가장 심한 상태(오류 > 일하는 중 > 끝남 > 쉬는 중)를 따른다 */
+export function deriveLocalView(def: AutomationDef, live: LiveDoc | null, now: Date): AutomationView {
+  const tasks: Record<string, { state: TaskState; note: string }> = {};
+  let worst: { state: TaskState; note: string; at?: string } | null = null;
+  let lastAt: string | undefined;
+  for (const task of def.tasks as TaskDef[]) {
+    if (task.planned) {
+      tasks[task.id] = { state: "planned", note: SUBTITLES.planned };
+      continue;
+    }
+    const j = judgeLiveTask(live?.[task.id], now);
+    tasks[task.id] = { state: j.state, note: j.note };
+    if (j.at && (lastAt === undefined || toMs(j.at) > toMs(lastAt))) lastAt = j.at;
+    // 더 심한 상태가 자동화 상태. 같은 상태면 신호가 있었던 작업의 문구를 쓴다("아직 실행한 적 없어요"보다 "마지막 실행 …")
+    if (!worst || LIVE_SEVERITY[j.state] > LIVE_SEVERITY[worst.state] || (LIVE_SEVERITY[j.state] === LIVE_SEVERITY[worst.state] && !worst.at && j.at)) worst = j;
+  }
+  if (!worst) worst = { state: "idle", note: SUBTITLES.neverRan };
+  const phase: RunPhase = worst.state === "planned" ? "idle" : worst.state;
+  const view: AutomationView = { id: def.id, dept: def.dept, name: def.name, phase, state: phaseToState(phase), sub: worst.note, tasks };
+  if (lastAt) view.lastRunAt = lastAt;
+  if (def.schedule) view.nextRun = def.schedule;
+  return view;
+}
+
 export function deriveAutomationView(
   def: AutomationDef,
   file: RealStatus | null,
@@ -273,7 +328,9 @@ export function deriveAutomationView(
   local: LocalRequest | null,
   now: Date,
   source: StatusSource = "github",
+  live: LiveDoc | null = null,
 ): AutomationView {
+  if (def.local && !def.workflow) return deriveLocalView(def, live, now);
   const v = judge(def, file, run, local, now, source);
   const view: AutomationView = {
     id: def.id,
@@ -337,9 +394,14 @@ export function deriveTaskStates(def: AutomationDef, view: AutomationView, file:
 
 const SEVERITY: Record<TaskState, number> = { error: 4, running: 3, done: 2, idle: 1, planned: 0 };
 
-/** 부서의 자동화(workflow 있는 것)들의 최악값(error > running > done > idle). 0개면 "none" */
+/** 실제로 도는 자동화 = 워크플로가 있거나 이 PC 에서 도는(local) 것 */
+export function isRealAutomation(a: Pick<AutomationDef, "workflow" | "local">): boolean {
+  return !!a.workflow || !!a.local;
+}
+
+/** 부서의 자동화(workflow 있거나 local 인 것)들의 최악값(error > running > done > idle). 0개면 "none" */
 export function deriveDeptView(automationsOfDept: AutomationDef[], views: AutomationView[]): DeptView {
-  const real = automationsOfDept.filter((a) => !!a.workflow);
+  const real = automationsOfDept.filter(isRealAutomation);
   const automationIds = real.map((a) => a.id);
   if (real.length === 0) return { state: "none", runningCount: 0, automationIds };
   const byId = new Map(views.map((v) => [v.id, v] as const));
@@ -356,7 +418,7 @@ export function deriveDeptView(automationsOfDept: AutomationDef[], views: Automa
 
 export type TaskSummary = {
   counts: Record<Exclude<TaskState, "planned">, number>;
-  automations: number;   // workflow 있는 자동화 수
+  automations: number;   // workflow 있거나 local 인 자동화 수
   running: number;       // 그중 실행 중
   brief: string;         // "자동화 N개 중 M개 실행 중"
 };
@@ -370,7 +432,7 @@ export function summarizeTasks(views: AutomationView[], defs: AutomationDef[]): 
       counts[t.state] += 1;
     }
   }
-  const realIds = new Set(defs.filter((d) => !!d.workflow).map((d) => d.id));
+  const realIds = new Set(defs.filter(isRealAutomation).map((d) => d.id));
   const running = views.filter((v) => realIds.has(v.id) && v.state === "running").length;
   const automations = realIds.size;
   return { counts, automations, running, brief: `자동화 ${automations}개 중 ${running}개 실행 중` };

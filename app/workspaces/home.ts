@@ -124,7 +124,7 @@ export const DEPARTMENTS: readonly Department[] = [
  * 자동화를 붙일 때 여기서 빼면 다시 나타난다.
  */
 export const HIDDEN_DEPARTMENTS: string[] = [
-  "brand", "strategy1", "qa", "strategy2", "reels", "carousel", "partner", "finance", "review",
+  "brand", "strategy1", "qa", "strategy2", "reels", "carousel", "partner", "review",
 ];
 
 /**
@@ -143,7 +143,13 @@ export const AUTOMATIONS: AutomationDef[] = [
   { id: "trip", dept: "reels", name: "여행 계획", tasks: [{ id: "plan", name: "여행 일정표", role: "여행 계획을 일정표로 정리" }] },
   { id: "house", dept: "carousel", name: "집안 관리", tasks: [{ id: "cycle", name: "교체 주기", role: "소모품 교체·수리 주기 관리" }] },
   { id: "car", dept: "partner", name: "차량 관리", tasks: [{ id: "schedule", name: "차량 일정", role: "정비·보험·검사 일정 알림" }] },
-  { id: "asset", dept: "finance", name: "자산·투자", tasks: [{ id: "quote", name: "시세 정리", role: "주식·코인 현황 정리" }] },
+  // 이 PC 에서 도는 자동화(automations/toss_record/): GitHub 워크플로 없음 → 시작 단추 없음, 상태는 /api/live 신호로. 실시간 화면 /home/live/orderbook
+  { id: "orderbook", dept: "finance", name: "호가 녹음(토스)", local: true, live: { kind: "orderbook", title: "실시간 호가·체결" }, schedule: "평일 08:55~15:35 (이 PC)",
+    tasks: [
+      { id: "record", name: "실시간 녹음", role: "토스 웹소켓으로 100종목 10단계 호가·체결을 저장", colors: ["#2b2f3a", "#fde68a", "#f59e0b"] },
+      { id: "candles", name: "1분봉 백필", role: "과거 1분봉(2022-11~) 내려받기", colors: ["#4b3b2c", "#bbf7d0", "#22c55e"] },
+      { id: "flows", name: "수급 백필", role: "투자자별·프로그램·공매도 일별 자료 내려받기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
+    ] },
   { id: "hobby", dept: "review", name: "취미·콘텐츠", tasks: [{ id: "archive", name: "콘텐츠 정리", role: "유튜브·AI 노래 프로젝트 기록" }] },
 ];
 

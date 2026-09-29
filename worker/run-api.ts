@@ -1,4 +1,5 @@
 // /api/run · /api/status · /api/history · /api/review 순수 로직. vinext/next 를 import 하지 않고, 시간·GitHub·저장소는 deps 로 주입받는다.
+import { liveForStatus, type R2Like } from "./live.ts";
 import {
   DAILY_RUN_LIMIT, HISTORY_CACHE_MAX, HISTORY_GITHUB_DAYS, HISTORY_PAST_CACHE_MS, HISTORY_START, HISTORY_TODAY_CACHE_MS,
   RUNS_PER_PAGE, STATUS_CACHE_MS, TOO_SOON_MS,
@@ -7,7 +8,7 @@ import { shiftDate } from "../app/history-rules.ts";
 import { GitHubAuthError, GitHubNotFoundError, GitHubUnavailableError, type GitHubLike, type RunSummary } from "./github.ts";
 
 // ── 사무실 설정(구조만 맞으면 됨 — app/workspaces 의 WorkspaceConfig 와 호환) ──
-export type AutomationLike = { id: string; workflow?: string; inputs?: Record<string, string> };
+export type AutomationLike = { id: string; workflow?: string; inputs?: Record<string, string>; local?: true; tasks?: { id: string }[] };
 export type WorkspaceLike = { id: string; automations: AutomationLike[] };
 
 // ── decideRun ──
@@ -295,6 +296,8 @@ export type StatusBody = {
   config: { canRun: boolean; tokenExpiresAt: string | null; githubError: GitHubErrorKind };
   runs: Record<string, RunView | null>;
   files: Record<string, unknown | null>;
+  /** 이 PC 자동화(local)의 작업별 살아있음 신호 (worker/live.ts, board 제외) */
+  live?: Record<string, Record<string, unknown | null>>;
   source: "github" | "static";
 };
 
@@ -313,6 +316,9 @@ export type HistoryBody = {
 export type RunApiEnv = {
   ASSETS: { fetch(request: Request): Promise<Response> };
   GITHUB_TOKEN?: string;
+  /** R2 버킷(ai-office-live) — 이 PC 자동화의 살아있음 신호·실시간 자료 (worker/live.ts) */
+  LIVE?: R2Like;
+  LIVE_TOKEN?: string;
 };
 
 export type RunApiDeps = {
@@ -538,6 +544,9 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
     files[a.id] = file;
   }
 
+  // 이 PC 자동화(local): R2 의 살아있음 신호(작업별). 버킷이 없으면 빈 객체 → 화면은 "쉬는 중"
+  const live = await liveForStatus(env, ws, workspace);
+
   return {
     checkedAt: new Date(now).toISOString(),
     config: {
@@ -548,6 +557,7 @@ export async function buildStatus(ws: string, workspace: WorkspaceLike, origin: 
     },
     runs,
     files,
+    live,
     source,
   };
 }

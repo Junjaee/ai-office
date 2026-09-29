@@ -23,6 +23,8 @@ WORK="$LOCAL/ai-office-node"
 # Windows ARM PC 는 x64 Node 를 쓴다(workerd 등 arm64 빌드가 없는 모듈 때문). 없으면 기본 Node.
 X64="$LOCAL/node-x64/node"
 if [ -x "$X64/node.exe" ]; then export PATH="$X64:$PATH"; fi
+# npm 실행 파일은 "#!/usr/bin/env bash" 로 시작한다 — PATH 에 System32 가 앞서면 WSL 의 bash 가 잡히므로 Git Bash 를 앞에 둔다
+export PATH="/usr/bin:$PATH"
 
 sync_sources() {
   mkdir -p "$WORK"
@@ -58,6 +60,6 @@ if [ "$cmd" = ci ]; then install_deps force; exit 0; fi
 install_deps
 cd "$WORK"
 case "$cmd" in
-  tsc) npx tsc --noEmit "$@" ;;
+  tsc) npm exec --no -- tsc --noEmit "$@" ;;   # x64 Node 폴더에 npx 실행 파일이 없어 npm exec 로
   *)   npm run "$cmd" -- "$@" ;;
 esac

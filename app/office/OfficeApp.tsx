@@ -56,7 +56,7 @@ export default function OfficeApp() {
         if (ws.hidden.includes(d.id)) return false;
         const autos = ws.automations.filter((a) => a.dept === d.id);
         if (!autos.length) return false;
-        return ws.showPlanned ? true : autos.some((a) => a.workflow);
+        return ws.showPlanned ? true : autos.some((a) => a.workflow || a.local);
       }),
     [],
   );
@@ -256,6 +256,11 @@ export default function OfficeApp() {
                     {dept?.icon} {v.name}
                   </h3>
                   <span className={`status-pill ${STATE_CLASS[v.state]}`}>{LABELS[v.state]}</span>
+                  {def.live ? (
+                    <a className="btn btn-primary btn-run" href={`/${ws.id}/live/${v.id}`}>
+                      📡 실시간 보기
+                    </a>
+                  ) : null}
                   {def.workflow ? (
                     canRun ? (
                       <button className="btn btn-primary btn-run" onClick={() => run(v.id)} disabled={busy.has(v.id) || v.state === "running" || !live.loaded}>

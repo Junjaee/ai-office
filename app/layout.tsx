@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./office.css";
 import "./review.css";
+import "./live.css";
 
 export const metadata: Metadata = {
   title: "AI 오피스",

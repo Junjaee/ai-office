@@ -51,6 +51,10 @@ export type AutomationDef = {
   schedule?: string;
   /** 검토 칸: 자동화가 public/review/<ws>/<id>.json 에 후보를 올리고, 사용자가 사이트에서 골라 만들게 한다 */
   review?: { kind: "topics"; title?: string };
+  /** 이 PC 에서 도는 자동화(GitHub 워크플로 없음, 시작 단추 없음). 상태는 자동화가 `/api/live` 로 보내는 살아있음 신호(작업별)로 정한다 */
+  local?: true;
+  /** 실시간 화면: 카드에 "실시간 보기" 단추가 붙고 `/<ws>/live/<id>` 가 열린다(자료는 `/api/live`) */
+  live?: { kind: "orderbook"; title?: string };
   /** 1개 이상, 부서 합계 6개 이하 */
   tasks: TaskDef[];
 };

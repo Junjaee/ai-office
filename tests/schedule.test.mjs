@@ -106,6 +106,8 @@ test("카드의 예약 문구와 실제 예약표가 어긋나지 않는다", ()
   for (const ws of WORKSPACE_LIST) {
     for (const def of ws.automations) {
       if (!def.schedule) continue;
+      // 이 PC 자동화(local)는 Worker 예약표가 아니라 PC 의 작업 스케줄러가 깨운다 — 문구만 안내용
+      if (def.local && !def.workflow) continue;
       assert.ok(scheduled.has(def.workflow ?? ""),
         `${ws.id}/${def.id}: 카드에 "${def.schedule}" 이라 적혀 있는데 worker/schedule.ts 에 예약이 없다`);
     }
