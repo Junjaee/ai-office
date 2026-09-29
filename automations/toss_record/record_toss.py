@@ -1,4 +1,5 @@
-"""토스증권 실시간 호가·체결 녹음기 — 연결 2개 × 100건으로 최대 100종목(호가+체결) 또는 200종목(호가만)을 하루 동안 저장한다.
+"""토스증권 실시간 호가·체결 녹음기 — 연결 2개 × 100건. 기본(book-poll)은 호가 200종목 웹소켓 + 체결은 '최근 체결 50건' 조회로 채움(초당 15건, 종목당 5~30초).
+both 모드는 예전 방식(호가+체결 웹소켓 100종목).
 
 사용:
   python automations/toss_record/record_toss.py --codes 005930,000660 --minutes 2          # 시험
@@ -23,6 +24,7 @@ sys.path.insert(0, str(HERE)); sys.path.insert(0, str(HERE.parents[1])); sys.pat
 import toss_rest as tr  # noqa: E402
 import toss_ws as tw  # noqa: E402
 from live_board import LiveBoard, LivePoster, live_settings, now_iso  # noqa: E402
+from trade_poll import TradePoller, prev_closes  # noqa: E402
 from record import KeepAwake, Lock, csv_to_parquet, log, notify, now_kst, parse_until  # noqa: E402
 
 LIVE_POST_SEC = 5.0
@@ -87,11 +89,17 @@ def pick_codes(a) -> tuple[list[str], dict[str, str]]:
 
 
 async def _record(a, codes: list[str], store: Store, until_dt, channels: tuple[str, ...], board: LiveBoard | None, poster: LivePoster | None) -> tuple[list[tw.ConnStats], str]:
+    import threading
     tr.load_secrets(a.config)
     ses = tr.Session(log=log)
     chunks = tw.split_codes(codes, len(channels))
     stats = [tw.ConnStats() for _ in chunks]
     started = now_iso()
+    if board is not None:
+        board.prev_close = await asyncio.to_thread(prev_closes, ses, codes, log)
+        log(f"전일 종가 {len(board.prev_close)}종목")
+    poll_stop = threading.Event()
+    poller: TradePoller | None = None
 
     def until() -> bool:
         return now_kst() >= until_dt
@@ -105,13 +113,20 @@ async def _record(a, codes: list[str], store: Store, until_dt, channels: tuple[s
             board.on_row(channel, code, row)
 
     def meta() -> dict:
-        return {"connections": sum(1 for s in stats if s.subscribed), "subscribed": sum(s.subscribed for s in stats), "reconnects": sum(s.reconnects for s in stats)}
+        m = {"connections": sum(1 for s in stats if s.subscribed), "subscribed": sum(s.subscribed for s in stats), "reconnects": sum(s.reconnects for s in stats)}
+        if poller:
+            m["poll"] = {k: poller.stats[k] for k in ("calls", "rounds", "hot", "full", "errors")}
+        return m
 
     def summary_line() -> str:
-        return f"{len(codes)}종목 · 호가 {sum(s.books for s in stats):,}·체결 {sum(s.trades for s in stats):,}행"
+        n_tr = sum(s.trades for s in stats) + (poller.stats["new"] if poller else 0)
+        return f"{len(codes)}종목 · 호가 {sum(s.books for s in stats):,}·체결 {n_tr:,}행"
 
     tasks = [asyncio.create_task(tw.run_connection(lambda: ses.token, ch, channels, on_row, until, st, log, f"c{i+1}", refresh))
              for i, (ch, st) in enumerate(zip(chunks, stats))]
+    if a.mode == "book-poll":
+        poller = TradePoller(ses, codes, on_row, log, poll_stop)
+        poller.start()
     last_report = time.time(); last_post = 0.0
     outcome = "정상"
     try:
@@ -122,14 +137,18 @@ async def _record(a, codes: list[str], store: Store, until_dt, channels: tuple[s
                 b = board.board(codes, meta())
                 await asyncio.to_thread(poster.post, "running", summary_line(), b, started)
             if time.time() - last_report >= 300:
-                log(f"진행: 행 {store.n:,} (호가 {sum(s.books for s in stats):,}, 체결 {sum(s.trades for s in stats):,}), 재연결 {sum(s.reconnects for s in stats)}"
-                    + (f", 전송 {poster.sent}/{poster.sent + poster.failed}" if poster else ""))
+                log(f"진행: 행 {store.n:,} (호가 {sum(s.books for s in stats):,}, 체결 {sum(s.trades for s in stats) + (poller.stats['new'] if poller else 0):,}), 재연결 {sum(s.reconnects for s in stats)}"
+                    + (f", 전송 {poster.sent}/{poster.sent + poster.failed}" if poster else "")
+                    + (f", 체결조회 {poller.stats['calls']}회·{poller.stats['rounds']}바퀴·활발 {poller.stats['hot']}·가득 {poller.stats['full']}·오류 {poller.stats['errors']}" if poller else ""))
                 last_report = time.time()
     except KeyboardInterrupt:
         outcome = "키보드 중단"
+    poll_stop.set()
     for t in tasks:
         t.cancel()
     await asyncio.gather(*tasks, return_exceptions=True)
+    if poller:
+        poller.join(timeout=5)
     if poster is not None and board is not None:
         await asyncio.to_thread(poster.post, "done" if outcome == "정상" else "error", f"{outcome} · {summary_line()}", board.board(codes, meta()), started, now_iso())
     return stats, outcome
@@ -144,13 +163,13 @@ def main() -> int:
     ap.add_argument("--auto", action="store_true")
     ap.add_argument("--candidates", default="")
     ap.add_argument("--cap-min", type=float, default=300); ap.add_argument("--cap-max", type=float, default=5000)
-    ap.add_argument("--mode", choices=["both", "book", "trade"], default="both")
+    ap.add_argument("--mode", choices=["book-poll", "both", "book", "trade"], default="book-poll", help="book-poll: 호가 200 웹소켓 + 체결 조회(기본)")
     ap.add_argument("--limit", type=int, default=0, help="종목 상한(기본: 모드별 최대 100/200)")
     ap.add_argument("--minutes", type=float, default=0); ap.add_argument("--until", default="15:35")
     ap.add_argument("--no-parquet", action="store_true")
     ap.add_argument("--no-live", action="store_true", help="사이트(/api/live)로 실시간 자료를 보내지 않는다")
     a = ap.parse_args()
-    channels = {"both": ("orderbook:kr", "trade:kr"), "book": ("orderbook:kr",), "trade": ("trade:kr",)}[a.mode]
+    channels = {"both": ("orderbook:kr", "trade:kr"), "book": ("orderbook:kr",), "trade": ("trade:kr",), "book-poll": ("orderbook:kr",)}[a.mode]
     max_codes = tw.PER_CONN_LIMIT // len(channels) * tw.MAX_CONNECTIONS
     a.limit = min(a.limit or max_codes, max_codes)
     out = Path(a.out)
@@ -177,7 +196,7 @@ def main() -> int:
                 store.close()
             n_pq = 0 if a.no_parquet else csv_to_parquet(run_dir)[0]
             summary = {"date": run_dir.parent.name, "run": run_dir.name, "outcome": outcome, "codes_n": len(codes), "codes": codes, "mode": a.mode, "rows": store.n,
-                       "books": sum(s.books for s in stats), "trades": sum(s.trades for s in stats), "frames": sum(s.frames for s in stats),
+                       "books": sum(s.books for s in stats), "trades": store.n - sum(s.books for s in stats), "frames": sum(s.frames for s in stats),
                        "reconnects": sum(s.reconnects for s in stats), "errors": sum(s.errors for s in stats), "rejected": [r for s in stats for r in s.rejected],
                        "subscribed": sum(s.subscribed for s in stats), "parquet_files": n_pq, "seconds": round((now_kst() - start).total_seconds())}
             (run_dir / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1), encoding="utf-8")

@@ -32,9 +32,19 @@ def _f(x) -> float:
         return 0.0
 
 
+def ts_ms(iso: str, default: int) -> int:
+    """'2026-09-29T10:07:15.007+09:00' → ms. 못 읽으면 default(수신 시각)."""
+    try:
+        return int(datetime.fromisoformat(iso).timestamp() * 1000)
+    except (TypeError, ValueError):
+        return default
+
+
 class LiveBoard:
-    def __init__(self, names: dict[str, str] | None = None, window_sec: int = 300, wall_mult: float = 2.0, wall_min_amt: float = 1e8, sample_sec: float = 5.0):
+    def __init__(self, names: dict[str, str] | None = None, window_sec: int = 300, wall_mult: float = 2.0, wall_min_amt: float = 1e8, sample_sec: float = 5.0,
+                 prev_close: dict[str, float] | None = None):
         self.names = names or {}
+        self.prev_close = prev_close or {}
         self.window_ms = window_sec * 1000
         self.wall_mult = wall_mult; self.wall_min_amt = wall_min_amt; self.sample_ms = sample_sec * 1000
         self.book: dict[str, dict] = {}                      # code → {"ts","asks":[(p,v)..],"bids":[(p,v)..],"recv"}
@@ -64,8 +74,11 @@ class LiveBoard:
                 elif price <= b["bids"][0][0]:
                     side = "S"
             dq = self.trades.setdefault(code, deque())
-            dq.append((recv, row.get("timestamp", ""), price, vol, side))
-            self._trim(dq, recv)
+            t = ts_ms(row.get("timestamp", ""), recv)
+            if dq and t < dq[-1][0]:
+                t = dq[-1][0]                       # 시각이 뒤로 가면(조회 순서) 정렬 유지
+            dq.append((t, row.get("timestamp", ""), price, vol, side))
+            self._trim(dq, max(recv, t))
             self.trades_n += 1
 
     def _trim(self, dq: deque, recv: int) -> None:
@@ -101,8 +114,10 @@ class LiveBoard:
                 if event:
                     break
         score = round(min(strength or 0, 400) / 100 + (wall["amt"] / 10 if wall else 0) + (2 if event else 0), 2)
+        pc = self.prev_close.get(code)
+        chg = round((price / pc - 1) * 100, 2) if pc and price else None
         return {
-            "code": code, "name": self.names.get(code, code), "price": price, "strength": strength,
+            "code": code, "name": self.names.get(code, code), "price": price, "prev_close": pc, "chg_pct": chg, "strength": strength,
             "buy_amt": round(buy / 1e8, 3), "sell_amt": round(sell / 1e8, 3), "ratio": ratio, "ask_total": ask_total, "bid_total": bid_total,
             "amt": round(amt / 1e8, 2), "n_trades": len(tr), "score": score, "wall": wall, "event": event,
             "book": {"ts": b["ts"], "asks": [[f"{p:g}", f"{v:g}"] for p, v in b["asks"]], "bids": [[f"{p:g}", f"{v:g}"] for p, v in b["bids"]]} if b else None,

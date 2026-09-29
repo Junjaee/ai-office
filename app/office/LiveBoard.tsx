@@ -6,7 +6,7 @@ import { LABELS, LIVE_TTL_MS, relativeTime, type LiveTaskDoc } from "../status-r
 type Level = [string, string];                       // [가격, 잔량]
 type Trade = [string, string, string, string];       // [시각, 체결가, 수량, B|S|M]
 export type LiveItem = {
-  code: string; name: string; price: number; strength: number | null; buy_amt: number; sell_amt: number;
+  code: string; name: string; price: number; prev_close?: number | null; chg_pct?: number | null; strength: number | null; buy_amt: number; sell_amt: number;
   ratio: number | null; ask_total: number; bid_total: number; amt: number; n_trades: number; score: number;
   wall: { side: "ask" | "bid"; level: number; price: number; amt: number } | null;
   event: string; book: { ts: string; asks: Level[]; bids: Level[] } | null; trades: Trade[];
@@ -122,7 +122,7 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
             <div className="live-table-wrap">
               <table className="live-table">
                 <thead>
-                  <tr><th className="num">점수</th><th>종목</th><th className="num">현재가</th><th className="num">체결강도</th><th className="num">매수/매도(억)</th><th className="num">잔량비</th><th>가장 큰 벽</th><th>신호</th></tr>
+                  <tr><th className="num">점수</th><th>종목</th><th className="num">현재가</th><th className="num">등락률</th><th className="num">체결강도</th><th className="num">매수/매도(억)</th><th className="num">잔량비</th><th>가장 큰 벽</th><th>신호</th></tr>
                 </thead>
                 <tbody>
                   {items.map((it) => (
@@ -130,6 +130,7 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
                       <td className="num score">{fmt(it.score, 2)}</td>
                       <td>{it.name}<small>{it.code}</small></td>
                       <td className="num">{fmt(it.price)}</td>
+                      <td className={`num chg ${(it.chg_pct ?? 0) > 0 ? "up" : (it.chg_pct ?? 0) < 0 ? "down" : ""}`}>{it.chg_pct == null ? "-" : `${it.chg_pct > 0 ? "+" : ""}${fmt(it.chg_pct, 2)}%`}</td>
                       <td className="num strength">{fmt(it.strength)}</td>
                       <td className="num">{fmt(it.buy_amt, 2)} / {fmt(it.sell_amt, 2)}</td>
                       <td className="num">{it.ask_total === 0 ? "상한가" : it.bid_total === 0 ? "하한가" : fmt(it.ratio, 2)}</td>
@@ -148,7 +149,7 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
                   <button className="btn btn-ghost" onClick={() => setSel(null)}>닫기</button>
                 </div>
                 <p className="live-detail-sub">
-                  현재가 {fmt(selected.price)}원 · 5분 체결강도 {fmt(selected.strength)} · 5분 거래대금 {fmt(selected.amt, 1)}억 · 체결 {fmt(selected.n_trades)}건
+                  현재가 {fmt(selected.price)}원{selected.chg_pct != null ? ` (${selected.chg_pct > 0 ? "+" : ""}${fmt(selected.chg_pct, 2)}%, 전일 ${fmt(selected.prev_close)}원)` : ""} · 5분 체결강도 {fmt(selected.strength)} · 5분 거래대금 {fmt(selected.amt, 1)}억 · 체결 {fmt(selected.n_trades)}건
                 </p>
                 {selected.book ? <Book book={selected.book} price={selected.price} /> : <p className="live-msg">호가 없음</p>}
                 <h3>최근 체결</h3>
