@@ -146,8 +146,8 @@ def test_score_direction_and_scale():
     s2, parts2 = LiveBoard.score(buy=2e7, sell=8e7, amt=1e8, wall={"side": "ask", "amt": 3.0}, event_side="ask", event_amt=3e8, bid_total=100, ask_total=200)
     assert s2 == -7.0
     # 체결 합계 1억 미만이면 체결 방향 0, 작은 벽(0.5억 미만) 0, 거래대금이 큰 종목의 같은 벽은 작게
-    s3, parts3 = LiveBoard.score(buy=5e6, sell=1e5, amt=6e6, wall={"side": "bid", "amt": 0.3}, event_side="", event_amt=0, bid_total=100, ask_total=100)
-    assert parts3["flow"] == 0 and parts3["wall"] == 0 and s3 == 0
+    s3, parts3 = LiveBoard.score(buy=4e7, sell=1e7, amt=5e7, wall={"side": "bid", "amt": 0.3}, event_side="", event_amt=0, bid_total=100, ask_total=100)
+    assert parts3["flow"] == 1.0 and parts3["wall"] == 0 and s3 == 1.0      # 4배(=+2)인데 합계 0.5억이라 절반만
     big, _ = LiveBoard.score(buy=0, sell=0, amt=50e8, wall={"side": "bid", "amt": 1.9}, event_side="", event_amt=0, bid_total=100, ask_total=100)
     small, _ = LiveBoard.score(buy=0, sell=0, amt=0.64e8, wall={"side": "bid", "amt": 1.9}, event_side="", event_amt=0, bid_total=100, ask_total=100)
     assert big < small

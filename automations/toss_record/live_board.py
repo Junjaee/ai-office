@@ -5,7 +5,7 @@
 - 체결강도 = 매수 체결금액 ÷ 매도 체결금액 × 100. 잔량비 = 매수 총잔량 ÷ 매도 총잔량. 벽 = 10단계 중 금액(가격×잔량)이 가장 큰 호가.
 - 벽 신호 = 5분 전 표본과 비교해 1~5호가 잔량이 2배 넘게 늘고 금액 1억 이상(2026-09-29 사용자 결정으로 3배·3억에서 낮춤). 매수벽·매도벽을 구분한다.
 - 점수(2026-09-29 개편, 사용자 지적 "벽이 작으면 점수가 낮아야"): 전부 방향이 있고 종목의 거래 규모에 견준다. 정렬용이지 예측값이 아니다.
-    체결 방향 = clip(log2(매수 체결금액 ÷ 매도 체결금액), -2, 2), 5분 합계 1억 미만이면 0
+    체결 방향 = clip(log2(매수 체결금액 ÷ 매도 체결금액), -2, 2) × min(1, 5분 합계 ÷ 1억)
     가장 큰 벽 = ±clip(log2(1 + 벽 금액 ÷ 5분 거래대금), 0, 2) (매수벽 +, 매도벽 -, 0.5억 미만 0)
     벽 생김 신호 = ±clip(log2(1 + 새 벽 금액 ÷ 5분 거래대금), 0, 2)
     잔량비 = clip(log2(매수 총잔량 ÷ 매도 총잔량), -1, 1)
@@ -136,7 +136,11 @@ class LiveBoard:
         def clip(x: float, lo: float, hi: float) -> float:
             return max(lo, min(hi, x))
         base = max(amt, 1e7)                                  # 5분 거래대금(최소 0.1억) — 벽을 이 크기에 견준다
-        flow = clip(math.log2(buy / sell), -2, 2) if (buy + sell >= 1e8 and buy > 0 and sell > 0) else (2.0 if buy + sell >= 1e8 and sell == 0 else -2.0 if buy + sell >= 1e8 and buy == 0 else 0.0)
+        # 체결 방향: 5분 합계 1억이면 온전히, 그보다 작으면 금액에 비례해 줄인다(소형주는 5분에 1억을 못 채우는 종목이 많아 2026-09-29 자름→비례로)
+        total = buy + sell
+        weight = min(1.0, total / 1e8)
+        raw = clip(math.log2(buy / sell), -2, 2) if (buy > 0 and sell > 0) else (2.0 if buy > 0 else -2.0 if sell > 0 else 0.0)
+        flow = raw * weight
         wall_pts = 0.0
         if wall and wall["amt"] * 1e8 >= 5e7:
             wall_pts = clip(math.log2(1 + wall["amt"] * 1e8 / base), 0, 2) * (1 if wall["side"] == "bid" else -1)
