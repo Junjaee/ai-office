@@ -29,6 +29,8 @@
 .live-table tbody tr { cursor: pointer; } .live-table tbody tr:hover { background: rgba(255, 255, 255, .04); } .live-table tbody tr.sel { background: rgba(76, 195, 138, .12); }
 .live-table .num { text-align: right; font-variant-numeric: tabular-nums; }
 .live-table tr.hot td.strength { color: var(--lb-hot); font-weight: 700; } .live-table tr.warm td.strength { color: var(--lb-warm); font-weight: 700; } .live-table tr.cold td.strength { color: var(--lb-cold); }
+.live-none { color: var(--lb-line); }
+.live-table td.score { color: var(--lb-dim); font-weight: 700; }
 .live-chip { background: #2a1f1f; color: var(--lb-hot); border: 1px solid #4a2a2a; border-radius: 999px; padding: 2px 8px; font-size: 12px; white-space: nowrap; }
 .live-detail { background: var(--lb-card); border: 1px solid var(--lb-line); border-radius: 8px; padding: 12px; align-self: start; position: sticky; top: 12px; max-height: calc(100vh - 40px); overflow: auto; }
 .live-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -54,5 +56,5 @@
 @media (max-width: 860px) {
   .live-body.with-detail { grid-template-columns: 1fr; }
   .live-detail { position: static; max-height: none; }
-  .live-table th:nth-child(4), .live-table td:nth-child(4) { display: none; }
+  .live-table th:nth-child(5), .live-table td:nth-child(5) { display: none; }
 }

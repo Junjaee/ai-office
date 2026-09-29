@@ -122,18 +122,19 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
             <div className="live-table-wrap">
               <table className="live-table">
                 <thead>
-                  <tr><th>종목</th><th className="num">현재가</th><th className="num">체결강도</th><th className="num">매수/매도(억)</th><th className="num">잔량비</th><th>가장 큰 벽</th><th>신호</th></tr>
+                  <tr><th className="num">점수</th><th>종목</th><th className="num">현재가</th><th className="num">체결강도</th><th className="num">매수/매도(억)</th><th className="num">잔량비</th><th>가장 큰 벽</th><th>신호</th></tr>
                 </thead>
                 <tbody>
                   {items.map((it) => (
                     <tr key={it.code} className={`${strengthClass(it.strength)} ${sel === it.code ? "sel" : ""}`} onClick={() => setSel(sel === it.code ? null : it.code)}>
+                      <td className="num score">{fmt(it.score, 2)}</td>
                       <td>{it.name}<small>{it.code}</small></td>
                       <td className="num">{fmt(it.price)}</td>
                       <td className="num strength">{fmt(it.strength)}</td>
                       <td className="num">{fmt(it.buy_amt, 2)} / {fmt(it.sell_amt, 2)}</td>
                       <td className="num">{it.ask_total === 0 ? "상한가" : it.bid_total === 0 ? "하한가" : fmt(it.ratio, 2)}</td>
                       <td>{it.wall ? `${it.wall.side === "ask" ? "매도" : "매수"}${it.wall.level} ${fmt(it.wall.price)}원 · ${fmt(it.wall.amt, 1)}억` : "-"}</td>
-                      <td>{it.event ? <span className="live-chip">{it.event}</span> : null}</td>
+                      <td>{it.event ? <span className="live-chip">{it.event}</span> : <span className="live-none">-</span>}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -162,7 +163,7 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
             ) : null}
           </div>
           <p className="live-foot">
-            체결강도 = 5분간 매수호가에 붙은 체결금액 ÷ 매도호가에 붙은 체결금액 × 100(토스 체결에는 매수·매도 구분이 없어 직전 호가와 대조해 추정). 벽 = 10단계 중 금액이 가장 큰 호가. 신호 = 5분 전보다 잔량이 3배 넘게 늘고 3억 이상인 호가. 호가는 KRX+NXT 통합.
+            체결강도 = 5분간 매수호가에 붙은 체결금액 ÷ 매도호가에 붙은 체결금액 × 100(토스 체결에는 매수·매도 구분이 없어 직전 호가와 대조해 추정). 벽 = 10단계 중 금액이 가장 큰 호가. 신호 = 5분 전보다 1~5호가 잔량이 2배 넘게 늘고 1억 이상인 호가. 점수 = 체결강도(최대 4점) + 가장 큰 벽 금액(억÷10) + 벽 신호 2점, 줄 세우기용. 호가는 KRX+NXT 통합.
           </p>
         </>
       ) : null}

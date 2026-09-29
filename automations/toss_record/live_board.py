@@ -3,7 +3,7 @@
 집계(종목마다, 창 = 최근 5분):
 - 체결 방향: 체결가 ≥ 직전 매도1호가 → 매수(B), ≤ 직전 매수1호가 → 매도(S), 그 사이 → 중간(M). 토스 체결에 매수/매도 구분이 없어 이렇게 추정한다.
 - 체결강도 = 매수 체결금액 ÷ 매도 체결금액 × 100. 잔량비 = 매수 총잔량 ÷ 매도 총잔량. 벽 = 10단계 중 금액(가격×잔량)이 가장 큰 호가.
-- 벽 신호 = 5분 전 표본과 비교해 1~5호가 잔량이 3배 넘게 늘고 금액 3억 이상.
+- 벽 신호 = 5분 전 표본과 비교해 1~5호가 잔량이 2배 넘게 늘고 금액 1억 이상(2026-09-29 사용자 결정으로 3배·3억에서 낮춤).
 - 점수 = min(체결강도, 400)/100 + 벽 금액(억)/10 + 신호 2점 — 정렬용이지 예측값이 아니다.
 보내는 문서: {ws, automation, task:"record", state, at, summary, started_at, board:{..., items:[...]}} (≤ 1MB, 종목 100개면 약 150KB).
 """
@@ -33,7 +33,7 @@ def _f(x) -> float:
 
 
 class LiveBoard:
-    def __init__(self, names: dict[str, str] | None = None, window_sec: int = 300, wall_mult: float = 3.0, wall_min_amt: float = 3e8, sample_sec: float = 5.0):
+    def __init__(self, names: dict[str, str] | None = None, window_sec: int = 300, wall_mult: float = 2.0, wall_min_amt: float = 1e8, sample_sec: float = 5.0):
         self.names = names or {}
         self.window_ms = window_sec * 1000
         self.wall_mult = wall_mult; self.wall_min_amt = wall_min_amt; self.sample_ms = sample_sec * 1000
