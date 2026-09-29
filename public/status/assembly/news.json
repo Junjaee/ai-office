@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 7건, 실패 0건, 14초",
   "counts": {
-    "new": 4,
+    "new": 7,
     "failed": 0,
-    "total": 2409
+    "total": 2416
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] 개혁신당 이기인, 이재명 대통령에 재판 수용 선언 촉구…영화 ‘암살자(들)’ 비판 — NANOOM ENERGY",
-    "[신규] \"나는 문과입니다\" 그 말을 하지 말아야 했습니다 — YouTube",
-    "[신규] 국회 재경위, 배민·구글코리아 대표 국감 증인·참고인 채택 — 쿠키뉴스",
-    "[신규] 국회, 국감 증인 채택 속도…배민·구글 경영진 불러 조세 적정성 검증 — 전자신문"
+    "신규 7건, 실패 0건, 14초",
+    "[신규] 문정복 의원, 리콜 1년 반 지나도 수리 안 된 차 81만대…35만대는 제동장치 결함 — 시민행정신문",
+    "[신규] 뿌요뿌요·버추얼태권도가 정식 종목?…2026 아시안게임 접수한 이색 스포츠 — v.daum.net",
+    "[신규] 수도권주거혁신포럼, 30일 국회서 창립총회…유현준 교수 발제 — 프리진뉴스",
+    "[신규] 강승규 의원, 초고령화 늪에 빠진 내항상선, 60세 이상 선원 60%, 20대 초반 신규 유입은 2.3% — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36483139710,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36483139710",
-  "request_id": "cron-202609282100",
+  "run_id": 36500898542,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36500898542",
+  "request_id": "cron-202609290000",
   "trigger": "schedule",
-  "started_at": "2026-09-29T06:00:48+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-09-29T09:00:46+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 137건"
+      "summary": "검색어 5개에서 138건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 16건 (신규 4건) · NANOOM ENERGY 6건, ksw-news.com 5건, YouTube 1건"
+      "summary": "오늘 23건 (신규 7건) · NANOOM ENERGY 6건, ksw-news.com 5건, 시민행정신문 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-29T06:01:01+09:00"
+  "updated_at": "2026-09-29T09:01:01+09:00"
 }
