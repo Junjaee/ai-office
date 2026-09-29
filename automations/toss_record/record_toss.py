@@ -146,7 +146,13 @@ async def _record(a, codes: list[str], store: Store, until_dt, channels: tuple[s
     poll_stop.set()
     for t in tasks:
         t.cancel()
-    await asyncio.gather(*tasks, return_exceptions=True)
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    for i, res in enumerate(results):
+        if isinstance(res, Exception) and not isinstance(res, asyncio.CancelledError):
+            import traceback
+            outcome = f"연결 작업 오류: {type(res).__name__}"
+            log(f"[c{i+1}] 작업이 예외로 끝남: {type(res).__name__}: {str(res)[:120]}")
+            log("".join(traceback.format_exception(res)).strip().splitlines()[-3:].__str__())
     if poller:
         poller.join(timeout=5)
     if poster is not None and board is not None:

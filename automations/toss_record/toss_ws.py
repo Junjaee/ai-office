@@ -98,10 +98,15 @@ async def run_connection(get_token: Callable[[], str], codes: list[str], channel
                             continue
                         ch, code = f"{parts[0]}:{parts[1]}", parts[2]
                         data = msg.get("data") or {}
-                        if parts[0] == "orderbook":
-                            stats.books += 1; on_row(ch, code, flatten_book(data))
-                        else:
-                            stats.trades += 1; on_row(ch, code, {"timestamp": data.get("timestamp", ""), "price": data.get("price", ""), "volume": data.get("volume", "")})
+                        try:
+                            if parts[0] == "orderbook":
+                                stats.books += 1; on_row(ch, code, flatten_book(data))
+                            else:
+                                stats.trades += 1; on_row(ch, code, {"timestamp": data.get("timestamp", ""), "price": data.get("price", ""), "volume": data.get("volume", "")})
+                        except Exception as exc:  # noqa: BLE001 — 저장·집계 오류 하나가 연결을 끊지 않게
+                            stats.errors += 1
+                            if stats.errors in (1, 10, 100, 1000):
+                                log(f"[{name}] 행 처리 오류({stats.errors}회) {code}: {type(exc).__name__}: {str(exc)[:100]}")
                         stats.last_data_ts = time.time()
                     elif t == "subscriptions":
                         stats.subscribed = len(msg.get("subscribed") or [])
