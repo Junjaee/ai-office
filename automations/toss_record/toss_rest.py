@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import threading
 import time
 from pathlib import Path
 from typing import Callable
@@ -56,6 +57,7 @@ class Session:
         self.rate_hits = 0
         self.retries = 0
         self.last_call: dict[str, float] = {}
+        self._pace_lock = threading.Lock()
         self.token = self._load_token() or self._issue_token()
 
     # ---------------- 토큰
@@ -99,10 +101,12 @@ class Session:
 
     # ---------------- 호출
     def _pace(self, group: str) -> None:
-        gap = 1.0 / GROUP_RATE.get(group, 5) - (time.time() - self.last_call.get(group, 0.0))
-        if gap > 0:
-            time.sleep(gap)
-        self.last_call[group] = time.time()
+        # 여러 스레드(체결 조회 4갈래)가 한 세션을 나눠 쓰므로 간격 계산은 잠금 안에서
+        with self._pace_lock:
+            gap = 1.0 / GROUP_RATE.get(group, 5) - (time.time() - self.last_call.get(group, 0.0))
+            if gap > 0:
+                time.sleep(gap)
+            self.last_call[group] = time.time()
 
     def get(self, path: str, params: dict | None = None, group: str = "MARKET_DATA", retries: int = 5):
         """조회 하나 → result 페이로드. 429·5xx·401(토큰) 은 재시도, 그 밖 4xx 는 TossError(code)."""
