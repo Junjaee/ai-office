@@ -48,9 +48,12 @@ def ts_ms(iso: str, default: int) -> int:
 
 class LiveBoard:
     def __init__(self, names: dict[str, str] | None = None, window_sec: int = 300, wall_mult: float = 2.0, wall_min_amt: float = 1e8, sample_sec: float = 5.0,
-                 prev_close: dict[str, float] | None = None):
+                 prev_close: dict[str, float] | None = None, refs: dict[str, dict] | None = None):
         self.names = names or {}
         self.prev_close = prev_close or {}
+        self.refs = refs or {}                                # daily_ref.daily_refs(): prev_close·prev_high·high20·avg_amt5
+        self.hist: dict[str, deque] = {}                      # code → deque[(ms, mid)] 최근 15분(흐름 계산)
+        self.day_high: dict[str, float] = {}                  # 녹음 시작 이후 최고 중간값
         self.window_ms = window_sec * 1000
         self.wall_mult = wall_mult; self.wall_min_amt = wall_min_amt; self.sample_ms = sample_sec * 1000
         self.book: dict[str, dict] = {}                      # code → {"ts","asks":[(p,v)..],"bids":[(p,v)..],"recv"}
@@ -65,6 +68,15 @@ class LiveBoard:
             asks = [(_f(row.get(f"ask{i}_p")), _f(row.get(f"ask{i}_v"))) for i in range(1, 11) if row.get(f"ask{i}_p")]
             bids = [(_f(row.get(f"bid{i}_p")), _f(row.get(f"bid{i}_v"))) for i in range(1, 11) if row.get(f"bid{i}_p")]
             self.book[code] = {"ts": row.get("timestamp", ""), "asks": asks, "bids": bids, "recv": recv}
+            if asks and bids:
+                mid = (asks[0][0] + bids[0][0]) / 2
+                h = self.hist.setdefault(code, deque())
+                if not h or recv - h[-1][0] >= 5000:
+                    h.append((recv, mid))
+                while h and recv - h[0][0] > 15 * 60 * 1000:
+                    h.popleft()
+                if mid > self.day_high.get(code, 0):
+                    self.day_high[code] = mid
             dq = self.samples.setdefault(code, deque())
             if not dq or recv - dq[-1][0] >= self.sample_ms:
                 dq.append((recv, asks, bids))
@@ -120,9 +132,25 @@ class LiveBoard:
                     if v1 > self.wall_mult * max(v0, 1) and p1 * v1 >= self.wall_min_amt and p1 * v1 > event_amt:
                         event = f"{sname}{i+1}호가 벽 생김({p1*v1/1e8:.1f}억)"; event_side = skey; event_amt = p1 * v1
         score, parts = self.score(buy, sell, amt, wall, event_side, event_amt, bid_total, ask_total)
-        pc = self.prev_close.get(code)
+        ref = self.refs.get(code, {})
+        pc = self.prev_close.get(code) or ref.get("prev_close")
         chg = round((price / pc - 1) * 100, 2) if pc and price else None
+        # 돈 몰림 항목: 거래대금 배수(5분 ÷ 평소 5분), 자리(20일 신고가·전일 고가·당일 고가), 15분 흐름
+        avg5 = ref.get("avg_amt5") or 0
+        amt_ratio = round(amt / avg5, 2) if avg5 > 0 else None
+        h = self.hist.get(code)
+        mom15 = None
+        if h and len(h) >= 2 and now - h[0][0] >= 10 * 60 * 1000 and h[0][1] > 0:
+            mom15 = round((price / h[0][1] - 1) * 100, 2) if price else None
+        pos = ""
+        if price and ref.get("high20") and price > ref["high20"]:
+            pos = "20일 신고가"
+        elif price and ref.get("prev_high") and price > ref["prev_high"]:
+            pos = "전일 고가 돌파"
+        elif price and self.day_high.get(code) and price >= self.day_high[code] * 0.999:
+            pos = "당일 고가"
         return {
+            "amt_ratio": amt_ratio, "pos": pos, "mom15": mom15, "high20": ref.get("high20"), "prev_high": ref.get("prev_high"),
             "code": code, "name": self.names.get(code, code), "price": price, "prev_close": pc, "chg_pct": chg, "strength": strength, "event_side": event_side, "parts": parts,
             "buy_amt": round(buy / 1e8, 3), "sell_amt": round(sell / 1e8, 3), "ratio": ratio, "ask_total": ask_total, "bid_total": bid_total,
             "amt": round(amt / 1e8, 2), "n_trades": len(tr), "score": score, "wall": wall, "event": event,

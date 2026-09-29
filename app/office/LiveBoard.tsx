@@ -7,6 +7,7 @@ type Level = [string, string];                       // [가격, 잔량]
 type Trade = [string, string, string, string];       // [시각, 체결가, 수량, B|S|M]
 export type LiveItem = {
   code: string; name: string; price: number; prev_close?: number | null; chg_pct?: number | null; strength: number | null; buy_amt: number; sell_amt: number;
+  amt_ratio?: number | null; pos?: string; mom15?: number | null; high20?: number | null; prev_high?: number | null;
   ratio: number | null; ask_total: number; bid_total: number; amt: number; n_trades: number; score: number;
   wall: { side: "ask" | "bid"; level: number; price: number; amt: number } | null;
   event: string; event_side?: "ask" | "bid" | ""; parts?: { flow: number; wall: number; event: number; depth: number };
@@ -17,9 +18,10 @@ export type LiveBoardDoc = LiveTaskDoc & {
 };
 type ApiLive = { ws: string; automation: string; tasks: Record<string, LiveBoardDoc | null>; checkedAt: string };
 
-type SortKey = "score" | "strength" | "wall" | "amt" | "ratio";
+type SortKey = "amt_ratio" | "score" | "strength" | "wall" | "amt" | "ratio" | "chg" | "mom15";
 const SORTS: { id: SortKey; label: string }[] = [
-  { id: "score", label: "신호 점수" }, { id: "strength", label: "체결강도" }, { id: "wall", label: "큰 벽" }, { id: "amt", label: "5분 거래대금" }, { id: "ratio", label: "매수/매도 잔량비" },
+  { id: "amt_ratio", label: "거래대금 배수(평소 대비)" }, { id: "score", label: "호가 점수" }, { id: "chg", label: "등락률" }, { id: "mom15", label: "15분 흐름" },
+  { id: "strength", label: "체결강도" }, { id: "wall", label: "큰 벽" }, { id: "amt", label: "5분 거래대금" }, { id: "ratio", label: "매수/매도 잔량비" },
 ];
 const REFRESH_MS = 5000;
 
@@ -38,7 +40,7 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
   const [data, setData] = useState<ApiLive | null>(null);
   const [error, setError] = useState<string>("");
   const [now, setNow] = useState(() => new Date());
-  const [sort, setSort] = useState<SortKey>("score");
+  const [sort, setSort] = useState<SortKey>("amt_ratio");
   const [q, setQ] = useState("");
   const [onlySignal, setOnlySignal] = useState(false);
   const [sel, setSel] = useState<string | null>(null);
@@ -76,7 +78,8 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
   const items = useMemo(() => {
     const list = (board?.items ?? []).filter((it) => (!onlySignal || it.event) && (!q || it.name.includes(q) || it.code.includes(q)));
     const key = (it: LiveItem) =>
-      sort === "score" ? it.score : sort === "strength" ? (it.strength ?? -1) : sort === "wall" ? (it.wall?.amt ?? 0) : sort === "amt" ? it.amt : (it.ratio ?? -1);
+      sort === "amt_ratio" ? (it.amt_ratio ?? -1) : sort === "score" ? it.score : sort === "chg" ? (it.chg_pct ?? -999) : sort === "mom15" ? (it.mom15 ?? -999)
+        : sort === "strength" ? (it.strength ?? -1) : sort === "wall" ? (it.wall?.amt ?? 0) : sort === "amt" ? it.amt : (it.ratio ?? -1);
     return list.slice().sort((a, b) => key(b) - key(a));
   }, [board, sort, q, onlySignal]);
   const selected = items.find((it) => it.code === sel) ?? board?.items.find((it) => it.code === sel) ?? null;
@@ -123,15 +126,18 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
             <div className="live-table-wrap">
               <table className="live-table">
                 <thead>
-                  <tr><th className="num">점수</th><th>종목</th><th className="num">현재가</th><th className="num">등락률</th><th className="num">체결강도</th><th className="num">매수/매도(억)</th><th className="num">잔량비</th><th>가장 큰 벽</th><th>신호</th></tr>
+                  <tr><th className="num">거래대금 배수</th><th>자리</th><th>종목</th><th className="num">현재가</th><th className="num">등락률</th><th className="num">15분 흐름</th><th className="num">호가 점수</th><th className="num">체결강도</th><th className="num">매수/매도(억)</th><th className="num">잔량비</th><th>가장 큰 벽</th><th>신호</th></tr>
                 </thead>
                 <tbody>
                   {items.map((it) => (
                     <tr key={it.code} className={`${strengthClass(it.strength)} ${sel === it.code ? "sel" : ""}`} onClick={() => setSel(sel === it.code ? null : it.code)}>
-                      <td className={`num score ${it.score > 0 ? "up" : it.score < 0 ? "down" : ""}`} title={it.parts ? `체결 ${it.parts.flow} · 벽 ${it.parts.wall} · 신호 ${it.parts.event} · 잔량 ${it.parts.depth}` : ""}>{it.score > 0 ? "+" : ""}{fmt(it.score, 2)}</td>
+                      <td className={`num ratio ${(it.amt_ratio ?? 0) >= 4 ? "hot" : (it.amt_ratio ?? 0) >= 2 ? "warm" : ""}`}>{it.amt_ratio == null ? "-" : `${fmt(it.amt_ratio, 1)}배`}</td>
+                      <td className="pos">{it.pos ? <span className={`live-pos ${it.pos === "20일 신고가" ? "top" : ""}`}>{it.pos}</span> : <span className="live-none">-</span>}</td>
                       <td>{it.name}<small>{it.code}</small></td>
                       <td className="num">{fmt(it.price)}</td>
                       <td className={`num chg ${(it.chg_pct ?? 0) > 0 ? "up" : (it.chg_pct ?? 0) < 0 ? "down" : ""}`}>{it.chg_pct == null ? "-" : `${it.chg_pct > 0 ? "+" : ""}${fmt(it.chg_pct, 2)}%`}</td>
+                      <td className={`num chg ${(it.mom15 ?? 0) > 0 ? "up" : (it.mom15 ?? 0) < 0 ? "down" : ""}`}>{it.mom15 == null ? "-" : `${it.mom15 > 0 ? "+" : ""}${fmt(it.mom15, 2)}%`}</td>
+                      <td className={`num score ${it.score > 0 ? "up" : it.score < 0 ? "down" : ""}`} title={it.parts ? `체결 ${it.parts.flow} · 벽 ${it.parts.wall} · 신호 ${it.parts.event} · 잔량 ${it.parts.depth}` : ""}>{it.score > 0 ? "+" : ""}{fmt(it.score, 2)}</td>
                       <td className="num strength">{fmt(it.strength)}</td>
                       <td className="num">{fmt(it.buy_amt, 2)} / {fmt(it.sell_amt, 2)}</td>
                       <td className="num">{it.ask_total === 0 ? "상한가" : it.bid_total === 0 ? "하한가" : fmt(it.ratio, 2)}</td>
@@ -165,7 +171,7 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
             ) : null}
           </div>
           <p className="live-foot">
-            체결강도 = 5분간 매수호가에 붙은 체결금액 ÷ 매도호가에 붙은 체결금액 × 100(토스 체결에는 매수·매도 구분이 없어 직전 호가와 대조해 추정). 벽 = 10단계 중 금액이 가장 큰 호가(매수벽 빨강, 매도벽 파랑). 신호 = 5분 전보다 1~5호가 잔량이 2배 넘게 늘고 1억 이상인 호가. 점수 = 체결 방향(매수÷매도 로그, ±2) + 가장 큰 벽(벽 금액 ÷ 5분 거래대금, 매수 +·매도 −, ±2) + 벽 생김(같은 식, ±2) + 잔량비(±1). 점수에 마우스를 올리면 항목별 기여. 줄 세우기용이지 예측값이 아님. 호가는 KRX+NXT 통합.
+            체결강도 = 5분간 매수호가에 붙은 체결금액 ÷ 매도호가에 붙은 체결금액 × 100(토스 체결에는 매수·매도 구분이 없어 직전 호가와 대조해 추정). 거래대금 배수 = 최근 5분 거래대금 ÷ 그 종목의 평소 5분 거래대금(20일 평균, 2배 노랑·4배 빨강). 자리 = 20일 신고가 / 전일 고가 돌파 / 당일 고가. 15분 흐름 = 15분 전 대비 등락. 호가 점수 = 체결 방향(±2) + 가장 큰 벽(벽 ÷ 5분 거래대금, 매수 +·매도 −, ±2) + 벽 생김(±2) + 잔량비(±1), 마우스를 올리면 항목별. 벽·신호는 매수 빨강·매도 파랑. 어느 것도 예측값이 아니라 정렬용이며, 어떤 조합이 실제로 오르는지는 매일 채점표로 확인한다(하루치 결과: 평소 8배 넘게 몰린 신고가 종목은 오히려 장 끝까지 −1.4%). 호가는 KRX+NXT 통합.
           </p>
         </>
       ) : null}

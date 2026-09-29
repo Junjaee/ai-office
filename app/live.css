@@ -36,6 +36,9 @@
 .live-chip.ask { background: #1c2333; color: var(--lb-cold); border-color: #2b3a5c; }
 .live-table td.wall-bid { color: var(--lb-hot); } .live-table td.wall-ask { color: var(--lb-cold); }
 .live-table td.score.up { color: var(--lb-hot); } .live-table td.score.down { color: var(--lb-cold); }
+.live-table td.ratio { font-weight: 700; } .live-table td.ratio.warm { color: var(--lb-warm); } .live-table td.ratio.hot { color: var(--lb-hot); }
+.live-pos { background: #1f2a1f; color: var(--lb-acc); border: 1px solid #2c4a2c; border-radius: 999px; padding: 2px 8px; font-size: 12px; white-space: nowrap; }
+.live-pos.top { background: #2a1f1f; color: var(--lb-hot); border-color: #4a2a2a; }
 .live-detail { background: var(--lb-card); border: 1px solid var(--lb-line); border-radius: 8px; padding: 12px; align-self: start; position: sticky; top: 12px; max-height: calc(100vh - 40px); overflow: auto; }
 .live-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .live-detail h2 { margin: 0; font-size: 16px; } .live-detail h2 small { color: var(--lb-dim); font-weight: 400; font-size: 12px; }
@@ -60,5 +63,5 @@
 @media (max-width: 860px) {
   .live-body.with-detail { grid-template-columns: 1fr; }
   .live-detail { position: static; max-height: none; }
-  .live-table th:nth-child(6), .live-table td:nth-child(6) { display: none; }
+  .live-table th:nth-child(9), .live-table td:nth-child(9), .live-table th:nth-child(10), .live-table td:nth-child(10) { display: none; }
 }

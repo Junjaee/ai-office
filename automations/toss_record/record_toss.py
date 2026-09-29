@@ -24,7 +24,8 @@ sys.path.insert(0, str(HERE)); sys.path.insert(0, str(HERE.parents[1])); sys.pat
 import toss_rest as tr  # noqa: E402
 import toss_ws as tw  # noqa: E402
 from live_board import LiveBoard, LivePoster, live_settings, now_iso  # noqa: E402
-from trade_poll import TradePoller, prev_closes  # noqa: E402
+from trade_poll import TradePoller  # noqa: E402
+from daily_ref import daily_refs  # noqa: E402
 from record import KeepAwake, Lock, csv_to_parquet, log, notify, now_kst, parse_until  # noqa: E402
 
 LIVE_POST_SEC = 5.0
@@ -96,8 +97,9 @@ async def _record(a, codes: list[str], store: Store, until_dt, channels: tuple[s
     stats = [tw.ConnStats() for _ in chunks]
     started = now_iso()
     if board is not None:
-        board.prev_close = await asyncio.to_thread(prev_closes, ses, codes, log)
-        log(f"전일 종가 {len(board.prev_close)}종목")
+        board.refs = await asyncio.to_thread(daily_refs, ses, codes, log)
+        board.prev_close = {c: r["prev_close"] for c, r in board.refs.items()}
+        log(f"일봉 기준값(전일 종가·고가·20일 신고가·평소 거래대금) {len(board.refs)}종목")
     poll_stop = threading.Event()
     poller: TradePoller | None = None
 
