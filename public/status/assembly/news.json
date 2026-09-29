@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 27건, 실패 0건, 12초",
+  "summary": "신규 21건, 실패 0건, 12초",
   "counts": {
-    "new": 27,
+    "new": 21,
     "failed": 0,
-    "total": 2443
+    "total": 2464
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 27건, 실패 0건, 12초",
-    "[신규] 보이넥스트도어 '컬투쇼' 출격부터 테크볼 이준석 선수까지, SBS 라디오 9월 29일 — SBS연예뉴스",
-    "[신규] 2200명이 재현하는 정조대왕 행차…수원화성 '축제의 8일' — v.daum.net",
-    "[신규] [선수와 가족을 잇는 응원쉼터]대한체육회, 아시안게임 최초 ‘팀코리아 프렌즈&패밀리 라운지’ 운영 — 전국뉴스",
-    "[신규] 송옥주 의원, “표준 AI항만, 데이터·경쟁력이 관건” — 시민행정신문"
+    "신규 21건, 실패 0건, 12초",
+    "[신규] [단독] '12년 만의 AG 농구 金 주역' 이현중, 유재석 만난다…'유퀴즈' 출연 — news1.kr",
+    "[신규] 한국군 훈련 정보 수집 혐의 중국인 2명…인민해방군 출신 — v.daum.net",
+    "[신규] 범보수계 수도권 의원들, 부동산 정책 점검·대안 마련 '포럼' 출범 — 매일일보",
+    "[신규] 野 '지뢰·포로' 쌍끌이 공세…\"李대통령 가짜평화 망상에 軍압박\"(종합) — 연합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36515209125,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36515209125",
-  "request_id": "cron-202609290300",
+  "run_id": 36528874368,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36528874368",
+  "request_id": "cron-202609290600",
   "trigger": "schedule",
-  "started_at": "2026-09-29T12:01:00+09:00",
+  "started_at": "2026-09-29T15:00:59+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 140건"
+      "summary": "검색어 5개에서 142건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 50건 (신규 27건) · NANOOM ENERGY 6건, ksw-news.com 5건, v.daum.net 5건"
+      "summary": "오늘 71건 (신규 21건) · v.daum.net 10건, NANOOM ENERGY 6건, ksw-news.com 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-29T12:01:14+09:00"
+  "updated_at": "2026-09-29T15:01:12+09:00"
 }
