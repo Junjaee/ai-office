@@ -9,7 +9,8 @@ export type LiveItem = {
   code: string; name: string; price: number; prev_close?: number | null; chg_pct?: number | null; strength: number | null; buy_amt: number; sell_amt: number;
   ratio: number | null; ask_total: number; bid_total: number; amt: number; n_trades: number; score: number;
   wall: { side: "ask" | "bid"; level: number; price: number; amt: number } | null;
-  event: string; book: { ts: string; asks: Level[]; bids: Level[] } | null; trades: Trade[];
+  event: string; event_side?: "ask" | "bid" | ""; parts?: { flow: number; wall: number; event: number; depth: number };
+  book: { ts: string; asks: Level[]; bids: Level[] } | null; trades: Trade[];
 };
 export type LiveBoardDoc = LiveTaskDoc & {
   board?: { at: string; codes_n: number; books: number; trades: number; connections: number; subscribed: number; reconnects: number; window_sec: number; items: LiveItem[] };
@@ -127,15 +128,15 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
                 <tbody>
                   {items.map((it) => (
                     <tr key={it.code} className={`${strengthClass(it.strength)} ${sel === it.code ? "sel" : ""}`} onClick={() => setSel(sel === it.code ? null : it.code)}>
-                      <td className="num score">{fmt(it.score, 2)}</td>
+                      <td className={`num score ${it.score > 0 ? "up" : it.score < 0 ? "down" : ""}`} title={it.parts ? `체결 ${it.parts.flow} · 벽 ${it.parts.wall} · 신호 ${it.parts.event} · 잔량 ${it.parts.depth}` : ""}>{it.score > 0 ? "+" : ""}{fmt(it.score, 2)}</td>
                       <td>{it.name}<small>{it.code}</small></td>
                       <td className="num">{fmt(it.price)}</td>
                       <td className={`num chg ${(it.chg_pct ?? 0) > 0 ? "up" : (it.chg_pct ?? 0) < 0 ? "down" : ""}`}>{it.chg_pct == null ? "-" : `${it.chg_pct > 0 ? "+" : ""}${fmt(it.chg_pct, 2)}%`}</td>
                       <td className="num strength">{fmt(it.strength)}</td>
                       <td className="num">{fmt(it.buy_amt, 2)} / {fmt(it.sell_amt, 2)}</td>
                       <td className="num">{it.ask_total === 0 ? "상한가" : it.bid_total === 0 ? "하한가" : fmt(it.ratio, 2)}</td>
-                      <td>{it.wall ? `${it.wall.side === "ask" ? "매도" : "매수"}${it.wall.level} ${fmt(it.wall.price)}원 · ${fmt(it.wall.amt, 1)}억` : "-"}</td>
-                      <td>{it.event ? <span className="live-chip">{it.event}</span> : <span className="live-none">-</span>}</td>
+                      <td className={it.wall ? (it.wall.side === "bid" ? "wall-bid" : "wall-ask") : ""}>{it.wall ? `${it.wall.side === "ask" ? "매도" : "매수"}${it.wall.level} ${fmt(it.wall.price)}원 · ${fmt(it.wall.amt, 1)}억` : "-"}</td>
+                      <td>{it.event ? <span className={`live-chip ${it.event_side === "ask" ? "ask" : "bid"}`}>{it.event}</span> : <span className="live-none">-</span>}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -164,7 +165,7 @@ export default function LiveBoard({ ws, automation, title, back }: { ws: string;
             ) : null}
           </div>
           <p className="live-foot">
-            체결강도 = 5분간 매수호가에 붙은 체결금액 ÷ 매도호가에 붙은 체결금액 × 100(토스 체결에는 매수·매도 구분이 없어 직전 호가와 대조해 추정). 벽 = 10단계 중 금액이 가장 큰 호가. 신호 = 5분 전보다 1~5호가 잔량이 2배 넘게 늘고 1억 이상인 호가. 점수 = 체결강도(최대 4점) + 가장 큰 벽 금액(억÷10) + 벽 신호 2점, 줄 세우기용. 호가는 KRX+NXT 통합.
+            체결강도 = 5분간 매수호가에 붙은 체결금액 ÷ 매도호가에 붙은 체결금액 × 100(토스 체결에는 매수·매도 구분이 없어 직전 호가와 대조해 추정). 벽 = 10단계 중 금액이 가장 큰 호가(매수벽 빨강, 매도벽 파랑). 신호 = 5분 전보다 1~5호가 잔량이 2배 넘게 늘고 1억 이상인 호가. 점수 = 체결 방향(매수÷매도 로그, ±2) + 가장 큰 벽(벽 금액 ÷ 5분 거래대금, 매수 +·매도 −, ±2) + 벽 생김(같은 식, ±2) + 잔량비(±1). 점수에 마우스를 올리면 항목별 기여. 줄 세우기용이지 예측값이 아님. 호가는 KRX+NXT 통합.
           </p>
         </>
       ) : null}

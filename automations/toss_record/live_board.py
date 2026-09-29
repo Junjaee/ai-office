@@ -3,13 +3,19 @@
 집계(종목마다, 창 = 최근 5분):
 - 체결 방향: 체결가 ≥ 직전 매도1호가 → 매수(B), ≤ 직전 매수1호가 → 매도(S), 그 사이 → 중간(M). 토스 체결에 매수/매도 구분이 없어 이렇게 추정한다.
 - 체결강도 = 매수 체결금액 ÷ 매도 체결금액 × 100. 잔량비 = 매수 총잔량 ÷ 매도 총잔량. 벽 = 10단계 중 금액(가격×잔량)이 가장 큰 호가.
-- 벽 신호 = 5분 전 표본과 비교해 1~5호가 잔량이 2배 넘게 늘고 금액 1억 이상(2026-09-29 사용자 결정으로 3배·3억에서 낮춤).
-- 점수 = min(체결강도, 400)/100 + 벽 금액(억)/10 + 신호 2점 — 정렬용이지 예측값이 아니다.
+- 벽 신호 = 5분 전 표본과 비교해 1~5호가 잔량이 2배 넘게 늘고 금액 1억 이상(2026-09-29 사용자 결정으로 3배·3억에서 낮춤). 매수벽·매도벽을 구분한다.
+- 점수(2026-09-29 개편, 사용자 지적 "벽이 작으면 점수가 낮아야"): 전부 방향이 있고 종목의 거래 규모에 견준다. 정렬용이지 예측값이 아니다.
+    체결 방향 = clip(log2(매수 체결금액 ÷ 매도 체결금액), -2, 2), 5분 합계 1억 미만이면 0
+    가장 큰 벽 = ±clip(log2(1 + 벽 금액 ÷ 5분 거래대금), 0, 2) (매수벽 +, 매도벽 -, 0.5억 미만 0)
+    벽 생김 신호 = ±clip(log2(1 + 새 벽 금액 ÷ 5분 거래대금), 0, 2)
+    잔량비 = clip(log2(매수 총잔량 ÷ 매도 총잔량), -1, 1)
+- 체결 방향 분류: 체결가 ≥ 매도1 → 매수, ≤ 매수1 → 매도, 그 사이(통합 호가라 자주 생김)는 호가 중간값보다 위면 매수·아래면 매도.
 보내는 문서: {ws, automation, task:"record", state, at, summary, started_at, board:{..., items:[...]}} (≤ 1MB, 종목 100개면 약 150KB).
 """
 from __future__ import annotations
 
 import json
+import math
 import time
 from collections import deque
 from datetime import datetime, timezone, timedelta
@@ -69,10 +75,13 @@ class LiveBoard:
             b = self.book.get(code)
             side = "M"
             if b and b["asks"] and b["bids"]:
-                if price >= b["asks"][0][0]:
+                a1, b1 = b["asks"][0][0], b["bids"][0][0]
+                if price >= a1:
                     side = "B"
-                elif price <= b["bids"][0][0]:
+                elif price <= b1:
                     side = "S"
+                else:                                 # 통합 호가(KRX+NXT)라 호가 사이 체결이 잦다 → 중간값 기준
+                    side = "B" if price >= (a1 + b1) / 2 else "S"
             dq = self.trades.setdefault(code, deque())
             t = ts_ms(row.get("timestamp", ""), recv)
             if dq and t < dq[-1][0]:
@@ -101,28 +110,40 @@ class LiveBoard:
             if cands:
                 side, lv, p, v, a = max(cands, key=lambda c: c[4])
                 wall = {"side": side, "level": lv, "price": p, "amt": round(a / 1e8, 2)}
-        event = ""
+        event = ""; event_side = ""; event_amt = 0.0
         smp = self.samples.get(code)
         if b and smp and len(smp) >= 2 and now - smp[0][0] >= self.window_ms * 0.8:
             _, asks0, bids0 = smp[0]
-            for side, cur, old in (("매도", b["asks"], asks0), ("매수", b["bids"], bids0)):
+            for sname, skey, cur, old in (("매수", "bid", b["bids"], bids0), ("매도", "ask", b["asks"], asks0)):
                 for i in range(min(5, len(cur), len(old))):
                     p1, v1 = cur[i]; v0 = old[i][1]
-                    if v1 > self.wall_mult * max(v0, 1) and p1 * v1 >= self.wall_min_amt:
-                        event = f"{side}{i+1}호가 벽 생김({p1*v1/1e8:.1f}억)"
-                        break
-                if event:
-                    break
-        score = round(min(strength or 0, 400) / 100 + (wall["amt"] / 10 if wall else 0) + (2 if event else 0), 2)
+                    if v1 > self.wall_mult * max(v0, 1) and p1 * v1 >= self.wall_min_amt and p1 * v1 > event_amt:
+                        event = f"{sname}{i+1}호가 벽 생김({p1*v1/1e8:.1f}억)"; event_side = skey; event_amt = p1 * v1
+        score, parts = self.score(buy, sell, amt, wall, event_side, event_amt, bid_total, ask_total)
         pc = self.prev_close.get(code)
         chg = round((price / pc - 1) * 100, 2) if pc and price else None
         return {
-            "code": code, "name": self.names.get(code, code), "price": price, "prev_close": pc, "chg_pct": chg, "strength": strength,
+            "code": code, "name": self.names.get(code, code), "price": price, "prev_close": pc, "chg_pct": chg, "strength": strength, "event_side": event_side, "parts": parts,
             "buy_amt": round(buy / 1e8, 3), "sell_amt": round(sell / 1e8, 3), "ratio": ratio, "ask_total": ask_total, "bid_total": bid_total,
             "amt": round(amt / 1e8, 2), "n_trades": len(tr), "score": score, "wall": wall, "event": event,
             "book": {"ts": b["ts"], "asks": [[f"{p:g}", f"{v:g}"] for p, v in b["asks"]], "bids": [[f"{p:g}", f"{v:g}"] for p, v in b["bids"]]} if b else None,
             "trades": [[ts, f"{p:g}", f"{v:g}", s] for _, ts, p, v, s in list(tr)[-20:]],
         }
+
+    @staticmethod
+    def score(buy: float, sell: float, amt: float, wall: dict | None, event_side: str, event_amt: float, bid_total: float, ask_total: float) -> tuple[float, dict]:
+        """방향 있는 점수와 항목별 기여. 값은 원 단위."""
+        def clip(x: float, lo: float, hi: float) -> float:
+            return max(lo, min(hi, x))
+        base = max(amt, 1e7)                                  # 5분 거래대금(최소 0.1억) — 벽을 이 크기에 견준다
+        flow = clip(math.log2(buy / sell), -2, 2) if (buy + sell >= 1e8 and buy > 0 and sell > 0) else (2.0 if buy + sell >= 1e8 and sell == 0 else -2.0 if buy + sell >= 1e8 and buy == 0 else 0.0)
+        wall_pts = 0.0
+        if wall and wall["amt"] * 1e8 >= 5e7:
+            wall_pts = clip(math.log2(1 + wall["amt"] * 1e8 / base), 0, 2) * (1 if wall["side"] == "bid" else -1)
+        ev_pts = clip(math.log2(1 + event_amt / base), 0, 2) * (1 if event_side == "bid" else -1) if event_side else 0.0
+        depth = clip(math.log2(bid_total / ask_total), -1, 1) if bid_total > 0 and ask_total > 0 else (1.0 if bid_total > 0 and ask_total == 0 else -1.0 if ask_total > 0 else 0.0)
+        parts = {"flow": round(flow, 2), "wall": round(wall_pts, 2), "event": round(ev_pts, 2), "depth": round(depth, 2)}
+        return round(flow + wall_pts + ev_pts + depth, 2), parts
 
     def board(self, codes: list[str], meta: dict) -> dict:
         items = [self.item(c) for c in codes]

@@ -135,3 +135,30 @@ def test_load_secrets_rejects_placeholder(tmp_path):
     cfg.write_text("toss_client_id: abcdefghijklmnop1234\ntoss_client_secret: " + "y" * 40 + "\n", encoding="utf-8")
     tr.load_secrets(cfg)
     assert os.environ["TOSS_CLIENT_ID"].startswith("abcdef")
+
+
+def test_score_direction_and_scale():
+    from live_board import LiveBoard
+    # 매수 체결 4배, 5분 거래대금 1억, 매수벽 3억(3배), 매수벽 생김 3억, 잔량 매수 2배 → 전부 +
+    s, parts = LiveBoard.score(buy=8e7, sell=2e7, amt=1e8, wall={"side": "bid", "amt": 3.0}, event_side="bid", event_amt=3e8, bid_total=200, ask_total=100)
+    assert parts == {"flow": 2.0, "wall": 2.0, "event": 2.0, "depth": 1.0} and s == 7.0
+    # 같은 크기의 매도벽·매도 우위 → 전부 -
+    s2, parts2 = LiveBoard.score(buy=2e7, sell=8e7, amt=1e8, wall={"side": "ask", "amt": 3.0}, event_side="ask", event_amt=3e8, bid_total=100, ask_total=200)
+    assert s2 == -7.0
+    # 체결 합계 1억 미만이면 체결 방향 0, 작은 벽(0.5억 미만) 0, 거래대금이 큰 종목의 같은 벽은 작게
+    s3, parts3 = LiveBoard.score(buy=5e6, sell=1e5, amt=6e6, wall={"side": "bid", "amt": 0.3}, event_side="", event_amt=0, bid_total=100, ask_total=100)
+    assert parts3["flow"] == 0 and parts3["wall"] == 0 and s3 == 0
+    big, _ = LiveBoard.score(buy=0, sell=0, amt=50e8, wall={"side": "bid", "amt": 1.9}, event_side="", event_amt=0, bid_total=100, ask_total=100)
+    small, _ = LiveBoard.score(buy=0, sell=0, amt=0.64e8, wall={"side": "bid", "amt": 1.9}, event_side="", event_amt=0, bid_total=100, ask_total=100)
+    assert big < small
+
+
+def test_mid_trades_classified():
+    from live_board import LiveBoard
+    b = LiveBoard()
+    row = {"timestamp": "t", "ask1_p": "37300", "ask1_v": "10", "bid1_p": "37250", "bid1_v": "10"}
+    b.on_row("orderbook:kr", "078340", row)
+    from live_board import now_iso
+    b.on_row("trade:kr", "078340", {"timestamp": now_iso(), "price": "37280", "volume": "1"})   # 중간값 37275 위 → 매수
+    b.on_row("trade:kr", "078340", {"timestamp": now_iso(), "price": "37260", "volume": "1"})   # 아래 → 매도
+    assert [t[3] for t in b.item("078340")["trades"]] == ["B", "S"]
