@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 31초",
+  "summary": "신규 5건, 실패 0건, 12초",
   "counts": {
-    "new": 4,
+    "new": 5,
     "failed": 0,
-    "total": 2687
+    "total": 2692
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 31초",
-    "[신규] 구심점 잃은 개혁 보수…野 '수도권 주거혁신포럼' 고리로 새 축 만들어지나 — v.daum.net, 더팩트",
-    "[신규] 국힘·개혁신당, ‘수도권 부동산’ 정책 공조 나서 — 울산제일일보",
-    "[신규] 당권파·친한계는 거리두고… 수도권 범야권 ‘부동산’ 손잡았다 — v.daum.net",
-    "[신규] 창원 국가산단, '방산 특화단지' 최초 지정…5조원대 항공엔진 사업 '탄력' — 포인트경제"
+    "신규 5건, 실패 0건, 12초",
+    "[신규] 李보다 유시민에 힘 실어준 진보 채팅창... 보수에선 '한동훈 복당 저지' 요구 [유튜브 부족주의] — 한국일보",
+    "[신규] 나경원, 'DMZ 지뢰' 규탄 결의안 발의 … 한동훈·이준석도 동참, 野 연합전선 — 뉴데일리",
+    "[신규] 野, 부동산 공동전선…수도권 주거혁신포럼 출범 — 연합뉴스TV",
+    "[신규] 현수막 대금 소송 끝났지만 갈등 계속… “불법추심 아니면 뭐냐” — 더리포트"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36755539287,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36755539287",
-  "request_id": "cron-202609301800",
+  "run_id": 36776665091,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36776665091",
+  "request_id": "cron-202609302100",
   "trigger": "schedule",
-  "started_at": "2026-10-01T03:01:33+09:00",
-  "duration_sec": 31,
+  "started_at": "2026-10-01T06:01:56+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 208건"
+      "summary": "검색어 5개에서 213건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 12건 (신규 4건) · NANOOM ENERGY 3건, v.daum.net 2건, 뉴시스 1건"
+      "summary": "오늘 17건 (신규 5건) · NANOOM ENERGY 3건, v.daum.net 2건, news.tf.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-01T03:02:04+09:00"
+  "updated_at": "2026-10-01T06:02:09+09:00"
 }
