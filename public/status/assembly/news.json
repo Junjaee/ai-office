@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 32건, 실패 0건, 13초",
+  "summary": "신규 26건, 실패 0건, 13초",
   "counts": {
-    "new": 32,
+    "new": 26,
     "failed": 0,
-    "total": 2628
+    "total": 2654
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 32건, 실패 0건, 13초",
-    "[신규] 국힘·개혁신당 손잡고 ‘수도권 부동산 정책’ 공조…이준석 “함께할 일 많을 것” — 동아일보",
-    "[신규] 이준석·조정훈, 수도권 부동산 해결에 '보수 연대'…오세훈과도 공조(종합) — v.daum.net",
-    "[신규] 이준석, 수도권 주거혁신 포럼 출범...\"빚내서 집 사겠다는 실수요자 존중해야\" — 뉴스핌",
-    "[신규] 윤상현 \"한동훈 연휴에도 쉬지 않고 싸워…이준석과 하나로 모여야\" — v.daum.net"
+    "신규 26건, 실패 0건, 13초",
+    "[신규] 이준석, 국힘 수도권 의원 10여명과 부동산 공부 모임 결성 — 조선일보, v.daum.net",
+    "[신규] 입지 쪼그라든 이준석…대북 안보 이슈 고리로 존재감 키우나 — 에너지경제신문",
+    "[신규] 조정훈·이준석 공동대표, 수도권 부동산정책 포럼 출범…친한계 빼고 보수 통합 시동 — 경향신문",
+    "[신규] 국민의힘·개혁신당, 부동산 공동전선…수도권 주거혁신포럼 출범 — 연합뉴스TV"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36676071111,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36676071111",
-  "request_id": "cron-202609300600",
+  "run_id": 36693291575,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36693291575",
+  "request_id": "cron-202609300900",
   "trigger": "schedule",
-  "started_at": "2026-09-30T15:01:03+09:00",
+  "started_at": "2026-09-30T18:00:53+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 201건"
+      "summary": "검색어 5개에서 231건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 93건 (신규 32건) · v.daum.net 20건, 뉴시스 10건, asiae.co.kr 4건"
+      "summary": "오늘 119건 (신규 26건) · v.daum.net 23건, 뉴시스 10건, 뉴스1 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-30T15:01:17+09:00"
+  "updated_at": "2026-09-30T18:01:07+09:00"
 }
