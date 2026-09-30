@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 26건, 실패 0건, 13초",
+  "summary": "신규 21건, 실패 0건, 15초",
   "counts": {
-    "new": 26,
+    "new": 21,
     "failed": 0,
-    "total": 2654
+    "total": 2675
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 26건, 실패 0건, 13초",
-    "[신규] 이준석, 국힘 수도권 의원 10여명과 부동산 공부 모임 결성 — 조선일보, v.daum.net",
-    "[신규] 입지 쪼그라든 이준석…대북 안보 이슈 고리로 존재감 키우나 — 에너지경제신문",
-    "[신규] 조정훈·이준석 공동대표, 수도권 부동산정책 포럼 출범…친한계 빼고 보수 통합 시동 — 경향신문",
-    "[신규] 국민의힘·개혁신당, 부동산 공동전선…수도권 주거혁신포럼 출범 — 연합뉴스TV"
+    "신규 21건, 실패 0건, 15초",
+    "[신규] 이준석 ‘부동산’·한동훈 ‘지뢰’…공동전선 넓히는 국힘 — 서울경제",
+    "[신규] 윤상현 \"한동훈 한 분이 당보다 잘 싸워…이준석도 뭉쳐야\" — v.daum.net",
+    "[신규] 이준석, 대표 사퇴 후 첫 공식행보는 국민의힘과…독자 행보 넓히나 — 데일리안",
+    "[신규] 조정훈·이준석 공동대표 수도권주거혁신포럼 창립 세미나 — 뉴스1"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36693291575,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36693291575",
-  "request_id": "cron-202609300900",
+  "run_id": 36712114158,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36712114158",
+  "request_id": "cron-202609301200",
   "trigger": "schedule",
-  "started_at": "2026-09-30T18:00:53+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-09-30T21:01:48+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 231건"
+      "summary": "검색어 5개에서 236건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 119건 (신규 26건) · v.daum.net 23건, 뉴시스 10건, 뉴스1 8건"
+      "summary": "오늘 140건 (신규 21건) · v.daum.net 26건, 뉴스1 12건, 뉴시스 12건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-30T18:01:07+09:00"
+  "updated_at": "2026-09-30T21:02:05+09:00"
 }
