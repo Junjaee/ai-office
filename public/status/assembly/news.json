@@ -3,36 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 11초",
+  "summary": "신규 28건, 실패 0건, 13초",
   "counts": {
-    "new": 1,
+    "new": 28,
     "failed": 0,
-    "total": 2568
+    "total": 2596
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 11초",
-    "[신규] ′굵직한 사건사고′ 식품유통가 국감장 달군다… CJ·쿠팡·배민 경영진 줄소환 — 소셜밸류"
+    "신규 28건, 실패 0건, 13초",
+    "[신규] 금메달 따고도 생계 막막? 테크볼 이준석 \"이유가‥\" [모닝콜] — MBC 뉴스",
+    "[신규] 대표 사퇴한 이준석, 국민의힘과 ‘부동산 때리기’ 나선다…첫 현장 행보로 ‘용산공원’ 유력 검토 — JTBC",
+    "[신규] [포토] 이야기 나누는 이준석-조정훈 — 아시아경제",
+    "[신규] 이준석-국힘, 부동산 정책 공동전선…중도 확장 시동 — v.daum.net"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36648091552,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36648091552",
-  "request_id": "cron-202609300000",
+  "run_id": 36662434148,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36662434148",
+  "request_id": "cron-202609300300",
   "trigger": "schedule",
-  "started_at": "2026-09-30T09:01:30+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-09-30T12:01:03+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 115건"
+      "summary": "검색어 5개에서 157건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 33건 (신규 1건) · v.daum.net 7건, 연합뉴스 2건, Chosunbiz 1건"
+      "summary": "오늘 61건 (신규 28건) · v.daum.net 12건, 뉴시스 5건, 뉴스1 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-30T09:01:42+09:00"
+  "updated_at": "2026-09-30T12:01:17+09:00"
 }
