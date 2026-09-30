@@ -3,37 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 전송 1건, 실패 0건, 58초",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 14초",
   "counts": {
-    "new": 2,
-    "sent": 1,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 2건, 전송 1건, 실패 0건, 58초",
-    "[신규] [고시] 주택건설사업계획변경(1차)승인 고시[동탄(1) M1-2-2블록(반송동99",
-    "[신규] [시정알림방] 2026년 화성시 공예체험의 날 체험부스 모집안내"
+    "신규 0건, 전송 0건, 실패 0건, 14초"
   ],
   "link": "",
-  "run_id": 36648095721,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36648095721",
+  "run_id": 36648094968,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36648094968",
   "request_id": "cron-202609300000",
   "trigger": "schedule",
-  "started_at": "2026-09-30T09:00:40+09:00",
-  "duration_sec": 58,
+  "started_at": "2026-09-30T09:02:12+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 2건, 첨부 3건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "1건 발송, 무음 1건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-09-30T09:01:39+09:00"
+  "updated_at": "2026-09-30T09:02:27+09:00"
 }
