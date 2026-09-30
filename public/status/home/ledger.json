@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 2초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
   "counts": {
     "new": 1,
     "replaced": 0,
@@ -12,16 +12,16 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 2초",
-    "[추가] 2026년 9월 9/30 서울약국 3,000원 (기타)"
+    "신규 1건, 취소 0건, 건너뜀 0건, 실패 0건, 3초",
+    "[추가] 2026년 9월 9/30 서울특별시송파구 1,100원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36677787724,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36677787724",
-  "request_id": "cron-202609300621",
+  "run_id": 36678563845,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36678563845",
+  "request_id": "cron-202609300630",
   "trigger": "schedule",
-  "started_at": "2026-09-30T15:21:43+09:00",
-  "duration_sec": 2,
+  "started_at": "2026-09-30T15:30:51+09:00",
+  "duration_sec": 3,
   "tasks": [
     {
       "id": "collect",
@@ -35,5 +35,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-09-30T15:21:46+09:00"
+  "updated_at": "2026-09-30T15:30:55+09:00"
 }
