@@ -17,11 +17,11 @@
     "재경위 1건"
   ],
   "link": "https://drive.google.com/drive/folders/1dNwHu2iEAoMnp2NxOPfe8O866kE84tBr",
-  "run_id": 36537233312,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36537233312",
-  "request_id": "cron-202609290732",
+  "run_id": 36669049057,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36669049057",
+  "request_id": "cron-202609300429",
   "trigger": "schedule",
-  "started_at": "2026-09-29T16:32:50+09:00",
+  "started_at": "2026-09-30T13:29:36+09:00",
   "duration_sec": 5,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "mail",
-  "updated_at": "2026-09-29T16:32:56+09:00"
+  "updated_at": "2026-09-30T13:29:42+09:00"
 }
