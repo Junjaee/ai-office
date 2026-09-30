@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 21건, 실패 0건, 15초",
+  "summary": "신규 8건, 실패 0건, 13초",
   "counts": {
-    "new": 21,
+    "new": 8,
     "failed": 0,
-    "total": 2675
+    "total": 2683
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 21건, 실패 0건, 15초",
-    "[신규] 이준석 ‘부동산’·한동훈 ‘지뢰’…공동전선 넓히는 국힘 — 서울경제",
-    "[신규] 윤상현 \"한동훈 한 분이 당보다 잘 싸워…이준석도 뭉쳐야\" — v.daum.net",
-    "[신규] 이준석, 대표 사퇴 후 첫 공식행보는 국민의힘과…독자 행보 넓히나 — 데일리안",
-    "[신규] 조정훈·이준석 공동대표 수도권주거혁신포럼 창립 세미나 — 뉴스1"
+    "신규 8건, 실패 0건, 13초",
+    "[신규] [이슈] 국민의힘 DMZ 결의안에 한동훈·이준석 동참... 보수 재편 군불? — 폴리뉴스 Polinews",
+    "[신규] '수도권 주거' 고리로 국힘·개혁 與 협공...선거 연대 노림수? — 자유일보",
+    "[신규] 개혁신당, 국감 증인 채택에 상임위원 4분의 1 요구 기준 제안 — NANOOM ENERGY",
+    "[신규] 개혁신당, 조작기소 특검법 처리 연기 비판…“특검 원칙은 눈치게임 안 돼” — NANOOM ENERGY"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36712114158,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36712114158",
-  "request_id": "cron-202609301200",
+  "run_id": 36733544649,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36733544649",
+  "request_id": "cron-202609301500",
   "trigger": "schedule",
-  "started_at": "2026-09-30T21:01:48+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-10-01T00:02:05+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 236건"
+      "summary": "검색어 5개에서 204건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 140건 (신규 21건) · v.daum.net 26건, 뉴스1 12건, 뉴시스 12건"
+      "summary": "오늘 8건 (신규 8건) · NANOOM ENERGY 3건, 뉴시스 1건, 이투데이 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-30T21:02:05+09:00"
+  "updated_at": "2026-10-01T00:02:19+09:00"
 }
