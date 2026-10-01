@@ -18,11 +18,11 @@
     "[대기] 월 탭 없음 2026-10"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36931522980,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36931522980",
-  "request_id": "cron-202610012152",
+  "run_id": 36931628635,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36931628635",
+  "request_id": "cron-202610012153",
   "trigger": "schedule",
-  "started_at": "2026-10-02T06:52:46+09:00",
+  "started_at": "2026-10-02T06:54:02+09:00",
   "duration_sec": 1,
   "tasks": [
     {
@@ -37,5 +37,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-02T06:52:47+09:00"
+  "updated_at": "2026-10-02T06:54:04+09:00"
 }
