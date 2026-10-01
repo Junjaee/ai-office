@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 21초",
+  "summary": "신규 5건, 실패 0건, 10초",
   "counts": {
-    "new": 10,
+    "new": 5,
     "failed": 0,
-    "total": 2810
+    "total": 2815
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 21초",
-    "[신규] 개혁신당 이준석, 수도권 주거·광역교통 대책 제시 약속 — 한국사회복지저널",
-    "[신규] [KPGA 현대해상 최경주 1R] 1.송민혁 -7, T2.배상문-김홍택 -5, 4.이재진 -4, T5.강경남-박태완-조성민 -2, T8.김연섭-김재호-이태희-박은신-최승빈-이수민-신용구-한승수-최경주-고석완 -1 — 골프경제신문",
-    "[신규] 필리핀 카지노 호텔 이용 시간 알림 기능 확인 — Histoire pour tous",
-    "[신규] 이기인 개혁신당 비대위원장과 악수하는 김민석 민주당 대표 — newsis.com"
+    "신규 5건, 실패 0건, 10초",
+    "[신규] 와일드가 모든 심벌을 대신하나요? 디아블로4 스킬 슬롯 변경 규칙 확인 — Calgary Roughnecks",
+    "[신규] 파워볼 밸런스작업 후기 의 비밀을 풀다: 전문가들이 공유하는 핵심 팁 — Calgary Roughnecks",
+    "[신규] 오버워치 블랙잭 일과 균형와 깊은 이해: 본질, 법칙 및 응용 — Calgary Roughnecks",
+    "[신규] 한동훈, 차기 대통령 적합도 `1위` 18.1%…2위는 김민석 15.2% — 매일신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36880874483,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36880874483",
-  "request_id": "cron-202610011500",
+  "run_id": 36903612636,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36903612636",
+  "request_id": "cron-202610011800",
   "trigger": "schedule",
-  "started_at": "2026-10-02T00:01:23+09:00",
-  "duration_sec": 21,
+  "started_at": "2026-10-02T03:00:55+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 140건"
+      "summary": "검색어 5개에서 139건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 10건) · 한국사회복지저널 4건, Histoire pour tous 1건, IT조선 1건"
+      "summary": "오늘 15건 (신규 5건) · Calgary Roughnecks 4건, 한국사회복지저널 4건, Histoire pour tous 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-02T00:01:45+09:00"
+  "updated_at": "2026-10-02T03:01:07+09:00"
 }
