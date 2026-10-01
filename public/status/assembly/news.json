@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 12초",
+  "summary": "신규 7건, 실패 0건, 9초",
   "counts": {
-    "new": 5,
+    "new": 7,
     "failed": 0,
-    "total": 2692
+    "total": 2699
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 12초",
-    "[신규] 李보다 유시민에 힘 실어준 진보 채팅창... 보수에선 '한동훈 복당 저지' 요구 [유튜브 부족주의] — 한국일보",
-    "[신규] 나경원, 'DMZ 지뢰' 규탄 결의안 발의 … 한동훈·이준석도 동참, 野 연합전선 — 뉴데일리",
-    "[신규] 野, 부동산 공동전선…수도권 주거혁신포럼 출범 — 연합뉴스TV",
-    "[신규] 현수막 대금 소송 끝났지만 갈등 계속… “불법추심 아니면 뭐냐” — 더리포트"
+    "신규 7건, 실패 0건, 9초",
+    "[신규] 나경원, '北지뢰참사' 진상규명결의안 대표발의… 이준석·한동훈 야권 105명 공동발의 — 굿처치뉴스, press24.co.kr, 노동일보",
+    "[신규] 나경원, 野 105명과 '北지뢰' 진상규명 결의안 공동발의 — 아이뉴스24",
+    "[신규] 개혁신당 “DMZ 지뢰 사고, 10명 중 7명 정부 대응 부적절\" — 이투데이",
+    "[신규] [포토] 수도권주거 혁신포럼 참석한 정점식 원내대표 — 아시아경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36776665091,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36776665091",
-  "request_id": "cron-202609302100",
+  "run_id": 36793935421,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36793935421",
+  "request_id": "cron-202610010000",
   "trigger": "schedule",
-  "started_at": "2026-10-01T06:01:56+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-01T09:00:38+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 213건"
+      "summary": "검색어 5개에서 224건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 17건 (신규 5건) · NANOOM ENERGY 3건, v.daum.net 2건, news.tf.co.kr 1건"
+      "summary": "오늘 24건 (신규 7건) · v.daum.net 4건, NANOOM ENERGY 3건, 이투데이 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-01T06:02:09+09:00"
+  "updated_at": "2026-10-01T09:00:48+09:00"
 }
