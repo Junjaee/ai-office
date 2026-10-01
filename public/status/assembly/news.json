@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 13초",
+  "summary": "신규 10건, 실패 0건, 21초",
   "counts": {
-    "new": 20,
+    "new": 10,
     "failed": 0,
-    "total": 2800
+    "total": 2810
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 13초",
-    "[신규] [뷰리핑] 중수청 개청 코앞, 김지용 후보 운명은? — v.daum.net",
-    "[신규] [뷰리핑] 개청 코앞, 김지용 후보 운명은 — v.daum.net",
-    "[신규] 소병훈 의원, 국가건강검진 수검자 중 ‘비만(질환의심)’4년간 19.1%증가… BMI 40 이상은 약 45% 급증 — 시민행정신문",
-    "[신규] 부산고 하현승·김지원·아시안게임 금메달리스트, 다음주 '유퀴즈' 출연 예고 — 비즈엔터"
+    "신규 10건, 실패 0건, 21초",
+    "[신규] 개혁신당 이준석, 수도권 주거·광역교통 대책 제시 약속 — 한국사회복지저널",
+    "[신규] [KPGA 현대해상 최경주 1R] 1.송민혁 -7, T2.배상문-김홍택 -5, 4.이재진 -4, T5.강경남-박태완-조성민 -2, T8.김연섭-김재호-이태희-박은신-최승빈-이수민-신용구-한승수-최경주-고석완 -1 — 골프경제신문",
+    "[신규] 필리핀 카지노 호텔 이용 시간 알림 기능 확인 — Histoire pour tous",
+    "[신규] 이기인 개혁신당 비대위원장과 악수하는 김민석 민주당 대표 — newsis.com"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36858948984,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36858948984",
-  "request_id": "cron-202610011200",
+  "run_id": 36880874483,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36880874483",
+  "request_id": "cron-202610011500",
   "trigger": "schedule",
-  "started_at": "2026-10-01T21:01:01+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-02T00:01:23+09:00",
+  "duration_sec": 21,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 130건"
+      "summary": "검색어 5개에서 140건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 125건 (신규 20건) · v.daum.net 18건, 뉴시스 13건, 시민행정신문 7건"
+      "summary": "오늘 10건 (신규 10건) · 한국사회복지저널 4건, Histoire pour tous 1건, IT조선 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-01T21:01:16+09:00"
+  "updated_at": "2026-10-02T00:01:45+09:00"
 }
