@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초",
+  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 1초",
   "counts": {
     "new": 0,
     "replaced": 0,
@@ -12,16 +12,16 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초",
+    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 1초",
     "[대기] 월 탭 없음 2026-10"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36835513248,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36835513248",
-  "request_id": "cron-202610010818",
+  "run_id": 36835606633,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36835606633",
+  "request_id": "cron-202610010819",
   "trigger": "schedule",
-  "started_at": "2026-10-01T17:27:48+09:00",
-  "duration_sec": 0,
+  "started_at": "2026-10-01T17:28:22+09:00",
+  "duration_sec": 1,
   "tasks": [
     {
       "id": "collect",
@@ -35,5 +35,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-01T17:27:49+09:00"
+  "updated_at": "2026-10-01T17:28:24+09:00"
 }
