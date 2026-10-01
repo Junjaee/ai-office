@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 9초",
+  "summary": "신규 20건, 실패 0건, 13초",
   "counts": {
-    "new": 7,
+    "new": 20,
     "failed": 0,
-    "total": 2699
+    "total": 2719
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 9초",
-    "[신규] 나경원, '北지뢰참사' 진상규명결의안 대표발의… 이준석·한동훈 야권 105명 공동발의 — 굿처치뉴스, press24.co.kr, 노동일보",
-    "[신규] 나경원, 野 105명과 '北지뢰' 진상규명 결의안 공동발의 — 아이뉴스24",
-    "[신규] 개혁신당 “DMZ 지뢰 사고, 10명 중 7명 정부 대응 부적절\" — 이투데이",
-    "[신규] [포토] 수도권주거 혁신포럼 참석한 정점식 원내대표 — 아시아경제"
+    "신규 20건, 실패 0건, 13초",
+    "[신규] [줌 인 여의도] 부동산·안보 투트랙에서 손잡는 보수…이준석·국힘, 한동훈-국힘 '정책 공조', 보수 결집 단초 되나 — v.daum.net",
+    "[신규] [만나보니] [KB자산운용] 이준석 실장 \"오래 들고 갈 ETF 만든다…RISE만의 색깔 키울 것\" — DealSite경제TV",
+    "[신규] 이 대통령 보단 유시민? 진보 유튜브 실시간 채팅창 보니...보수에선 '한동훈 막아라' [유튜브 부족주의] — 한국일보",
+    "[신규] 차기 대통령감은? 한동훈 18.1%·김민석 15.2%·오세훈 10.5% — 에너지경제신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36793935421,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36793935421",
-  "request_id": "cron-202610010000",
+  "run_id": 36808467394,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36808467394",
+  "request_id": "cron-202610010300",
   "trigger": "schedule",
-  "started_at": "2026-10-01T09:00:38+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-01T12:00:37+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 224건"
+      "summary": "검색어 5개에서 164건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 24건 (신규 7건) · v.daum.net 4건, NANOOM ENERGY 3건, 이투데이 2건"
+      "summary": "오늘 44건 (신규 20건) · v.daum.net 8건, 뉴시스 5건, NANOOM ENERGY 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-01T09:00:48+09:00"
+  "updated_at": "2026-10-01T12:00:51+09:00"
 }
