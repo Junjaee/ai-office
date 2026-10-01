@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 13초",
+  "summary": "신규 23건, 실패 0건, 9초",
   "counts": {
-    "new": 20,
+    "new": 23,
     "failed": 0,
-    "total": 2719
+    "total": 2742
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 13초",
-    "[신규] [줌 인 여의도] 부동산·안보 투트랙에서 손잡는 보수…이준석·국힘, 한동훈-국힘 '정책 공조', 보수 결집 단초 되나 — v.daum.net",
-    "[신규] [만나보니] [KB자산운용] 이준석 실장 \"오래 들고 갈 ETF 만든다…RISE만의 색깔 키울 것\" — DealSite경제TV",
-    "[신규] 이 대통령 보단 유시민? 진보 유튜브 실시간 채팅창 보니...보수에선 '한동훈 막아라' [유튜브 부족주의] — 한국일보",
-    "[신규] 차기 대통령감은? 한동훈 18.1%·김민석 15.2%·오세훈 10.5% — 에너지경제신문"
+    "신규 23건, 실패 0건, 9초",
+    "[신규] 무소속 한동훈 18.1%·김민석 15.2%…국힘 지지층선 韓 32.6% — JIBS제주방송",
+    "[신규] 체조 황서현→女농구팀…'금의환향' 金 주역들, 유재석 만났다 — v.daum.net",
+    "[신규] \"모델 하나론 부족하다\"…반도체·전력 아우르는 'AI 풀스택' 역량 절실 — 뉴시스",
+    "[신규] 차기 대통령 적합도…한동훈 18.1%·김민석 15.2%·오세훈 10.5%[창간특집 여론조사] — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36808467394,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36808467394",
-  "request_id": "cron-202610010300",
+  "run_id": 36822508442,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36822508442",
+  "request_id": "cron-202610010600",
   "trigger": "schedule",
-  "started_at": "2026-10-01T12:00:37+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-01T15:00:42+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 164건"
+      "summary": "검색어 5개에서 133건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 44건 (신규 20건) · v.daum.net 8건, 뉴시스 5건, NANOOM ENERGY 3건"
+      "summary": "오늘 67건 (신규 23건) · v.daum.net 9건, 뉴시스 7건, 연합뉴스 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-01T12:00:51+09:00"
+  "updated_at": "2026-10-01T15:00:52+09:00"
 }
