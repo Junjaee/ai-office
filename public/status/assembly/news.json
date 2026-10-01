@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 38건, 실패 0건, 13초",
+  "summary": "신규 20건, 실패 0건, 13초",
   "counts": {
-    "new": 38,
+    "new": 20,
     "failed": 0,
-    "total": 2780
+    "total": 2800
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 38건, 실패 0건, 13초",
-    "[신규] 北 지뢰 사태 고리로 야권 연대해 정부·여당 압박 총력전 — 매일신문",
-    "[신규] 이준석도 안 쓸...…좌아하게 쓴 李대통령, 진보도 혀 찼다 — 아주경제",
-    "[신규] [포토] 이준석, 정교한 아이언샷 — edaily.co.kr",
-    "[신규] 대방건설, 이번엔 세무리스크 부상…구교운 회장 국감 증인 채택 — CEO스코어데일리"
+    "신규 20건, 실패 0건, 13초",
+    "[신규] [뷰리핑] 중수청 개청 코앞, 김지용 후보 운명은? — v.daum.net",
+    "[신규] [뷰리핑] 개청 코앞, 김지용 후보 운명은 — v.daum.net",
+    "[신규] 소병훈 의원, 국가건강검진 수검자 중 ‘비만(질환의심)’4년간 19.1%증가… BMI 40 이상은 약 45% 급증 — 시민행정신문",
+    "[신규] 부산고 하현승·김지원·아시안게임 금메달리스트, 다음주 '유퀴즈' 출연 예고 — 비즈엔터"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36839958548,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36839958548",
-  "request_id": "cron-202610010900",
+  "run_id": 36858948984,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36858948984",
+  "request_id": "cron-202610011200",
   "trigger": "schedule",
-  "started_at": "2026-10-01T18:01:17+09:00",
+  "started_at": "2026-10-01T21:01:01+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 126건"
+      "summary": "검색어 5개에서 130건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 105건 (신규 38건) · v.daum.net 15건, 뉴시스 13건, 시민행정신문 6건"
+      "summary": "오늘 125건 (신규 20건) · v.daum.net 18건, 뉴시스 13건, 시민행정신문 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-01T18:01:31+09:00"
+  "updated_at": "2026-10-01T21:01:16+09:00"
 }
