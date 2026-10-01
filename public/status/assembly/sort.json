@@ -3,35 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "정리 1건, 보류 2건, 33초",
+  "summary": "정리 0건, 보류 4건, 12초",
   "counts": {
-    "moved": 1,
-    "skip": 2
+    "moved": 0,
+    "skip": 4
   },
   "next_run": "새 자료가 오면",
   "log": [
-    "정리 1건, 보류 2건, 33초",
-    "재경위 1건 정리, 2건 보류"
+    "정리 0건, 보류 4건, 12초",
+    "재경위 0건 정리, 4건 보류"
   ],
   "link": "https://drive.google.com/drive/folders/1E7pUQ5hFNCq2NnLkJxPW1hb8lTJLaheQ",
-  "run_id": 36669049057,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36669049057",
-  "request_id": "cron-202609300429",
+  "run_id": 36829031628,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36829031628",
+  "request_id": "cron-202610010712",
   "trigger": "schedule",
-  "started_at": "2026-09-30T13:29:47+09:00",
-  "duration_sec": 33,
+  "started_at": "2026-10-01T16:13:24+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "plan",
       "status": "done",
-      "summary": "파일 3개 검토"
+      "summary": "파일 4개 검토"
     },
     {
       "id": "move",
       "status": "done",
-      "summary": "1개 정리, 2개 보류"
+      "summary": "0개 정리, 4개 보류"
     }
   ],
   "id": "sort",
-  "updated_at": "2026-09-30T13:30:20+09:00"
+  "updated_at": "2026-10-01T16:13:36+09:00"
 }
