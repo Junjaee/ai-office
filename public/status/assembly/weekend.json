@@ -3,28 +3,31 @@
   "dept": "partner",
   "ok": true,
   "running": false,
-  "summary": "주말 일정 1건, 전송 1건, 2초",
+  "summary": "주말 일정 6건, 전송 1건, 2초",
   "counts": {
-    "events": 1,
+    "events": 6,
     "sent": 1
   },
   "next_run": "매주 목 17:00",
   "log": [
-    "주말 일정 1건, 전송 1건, 2초",
-    "[9/27] 기타 일정"
+    "주말 일정 6건, 전송 1건, 2초",
+    "[10/3] 2026화성특례시장배 파크골프대회 @ 동탄2수질복원센터, 대한민국 화성시",
+    "[10/3] 화성특례시탁구대회 @ 화성시 실내배드민턴장, 대한민국 경기도 화성시 동탄신리천로 221",
+    "[10/3] 회의 일정",
+    "[10/3] 동탄맨 콘텐츠 촬영"
   ],
   "link": "",
-  "run_id": 35972715757,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35972715757",
-  "request_id": "cron-202609240800",
+  "run_id": 36833716596,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36833716596",
+  "request_id": "cron-202610010800",
   "trigger": "schedule",
-  "started_at": "2026-09-24T17:00:43+09:00",
+  "started_at": "2026-10-01T17:13:11+09:00",
   "duration_sec": 2,
   "tasks": [
     {
       "id": "fetch",
       "status": "done",
-      "summary": "토 0건 · 일 1건"
+      "summary": "토 5건 · 일 1건"
     },
     {
       "id": "send",
@@ -33,5 +36,5 @@
     }
   ],
   "id": "weekend",
-  "updated_at": "2026-09-24T17:00:46+09:00"
+  "updated_at": "2026-10-01T17:13:14+09:00"
 }
