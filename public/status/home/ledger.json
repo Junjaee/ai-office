@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 1초",
+  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초",
   "counts": {
     "new": 0,
     "replaced": 0,
@@ -12,24 +12,24 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 1초",
+    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 0초",
     "[대기] 월 탭 없음 2026-10",
     "[대기] 월 탭 없음 2026-10",
     "[대기] 월 탭 없음 2026-10",
     "[대기] 월 탭 없음 2026-10"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36964772501,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36964772501",
-  "request_id": "cron-202610020429",
+  "run_id": 36964894339,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36964894339",
+  "request_id": "cron-202610020430",
   "trigger": "schedule",
-  "started_at": "2026-10-02T13:29:49+09:00",
-  "duration_sec": 1,
+  "started_at": "2026-10-02T13:31:31+09:00",
+  "duration_sec": 0,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 5건 확인, 결제 0건"
+      "summary": "메일 6건 확인, 결제 0건"
     },
     {
       "id": "sheet",
@@ -38,5 +38,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-02T13:29:52+09:00"
+  "updated_at": "2026-10-02T13:31:32+09:00"
 }
