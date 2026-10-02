@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 14초",
+  "summary": "신규 31건, 실패 0건, 14초",
   "counts": {
-    "new": 12,
+    "new": 31,
     "failed": 0,
-    "total": 2832
+    "total": 2863
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 14초",
-    "[신규] 이재관의원, 온라인도매시장 거래액 늘었지만…상위업체 편중·거래 지속성 미흡 — 시민행정신문",
-    "[신규] 조인철 의원, 스마트크루즈 믿었는데.. 고속도로 ACC 사고 치사율, 일반 사고 7배 — 시민행정신문",
-    "[신규] 김문수 의원, 한국장학재단 새도약기금 연내 매각 목표, 법 개정에 달려… — 시민행정신문",
-    "[신규] 소병훈 의원, 마운자로 출시 1년, DUR 점검 264만 건… 월 40만건 돌파 — 시민행정신문"
+    "신규 31건, 실패 0건, 14초",
+    "[신규] 이준석 \"호텔경제학자 하준경을 정책실장으로…레버리지보다 민생 더 파탄\" — newspim.com",
+    "[신규] 이준석 “李, 호텔경제학자를 정책실장에 … 레버리지 ETF보다 민생 더 파탄시킬 것” — 뉴데일리",
+    "[신규] 크릿벤처스, '오딘' 개발진 출신 제이드래곤게임즈에 투자 — 매일경제 마켓",
+    "[신규] '오딘' 이준석 신생법인 제이드래곤, 크릿벤처스 투자 유치 — 월요신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36943886699,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36943886699",
-  "request_id": "cron-202610020000",
+  "run_id": 36958285227,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36958285227",
+  "request_id": "cron-202610020300",
   "trigger": "schedule",
-  "started_at": "2026-10-02T09:02:28+09:00",
+  "started_at": "2026-10-02T12:01:49+09:00",
   "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 126건"
+      "summary": "검색어 5개에서 110건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 32건 (신규 12건) · Calgary Roughnecks 5건, 시민행정신문 5건, 한국사회복지저널 4건"
+      "summary": "오늘 63건 (신규 31건) · 시민행정신문 9건, Calgary Roughnecks 6건, 한국사회복지저널 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-02T09:02:43+09:00"
+  "updated_at": "2026-10-02T12:02:03+09:00"
 }
