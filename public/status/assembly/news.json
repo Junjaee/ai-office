@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 10초",
+  "summary": "신규 12건, 실패 0건, 14초",
   "counts": {
-    "new": 5,
+    "new": 12,
     "failed": 0,
-    "total": 2820
+    "total": 2832
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 10초",
-    "[신규] 한동훈, 차기 대통령 적합도 18.1%로 1위…김민석 15.2% [에이스리서치] — 시사저널",
-    "[신규] 차기 대통령 적합도 한동훈 18.1% 김민석 15.2%…격차 2.9%p(에이스리서치) — TopStarNews",
-    "[신규] 與 \"국익 지킨 성과\"…野 \"굴종외교 민낯\" — 연합뉴스",
-    "[신규] 거리서 국회로 간 ‘인앱결제 전쟁’…구글 윤구, 국감 증인석 선다 — greened.kr"
+    "신규 12건, 실패 0건, 14초",
+    "[신규] 이재관의원, 온라인도매시장 거래액 늘었지만…상위업체 편중·거래 지속성 미흡 — 시민행정신문",
+    "[신규] 조인철 의원, 스마트크루즈 믿었는데.. 고속도로 ACC 사고 치사율, 일반 사고 7배 — 시민행정신문",
+    "[신규] 김문수 의원, 한국장학재단 새도약기금 연내 매각 목표, 법 개정에 달려… — 시민행정신문",
+    "[신규] 소병훈 의원, 마운자로 출시 1년, DUR 점검 264만 건… 월 40만건 돌파 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36925705515,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36925705515",
-  "request_id": "cron-202610012100",
+  "run_id": 36943886699,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36943886699",
+  "request_id": "cron-202610020000",
   "trigger": "schedule",
-  "started_at": "2026-10-02T06:01:05+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-10-02T09:02:28+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 133건"
+      "summary": "검색어 5개에서 126건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 20건 (신규 5건) · Calgary Roughnecks 4건, 한국사회복지저널 4건, edaily.co.kr 2건"
+      "summary": "오늘 32건 (신규 12건) · Calgary Roughnecks 5건, 시민행정신문 5건, 한국사회복지저널 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-02T06:01:15+09:00"
+  "updated_at": "2026-10-02T09:02:43+09:00"
 }
