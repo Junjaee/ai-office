@@ -82,6 +82,8 @@ export default function OfficeApp() {
     isToday,
   });
   const hasHistory = !histMsg?.replacesTable;
+  // 요약 칸의 실행 횟수: 이력을 실제로 받아 왔으면 0회도 숫자로 보인다(못 받아 왔을 때만 –)
+  const statsReady = hist.data != null && hist.data.source !== "static" && !(hist.error && histItems.length === 0);
   const stats = useMemo(() => dayStats(histItems), [histItems]);
   const buckets = useMemo(() => hourBuckets(histItems), [histItems]);
   const bucketMax = Math.max(1, ...buckets);
@@ -266,11 +268,11 @@ export default function OfficeApp() {
                 {runsTitle(hist.date, hist.today)}
               </div>
               <div className="kpi-value">
-                <strong>{hasHistory ? stats.runs.toLocaleString("ko-KR") : "–"}</strong>
+                <strong>{statsReady ? stats.runs.toLocaleString("ko-KR") : "–"}</strong>
                 <span>회</span>
               </div>
               <div className="kpi-sub">
-                {hasHistory
+                {statsReady && stats.runs > 0
                   ? `성공 ${stats.ok.toLocaleString("ko-KR")} · 실패 ${stats.failed.toLocaleString("ko-KR")}${stats.avgSec != null ? ` · 평균 ${secondsText(stats.avgSec)}` : ""}`
                   : (histMsg?.text ?? "")}
               </div>
