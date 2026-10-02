@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 12초",
+  "summary": "신규 12건, 실패 0건, 9초",
   "counts": {
-    "new": 20,
+    "new": 12,
     "failed": 0,
-    "total": 2902
+    "total": 2914
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 12초",
-    "[신규] `오딘` 개발진 뭉친 제이드래곤게임즈, 크릿벤처스 투자 유치 — ddaily.co.kr",
-    "[신규] ‘오딘’ 개발진 설립 게임사 ‘제이드래곤게임즈’, 투자 유치∙∙∙신작 ‘프로젝트 D’ 개발 가속 — 한국M&A경제신문",
-    "[신규] 크릿벤처스, MMORPG 제이드래곤게임즈에 투자 — 한경매거진&북",
-    "[신규] 시각장애 안고, 직장 그만두고… 나고야 울린 ‘인간승리’ 주인공들[2026 아이치·나고야 아시안게임] — 문화일보"
+    "신규 12건, 실패 0건, 9초",
+    "[신규] '오딘' 개발진이 설립한 제이드래곤게임즈, 시드투자 유치 — 머니투데이",
+    "[신규] 크릿벤처스, MMORPG 개발사 ‘제이드래곤게임즈’에 투자 — 데이터넷",
+    "[신규] 크릿벤처스, 제이드래곤게임즈에 투자 — 한스경제",
+    "[신규] 비대위 체제 개혁신당, 장경석 신임 인천시당위원장 임명 — 경인일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36987310853,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36987310853",
-  "request_id": "cron-202610020900",
+  "run_id": 37004221107,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37004221107",
+  "request_id": "cron-202610021200",
   "trigger": "schedule",
-  "started_at": "2026-10-02T18:01:11+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-02T21:01:27+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 91건"
+      "summary": "검색어 5개에서 74건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 102건 (신규 20건) · 시민행정신문 10건, Calgary Roughnecks 7건, v.daum.net 5건"
+      "summary": "오늘 114건 (신규 12건) · citizenadmnews.co.kr 10건, 시민행정신문 10건, Calgary Roughnecks 9건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-02T18:01:24+09:00"
+  "updated_at": "2026-10-02T21:01:37+09:00"
 }
