@@ -3,40 +3,41 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 1초",
+  "summary": "신규 6건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 11초",
   "counts": {
-    "new": 0,
+    "new": 6,
     "replaced": 0,
     "skip": 0,
+    "wait": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 0건, 취소 0건, 건너뜀 0건, 실패 0건, 1초",
-    "[대기] 월 탭 없음 2026-10",
-    "[대기] 월 탭 없음 2026-10",
-    "[대기] 월 탭 없음 2026-10",
-    "[대기] 월 탭 없음 2026-10"
+    "신규 6건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 11초",
+    "[탭 생성] '2026년 10월' — '샘플(매월복사)' 을 복사했어요",
+    "[추가] 2026년 10월 10/2 GSSHOP 12,900원 (생활비)",
+    "[추가] 2026년 10월 10/2 행복나누기 2,500원 (생활비)",
+    "[추가] 2026년 10월 10/2 쿠팡(쿠페이) 7,900원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36967065977,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36967065977",
-  "request_id": "cron-202610020500",
+  "run_id": 36967237887,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36967237887",
+  "request_id": "cron-202610020503",
   "trigger": "schedule",
-  "started_at": "2026-10-02T14:01:32+09:00",
-  "duration_sec": 1,
+  "started_at": "2026-10-02T14:04:01+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 6건 확인, 결제 0건"
+      "summary": "메일 6건 확인, 결제 6건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 0 · 취소 0 · 건너뜀 0"
+      "summary": "추가 6 · 취소 0 · 건너뜀 0 · 새 탭 1"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-02T14:01:34+09:00"
+  "updated_at": "2026-10-02T14:04:13+09:00"
 }
