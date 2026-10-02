@@ -3,9 +3,9 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 4초",
+  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 1초",
   "counts": {
-    "new": 2,
+    "new": 0,
     "replaced": 0,
     "skip": 0,
     "wait": 0,
@@ -13,29 +13,27 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 2건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 4초",
-    "[추가] 2026년 10월 10/2 쿠팡이츠 58,000원 (식비)",
-    "[추가] 2026년 10월 10/2 엔씨송파점 17,900원 (생활비)"
+    "신규 0건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 1초"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 36997436564,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36997436564",
-  "request_id": "cron-202610021047",
+  "run_id": 37004223739,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37004223739",
+  "request_id": "cron-202610021200",
   "trigger": "schedule",
-  "started_at": "2026-10-02T19:48:05+09:00",
-  "duration_sec": 4,
+  "started_at": "2026-10-02T21:01:37+09:00",
+  "duration_sec": 1,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 2건 확인, 결제 2건"
+      "summary": "메일 0건 확인, 결제 0건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 2 · 취소 0 · 건너뜀 0"
+      "summary": "추가 0 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-02T19:48:10+09:00"
+  "updated_at": "2026-10-02T21:01:39+09:00"
 }
