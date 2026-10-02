@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 31건, 실패 0건, 14초",
+  "summary": "신규 19건, 실패 0건, 15초",
   "counts": {
-    "new": 31,
+    "new": 19,
     "failed": 0,
-    "total": 2863
+    "total": 2882
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 31건, 실패 0건, 14초",
-    "[신규] 이준석 \"호텔경제학자 하준경을 정책실장으로…레버리지보다 민생 더 파탄\" — newspim.com",
-    "[신규] 이준석 “李, 호텔경제학자를 정책실장에 … 레버리지 ETF보다 민생 더 파탄시킬 것” — 뉴데일리",
-    "[신규] 크릿벤처스, '오딘' 개발진 출신 제이드래곤게임즈에 투자 — 매일경제 마켓",
-    "[신규] '오딘' 이준석 신생법인 제이드래곤, 크릿벤처스 투자 유치 — 월요신문"
+    "신규 19건, 실패 0건, 15초",
+    "[신규] 하준경 향한 이준석의 직격탄 — 공공뉴스",
+    "[신규] 나경원·이준석, 하준경에 \"호텔경제학자\" — 시사포커스",
+    "[신규] [박성원의 나고야컷] \"대~한민국\" 일본에서 들린 함성 — 조선일보",
+    "[신규] 크릿벤처스, 제이드래곤게임즈에 투자…MMORPG ‘프로젝트 D’ 개발 가속 — beSUCCESS"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36958285227,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36958285227",
-  "request_id": "cron-202610020300",
+  "run_id": 36971552061,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36971552061",
+  "request_id": "cron-202610020600",
   "trigger": "schedule",
-  "started_at": "2026-10-02T12:01:49+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-02T15:01:37+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 110건"
+      "summary": "검색어 5개에서 103건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 63건 (신규 31건) · 시민행정신문 9건, Calgary Roughnecks 6건, 한국사회복지저널 4건"
+      "summary": "오늘 82건 (신규 19건) · 시민행정신문 10건, Calgary Roughnecks 6건, 연합뉴스 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-02T12:02:03+09:00"
+  "updated_at": "2026-10-02T15:01:54+09:00"
 }
