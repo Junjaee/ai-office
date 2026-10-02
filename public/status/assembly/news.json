@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 25건, 실패 0건, 10초",
+  "summary": "신규 31건, 실패 0건, 14초",
   "counts": {
-    "new": 25,
+    "new": 31,
     "failed": 0,
-    "total": 2489
+    "total": 2863
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 25건, 실패 0건, 10초",
-    "[신규] 이준석 \"가상자산 규제, 글로벌 시장과 호환돼야\" [이스트포인트 : 서울 2026] By Bloomingbit — Investing.com 한국어",
-    "[신규] 인천·경기 집값 겨냥한 야권 공조…이준석·조정훈 ‘수도권 주거혁신포럼’ 출범 — 인천일보",
-    "[신규] 이준석, 국힘과 손잡고 '수도권 주거혁신포럼' 띄운다…李정부 부동산 겨냥 — 뉴스1",
-    "[신규] 조정훈·이준석, 수도권 부동산 해법 손잡았다...‘주거혁신포럼’ 출범 — m-economynews.com"
+    "신규 31건, 실패 0건, 14초",
+    "[신규] 이준석 \"호텔경제학자 하준경을 정책실장으로…레버리지보다 민생 더 파탄\" — newspim.com",
+    "[신규] 이준석 “李, 호텔경제학자를 정책실장에 … 레버리지 ETF보다 민생 더 파탄시킬 것” — 뉴데일리",
+    "[신규] 크릿벤처스, '오딘' 개발진 출신 제이드래곤게임즈에 투자 — 매일경제 마켓",
+    "[신규] '오딘' 이준석 신생법인 제이드래곤, 크릿벤처스 투자 유치 — 월요신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36546336333,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36546336333",
-  "request_id": "cron-202609290900",
+  "run_id": 36958285227,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36958285227",
+  "request_id": "cron-202610020300",
   "trigger": "schedule",
-  "started_at": "2026-09-29T18:00:54+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-10-02T12:01:49+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 99건"
+      "summary": "검색어 5개에서 110건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 96건 (신규 25건) · v.daum.net 12건, NANOOM ENERGY 6건, ksw-news.com 5건"
+      "summary": "오늘 63건 (신규 31건) · 시민행정신문 9건, Calgary Roughnecks 6건, 한국사회복지저널 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-09-29T18:01:05+09:00"
+  "updated_at": "2026-10-02T12:02:03+09:00"
 }
