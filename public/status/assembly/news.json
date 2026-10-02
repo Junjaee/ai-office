@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 9초",
+  "summary": "신규 16건, 실패 0건, 12초",
   "counts": {
-    "new": 12,
+    "new": 16,
     "failed": 0,
-    "total": 2914
+    "total": 2930
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 9초",
-    "[신규] '오딘' 개발진이 설립한 제이드래곤게임즈, 시드투자 유치 — 머니투데이",
-    "[신규] 크릿벤처스, MMORPG 개발사 ‘제이드래곤게임즈’에 투자 — 데이터넷",
-    "[신규] 크릿벤처스, 제이드래곤게임즈에 투자 — 한스경제",
-    "[신규] 비대위 체제 개혁신당, 장경석 신임 인천시당위원장 임명 — 경인일보"
+    "신규 16건, 실패 0건, 12초",
+    "[신규] 이준석 “호텔경제학자를 靑정책실장에 앉혀…ETF보다 더 파탄낼 것” — munhwa.com",
+    "[신규] 최미금 도의원, 가상체험학습 진로교육 확대 강조 — 화성신문",
+    "[신규] “내년 화성특례시에 국비 3,354억 원 필요” — 화성신문",
+    "[신규] 체류형 관광 이끌 궁평오솔로캠핑장 임시개장 — 화성신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37004221107,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37004221107",
-  "request_id": "cron-202610021200",
+  "run_id": 37023933689,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37023933689",
+  "request_id": "cron-202610021500",
   "trigger": "schedule",
-  "started_at": "2026-10-02T21:01:27+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-03T00:01:19+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 74건"
+      "summary": "검색어 5개에서 92건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 114건 (신규 12건) · citizenadmnews.co.kr 10건, 시민행정신문 10건, Calgary Roughnecks 9건"
+      "summary": "오늘 16건 (신규 16건) · 화성신문 5건, v.daum.net 3건, 한국사회복지저널 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-02T21:01:37+09:00"
+  "updated_at": "2026-10-03T00:01:32+09:00"
 }
