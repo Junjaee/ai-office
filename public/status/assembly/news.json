@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 16건, 실패 0건, 12초",
+  "summary": "신규 6건, 실패 0건, 16초",
   "counts": {
-    "new": 16,
+    "new": 6,
     "failed": 0,
-    "total": 2930
+    "total": 2936
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 16건, 실패 0건, 12초",
-    "[신규] 이준석 “호텔경제학자를 靑정책실장에 앉혀…ETF보다 더 파탄낼 것” — munhwa.com",
-    "[신규] 최미금 도의원, 가상체험학습 진로교육 확대 강조 — 화성신문",
-    "[신규] “내년 화성특례시에 국비 3,354억 원 필요” — 화성신문",
-    "[신규] 체류형 관광 이끌 궁평오솔로캠핑장 임시개장 — 화성신문"
+    "신규 6건, 실패 0건, 16초",
+    "[신규] [KPGA 현대해상 최경주 2R] T1.송민혁-배상문 -8, 3.김홍택 -4, T5.왕정훈-조민규-이재진-김연섭-이유석 -3, 9.최승빈 -2, 10.고석완 -1 — 골프경제신문",
+    "[신규] 도박 능력 에 대한 궁금증을 해소하는 완벽한 가이드 — Calgary Roughnecks",
+    "[신규] 10월 2~5일 아침 기온 낮고 일교차 커…4~5일 일부 지역 비 — ksw-news.com",
+    "[신규] ‘재난취약시설’ 제부도 제비꼬리길 안전관리 실태점검 — 화성신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37023933689,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37023933689",
-  "request_id": "cron-202610021500",
+  "run_id": 37044611489,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37044611489",
+  "request_id": "cron-202610021800",
   "trigger": "schedule",
-  "started_at": "2026-10-03T00:01:19+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-03T03:01:34+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 92건"
+      "summary": "검색어 5개에서 93건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 16건 (신규 16건) · 화성신문 5건, v.daum.net 3건, 한국사회복지저널 2건"
+      "summary": "오늘 22건 (신규 6건) · 화성신문 6건, ksw-news.com 3건, v.daum.net 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-03T00:01:32+09:00"
+  "updated_at": "2026-10-03T03:01:51+09:00"
 }
