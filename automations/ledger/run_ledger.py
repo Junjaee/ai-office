@@ -45,9 +45,14 @@ HERE = Path(__file__).resolve().parent
 SCOPES = ["https://www.googleapis.com/auth/gmail.modify",
           "https://www.googleapis.com/auth/spreadsheets"]
 SPREADSHEET_ID = "1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg"
-MONTH_TAB = {"2026-07": "2026년 7월", "2026-08": "2026년 8월", "2026-09": "2026년 9월"}
 GMAIL_QUERY = 'subject:"[카드SMS]" newer_than:2d'
 PROCESSED_LABEL = "카드동기화완료"
+# 그 달 탭이 시트에 없어 보류한 문자에 붙인다. Worker 의 1분 감시(worker/gmail.ts LEDGER_WATCH_QUERY)는 이 라벨을 건너뛴다 —
+# 라벨 없이 두면 탭이 생길 때까지 거의 매분 다시 깨워진다(2026-10-01~02 실측: 이틀 동안 832번 실행).
+PENDING_LABEL = "카드동기화대기"
+# 그 달 탭이 없으면 이 탭을 복사해 만든다(사용자 결정 2026-10-02). 정산 월 칸에 "10월" 처럼 적는다.
+TEMPLATE_TAB = "샘플(매월복사)"
+MONTH_CELL = "D3"
 COL_DATE, COL_AMOUNT = "B", "F"
 DATA_FIRST_ROW, DATA_SCAN_LAST_ROW = 6, 250
 BF_START, BF_END = 1, 6   # B..F (0-based, end 배타적)
@@ -95,17 +100,23 @@ def get_services(token_path: str | None):
 
 
 # ───────────────────────── Gmail ─────────────────────────
-def ensure_label(gmail):
+def ensure_label(gmail, name=PROCESSED_LABEL):
     for l in gmail.users().labels().list(userId="me").execute().get("labels", []):
-        if l["name"] == PROCESSED_LABEL:
+        if l["name"] == name:
             return l["id"]
     return gmail.users().labels().create(
-        userId="me", body={"name": PROCESSED_LABEL}).execute()["id"]
+        userId="me", body={"name": name}).execute()["id"]
+
+
+def fetch_query():
+    # 아직 완료 라벨이 없는 카드 문자. 최근 2일치 + 보류(대기 라벨)된 것은 날짜와 상관없이 본다 —
+    # 탭을 며칠 뒤에 만들어도 보류분이 빠지지 않게.
+    base = GMAIL_QUERY.replace(" newer_than:2d", "")
+    return f"{base} -label:{PROCESSED_LABEL} (newer_than:2d OR label:{PENDING_LABEL})"
 
 
 def fetch_messages(gmail):
-    q = f'{GMAIL_QUERY} -label:{PROCESSED_LABEL}'
-    return gmail.users().messages().list(userId="me", q=q).execute().get("messages", [])
+    return gmail.users().messages().list(userId="me", q=fetch_query()).execute().get("messages", [])
 
 
 def get_body_text(gmail, msg_id):
@@ -188,11 +199,44 @@ def parse_sms(text, received_date):
 
 
 # ───────────────────────── 시트 ─────────────────────────
-def get_sheet_id(sheets, tab_name):
-    for sh in sheets.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()["sheets"]:
-        if sh["properties"]["title"] == tab_name:
-            return sh["properties"]["sheetId"]
-    raise RuntimeError(f"탭을 찾을 수 없음: {tab_name}")
+def month_tab(key):
+    # "2026-10" → "2026년 10월" (가계부 시트의 월 탭 이름 규칙). 달마다 코드를 고치지 않게 이름을 계산한다.
+    y, m = key.split("-")
+    return f"{y}년 {int(m)}월"
+
+
+def sheet_tabs(sheets):
+    # 시트의 탭 이름 → 탭 번호. 그 달 탭이 실제로 있는지 여기서 확인한다.
+    data = sheets.spreadsheets().get(spreadsheetId=SPREADSHEET_ID,
+                                     fields="sheets.properties(title,sheetId)").execute()
+    return {sh["properties"]["title"]: sh["properties"]["sheetId"] for sh in data.get("sheets", [])}
+
+
+def creatable_months(today):
+    # 자동으로 만들어도 되는 달: 지난달·이번 달·다음 달(실행기 시계가 UTC 라 월초 새벽에는 '다음 달'로 보인다).
+    # 문자를 잘못 읽어 엉뚱한 달이 나와도 탭이 생기지 않게 범위를 좁힌다.
+    out = set()
+    for delta in (-1, 0, 1):
+        idx = today.year * 12 + (today.month - 1) + delta
+        out.add(f"{idx // 12}-{idx % 12 + 1:02d}")
+    return out
+
+
+def create_month_tab(sheets, tab_name, month):
+    # 샘플 탭을 복사해 그 달 탭을 만든다(샘플 바로 뒤 = 최신 달이 앞쪽). 새 탭 번호를 돌려주고, 샘플이 없으면 None.
+    data = sheets.spreadsheets().get(spreadsheetId=SPREADSHEET_ID,
+                                     fields="sheets.properties(title,sheetId,index)").execute()
+    props = [sh["properties"] for sh in data.get("sheets", [])]
+    tpl = next((x for x in props if x["title"] == TEMPLATE_TAB), None)
+    if tpl is None:
+        return None
+    res = sheets.spreadsheets().batchUpdate(spreadsheetId=SPREADSHEET_ID, body={"requests": [{"duplicateSheet": {
+        "sourceSheetId": tpl["sheetId"], "insertSheetIndex": tpl["index"] + 1, "newSheetName": tab_name}}]}).execute()
+    new_id = res["replies"][0]["duplicateSheet"]["properties"]["sheetId"]
+    sheets.spreadsheets().values().update(
+        spreadsheetId=SPREADSHEET_ID, range=f"'{tab_name}'!{MONTH_CELL}",
+        valueInputOption="USER_ENTERED", body={"values": [[f"{int(month)}월"]]}).execute()
+    return new_id
 
 
 def read_days(sheets, tab_name):
@@ -279,6 +323,7 @@ def do_work(cfg, args, progress):
     progress("Gmail·시트 인증")
     gmail, sheets = get_services(token_path)
     label_id = ensure_label(gmail)
+    pending_id = ensure_label(gmail, PENDING_LABEL)
 
     progress("승인문자 메일 확인")
     msgs = fetch_messages(gmail)
@@ -286,12 +331,16 @@ def do_work(cfg, args, progress):
     parsed.sort(key=lambda p: {"approve": 0, "cancel": 1}.get(p[1]["kind"], 2) if p[1] else 2)
 
     today = dt.date.today()
-    added = removed = skipped = 0
-    lines, sheet_ids = [], {}
+    added = removed = skipped = created = 0
+    lines, tabs, waiting = [], None, {}
 
     def mark_done(mid):
         gmail.users().messages().modify(
-            userId="me", id=mid, body={"addLabelIds": [label_id]}).execute()
+            userId="me", id=mid, body={"addLabelIds": [label_id], "removeLabelIds": [pending_id]}).execute()
+
+    def mark_pending(mid):
+        gmail.users().messages().modify(
+            userId="me", id=mid, body={"addLabelIds": [pending_id]}).execute()
 
     for mid, txn in parsed:
         if not txn:
@@ -300,10 +349,27 @@ def do_work(cfg, args, progress):
             if not args.dry_run:
                 mark_done(mid)
             continue
-        tab = MONTH_TAB.get(month_key(txn["month"], today))
-        if not tab:
-            lines.append(f"[대기] 월 탭 없음 {month_key(txn['month'], today)}")
-            continue                      # 라벨 없이 둔다 — 탭이 생기면 처리
+        key = month_key(txn["month"], today)
+        tab = month_tab(key)
+        if tabs is None:
+            tabs = sheet_tabs(sheets)
+        if tab not in tabs and key in creatable_months(today):
+            # 그 달 탭이 없으면 샘플을 복사해 만든다(지난달~다음 달만)
+            if args.dry_run:
+                tabs[tab] = None
+                lines.append(f"[예정] '{tab}' 탭 만들기 — '{TEMPLATE_TAB}' 복사")
+            else:
+                new_id = create_month_tab(sheets, tab, txn["month"])
+                if new_id is not None:
+                    tabs[tab] = new_id
+                    created += 1
+                    lines.append(f"[탭 생성] '{tab}' — '{TEMPLATE_TAB}' 을 복사했어요")
+        if tab not in tabs:
+            # 만들 수 없었다(샘플 탭이 없거나 범위 밖의 달) → 대기 라벨만 붙여 둔다. 탭이 생기면 6시간 예약 실행이나 다음 새 문자 때 들어간다.
+            waiting[tab] = waiting.get(tab, 0) + 1
+            if not args.dry_run:
+                mark_pending(mid)
+            continue
         if args.dry_run:
             lines.append(f"[예정:{txn['kind']}] {txn['month']}/{txn['day']} "
                          f"{txn['detail']} {txn['amount']:,}원 ({txn['card']})")
@@ -312,9 +378,7 @@ def do_work(cfg, args, progress):
             else:
                 added += 1
             continue
-        if tab not in sheet_ids:
-            sheet_ids[tab] = get_sheet_id(sheets, tab)
-        sid = sheet_ids[tab]
+        sid = tabs[tab]
         if txn["kind"] == "cancel":
             row = cancel_transaction(sheets, tab, sid, txn)
             if row:
@@ -328,10 +392,14 @@ def do_work(cfg, args, progress):
         mark_done(mid)
         progress(f"기록 {added + removed}건")
 
+    wait_n = sum(waiting.values())
+    for tab, n in waiting.items():
+        lines.append(f"[대기] 시트에 '{tab}' 탭이 없어 {n}건 보류 — 탭을 만들면 다음 실행 때 들어가요")
     collect_txt = f"메일 {len(msgs)}건 확인, 결제 {added + removed}건"
-    sheet_txt = f"추가 {added} · 취소 {removed} · 건너뜀 {skipped}"
+    sheet_txt = (f"추가 {added} · 취소 {removed} · 건너뜀 {skipped}" + (f" · 새 탭 {created}" if created else "")
+                 + (f" · 대기 {wait_n}(월 탭 없음)" if wait_n else ""))
     return {
-        "counts": {"new": added, "replaced": removed, "skip": skipped, "failed": 0},
+        "counts": {"new": added, "replaced": removed, "skip": skipped, "wait": wait_n, "failed": 0},
         "lines": lines,
         "tasks": {"collect": (True, collect_txt), "sheet": (True, sheet_txt)},
     }
@@ -352,7 +420,7 @@ def load_config(path):
 
 
 def build_summary(counts, elapsed):
-    names = {"new": "신규", "replaced": "취소", "failed": "실패", "skip": "건너뜀"}
+    names = {"new": "신규", "replaced": "취소", "failed": "실패", "skip": "건너뜀", "wait": "대기"}
     parts = [f"{names[k]} {v}건" for k, v in counts.items() if k in names]
     parts.append(f"{elapsed/60:.1f}분" if elapsed >= 60 else f"{int(elapsed)}초")
     return ", ".join(parts)

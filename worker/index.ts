@@ -7,7 +7,7 @@ import { createRunApiStores, handleHistory, handleReview, handleRun, handleStatu
 import { handleLive, type R2Like } from "./live.ts";
 import { LEDGER_WATCH_JOB, MAIL_JOB, SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
 import {
-  LEDGER_COOLDOWN_MS, LEDGER_WATCH_QUERY, MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY,
+  LEDGER_COOLDOWN_MS, LEDGER_WATCH_QUERY, MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY, lastRunMs,
   accessToken, coolEnough, googleCreds, newMailCount, shouldWake,
 } from "./gmail.ts";
 
@@ -115,22 +115,40 @@ const worker = {
     const jobs = dueJobs(SCHEDULES, now);
 
     const nowMs = now.getTime();
+    const github = new GitHubClient(env.GITHUB_TOKEN);
+    // 메모리의 "마지막으로 깨운 시각"은 Worker 가 새로 뜨면 사라진다 → 깨우기 직전에 GitHub 의 실제 실행 기록으로 한 번 더 확인한다.
+    // (새 메일이 있을 때만 부르므로 평소에는 호출이 없다. 확인에 실패하면 깨우지 않는다 — 6시간 예약이 뒤를 받친다)
+    const ranRecently = async (workflow: string, cooldownMs: number): Promise<number | null> => {
+      const last = lastRunMs(await github.listRuns(30), workflow);
+      return last !== null && nowMs - last < cooldownMs ? last : null;
+    };
     // 상임위 메일·카드 문자는 시각이 아니라 "새 메일이 왔을 때" 돈다 — 매분 지메일만 가볍게 확인한다
     // (쉬는 시간 안이면 지메일을 아예 부르지 않는다)
-    if (coolEnough(lastMailDispatchMs, nowMs, MAIL_COOLDOWN_MS)
-        && shouldWake(await unreadCount(env, MAIL_WATCH_QUERY, nowMs), lastMailDispatchMs, nowMs, MAIL_COOLDOWN_MS)) {
-      jobs.push(MAIL_JOB);
+    try {
+      if (coolEnough(lastMailDispatchMs, nowMs, MAIL_COOLDOWN_MS)
+          && shouldWake(await unreadCount(env, MAIL_WATCH_QUERY, nowMs), lastMailDispatchMs, nowMs, MAIL_COOLDOWN_MS)) {
+        const recent = await ranRecently(MAIL_JOB.workflow, MAIL_COOLDOWN_MS);
+        if (recent === null) jobs.push(MAIL_JOB);
+        else lastMailDispatchMs = recent;
+      }
+    } catch (err) {
+      console.error(`메일 깨우기 확인 실패 — ${err instanceof Error ? err.message : String(err)}`);
     }
     // 6시간 예약과 같은 분이면 예약 쪽 하나만 깨운다
-    if (!jobs.some((j) => j.workflow === LEDGER_WATCH_JOB.workflow)
-        && coolEnough(lastLedgerDispatchMs, nowMs, LEDGER_COOLDOWN_MS)
-        && shouldWake(await unreadCount(env, LEDGER_WATCH_QUERY, nowMs), lastLedgerDispatchMs, nowMs, LEDGER_COOLDOWN_MS)) {
-      jobs.push(LEDGER_WATCH_JOB);
+    try {
+      if (!jobs.some((j) => j.workflow === LEDGER_WATCH_JOB.workflow)
+          && coolEnough(lastLedgerDispatchMs, nowMs, LEDGER_COOLDOWN_MS)
+          && shouldWake(await unreadCount(env, LEDGER_WATCH_QUERY, nowMs), lastLedgerDispatchMs, nowMs, LEDGER_COOLDOWN_MS)) {
+        const recent = await ranRecently(LEDGER_WATCH_JOB.workflow, LEDGER_COOLDOWN_MS);
+        if (recent === null) jobs.push(LEDGER_WATCH_JOB);
+        else lastLedgerDispatchMs = recent;
+      }
+    } catch (err) {
+      console.error(`가계부 깨우기 확인 실패 — ${err instanceof Error ? err.message : String(err)}`);
     }
 
     if (jobs.length === 0) return;
 
-    const github = new GitHubClient(env.GITHUB_TOKEN);
     const requestId = cronRequestId(now);
     for (const job of jobs) {
       try {

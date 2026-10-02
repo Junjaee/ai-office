@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   LEDGER_COOLDOWN_MS, LEDGER_WATCH_QUERY, MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY, accessToken, coolEnough,
-  countMessages, googleCreds, newMailCount, resetTokenCache, shouldWake,
+  countMessages, googleCreds, lastRunMs, newMailCount, resetTokenCache, shouldWake,
 } from "../worker/gmail.ts";
 
 const CREDS = { clientId: "id", clientSecret: "secret", refreshToken: "refresh" };
@@ -97,6 +97,8 @@ test("카드 문자 검색어: [카드SMS] 제목이고 가계부가 라벨을 �
   assert.match(LEDGER_WATCH_QUERY, /subject:"\[카드SMS\]"/);
   assert.match(LEDGER_WATCH_QUERY, /-label:카드동기화완료/);
   assert.match(LEDGER_WATCH_QUERY, /newer_than:2d/);
+  // 월 탭이 없어 보류된 문자(파이썬이 대기 라벨을 붙인다)는 깨우는 사유가 아니다 — 안 빼면 탭이 생길 때까지 계속 깨운다
+  assert.match(LEDGER_WATCH_QUERY, /-label:카드동기화대기/);
 });
 
 test("가계부 깨우기: 새 메일이 있고 쉬는 시간이 지났을 때만 (쉬는 시간 10분)", () => {
@@ -105,4 +107,21 @@ test("가계부 깨우기: 새 메일이 있고 쉬는 시간이 지났을 때�
   assert.equal(shouldWake(0, null, 1_000, LEDGER_COOLDOWN_MS), false);
   assert.equal(shouldWake(3, 1_000, 1_000 + LEDGER_COOLDOWN_MS - 1, LEDGER_COOLDOWN_MS), false);
   assert.equal(shouldWake(3, 1_000, 1_000 + LEDGER_COOLDOWN_MS, LEDGER_COOLDOWN_MS), true);
+});
+
+test("lastRunMs: 그 워크플로의 가장 최근 시작 시각 (메모리가 비워져도 쉬는 시간을 지키려고 실제 실행 기록을 본다)", () => {
+  const runs = [
+    { path: ".github/workflows/news.yml", run_started_at: "2026-10-02T03:20:00Z" },
+    { path: ".github/workflows/ledger.yml", run_started_at: "2026-10-02T03:17:26Z" },
+    { path: ".github/workflows/ledger.yml", run_started_at: "2026-10-02T03:18:26Z" },
+    { path: ".github/workflows/old-ledger.yml", run_started_at: "2026-10-02T03:19:59Z" },   // 이름 끝이 같아도 다른 파일
+    { path: ".github/workflows/ledger.yml", run_started_at: null, updated_at: "bad" },
+  ];
+  assert.equal(lastRunMs(runs, "ledger.yml"), Date.parse("2026-10-02T03:18:26Z"));
+  assert.equal(lastRunMs(runs, "mail.yml"), null);
+  assert.equal(lastRunMs([], "ledger.yml"), null);
+  // 쉬는 시간 판단: 마지막 실행이 10분 안이면 깨우지 않는다
+  const last = lastRunMs(runs, "ledger.yml");
+  assert.equal(coolEnough(last, last + LEDGER_COOLDOWN_MS - 1, LEDGER_COOLDOWN_MS), false);
+  assert.equal(coolEnough(last, last + LEDGER_COOLDOWN_MS, LEDGER_COOLDOWN_MS), true);
 });

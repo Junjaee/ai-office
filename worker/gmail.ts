@@ -14,8 +14,11 @@ export const MAIL_WATCH_QUERY = 'from:assembly.go.kr -label:"재경위" -label:"
 /** 실행이 이미 돌고 있는데 또 깨우지 않도록 쉬는 시간 */
 export const MAIL_COOLDOWN_MS = 3 * 60 * 1000;
 
-/** 카드 승인 문자(앱이 넣은 [카드SMS] 메일) 중 가계부가 아직 라벨을 안 붙인 것. 파이썬은 파싱 못 한 것에도 라벨을 붙인다. */
-export const LEDGER_WATCH_QUERY = 'subject:"[카드SMS]" -label:카드동기화완료 newer_than:2d';
+/** 카드 승인 문자(앱이 넣은 [카드SMS] 메일) 중 가계부가 아직 라벨을 안 붙인 것. 파이썬은 파싱 못 한 것에도 라벨을 붙인다.
+ * 월 탭이 없어 보류된 문자는 파이썬이 `카드동기화대기` 라벨을 붙이고, 여기서는 그것을 뺀다 — 안 빼면 탭이 생길 때까지
+ * 매번 "새 문자가 있다"고 보고 계속 깨운다(2026-10-01~02 실측: 10월 탭이 없어 이틀 동안 832번 실행).
+ * 보류분은 6시간 예약 실행이나 다음 새 문자 때 다시 시도된다. */
+export const LEDGER_WATCH_QUERY = 'subject:"[카드SMS]" -label:카드동기화완료 -label:카드동기화대기 newer_than:2d';
 
 /** 카드 문자는 쇼핑 한 번에 여러 통 오므로 10분 안의 것은 한 번에 처리한다(실행 분 절약, 실패 반복도 하루 144회로 제한) */
 export const LEDGER_COOLDOWN_MS = 10 * 60 * 1000;
@@ -42,6 +45,20 @@ export function googleCreds(env: Record<string, unknown>): GoogleCreds | null {
 export function coolEnough(lastDispatchMs: number | null, nowMs: number,
                            cooldownMs: number = MAIL_COOLDOWN_MS): boolean {
   return lastDispatchMs === null || nowMs - lastDispatchMs >= cooldownMs;
+}
+
+/** 그 워크플로가 마지막으로 시작된 시각(ms). 최근 실행 목록(GitHub)에서 찾고, 없으면 null.
+ *
+ * 왜 필요한가: "마지막으로 깨운 시각"을 Worker 메모리에만 두면, 1분마다 깨어날 때 메모리가 새로 만들어지는 일이 잦아
+ * 쉬는 시간이 지켜지지 않는다(2026-10-02 실측: 쉬는 시간 10분인데 거의 매분 실행). 실제 실행 기록을 기준으로 다시 확인한다. */
+export function lastRunMs(runs: { path: string; run_started_at: string | null; updated_at?: string }[], workflow: string): number | null {
+  let latest: number | null = null;
+  for (const r of runs) {
+    if (!r.path.endsWith(`/${workflow}`)) continue;
+    const ms = Date.parse(r.run_started_at ?? r.updated_at ?? "");
+    if (!Number.isNaN(ms) && (latest === null || ms > latest)) latest = ms;
+  }
+  return latest;
 }
 
 /** 지메일 응답에서 건수. 목록이 있으면 그 길이, 없으면 추정치(0 이면 없음) */
