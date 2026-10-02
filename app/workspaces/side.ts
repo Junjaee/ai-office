@@ -11,7 +11,7 @@ export const COMPANY: CompanyInfo = {
   titlePrefix: "부업",
   titleAccent: "AI Studio",
   pageTitle: "부업 AI 스튜디오 — 콘텐츠 자동화 현황",
-  description: "인스타그램 게시글·릴스, 유튜브 쇼츠, 네이버 블로그까지 계정별 콘텐츠 자동화가 돌아가는 픽셀 스튜디오",
+  description: "인스타그램 게시글·릴스, 유튜브 쇼츠, 네이버 블로그까지 계정별 콘텐츠 자동화의 실행 현황",
   windowLabel: "side_studio.exe — 편집실",
   reportName: "부업 AI 스튜디오",
 };

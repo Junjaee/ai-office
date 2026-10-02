@@ -10,7 +10,7 @@ export const COMPANY: CompanyInfo = {
   titlePrefix: "우리집",
   titleAccent: "AI Home",
   pageTitle: "우리집 AI 홈 — 가정 자동화 현황",
-  description: "지출 정산, 장보기, 가족 일정, 공과금까지 집안일 자동화가 돌아가는 픽셀 홈오피스",
+  description: "지출 정산, 장보기, 가족 일정, 공과금까지 집안일 자동화의 실행 현황",
   windowLabel: "ai_home.exe — 서재",
   reportName: "우리집 AI 홈",
 };

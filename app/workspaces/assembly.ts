@@ -10,7 +10,7 @@ export const COMPANY: CompanyInfo = {
   titlePrefix: "의원실",
   titleAccent: "AI Office",
   pageTitle: "의원실 AI 오피스 — 자동화 현황",
-  description: "국회회의록 수집부터 기사·SNS 모니터링, 질의서 초안까지 의원실 자동화가 돌아가는 픽셀 사무실",
+  description: "국회회의록 수집부터 기사·SNS 모니터링, 질의서 초안까지 의원실 자동화의 실행 현황",
   windowLabel: "assembly_office.exe — 대표실",
   reportName: "의원실 AI 오피스",
 };

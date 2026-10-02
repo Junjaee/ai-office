@@ -1,6 +1,6 @@
 # AI 오피스 — 작업 지침 (AI 코딩 도구용)
 
-이 저장소는 **자동화를 실행하고 상태를 보여 주는 픽셀 사무실 대시보드**다. 한 사이트에 사무실(`/assembly`, `/home`, `/side`)이 여럿 있고, 각 사무실은 `app/workspaces/<id>.ts` 한 파일로 정의된다.
+이 저장소는 **자동화를 실행하고 상태를 보여 주는 대시보드**다(2026-10-02 픽셀 사무실 화면에서 일반 대시보드로 전환 — 사용자 결정). 한 사이트에 사무실(`/assembly`, `/home`, `/side`)이 여럿 있고, 각 사무실은 `app/workspaces/<id>.ts` 한 파일로 정의된다.
 
 - **한국어로 대화한다.** 사용자는 개발자가 아니므로 전문용어 대신 쉬운 말로 안내한다.
 - 대시보드: https://ai-office.smartjohn-d34.workers.dev — `/assembly`(국회) `/home`(홈) `/side`(부업). 주소는 비공개 취급(주소를 아는 사람은 누구나 시작 버튼을 누를 수 있다).
@@ -20,8 +20,8 @@
 ## 화면이 보여 주는 것 (바꾸지 말 것)
 
 - 직원 = 자동화의 하위 작업(`automations[].tasks[]`). 이름은 사람 이름이 아니라 **업무명**.
-- 직원 상태는 네 가지뿐: **쉬는 중 · 일하는 중 · 끝남 · 오류** (+ 아직 자동화 안 된 업무는 "준비 중"). 각본·타이머·랜덤 행동은 없고, 상태가 바뀔 때만 자리를 옮긴다(쉬는 중=라운지 소파, 일하는 중·끝남=책상, 오류=책상 옆).
-- 그려지는 부서 = 워크플로가 있는 자동화가 붙은 부서만(4열, 행 수 가변). 회의실·대표실 없음. 라운지는 항상 있음.
+- 직원 상태는 네 가지뿐: **쉬는 중 · 일하는 중 · 끝남 · 오류** (+ 아직 자동화 안 된 업무는 "준비 중"). 상태는 색만으로 구분하지 않고 **아이콘 + 글자**를 함께 쓴다(그림 문자 대신 선 아이콘).
+- **화면 구성(대시보드, 2026-10-02)**: 머리글(사무실 탭·마지막 확인) → 제목·전체 시작 → 배너 → 요약 5칸(상태별 직원 수 4칸 + 그 날 실행 횟수) → 자동화 카드(팀 이름·상태·직원별 상태·마지막 실행·걸린 시간·방식·다음 실행·누적) + 옆 패널(시간대별 실행 횟수 막대, 언제 실행되나) → 실행 이력 표(30줄 넘으면 "더 보기"). 보이는 카드 = 실제로 도는 자동화(워크플로 또는 local)가 붙은 부서의 자동화. 픽셀 사무실(월드·캐릭터)은 화면에서 뺐다 — `app/game/`·`app/office.css` 는 남아 있지만 쓰지 않는다(되살릴 일이 없으면 지워도 된다). 모양은 `app/dashboard.css`, 색 토큰은 `app/globals.css`(`--accent` = 사무실 대표 색).
 - 요약 줄의 **전체 시작**, 카드마다 **시작** 버튼이 실제로 GitHub Actions 를 실행한다(`POST /api/run`). **전체 시작은 따라다니는 머리글(sticky nav)에 두지 않는다** — 스크롤하면 카드의 ▶ 시작 자리와 겹쳐 개별 시작 대신 전체가 눌렸다(2026-09-10). 버튼 보호는 없다(사이트 주소를 아는 사람은 누구나 실행 가능). 중복 실행 방지·하루 50회 상한은 Worker 가 지킨다.
 - **사이트 변경은 모든 사무실에 함께 적용한다.** 사무실 하나만 고치는 요청이라도 나머지 사무실에서 깨지지 않는지 본다.
 - **이 PC 자동화(local)와 실시간 화면**(2026-09-29): 사무실 설정의 자동화에 `local: true` 를 주면 GitHub 워크플로 없이도 실제 자동화로 그려진다(시작 단추 없음). 상태는 그 프로그램이 5초~60초마다 `POST /api/live` 로 보내는 작업별 신호로 정한다(Worker 비밀값 `LIVE_TOKEN` 을 두면 헤더 `X-Live-Token` 을 검사하고, 없으면 검사 없이 받는다 — **사용자 결정 2026-09-29: 나만 보는 사이트라 토큰 없이 운영**, 주소를 아는 사람은 누구나 써 넣을 수 있음) — 90초 안 신호면 일하는 중, 끊기면 오류(`app/status-rules.ts` 3.7절). `live: { kind: "orderbook" }` 를 주면 카드에 **📡 실시간 보기** 단추가 붙고 `/<사무실>/live/<id>` 전광판이 `/api/live` 를 5초마다 읽는다. 저장은 R2 버킷 `ai-office-live`(바인딩 `LIVE`, `vite.config.ts`). 표준 구현은 `automations/toss_record/`(홈 `orderbook`).
@@ -74,7 +74,7 @@ python -m pytest -q automations
 
 - `app/workspaces/` 사무실 설정(`types.ts`, `assembly.ts`, `home.ts`, `index.ts`). `company.config.ts` 는 현재 사무실을 내보내는 한 줄짜리 파일.
 - `app/status-rules.ts` 상태 파일 v2 + GitHub run + 로컬 요청 → 화면 상태(순수). `app/status.ts` 조회·폴링 훅(`/api/status` → 정적 파일 폴백). `app/history.ts`·`app/history-rules.ts` 실행 이력(날짜별) 조회 훅·순수 규칙.
-- `app/office/OfficeApp.tsx` 단일 페이지 화면. `app/game/` 월드(`world.ts`)·경로(`pathfinding.ts`)·직원(`staff.ts`)·상태→자리 번역(`office-model.ts`)·엔진(`engine.ts`)·렌더러(`OfficeWorld.tsx`).
+- `app/office/OfficeApp.tsx` 단일 페이지 대시보드 화면(모양 `app/dashboard.css`). 하루 집계·시간대별 횟수는 `app/history-rules.ts`(`dayStats`·`hourBuckets`). `app/game/`(옛 픽셀 사무실 월드·엔진)와 `app/office.css` 는 2026-10-02 부터 화면에서 쓰지 않는다.
 - `worker/` Cloudflare Worker: `index.ts`(라우팅) `run-api.ts`(`/api/run`, `/api/status`, `/api/history`) `github.ts`(dispatch·runs·Contents) `config.ts`.
 - `automations/insta/` 인스타 게시글(콘텐츠 제작·게시형의 표준 구현: 소재→글→카드→업로드, 주제 프로필·계정별 자동화). 새 계정·새 플랫폼은 `automations/insta/README.md` 참고.
 - `automations/` 파이썬 자동화와 공통 모듈, `.github/workflows/` 실행 워크플로, `public/status/<사무실>/` 상태 파일. `history/<사무실>/<자동화>/<YYYY-MM>.jsonl` 실행 일지(영구 기록) — `report()` 가 실행마다 한 줄씩 더하고, 지난 기록 복원은 `python automations/common/history_log.py --backfill`(여러 번 돌려도 같은 결과). 화면의 실행 이력은 이 일지와 GitHub 날짜별 실행 목록을 합쳐 보여 준다(`/api/history`).

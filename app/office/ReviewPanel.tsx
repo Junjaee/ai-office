@@ -68,7 +68,7 @@ export default function ReviewPanel({ ws, automationId, title, canRun, busy, onR
     <section className="review" aria-label={title}>
       <div className="review-head">
         <h4>
-          📋 {title}
+          {title}
           {file?.date ? <small> · {file.date}</small> : null}
         </h4>
         {canRun && tab === "pick" ? (
@@ -207,8 +207,8 @@ function PickTab({ candidates, queue, taken, checked, showAll, canRun, busy, pic
                   <span className="review-body">
                     <b>
                       {c.title_ko || c.title}
-                      {c.gap ? <span className="review-gap">🇺🇸 빈자리</span> : null}
-                      {c.video ? <span className="review-gap review-video">🎬 영상</span> : null}
+                      {c.gap ? <span className="review-gap">빈자리</span> : null}
+                      {c.video ? <span className="review-gap review-video">영상</span> : null}
                     </b>
                     <small>
                       {c.title_ko ? `${c.title.slice(0, 60)}${c.title.length > 60 ? "…" : ""} · ` : ""}

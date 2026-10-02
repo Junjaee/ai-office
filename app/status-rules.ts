@@ -67,6 +67,8 @@ export type AutomationView = {
   tasks: Record<string, { state: TaskState; note: string }>;
   lastRunAt?: string; nextRun?: string; runUrl?: string; link?: string;
   counts?: Record<string, number>; log?: string[];
+  /** 마지막 실행에 걸린 시간(초)·방식 — 상태 파일 값 그대로(카드의 '걸린 시간'·'방식'). local 자동화는 방식만 "local" */
+  durationSec?: number; trigger?: "manual" | "schedule" | "local";
 };
 export type DeptView = { state: TaskState | "none"; runningCount: number; automationIds: string[] };
 
@@ -318,6 +320,7 @@ export function deriveLocalView(def: AutomationDef, live: LiveDoc | null, now: D
   const view: AutomationView = { id: def.id, dept: def.dept, name: def.name, phase, state: phaseToState(phase), sub: worst.note, tasks };
   if (lastAt) view.lastRunAt = lastAt;
   if (def.schedule) view.nextRun = def.schedule;
+  view.trigger = "local";
   return view;
 }
 
@@ -350,6 +353,8 @@ export function deriveAutomationView(
   if (file?.link) view.link = file.link;
   if (file?.counts) view.counts = file.counts;
   if (file?.log) view.log = file.log;
+  if (typeof file?.duration_sec === "number") view.durationSec = file.duration_sec;
+  if (file?.trigger) view.trigger = file.trigger;
   view.tasks = deriveTaskStates(def, view, file);
   return view;
 }

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { HISTORY_START, kstToday, shiftDate, clampDate, historyTitle, historyMessage } from "../app/history-rules.ts";
+import { HISTORY_START, kstToday, shiftDate, clampDate, historyTitle, historyMessage, runsTitle, dayStats, hourBuckets, bucketsText } from "../app/history-rules.ts";
 import { TRIGGER_LABEL, secondsText } from "../app/status-rules.ts";
 
 test("kstToday: KST 자정 기준", () => {
@@ -40,4 +40,24 @@ test("secondsText: 초·분·시간", () => {
   assert.equal(secondsText(45), "45초");
   assert.equal(secondsText(325), "5.4분");
   assert.equal(secondsText(51480), "14시간 18분");
+});
+
+test("dayStats · hourBuckets: 하루 집계와 KST 시간대별 횟수", () => {
+  const items = [
+    { status: "completed", conclusion: "success", startedAt: "2026-10-02T00:01:48Z", durationSec: 80 },   // KST 09시
+    { status: "completed", conclusion: "success", startedAt: "2026-10-02T00:01:46Z", durationSec: 14 },   // KST 09시
+    { status: "completed", conclusion: "failure", startedAt: "2026-10-01T21:00:35Z", durationSec: null }, // KST 06시
+    { status: "completed", conclusion: "cancelled", startedAt: "2026-10-02T03:01:21Z", durationSec: null }, // 취소는 실패로 안 센다
+    { status: "in_progress", conclusion: null, startedAt: null, durationSec: null },                        // 시각 없으면 막대에서 뺀다
+  ];
+  assert.deepEqual(dayStats(items), { runs: 5, ok: 2, failed: 1, avgSec: 47 });
+  assert.deepEqual(dayStats([]), { runs: 0, ok: 0, failed: 0, avgSec: null });
+  const b = hourBuckets(items);
+  assert.equal(b.length, 24);
+  assert.equal(b[9], 2); assert.equal(b[6], 1); assert.equal(b[12], 1);
+  assert.equal(b.reduce((x, y) => x + y, 0), 4);
+  assert.equal(bucketsText(b), "합계 4회 · 가장 많은 시간 09시");
+  assert.equal(bucketsText(new Array(24).fill(0)), "");
+  assert.equal(runsTitle("2026-10-02", "2026-10-02"), "오늘 실행");
+  assert.equal(runsTitle("2026-10-01", "2026-10-02"), "10월 1일 실행");
 });

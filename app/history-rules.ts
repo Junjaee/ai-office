@@ -50,3 +50,46 @@ export function historyMessage(v: HistoryView): { text: string; replacesTable: b
   if (v.partial) return { text: "GitHub 응답이 없어 일부만 보여요.", replacesTable: false };
   return null;
 }
+
+// ───────────────────────── 하루 집계 (대시보드 요약 칸·시간대별 막대) ─────────────────────────
+
+export type DayItem = { status: string; conclusion: string | null; startedAt: string | null; durationSec: number | null };
+
+/** 요약 칸 제목: 오늘 실행 / M월 D일 실행 */
+export function runsTitle(date: string, today: string): string {
+  if (date === today) return "오늘 실행";
+  const [, m, d] = date.split("-");
+  return `${Number(m)}월 ${Number(d)}일 실행`;
+}
+
+/** 그 날 실행 횟수·성공·실패·평균 소요(초). 실패 = 끝났는데 성공·취소·건너뜀이 아닌 것(이력 표의 "오류"와 같은 기준) */
+export function dayStats(items: DayItem[]): { runs: number; ok: number; failed: number; avgSec: number | null } {
+  let ok = 0, failed = 0, sum = 0, n = 0;
+  for (const it of items) {
+    if (it.status === "completed") {
+      if (it.conclusion === "success") ok += 1;
+      else if (it.conclusion !== "cancelled" && it.conclusion !== "skipped") failed += 1;
+    }
+    if (typeof it.durationSec === "number") { sum += it.durationSec; n += 1; }
+  }
+  return { runs: items.length, ok, failed, avgSec: n ? sum / n : null };
+}
+
+/** KST 0~23시별 실행 횟수(시작 시각 기준). 시작 시각이 없는 줄은 뺀다 */
+export function hourBuckets(items: Pick<DayItem, "startedAt">[]): number[] {
+  const out = new Array<number>(24).fill(0);
+  for (const it of items) {
+    const ms = it.startedAt ? Date.parse(it.startedAt) : NaN;
+    if (Number.isNaN(ms)) continue;
+    out[new Date(ms + KST_OFFSET_MS).getUTCHours()] += 1;
+  }
+  return out;
+}
+
+/** 막대 위 한 줄: "합계 5회 · 가장 많은 시간 09시". 0회면 빈 문자열 */
+export function bucketsText(buckets: number[]): string {
+  const total = buckets.reduce((a, b) => a + b, 0);
+  if (!total) return "";
+  const peak = buckets.indexOf(Math.max(...buckets));
+  return `합계 ${total.toLocaleString("ko-KR")}회 · 가장 많은 시간 ${String(peak).padStart(2, "0")}시`;
+}

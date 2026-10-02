@@ -306,6 +306,8 @@ test("규칙 11: 그 외 → done, file.summary, 부가 필드 전달", () => {
   assert.equal(v.nextRun, "매일 09:00");
   assert.equal(v.runUrl, fileV2.run_url);
   assert.deepEqual(v.counts, fileV2.counts);
+  assert.equal(v.durationSec, fileV2.duration_sec);   // 카드의 '걸린 시간'·'방식'은 상태 파일 값 그대로
+  assert.equal(v.trigger, fileV2.trigger);
   assert.equal(v.id, "minutes");
   assert.equal(v.dept, "research");
   assert.equal(v.name, "국회회의록 수집");
@@ -475,6 +477,7 @@ test("local: running 신호가 90초 안이면 일하는 중, 넘으면 신호 �
   assert.equal(fresh.state, "running");
   assert.equal(fresh.tasks.record.note, "100종목 · 호가 1,000행");
   assert.equal(fresh.lastRunAt, iso(-5000));
+  assert.equal(fresh.trigger, "local");
   const silent = deriveLocalView(localDef, { record: { state: "running", at: iso(-LIVE_TTL_MS - 1000) } }, now);
   assert.equal(silent.state, "error");
   assert.equal(silent.sub, LIVE_SUBTITLES.silent("1분 전"));
