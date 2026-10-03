@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 12초",
+  "summary": "신규 8건, 실패 0건, 13초",
   "counts": {
-    "new": 7,
+    "new": 8,
     "failed": 0,
-    "total": 2979
+    "total": 2987
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 12초",
-    "[신규] [부고]강은규(천하람 개혁신당 원내대표 보좌관)씨 모친상 — 머니투데이",
-    "[신규] 주진우, 암살자(들) '탄흔 티켓' 굿즈에 \"메가박스 패륜굿즈 전량 폐기해야\" — 뉴시스",
-    "[신규] 라인 방식과 웨이 방식으로 보는 네이버 앱스토어 talk day 유형 차이 — Calgary Roughnecks",
-    "[신규] 부산시, 더불어민주당 중앙당과 예산정책협의회 열어... 2027년도 주요 국비 사업 지원 요청 — 글로벌경제신문"
+    "신규 8건, 실패 0건, 13초",
+    "[신규] '오딘'·'로아' 개발진 모인 제이드래곤게임즈, 크릿벤처스 투자받는다…신작 개발 속도 — xportsnews.com",
+    "[신규] '암살자(들)', 역사 왜곡 논란에도 관객 200만명 돌파 — 연합뉴스",
+    "[신규] 육영수 여사 피격 장면을 굿즈로?…‘암살자(들)’ 메가박스 티켓 논란 — v.daum.net",
+    "[신규] 암살자(들) 이번엔 탄흔 티켓 논란…주진우 “패륜굿즈 전량 폐기해야” — ichannela.com"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37111594642,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37111594642",
-  "request_id": "cron-202610030900",
+  "run_id": 37121442189,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37121442189",
+  "request_id": "cron-202610031200",
   "trigger": "schedule",
-  "started_at": "2026-10-03T18:01:00+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-03T21:00:36+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 47건"
+      "summary": "검색어 5개에서 54건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 65건 (신규 7건) · Calgary Roughnecks 12건, calgaryroughnecks.com 9건, v.daum.net 6건"
+      "summary": "오늘 73건 (신규 8건) · Calgary Roughnecks 15건, calgaryroughnecks.com 9건, v.daum.net 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-03T18:01:12+09:00"
+  "updated_at": "2026-10-03T21:00:50+09:00"
 }
