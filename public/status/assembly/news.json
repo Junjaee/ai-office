@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 9초",
   "counts": {
-    "new": 4,
+    "new": 11,
     "failed": 0,
-    "total": 3005
+    "total": 3016
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] 수원 1호선 선로서 60대 남성 열차에 치여 숨져…승객 150여명 환승 — 한국사회복지저널",
-    "[신규] 천원 배팅 토토 진행 표시가 갱신되지 않을 때 — Calgary Roughnecks",
-    "[신규] 카지노 허성태 역할 게임 유형을 구분하는 기준 — Calgary Roughnecks",
-    "[신규] 화면 효과가 결과를 가릴 때 확인할 파워볼 누적 상금 표시 — Calgary Roughnecks"
+    "신규 11건, 실패 0건, 9초",
+    "[신규] '북 지뢰' 속내 다른 여야...'상응 조치' 갈등 불가피 — YTN",
+    "[신규] 세계 호남 향우들, 5·18묘지 참배...장학금도 전달 — KBC광주방송",
+    "[신규] 블록 체인 컴퓨터 공학 마케터를 위한 서비스 디자인 핵심 방법 — Calgary Roughnecks",
+    "[신규] 전남광주 곳곳 화재·교통사고...2명 숨져 — KBC광주방송"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37142586528,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37142586528",
-  "request_id": "cron-202610031800",
+  "run_id": 37153557704,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37153557704",
+  "request_id": "cron-202610032100",
   "trigger": "schedule",
-  "started_at": "2026-10-04T03:00:48+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-04T06:00:49+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 48건"
+      "summary": "검색어 5개에서 42건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 18건 (신규 4건) · Calgary Roughnecks 8건, insight.co.kr 1건, v.daum.net 1건"
+      "summary": "오늘 29건 (신규 11건) · Calgary Roughnecks 12건, v.daum.net 3건, KBC광주방송 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-04T03:01:00+09:00"
+  "updated_at": "2026-10-04T06:00:59+09:00"
 }
