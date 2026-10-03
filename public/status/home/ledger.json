@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
-    "[추가] 2026년 10월 10/3 벤티프레소가든파 3,500원 (생활비)"
+    "[추가] 2026년 10월 10/3 이마트가든5점 90,860원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 37114433147,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37114433147",
-  "request_id": "cron-202610030951",
+  "run_id": 37118294933,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37118294933",
+  "request_id": "cron-202610031101",
   "trigger": "schedule",
-  "started_at": "2026-10-03T18:51:31+09:00",
+  "started_at": "2026-10-03T20:01:32+09:00",
   "duration_sec": 2,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-03T18:51:34+09:00"
+  "updated_at": "2026-10-03T20:01:35+09:00"
 }
