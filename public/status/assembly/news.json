@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 9건, 실패 0건, 13초",
   "counts": {
-    "new": 4,
+    "new": 9,
     "failed": 0,
-    "total": 2940
+    "total": 2949
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] 전대 대비 포석? 몸 푸는 비당권파... 김문수·오세훈 포럼, 이준석도 조정훈과 포럼 — 한국일보",
-    "[신규] 처음 읽는 규칙 문서와 친해지는 그것이알고싶다 토토 — Calgary Roughnecks",
-    "[신규] 입문자가 읽기 편한 토토 총판 죽장 화면별 설명 — Calgary Roughnecks",
-    "[신규] 野 수적 열세에 주요 증인채택 줄줄이 불발…'맹탕 국감' 현실화되나 — 데일리안"
+    "신규 9건, 실패 0건, 13초",
+    "[신규] 크릿벤처스, ‘오딘’ 개발진이 설립한 ‘제이드래곤게임즈’에 투자 — 쿠키뉴스",
+    "[신규] 크릿벤처스, '오딘' 개발진이 설립한 제이드래곤게임즈에 투자 진행 — v.daum.net",
+    "[신규] [주간政談] 국감 준비 한창인데…장외집회에 국힘 내부서 한숨 — v.daum.net",
+    "[신규] [주간政談] 국감 준비 한창인데…장외집회에 국힘 내부서 한숨 - 정치 | 기사 — 더팩트"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37064226478,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37064226478",
-  "request_id": "cron-202610022100",
+  "run_id": 37080176709,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37080176709",
+  "request_id": "cron-202610030000",
   "trigger": "schedule",
-  "started_at": "2026-10-03T06:01:18+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-03T09:00:58+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 92건"
+      "summary": "검색어 5개에서 87건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 26건 (신규 4건) · 화성신문 6건, Calgary Roughnecks 4건, ksw-news.com 3건"
+      "summary": "오늘 35건 (신규 9건) · 화성신문 6건, v.daum.net 5건, Calgary Roughnecks 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-03T06:01:31+09:00"
+  "updated_at": "2026-10-03T09:01:12+09:00"
 }
