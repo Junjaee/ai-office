@@ -3,38 +3,36 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 전송 2건, 실패 0건, 1.3분",
+  "summary": "신규 1건, 전송 1건, 실패 0건, 35초",
   "counts": {
-    "new": 3,
-    "sent": 2,
+    "new": 1,
+    "sent": 1,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 3건, 전송 2건, 실패 0건, 1.3분",
-    "[신규]⭐ [일반공고] 거주불명등록자에 대한 행정상관리주소 이전 공고 (1차)",
-    "[신규] [시정알림방] 화성「아크메르 동탄 95， 99」장애인 특별공급 안내",
-    "[신규] [시정알림방] 동탄구청 식품위생법 위반 사실의 공표(2026년 9월)"
+    "신규 1건, 전송 1건, 실패 0건, 35초",
+    "[신규] [입찰공고] 용역 입찰공고[동탄 도시철도 건설공사(1단계) 소규모 지하안전평가 용역]"
   ],
   "link": "",
-  "run_id": 36943889873,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36943889873",
-  "request_id": "cron-202610020000",
+  "run_id": 37080181356,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37080181356",
+  "request_id": "cron-202610030000",
   "trigger": "schedule",
-  "started_at": "2026-10-02T09:02:15+09:00",
-  "duration_sec": 80,
+  "started_at": "2026-10-03T09:01:02+09:00",
+  "duration_sec": 35,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 3건, 첨부 5건"
+      "summary": "신규 1건, 첨부 2건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "2건 발송, 무음 1건"
+      "summary": "1건 발송, 무음 0건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-10-02T09:03:36+09:00"
+  "updated_at": "2026-10-03T09:01:38+09:00"
 }
