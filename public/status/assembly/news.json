@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 12초",
+  "summary": "신규 7건, 실패 0건, 12초",
   "counts": {
-    "new": 10,
+    "new": 7,
     "failed": 0,
-    "total": 2972
+    "total": 2979
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 12초",
-    "[신규] [포토] 이준석, 호쾌한 드라이버샷 — edaily.co.kr",
-    "[신규] '오딘' 개발진이 설립한 제이드래곤게임즈, 시드투자 유치 - 머니투데이 — mt.co.kr",
-    "[신규] 어떤 기능부터 익히면 편할까? gta5 카지노 지문 프로그램 입문 질문 — calgaryroughnecks.com",
-    "[신규] 바카라 크롬하츠 도움말의 그림과 숫자 읽기 — calgaryroughnecks.com"
+    "신규 7건, 실패 0건, 12초",
+    "[신규] [부고]강은규(천하람 개혁신당 원내대표 보좌관)씨 모친상 — 머니투데이",
+    "[신규] 주진우, 암살자(들) '탄흔 티켓' 굿즈에 \"메가박스 패륜굿즈 전량 폐기해야\" — 뉴시스",
+    "[신규] 라인 방식과 웨이 방식으로 보는 네이버 앱스토어 talk day 유형 차이 — Calgary Roughnecks",
+    "[신규] 부산시, 더불어민주당 중앙당과 예산정책협의회 열어... 2027년도 주요 국비 사업 지원 요청 — 글로벌경제신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37101635318,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37101635318",
-  "request_id": "cron-202610030600",
+  "run_id": 37111594642,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37111594642",
+  "request_id": "cron-202610030900",
   "trigger": "schedule",
-  "started_at": "2026-10-03T15:00:56+09:00",
+  "started_at": "2026-10-03T18:01:00+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 54건"
+      "summary": "검색어 5개에서 47건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 58건 (신규 10건) · calgaryroughnecks.com 9건, Calgary Roughnecks 8건, v.daum.net 6건"
+      "summary": "오늘 65건 (신규 7건) · Calgary Roughnecks 12건, calgaryroughnecks.com 9건, v.daum.net 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-03T15:01:09+09:00"
+  "updated_at": "2026-10-03T18:01:12+09:00"
 }
