@@ -3,27 +3,27 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 17건, 실패 0건, 10초",
+  "summary": "신규 11건, 실패 0건, 12초",
   "counts": {
-    "new": 17,
+    "new": 11,
     "failed": 0,
-    "total": 3061
+    "total": 3072
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 17건, 실패 0건, 10초",
-    "[신규] 생업 포기하고 금메달 목에 건 테크볼 이준석 — 뉴시스",
-    "[신규] [아시안게임] 펜싱 2관왕 오상욱, 우리 선수단 MVP‥투혼상에 테크볼 이준석 — MBC 뉴스",
-    "[신규] '2연속 2관왕' 오상욱 MVP 등극, 상금 3000만원... 투혼상은 테크볼 이준석 [아이치 나고야 AG] — 머니투데이",
-    "[신규] [포토] 이준석, 호쾌하게 날린다 — edaily.co.kr"
+    "신규 11건, 실패 0건, 12초",
+    "[신규] '금39개-종합3위' 유승민 대한체육회장\"韓스포츠 현위치 과제 확인\" ...펜싱 오상욱 MVP 3000만원-테크볼 이준석 투혼상-카누 조광희X김효빈 기량발전상 각 1000만원 포상금[오피셜] — 조선일보",
+    "[신규] 2026 아이치·나고야하계아시아경기대회 결산…대한민국 선수단 MVP에 펜싱 오상욱 선수 선정 — 경기매일",
+    "[신규] '사상 첫 2연패' 안세영·오상욱…일본 하늘에 태극기 '펄럭'[AG 결산③] — 뉴시스",
+    "[신규] 일본 안방서 완성한 짜릿한 45-44 역전승...허리 통증 이겨낸 오상욱, 2연속 AG 2관왕→한국 선수단 MVP 선정 — 머니투데이"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37181554893,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37181554893",
-  "request_id": "cron-202610040600",
+  "run_id": 37190774282,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37190774282",
+  "request_id": "cron-202610040900",
   "trigger": "schedule",
-  "started_at": "2026-10-04T15:01:32+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-10-04T18:01:22+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
@@ -33,9 +33,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 74건 (신규 17건) · Calgary Roughnecks 14건, v.daum.net 6건, 연합뉴스 5건"
+      "summary": "오늘 85건 (신규 11건) · Calgary Roughnecks 15건, v.daum.net 8건, 연합뉴스 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-04T15:01:42+09:00"
+  "updated_at": "2026-10-04T18:01:35+09:00"
 }
