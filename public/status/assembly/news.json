@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 11초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 6,
+    "new": 4,
     "failed": 0,
-    "total": 3098
+    "total": 3102
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 11초",
-    "[신규] \"악으로 버텼다\" \"얕보는 게 화나서\" 금빛으로 반짝인 투혼 — 조선일보",
-    "[신규] '금메달 7개' 대한민국 구기 종목 열전 — 뉴시스",
-    "[신규] 16일간 달려온 아시안게임, 오늘 폐막…한국, 성과와 과제 함께 남겼다[AG] — 뉴스1",
-    "[신규] [나고야AG] 펜싱 2관왕 오상욱, 한국 선수단 MVP — 아시아경제"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] 펜싱 2관왕 오상욱, 韓선수단 MVP…투혼상은 테크볼 이준석 — 동아일보",
+    "[신규] 아이치·나고야 아시안게임 마친 한국 선수단…MVP에 펜싱 오상욱 — 무예신문",
+    "[신규] 재경위 \"미래기금 재정통제 약화 가능성…추가세수 충분치 않으면 재원 감소\" — v.daum.net",
+    "[신규] 원주시, 내년도 국비 확보 총력…이광재 예결위원장 면담 — 중앙뉴스타임스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37222729731,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37222729731",
-  "request_id": "cron-202610041800",
+  "run_id": 37234348364,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37234348364",
+  "request_id": "cron-202610042100",
   "trigger": "schedule",
-  "started_at": "2026-10-05T03:01:31+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-05T06:01:27+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 62건"
+      "summary": "검색어 5개에서 64건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 9건 (신규 6건) · ksw-news.com 1건, 금융소비자뉴스 1건, 뉴스1 1건"
+      "summary": "오늘 13건 (신규 4건) · v.daum.net 2건, ksw-news.com 1건, mydaily.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-05T03:01:43+09:00"
+  "updated_at": "2026-10-05T06:01:39+09:00"
 }
