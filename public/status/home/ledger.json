@@ -3,39 +3,38 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 1건, 건너뜀 0건, 대기 0건, 실패 0건, 9초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
   "counts": {
     "new": 1,
-    "replaced": 1,
+    "replaced": 0,
     "skip": 0,
     "wait": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 1건, 건너뜀 0건, 대기 0건, 실패 0건, 9초",
-    "[추가] 2026년 10월 10/4 위례제일주유소 109,665원 (기타)",
-    "[취소삭제] 2026년 10월 위례제일주유소 150,000원"
+    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
+    "[추가] 2026년 10월 10/4 현대아울렛가든파 4,900원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 37186116921,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37186116921",
-  "request_id": "cron-202610040732",
+  "run_id": 37191697433,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37191697433",
+  "request_id": "cron-202610040917",
   "trigger": "schedule",
-  "started_at": "2026-10-04T16:33:24+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-04T18:18:19+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 2건 확인, 결제 2건"
+      "summary": "메일 1건 확인, 결제 1건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 1 · 취소 1 · 건너뜀 0"
+      "summary": "추가 1 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-04T16:33:33+09:00"
+  "updated_at": "2026-10-04T18:18:22+09:00"
 }
