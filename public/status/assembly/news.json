@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 12초",
+  "summary": "신규 18건, 실패 0건, 10초",
   "counts": {
-    "new": 10,
+    "new": 18,
     "failed": 0,
-    "total": 3026
+    "total": 3044
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 12초",
-    "[신규] 녹빛 필드 위에서 하나 된 화성... '2026 시장배 파크골프대회' 개최 — 화성저널",
-    "[신규] 국회 4석·지방의원 41명…진보당은 '아래에서 위로' 올라갈 수 있을까 — 뉴스후플러스",
-    "[신규] 투명판 겹치자 육영수 자리 '총탄 자국'...영화 '암살자(들)' 탄흔 티켓에 발칵 — 파이낸셜뉴스",
-    "[신규] 전남대병원 금융부채 273억 원...연간 이자만 12억 원 — KBC광주방송"
+    "신규 18건, 실패 0건, 10초",
+    "[신규] 기적을 쓴 오상욱, AG 한국 MVP 선정…투혼상 테크볼 이준석·리더상 3x3 농구 배길태 감독 등 — 스포츠월드",
+    "[신규] ‘단체전 대역전극’ 펜싱 2관왕 오상욱, 한국선수단 MVP — 국제신문",
+    "[신규] '펜싱 2관왕' 오상욱, 선수단 MVP 선정 — 동행미디어 시대",
+    "[신규] '2관왕' 펜싱 오상욱, 韓 MVP…\"선수단 선전에 크게 기여\"(종합)[나고야AG] — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37163597367,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37163597367",
-  "request_id": "cron-202610040000",
+  "run_id": 37172814432,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37172814432",
+  "request_id": "cron-202610040300",
   "trigger": "schedule",
-  "started_at": "2026-10-04T09:01:35+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-04T12:01:35+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 42건"
+      "summary": "검색어 5개에서 50건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 39건 (신규 10건) · Calgary Roughnecks 12건, v.daum.net 5건, KBC광주방송 3건"
+      "summary": "오늘 57건 (신규 18건) · Calgary Roughnecks 14건, v.daum.net 6건, KBC광주방송 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-04T09:01:48+09:00"
+  "updated_at": "2026-10-04T12:01:46+09:00"
 }
