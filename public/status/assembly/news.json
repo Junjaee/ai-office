@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 9초",
+  "summary": "신규 6건, 실패 0건, 11초",
   "counts": {
-    "new": 3,
+    "new": 6,
     "failed": 0,
-    "total": 3092
+    "total": 3098
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 9초",
-    "[신규] ‘암살자(들)’ 총탄 자국 티켓 논란…메가박스 “전량 폐기” — 스포츠월드",
-    "[신규] 메가박스, '암살자(들)' 탄흔 티켓 논란에 사과…잔여 물량 전량 폐기 — ksw-news.com",
-    "[신규] 재경委 \"미래기금 정부 재량 지나치게 커...국회 통제권 약화\" — 금융소비자뉴스"
+    "신규 6건, 실패 0건, 11초",
+    "[신규] \"악으로 버텼다\" \"얕보는 게 화나서\" 금빛으로 반짝인 투혼 — 조선일보",
+    "[신규] '금메달 7개' 대한민국 구기 종목 열전 — 뉴시스",
+    "[신규] 16일간 달려온 아시안게임, 오늘 폐막…한국, 성과와 과제 함께 남겼다[AG] — 뉴스1",
+    "[신규] [나고야AG] 펜싱 2관왕 오상욱, 한국 선수단 MVP — 아시아경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37211415455,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37211415455",
-  "request_id": "cron-202610041500",
+  "run_id": 37222729731,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37222729731",
+  "request_id": "cron-202610041800",
   "trigger": "schedule",
-  "started_at": "2026-10-05T00:01:26+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-05T03:01:31+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 58건"
+      "summary": "검색어 5개에서 62건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 3건 (신규 3건) · ksw-news.com 1건, 금융소비자뉴스 1건, 스포츠월드 1건"
+      "summary": "오늘 9건 (신규 6건) · ksw-news.com 1건, 금융소비자뉴스 1건, 뉴스1 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-05T00:01:36+09:00"
+  "updated_at": "2026-10-05T03:01:43+09:00"
 }
