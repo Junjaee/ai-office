@@ -1,8 +1,7 @@
-/* 주식 분석 화면 (app/office/StockBoard.tsx · StockPage.tsx). 단추·카드·상태 알약은 dashboard.css 것을 그대로 쓴다. */
+/* 주식 분석 화면 (app/office/StockBoard.tsx · StockDiscover.tsx · StockPage.tsx). 단추·카드·상태 알약은 dashboard.css 것을 그대로 쓴다. */
 .stk-nav { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #e6e9ef; }
-.stk-nav a, .stk-nav span { display: inline-flex; min-width: 96px; min-height: 44px; align-items: center; justify-content: center; padding: 0 18px; border-radius: 9px; color: var(--d-soft); font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.stk-nav a { display: inline-flex; min-width: 96px; min-height: 44px; align-items: center; justify-content: center; padding: 0 18px; border-radius: 9px; color: var(--d-soft); font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap; }
 .stk-nav a.on { background: #fff; color: var(--d-ink); box-shadow: 0 1px 2px rgba(17, 24, 39, .08); }
-.stk-nav span { color: var(--d-faint); font-weight: 500; }
 .stk-up { color: #b3261e; } .stk-down { color: #1d4fb4; } .stk-flat { color: var(--d-soft); }
 .status-pill.care { background: #fdf1cf; color: #6b4a00; }
 
@@ -63,7 +62,42 @@
 .stk-years .stk-yr span:not(:first-child) { text-align: right; }
 .stk-empty { border-style: dashed; }
 @media (max-width: 680px) {
-  .stk-nav { order: 3; width: 100%; } .stk-nav a, .stk-nav span { min-width: 0; flex: 1 1 0; padding: 0 8px; }
+  .stk-nav { order: 3; width: 100%; } .stk-nav a { min-width: 0; flex: 1 1 0; padding: 0 8px; }
   .stk-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stk-events li { flex-wrap: wrap; } .stk-hero .price { font-size: 28px; }
+}
+
+/* 발굴 판 (app/office/StockDiscover.tsx) · 종목 한 장의 관점 알약 */
+.stk-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.stk-tab { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; padding: 0 14px; border: 1px solid var(--d-line-strong); border-radius: 999px; background: #fff; color: var(--d-ink); font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; }
+.stk-tab:hover { background: #f6f7f9; }
+.stk-tab[aria-pressed="true"] { border-color: var(--d-ink); background: var(--d-ink); color: #fff; }
+.stk-count { display: inline-flex; min-width: 22px; height: 22px; align-items: center; justify-content: center; padding: 0 6px; border-radius: 999px; background: #eceff3; color: var(--d-ink); font-size: 12.5px; font-weight: 700; }
+.stk-tab[aria-pressed="true"] .stk-count { background: #fff; }
+.stk-rule { margin: 0; color: var(--d-soft); font-size: 13.5px; }
+
+.stk-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.stk-card { display: flex; min-width: 0; flex-direction: column; gap: 12px; padding: 18px; border: 1px solid var(--d-line); border-radius: 14px; background: #fff; }
+.stk-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.stk-card-name { min-width: 0; }
+.stk-card-name h2 { font-size: 17px; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.stk-card-name small { color: var(--d-faint); font-family: "Archivo", sans-serif; font-size: 12.5px; font-weight: 600; }
+.stk-card-price { display: flex; flex: none; flex-direction: column; align-items: flex-end; }
+.stk-card-price .stk-num { font-size: 16px; }
+.stk-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.stk-hero .stk-chips { margin-top: 8px; }
+.stk-chip { display: inline-flex; height: 26px; align-items: center; padding: 0 10px; border: 1px solid var(--d-line-strong); border-radius: 999px; background: #fff; color: var(--d-ink); font-size: 12.5px; font-weight: 600; }
+.stk-chip.dark { border-color: var(--d-ink); background: var(--d-ink); color: #fff; }
+.stk-why { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 12px 0 0; border-top: 1px solid var(--d-line-soft); font-size: 13.5px; list-style: none; }
+.stk-why li { display: flex; gap: 8px; }
+.stk-why li > span:first-child { flex: none; width: 64px; color: var(--d-faint); font-weight: 600; }
+.stk-why li > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.stk-kv { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.stk-kv dt { color: var(--d-faint); font-size: 12px; }
+.stk-kv dd { margin: 1px 0 0; font-size: 13.5px; font-weight: 600; }
+.stk-card-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.stk-more { display: flex; justify-content: center; }
+.stk-subhead { margin: 14px 0 6px; font-size: 14px; font-weight: 700; }
+@media (max-width: 420px) {
+  .stk-kv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

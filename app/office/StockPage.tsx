@@ -2,7 +2,7 @@
 // 종목 한 장 — /api/stock?ticker= 를 읽어 그린다. 1단계: 결론은 점검표로 만든 규칙 문장, 사건은 가격에서 계산한 큰 변동일.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { STATE_META, chartGeometry, earnText, eok, money, monthDay, normalizeDoc, pctText, tone, watchErrorText, type TickerDoc } from "../stock-rules";
+import { LENS_LABEL, STATE_META, chartGeometry, earnText, eok, money, monthDay, normalizeDoc, pctText, tone, watchErrorText, type TickerDoc } from "../stock-rules";
 import { mockDoc } from "../stock-mock";
 
 type ApiTicker = { market: string; ticker: string; doc: TickerDoc | null; watched: boolean };
@@ -71,7 +71,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
     return (
       <main className="page-shell">
         <div className="wrap dash">
-          <StockHeader ws={ws} asOf={null} onBoard={false} />
+          <StockHeader ws={ws} asOf={null} view="page" mock={mock} />
           <a className="stk-back" href={back}>
             <StockIcon d="M15 5l-7 7 7 7" />
             관심 종목으로
@@ -93,7 +93,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
   return (
     <main className="page-shell">
       <div className="wrap dash">
-        <StockHeader ws={ws} asOf={doc.as_of} onBoard={false} />
+        <StockHeader ws={ws} asOf={doc.as_of} view="page" mock={mock} />
 
         <section className="stk-hero">
           <div>
@@ -106,6 +106,14 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
               {rec.t} · {rec.exchange}
               {rec.sector ? ` · ${rec.sector}` : ""}
             </span>
+            {doc.lenses.length ? (
+              <div className="stk-chips" aria-label="발굴 관점">
+                <span className="stk-sub">발굴:</span>
+                {doc.lenses.map((l) => (
+                  <span key={l.id} className="stk-chip">{LENS_LABEL[l.id]}</span>
+                ))}
+              </div>
+            ) : null}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <div style={{ textAlign: "right" }}>
@@ -224,6 +232,18 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
           ) : (
             <p className="auto-meta">최근 1년 동안 하루에 7% 넘게 움직인 날이 없어요.</p>
           )}
+          {doc.events.length ? (
+            <>
+              <h3 className="stk-subhead">최근 공시</h3>
+              <ul className="stk-list">
+                {doc.events.map((ev, i) => (
+                  <li key={i}>
+                    <b>{/^\d{4}-\d{2}-\d{2}$/.test(ev.date) ? monthDay(ev.date) : ev.date}</b> · {ev.kind}
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </section>
 
         <div className="stk-two">

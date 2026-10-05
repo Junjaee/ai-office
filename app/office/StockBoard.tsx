@@ -1,69 +1,19 @@
 "use client";
 // 관심 종목 판 — /api/stock?view=board 를 읽어 관심 목록 순서대로 그린다. 담기·빼기는 /api/stock/watch.
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { STATE_META, buildFlags, earnText, money, normalizeBoard, pctText, polyPoints, tone, watchErrorText, watchRows, type Board, type BoardRow } from "../stock-rules";
-import { mockBoard } from "../stock-mock";
+import { STATE_META, buildFlags, earnText, money, pctText, polyPoints, tone, watchRows, type BoardRow } from "../stock-rules";
+import { useStockBoard } from "./useStockBoard";
 
-type ApiBoard = { market: string; board: Board | null; watch: string[]; checkedAt?: string };
-const MARKET = "us";
 const FLAG_ICON = { earnings: "M7 3v4M17 3v4M4 9h16M5 5h14v15H5z", warn: STATE_META.warn.icon, high: "M4 17l5-5 4 4 7-8M15 8h5v5" } as const;
-const tickers = (v: unknown): string[] => (Array.isArray(v) ? v.filter((t): t is string => typeof t === "string") : []);
+const okNote = (t: string, action: "add" | "remove") => (action === "add" ? `${t} 을(를) 담았어요. 판에 없는 종목은 다음 갱신 때 자료가 들어옵니다.` : `${t} 을(를) 뺐어요.`);
+const MARKET = "us";
 
 export default function StockBoard({ ws }: { ws: string }) {
-  const [data, setData] = useState<ApiBoard | null>(null);
-  const [error, setError] = useState("");
+  const { data, error, busy, note, change: apply, mock } = useStockBoard(okNote);
   const [input, setInput] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [note, setNote] = useState("");
-  const mock = useMemo(() => (typeof window !== "undefined" ? new URLSearchParams(window.location.search).has("mock") : false), []);
-
-  const load = useCallback(async () => {
-    if (mock) {
-      const m = mockBoard();
-      setData({ market: MARKET, board: normalizeBoard(m.board), watch: tickers(m.watch) });
-      return;
-    }
-    try {
-      const r = await fetch(`/api/stock?market=${MARKET}&view=board&t=${Date.now()}`, { cache: "no-store" });
-      if (!r.ok) throw new Error(r.status === 503 ? "저장 공간이 아직 연결되지 않았어요" : `자료를 불러오지 못했어요 (HTTP ${r.status})`);
-      const j = (await r.json()) as { board?: unknown; watch?: unknown; checkedAt?: string };
-      setData({ market: MARKET, board: normalizeBoard(j.board), watch: tickers(j.watch), checkedAt: j.checkedAt });
-      setError("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "자료를 불러오지 못했어요");
-    }
-  }, [mock]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
-
   const change = async (ticker: string, action: "add" | "remove") => {
-    const t = ticker.trim().toUpperCase();
-    if (!t) return;
-    if (mock) {
-      setData((d) => (d ? { ...d, watch: action === "add" ? [...new Set([...d.watch, t])] : d.watch.filter((x) => x !== t) } : d));
-      setInput("");
-      return;
-    }
-    setBusy(true);
-    setNote("");
-    try {
-      const r = await fetch("/api/stock/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ market: MARKET, ticker: t, action }) });
-      const j = (await r.json().catch(() => ({}))) as { watch?: string[]; error?: string };
-      if (!r.ok || !j.watch) {
-        setNote(watchErrorText(r.status, j.error));
-        return;
-      }
-      setData((d) => (d ? { ...d, watch: tickers(j.watch) } : d));
-      setInput("");
-      setNote(action === "add" ? `${t} 을(를) 담았어요. 판에 없는 종목은 다음 갱신 때 자료가 들어옵니다.` : `${t} 을(를) 뺐어요.`);
-    } catch {
-      setNote("잠시 뒤 다시 해 주세요");
-    } finally {
-      setBusy(false);
-    }
+    if (await apply(ticker, action)) setInput("");
   };
 
   const rows = useMemo(() => watchRows(data?.board ?? null, data?.watch ?? []), [data]);
@@ -74,7 +24,7 @@ export default function StockBoard({ ws }: { ws: string }) {
   return (
     <main className="page-shell">
       <div className="wrap dash">
-        <StockHeader ws={ws} asOf={data?.board?.as_of ?? null} onBoard />
+        <StockHeader ws={ws} asOf={data?.board?.as_of ?? null} view="board" mock={mock} />
         <section className="dash-title">
           <div>
             <h1>관심 종목</h1>
