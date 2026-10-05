@@ -2,7 +2,7 @@
 // 종목 한 장 — /api/stock?ticker= 를 읽어 그린다. 1단계: 결론은 점검표로 만든 규칙 문장, 사건은 가격에서 계산한 큰 변동일.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { STATE_META, chartGeometry, earnText, eok, money, monthDay, pctText, tone, type TickerDoc } from "../stock-rules";
+import { STATE_META, chartGeometry, earnText, eok, money, monthDay, normalizeDoc, pctText, tone, watchErrorText, type TickerDoc } from "../stock-rules";
 import { mockDoc } from "../stock-mock";
 
 type ApiTicker = { market: string; ticker: string; doc: TickerDoc | null; watched: boolean };
@@ -14,17 +14,19 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
   const [data, setData] = useState<ApiTicker | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState("");
   const mock = useMemo(() => (typeof window !== "undefined" ? new URLSearchParams(window.location.search).has("mock") : false), []);
 
   const load = useCallback(async () => {
     if (mock) {
-      setData({ market, ticker, doc: mockDoc(ticker), watched: true });
+      setData({ market, ticker, doc: normalizeDoc(mockDoc(ticker)), watched: true });
       return;
     }
     try {
       const r = await fetch(`/api/stock?market=${encodeURIComponent(market)}&ticker=${encodeURIComponent(ticker)}&t=${Date.now()}`, { cache: "no-store" });
       if (!r.ok) throw new Error(r.status === 503 ? "저장 공간이 아직 연결되지 않았어요" : `자료를 불러오지 못했어요 (HTTP ${r.status})`);
-      setData((await r.json()) as ApiTicker);
+      const j = (await r.json()) as { doc?: unknown; watched?: unknown };
+      setData({ market, ticker, doc: normalizeDoc(j.doc), watched: j.watched === true });
       setError("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "자료를 불러오지 못했어요");
@@ -38,14 +40,22 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
   const toggleWatch = async () => {
     if (!data) return;
     const action = data.watched ? "remove" : "add";
+    setNote("");
     if (mock) {
-      setData({ ...data, watched: !data.watched });
+      setData((d) => (d ? { ...d, watched: !d.watched } : d));
       return;
     }
     setBusy(true);
     try {
       const r = await fetch("/api/stock/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ market, ticker, action }) });
-      if (r.ok) setData({ ...data, watched: !data.watched });
+      const j = (await r.json().catch(() => ({}))) as { error?: string };
+      if (!r.ok) {
+        setNote(watchErrorText(r.status, j.error));
+        return;
+      }
+      setData((d) => (d ? { ...d, watched: !d.watched } : d));
+    } catch {
+      setNote("잠시 뒤 다시 해 주세요");
     } finally {
       setBusy(false);
     }
@@ -105,6 +115,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
             <button className={`btn ${data?.watched ? "btn-ghost" : "btn-accent"}`} disabled={busy} onClick={() => void toggleWatch()}>
               {data?.watched ? "관심 종목에서 빼기" : "관심에 담기"}
             </button>
+            {note ? <span className="auto-meta" role="status">{note}</span> : null}
           </div>
         </section>
 

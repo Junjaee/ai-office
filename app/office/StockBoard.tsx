@@ -2,13 +2,13 @@
 // 관심 종목 판 — /api/stock?view=board 를 읽어 관심 목록 순서대로 그린다. 담기·빼기는 /api/stock/watch.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { STATE_META, buildFlags, earnText, money, pctText, polyPoints, tone, watchRows, type Board, type BoardRow } from "../stock-rules";
+import { STATE_META, buildFlags, earnText, money, normalizeBoard, pctText, polyPoints, tone, watchErrorText, watchRows, type Board, type BoardRow } from "../stock-rules";
 import { mockBoard } from "../stock-mock";
 
 type ApiBoard = { market: string; board: Board | null; watch: string[]; checkedAt?: string };
 const MARKET = "us";
 const FLAG_ICON = { earnings: "M7 3v4M17 3v4M4 9h16M5 5h14v15H5z", warn: STATE_META.warn.icon, high: "M4 17l5-5 4 4 7-8M15 8h5v5" } as const;
-const WATCH_ERRORS: Record<string, string> = { watch_full: "관심 종목은 100개까지 담을 수 있어요", bad_request: "종목 기호를 확인해 주세요 (예: NVDA)", forbidden: "이 화면에서만 담을 수 있어요" };
+const tickers = (v: unknown): string[] => (Array.isArray(v) ? v.filter((t): t is string => typeof t === "string") : []);
 
 export default function StockBoard({ ws }: { ws: string }) {
   const [data, setData] = useState<ApiBoard | null>(null);
@@ -20,13 +20,15 @@ export default function StockBoard({ ws }: { ws: string }) {
 
   const load = useCallback(async () => {
     if (mock) {
-      setData({ market: MARKET, ...mockBoard() });
+      const m = mockBoard();
+      setData({ market: MARKET, board: normalizeBoard(m.board), watch: tickers(m.watch) });
       return;
     }
     try {
       const r = await fetch(`/api/stock?market=${MARKET}&view=board&t=${Date.now()}`, { cache: "no-store" });
       if (!r.ok) throw new Error(r.status === 503 ? "저장 공간이 아직 연결되지 않았어요" : `자료를 불러오지 못했어요 (HTTP ${r.status})`);
-      setData((await r.json()) as ApiBoard);
+      const j = (await r.json()) as { board?: unknown; watch?: unknown; checkedAt?: string };
+      setData({ market: MARKET, board: normalizeBoard(j.board), watch: tickers(j.watch), checkedAt: j.checkedAt });
       setError("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "자료를 불러오지 못했어요");
@@ -51,10 +53,10 @@ export default function StockBoard({ ws }: { ws: string }) {
       const r = await fetch("/api/stock/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ market: MARKET, ticker: t, action }) });
       const j = (await r.json().catch(() => ({}))) as { watch?: string[]; error?: string };
       if (!r.ok || !j.watch) {
-        setNote(WATCH_ERRORS[j.error ?? ""] ?? "잠시 뒤 다시 해 주세요");
+        setNote(watchErrorText(r.status, j.error));
         return;
       }
-      setData((d) => (d ? { ...d, watch: j.watch as string[] } : d));
+      setData((d) => (d ? { ...d, watch: tickers(j.watch) } : d));
       setInput("");
       setNote(action === "add" ? `${t} 을(를) 담았어요. 판에 없는 종목은 다음 갱신 때 자료가 들어옵니다.` : `${t} 을(를) 뺐어요.`);
     } catch {
@@ -89,7 +91,7 @@ export default function StockBoard({ ws }: { ws: string }) {
         ) : null}
 
         {ready.length ? (
-          <section aria-label="오늘 먼저 볼 것" className="dash-list">
+          <section aria-label="오늘 먼저 볼 것" className="stk-section">
             <div className="section-head">
               <h2>오늘 먼저 볼 것</h2>
             </div>

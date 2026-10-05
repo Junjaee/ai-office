@@ -6,6 +6,7 @@
 .stk-up { color: #b3261e; } .stk-down { color: #1d4fb4; } .stk-flat { color: var(--d-soft); }
 .status-pill.care { background: #fdf1cf; color: #6b4a00; }
 
+.stk-section { display: flex; flex-direction: column; gap: 12px; }
 .stk-flags { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
 .stk-flag { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border: 1px solid var(--d-line); border-radius: 14px; background: #fff; }
 .stk-flag span { color: var(--d-soft); font-size: 13.5px; font-weight: 600; }

@@ -137,3 +137,62 @@ export function chartGeometry(chart: [string, number][], moves: { date: string; 
   const xLabels = pick.map((i) => `${chart[i][0].slice(2, 4)}.${chart[i][0].slice(5, 7)}`);
   return { points, marks, yMax, yMin, xLabels };
 }
+
+// ---- 받은 자료 정리: /api/stock 이 돌려준 자료가 깨졌어도 화면이 죽지 않게, 그리기 전에 모양을 맞춘다 ----
+type Obj = Record<string, unknown>;
+const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== null && !Array.isArray(v);
+const num = (v: unknown): number | null => (typeof v === "number" && Number.isFinite(v) ? v : null);
+const numOr = (v: unknown, d: number): number => num(v) ?? d;
+const str = (v: unknown, d = ""): string => (typeof v === "string" ? v : d);
+const strOrNull = (v: unknown): string | null => (typeof v === "string" ? v : null);
+const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
+const nums = (v: unknown): number[] => arr(v).filter((x): x is number => typeof x === "number" && Number.isFinite(x));
+
+export function normalizeBoard(input: unknown): Board | null {
+  if (!isObj(input) || !Array.isArray(input.rows)) return null;
+  const rows: BoardRow[] = [];
+  for (const raw of input.rows) {
+    if (!isObj(raw) || typeof raw.t !== "string" || !raw.t) continue;
+    rows.push({
+      t: raw.t, name: str(raw.name, raw.t), price: numOr(raw.price, 0), chg_pct: num(raw.chg_pct), spark: nums(raw.spark), ath_pct: num(raw.ath_pct), off_hi_pct: num(raw.off_hi_pct),
+      fpe: num(raw.fpe), n_pass: numOr(raw.n_pass, 0), n_care: numOr(raw.n_care, 0), n_warn: numOr(raw.n_warn, 0), diag: str(raw.diag), next_earn: strOrNull(raw.next_earn),
+      warn_keys: arr(raw.warn_keys).filter((x): x is string => typeof x === "string"),
+    });
+  }
+  return { market: str(input.market), as_of: str(input.as_of), ...(typeof input.generated_at === "string" ? { generated_at: input.generated_at } : {}), rows };
+}
+
+const STATES: readonly string[] = ["pass", "care", "warn", "na"];
+
+export function normalizeDoc(input: unknown): TickerDoc | null {
+  if (!isObj(input) || !isObj(input.rec)) return null;
+  const r = input.rec;
+  if (typeof r.t !== "string" || !r.t || num(r.price) === null) return null;
+  const tgt = isObj(r.tgt) && num(r.tgt.mean) !== null ? { mean: r.tgt.mean as number, lo: num(r.tgt.lo), hi: num(r.tgt.hi), n: numOr(r.tgt.n, 0) } : null;
+  const rec: StockRecord = {
+    t: r.t, name: str(r.name, r.t), exchange: str(r.exchange), sector: str(r.sector), financial: r.financial === true, as_of: str(r.as_of), price: r.price as number, chg_pct: num(r.chg_pct),
+    hi52: numOr(r.hi52, 0), lo52: numOr(r.lo52, 0), off_hi_pct: num(r.off_hi_pct), ath: numOr(r.ath, 0), ath_date: str(r.ath_date), ath_pct: num(r.ath_pct), y_ret_pct: num(r.y_ret_pct),
+    spark: nums(r.spark),
+    chart: arr(r.chart).filter((p): p is [string, number] => Array.isArray(p) && typeof p[0] === "string" && num(p[1]) !== null).map((p) => [p[0], p[1]] as [string, number]),
+    moves: arr(r.moves).filter(isObj).filter((m) => typeof m.date === "string" && num(m.pct) !== null && num(m.close) !== null).map((m) => ({ date: m.date as string, pct: m.pct as number, close: m.close as number })),
+    dv_ratio: num(r.dv_ratio), fpe: num(r.fpe), tpe: num(r.tpe), pb: num(r.pb), mcap: num(r.mcap), rev_g: num(r.rev_g), eps_g: num(r.eps_g), opm: num(r.opm),
+    net_debt_ebitda: num(r.net_debt_ebitda), debt: num(r.debt), cash: num(r.cash), fcf: num(r.fcf), ocf: num(r.ocf), rev: num(r.rev),
+    tgt, next_earn: strOrNull(r.next_earn),
+    annual: arr(r.annual).filter(isObj).filter((a) => num(a.fy) !== null).map((a) => ({ fy: a.fy as number, rev: num(a.rev), ni: num(a.ni), capex: num(a.capex), fcf: num(a.fcf) })),
+  };
+  const checks: Check[] = arr(input.checks).filter(isObj).filter((c) => typeof c.key === "string" && typeof c.text === "string")
+    .map((c) => ({ key: c.key as string, text: c.text as string, state: (STATES.includes(c.state as string) ? c.state : "na") as CheckState }));
+  const peers = arr(input.peers).filter(isObj).filter((p) => typeof p.t === "string" && typeof p.name === "string" && num(p.fpe) !== null)
+    .map((p) => ({ t: p.t as string, name: p.name as string, fpe: p.fpe as number }));
+  const ref = isObj(input.ref) ? { fpe: num(input.ref.fpe), opm: num(input.ref.opm), label: str(input.ref.label, "시장") } : { fpe: null, opm: null, label: "시장" };
+  return { market: str(input.market), as_of: str(input.as_of), rec, checks, diag: str(input.diag), peers, ref };
+}
+
+/** 관심 담기·빼기 실패 안내 문구 */
+export function watchErrorText(status: number, code: string | undefined): string {
+  if (status === 503) return "저장 공간이 아직 연결되지 않았어요";
+  if (code === "watch_full") return "관심 종목은 100개까지 담을 수 있어요";
+  if (code === "bad_request") return "종목 기호를 확인해 주세요 (예: NVDA)";
+  if (code === "forbidden") return "이 화면에서만 담을 수 있어요";
+  return "잠시 뒤 다시 해 주세요";
+}

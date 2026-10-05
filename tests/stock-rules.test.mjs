@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { STATE_META, money, pctText, tone, eok, polyPoints, monthDay, daysUntil, earnText, watchRows, buildFlags, chartGeometry } from "../app/stock-rules.ts";
+import { STATE_META, money, pctText, tone, eok, polyPoints, monthDay, daysUntil, earnText, watchRows, buildFlags, chartGeometry, normalizeBoard, normalizeDoc, watchErrorText } from "../app/stock-rules.ts";
 
 const row = (o = {}) => ({ t: "AAA", name: "A", price: 100, chg_pct: 1.2, spark: [1, 2, 3], ath_pct: -5, off_hi_pct: -5, fpe: 12, n_pass: 5, n_care: 1, n_warn: 1, diag: "좋음: 가치", next_earn: "2026-10-22", warn_keys: ["빚"], ...o });
 
@@ -73,4 +73,46 @@ test("그래프 좌표와 큰 변동일 표시", () => {
   assert.equal(g.yMax, 200); assert.equal(g.yMin, 100);
   assert.deepEqual(g.xLabels, ["26.01", "26.04", "26.07", "26.10"]);
   assert.equal(chartGeometry([], []).points, "");
+});
+
+test("판 자료 정리: 깨진 자료는 null, 줄은 모양을 맞춘다", () => {
+  assert.equal(normalizeBoard(null), null);
+  assert.equal(normalizeBoard({}), null);
+  assert.equal(normalizeBoard({ rows: "x" }), null);
+  const b = normalizeBoard({ rows: [{}, { t: "AAA" }, 5] });
+  assert.equal(b.rows.length, 1);
+  assert.deepEqual({ t: b.rows[0].t, name: b.rows[0].name, spark: b.rows[0].spark, warn_keys: b.rows[0].warn_keys, n_warn: b.rows[0].n_warn, fpe: b.rows[0].fpe, price: b.rows[0].price, next_earn: b.rows[0].next_earn },
+    { t: "AAA", name: "AAA", spark: [], warn_keys: [], n_warn: 0, fpe: null, price: 0, next_earn: null });
+  const good = { market: "us", as_of: "2026-10-02", rows: [row(), row({ t: "BBB" })] };
+  const n = normalizeBoard(good);
+  assert.equal(n.market, "us"); assert.equal(n.as_of, "2026-10-02");
+  assert.deepEqual(n.rows, good.rows);
+  assert.doesNotThrow(() => { const w = watchRows(b, ["AAA", "ZZZ"]); buildFlags(w.filter((r) => !r.pending), "2026-10-05"); });
+});
+
+test("종목 자료 정리: 깨진 자료는 null, 없는 칸은 기본값", () => {
+  assert.equal(normalizeDoc({}), null);
+  assert.equal(normalizeDoc({ rec: {} }), null);
+  const d = normalizeDoc({ rec: { t: "ORCL", price: 1 }, checks: [{ key: "빚", state: "weird", text: "x" }, { state: "pass" }], peers: "nope" });
+  assert.equal(d.checks.length, 1); assert.equal(d.checks[0].state, "na");
+  assert.deepEqual(d.peers, []);
+  assert.equal(d.ref.label, "시장");
+  assert.deepEqual([d.rec.annual, d.rec.chart, d.rec.moves, d.rec.tgt], [[], [], [], null]);
+  assert.equal(d.rec.name, "ORCL");
+  assert.doesNotThrow(() => chartGeometry(d.rec.chart, d.rec.moves));
+  const full = normalizeDoc({ market: "us", as_of: "2026-10-02", diag: "d", rec: { t: "X", price: 2, chart: [["2026-01-02", 1], ["bad"], ["2026-01-03", "x"]], moves: [{ date: "2026-01-02", pct: 8, close: 1 }, {}], annual: [{ fy: 2025, rev: 1 }, { rev: 2 }], tgt: { mean: 5, n: 3 } }, peers: [{ t: "P", name: "Pn", fpe: 10 }, { t: "Q" }], ref: { fpe: 20, label: "S&P" } });
+  assert.deepEqual(full.rec.chart, [["2026-01-02", 1]]);
+  assert.equal(full.rec.moves.length, 1);
+  assert.deepEqual(full.rec.annual, [{ fy: 2025, rev: 1, ni: null, capex: null, fcf: null }]);
+  assert.deepEqual(full.rec.tgt, { mean: 5, lo: null, hi: null, n: 3 });
+  assert.equal(full.peers.length, 1); assert.deepEqual(full.ref, { fpe: 20, opm: null, label: "S&P" });
+  assert.equal(full.diag, "d");
+});
+
+test("관심 담기 실패 문구", () => {
+  assert.equal(watchErrorText(503, undefined), "저장 공간이 아직 연결되지 않았어요");
+  assert.equal(watchErrorText(409, "watch_full"), "관심 종목은 100개까지 담을 수 있어요");
+  assert.equal(watchErrorText(400, "bad_request"), "종목 기호를 확인해 주세요 (예: NVDA)");
+  assert.equal(watchErrorText(403, "forbidden"), "이 화면에서만 담을 수 있어요");
+  assert.equal(watchErrorText(500, undefined), "잠시 뒤 다시 해 주세요");
 });
