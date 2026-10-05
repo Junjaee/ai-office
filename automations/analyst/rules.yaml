@@ -1,0 +1,17 @@
+# 주식 분석 점검표 문턱값 — 한 곳에서 고친다 (설계서 §5.1). 숫자를 바꾸면 화면 문장도 따라 바뀐다.
+sector_min: 5            # 업종 안 종목이 이보다 적으면 시장 전체 중앙값과 견준다
+checks:
+  value:                 # 예상 PER ÷ 견줄 중앙값
+    pass_below: 1.0
+    warn_at: 1.5
+  growth:                # 최근 분기 매출 증가율(%, 전년 대비)
+    pass_at: 10
+    care_at: 0
+  earnings:              # 최근 분기 이익 증가율(%). care_floor 아래면 경고
+    care_floor: -20
+  debt:                  # 순부채 ÷ 연간 영업이익(EBITDA)
+    pass_below: 2.0
+    warn_at: 4.0
+  trend:                 # 1년 최고가 대비 얼마나 아래인가(%)
+    pass_within: 10
+    care_within: 30
