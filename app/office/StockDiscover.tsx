@@ -2,7 +2,7 @@
 // 발굴 판 — 봇이 네 관점으로 걸러 온 종목 카드. 자료·담기/빼기는 관심 종목 판과 같은 훅(useStockBoard)을 쓴다.
 import { useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { LENS_LABEL, LENS_ORDER, STATE_META, discoverView, lensDaysText, money, pctText, tone, type BoardRow, type LensId } from "../stock-rules";
+import { LENS_LABEL, LENS_ORDER, STATE_META, discoverView, lensDaysText, money, pctText, scoreText, tone, type BoardRow, type LensId } from "../stock-rules";
 import { useStockBoard } from "./useStockBoard";
 
 const MARKET = "us";
@@ -91,6 +91,33 @@ export default function StockDiscover({ ws }: { ws: string }) {
         ) : null}
 
         {data ? <p className="auto-meta">{lensDaysText(data.lensDays)}</p> : null}
+        {board?.lens_score ? (
+          <section className="stk-section">
+            <h3 className="stk-subhead">관점별 성적 (지수 대비, 배당 제외)</h3>
+            <div className="stk-scroll">
+              <table className="stk-ops stk-lens-score">
+                <thead>
+                  <tr>
+                    <th scope="col">관점</th>
+                    <th scope="col">1주</th>
+                    <th scope="col">1개월</th>
+                    <th scope="col">3개월</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {LENS_ORDER.map((id) => (
+                    <tr key={id}>
+                      <th scope="row">{label(id)}</th>
+                      {(["1w", "1m", "3m"] as const).map((h) => (
+                        <td key={h}>{scoreText(board.lens_score?.[id]?.[h])}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ) : null}
 
         <footer className="dash-foot">발굴 결과는 조건에 맞는 종목을 걸러 보여 주는 것이며 매수 추천이 아닙니다. 출처는 야후 파이낸스와 미국 증권거래위원회(EDGAR) 공시 목록입니다.</footer>
       </div>
