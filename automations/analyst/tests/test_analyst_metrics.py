@@ -61,3 +61,18 @@ def test_thin_keeps_first_and_last():
 
 def test_financial_sector_flag():
     assert m.build_record(make_raw(sector="Financial Services"))["financial"] is True
+
+
+def test_missing_cash_requires_none_for_net_debt():
+    # When totalCash is missing but totalDebt and ebitda are present,
+    # net_debt_ebitda must be None (not a calculation using 0 for cash)
+    info_no_cash = {"forwardPE": 12.5, "trailingPE": 20.0, "priceToBook": 6.0,
+                    "ebitda": 30e9, "totalDebt": 169e9}  # No totalCash
+    raw = make_raw(info=info_no_cash)
+    r = m.build_record(raw)
+    assert r["net_debt_ebitda"] is None
+    assert r["cash"] is None
+    # Verify that with all three present, calculation works
+    r_full = m.build_record(make_raw())
+    assert r_full["net_debt_ebitda"] == round((169e9 - 37e9) / 30e9, 2)
+    assert r_full["cash"] == 37e9

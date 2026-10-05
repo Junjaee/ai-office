@@ -66,8 +66,8 @@ def build_record(raw: dict) -> dict:
     ath = num(raw.get("ath")) or hi52
     debt, cash, ebitda = num(info.get("totalDebt")), num(info.get("totalCash")), num(info.get("ebitda"))
     nde = None
-    if debt is not None and ebitda and ebitda > 0:
-        nde = round((debt - (cash or 0)) / ebitda, 2)
+    if debt is not None and cash is not None and ebitda and ebitda > 0:
+        nde = round((debt - cash) / ebitda, 2)
     tmean = num(info.get("targetMeanPrice"))
     tgt = None if tmean is None else {"mean": tmean, "lo": num(info.get("targetLowPrice")), "hi": num(info.get("targetHighPrice")),
                                       "n": int(num(info.get("numberOfAnalystOpinions")) or 0)}
