@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { handleStock, boardKey, tickerKey, lensKey, validTicker, applyWatch, WATCH_KEY, WATCH_MAX } from "../worker/stock.ts";
+import { handleStock, boardKey, tickerKey, lensKey, opinionKey, indexKey, lensHistKey, cleanOpinion, validTicker, applyWatch, WATCH_KEY, WATCH_MAX, OPINION_MAX } from "../worker/stock.ts";
 
 const ORIGIN = "https://ai-office.example.workers.dev";
 const NOW = Date.parse("2026-10-05T01:00:00Z");
@@ -157,4 +157,122 @@ test("없는 경로·메서드", async () => {
   const LIVE = fakeR2();
   assert.equal((await handleStock(new Request(`${ORIGIN}/api/stock/nope`), { LIVE }, deps)).status, 404);
   assert.equal((await handleStock(new Request(`${ORIGIN}/api/stock/watch`), { LIVE }, deps)).status, 405);
+});
+
+// ---- 3단계: 해석 저장·읽기, 지수·관점 기록 ----
+const OP = { price: 142.3, as_of: "2026-10-02", next_earn: "2026-12-10", verdict: "  한 줄 결론  ", good: [{ text: "좋은 점", src: "재무" }], bad: [{ text: "나쁜 점", src: "시세" }], watch: ["다음 실적"] };
+const cleaned = { ...OP, verdict: "한 줄 결론" };
+const opPost = (opinion, extra = {}, headers = {}) => post("/api/stock/opinion", { market: "us", ticker: "ORCL", opinion, ...extra }, headers);
+
+test("cleanOpinion: 정상은 정리해서 돌려주고 모르는 키는 버린다", () => {
+  assert.deepEqual(cleanOpinion(OP), cleaned);
+  assert.deepEqual(cleanOpinion({ ...OP, next_earn: null, watch: [], id: "x", rating: "buy", good: [{ text: " a ", src: "뉴스", extra: 1 }] }), { ...cleaned, next_earn: null, watch: [], good: [{ text: "a", src: "뉴스" }] });
+  assert.equal(OPINION_MAX, 20);
+  assert.equal(opinionKey("us", "ORCL"), "stock/opinions/us/ORCL.json");
+  assert.equal(indexKey("kr"), "stock/kr/index.json");
+  assert.equal(lensHistKey("us"), "stock/us/lens-history.json");
+});
+
+test("cleanOpinion: 어긋나면 null", () => {
+  const pts = (n, text = "t", src = "재무") => Array.from({ length: n }, () => ({ text, src }));
+  const bads = [
+    null, [], "x", { ...OP, verdict: undefined }, { ...OP, verdict: "   " }, { ...OP, verdict: "가".repeat(301) }, { ...OP, verdict: 5 },
+    { ...OP, good: "x" }, { ...OP, good: [] }, { ...OP, good: pts(7) }, { ...OP, bad: [] }, { ...OP, bad: pts(7) },
+    { ...OP, good: pts(1, "t", "소문") }, { ...OP, good: pts(1, "t", null) }, { ...OP, good: pts(1, "가".repeat(301)) }, { ...OP, good: pts(1, "  ") }, { ...OP, good: ["x"] },
+    { ...OP, price: 0 }, { ...OP, price: -1 }, { ...OP, price: "142" }, { ...OP, price: NaN }, { ...OP, price: Infinity },
+    { ...OP, as_of: "2026-10-2" }, { ...OP, as_of: "2026-02-30" }, { ...OP, as_of: undefined },
+    { ...OP, next_earn: undefined }, { ...OP, next_earn: "내년" }, { ...OP, next_earn: "2026-13-01" },
+    { ...OP, watch: undefined }, { ...OP, watch: Array(7).fill("w") }, { ...OP, watch: ["가".repeat(201)] }, { ...OP, watch: [""] }, { ...OP, watch: [3] },
+  ];
+  bads.forEach((b, i) => assert.equal(cleanOpinion(b), null, `bad #${i}`));
+  assert.ok(cleanOpinion({ ...OP, verdict: "가".repeat(300), good: pts(6, "가".repeat(300)), watch: Array(6).fill("가".repeat(200)) }));
+});
+
+test("해석 저장: id 는 서버 시각, 최근 것이 앞, 20개까지, 같은 밀리초도 id 가 겹치지 않는다", async () => {
+  const LIVE = fakeR2();
+  const r = await handleStock(opPost(OP), { LIVE }, deps);
+  assert.equal(r.status, 200);
+  const first = await body(r);
+  assert.deepEqual(first, { ok: true, id: new Date(NOW).toISOString() });
+  assert.deepEqual(JSON.parse(LIVE.store.get("stock/opinions/us/ORCL.json")).items, [{ id: first.id, ...cleaned }]);
+  const second = await body(await handleStock(opPost({ ...OP, verdict: "둘째" }), { LIVE }, deps));
+  assert.ok(second.id > first.id);
+  const items = JSON.parse(LIVE.store.get("stock/opinions/us/ORCL.json")).items;
+  assert.deepEqual(items.map((i) => i.verdict), ["둘째", "한 줄 결론"]);
+  for (let i = 0; i < 25; i++) await handleStock(opPost({ ...OP, verdict: `v${i}` }), { LIVE }, deps);
+  const all = JSON.parse(LIVE.store.get("stock/opinions/us/ORCL.json")).items;
+  assert.equal(all.length, OPINION_MAX);
+  assert.equal(all[0].verdict, "v24");
+  assert.equal(new Set(all.map((i) => i.id)).size, OPINION_MAX);
+});
+
+test("해석 저장: 잘못된 기호·시장·본문 400, 토큰, 큰 본문 413, 없는 메서드 405", async () => {
+  const LIVE = fakeR2();
+  for (const b of [{ ticker: "orcl" }, { ticker: "../x" }, { market: "jp" }, { market: "constructor" }, { ticker: 5 }, { opinion: { ...OP, verdict: "" } }, { opinion: null }]) {
+    const req = post("/api/stock/opinion", { market: "us", ticker: "ORCL", opinion: OP, ...b });
+    assert.equal((await handleStock(req, { LIVE }, deps)).status, 400, JSON.stringify(b));
+  }
+  assert.equal((await handleStock(post("/api/stock/opinion", "not json"), { LIVE }, deps)).status, 400);
+  assert.equal(LIVE.store.size, 0);
+  const env = { LIVE, LIVE_TOKEN: "secret-token-1234" };
+  assert.equal((await handleStock(opPost(OP), env, deps)).status, 401);
+  assert.equal((await handleStock(opPost(OP, {}, { "X-Live-Token": "secret-token-1234" }), env, deps)).status, 200);
+  assert.equal((await handleStock(opPost(OP, { pad: "x".repeat(20_000) }), { LIVE }, deps)).status, 413);
+  assert.equal((await handleStock(new Request(`${ORIGIN}/api/stock/opinion`), { LIVE }, deps)).status, 405);
+  // 스크립트가 부르는 길이라 다른 출처 검사는 하지 않는다
+  assert.equal((await handleStock(opPost(OP, {}, { Origin: "https://evil.example" }), { LIVE }, deps)).status, 200);
+});
+
+test("해석 저장: 읽기·해석에 실패하면 503 이고 쓰지 않는다", async () => {
+  const put = [];
+  const throwing = { async get() { throw new Error("r2 down"); }, async put(k) { put.push(k); } };
+  const broken = { async get() { return { text: async () => "{not json" }; }, async put(k) { put.push(k); } };
+  const oddShape = { async get() { return { text: async () => '{"items":"x"}' }; }, async put(k) { put.push(k); } };
+  for (const LIVE of [throwing, broken, oddShape]) {
+    const r = await handleStock(opPost(OP), { LIVE }, deps);
+    assert.equal(r.status, 503);
+    assert.deepEqual(await body(r), { error: "stock_unavailable" });
+  }
+  assert.deepEqual(put, []);
+});
+
+test("종목 응답의 opinions: 없으면 [], 저장된 것도 다시 걸러서", async () => {
+  const LIVE = fakeR2();
+  assert.deepEqual((await body(await handleStock(get("market=us&ticker=ORCL"), { LIVE }, deps))).opinions, []);
+  LIVE.store.set("stock/opinions/us/ORCL.json", JSON.stringify({ items: [
+    { id: "2026-10-05T01:00:00.000Z", ...cleaned, rating: "buy" },
+    { id: "2026-10-04T01:00:00.000Z", ...cleaned, verdict: "" },
+    { ...cleaned },
+    { id: 7, ...cleaned },
+    "junk",
+  ] }));
+  assert.deepEqual((await body(await handleStock(get("market=us&ticker=ORCL"), { LIVE }, deps))).opinions, [{ id: "2026-10-05T01:00:00.000Z", ...cleaned }]);
+  LIVE.store.set("stock/opinions/us/ORCL.json", "{broken");
+  assert.deepEqual((await body(await handleStock(get("market=us&ticker=ORCL"), { LIVE }, deps))).opinions, []);
+});
+
+test("ingest kind=index·lenshist 와 읽기 view", async () => {
+  const LIVE = fakeR2();
+  assert.deepEqual(await body(await handleStock(get("market=us&view=index"), { LIVE }, deps)), { market: "us", index: null });
+  assert.deepEqual(await body(await handleStock(get("market=us&view=lenshist"), { LIVE }, deps)), { market: "us", history: null });
+  const index = { t: "SPY", closes: [["2025-10-06", 571.2]] };
+  const history = { days: { "2026-10-05": { value: ["AAA"] } } };
+  assert.equal((await handleStock(post("/api/stock/ingest", { market: "us", kind: "index", doc: index }), { LIVE }, deps)).status, 200);
+  assert.equal((await handleStock(post("/api/stock/ingest", { market: "us", kind: "lenshist", doc: history }), { LIVE }, deps)).status, 200);
+  assert.ok(LIVE.store.has("stock/us/index.json") && LIVE.store.has("stock/us/lens-history.json"));
+  assert.deepEqual(await body(await handleStock(get("market=us&view=index"), { LIVE }, deps)), { market: "us", index });
+  assert.deepEqual(await body(await handleStock(get("market=us&view=lenshist"), { LIVE }, deps)), { market: "us", history });
+  for (const kind of ["index", "lenshist"]) {
+    assert.equal((await handleStock(post("/api/stock/ingest", { market: "us", kind, doc: [1] }), { LIVE }, deps)).status, 400);
+    assert.equal((await handleStock(post("/api/stock/ingest", { market: "us", kind, doc: "x" }), { LIVE }, deps)).status, 400);
+    assert.equal((await handleStock(post("/api/stock/ingest", { market: "us", kind, doc: { pad: "x".repeat(2_000_000) } }), { LIVE }, deps)).status, 413);
+  }
+});
+
+test("view=lenshist: 읽기 실패는 503", async () => {
+  for (const text of [null, "{not json"]) {
+    const LIVE = { async get() { if (text === null) throw new Error("down"); return { text: async () => text }; }, async put() {} };
+    const r = await handleStock(get("market=us&view=lenshist"), { LIVE }, deps);
+    assert.equal(r.status, 503);
+  }
 });
