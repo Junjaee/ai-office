@@ -34,7 +34,7 @@ export function mockDoc(ticker: string): TickerDoc {
     checks: [
       { key: "가치", state: "pass", text: "예상 PER 12.9배 · 업종 중앙값 26.8배보다 낮음" }, { key: "매출 성장", state: "pass", text: "최근 분기 매출 +29.6% (전년 대비)" },
       { key: "이익 방향", state: "pass", text: "최근 분기 이익 +54.5% (전년 대비)" }, { key: "수익성", state: "pass", text: "영업이익률 35.6% · 업종 중앙값 31.0% 이상" },
-      { key: "빚", state: "warn", text: "순부채가 연간 영업이익의 4.4배" }, { key: "현금흐름", state: "care", text: "영업으로는 벌지만 투자로 −459억 달러" },
+      { key: "빚", state: "warn", text: "순부채가 연간 영업이익의 4.4배" }, { key: "현금흐름", state: "care", text: "쓰고 남은 현금 −459억 달러 (영업현금은 흑자)" },
       { key: "추세", state: "warn", text: "1년 최고가 대비 -54.5%" },
     ],
     peers: [{ t: "CRM", name: "Salesforce, Inc.", fpe: 19.8 }, { t: "IBM", name: "International Business Machines", fpe: 22.4 }, { t: "ADBE", name: "Adobe Inc.", fpe: 16.1 }],
