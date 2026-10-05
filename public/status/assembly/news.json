@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 12초",
+  "summary": "신규 16건, 실패 0건, 12초",
   "counts": {
-    "new": 12,
+    "new": 16,
     "failed": 0,
-    "total": 3142
+    "total": 3158
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 12초",
-    "[신규] ‘보수 대권’ 국힘지지층 한동훈 34.3% 오세훈 20.8% 장동혁 20.6% [여론조사꽃] — v.daum.net",
-    "[신규] [AG 결산①] 金 40개 목표 달성 실패...효자 종목 주춤, 새 금맥 발견 — 뉴스핌",
-    "[신규] 펜싱 2관왕 오상욱 ‘최고의 별’ — v.daum.net",
-    "[신규] [차기대권 선호도] 범야권 한동훈 18.7%·장동혁 오세훈 12.3%…ARS 오차범위 밖 (여론조사꽃) — TopStarNews"
+    "신규 16건, 실패 0건, 12초",
+    "[신규] 김문수 의원, 고교학점제 소규모학교에 불리...과목개설 학교 간·지역 간 편차 심각 — 시민행정신문",
+    "[신규] 여러 테마 사이에서 살펴보는 아레나 토토 사이트 분위기 — Calgary Roughnecks",
+    "[신규] 강승규 의원, 보수 외연 확장론 주장 — 금강일보",
+    "[신규] 문금주 의원 “노후어선 사고 3년 새 85.3% 증가...기관손상 2배 이상” — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37270261497,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37270261497",
-  "request_id": "cron-202610050600",
+  "run_id": 37287161741,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37287161741",
+  "request_id": "cron-202610050900",
   "trigger": "schedule",
-  "started_at": "2026-10-05T15:00:31+09:00",
+  "started_at": "2026-10-05T18:00:40+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 68건"
+      "summary": "검색어 5개에서 61건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 53건 (신규 12건) · v.daum.net 6건, 뉴스1 4건, Calgary Roughnecks 3건"
+      "summary": "오늘 69건 (신규 16건) · v.daum.net 6건, Calgary Roughnecks 4건, 뉴스1 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-05T15:00:44+09:00"
+  "updated_at": "2026-10-05T18:00:53+09:00"
 }
