@@ -1,41 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 22건, 실패 0건, 11초",
-  "counts": {
-    "new": 22,
-    "failed": 0,
-    "total": 3180
-  },
+  "summary": "뉴스 목록을 받아오지 못했어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 22건, 실패 0건, 11초",
-    "[신규] 안태준 의원, HUG 무담보채권 1조원 넘었는데...채권추심 맡기고도 금융재산 압류 ‘0’ — citizenadmnews.co.kr",
-    "[신규] [나고야 결산⑦] 테크볼-쿠라시-컴파운드 양궁에서 나온 값진 메달… 가능성 키우는 건 ‘꾸준한’ 지원 — 스포츠월드",
-    "[신규] 게임 선택 전 지원 환경부터 확인하는 옐로우스타게임즈 — Calgary Roughnecks",
-    "[신규] 박용갑 의원 , 공공어린이재활병원 운영비 국비 지원 의무화' 장애인 건강권 및 의료접근성 보장에 관한 법률 ' 대표발의 — citizenadmnews.co.kr"
+    "뉴스 목록을 받아오지 못했어요",
+    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37306616147,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37306616147",
-  "request_id": "cron-202610051200",
+  "run_id": 37329302140,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37329302140",
+  "request_id": "cron-202610051500",
   "trigger": "schedule",
-  "started_at": "2026-10-05T21:01:12+09:00",
-  "duration_sec": 11,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 68건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 91건 (신규 22건) · citizenadmnews.co.kr 17건, Calgary Roughnecks 6건, v.daum.net 6건"
-    }
-  ],
+  "started_at": "2026-10-06T00:00:49+09:00",
+  "duration_sec": 129,
   "id": "news",
-  "updated_at": "2026-10-05T21:01:24+09:00"
+  "updated_at": "2026-10-06T00:02:59+09:00"
 }
