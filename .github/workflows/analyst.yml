@@ -1,0 +1,54 @@
+name: 주식 분석
+
+# 예약은 Cloudflare Worker 가 맡는다 (worker/schedule.ts, 1분마다 확인 → workflow_dispatch).
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: "화면에서 누른 요청 id (비워도 됨)"
+        type: string
+        default: ""
+      market:
+        description: "시장 (us)"
+        type: string
+        default: "us"
+
+# runs API 의 display_title 로 "내가 누른 실행"을 결정적으로 매칭한다 — 바꾸지 말 것
+run-name: ${{ format('analyst · {0}', inputs.request_id) }}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: analyst
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 의존성 설치
+        run: |
+          python --version
+          python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
+
+      - name: git 사용자 설정 (상태 파일 커밋용)
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+
+      - name: 실행
+        env:
+          # 선택: Worker 에 LIVE_TOKEN 을 설정했다면 같은 값을 GitHub Secrets 에도 넣는다. 없으면 빈 값으로 보낸다.
+          LIVE_TOKEN: ${{ secrets.LIVE_TOKEN }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/analyst/run_analyst.py --config automations/analyst/config.actions.yaml --market "${{ inputs.market }}"

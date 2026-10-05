@@ -30,6 +30,7 @@ export const SCHEDULES: ScheduledJob[] = [
   { workflow: "hscity.yml", cron: "0 0 * * *", note: "화성시 — KST 09:00 (사용자 결정 2026-09-17)" },
   { workflow: "weekend.yml", cron: "0 8 * * 4", note: "주말 일정 — 목 KST 17:00" },
   { workflow: "stock.yml", cron: "30 21 * * 1-5", note: "주식 신호 — 화~토 KST 06:30 (미국 장 마감 뒤, 사용자 결정 2026-09-22)" },
+  { workflow: "analyst.yml", cron: "0 22 * * 1-5", inputs: { market: "us" }, note: "주식 분석(미국) — 화~토 KST 07:00 (미국 장 마감 뒤, 사용자 결정 2026-10-05)" },
   // 인스타(후보 뽑기·게시 확인)는 예약에서 뺐다 — 사이트 ▶ 시작으로만 돈다 (사용자 결정 2026-09-17)
 ];
 

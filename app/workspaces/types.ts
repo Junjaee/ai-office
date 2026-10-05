@@ -55,6 +55,8 @@ export type AutomationDef = {
   local?: true;
   /** 실시간 화면: 카드에 "실시간 보기" 단추가 붙고 `/<ws>/live/<id>` 가 열린다(자료는 `/api/live`) */
   live?: { kind: "orderbook"; title?: string };
+  /** 따로 볼 화면이 있으면 카드에 그 화면으로 가는 단추를 붙인다 (예: 주식 분석 → /home/stock) */
+  page?: { href: string; label: string };
   /** 1개 이상, 부서 합계 6개 이하 */
   tasks: TaskDef[];
 };
