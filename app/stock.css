@@ -92,12 +92,9 @@
 .stk-why li { display: flex; gap: 8px; }
 .stk-why li > span:first-child { flex: none; width: 64px; color: var(--d-faint); font-weight: 600; }
 .stk-why li > span:last-child { min-width: 0; overflow-wrap: anywhere; }
-.stk-kv { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.stk-kv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; }
 .stk-kv dt { color: var(--d-faint); font-size: 12px; }
 .stk-kv dd { margin: 1px 0 0; font-size: 13.5px; font-weight: 600; }
 .stk-card-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 .stk-more { display: flex; justify-content: center; }
 .stk-subhead { margin: 14px 0 6px; font-size: 14px; font-weight: 700; }
-@media (max-width: 420px) {
-  .stk-kv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}

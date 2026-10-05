@@ -184,13 +184,14 @@ def lenses(rec: dict, checks: list[dict], events: list[dict], rules: dict) -> li
     return out
 
 
-def lens_info(rules: dict) -> dict:
-    """관점 이름과 화면에 적을 기준 한 줄 — 문턱값은 rules.yaml 에서 읽어 문장에 끼운다."""
+def lens_info(rules: dict, filings_ok: bool = True) -> dict:
+    """관점 이름과 화면에 적을 기준 한 줄 — 문턱값은 rules.yaml 에서 읽어 문장에 끼운다. 공시를 못 받은 날은 사건 기준에 그렇게 적는다."""
     L = rules["lenses"]
     rule = {
         "value": "점검표의 가치·빚·현금흐름이 모두 통과",
         "growth": f"최근 분기 매출이 전년보다 {L['growth']['rev_at']}% 이상 늘고 이익도 늘어남",
-        "event": f"최근 {L['event']['days']}일 안에 주요 공시가 있었거나, 하루 ±{L['event']['move_pct']}% 이상 움직이면서 거래대금이 평소의 {L['event']['dv1_at']}배 이상",
+        "event": f"최근 {L['event']['days']}일 안에 주요 공시가 있었거나, 기준일 하루에 ±{L['event']['move_pct']}% 이상 움직이면서 거래대금이 평소의 {L['event']['dv1_at']}배 이상"
+                 + ("" if filings_ok else " (오늘은 공시를 확인하지 못해 가격 조건만 봤습니다)"),
         "flow": f"최근 5일 평균 거래대금이 60일 평균의 {L['flow']['dv_at']}배 이상이고 종가가 20일 평균 위",
     }
     return {k: {"label": LENS_LABEL[k], "rule": rule[k]} for k in LENS_ORDER}

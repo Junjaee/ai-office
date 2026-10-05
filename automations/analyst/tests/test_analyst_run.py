@@ -190,10 +190,24 @@ def test_lens_log_and_candidates_cover_fresh_reference_universe_only(tmp_path):
     site = FakeSite(["ZZZ"])                             # ZZZ 는 관심만
     out = mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch, site=site, filings_for=lambda t, since: [{"form": "8-K", "date": AS_OF, "items": "2.02"}])
     by = {r["t"]: [x["id"] for x in r["lenses"]] for r in site.docs["board"]["rows"]}
-    assert by["ZZZ"] == ["event"] and by["BBB"] == ["event"] and by["AAA"] == ["event"]   # 판에는 모두 있다
+    assert by == {"AAA": ["event"], "BBB": [], "CCC": ["event"], "ZZZ": []}            # 관점은 기준 묶음의 그날 자료만
+    assert site.docs["ticker:ZZZ"]["lenses"] == [] and site.docs["ticker:ZZZ"]["events"]   # 공시는 남는다
     log = site.docs[f"lens:{AS_OF}"]
-    assert sorted(h["t"] for h in log["hits"]["event"]) == ["AAA", "CCC"]              # 기록에는 신선한 기준 묶음만
+    assert sorted(h["t"] for h in log["hits"]["event"]) == ["AAA", "CCC"]
     assert out["counts"]["candidates"] == 2 and "후보 2종목" in out["tasks"]["discover"][1]
+
+
+def test_watch_only_later_date_does_not_move_as_of_and_universe_is_on_board(tmp_path):
+    def fetch(t):
+        raw = fetch_info({"ZZZ": {"revenueGrowth": 0.30, "earningsGrowth": 0.10}})(t)   # ZZZ 는 기준 묶음이면 실적 개선에 걸릴 종목
+        if t == "ZZZ":
+            raw["closes"][-1][0] = "2099-01-01"
+        return raw
+    site = FakeSite(["ZZZ"])
+    mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch, site=site)
+    board = site.docs["board"]
+    assert board["as_of"] == AS_OF and board["universe"] == 3
+    assert next(r for r in board["rows"] if r["t"] == "ZZZ")["lenses"] == []
 
 
 def test_filings_failure_is_counted_not_fatal_and_never_named(tmp_path, capsys):
@@ -210,18 +224,22 @@ def test_filings_failure_is_counted_not_fatal_and_never_named(tmp_path, capsys):
     assert site.docs["ticker:AAA"]["events"] == []
 
 
-def test_filings_stop_asking_after_five_straight_failures(tmp_path, capsys):
+def test_filings_stop_asking_after_ten_straight_failures(tmp_path, capsys):
     asked = []
 
     def filings_for(t, since):
         asked.append(t)
+        if t == "T00":
+            return []
         raise RuntimeError("막힘")
-    mod.do_work(cfg(tmp_path, "\n".join(f"T{i:02d}" for i in range(12))), args(), print, fetch=fetch_info({}), site=FakeSite([]), filings_for=filings_for)
+    site = FakeSite([])
+    mod.do_work(cfg(tmp_path, "\n".join(f"T{i:02d}" for i in range(20))), args(), print, fetch=fetch_info({}), site=site, filings_for=filings_for)
     text = capsys.readouterr().out
-    assert len(asked) == 5 and text.count("공시를 받지 못해") == 1
+    assert len(asked) == 11 and text.count("공시를 받지 못해") == 1      # 성공 1번 뒤 연달아 10번 실패
+    assert site.docs["board"]["filings_ok"] is False
 
 
-def test_filings_breaker_does_not_trip_when_some_succeed(tmp_path, capsys):
+def test_filings_breaker_counts_consecutive_failures_only(tmp_path, capsys):
     asked = []
 
     def filings_for(t, since):
@@ -229,9 +247,40 @@ def test_filings_breaker_does_not_trip_when_some_succeed(tmp_path, capsys):
         if t != "T00":
             raise RuntimeError("막힘")
         return []
-    mod.do_work(cfg(tmp_path, "\n".join(f"T{i:02d}" for i in range(7))), args(), print, fetch=fetch_info({}), site=FakeSite([]), filings_for=filings_for)
+    site = FakeSite([])
+    mod.do_work(cfg(tmp_path, "\n".join(f"T{i:02d}" for i in range(7))), args(), print, fetch=fetch_info({}), site=site, filings_for=filings_for)
     text = capsys.readouterr().out
     assert len(asked) == 7 and "공시를 받지 못해 건너뛴 종목 6건" in text
+    assert site.docs["board"]["filings_ok"] is False
+
+
+def test_success_resets_the_failure_streak(tmp_path):
+    asked = []
+
+    def filings_for(t, since):
+        asked.append(t)
+        if int(t[1:]) % 10 == 9:       # 9번째마다 성공 — 9번 실패 뒤 성공이라 끊기지 않는다
+            return []
+        raise RuntimeError("막힘")
+    mod.do_work(cfg(tmp_path, "\n".join(f"T{i:02d}" for i in range(30))), args(), lambda m: None, fetch=fetch_info({}), site=FakeSite([]), filings_for=filings_for)
+    assert len(asked) == 30
+
+
+def test_filings_ok_only_when_configured_and_complete(tmp_path):
+    site = FakeSite([])
+    mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_info({}), site=site, filings_for=lambda t, since: [])
+    board = site.docs["board"]
+    assert board["filings_ok"] is True and "확인하지 못해" not in board["lens_info"]["event"]["rule"]
+    site = FakeSite([])
+    mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_info({}), site=site)   # SEC_USER_AGENT 없음
+    board = site.docs["board"]
+    assert board["filings_ok"] is False and board["lens_info"]["event"]["rule"].endswith("(오늘은 공시를 확인하지 못해 가격 조건만 봤습니다)")
+
+
+def test_lens_counts_are_progressed_for_dry_run(tmp_path):
+    lines = []
+    mod.do_work(cfg(tmp_path), args(dry=True), lines.append, fetch=fetch_info({}), site=FakeSite([]))
+    assert any(l.startswith("후보 ") and "싸고 탄탄" in l and "AAA" not in l for l in lines)
 
 
 def test_filings_loop_stops_when_time_budget_is_spent(tmp_path, capsys):

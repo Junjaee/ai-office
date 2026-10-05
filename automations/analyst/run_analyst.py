@@ -103,7 +103,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     # 업종 중앙값·비교 회사는 기준 묶음만으로 — 관심 목록이 바뀌어도 기준이 흔들리지 않게
     base = [r for r in records if r["t"] in uni]
     med = medians(base, rules.get("sector_min", 5))
-    as_of = max(r["as_of"] for r in records)
+    as_of = max(r["as_of"] for r in (base or records))   # 기준일은 기준 묶음에서만 — 관심 종목의 더 늦은 날짜가 판 날짜를 끌어가지 않게
     # 공시(8-K) — 받지 못해도 계속한다(사건 관점은 가격 조건만 남는다). 실패 내용엔 회사·종목이 들어 있어 건수만 센다
     if filings_for is None:
         ua = os.environ.get("SEC_USER_AGENT", "").strip()
@@ -114,25 +114,30 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     ev_days = int(rules["lenses"]["event"]["days"])
     since = (_date.fromisoformat(as_of) - timedelta(days=ev_days)).isoformat()
     events: dict[str, list] = {}
+    filings_ok = False   # 설정돼 있고 끝까지 하나도 빠짐없이 받았을 때만 참 — 화면이 "공시를 확인했다"고 말해도 되는지
     if filings_for:
         progress("공시 확인")
-        got = lost = 0
+        lost = streak = 0
+        stopped = False
         budget, t0 = float(cfg.get("filings_budget_sec", 480)), clock()
         for i, r in enumerate(records):
             if clock() - t0 > budget:   # 공시 서버가 느려 실행이 끝없이 늘어지지 않게
                 progress(f"공시를 받지 못해 남은 {len(records) - i}종목은 가격 조건만 봅니다 (시간 초과)")
+                stopped = True
                 break
             try:
                 events[r["t"]] = classify(filings_for(r["t"], since), as_of, ev_days)
-                got += 1
+                streak = 0
             except Exception:  # noqa: BLE001 — 종목 이름·오류 내용은 로그에 남기지 않는다
                 lost += 1
-                if lost >= 5 and not got:   # 처음부터 계속 막히면 나머지는 묻지 않는다
+                streak += 1
+                if streak >= 10:   # 연달아 막히면 나머지는 묻지 않는다(중간에 한 번이라도 되면 다시 센다)
                     progress("공시를 받지 못해 가격 조건만으로 사건을 봅니다")
+                    stopped = True
                     break
-        else:
-            if lost:
-                progress(f"공시를 받지 못해 건너뛴 종목 {lost}건")
+        if lost and not stopped:
+            progress(f"공시를 받지 못해 건너뛴 종목 {lost}건")
+        filings_ok = not lost and not stopped
 
     rows, docs = [], []
     hits = {k: [] for k in LENS_ORDER}
@@ -140,8 +145,9 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     for r in records:
         checks = run_checks(r, med, rules)
         ev = events.get(r["t"], [])
-        lens = lenses(r, checks, ev, rules)
-        if r["t"] in uni and r["as_of"] == as_of:   # 기록·후보는 기준 묶음의 그날 자료만 — 관심 종목·오래된 자료는 판에만 보인다
+        lens = []
+        if r["t"] in uni and r["as_of"] == as_of:   # 관점은 기준 묶음의 그날 자료만 — 관심 종목·오래된 자료는 점검표와 공시만 보인다
+            lens = lenses(r, checks, ev, rules)
             candidates += bool(lens)
             for x in lens:
                 hits[x["id"]].append({"t": r["t"], "close": r["price"]})
@@ -150,7 +156,9 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
                      "peers": peers(r, base), "ref": ref_for(r, med, rules.get("sector_min", 5)), "lenses": lens, "events": ev})
     board = {"market": market, "as_of": as_of, "generated_at": datetime.now(KST).isoformat(timespec="seconds"), "rows": rows, "medians": med,
              "missing": failed_watch,  # missing: 관심 종목 중 받지 못한 것 — 사이트 저장 공간에만 간다(로그·상태 파일에는 건수만)
-             "lens_info": lens_info(rules)}
+             "universe": len(uni), "filings_ok": filings_ok, "lens_info": lens_info(rules, filings_ok)}
+    discover = f"후보 {candidates}종목 · " + " ".join(f"{LENS_LABEL[k]} {len(hits[k])}" for k in LENS_ORDER)
+    progress(discover)   # 건수만 — 시험 실행에서도 보이게
 
     # 관점 기록(§5.3) — 걸린 종목과 그날 종가, 견줄 지수 종가. 채점은 나중 단계에서 이 기록으로 한다
     index = None
@@ -177,7 +185,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
                    "candidates": candidates},
         "lines": [f"기준일 {as_of}", f"경고가 하나라도 있는 종목 {n_warn}개", f"관점에 걸린 종목 {candidates}개"],
         "tasks": {"collect": (True, f"{len(records)}종목 수집, 실패 {failed}건"), "check": (True, f"점검표 {len(rows)}종목, 관심 {len(watch)}종목"),
-                  "discover": (True, f"후보 {candidates}종목 · " + " ".join(f"{LENS_LABEL[k]} {len(hits[k])}" for k in LENS_ORDER))},
+                  "discover": (True, discover)},
     }
 
 

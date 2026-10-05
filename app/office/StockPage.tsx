@@ -359,7 +359,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
         </div>
 
         <footer className="dash-foot">
-          출처: 야후 파이낸스(시세·재무·전망) · 기준일 {monthDay(doc.as_of)} · 역대 최고가 {money(rec.ath)}({rec.ath_date}) 대비 {pctText(rec.ath_pct, 0)}. 투자 권유가 아니며, 판단은 직접 하셔야 합니다.
+          출처: 야후 파이낸스(시세·재무·전망){doc.events.length > 0 ? " · 공시: 미국 증권거래위원회(EDGAR)" : ""} · 기준일 {monthDay(doc.as_of)} · 역대 최고가 {money(rec.ath)}({rec.ath_date}) 대비 {pctText(rec.ath_pct, 0)}. 투자 권유가 아니며, 판단은 직접 하셔야 합니다.
         </footer>
       </div>
     </main>

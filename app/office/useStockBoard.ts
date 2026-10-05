@@ -7,7 +7,7 @@ import { mockBoard } from "../stock-mock";
 export type ApiBoard = { market: string; board: Board | null; watch: string[]; checkedAt?: string; lensDays: number };
 const MARKET = "us";
 const tickers = (v: unknown): string[] => (Array.isArray(v) ? v.filter((t): t is string => typeof t === "string") : []);
-const days = (v: unknown): number => (typeof v === "number" && Number.isFinite(v) && v > 0 ? v : 0);
+const days = (v: unknown): number => (typeof v === "number" && Number.isFinite(v) && v > 0 ? Math.floor(v) : 0);
 
 /** okNote: 서버에서 담기/빼기가 성공했을 때 보여 줄 문구(화면마다 다르다). 모듈 바깥에 둔 고정 함수를 넘길 것 */
 export function useStockBoard(okNote: (t: string, action: "add" | "remove") => string) {

@@ -156,6 +156,21 @@ test("discoverView: 전체는 겹친 관점이 많은 순, 단추마다 걸린 �
   assert.deepEqual(discoverView(null, "all").cards, []);
 });
 
+test("normalizeBoard: 같은 관점이 여러 번 와도 첫 번째만", () => {
+  const b = normalizeBoard({ rows: [{ t: "A", price: 1, lenses: [{ id: "flow", why: "첫째" }, { id: "value", why: "v" }, { id: "flow", why: "둘째" }] }] });
+  assert.deepEqual(b.rows[0].lenses, [{ id: "flow", why: "첫째" }, { id: "value", why: "v" }]);
+  assert.deepEqual(normalizeDoc({ rec: { t: "A", price: 1 }, lenses: [{ id: "event", why: "a" }, { id: "event", why: "b" }] }).lenses, [{ id: "event", why: "a" }]);
+});
+
+test("Board.universe: 숫자면 그대로, 아니면 null — 발굴 판은 없을 때 줄 수로 센다", () => {
+  assert.equal(normalizeBoard({ rows: [], universe: 480 }).universe, 480);
+  assert.equal(normalizeBoard({ rows: [], universe: "x" }).universe, null);
+  assert.equal(normalizeBoard({ rows: [] }).universe, null);
+  const withUni = normalizeBoard({ rows: [lrow("A", ["flow"]), lrow("B", [])], universe: 480 });
+  assert.equal(discoverView(withUni, "all").universe, 480);
+  assert.equal(discoverView(normalizeBoard({ rows: [lrow("A", []), lrow("B", [])] }), "all").universe, 2);
+});
+
 test("normalizeDoc: 관점과 공시 목록", () => {
   const d = normalizeDoc({ rec: { t: "A", price: 1 }, lenses: [{ id: "event", why: "w" }, { id: "nope", why: "" }], events: [{ date: "2026-09-30", kind: "실적 발표" }, { date: 5, kind: "x" }, null] });
   assert.deepEqual(d.lenses, [{ id: "event", why: "w" }]);

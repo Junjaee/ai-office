@@ -15,7 +15,7 @@ const row = (t: string, name: string, price: number, chg: number, from: number, 
 export function mockBoard(): { board: Board; watch: string[] } {
   return {
     watch: ["NVDA", "MSFT", "ORCL", "TSLA", "NEW1"],
-    board: { market: "us", as_of: "2026-10-02", rows: [
+    board: { market: "us", as_of: "2026-10-02", universe: 8, rows: [
       row("NVDA", "NVIDIA Corporation", 233.95, 1.3, 189.0, -0.8, -0.8, 14.9, 7, 0, 0, "좋음: 가치·매출 성장·이익 방향·수익성·빚·현금흐름·추세", "2026-11-18", [], ["value", "growth", "flow"], 2.1, 62.5, 0.2),
       row("MSFT", "Microsoft Corporation", 517.53, 0.9, 519.0, -4.5, -4.5, 21.9, 6, 1, 0, "좋음: 매출 성장·이익 방향·수익성·빚·현금흐름·추세", "2026-10-29", [], ["value", "event"], 1.2, 16.0, 0.1),
       row("ORCL", "Oracle Corporation", 142.3, 3.1, 289.0, -56.7, -54.5, 12.9, 4, 0, 3, "좋음: 가치·매출 성장·이익 방향·수익성 / 경고: 빚·현금흐름·추세", "2026-12-11", ["빚", "현금흐름", "추세"], ["growth"], 0.9, 29.6, 4.4),

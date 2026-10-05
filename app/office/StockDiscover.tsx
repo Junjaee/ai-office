@@ -25,7 +25,7 @@ export default function StockDiscover({ ws }: { ws: string }) {
   const label = (id: LensId) => board?.lens_info[id].label ?? LENS_LABEL[id];
   const cards = view.cards.slice(0, shown);
   const rest = view.cards.length - cards.length;
-  const noData = !board || board.rows.length === 0;
+  const noData = !board || board.rows.length === 0 || LENS_ORDER.every((id) => !board.lens_info[id].rule); // 1단계 판(관점 자료 없음)도 "아직 없음"
 
   const pick = (id: LensId | "all") => {
     setLens(id);
@@ -60,7 +60,7 @@ export default function StockDiscover({ ws }: { ws: string }) {
               </button>
             ))}
           </div>
-          {board ? (
+          {board && !noData ? (
             <p className="stk-rule">
               기준: {view.rule}
               {lens === "all" ? ` 대상 ${view.universe}종목 중 ${view.total}종목이 하나 이상에 걸렸습니다.` : ""}
@@ -81,6 +81,7 @@ export default function StockDiscover({ ws }: { ws: string }) {
             ))}
           </section>
         ) : null}
+        {cards.length && note ? <p className="auto-meta">{note}</p> : null}   {/* 위쪽 안내와 같은 글(안내 읽기는 위쪽 한 곳만) */}
         {rest > 0 ? (
           <div className="stk-more">
             <button type="button" className="btn" onClick={() => setShown((n) => n + PAGE)}>
@@ -132,11 +133,11 @@ function Card({ r, ws, mock, saved, busy, label, change }: { r: BoardRow; ws: st
         <div><dt>거래대금</dt><dd>{ratioText(r.dv_ratio)}</dd></div>
       </dl>
       <div className="stk-card-acts">
-        <button type="button" className={`btn ${saved ? "btn-primary" : "btn-accent"}`} aria-pressed={saved} disabled={busy} onClick={() => void change(r.t, saved ? "remove" : "add")}>
-          {saved ? "관심 종목에 있음" : "관심에 담기"}
+        <button type="button" className={`btn ${saved ? "btn-primary" : "btn-accent"}`} aria-label={`${r.t} ${saved ? "관심 종목에서 빼기" : "관심에 담기"}`} aria-pressed={saved} disabled={busy} onClick={() => void change(r.t, saved ? "remove" : "add")}>
+          {saved ? "관심 종목에 있음 · 빼기" : "관심에 담기"}
         </button>
         {SYMBOL.test(r.t) ? (
-          <a className="btn btn-ghost" href={`/${ws}/stock/${MARKET}/${r.t}${mock ? "?mock=1" : ""}`}>
+          <a className="btn btn-ghost" aria-label={`${r.t} 분석 보기`} href={`/${ws}/stock/${MARKET}/${r.t}${mock ? "?mock=1" : ""}`}>
             분석 보기
           </a>
         ) : null}

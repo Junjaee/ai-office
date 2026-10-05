@@ -13,7 +13,7 @@ export type BoardRow = {
   fpe: number | null; n_pass: number; n_care: number; n_warn: number; diag: string; next_earn: string | null; warn_keys: string[];
   sector: string; rev_g: number | null; nde: number | null; dv_ratio: number | null; lenses: LensHit[];
 };
-export type Board = { market: string; as_of: string; generated_at?: string; rows: BoardRow[]; missing: string[]; lens_info: Record<LensId, { label: string; rule: string }> };
+export type Board = { market: string; as_of: string; generated_at?: string; universe: number | null; rows: BoardRow[]; missing: string[]; lens_info: Record<LensId, { label: string; rule: string }> };
 export type StockRecord = {
   t: string; name: string; exchange: string; sector: string; financial: boolean; as_of: string; price: number; chg_pct: number | null;
   hi52: number; lo52: number; off_hi_pct: number | null; ath: number; ath_date: string; ath_pct: number | null; y_ret_pct: number | null;
@@ -116,7 +116,7 @@ export function discoverView(board: Board | null, lens: LensId | "all"): { tabs:
     .filter((r) => lens === "all" || r.lenses.some((x) => x.id === lens))
     .sort((a, b) => b.lenses.length - a.lenses.length || (b.dv_ratio ?? 0) - (a.dv_ratio ?? 0) || a.t.localeCompare(b.t));
   const rule = lens === "all" ? "여러 관점에 동시에 걸린 종목이 위에 옵니다." : board?.lens_info[lens].rule ?? "";
-  return { tabs, cards, rule, total: hit.length, universe: rows.length };
+  return { tabs, cards, rule, total: hit.length, universe: board?.universe ?? rows.length };
 }
 
 export function lensDaysText(n: number): string {
@@ -177,7 +177,8 @@ const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 const nums = (v: unknown): number[] => arr(v).filter((x): x is number => typeof x === "number" && Number.isFinite(x));
 
 const lensHits = (v: unknown): LensHit[] =>
-  arr(v).filter(isObj).filter((x) => (LENS_ORDER as string[]).includes(x.id as string)).map((x) => ({ id: x.id as LensId, why: str(x.why) }));
+  arr(v).filter(isObj).filter((x) => (LENS_ORDER as string[]).includes(x.id as string)).map((x) => ({ id: x.id as LensId, why: str(x.why) }))
+    .filter((x, i, all) => all.findIndex((y) => y.id === x.id) === i); // 같은 관점은 첫 번째만 — 화면의 key 가 겹치지 않게
 
 function lensInfo(v: unknown): Board["lens_info"] {
   const src = isObj(v) ? v : {};
@@ -201,7 +202,7 @@ export function normalizeBoard(input: unknown): Board | null {
       sector: str(raw.sector), rev_g: num(raw.rev_g), nde: num(raw.nde), dv_ratio: num(raw.dv_ratio), lenses: lensHits(raw.lenses),
     });
   }
-  return { market: str(input.market), as_of: str(input.as_of), ...(typeof input.generated_at === "string" ? { generated_at: input.generated_at } : {}), rows,
+  return { market: str(input.market), as_of: str(input.as_of), ...(typeof input.generated_at === "string" ? { generated_at: input.generated_at } : {}), universe: num(input.universe), rows,
     missing: arr(input.missing).filter((x): x is string => typeof x === "string"), lens_info: lensInfo(input.lens_info) };
 }
 

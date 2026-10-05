@@ -10,7 +10,7 @@ import time
 
 import requests
 
-TIMEOUT = 20
+TIMEOUT = 10
 
 
 class Edgar:

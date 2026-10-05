@@ -119,6 +119,13 @@ def test_lenses_come_in_fixed_order_and_info_covers_all():
     assert "15" in info["growth"]["rule"] and "1.5" in info["flow"]["rule"]
 
 
+def test_event_rule_text_says_reference_day_and_whether_filings_were_checked():
+    L = RULES["lenses"]["event"]
+    base = f"최근 {L['days']}일 안에 주요 공시가 있었거나, 기준일 하루에 ±{L['move_pct']}% 이상 움직이면서 거래대금이 평소의 {L['dv1_at']}배 이상"
+    assert lens_info(RULES)["event"]["rule"] == base
+    assert lens_info(RULES, filings_ok=False)["event"]["rule"] == base + " (오늘은 공시를 확인하지 못해 가격 조건만 봤습니다)"
+
+
 def test_board_row_carries_lens_fields():
     rec = {"t": "A", "name": "A Inc", "price": 1.0, "sector": "Technology", "rev_g": 12.0, "net_debt_ebitda": 0.5, "dv_ratio": 1.2}
     row = c.board_row(rec, _ck(), [{"id": "flow", "why": "x"}])
