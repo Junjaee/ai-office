@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 6건, 실패 0건, 13초",
   "counts": {
-    "new": 4,
+    "new": 6,
     "failed": 0,
-    "total": 3102
+    "total": 3108
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] 펜싱 2관왕 오상욱, 韓선수단 MVP…투혼상은 테크볼 이준석 — 동아일보",
-    "[신규] 아이치·나고야 아시안게임 마친 한국 선수단…MVP에 펜싱 오상욱 — 무예신문",
-    "[신규] 재경위 \"미래기금 재정통제 약화 가능성…추가세수 충분치 않으면 재원 감소\" — v.daum.net",
-    "[신규] 원주시, 내년도 국비 확보 총력…이광재 예결위원장 면담 — 중앙뉴스타임스"
+    "신규 6건, 실패 0건, 13초",
+    "[신규] 짧은 문장으로 풀어 쓴 재 맞고 온라인 강의 게임 원리 — calgaryroughnecks.com",
+    "[신규] \"왕사남보다 빨랐다\"…'암살자(들)' 논란 속 관객 200만 돌파 [어떻게 생각하십니까] — 한국경제",
+    "[신규] 모바일 브라우저에서 점검하는 슬롯 머신 즐기기 표시 상태 — calgaryroughnecks.com",
+    "[신규] 메가박스, 패륜 굿즈 논란 '탄흔 티켓' 전량 폐기…\"역사 비극 무게 못 헤아려\" — news1.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37234348364,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37234348364",
-  "request_id": "cron-202610042100",
+  "run_id": 37245752622,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37245752622",
+  "request_id": "cron-202610050000",
   "trigger": "schedule",
-  "started_at": "2026-10-05T06:01:27+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-05T09:00:33+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 64건"
+      "summary": "검색어 5개에서 68건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 4건) · v.daum.net 2건, ksw-news.com 1건, mydaily.co.kr 1건"
+      "summary": "오늘 19건 (신규 6건) · calgaryroughnecks.com 2건, news1.kr 2건, v.daum.net 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-05T06:01:39+09:00"
+  "updated_at": "2026-10-05T09:00:47+09:00"
 }
