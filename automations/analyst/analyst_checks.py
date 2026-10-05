@@ -142,12 +142,58 @@ def diag(checks: list[dict]) -> str:
     return " / ".join(parts) or "눈에 띄는 항목 없음"
 
 
-def board_row(rec: dict, checks: list[dict]) -> dict:
+def board_row(rec: dict, checks: list[dict], lens: list[dict] | None = None) -> dict:
     n = {s: sum(1 for c in checks if c["state"] == s) for s in ("pass", "care", "warn")}
     return {"t": rec["t"], "name": rec["name"], "price": rec["price"], "chg_pct": rec.get("chg_pct"), "spark": rec.get("spark") or [],
             "ath_pct": rec.get("ath_pct"), "off_hi_pct": rec.get("off_hi_pct"), "fpe": rec.get("fpe"),
             "n_pass": n["pass"], "n_care": n["care"], "n_warn": n["warn"], "diag": diag(checks), "next_earn": rec.get("next_earn"),
-            "warn_keys": [c["key"] for c in checks if c["state"] == "warn"]}
+            "warn_keys": [c["key"] for c in checks if c["state"] == "warn"],
+            "sector": rec.get("sector") or "", "rev_g": rec.get("rev_g"), "nde": rec.get("net_debt_ebitda"), "dv_ratio": rec.get("dv_ratio"),
+            "lenses": list(lens or [])}
+
+
+LENS_ORDER = ["value", "growth", "event", "flow"]
+LENS_LABEL = {"value": "싸고 탄탄", "growth": "실적 개선", "event": "사건", "flow": "돈 몰림"}
+
+
+def _md(iso: str) -> str:
+    _, m, d = iso.split("-")
+    return f"{int(m)}월 {int(d)}일"
+
+
+def lenses(rec: dict, checks: list[dict], events: list[dict], rules: dict) -> list[dict]:
+    """발굴 네 관점 중 이 종목이 걸린 것과 이유 한 줄(설계서 §5.2). LENS_ORDER 순."""
+    L = rules["lenses"]
+    st = {c["key"]: c for c in checks}
+    out: list[dict] = []
+    if all((st.get(k) or {}).get("state") == "pass" for k in ("가치", "빚", "현금흐름")):
+        out.append({"id": "value", "why": f"{st['가치']['text']} · 빚·현금흐름 통과"})
+    g, e = rec.get("rev_g"), rec.get("eps_g")
+    if g is not None and e is not None and g >= L["growth"]["rev_at"] and e > 0:
+        out.append({"id": "growth", "why": f"매출 {g:+.1f}% · 이익 {e:+.1f}% (전년 대비)"})
+    major = [x for x in events or [] if x.get("kind") in L["event"]["major"]]
+    chg, dv1 = rec.get("chg_pct"), rec.get("dv1_ratio")
+    if major:
+        more = f" 외 {len(major) - 1}건" if len(major) > 1 else ""
+        out.append({"id": "event", "why": f"{_md(major[0]['date'])} {major[0]['kind']} 공시{more}"})
+    elif chg is not None and dv1 is not None and abs(chg) >= L["event"]["move_pct"] and dv1 >= L["event"]["dv1_at"]:
+        out.append({"id": "event", "why": f"하루 {chg:+.1f}% · 거래대금 평소의 {dv1:.1f}배"})
+    dv = rec.get("dv_ratio")
+    if dv is not None and dv >= L["flow"]["dv_at"] and rec.get("above_ma20"):
+        out.append({"id": "flow", "why": f"최근 5일 거래대금 평소의 {dv:.1f}배 · 20일 평균 위"})
+    return out
+
+
+def lens_info(rules: dict) -> dict:
+    """관점 이름과 화면에 적을 기준 한 줄 — 문턱값은 rules.yaml 에서 읽어 문장에 끼운다."""
+    L = rules["lenses"]
+    rule = {
+        "value": "점검표의 가치·빚·현금흐름이 모두 통과",
+        "growth": f"최근 분기 매출이 전년보다 {L['growth']['rev_at']}% 이상 늘고 이익도 늘어남",
+        "event": f"최근 {L['event']['days']}일 안에 주요 공시가 있었거나, 하루 ±{L['event']['move_pct']}% 이상 움직이면서 거래대금이 평소의 {L['event']['dv1_at']}배 이상",
+        "flow": f"최근 5일 평균 거래대금이 60일 평균의 {L['flow']['dv_at']}배 이상이고 종가가 20일 평균 위",
+    }
+    return {k: {"label": LENS_LABEL[k], "rule": rule[k]} for k in LENS_ORDER}
 
 
 def peers(rec: dict, records: list[dict], n: int = 3) -> list[dict]:
