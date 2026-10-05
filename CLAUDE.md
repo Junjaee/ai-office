@@ -28,6 +28,8 @@
 - **검토 칸**: 사무실 설정의 자동화에 `review: { kind: "topics" }` 를 주면 카드 안에 후보 목록(체크 → 만들기)이 붙는다. 자동화는 `public/review/<사무실>/<id>.json` 에 후보·예약을 쓰고, Worker `/api/review` 가 읽고, `/api/run` 의 `inputs`(허용 목록: `mode`·`picks`)로 워크플로에 전달한다. 표준 구현은 `automations/insta/`(README "주제 검토 방식"). 인스타는 06:30 후보 → 고정 시간대 07:30·12:30·18:30 에 게시, 07:30 에 예약이 없으면 1순위 자동(사용자 결정 2026-09-12).
 - **주식 분석 화면**(2026-10-05): 사무실 설정의 자동화에 `page: { href, label }` 을 주면 카드에 그 화면으로 가는 단추가 붙는다. 홈의 `analyst`("주식 분석")는 `/home/stock`(관심 종목 판)과 `/home/stock/us/<기호>`(종목 한 장)를 연다. 자료는 `automations/analyst/` 가 매일(화~토 07:00) 야후 파이낸스에서 받아 계산해 Worker `/api/stock/ingest` → R2 `stock/` 에 둔다. **AI 호출 없음.** 공개 저장소에는 건수만 남기고 종목 기호·관심 목록은 적지 않는다. 등급·목표가·매수 추천을 만들지 않는다. 설계 `docs/superpowers/specs/2026-10-05-주식-분석-봇-design.md`, 문턱값 `automations/analyst/rules.yaml`.
   - **발굴 판**(2단계, `/home/stock/discover`): 봇이 네 관점(싸고 탄탄·실적 개선·사건·돈 몰림)으로 종목을 걸러 카드로 보여 준다. 문턱값은 `rules.yaml` 의 `lenses:`. 사건 관점의 공시는 EDGAR 에서 받고(GitHub Secrets `SEC_USER_AGENT`("이름 이메일")가 있을 때만 받는다), 못 받으면 가격 조건만으로 판정한다. 매일의 관점 결과는 `stock/lens-log/<시장>/<날짜>.json` 에 쌓고(채점은 3단계), 화면은 `app/office/StockDiscover.tsx`.
+  - **해석·채점**(3단계): 사용자가 "○○ 해석해 줘"라고 하면 `stock-opinion` 스킬 절차대로 써서 `automations/analyst/save_opinion.py` 로 저장한다(Worker `/api/stock/opinion`, R2 `stock/opinions/`; 금지어는 저장 스크립트가 막는다). 종목 한 장은 해석이 30일 지나거나 실적 발표가 있었거나 주가가 ±20% 움직이면 "오래됨"으로 표시하고, 해석 뒤 1주·1개월·3개월 수익률을 지수와 나란히 보여 준다(맞고 틀림은 매기지 않음).
+  - 발굴 관점 채점은 매일 실행이 `lens-history.json` 에 걸린 종목을 쌓아 계산하고 발굴 판 아래에 보여 주며, 표본이 30건이 되기 전에는 판단을 보류한다. 기사 제목은 관심 종목만 받는다(R2 에만, 공개 로그·상태 파일에는 건수만).
 
 ## 새 자동화 붙이기
 
