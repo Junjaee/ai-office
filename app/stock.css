@@ -1,0 +1,68 @@
+/* 주식 분석 화면 (app/office/StockBoard.tsx · StockPage.tsx). 단추·카드·상태 알약은 dashboard.css 것을 그대로 쓴다. */
+.stk-nav { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #e6e9ef; }
+.stk-nav a, .stk-nav span { display: inline-flex; min-width: 96px; min-height: 44px; align-items: center; justify-content: center; padding: 0 18px; border-radius: 9px; color: var(--d-soft); font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.stk-nav a.on { background: #fff; color: var(--d-ink); box-shadow: 0 1px 2px rgba(17, 24, 39, .08); }
+.stk-nav span { color: var(--d-faint); font-weight: 500; }
+.stk-up { color: #b3261e; } .stk-down { color: #1d4fb4; } .stk-flat { color: var(--d-soft); }
+.status-pill.care { background: #fdf1cf; color: #6b4a00; }
+
+.stk-flags { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.stk-flag { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border: 1px solid var(--d-line); border-radius: 14px; background: #fff; }
+.stk-flag span { color: var(--d-soft); font-size: 13.5px; font-weight: 600; }
+.stk-flag b { font-size: 15px; font-weight: 600; line-height: 1.45; }
+
+.stk-scroll { overflow-x: auto; }
+.stk-table { min-width: 1150px; font-size: 14px; }
+.stk-tr { display: grid; grid-template-columns: 180px 112px 120px 78px 78px 216px minmax(170px, 1fr) 96px 150px; column-gap: 14px; align-items: center; padding: 12px 6px; border-bottom: 1px solid var(--d-line-soft); }
+.stk-tr.head { padding: 8px 6px; border-bottom-color: var(--d-line); color: var(--d-faint); font-size: 12.5px; font-weight: 600; }
+.stk-tr .r { text-align: right; }
+.stk-name b { display: block; overflow: hidden; font-size: 15px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.stk-name small, .stk-sub { color: var(--d-faint); font-size: 12.5px; font-weight: 600; }
+.stk-num { font-family: "Archivo", sans-serif; font-weight: 700; }
+.stk-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.stk-pills .status-pill { height: 26px; padding: 0 8px 0 6px; font-size: 12.5px; }
+.stk-acts { display: flex; gap: 6px; justify-content: flex-end; }
+.stk-acts .btn { padding: 0 11px; font-size: 13.5px; }
+.stk-add { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 4px; }
+.stk-add input { min-width: 220px; height: 44px; padding: 0 12px; border: 1px solid var(--d-line-strong); border-radius: 10px; font-size: 14px; text-transform: uppercase; }
+.stk-add label { font-size: 13.5px; font-weight: 600; }
+
+.stk-hero { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 20px; }
+.stk-hero h1 { font-size: 30px; font-weight: 700; letter-spacing: -.02em; }
+.stk-hero .price { font-family: "Archivo", sans-serif; font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.stk-back { display: inline-flex; min-height: 28px; align-items: center; gap: 4px; color: var(--d-link); font-size: 13.5px; font-weight: 600; text-decoration: none; }
+.stk-verdict { display: flex; flex-direction: column; gap: 8px; padding: 20px 22px; border-radius: 14px; background: var(--d-ink); color: #fff; }
+.stk-verdict small { color: #c7d0e0; font-size: 12.5px; font-weight: 600; }
+.stk-verdict p { font-size: 19px; font-weight: 600; line-height: 1.5; }
+.stk-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 14px; }
+.stk-list { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; font-size: 14.5px; list-style: none; }
+.stk-checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 0 16px; margin: 0; padding: 0; list-style: none; }
+.stk-checks li { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--d-line-soft); font-size: 14px; }
+.stk-checks li b { width: 76px; flex: none; font-weight: 600; }
+.stk-checks .status-pill { min-width: 62px; height: 26px; font-size: 12.5px; }
+.stk-chart { position: relative; height: 230px; border-bottom: 1px solid var(--d-line-strong); }
+.stk-chart svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.stk-chart .y { position: absolute; left: 0; padding-right: 4px; background: #fff; color: var(--d-faint); font-size: 11.5px; }
+.stk-mark { position: absolute; display: flex; width: 24px; height: 24px; align-items: center; justify-content: center; border: 2px solid #fff; border-radius: 50%; background: var(--d-ink); color: #fff; font-size: 12px; font-weight: 700; transform: translate(-50%, -50%); }
+.stk-mark.inline { position: static; width: 22px; height: 22px; flex: none; border: 0; transform: none; }
+.stk-xaxis { display: flex; justify-content: space-between; margin-top: -6px; color: var(--d-faint); font-size: 11.5px; }
+.stk-events { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; font-size: 14px; list-style: none; }
+.stk-events li { display: flex; align-items: flex-start; gap: 10px; }
+.stk-events b { width: 132px; flex: none; font-weight: 600; }
+.stk-bars { display: flex; flex-direction: column; gap: 8px; }
+.stk-bar { display: grid; grid-template-columns: 140px minmax(0, 1fr) 56px; align-items: center; gap: 10px; font-size: 13.5px; }
+.stk-bar span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stk-bar i { display: block; height: 14px; border-radius: 0 4px 4px 0; background: #9aa5b8; }
+.stk-bar.me { font-weight: 700; } .stk-bar.me i { background: var(--accent); } .stk-bar.ref i { background: var(--d-line-strong); }
+.stk-bar .track { background: var(--pink-bg); border-radius: 0 4px 4px 0; }
+.stk-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding-top: 12px; border-top: 1px solid var(--d-line-soft); }
+.stk-facts dt { color: var(--d-faint); font-size: 12px; } .stk-facts dd { margin: 1px 0 0; font-size: 15px; font-weight: 700; }
+.stk-years .stk-yr { display: grid; grid-template-columns: minmax(96px, 1.3fr) repeat(4, minmax(0, 1fr)); gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--d-line-soft); font-size: 14px; }
+.stk-years .stk-yr.head { padding: 6px 0; border-bottom-color: var(--d-line); color: var(--d-faint); font-size: 12.5px; font-weight: 600; }
+.stk-years .stk-yr span:not(:first-child) { text-align: right; }
+.stk-empty { border-style: dashed; }
+@media (max-width: 680px) {
+  .stk-nav { order: 3; width: 100%; } .stk-nav a, .stk-nav span { min-width: 0; flex: 1 1 0; padding: 0 8px; }
+  .stk-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stk-events li { flex-wrap: wrap; } .stk-hero .price { font-size: 28px; }
+}

@@ -407,6 +407,12 @@ export default function OfficeApp() {
                             실시간 보기
                           </a>
                         ) : null}
+                        {def.page ? (
+                          <a className="btn btn-dark" href={def.page.href}>
+                            <Icon name="runs" size={15} />
+                            {def.page.label}
+                          </a>
+                        ) : null}
                         {v.link ? (
                           <a className="btn btn-ghost" href={v.link} target="_blank" rel="noreferrer">
                             결과 폴더 열기 ↗
