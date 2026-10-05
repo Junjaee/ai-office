@@ -3,11 +3,17 @@
 
 export type CheckState = "pass" | "care" | "warn" | "na";
 export type Check = { key: string; state: CheckState; text: string };
+export type LensId = "value" | "growth" | "event" | "flow";
+export type LensHit = { id: LensId; why: string };
+export type StockEvent = { date: string; kind: string };
+export const LENS_ORDER: LensId[] = ["value", "growth", "event", "flow"];
+export const LENS_LABEL: Record<LensId, string> = { value: "싸고 탄탄", growth: "실적 개선", event: "사건", flow: "돈 몰림" };
 export type BoardRow = {
   t: string; name: string; price: number; chg_pct: number | null; spark: number[]; ath_pct: number | null; off_hi_pct: number | null;
   fpe: number | null; n_pass: number; n_care: number; n_warn: number; diag: string; next_earn: string | null; warn_keys: string[];
+  sector: string; rev_g: number | null; nde: number | null; dv_ratio: number | null; lenses: LensHit[];
 };
-export type Board = { market: string; as_of: string; generated_at?: string; rows: BoardRow[]; missing: string[] };
+export type Board = { market: string; as_of: string; generated_at?: string; rows: BoardRow[]; missing: string[]; lens_info: Record<LensId, { label: string; rule: string }> };
 export type StockRecord = {
   t: string; name: string; exchange: string; sector: string; financial: boolean; as_of: string; price: number; chg_pct: number | null;
   hi52: number; lo52: number; off_hi_pct: number | null; ath: number; ath_date: string; ath_pct: number | null; y_ret_pct: number | null;
@@ -20,6 +26,7 @@ export type StockRecord = {
 export type TickerDoc = {
   market: string; as_of: string; rec: StockRecord; checks: Check[]; diag: string;
   peers: { t: string; name: string; fpe: number }[]; ref: { fpe: number | null; opm: number | null; label: string };
+  lenses: LensHit[]; events: StockEvent[];
 };
 export type WatchRow = (BoardRow & { pending: false }) | { t: string; pending: true; missing: boolean };
 export type Flag = { kind: "earnings" | "warn" | "high"; title: string; body: string };
@@ -97,6 +104,26 @@ export function watchRows(board: Board | null, watch: string[]): WatchRow[] {
   });
 }
 
+/** 발굴 판: 관점 단추(걸린 수)와 카드 목록. 전체는 겹친 관점이 많은 순, 같으면 거래대금 배수가 큰 순 */
+export function discoverView(board: Board | null, lens: LensId | "all"): { tabs: { id: LensId | "all"; label: string; count: number }[]; cards: BoardRow[]; rule: string; total: number; universe: number } {
+  const rows = board?.rows ?? [];
+  const hit = rows.filter((r) => r.lenses.length > 0);
+  const tabs: { id: LensId | "all"; label: string; count: number }[] = [
+    { id: "all", label: "전체", count: hit.length },
+    ...LENS_ORDER.map((id) => ({ id, label: board?.lens_info[id].label ?? LENS_LABEL[id], count: hit.filter((r) => r.lenses.some((x) => x.id === id)).length })),
+  ];
+  const cards = hit
+    .filter((r) => lens === "all" || r.lenses.some((x) => x.id === lens))
+    .sort((a, b) => b.lenses.length - a.lenses.length || (b.dv_ratio ?? 0) - (a.dv_ratio ?? 0) || a.t.localeCompare(b.t));
+  const rule = lens === "all" ? "여러 관점에 동시에 걸린 종목이 위에 옵니다." : board?.lens_info[lens].rule ?? "";
+  return { tabs, cards, rule, total: hit.length, universe: rows.length };
+}
+
+export function lensDaysText(n: number): string {
+  if (!n) return "기준 채점: 아직 기록이 없어요";
+  return `기준 채점: 기록 ${n}일째 — 관점별 성적은 표본이 30건 쌓인 뒤에 보여 드립니다(아직 판단하기 이릅니다)`;
+}
+
 export const FLAG_EARN_DAYS = 30;
 export const FLAG_NEAR_HIGH_PCT = 3;
 
@@ -149,6 +176,19 @@ const strOrNull = (v: unknown): string | null => (typeof v === "string" ? v : nu
 const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 const nums = (v: unknown): number[] => arr(v).filter((x): x is number => typeof x === "number" && Number.isFinite(x));
 
+const lensHits = (v: unknown): LensHit[] =>
+  arr(v).filter(isObj).filter((x) => (LENS_ORDER as string[]).includes(x.id as string)).map((x) => ({ id: x.id as LensId, why: str(x.why) }));
+
+function lensInfo(v: unknown): Board["lens_info"] {
+  const src = isObj(v) ? v : {};
+  const out = {} as Board["lens_info"];
+  for (const id of LENS_ORDER) {
+    const o = isObj(src[id]) ? (src[id] as Obj) : {};
+    out[id] = { label: str(o.label, LENS_LABEL[id]) || LENS_LABEL[id], rule: str(o.rule) };
+  }
+  return out;
+}
+
 export function normalizeBoard(input: unknown): Board | null {
   if (!isObj(input) || !Array.isArray(input.rows)) return null;
   const rows: BoardRow[] = [];
@@ -158,10 +198,11 @@ export function normalizeBoard(input: unknown): Board | null {
       t: raw.t, name: str(raw.name, raw.t), price: numOr(raw.price, 0), chg_pct: num(raw.chg_pct), spark: nums(raw.spark), ath_pct: num(raw.ath_pct), off_hi_pct: num(raw.off_hi_pct),
       fpe: num(raw.fpe), n_pass: numOr(raw.n_pass, 0), n_care: numOr(raw.n_care, 0), n_warn: numOr(raw.n_warn, 0), diag: str(raw.diag), next_earn: strOrNull(raw.next_earn),
       warn_keys: arr(raw.warn_keys).filter((x): x is string => typeof x === "string"),
+      sector: str(raw.sector), rev_g: num(raw.rev_g), nde: num(raw.nde), dv_ratio: num(raw.dv_ratio), lenses: lensHits(raw.lenses),
     });
   }
   return { market: str(input.market), as_of: str(input.as_of), ...(typeof input.generated_at === "string" ? { generated_at: input.generated_at } : {}), rows,
-    missing: arr(input.missing).filter((x): x is string => typeof x === "string") };
+    missing: arr(input.missing).filter((x): x is string => typeof x === "string"), lens_info: lensInfo(input.lens_info) };
 }
 
 const STATES: readonly string[] = ["pass", "care", "warn", "na"];
@@ -187,7 +228,8 @@ export function normalizeDoc(input: unknown): TickerDoc | null {
   const peers = arr(input.peers).filter(isObj).filter((p) => typeof p.t === "string" && typeof p.name === "string" && num(p.fpe) !== null)
     .map((p) => ({ t: p.t as string, name: p.name as string, fpe: p.fpe as number }));
   const ref = isObj(input.ref) ? { fpe: num(input.ref.fpe), opm: num(input.ref.opm), label: str(input.ref.label, "시장") } : { fpe: null, opm: null, label: "시장" };
-  return { market: str(input.market), as_of: str(input.as_of), rec, checks, diag: str(input.diag), peers, ref };
+  const events = arr(input.events).filter(isObj).filter((e) => typeof e.date === "string" && typeof e.kind === "string").map((e) => ({ date: e.date as string, kind: e.kind as string }));
+  return { market: str(input.market), as_of: str(input.as_of), rec, checks, diag: str(input.diag), peers, ref, lenses: lensHits(input.lenses), events };
 }
 
 /** 관심 담기·빼기 실패 안내 문구 */

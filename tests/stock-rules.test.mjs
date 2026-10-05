@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { STATE_META, money, pctText, tone, eok, polyPoints, monthDay, daysUntil, earnText, watchRows, buildFlags, chartGeometry, normalizeBoard, normalizeDoc, watchErrorText } from "../app/stock-rules.ts";
+import { STATE_META, money, pctText, tone, eok, polyPoints, monthDay, daysUntil, earnText, watchRows, buildFlags, chartGeometry, normalizeBoard, normalizeDoc, watchErrorText, discoverView, lensDaysText } from "../app/stock-rules.ts";
 
-const row = (o = {}) => ({ t: "AAA", name: "A", price: 100, chg_pct: 1.2, spark: [1, 2, 3], ath_pct: -5, off_hi_pct: -5, fpe: 12, n_pass: 5, n_care: 1, n_warn: 1, diag: "좋음: 가치", next_earn: "2026-10-22", warn_keys: ["빚"], ...o });
+const row = (o = {}) => ({ t: "AAA", name: "A", price: 100, chg_pct: 1.2, spark: [1, 2, 3], ath_pct: -5, off_hi_pct: -5, fpe: 12, n_pass: 5, n_care: 1, n_warn: 1, diag: "좋음: 가치", next_earn: "2026-10-22", warn_keys: ["빚"], sector: "Tech", rev_g: 5, nde: 1, dv_ratio: 1.2, lenses: [], ...o });
 
 test("숫자 문구", () => {
   assert.equal(money(142.3), "$142.30");
@@ -123,4 +123,48 @@ test("관심 담기 실패 문구", () => {
   assert.equal(watchErrorText(400, "bad_request"), "종목 기호를 확인해 주세요 (예: NVDA)");
   assert.equal(watchErrorText(403, "forbidden"), "이 화면에서만 담을 수 있어요");
   assert.equal(watchErrorText(500, undefined), "잠시 뒤 다시 해 주세요");
+});
+
+const lrow = (t, ids, extra = {}) => ({ t, name: t, price: 10, lenses: ids.map((id) => ({ id, why: `${id} 이유` })), ...extra });
+
+test("normalizeBoard: 관점은 아는 id 만, 이유는 글자만 남긴다", () => {
+  const b = normalizeBoard({ market: "us", as_of: "2026-10-02", rows: [
+    { t: "A", price: 1, sector: "Tech", rev_g: 12.5, nde: "x", dv_ratio: 1.7, lenses: [{ id: "value", why: "w" }, { id: "hack", why: "x" }, { id: "flow" }, "bad"] },
+    { t: "B", price: 1 },
+  ], lens_info: { value: { label: "<b>싸고</b>", rule: 5 }, bogus: { label: "x", rule: "y" } } });
+  assert.deepEqual(b.rows[0].lenses, [{ id: "value", why: "w" }, { id: "flow", why: "" }]);
+  assert.deepEqual([b.rows[0].sector, b.rows[0].rev_g, b.rows[0].nde, b.rows[0].dv_ratio], ["Tech", 12.5, null, 1.7]);
+  assert.deepEqual(b.rows[1].lenses, []);
+  assert.deepEqual(Object.keys(b.lens_info), ["value", "growth", "event", "flow"]);
+  assert.equal(b.lens_info.value.label, "<b>싸고</b>");   // 글자 그대로 — React 가 글자로 그린다
+  assert.equal(b.lens_info.value.rule, "");
+  assert.equal(b.lens_info.growth.label, "실적 개선");
+});
+
+test("discoverView: 전체는 겹친 관점이 많은 순, 단추마다 걸린 수", () => {
+  const board = normalizeBoard({ market: "us", as_of: "2026-10-02", rows: [
+    lrow("ONE", ["flow"], { dv_ratio: 3 }), lrow("NONE", []), lrow("TWO", ["value", "growth"]), lrow("ONEB", ["flow"], { dv_ratio: 5 }),
+  ], lens_info: { flow: { label: "돈 몰림", rule: "기준 문장" } } });
+  const all = discoverView(board, "all");
+  assert.deepEqual(all.cards.map((r) => r.t), ["TWO", "ONEB", "ONE"]);       // 같은 수면 거래대금 배수가 큰 순
+  assert.deepEqual(all.tabs.map((t) => [t.id, t.count]), [["all", 3], ["value", 1], ["growth", 1], ["event", 0], ["flow", 2]]);
+  assert.equal(all.total, 3);
+  assert.equal(all.universe, 4);
+  const flow = discoverView(board, "flow");
+  assert.deepEqual(flow.cards.map((r) => r.t), ["ONEB", "ONE"]);
+  assert.equal(flow.rule, "기준 문장");
+  assert.deepEqual(discoverView(null, "all").cards, []);
+});
+
+test("normalizeDoc: 관점과 공시 목록", () => {
+  const d = normalizeDoc({ rec: { t: "A", price: 1 }, lenses: [{ id: "event", why: "w" }, { id: "nope", why: "" }], events: [{ date: "2026-09-30", kind: "실적 발표" }, { date: 5, kind: "x" }, null] });
+  assert.deepEqual(d.lenses, [{ id: "event", why: "w" }]);
+  assert.deepEqual(d.events, [{ date: "2026-09-30", kind: "실적 발표" }]);
+  assert.deepEqual(normalizeDoc({ rec: { t: "A", price: 1 } }).events, []);
+});
+
+test("lensDaysText", () => {
+  assert.equal(lensDaysText(0), "기준 채점: 아직 기록이 없어요");
+  assert.match(lensDaysText(12), /기록 12일째/);
+  assert.match(lensDaysText(12), /판단하기 이릅니다/);
 });
