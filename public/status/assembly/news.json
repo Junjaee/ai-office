@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 31건, 실패 0건, 14초",
+  "summary": "신규 12건, 실패 0건, 12초",
   "counts": {
-    "new": 31,
+    "new": 12,
     "failed": 0,
-    "total": 2863
+    "total": 3142
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 31건, 실패 0건, 14초",
-    "[신규] 이준석 \"호텔경제학자 하준경을 정책실장으로…레버리지보다 민생 더 파탄\" — newspim.com",
-    "[신규] 이준석 “李, 호텔경제학자를 정책실장에 … 레버리지 ETF보다 민생 더 파탄시킬 것” — 뉴데일리",
-    "[신규] 크릿벤처스, '오딘' 개발진 출신 제이드래곤게임즈에 투자 — 매일경제 마켓",
-    "[신규] '오딘' 이준석 신생법인 제이드래곤, 크릿벤처스 투자 유치 — 월요신문"
+    "신규 12건, 실패 0건, 12초",
+    "[신규] ‘보수 대권’ 국힘지지층 한동훈 34.3% 오세훈 20.8% 장동혁 20.6% [여론조사꽃] — v.daum.net",
+    "[신규] [AG 결산①] 金 40개 목표 달성 실패...효자 종목 주춤, 새 금맥 발견 — 뉴스핌",
+    "[신규] 펜싱 2관왕 오상욱 ‘최고의 별’ — v.daum.net",
+    "[신규] [차기대권 선호도] 범야권 한동훈 18.7%·장동혁 오세훈 12.3%…ARS 오차범위 밖 (여론조사꽃) — TopStarNews"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 36958285227,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36958285227",
-  "request_id": "cron-202610020300",
+  "run_id": 37270261497,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37270261497",
+  "request_id": "cron-202610050600",
   "trigger": "schedule",
-  "started_at": "2026-10-02T12:01:49+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-05T15:00:31+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 110건"
+      "summary": "검색어 5개에서 68건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 63건 (신규 31건) · 시민행정신문 9건, Calgary Roughnecks 6건, 한국사회복지저널 4건"
+      "summary": "오늘 53건 (신규 12건) · v.daum.net 6건, 뉴스1 4건, Calgary Roughnecks 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-02T12:02:03+09:00"
+  "updated_at": "2026-10-05T15:00:44+09:00"
 }

@@ -3,38 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 전송 2건, 실패 0건, 1.3분",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 14초",
   "counts": {
-    "new": 3,
-    "sent": 2,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 3건, 전송 2건, 실패 0건, 1.3분",
-    "[신규]⭐ [일반공고] 거주불명등록자에 대한 행정상관리주소 이전 공고 (1차)",
-    "[신규] [시정알림방] 화성「아크메르 동탄 95， 99」장애인 특별공급 안내",
-    "[신규] [시정알림방] 동탄구청 식품위생법 위반 사실의 공표(2026년 9월)"
+    "신규 0건, 전송 0건, 실패 0건, 14초"
   ],
   "link": "",
-  "run_id": 36943889873,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/36943889873",
-  "request_id": "cron-202610020000",
+  "run_id": 37245756886,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37245756886",
+  "request_id": "cron-202610050000",
   "trigger": "schedule",
-  "started_at": "2026-10-02T09:02:15+09:00",
-  "duration_sec": 80,
+  "started_at": "2026-10-05T09:00:35+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 3건, 첨부 5건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "2건 발송, 무음 1건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-10-02T09:03:36+09:00"
+  "updated_at": "2026-10-05T09:00:50+09:00"
 }
