@@ -7,6 +7,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from analyst_sources_edgar import Edgar  # noqa: E402
 
 
+UA = "Test Agent test@example.com"
+
+
 class FakeResp:
     def __init__(self, data, status=200):
         self._data, self.status_code = data, status
@@ -32,10 +35,10 @@ class FakeHttp:
 
 def test_filings_maps_ticker_to_cik_and_filters_by_date():
     http = FakeHttp()
-    e = Edgar(http=http, delay=0)
+    e = Edgar(http=http, delay=0, user_agent=UA)
     assert e.filings("AAPL", "2026-09-01") == [{"form": "8-K", "date": "2026-09-30", "items": "2.02,9.01"}, {"form": "10-Q", "date": "2026-09-20", "items": ""}]
     assert http.calls[1][0] == "https://data.sec.gov/submissions/CIK0000320193.json"
-    assert "ai-office" in http.calls[0][1]["User-Agent"]
+    assert all(h == {"User-Agent": UA} for _, h in http.calls)
     e.filings("BRK-B", "2026-09-01")
     assert sum(1 for u, _ in http.calls if u.endswith("company_tickers.json")) == 1   # 표는 한 번만 받는다
 

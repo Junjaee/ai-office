@@ -1,6 +1,6 @@
 """analyst_checks — 중앙값, 점검표 7가지, 점검 요약, 판 한 줄."""
 import analyst_checks as c
-from analyst_checks import LENS_ORDER, lens_info, lenses, load_rules
+from analyst_checks import LENS_ORDER, lens_info, lenses
 
 RULES = c.load_rules()
 
@@ -79,9 +79,6 @@ def _ck(**states):
     base = {k: "care" for k in ["가치", "매출 성장", "이익 방향", "수익성", "빚", "현금흐름", "추세"]}
     base.update(states)
     return [{"key": k, "state": s, "text": f"{k} 문장"} for k, s in base.items()]
-
-
-RULES = load_rules()
 
 
 def test_value_lens_needs_value_debt_cashflow_all_pass():

@@ -48,6 +48,8 @@ jobs:
         env:
           # 선택: Worker 에 LIVE_TOKEN 을 설정했다면 같은 값을 GitHub Secrets 에도 넣는다. 없으면 빈 값으로 보낸다.
           LIVE_TOKEN: ${{ secrets.LIVE_TOKEN }}
+          # 선택: 미국 공시(EDGAR)용 식별 문구 '이름 이메일'. 없으면 공시 없이 가격 조건만 본다
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
           REQUEST_ID: ${{ inputs.request_id }}
           MARKET: ${{ inputs.market }}
           PYTHONUTF8: "1"

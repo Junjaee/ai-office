@@ -25,3 +25,10 @@ def test_classify_keeps_recent_8k_items_newest_first():
 
 def test_classify_ignores_unknown_items_and_bad_rows():
     assert classify([{"form": "8-K", "date": "2026-10-01", "items": "7.01,9.01"}, {}, {"form": None}], "2026-10-02") == []
+
+
+def test_classify_window_edges_are_inclusive():
+    def f(d):
+        return [{"form": "8-K", "date": d, "items": "2.02"}]
+    assert classify(f("2026-10-02"), "2026-10-02") and classify(f("2026-09-18"), "2026-10-02")   # 기준일·14일 전 포함
+    assert classify(f("2026-09-17"), "2026-10-02") == []                                          # 15일 전은 제외

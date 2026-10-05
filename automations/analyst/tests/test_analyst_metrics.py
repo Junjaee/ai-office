@@ -91,6 +91,10 @@ def test_dv1_ratio_is_last_day_over_60day_average():
     assert rec["dv1_ratio"] == round(4000 * 100 / ((59 * 1000 * 100 + 4000 * 100) / 60), 2)
 
 
+def test_dv1_ratio_is_none_when_last_day_has_no_volume():
+    assert m.build_record(_raw70(last_vol=0))["dv1_ratio"] is None
+
+
 def test_above_ma20_true_when_last_close_over_20day_mean():
     assert m.build_record(_raw70(last_close=110.0))["above_ma20"] is True
     assert m.build_record(_raw70(last_close=90.0))["above_ma20"] is False

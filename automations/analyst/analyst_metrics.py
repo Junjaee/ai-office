@@ -43,9 +43,14 @@ def big_moves(closes: list, limit: int = 4, floor: float = BIG_MOVE_PCT) -> list
     return sorted(out[:limit], key=lambda x: x["date"])
 
 
+def _dv_series(closes: list, volumes: list) -> list[float]:
+    """거래가 있던 날의 거래대금(종가×거래량)."""
+    return [c * v for (_, c), v in zip(closes, volumes) if c and v]
+
+
 def _dv_ratio(closes: list, volumes: list) -> float | None:
     """최근 5일 평균 거래대금 ÷ 60일 평균 거래대금."""
-    dv = [c * v for (_, c), v in zip(closes, volumes) if c and v]
+    dv = _dv_series(closes, volumes)
     if len(dv) < 60:
         return None
     base = sum(dv[-60:]) / 60
@@ -53,12 +58,13 @@ def _dv_ratio(closes: list, volumes: list) -> float | None:
 
 
 def _dv1_ratio(closes: list, volumes: list) -> float | None:
-    """마지막 날 거래대금 ÷ 60일 평균 거래대금."""
-    dv = [c * v for (_, c), v in zip(closes, volumes) if c and v]
-    if len(dv) < 60:
+    """마지막 날 거래대금 ÷ 60일 평균 거래대금. 마지막 날에 거래가 없으면 앞날로 대신하지 않고 None."""
+    dv = _dv_series(closes, volumes)
+    last = closes[-1][1] * volumes[-1] if closes and volumes else 0
+    if len(dv) < 60 or not last:
         return None
     base = sum(dv[-60:]) / 60
-    return round(dv[-1] / base, 2) if base else None
+    return round(last / base, 2) if base else None
 
 
 def _above_ma(values: list, n: int = 20) -> bool | None:
