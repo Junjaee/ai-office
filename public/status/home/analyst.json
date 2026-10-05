@@ -3,7 +3,7 @@
   "dept": "finance",
   "ok": true,
   "running": false,
-  "summary": "점검 96건, 관심 2건, 실패 0건, 관심 실패 0건, 2.2분",
+  "summary": "점검 96건, 관심 2건, 실패 0건, 관심 실패 0건, 3.5분",
   "counts": {
     "checked": 96,
     "watch": 2,
@@ -12,17 +12,17 @@
   },
   "next_run": "화~토 07:00",
   "log": [
-    "점검 96건, 관심 2건, 실패 0건, 관심 실패 0건, 2.2분",
-    "기준일 2026-10-02",
+    "점검 96건, 관심 2건, 실패 0건, 관심 실패 0건, 3.5분",
+    "기준일 2026-10-05",
     "경고가 하나라도 있는 종목 40개"
   ],
   "link": "",
-  "run_id": 37271584094,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37271584094",
-  "request_id": "req-20261005151620-1r9w",
-  "trigger": "manual",
-  "started_at": "2026-10-05T15:16:57+09:00",
-  "duration_sec": 133,
+  "run_id": 37379625633,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37379625633",
+  "request_id": "cron-202610052200",
+  "trigger": "schedule",
+  "started_at": "2026-10-06T07:01:00+09:00",
+  "duration_sec": 208,
   "tasks": [
     {
       "id": "check",
@@ -36,5 +36,5 @@
     }
   ],
   "id": "analyst",
-  "updated_at": "2026-10-05T15:19:10+09:00"
+  "updated_at": "2026-10-06T07:04:29+09:00"
 }
