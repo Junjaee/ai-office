@@ -1,10 +1,11 @@
-/** Cloudflare Worker 진입점 — /api/run · /api/status · /api/history · /api/review · /api/live 만 직접 처리하고 나머지는 vinext 에 넘긴다. */
+/** Cloudflare Worker 진입점 — /api/run · /api/status · /api/history · /api/review · /api/live · /api/stock 만 직접 처리하고 나머지는 vinext 에 넘긴다. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { WORKSPACES } from "../app/workspaces/index";
 import { GitHubClient } from "./github.ts";
 import { createRunApiStores, handleHistory, handleReview, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
 import { handleLive, type R2Like } from "./live.ts";
+import { handleStock } from "./stock.ts";
 import { LEDGER_WATCH_JOB, MAIL_JOB, SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
 import {
   LEDGER_COOLDOWN_MS, LEDGER_WATCH_QUERY, MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY, lastRunMs,
@@ -83,6 +84,10 @@ const worker = {
 
     if (url.pathname === "/api/live") {
       return handleLive(request, env, { workspaces: WORKSPACES, now: () => Date.now() });
+    }
+
+    if (url.pathname === "/api/stock" || url.pathname.startsWith("/api/stock/")) {
+      return handleStock(request, env, { now: () => Date.now() });
     }
 
     if (url.pathname === "/_vinext/image") {
