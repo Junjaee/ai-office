@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 16건, 실패 0건, 12초",
+  "summary": "신규 22건, 실패 0건, 11초",
   "counts": {
-    "new": 16,
+    "new": 22,
     "failed": 0,
-    "total": 3158
+    "total": 3180
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 16건, 실패 0건, 12초",
-    "[신규] 김문수 의원, 고교학점제 소규모학교에 불리...과목개설 학교 간·지역 간 편차 심각 — 시민행정신문",
-    "[신규] 여러 테마 사이에서 살펴보는 아레나 토토 사이트 분위기 — Calgary Roughnecks",
-    "[신규] 강승규 의원, 보수 외연 확장론 주장 — 금강일보",
-    "[신규] 문금주 의원 “노후어선 사고 3년 새 85.3% 증가...기관손상 2배 이상” — 시민행정신문"
+    "신규 22건, 실패 0건, 11초",
+    "[신규] 안태준 의원, HUG 무담보채권 1조원 넘었는데...채권추심 맡기고도 금융재산 압류 ‘0’ — citizenadmnews.co.kr",
+    "[신규] [나고야 결산⑦] 테크볼-쿠라시-컴파운드 양궁에서 나온 값진 메달… 가능성 키우는 건 ‘꾸준한’ 지원 — 스포츠월드",
+    "[신규] 게임 선택 전 지원 환경부터 확인하는 옐로우스타게임즈 — Calgary Roughnecks",
+    "[신규] 박용갑 의원 , 공공어린이재활병원 운영비 국비 지원 의무화' 장애인 건강권 및 의료접근성 보장에 관한 법률 ' 대표발의 — citizenadmnews.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37287161741,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37287161741",
-  "request_id": "cron-202610050900",
+  "run_id": 37306616147,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37306616147",
+  "request_id": "cron-202610051200",
   "trigger": "schedule",
-  "started_at": "2026-10-05T18:00:40+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-05T21:01:12+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 61건"
+      "summary": "검색어 5개에서 68건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 69건 (신규 16건) · v.daum.net 6건, Calgary Roughnecks 4건, 뉴스1 4건"
+      "summary": "오늘 91건 (신규 22건) · citizenadmnews.co.kr 17건, Calgary Roughnecks 6건, v.daum.net 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-05T18:00:53+09:00"
+  "updated_at": "2026-10-05T21:01:24+09:00"
 }
