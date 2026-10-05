@@ -20,9 +20,15 @@ const TICKER_RE: Record<string, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /
 export const boardKey = (market: string) => `stock/${market}/board.json`;
 export const tickerKey = (market: string, ticker: string) => `stock/${market}/t/${ticker}.json`;
 
+/** 시장 이름이 TICKER_RE 의 자기 속성인지 확인 (constructor 같은 상속 속성 차단) */
+function isMarket(market: string): boolean {
+  return Object.prototype.hasOwnProperty.call(TICKER_RE, market);
+}
+
 export function validTicker(market: string, ticker: string): boolean {
+  if (!isMarket(market)) return false;
   const re = TICKER_RE[market];
-  return !!re && re.test(ticker);
+  return re.test(ticker);
 }
 
 /** 관심 목록에 담거나 뺀 새 목록. 가득 차면 목록은 그대로 두고 error 를 붙인다 */
@@ -78,7 +84,7 @@ export async function handleStock(request: Request, env: StockEnv, deps: { now: 
   if (url.pathname === "/api/stock") {
     if (request.method !== "GET") return json({ error: "method_not_allowed" }, 405);
     const market = url.searchParams.get("market") ?? "";
-    if (!TICKER_RE[market]) return json({ error: "bad_request" }, 400);
+    if (!isMarket(market)) return json({ error: "bad_request" }, 400);
     const watch = watchOf(await readWatch(bucket), market);
     const ticker = url.searchParams.get("ticker");
     if (ticker !== null) {
@@ -116,7 +122,7 @@ export async function handleStock(request: Request, env: StockEnv, deps: { now: 
     const body = await readBody(request, INGEST_MAX_BYTES);
     if (body instanceof Response) return body;
     const { market, kind, ticker, doc } = body;
-    if (typeof market !== "string" || !TICKER_RE[market] || !doc || typeof doc !== "object") return json({ error: "bad_request" }, 400);
+    if (typeof market !== "string" || !isMarket(market) || !doc || typeof doc !== "object") return json({ error: "bad_request" }, 400);
     let key: string;
     if (kind === "board") key = boardKey(market);
     else if (kind === "ticker" && typeof ticker === "string" && validTicker(market, ticker)) key = tickerKey(market, ticker);

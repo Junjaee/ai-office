@@ -80,6 +80,24 @@ test("관심 담기·빼기: 저장되고 판·종목 응답에 반영, 다른 �
   assert.equal((await handleStock(post("/api/stock/watch", { market: "us", ticker: "X", action: "add" }, { Origin: "https://evil.example" }), { LIVE }, deps)).status, 403);
 });
 
+test("시장 이름: constructor 같은 상속 속성은 차단", async () => {
+  const LIVE = fakeR2();
+  for (const market of ["constructor", "toString", "__proto__"]) {
+    // validTicker 는 에러 없이 false 를 반환한다
+    assert.equal(validTicker(market, "X"), false);
+    // GET 판·종목은 400
+    assert.equal((await handleStock(get(`market=${market}&view=board`), { LIVE }, deps)).status, 400);
+    assert.equal((await handleStock(get(`market=${market}&ticker=X`), { LIVE }, deps)).status, 400);
+    // POST ingest 는 400 이고 저장하지 않는다
+    assert.equal((await handleStock(post("/api/stock/ingest", { market, kind: "board", doc: {} }), { LIVE }, deps)).status, 400);
+    const keyPrefix = `stock/${market}/`;
+    const stored = Array.from(LIVE.store.keys()).filter((k) => k.startsWith(keyPrefix));
+    assert.equal(stored.length, 0, `이 시장 아래 저장된 키가 있으면 안 됨: ${stored.join(", ")}`);
+    // POST watch 는 400
+    assert.equal((await handleStock(post("/api/stock/watch", { market, ticker: "X", action: "add" }), { LIVE }, deps)).status, 400);
+  }
+});
+
 test("없는 경로·메서드", async () => {
   const LIVE = fakeR2();
   assert.equal((await handleStock(new Request(`${ORIGIN}/api/stock/nope`), { LIVE }, deps)).status, 404);
