@@ -1,22 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "뉴스 목록을 받아오지 못했어요",
-  "counts": {},
+  "summary": "신규 9건, 실패 0건, 12초",
+  "counts": {
+    "new": 9,
+    "failed": 0,
+    "total": 3189
+  },
   "next_run": "3시간마다",
   "log": [
-    "뉴스 목록을 받아오지 못했어요",
-    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
+    "신규 9건, 실패 0건, 12초",
+    "[신규] 김주영 의원, 해상특보구역 늘어도 관측망은 5년째 제자리 — 시민행정신문",
+    "[신규] 수도권 주거 혁신포럼 창립 총회 / 정중규 — 브런치",
+    "[신규] 내용을 찾기 쉬운지 확인하는 롯데 자이언츠 슬롯 도움말 구성 — Calgary Roughnecks",
+    "[신규] 피격 사건 연상시킨 ‘탄흔 굿즈’…메가박스 \"남은 수량 폐기\" — JTBC"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37329302140,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37329302140",
-  "request_id": "cron-202610051500",
+  "run_id": 37352682576,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37352682576",
+  "request_id": "cron-202610051800",
   "trigger": "schedule",
-  "started_at": "2026-10-06T00:00:49+09:00",
-  "duration_sec": 129,
+  "started_at": "2026-10-06T03:00:57+09:00",
+  "duration_sec": 12,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 59건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 9건 (신규 9건) · Calgary Roughnecks 3건, JTBC 1건, 뉴스타운 1건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-10-06T00:02:59+09:00"
+  "updated_at": "2026-10-06T03:01:09+09:00"
 }
