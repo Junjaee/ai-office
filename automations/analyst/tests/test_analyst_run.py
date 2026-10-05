@@ -12,13 +12,21 @@ from test_analyst_metrics import make_raw
 
 
 class FakeSite:
-    def __init__(self, watch):
-        self._watch = watch; self.sent = []
+    def __init__(self, watch, history=None):
+        self._watch = watch; self.sent = []; self.order = []; self.extra = {}; self._history = history
 
     def watch(self, market):
         return list(self._watch)
 
+    def get_view(self, market, view):
+        assert view == "lenshist"
+        return {"market": market, "history": self._history}
+
     def ingest(self, market, kind, doc, ticker=None, date=None):
+        self.order.append(kind)
+        if kind in ("index", "lenshist"):   # 3단계에 더해진 종류 — 앞 단계 시험이 보는 sent 목록은 그대로 둔다
+            self.extra[kind] = doc
+            return
         self.sent.append((market, kind, ticker, doc))
         self.dates = getattr(self, "dates", []) + [(kind, date)]
 
@@ -50,7 +58,7 @@ def fetch_ok(t):
 def test_collects_universe_plus_watch_and_publishes(tmp_path):
     site = FakeSite(["ZZZ", "AAA"])
     out = mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=site)
-    assert {k: v for k, v in out["counts"].items() if k != "candidates"} == {"checked": 4, "watch": 2, "failed": 0, "failed_watch": 0}
+    assert {k: v for k, v in out["counts"].items() if k not in ("candidates", "news")} == {"checked": 4, "watch": 2, "failed": 0, "failed_watch": 0}
     kinds = [(k, t) for _, k, t, _ in site.sent]
     assert kinds[-2:] == [("board", None), ("lens", None)] and sorted(t for k, t in kinds[:-2]) == ["AAA", "BBB", "CCC", "ZZZ"]   # 종목 자료가 먼저
     assert site.dates[-1] == ("lens", make_raw()["closes"][-1][0])
@@ -58,7 +66,7 @@ def test_collects_universe_plus_watch_and_publishes(tmp_path):
     assert board["market"] == "us" and len(board["rows"]) == 4
     assert board["as_of"] == make_raw()["closes"][-1][0]
     doc = next(d for _, k, t, d in site.sent if t == "ZZZ")
-    assert set(doc) == {"market", "as_of", "rec", "checks", "diag", "peers", "ref", "lenses", "events"} and len(doc["checks"]) == 7
+    assert set(doc) == {"market", "as_of", "rec", "checks", "diag", "peers", "ref", "lenses", "events", "news"} and len(doc["checks"]) == 7
 
 
 def test_public_outputs_never_name_tickers(tmp_path):
@@ -342,6 +350,159 @@ def test_stale_index_leaves_index_empty(tmp_path):
     site = FakeSite([])
     mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch, site=site)
     assert site.docs[f"lens:{AS_OF}"]["index"] is None
+
+
+# ---- 3단계: 관점 기록 덧붙이기·채점·지수, 관심 종목 기사 제목 ----
+
+def test_history_merged_scored_and_uploaded_in_order(tmp_path):
+    old = {"days": {"2025-01-02": {"value": ["AAA"], "growth": [], "event": [], "flow": []}}}
+    site = FakeSite([], history=old)
+    mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_info({"AAA": {"revenueGrowth": 0.30, "earningsGrowth": 0.10}}), site=site)
+    assert site.order == ["ticker"] * 3 + ["board", "lens", "lenshist", "index"]
+    hist = site.extra["lenshist"]
+    assert set(hist["days"]) == {"2025-01-02", AS_OF} and hist["days"][AS_OF]["growth"] == ["AAA"] and hist["days"]["2025-01-02"]["value"] == ["AAA"]
+    idx = site.extra["index"]
+    assert idx["t"] == "SPY" and idx["closes"] == make_raw()["closes"] and idx["closes"][-1][0] == AS_OF
+    score = site.docs["board"]["lens_score"]
+    assert set(score) == {"value", "growth", "event", "flow"} and set(score["growth"]) == {"1w", "1m", "3m"}
+    assert score["growth"]["1w"]["n"] == 0                       # 오늘 걸린 것은 아직 며칠 뒤 종가가 없다
+
+
+def test_scoring_uses_universe_closes_and_spy(tmp_path):
+    # 기록의 첫 날(100거래일 전)에 AAA 가 걸렸다 → 그 뒤 5·21·63일 수익률을 SPY 와 견준다
+    day0 = make_raw()["closes"][-100][0]
+    site = FakeSite([], history={"days": {day0: {"value": ["AAA"], "growth": [], "event": [], "flow": []}}})
+    mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_info({}), site=site)
+    v = site.docs["board"]["lens_score"]["value"]
+    assert v["1w"]["n"] == 1 and v["1m"]["n"] == 1 and v["3m"]["n"] == 1
+
+
+def test_history_null_is_not_a_failure(tmp_path):
+    site = FakeSite([], history=None)
+    out = mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_info({}), site=site)
+    assert "lenshist" in site.order and site.docs["board"]["lens_score"] is not None and out["counts"]["checked"] == 3
+
+
+class NoHistory(FakeSite):
+    def get_view(self, market, view):
+        raise OSError("503 https://x.example/api/stock?ticker=AAA")
+
+
+def test_history_read_failure_skips_scoring_and_never_overwrites(tmp_path, capsys):
+    site = NoHistory([])
+    mod.do_work(cfg(tmp_path), args(), print, fetch=fetch_info({}), site=site)
+    cap = capsys.readouterr()
+    shown = cap.out + cap.err
+    assert "관점 기록을 읽지 못해 오늘 채점은 건너뜁니다" in cap.out
+    assert "503" not in shown and "x.example" not in shown and "AAA" not in shown
+    assert site.order == ["ticker"] * 3 + ["board", "lens"] and site.docs["board"]["lens_score"] is None
+
+
+def test_stale_or_missing_spy_skips_scoring_uploads(tmp_path, capsys):
+    def stale(t):
+        raw = fetch_info({})(t)
+        if t == "SPY":
+            raw["closes"][-1][0] = "2025-01-01"
+        return raw
+
+    def dead(t):
+        if t == "SPY":
+            raise ValueError("SPY 없음")
+        return fetch_info({})(t)
+    for f in (stale, dead):
+        site = FakeSite([])
+        mod.do_work(cfg(tmp_path), args(), print, fetch=f, site=site)
+        assert "채점은 건너뜁니다" in capsys.readouterr().out
+        assert "lenshist" not in site.order and "index" not in site.order and site.docs["board"]["lens_score"] is None
+
+
+def test_dry_run_reads_history_but_sends_nothing(tmp_path):
+    reads = []
+
+    class Reads(FakeSite):
+        def get_view(self, market, view):
+            reads.append(view)
+            return super().get_view(market, view)
+    site = Reads([])
+    mod.do_work(cfg(tmp_path), args(dry=True), lambda m: None, fetch=fetch_info({}), site=site)
+    assert reads == ["lenshist"] and site.order == []
+    lines = []
+    mod.do_work(cfg(tmp_path), args(dry=True), lines.append, fetch=fetch_info({}), site=NoHistory([]))   # 읽기 실패도 시험 실행은 계속
+    assert "관점 기록을 읽지 못해 오늘 채점은 건너뜁니다" in lines
+
+
+def fake_news(name, as_of):
+    return [{"title": f"{name} jumps (ZZZ)", "source": "Wire", "date": as_of, "url": "https://example.com/a"}]
+
+
+def news_cfg(tmp_path):
+    c = cfg(tmp_path)
+    c["news_enabled"] = True
+    return c
+
+
+def test_news_only_for_watch_tickers_and_counted(tmp_path):
+    asked = []
+
+    def news(name, as_of):
+        asked.append(name)
+        return fake_news(name, as_of) if name.startswith("ZZZ") else []
+    site = FakeSite(["ZZZ", "AAA"])
+    out = mod.do_work(news_cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=site, news=news)
+    assert sorted(asked) == ["AAA Corp", "ZZZ Corp"]
+    assert site.docs["ticker:ZZZ"]["news"][0]["url"].startswith("https://") and site.docs["ticker:AAA"]["news"] == []
+    assert site.docs["ticker:BBB"]["news"] == []
+    assert out["counts"]["news"] == 2 and "관심 종목 기사 제목 2종목" in out["lines"]
+    assert "기사" not in mod.build_summary(out["counts"], 3)
+
+
+def test_news_disabled_asks_nothing(tmp_path):
+    def boom(name, as_of):
+        raise AssertionError("끄면 받지 않는다")
+    site = FakeSite(["ZZZ"])
+    out = mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=site, news=boom)
+    assert out["counts"]["news"] == 0 and site.docs["ticker:ZZZ"]["news"] == [] and not any("기사" in l for l in out["lines"])
+
+
+def test_news_failures_are_counted_and_stop_after_five_straight(tmp_path, capsys):
+    asked = []
+
+    def news(name, as_of):
+        asked.append(name)
+        if len(asked) == 1:
+            return []
+        raise RuntimeError(f"403 {name}")
+    watch = [f"W{i:02d}" for i in range(12)]
+    out = mod.do_work(news_cfg(tmp_path), args(), print, fetch=fetch_ok, site=FakeSite(watch), news=news)
+    cap = capsys.readouterr()
+    shown = cap.out + cap.err
+    assert len(asked) == 6 and out["counts"]["news"] == 1          # 성공 1번 뒤 연달아 5번 실패
+    assert shown.count("기사 제목을 받지 못해") == 1
+    assert "403" not in shown and "W0" not in shown and "Corp" not in shown
+
+
+def test_news_some_failures_are_summarised(tmp_path, capsys):
+    def news(name, as_of):
+        if name.startswith("W01"):
+            raise RuntimeError("x")
+        return []
+    out = mod.do_work(news_cfg(tmp_path), args(), print, fetch=fetch_ok, site=FakeSite(["W00", "W01", "W02"]), news=news)
+    assert "기사 제목을 받지 못해 건너뛴 종목 1건" in capsys.readouterr().out and out["counts"]["news"] == 2
+
+
+def test_news_never_leaks_names_or_titles(tmp_path, capsys):
+    def noisy(name, as_of):
+        print("제목", name)
+        print(name, file=sys.stderr)
+        warnings.warn(name)
+        return fake_news(name, as_of)
+    site = FakeSite(["ZZZ"])
+    out = mod.do_work(news_cfg(tmp_path), args(), print, fetch=fetch_ok, site=site, news=noisy)
+    cap = capsys.readouterr()
+    shown = cap.out + cap.err + " ".join(out["lines"]) + " ".join(v[1] for v in out["tasks"].values())
+    for bad in ("AAA", "BBB", "CCC", "ZZZ", "Corp", "jumps"):
+        assert bad not in shown
+    assert "jumps" in site.docs["ticker:ZZZ"]["news"][0]["title"]       # 자료는 사이트 저장 공간에만 간다
 
 
 def test_site_client_urls_and_token():

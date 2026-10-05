@@ -36,7 +36,9 @@ from analyst_checks import LENS_LABEL, LENS_ORDER, board_row, diag, lens_info, l
 from analyst_events import classify  # noqa: E402
 from analyst_metrics import build_record  # noqa: E402
 from analyst_publish import Site  # noqa: E402
+from analyst_score import merge_history, score_lenses  # noqa: E402
 from analyst_sources_edgar import Edgar  # noqa: E402
+from analyst_sources_news import fetch_titles  # noqa: E402
 from analyst_sources_us import fetch_raw  # noqa: E402
 
 KST = timezone(timedelta(hours=9))
@@ -58,8 +60,60 @@ def read_universe(path: str | Path) -> list[str]:
             out.append(t)
     return out
 
+SCORE_SKIPPED = "관점 기록을 읽지 못해 오늘 채점은 건너뜁니다"
 
-def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site: Site | None = None, filings_for=None, clock=time.monotonic) -> dict:
+
+@contextlib.contextmanager
+def _quiet():
+    """받는 쪽 라이브러리가 종목 기호를 print·경고·로그로 흘려도 공개 Actions 로그에 나가지 않게 전부 삼킨다."""
+    with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        yield
+
+
+def _score(site, market: str, as_of: str, hits: dict, closes: dict, spy_closes, progress):
+    """(관점 채점 결과, 사이트에 보낼 관점 기록). 지수가 오늘 것이 아니거나 기록을 못 읽으면 (None, None) — 기록을 덮어쓰지 않는다."""
+    if not spy_closes or spy_closes[-1][0] != as_of:
+        progress(SCORE_SKIPPED)
+        return None, None
+    try:
+        with _quiet():
+            history = site.get_view(market, "lenshist").get("history")   # 아직 없으면 None — 실패가 아니다
+    except Exception:  # noqa: BLE001 — 오류 내용엔 주소가 들어 있을 수 있다
+        progress(SCORE_SKIPPED)
+        return None, None
+    merged = merge_history(history, as_of, {k: [x["t"] for x in v] for k, v in hits.items()})
+    return score_lenses(merged, closes, spy_closes), merged
+
+
+def _news(records: list, watch: list, as_of: str, news, delay: float, progress) -> tuple[dict, int]:
+    """관심 종목의 기사 제목 {기호: [...]}, 받은 종목 수. 실패는 세고 넘어간다(이름·오류 내용은 남기지 않는다)."""
+    out, lost, streak, stopped = {}, 0, 0, False
+    for r in records:
+        if r["t"] not in watch:
+            continue
+        if not r.get("name"):
+            lost += 1
+            continue
+        try:
+            with _quiet():
+                out[r["t"]] = news(r["name"], as_of)
+            streak = 0
+        except Exception:  # noqa: BLE001
+            lost += 1
+            streak += 1
+            if streak >= 5:   # 연달아 막히면 나머지는 묻지 않는다
+                progress("기사 제목을 받지 못해 나머지 종목은 묻지 않습니다")
+                stopped = True
+                break
+        if delay:
+            time.sleep(delay)
+    if lost and not stopped:
+        progress(f"기사 제목을 받지 못해 건너뛴 종목 {lost}건")
+    return out, len(out)
+
+
+def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site: Site | None = None, filings_for=None, clock=time.monotonic, news=fetch_titles) -> dict:
     market = getattr(args, "market", "us") or "us"
     if site is None:
         site = Site(cfg["site_url"], token=os.environ.get("LIVE_TOKEN", ""))
@@ -77,14 +131,16 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
 
     uni = set(universe)
     records, failed, failed_uni, failed_watch = [], 0, 0, []
+    closes: dict[str, list] = {}   # 기준 묶음의 1년 종가 — 관점 채점용
     delay = float(cfg.get("request_delay", 0.3))
     for i, t in enumerate(tickers, 1):
         try:
             # 받는 쪽 라이브러리가 종목 기호를 print·경고·로그로 흘려도 공개 Actions 로그에 나가지 않게 전부 삼킨다
-            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), warnings.catch_warnings():
-                warnings.simplefilter("ignore")
+            with _quiet():
                 raw = fetch(t)
             records.append(build_record(raw))
+            if t in uni:
+                closes[t] = raw["closes"]
         except Exception as exc:  # noqa: BLE001 — 한 종목 실패는 세고 넘어간다(종목 이름은 로그에 남기지 않는다)
             failed += 1
             if t in uni:
@@ -153,24 +209,32 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
                 hits[x["id"]].append({"t": r["t"], "close": r["price"]})
         rows.append(board_row(r, checks, lens))
         docs.append({"market": market, "as_of": r["as_of"], "rec": r, "checks": checks, "diag": diag(checks),
-                     "peers": peers(r, base), "ref": ref_for(r, med, rules.get("sector_min", 5)), "lenses": lens, "events": ev})
+                     "peers": peers(r, base), "ref": ref_for(r, med, rules.get("sector_min", 5)), "lenses": lens, "events": ev, "news": []})
     board = {"market": market, "as_of": as_of, "generated_at": datetime.now(KST).isoformat(timespec="seconds"), "rows": rows, "medians": med,
              "missing": failed_watch,  # missing: 관심 종목 중 받지 못한 것 — 사이트 저장 공간에만 간다(로그·상태 파일에는 건수만)
              "universe": len(uni), "filings_ok": filings_ok, "lens_info": lens_info(rules, filings_ok)}
     discover = f"후보 {candidates}종목 · " + " ".join(f"{LENS_LABEL[k]} {len(hits[k])}" for k in LENS_ORDER)
     progress(discover)   # 건수만 — 시험 실행에서도 보이게
 
-    # 관점 기록(§5.3) — 걸린 종목과 그날 종가, 견줄 지수 종가. 채점은 나중 단계에서 이 기록으로 한다
-    index = None
+    # 관점 기록(§5.3) — 걸린 종목과 그날 종가, 견줄 지수 종가
+    index, spy_closes = None, None
     try:
-        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            spy = fetch("SPY")
-        if spy["closes"][-1][0] == as_of:
-            index = {"t": "SPY", "close": round(float(spy["closes"][-1][1]), 2)}
+        with _quiet():
+            spy_closes = fetch("SPY")["closes"]
+        if spy_closes[-1][0] == as_of:
+            index = {"t": "SPY", "close": round(float(spy_closes[-1][1]), 2)}
     except Exception:  # noqa: BLE001
         progress("지수 종가를 받지 못했습니다(기록에는 비워 둡니다)")
     lens_log = {"market": market, "date": as_of, "index": index, "hits": hits}
+    # 채점 — 쌓인 기록에 오늘 것을 덧붙여 걸린 뒤 수익률을 지수와 견준다. 시험 실행에서도 읽기는 한다(보내지는 않는다)
+    board["lens_score"], lens_hist = _score(site, market, as_of, hits, closes, spy_closes, progress)
+
+    # 관심 종목 기사 제목(해석할 때 읽을 자료) — 끄면 아무것도 받지 않는다
+    news_n = 0
+    if cfg.get("news_enabled"):
+        titles, news_n = _news(records, set(watch), as_of, news, delay, progress)
+        for d in docs:
+            d["news"] = titles.get(d["rec"]["t"], [])
 
     if not args.dry_run:
         progress("저장")
@@ -178,12 +242,16 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
             site.ingest(market, "ticker", d, ticker=d["rec"]["t"])
         site.ingest(market, "board", board)
         site.ingest(market, "lens", lens_log, date=as_of)
+        if lens_hist is not None:
+            site.ingest(market, "lenshist", lens_hist)
+            site.ingest(market, "index", {"t": "SPY", "closes": spy_closes})
 
     n_warn = sum(1 for row in rows if row["n_warn"])
     return {
         "counts": {"checked": len(records), "watch": len(watch), "failed": failed, "failed_watch": sum(1 for t in failed_watch if t not in uni),
-                   "candidates": candidates},
-        "lines": [f"기준일 {as_of}", f"경고가 하나라도 있는 종목 {n_warn}개", f"관점에 걸린 종목 {candidates}개"],
+                   "candidates": candidates, "news": news_n},
+        "lines": [f"기준일 {as_of}", f"경고가 하나라도 있는 종목 {n_warn}개", f"관점에 걸린 종목 {candidates}개"]
+                 + ([f"관심 종목 기사 제목 {news_n}종목"] if cfg.get("news_enabled") else []),
         "tasks": {"collect": (True, f"{len(records)}종목 수집, 실패 {failed}건"), "check": (True, f"점검표 {len(rows)}종목, 관심 {len(watch)}종목"),
                   "discover": (True, discover)},
     }
