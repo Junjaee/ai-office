@@ -9,6 +9,7 @@ import type { WorkspaceLike } from "./run-api.ts";
 export type R2Like = {
   get(key: string): Promise<{ text(): Promise<string> } | null>;
   put(key: string, value: string, options?: unknown): Promise<unknown>;
+  list?(options: { prefix: string; cursor?: string }): Promise<{ objects: { key: string }[]; truncated?: boolean; cursor?: string }>;
 };
 
 export type LiveEnv = { LIVE?: R2Like; LIVE_TOKEN?: string };

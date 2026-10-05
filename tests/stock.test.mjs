@@ -1,13 +1,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { handleStock, boardKey, tickerKey, validTicker, applyWatch, WATCH_KEY, WATCH_MAX } from "../worker/stock.ts";
+import { handleStock, boardKey, tickerKey, lensKey, validTicker, applyWatch, WATCH_KEY, WATCH_MAX } from "../worker/stock.ts";
 
 const ORIGIN = "https://ai-office.example.workers.dev";
 const NOW = Date.parse("2026-10-05T01:00:00Z");
 
 function fakeR2() {
   const store = new Map();
-  return { store, async get(key) { const v = store.get(key); return v === undefined ? null : { text: async () => v }; }, async put(key, value) { store.set(key, value); } };
+  return { store, async get(key) { const v = store.get(key); return v === undefined ? null : { text: async () => v }; }, async put(key, value) { store.set(key, value); }, async list({ prefix }) { return { objects: [...store.keys()].filter((k) => k.startsWith(prefix)).map((key) => ({ key })), truncated: false }; } };
 }
 const deps = { now: () => NOW };
 const get = (qs) => new Request(`${ORIGIN}/api/stock?${qs}`);
@@ -38,7 +38,7 @@ test("판: 저장 전에는 board null, 관심 목록은 빈 배열", async () =
   const LIVE = fakeR2();
   const r = await handleStock(get("market=us&view=board"), { LIVE }, deps);
   assert.equal(r.status, 200);
-  assert.deepEqual(await body(r), { market: "us", board: null, watch: [], checkedAt: new Date(NOW).toISOString() });
+  assert.deepEqual(await body(r), { market: "us", board: null, watch: [], lensDays: 0, checkedAt: new Date(NOW).toISOString() });
   assert.equal((await handleStock(get("market=xx&view=board"), { LIVE }, deps)).status, 400);
 });
 
@@ -110,6 +110,35 @@ test("시장 이름: constructor 같은 상속 속성은 차단", async () => {
     // POST watch 는 400
     assert.equal((await handleStock(post("/api/stock/watch", { market, ticker: "X", action: "add" }), { LIVE }, deps)).status, 400);
   }
+});
+
+test("ingest kind=lens 는 날짜별 파일로 저장하고 날짜가 이상하면 거절한다", async () => {
+  const LIVE = fakeR2();
+  const ok = await handleStock(post("/api/stock/ingest", { market: "us", kind: "lens", date: "2026-10-05", doc: { hits: {} } }), { LIVE }, deps);
+  assert.equal(ok.status, 200);
+  assert.equal(lensKey("us", "2026-10-05"), "stock/lens-log/us/2026-10-05.json");
+  assert.ok(LIVE.store.has("stock/lens-log/us/2026-10-05.json"));
+  for (const date of ["2026-1-5", "../x", "", undefined, 20261005, "2026-10-05\n"]) {
+    const bad = await handleStock(post("/api/stock/ingest", { market: "us", kind: "lens", date, doc: { hits: {} } }), { LIVE }, deps);
+    assert.equal(bad.status, 400);
+  }
+  assert.equal(LIVE.store.size, 1);
+});
+
+test("판 응답에 그 시장의 관점 기록 일수가 붙는다", async () => {
+  const LIVE = fakeR2();
+  for (const d of ["2026-10-01", "2026-10-02"]) await handleStock(post("/api/stock/ingest", { market: "us", kind: "lens", date: d, doc: {} }), { LIVE }, deps);
+  await handleStock(post("/api/stock/ingest", { market: "kr", kind: "lens", date: "2026-10-01", doc: {} }), { LIVE }, deps);
+  const r = await handleStock(get("market=us&view=board"), { LIVE }, deps);
+  assert.equal((await body(r)).lensDays, 2);
+});
+
+test("기록 일수를 세지 못해도 판은 그대로 준다", async () => {
+  const LIVE = fakeR2();
+  LIVE.list = async () => { throw new Error("boom"); };
+  const r = await handleStock(get("market=us&view=board"), { LIVE }, deps);
+  assert.equal(r.status, 200);
+  assert.equal((await body(r)).lensDays, 0);
 });
 
 test("없는 경로·메서드", async () => {

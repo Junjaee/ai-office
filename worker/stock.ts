@@ -3,7 +3,7 @@
 // GET  /api/stock?market=us&view=watch|board     → 관심 목록 / 판 요약 + 관심 목록
 // GET  /api/stock?market=us&ticker=ORCL          → 종목 한 장 자료
 // POST /api/stock/watch   {market, ticker, action:"add"|"remove"}   화면에서 담고 빼기(다른 출처는 막는다)
-// POST /api/stock/ingest  {market, kind:"board"|"ticker", ticker?, doc}   수집 프로그램(automations/analyst)이 보냄
+// POST /api/stock/ingest  {market, kind:"board"|"ticker"|"lens", ticker?, date?, doc}   수집 프로그램(automations/analyst)이 보냄
 //
 // 공개 저장소에는 종목·관심 목록을 두지 않으려고 여기에 둔다. 사이트에 로그인이 없으므로 주소를 아는 사람은 볼 수 있다
 // (/api/live 와 같은 조건, 사용자 결정 2026-09-29). ingest 는 LIVE_TOKEN 이 설정돼 있을 때만 토큰을 검사한다.
@@ -19,6 +19,25 @@ const TICKER_RE: Record<string, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /
 
 export const boardKey = (market: string) => `stock/${market}/board.json`;
 export const tickerKey = (market: string, ticker: string) => `stock/${market}/t/${ticker}.json`;
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+export const lensKey = (market: string, date: string) => `stock/lens-log/${market}/${date}.json`;
+
+/** 그 시장의 관점 기록 파일 수. 세지 못하면 0 (판을 막지 않는다) */
+async function countLensDays(bucket: R2Like, market: string): Promise<number> {
+  if (!bucket.list) return 0;
+  try {
+    let n = 0;
+    let cursor: string | undefined;
+    do {
+      const page = await bucket.list({ prefix: `stock/lens-log/${market}/`, cursor });
+      n += page.objects.length;
+      cursor = page.truncated ? page.cursor : undefined;
+    } while (cursor);
+    return n;
+  } catch {
+    return 0;
+  }
+}
 
 /** 시장 이름이 TICKER_RE 의 자기 속성인지 확인 (constructor 같은 상속 속성 차단) */
 function isMarket(market: string): boolean {
@@ -107,7 +126,7 @@ export async function handleStock(request: Request, env: StockEnv, deps: { now: 
     }
     const view = url.searchParams.get("view") ?? "board";
     if (view === "watch") return json({ market, watch });
-    if (view === "board") return json({ market, board: await readJson(bucket, boardKey(market)), watch, checkedAt });
+    if (view === "board") return json({ market, board: await readJson(bucket, boardKey(market)), watch, lensDays: await countLensDays(bucket, market), checkedAt });
     return json({ error: "bad_request" }, 400);
   }
 
@@ -136,11 +155,12 @@ export async function handleStock(request: Request, env: StockEnv, deps: { now: 
     }
     const body = await readBody(request, INGEST_MAX_BYTES);
     if (body instanceof Response) return body;
-    const { market, kind, ticker, doc } = body;
+    const { market, kind, ticker, date, doc } = body;
     if (typeof market !== "string" || !isMarket(market) || !doc || typeof doc !== "object") return json({ error: "bad_request" }, 400);
     let key: string;
     if (kind === "board") key = boardKey(market);
     else if (kind === "ticker" && typeof ticker === "string" && validTicker(market, ticker)) key = tickerKey(market, ticker);
+    else if (kind === "lens" && typeof date === "string" && DATE_RE.test(date)) key = lensKey(market, date);
     else return json({ error: "bad_request" }, 400);
     await bucket.put(key, JSON.stringify(doc), { httpMetadata: { contentType: "application/json" } });
     return json({ ok: true });
