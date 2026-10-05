@@ -1,6 +1,7 @@
 {
   "automations": [
+    "analyst",
     "ledger"
   ],
-  "generated_at": "2026-10-05T15:00:37+09:00"
+  "generated_at": "2026-10-05T15:19:10+09:00"
 }
