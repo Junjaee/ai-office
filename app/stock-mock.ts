@@ -1,5 +1,5 @@
 // 주식 분석 화면 견본 자료 — 개발 서버(저장 공간 없음)에서 ?mock=1 로 화면을 확인할 때만 쓴다.
-import type { Board, BoardRow, LensHit, LensId, TickerDoc } from "./stock-rules";
+import type { Board, BoardRow, IndexDoc, LensHit, LensId, Opinion, Score, TickerDoc } from "./stock-rules";
 
 const spark = (a: number, b: number) => Array.from({ length: 60 }, (_, i) => Number((a + ((b - a) * i) / 59 + Math.sin(i / 4) * (Math.abs(b - a) * 0.06 + 1)).toFixed(2)));
 const WHY: Record<LensId, string> = {
@@ -11,6 +11,18 @@ const WHY: Record<LensId, string> = {
 const hits = (ids: LensId[]): LensHit[] => ids.map((id) => ({ id, why: WHY[id] }));
 const row = (t: string, name: string, price: number, chg: number, from: number, ath: number, off: number, fpe: number | null, p: number, c: number, w: number, diag: string, next: string | null, warn: string[], lenses: LensId[] = [], dv: number | null = 1, rev_g: number | null = 10, nde: number | null = 1): BoardRow =>
   ({ t, name, price, chg_pct: chg, spark: spark(from, price), ath_pct: ath, off_hi_pct: off, fpe, n_pass: p, n_care: c, n_warn: w, diag, next_earn: next, warn_keys: warn, sector: "Technology", rev_g, nde, dv_ratio: dv, lenses: hits(lenses) });
+
+/** 한 관점(싸고 탄탄)만 표본이 30건 이상 — 나머지는 아직 판단하기 이른 경우를 화면에서 확인하려는 견본 */
+function mockLensScore(): NonNullable<Board["lens_score"]> {
+  const cells = (a: Score, b: Score, c: Score) => ({ "1w": a, "1m": b, "3m": c });
+  const none: Score = { n: 0, avg: null, win: null };
+  return {
+    value: cells({ n: 120, avg: 0.4, win: 52.5 }, { n: 96, avg: 1.1, win: 55.2 }, { n: 41, avg: -0.6, win: 48.8 }),
+    growth: cells({ n: 18, avg: 0.9, win: 55.6 }, { n: 9, avg: 2.1, win: 66.7 }, none),
+    event: cells({ n: 7, avg: -0.3, win: 42.9 }, { n: 2, avg: 1.4, win: 50 }, none),
+    flow: cells(none, none, none),
+  };
+}
 
 export function mockBoard(): { board: Board; watch: string[] } {
   return {
@@ -25,6 +37,7 @@ export function mockBoard(): { board: Board; watch: string[] } {
       row("KO", "The Coca-Cola Company", 71.5, 0.2, 69.0, -2.0, -2.0, 21.0, 6, 1, 0, "좋음: 가치·수익성·빚·현금흐름", "2026-10-21", [], ["value"], 0.8, 6.0, 1.9),
       row("INTC", "Intel Corporation", 24.1, -1.1, 26.0, -60.0, -48.0, null, 2, 1, 4, "경고: 가치·이익 방향·수익성·현금흐름", "2026-10-23", ["이익 방향", "수익성"], [], 0.7, -2.0, 3.8),
     ], missing: [],
+    lens_score: mockLensScore(),
     lens_info: {
       value: { label: "싸고 탄탄", rule: "점검표의 가치·빚·현금흐름이 모두 통과" },
       growth: { label: "실적 개선", rule: "최근 분기 매출이 전년보다 15% 이상 늘고 이익도 늘어남" },
@@ -34,11 +47,10 @@ export function mockBoard(): { board: Board; watch: string[] } {
   };
 }
 
+const mockDates = (): string[] => Array.from({ length: 130 }, (_, i) => new Date(Date.UTC(2025, 9, 6) + i * 2.78 * 86400000).toISOString().slice(0, 10));
+
 export function mockDoc(ticker: string): TickerDoc {
-  const chart: [string, number][] = Array.from({ length: 130 }, (_, i) => {
-    const d = new Date(Date.UTC(2025, 9, 6) + i * 2.78 * 86400000).toISOString().slice(0, 10);
-    return [d, Number((290 - i * 1.15 + Math.sin(i / 6) * 18).toFixed(2))];
-  });
+  const chart: [string, number][] = mockDates().map((d, i) => [d, Number((290 - i * 1.15 + Math.sin(i / 6) * 18).toFixed(2))]);
   chart[chart.length - 1] = ["2026-10-02", 142.3];
   return {
     market: "us", as_of: "2026-10-02", diag: "좋음: 가치·매출 성장·이익 방향·수익성 / 경고: 빚·현금흐름·추세",
@@ -57,5 +69,30 @@ export function mockDoc(ticker: string): TickerDoc {
     peers: [{ t: "CRM", name: "Salesforce, Inc.", fpe: 19.8 }, { t: "IBM", name: "International Business Machines", fpe: 22.4 }, { t: "ADBE", name: "Adobe Inc.", fpe: 16.1 }],
     ref: { fpe: 26.8, opm: 31.0, label: "업종" },
     lenses: [{ id: "event", why: "9월 30일 실적 발표 공시" }], events: [{ date: "2026-09-30", kind: "실적 발표" }],
+    news: [
+      { title: "오라클, 클라우드 계약 확대에 설비투자 전망 상향", source: "견본 통신", date: "2026-10-01", url: "https://example.com/news/1" },
+      { title: "AI 데이터센터 자금 조달 부담 논란", source: "견본 경제", date: "2026-09-29", url: "https://example.com/news/2" },
+    ],
   };
+}
+
+/** 최근 해석 1개 + 40일 전 해석 1개(오래됨 표시 확인용). 최신순 */
+export function mockOpinions(): Opinion[] {
+  return [
+    { id: "2026-10-03T01:20:00.000Z", price: 138.5, as_of: "2026-10-02", next_earn: "2026-12-11", verdict: "성장은 빠르지만 빚과 현금 소모가 부담이라 실적 발표 전까지 지켜볼 구간",
+      good: [{ text: "최근 분기 매출이 전년보다 29.6% 늘었어요", src: "재무" }, { text: "예상 PER 12.9배로 업종 중앙값보다 낮아요", src: "재무" }],
+      bad: [{ text: "순부채가 연간 영업이익의 4.4배예요", src: "재무" }, { text: "1년 최고가보다 54% 아래에 있어요", src: "시세" }],
+      watch: ["다음 실적 발표에서 설비투자와 잉여현금흐름", "클라우드 계약 잔액 증가 속도"] },
+    { id: "2026-08-27T03:00:00.000Z", price: 189.4, as_of: "2026-08-26", next_earn: "2026-09-10", verdict: "실적 발표를 앞두고 기대가 높아 변동이 클 수 있어요",
+      good: [{ text: "클라우드 매출 성장 전망이 높아졌어요", src: "전망" }],
+      bad: [{ text: "주가가 단기간에 많이 올랐어요", src: "시세" }],
+      watch: ["9월 실적 발표"] },
+  ];
+}
+
+/** 견본 그래프와 같은 날짜 범위의 기준 지수(SPY) */
+export function mockIndex(): IndexDoc {
+  const closes = mockDates().map((d, i) => [d, Number((570 + i * 0.55 + Math.sin(i / 9) * 6).toFixed(2))] as [string, number]);
+  closes[closes.length - 1][0] = "2026-10-02";
+  return { t: "SPY", closes };
 }
