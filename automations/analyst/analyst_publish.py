@@ -20,9 +20,11 @@ class Site:
         r.raise_for_status()
         return list(r.json().get("watch") or [])
 
-    def ingest(self, market: str, kind: str, doc: dict, ticker: str | None = None) -> None:
+    def ingest(self, market: str, kind: str, doc: dict, ticker: str | None = None, date: str | None = None) -> None:
         body = {"market": market, "kind": kind, "doc": doc}
         if ticker:
             body["ticker"] = ticker
+        if date:
+            body["date"] = date
         r = self.http.post(f"{self.base}/api/stock/ingest", json=body, headers=self._headers(), timeout=TIMEOUT)
         r.raise_for_status()

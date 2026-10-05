@@ -150,12 +150,13 @@ export const AUTOMATIONS: AutomationDef[] = [
       { id: "candles", name: "1분봉 백필", role: "과거 1분봉(2022-11~) 내려받기", colors: ["#4b3b2c", "#bbf7d0", "#22c55e"] },
       { id: "flows", name: "수급 백필", role: "투자자별·프로그램·공매도 일별 자료 내려받기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
     ] },
-  // 주식 분석(automations/analyst/): 미국 종목 시세·재무를 받아 점검표를 계산해 /home/stock 화면에 보여 준다. 자료는 R2 stock/ (공개 저장소에는 건수만)
+  // 주식 분석(automations/analyst/): 미국 종목 시세·재무를 받아 점검표를 계산하고 네 관점으로 후보를 걸러 발굴 판에 올려 /home/stock 화면에 보여 준다. 자료는 R2 stock/ (공개 저장소에는 건수만)
   { id: "analyst", dept: "finance", name: "주식 분석", workflow: "analyst.yml", inputs: { market: "us" }, schedule: "화~토 07:00",
     page: { href: "/home/stock", label: "분석 화면" },
     tasks: [
       { id: "collect", name: "주식 자료 수집", role: "야후 파이낸스에서 시세·재무·실적일 받기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
       { id: "check", name: "종목 점검", role: "점검표 7가지 계산과 관심 종목 판 갱신", colors: ["#2b2f3a", "#bbf7d0", "#22c55e"] },
+      { id: "discover", name: "종목 발굴", role: "네 관점으로 후보 걸러 발굴 판 갱신", colors: ["#3a2f4a", "#ede9fe", "#8b5cf6"] },
     ] },
   { id: "hobby", dept: "review", name: "취미·콘텐츠", tasks: [{ id: "archive", name: "콘텐츠 정리", role: "유튜브·AI 노래 프로젝트 기록" }] },
 ];

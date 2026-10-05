@@ -15,4 +15,4 @@ office_workspace: "home"
 next_run: "화~토 07:00"
 
 # 화면의 직원(하위 작업) id. 원천은 app/workspaces/home.ts (테스트로 일치 강제)
-tasks: [check, collect]
+tasks: [check, collect, discover]

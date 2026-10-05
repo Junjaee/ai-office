@@ -5,6 +5,7 @@
   python run_analyst.py --dry-run            # 받아서 계산만 하고 보내지 않는다
   옵션: --config 경로, --market us
 
+네 관점(싸고 탄탄·실적 개선·사건·돈 몰림) 판정과 미국 공시(EDGAR 8-K) 분류를 더해 발굴 판과 관점 기록도 올린다.
 AI 를 부르지 않는다. 저장소가 공개라서 상태 파일·로그에는 건수만 남기고 종목 기호·이름은 적지 않는다
 (자료는 Worker /api/stock/ingest → R2 에만 둔다. 설계서 §4.5).
 """
@@ -19,7 +20,7 @@ import sys
 import time
 import traceback
 import warnings
-from datetime import datetime, timedelta, timezone
+from datetime import date as _date, datetime, timedelta, timezone
 from pathlib import Path
 
 import yaml
@@ -31,9 +32,11 @@ try:
 except ImportError:
     report_status = None
 
-from analyst_checks import board_row, diag, load_rules, medians, peers, ref_for, run_checks  # noqa: E402
+from analyst_checks import LENS_LABEL, LENS_ORDER, board_row, diag, lens_info, lenses, load_rules, medians, peers, ref_for, run_checks  # noqa: E402
+from analyst_events import classify  # noqa: E402
 from analyst_metrics import build_record  # noqa: E402
 from analyst_publish import Site  # noqa: E402
+from analyst_sources_edgar import Edgar  # noqa: E402
 from analyst_sources_us import fetch_raw  # noqa: E402
 
 KST = timezone(timedelta(hours=9))
@@ -56,7 +59,7 @@ def read_universe(path: str | Path) -> list[str]:
     return out
 
 
-def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site: Site | None = None) -> dict:
+def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site: Site | None = None, filings_for=None) -> dict:
     market = getattr(args, "market", "us") or "us"
     if site is None:
         site = Site(cfg["site_url"], token=os.environ.get("LIVE_TOKEN", ""))
@@ -101,26 +104,73 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     base = [r for r in records if r["t"] in uni]
     med = medians(base, rules.get("sector_min", 5))
     as_of = max(r["as_of"] for r in records)
+    # 공시(8-K) — 받지 못해도 계속한다(사건 관점은 가격 조건만 남는다). 실패 내용엔 회사·종목이 들어 있어 건수만 센다
+    if filings_for is None:
+        ua = os.environ.get("SEC_USER_AGENT", "").strip()
+        if ua:
+            filings_for = Edgar(user_agent=ua).filings
+        else:
+            progress("공시 출처 설정(SEC_USER_AGENT)이 없어 가격 조건만으로 사건을 봅니다")
+    ev_days = int(rules["lenses"]["event"]["days"])
+    since = (_date.fromisoformat(as_of) - timedelta(days=ev_days)).isoformat()
+    events: dict[str, list] = {}
+    if filings_for:
+        progress("공시 확인")
+        got = lost = 0
+        for r in records:
+            try:
+                events[r["t"]] = classify(filings_for(r["t"], since), as_of, ev_days)
+                got += 1
+            except Exception:  # noqa: BLE001 — 종목 이름·오류 내용은 로그에 남기지 않는다
+                lost += 1
+                if lost >= 5 and not got:   # 처음부터 계속 막히면 나머지는 묻지 않는다
+                    progress("공시를 받지 못해 가격 조건만으로 사건을 봅니다")
+                    break
+        else:
+            if lost:
+                progress(f"공시를 받지 못해 건너뛴 종목 {lost}건")
+
     rows, docs = [], []
+    hits = {k: [] for k in LENS_ORDER}
     for r in records:
         checks = run_checks(r, med, rules)
-        rows.append(board_row(r, checks))
+        ev = events.get(r["t"], [])
+        lens = lenses(r, checks, ev, rules)
+        for x in lens:
+            hits[x["id"]].append({"t": r["t"], "close": r["price"]})
+        rows.append(board_row(r, checks, lens))
         docs.append({"market": market, "as_of": r["as_of"], "rec": r, "checks": checks, "diag": diag(checks),
-                     "peers": peers(r, base), "ref": ref_for(r, med, rules.get("sector_min", 5))})
+                     "peers": peers(r, base), "ref": ref_for(r, med, rules.get("sector_min", 5)), "lenses": lens, "events": ev})
     board = {"market": market, "as_of": as_of, "generated_at": datetime.now(KST).isoformat(timespec="seconds"), "rows": rows, "medians": med,
-             "missing": failed_watch}  # missing: 관심 종목 중 받지 못한 것 — 사이트 저장 공간에만 간다(로그·상태 파일에는 건수만)
+             "missing": failed_watch,  # missing: 관심 종목 중 받지 못한 것 — 사이트 저장 공간에만 간다(로그·상태 파일에는 건수만)
+             "lens_info": lens_info(rules)}
+
+    # 관점 기록(§5.3) — 걸린 종목과 그날 종가, 견줄 지수 종가. 채점은 나중 단계에서 이 기록으로 한다
+    index = None
+    try:
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            spy = fetch("SPY")
+        index = {"t": "SPY", "close": round(float(spy["closes"][-1][1]), 2)}
+    except Exception:  # noqa: BLE001
+        progress("지수 종가를 받지 못했습니다(기록에는 비워 둡니다)")
+    lens_log = {"market": market, "date": as_of, "index": index, "hits": hits}
 
     if not args.dry_run:
         progress("저장")
-        site.ingest(market, "board", board)
-        for d in docs:
+        for d in docs:   # 종목 자료를 먼저 — 판이 가리키는 자료가 중간에 끊겨도 이미 있도록
             site.ingest(market, "ticker", d, ticker=d["rec"]["t"])
+        site.ingest(market, "board", board)
+        site.ingest(market, "lens", lens_log, date=as_of)
 
     n_warn = sum(1 for row in rows if row["n_warn"])
+    candidates = sum(1 for row in rows if row["lenses"])
     return {
-        "counts": {"checked": len(records), "watch": len(watch), "failed": failed, "failed_watch": sum(1 for t in failed_watch if t not in uni)},
-        "lines": [f"기준일 {as_of}", f"경고가 하나라도 있는 종목 {n_warn}개"],
-        "tasks": {"collect": (True, f"{len(records)}종목 수집, 실패 {failed}건"), "check": (True, f"점검표 {len(rows)}종목, 관심 {len(watch)}종목")},
+        "counts": {"checked": len(records), "watch": len(watch), "failed": failed, "failed_watch": sum(1 for t in failed_watch if t not in uni),
+                   "candidates": candidates},
+        "lines": [f"기준일 {as_of}", f"경고가 하나라도 있는 종목 {n_warn}개", f"관점에 걸린 종목 {candidates}개"],
+        "tasks": {"collect": (True, f"{len(records)}종목 수집, 실패 {failed}건"), "check": (True, f"점검표 {len(rows)}종목, 관심 {len(watch)}종목"),
+                  "discover": (True, f"후보 {candidates}종목 · " + " ".join(f"{LENS_LABEL[k]} {len(hits[k])}" for k in LENS_ORDER))},
     }
 
 
@@ -138,7 +188,7 @@ def load_config(path: str) -> dict:
 
 
 def build_summary(counts: dict, elapsed_sec: float) -> str:
-    names = {"checked": "점검", "watch": "관심", "failed": "실패", "failed_watch": "관심 실패"}
+    names = {"checked": "점검", "watch": "관심", "failed": "실패", "failed_watch": "관심 실패", "candidates": "후보"}
     parts = [f"{names[k]} {v}건" for k, v in counts.items() if k in names]
     parts.append(f"{elapsed_sec / 60:.1f}분" if elapsed_sec >= 60 else f"{int(elapsed_sec)}초")
     return ", ".join(parts)
