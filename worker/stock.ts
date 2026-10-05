@@ -21,6 +21,14 @@ export const boardKey = (market: string) => `stock/${market}/board.json`;
 export const tickerKey = (market: string, ticker: string) => `stock/${market}/t/${ticker}.json`;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 export const lensKey = (market: string, date: string) => `stock/lens-log/${market}/${date}.json`;
+const DAY_MS = 86_400_000;
+
+/** 실제 달력에 있는 날이고 now 기준 10일 전 ~ 2일 뒤 안일 때만 (인증 없는 입구라 키가 끝없이 늘지 않게) */
+function validLensDate(date: string, now: number): boolean {
+  if (!DATE_RE.test(date)) return false;
+  const t = Date.parse(`${date}T00:00:00Z`);
+  return Number.isFinite(t) && new Date(t).toISOString().slice(0, 10) === date && t > now - 10 * DAY_MS && t < now + 2 * DAY_MS;
+}
 
 /** 그 시장의 관점 기록 파일 수. 세지 못하면 0 (판을 막지 않는다) */
 async function countLensDays(bucket: R2Like, market: string): Promise<number> {
@@ -160,7 +168,7 @@ export async function handleStock(request: Request, env: StockEnv, deps: { now: 
     let key: string;
     if (kind === "board") key = boardKey(market);
     else if (kind === "ticker" && typeof ticker === "string" && validTicker(market, ticker)) key = tickerKey(market, ticker);
-    else if (kind === "lens" && typeof date === "string" && DATE_RE.test(date)) key = lensKey(market, date);
+    else if (kind === "lens" && typeof date === "string" && validLensDate(date, deps.now())) key = lensKey(market, date);
     else return json({ error: "bad_request" }, 400);
     await bucket.put(key, JSON.stringify(doc), { httpMetadata: { contentType: "application/json" } });
     return json({ ok: true });

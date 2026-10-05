@@ -44,6 +44,14 @@ def test_filings_maps_ticker_to_cik_and_filters_by_date():
 
 
 def test_unknown_ticker_is_empty_and_network_error_raises():
-    assert Edgar(http=FakeHttp(), delay=0).filings("ZZZZ", "2026-09-01") == []
+    assert Edgar(http=FakeHttp(), delay=0, user_agent=UA).filings("ZZZZ", "2026-09-01") == []
     with pytest.raises(RuntimeError):
-        Edgar(http=FakeHttp(status=403), delay=0).filings("AAPL", "2026-09-01")
+        Edgar(http=FakeHttp(status=403), delay=0, user_agent=UA).filings("AAPL", "2026-09-01")
+
+
+def test_empty_user_agent_is_refused():
+    for ua in ("", "   "):
+        with pytest.raises(ValueError):
+            Edgar(http=FakeHttp(), delay=0, user_agent=ua)
+    with pytest.raises(TypeError):
+        Edgar(http=FakeHttp(), delay=0)

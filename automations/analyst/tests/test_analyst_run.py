@@ -181,6 +181,21 @@ def test_lenses_reach_board_docs_and_lens_log(tmp_path):
     assert "후보 2종목" in out["tasks"]["discover"][1] and "AAA" not in out["tasks"]["discover"][1]
 
 
+def test_lens_log_and_candidates_cover_fresh_reference_universe_only(tmp_path):
+    def fetch(t):
+        raw = fetch_info({})(t)
+        if t == "BBB":                                   # 기준 묶음이지만 자료가 기준일보다 오래됐다
+            raw["closes"][-1][0] = "2025-01-01"
+        return raw
+    site = FakeSite(["ZZZ"])                             # ZZZ 는 관심만
+    out = mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch, site=site, filings_for=lambda t, since: [{"form": "8-K", "date": AS_OF, "items": "2.02"}])
+    by = {r["t"]: [x["id"] for x in r["lenses"]] for r in site.docs["board"]["rows"]}
+    assert by["ZZZ"] == ["event"] and by["BBB"] == ["event"] and by["AAA"] == ["event"]   # 판에는 모두 있다
+    log = site.docs[f"lens:{AS_OF}"]
+    assert sorted(h["t"] for h in log["hits"]["event"]) == ["AAA", "CCC"]              # 기록에는 신선한 기준 묶음만
+    assert out["counts"]["candidates"] == 2 and "후보 2종목" in out["tasks"]["discover"][1]
+
+
 def test_filings_failure_is_counted_not_fatal_and_never_named(tmp_path, capsys):
     site = FakeSite([])
 
@@ -204,6 +219,34 @@ def test_filings_stop_asking_after_five_straight_failures(tmp_path, capsys):
     mod.do_work(cfg(tmp_path, "\n".join(f"T{i:02d}" for i in range(12))), args(), print, fetch=fetch_info({}), site=FakeSite([]), filings_for=filings_for)
     text = capsys.readouterr().out
     assert len(asked) == 5 and text.count("공시를 받지 못해") == 1
+
+
+def test_filings_breaker_does_not_trip_when_some_succeed(tmp_path, capsys):
+    asked = []
+
+    def filings_for(t, since):
+        asked.append(t)
+        if t != "T00":
+            raise RuntimeError("막힘")
+        return []
+    mod.do_work(cfg(tmp_path, "\n".join(f"T{i:02d}" for i in range(7))), args(), print, fetch=fetch_info({}), site=FakeSite([]), filings_for=filings_for)
+    text = capsys.readouterr().out
+    assert len(asked) == 7 and "공시를 받지 못해 건너뛴 종목 6건" in text
+
+
+def test_filings_loop_stops_when_time_budget_is_spent(tmp_path, capsys):
+    asked = []
+
+    def filings_for(t, since):
+        asked.append(t)
+        return []
+    ticks = iter(range(0, 10_000, 100))          # 가짜 시계: 부를 때마다 100초씩 간다
+    c = cfg(tmp_path, "\n".join(f"T{i:02d}" for i in range(6)))
+    c["filings_budget_sec"] = 250
+    out = mod.do_work(c, args(), print, fetch=fetch_info({}), site=FakeSite([]), filings_for=filings_for, clock=lambda: next(ticks))
+    text = capsys.readouterr().out
+    assert len(asked) == 2 and "공시를 받지 못해 남은 4종목은 가격 조건만 봅니다 (시간 초과)" in text
+    assert "T0" not in text and out["counts"]["checked"] == 6
 
 
 def test_without_sec_user_agent_edgar_is_never_called(tmp_path, monkeypatch, capsys):
@@ -241,6 +284,17 @@ def test_index_failure_leaves_index_empty(tmp_path):
     assert site.docs[f"lens:{AS_OF}"]["index"] is None
 
 
+def test_stale_index_leaves_index_empty(tmp_path):
+    def fetch(t):
+        raw = fetch_info({})(t)
+        if t == "SPY":
+            raw["closes"][-1][0] = "2025-01-01"
+        return raw
+    site = FakeSite([])
+    mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch, site=site)
+    assert site.docs[f"lens:{AS_OF}"]["index"] is None
+
+
 def test_site_client_urls_and_token():
     calls = []
 
@@ -261,3 +315,54 @@ def test_site_client_urls_and_token():
     assert calls[1] == ("POST", "https://x.example/api/stock/ingest", {"market": "us", "kind": "ticker", "doc": {"a": 1}, "ticker": "ORCL"}, {"X-Live-Token": "tok"})
     assert calls[2][2] == {"market": "us", "kind": "lens", "doc": {"b": 2}, "date": "2026-10-02"}
     assert analyst_publish.Site("https://x.example", http=Http())._headers() == {}
+
+
+class Resp:
+    def __init__(self, status):
+        self.status_code = status
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise RuntimeError(f"HTTP {self.status_code}")
+
+
+class ScriptedHttp:
+    """post 를 부를 때마다 steps 의 다음 값(상태 코드, 또는 던질 예외)으로 답한다."""
+    def __init__(self, *steps):
+        self.steps, self.posts = list(steps), 0
+
+    def post(self, url, json=None, headers=None, timeout=None):
+        self.posts += 1
+        step = self.steps.pop(0)
+        if isinstance(step, Exception):
+            raise step
+        return Resp(step)
+
+
+def make_site(*steps):
+    waits = []
+    return analyst_publish.Site("https://x.example", http=ScriptedHttp(*steps), sleep=waits.append), waits
+
+
+def test_ingest_retries_once_after_network_error_or_5xx():
+    for first in (OSError("끊김"), 503):
+        site, waits = make_site(first, 200)
+        site.ingest("us", "board", {})
+        assert site.http.posts == 2 and waits == [2]
+
+
+def test_ingest_gives_up_after_one_retry():
+    site, waits = make_site(503, 502)
+    with pytest.raises(RuntimeError):
+        site.ingest("us", "board", {})
+    assert site.http.posts == 2 and waits == [2]
+    site, _ = make_site(OSError("끊김"), OSError("끊김"))
+    with pytest.raises(OSError):
+        site.ingest("us", "board", {})
+
+
+def test_ingest_does_not_retry_client_errors():
+    site, waits = make_site(400, 200)
+    with pytest.raises(RuntimeError):
+        site.ingest("us", "board", {})
+    assert site.http.posts == 1 and waits == []

@@ -59,7 +59,7 @@ def read_universe(path: str | Path) -> list[str]:
     return out
 
 
-def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site: Site | None = None, filings_for=None) -> dict:
+def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site: Site | None = None, filings_for=None, clock=time.monotonic) -> dict:
     market = getattr(args, "market", "us") or "us"
     if site is None:
         site = Site(cfg["site_url"], token=os.environ.get("LIVE_TOKEN", ""))
@@ -108,7 +108,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     if filings_for is None:
         ua = os.environ.get("SEC_USER_AGENT", "").strip()
         if ua:
-            filings_for = Edgar(user_agent=ua).filings
+            filings_for = Edgar(ua).filings
         else:
             progress("공시 출처 설정(SEC_USER_AGENT)이 없어 가격 조건만으로 사건을 봅니다")
     ev_days = int(rules["lenses"]["event"]["days"])
@@ -117,7 +117,11 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     if filings_for:
         progress("공시 확인")
         got = lost = 0
-        for r in records:
+        budget, t0 = float(cfg.get("filings_budget_sec", 480)), clock()
+        for i, r in enumerate(records):
+            if clock() - t0 > budget:   # 공시 서버가 느려 실행이 끝없이 늘어지지 않게
+                progress(f"공시를 받지 못해 남은 {len(records) - i}종목은 가격 조건만 봅니다 (시간 초과)")
+                break
             try:
                 events[r["t"]] = classify(filings_for(r["t"], since), as_of, ev_days)
                 got += 1
@@ -132,12 +136,15 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
 
     rows, docs = [], []
     hits = {k: [] for k in LENS_ORDER}
+    candidates = 0
     for r in records:
         checks = run_checks(r, med, rules)
         ev = events.get(r["t"], [])
         lens = lenses(r, checks, ev, rules)
-        for x in lens:
-            hits[x["id"]].append({"t": r["t"], "close": r["price"]})
+        if r["t"] in uni and r["as_of"] == as_of:   # 기록·후보는 기준 묶음의 그날 자료만 — 관심 종목·오래된 자료는 판에만 보인다
+            candidates += bool(lens)
+            for x in lens:
+                hits[x["id"]].append({"t": r["t"], "close": r["price"]})
         rows.append(board_row(r, checks, lens))
         docs.append({"market": market, "as_of": r["as_of"], "rec": r, "checks": checks, "diag": diag(checks),
                      "peers": peers(r, base), "ref": ref_for(r, med, rules.get("sector_min", 5)), "lenses": lens, "events": ev})
@@ -151,7 +158,8 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), warnings.catch_warnings():
             warnings.simplefilter("ignore")
             spy = fetch("SPY")
-        index = {"t": "SPY", "close": round(float(spy["closes"][-1][1]), 2)}
+        if spy["closes"][-1][0] == as_of:
+            index = {"t": "SPY", "close": round(float(spy["closes"][-1][1]), 2)}
     except Exception:  # noqa: BLE001
         progress("지수 종가를 받지 못했습니다(기록에는 비워 둡니다)")
     lens_log = {"market": market, "date": as_of, "index": index, "hits": hits}
@@ -164,7 +172,6 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
         site.ingest(market, "lens", lens_log, date=as_of)
 
     n_warn = sum(1 for row in rows if row["n_warn"])
-    candidates = sum(1 for row in rows if row["lenses"])
     return {
         "counts": {"checked": len(records), "watch": len(watch), "failed": failed, "failed_watch": sum(1 for t in failed_watch if t not in uni),
                    "candidates": candidates},

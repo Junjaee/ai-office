@@ -125,6 +125,18 @@ test("ingest kind=lens 는 날짜별 파일로 저장하고 날짜가 이상하�
   assert.equal(LIVE.store.size, 1);
 });
 
+test("ingest kind=lens: 실제 달력 날짜이고 최근(10일 전~2일 뒤)이어야 한다", async () => {
+  const LIVE = fakeR2();
+  const send = (date) => handleStock(post("/api/stock/ingest", { market: "us", kind: "lens", date, doc: { hits: {} } }), { LIVE }, deps);
+  // 달력에 없는 날, 너무 오래된 날, 너무 먼 미래 → 400 이고 저장 없음
+  for (const date of ["9999-99-99", "2026-13-45", "2026-02-30", "2026-09-05", "2026-10-10"]) assert.equal((await send(date)).status, 400, date);
+  assert.equal(LIVE.store.size, 0);
+  // 오늘(NOW 의 날)과 어제는 받는다
+  assert.equal((await send("2026-10-05")).status, 200);
+  assert.equal((await send("2026-10-04")).status, 200);
+  assert.equal(LIVE.store.size, 2);
+});
+
 test("판 응답에 그 시장의 관점 기록 일수가 붙는다", async () => {
   const LIVE = fakeR2();
   for (const d of ["2026-10-01", "2026-10-02"]) await handleStock(post("/api/stock/ingest", { market: "us", kind: "lens", date: d, doc: {} }), { LIVE }, deps);

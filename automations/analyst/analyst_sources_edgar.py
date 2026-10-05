@@ -14,7 +14,9 @@ TIMEOUT = 20
 
 
 class Edgar:
-    def __init__(self, http=requests, delay: float = 0.12, user_agent: str = ""):
+    def __init__(self, user_agent: str, http=requests, delay: float = 0.12):
+        if not user_agent.strip():
+            raise ValueError("SEC 는 User-Agent(이름·이메일)가 비어 있으면 막는다")
         self.http, self.delay, self._cik = http, delay, None
         self.headers = {"User-Agent": user_agent}
 
