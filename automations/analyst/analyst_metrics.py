@@ -52,6 +52,20 @@ def _dv_ratio(closes: list, volumes: list) -> float | None:
     return round(sum(dv[-5:]) / 5 / base, 2) if base else None
 
 
+def _dv1_ratio(closes: list, volumes: list) -> float | None:
+    """마지막 날 거래대금 ÷ 60일 평균 거래대금."""
+    dv = [c * v for (_, c), v in zip(closes, volumes) if c and v]
+    if len(dv) < 60:
+        return None
+    base = sum(dv[-60:]) / 60
+    return round(dv[-1] / base, 2) if base else None
+
+
+def _above_ma(values: list, n: int = 20) -> bool | None:
+    """마지막 종가가 n일 평균보다 위인가."""
+    return None if len(values) < n else values[-1] > sum(values[-n:]) / n
+
+
 def _pct(v) -> float | None:
     f = num(v)
     return None if f is None else round(f * 100, 1)
@@ -82,6 +96,7 @@ def build_record(raw: dict) -> dict:
         "chart": [[d, round(c, 2)] for d, c in thin(closes, CHART_POINTS)],
         "moves": big_moves(closes),
         "dv_ratio": _dv_ratio(closes, raw.get("volumes") or []),
+        "dv1_ratio": _dv1_ratio(closes, raw.get("volumes") or []), "above_ma20": _above_ma(values),
         "fpe": num(info.get("forwardPE")), "tpe": num(info.get("trailingPE")), "pb": num(info.get("priceToBook")), "mcap": num(info.get("marketCap")),
         "rev_g": _pct(info.get("revenueGrowth")), "eps_g": _pct(info.get("earningsGrowth")), "opm": _pct(info.get("operatingMargins")),
         "net_debt_ebitda": nde, "debt": debt, "cash": cash, "fcf": num(info.get("freeCashflow")), "ocf": num(info.get("operatingCashflow")),

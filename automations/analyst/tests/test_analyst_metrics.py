@@ -76,3 +76,28 @@ def test_missing_cash_requires_none_for_net_debt():
     r_full = m.build_record(make_raw())
     assert r_full["net_debt_ebitda"] == round((169e9 - 37e9) / 30e9, 2)
     assert r_full["cash"] == 37e9
+
+
+def _raw70(last_close=110.0, last_vol=1000.0):
+    closes = [[f"2026-07-{i + 1:02d}" if i < 31 else f"2026-08-{i - 30:02d}" if i < 62 else f"2026-09-{i - 61:02d}", 100.0] for i in range(70)]
+    closes[-1][1] = last_close
+    vols = [1000.0] * 70
+    vols[-1] = last_vol
+    return {"t": "AAA", "closes": closes, "volumes": vols, "info": {}}
+
+
+def test_dv1_ratio_is_last_day_over_60day_average():
+    rec = m.build_record(_raw70(last_close=100.0, last_vol=4000.0))
+    assert rec["dv1_ratio"] == round(4000 * 100 / ((59 * 1000 * 100 + 4000 * 100) / 60), 2)
+
+
+def test_above_ma20_true_when_last_close_over_20day_mean():
+    assert m.build_record(_raw70(last_close=110.0))["above_ma20"] is True
+    assert m.build_record(_raw70(last_close=90.0))["above_ma20"] is False
+
+
+def test_short_history_gives_none_not_zero():
+    raw = _raw70()
+    raw["closes"], raw["volumes"] = raw["closes"][-10:], raw["volumes"][-10:]
+    rec = m.build_record(raw)
+    assert rec["dv1_ratio"] is None and rec["above_ma20"] is None
