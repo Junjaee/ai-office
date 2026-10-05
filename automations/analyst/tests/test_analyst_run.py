@@ -1,5 +1,8 @@
 """run_analyst — 수집·계산·저장 흐름(가짜 수집기·가짜 사이트)과 공개 기록 규칙."""
+import logging
+import sys
 import types
+import warnings
 
 import pytest
 
@@ -35,7 +38,7 @@ def fetch_ok(t):
 def test_collects_universe_plus_watch_and_publishes(tmp_path):
     site = FakeSite(["ZZZ", "AAA"])
     out = mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=site)
-    assert out["counts"] == {"checked": 4, "watch": 2, "failed": 0}
+    assert out["counts"] == {"checked": 4, "watch": 2, "failed": 0, "failed_watch": 0}
     kinds = [(k, t) for _, k, t, _ in site.sent]
     assert kinds[0] == ("board", None) and sorted(t for k, t in kinds[1:]) == ["AAA", "BBB", "CCC", "ZZZ"]
     board = site.sent[0][3]
@@ -70,12 +73,57 @@ def test_some_failures_are_counted_but_too_many_abort(tmp_path):
     assert site2.sent == []                     # 실패가 많으면 지난 자료를 덮어쓰지 않는다
 
 
+def test_dead_watch_tickers_do_not_abort_and_are_listed_as_missing(tmp_path):
+    dead = [f"W{i:02d}" for i in range(25)]
+
+    def fetch(t):
+        if t in dead:
+            raise ValueError("없는 종목")
+        return fetch_ok(t)
+    site = FakeSite(dead)
+    out = mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch, site=site)
+    assert out["counts"] == {"checked": 3, "watch": 25, "failed": 25, "failed_watch": 25}
+    board = site.sent[0][3]
+    assert board["missing"] == dead and len(board["rows"]) == 3
+
+
+def test_reference_set_ignores_watch_only_tickers(tmp_path):
+    def fetch(t):
+        raw = make_raw(t=t, name=f"{t} Corp")
+        if t == "ZZZ":
+            raw["sector"] = "Other"
+        return raw
+    site = FakeSite(["ZZZ"])
+    mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch, site=site)
+    med = site.sent[0][3]["medians"]
+    assert "Other" not in med["sector"]
+    doc = next(d for _, k, t, d in site.sent if t == "AAA")
+    assert all(p["t"] != "ZZZ" for p in doc["peers"])
+
+
+def test_fetch_noise_never_reaches_public_logs(tmp_path, capsys, caplog):
+    def noisy(t):
+        print(t)
+        print(t, file=sys.stderr)
+        warnings.warn(t)
+        logging.getLogger("yfinance").error(t)
+        raise ValueError(t)
+    caplog.set_level(logging.DEBUG)
+    with pytest.raises(RuntimeError):
+        mod.do_work(cfg(tmp_path), args(), print, fetch=noisy, site=FakeSite(["ZZZ"]))
+    cap = capsys.readouterr()
+    everything = cap.out + cap.err + caplog.text
+    for t in ("AAA", "BBB", "CCC", "ZZZ"):
+        assert t not in everything
+    assert "수집 실패 1건" in cap.out
+
+
 def test_watch_read_failure_is_tolerated_only_in_dry_run(tmp_path):
     class Down(FakeSite):
         def watch(self, market):
             raise OSError("사이트에 아직 경로가 없음")
     out = mod.do_work(cfg(tmp_path), args(dry=True), lambda m: None, fetch=fetch_ok, site=Down([]))
-    assert out["counts"] == {"checked": 3, "watch": 0, "failed": 0}
+    assert out["counts"] == {"checked": 3, "watch": 0, "failed": 0, "failed_watch": 0}
     with pytest.raises(OSError):
         mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=Down([]))
 

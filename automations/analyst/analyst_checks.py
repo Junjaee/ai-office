@@ -117,7 +117,7 @@ def run_checks(rec: dict, med: dict, rules: dict) -> list[dict]:
         elif fcf > 0:
             add("현금흐름", "pass", f"최근 12개월 쓰고 남은 현금 +{_eok(fcf)}")
         elif ocf is not None and ocf > 0:
-            add("현금흐름", "care", f"영업으로는 벌지만 투자로 −{_eok(fcf)}")
+            add("현금흐름", "care", f"쓰고 남은 현금 −{_eok(fcf)} (영업현금은 흑자)")
         else:
             add("현금흐름", "warn", f"최근 12개월 쓰고 남은 현금 −{_eok(fcf)}")
 

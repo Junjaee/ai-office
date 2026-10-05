@@ -49,6 +49,7 @@ jobs:
           # 선택: Worker 에 LIVE_TOKEN 을 설정했다면 같은 값을 GitHub Secrets 에도 넣는다. 없으면 빈 값으로 보낸다.
           LIVE_TOKEN: ${{ secrets.LIVE_TOKEN }}
           REQUEST_ID: ${{ inputs.request_id }}
+          MARKET: ${{ inputs.market }}
           PYTHONUTF8: "1"
         run: |
-          python -X utf8 automations/analyst/run_analyst.py --config automations/analyst/config.actions.yaml --market "${{ inputs.market }}"
+          python -X utf8 automations/analyst/run_analyst.py --config automations/analyst/config.actions.yaml --market "$MARKET"

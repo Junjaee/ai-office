@@ -80,6 +80,20 @@ test("관심 담기·빼기: 저장되고 판·종목 응답에 반영, 다른 �
   assert.equal((await handleStock(post("/api/stock/watch", { market: "us", ticker: "X", action: "add" }, { Origin: "https://evil.example" }), { LIVE }, deps)).status, 403);
 });
 
+test("관심 쓰기: 읽기·해석에 실패하면 503 이고 아무것도 쓰지 않는다", async () => {
+  const put = [];
+  const throwing = { async get() { throw new Error("r2 down"); }, async put(k) { put.push(k); } };
+  const bad = { async get() { return { text: async () => "{not json" }; }, async put(k) { put.push(k); } };
+  for (const LIVE of [throwing, bad]) {
+    const r = await handleStock(post("/api/stock/watch", { market: "us", ticker: "NVDA", action: "add" }), { LIVE }, deps);
+    assert.equal(r.status, 503);
+    assert.deepEqual(await body(r), { error: "stock_unavailable" });
+  }
+  assert.deepEqual(put, []);
+  // 목록이 아직 없는 것(빈 목록)은 정상: 첫 담기는 저장된다
+  assert.equal((await handleStock(post("/api/stock/watch", { market: "us", ticker: "NVDA", action: "add" }), { LIVE: fakeR2() }, deps)).status, 200);
+});
+
 test("시장 이름: constructor 같은 상속 속성은 차단", async () => {
   const LIVE = fakeR2();
   for (const market of ["constructor", "toString", "__proto__"]) {

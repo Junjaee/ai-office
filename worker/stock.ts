@@ -52,9 +52,23 @@ async function readJson(bucket: R2Like, key: string): Promise<unknown | null> {
   }
 }
 
-async function readWatch(bucket: R2Like): Promise<Record<string, unknown>> {
-  const doc = await readJson(bucket, WATCH_KEY);
+function asObject(doc: unknown): Record<string, unknown> {
   return doc && typeof doc === "object" && !Array.isArray(doc) ? (doc as Record<string, unknown>) : {};
+}
+
+/** 읽기용: 못 읽으면 빈 목록으로 본다 */
+async function readWatch(bucket: R2Like): Promise<Record<string, unknown>> {
+  return asObject(await readJson(bucket, WATCH_KEY));
+}
+
+/** 쓰기용: 없는 것(빈 목록)은 정상, 읽기·해석 실패는 null — 이때 덮어쓰면 목록이 통째로 사라진다 */
+async function readWatchStrict(bucket: R2Like): Promise<Record<string, unknown> | null> {
+  try {
+    const obj = await bucket.get(WATCH_KEY);
+    return obj ? asObject(JSON.parse(await obj.text())) : {};
+  } catch {
+    return null;
+  }
 }
 
 function watchOf(all: Record<string, unknown>, market: string): string[] {
@@ -106,7 +120,8 @@ export async function handleStock(request: Request, env: StockEnv, deps: { now: 
     if (typeof market !== "string" || typeof ticker !== "string" || !validTicker(market, ticker) || (action !== "add" && action !== "remove")) {
       return json({ error: "bad_request" }, 400);
     }
-    const all = await readWatch(bucket);
+    const all = await readWatchStrict(bucket);
+    if (!all) return json({ error: "stock_unavailable" }, 503);
     const next = applyWatch(watchOf(all, market), ticker, action);
     if (next.error) return json({ error: next.error }, 409);
     await bucket.put(WATCH_KEY, JSON.stringify({ ...all, [market]: next.list, updated_at: checkedAt }), { httpMetadata: { contentType: "application/json" } });

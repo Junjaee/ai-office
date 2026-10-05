@@ -47,6 +47,14 @@ test("관심 줄: 관심 목록 순서대로, 아직 자료가 없는 종목은 
   assert.deepEqual(watchRows(null, ["X"]).map((r) => [r.t, r.pending]), [["X", true]]);
 });
 
+test("관심 줄: 판의 missing 에 든 종목은 찾지 못함으로 표시", () => {
+  const board = normalizeBoard({ market: "us", as_of: "2026-10-02", rows: [row({ t: "AAA" })], missing: ["BAD", 7] });
+  assert.deepEqual(board.missing, ["BAD"]);
+  assert.deepEqual(normalizeBoard({ rows: [] }).missing, []);
+  const out = watchRows(board, ["AAA", "BAD", "NEW"]);
+  assert.deepEqual(out.map((r) => [r.t, r.pending, r.pending && r.missing]), [["AAA", false, false], ["BAD", true, true], ["NEW", true, false]]);
+});
+
 test("오늘 먼저 볼 것 세 칸", () => {
   const rows = [row({ t: "A", name: "가", next_earn: "2026-10-22", n_warn: 0, warn_keys: [], off_hi_pct: -0.8 }),
     row({ t: "B", name: "나", next_earn: "2026-12-11", n_warn: 3, warn_keys: ["빚", "현금흐름", "추세"], off_hi_pct: -57 }),

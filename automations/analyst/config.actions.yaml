@@ -6,8 +6,8 @@ site_url: "https://ai-office.smartjohn-d34.workers.dev"
 request_delay: 0.3      # 종목 사이 쉬는 시간(초)
 max_fail_ratio: 0.2     # 받지 못한 종목이 이 비율을 넘으면 실패로 끝내고 지난 자료를 둔다
 
-# 결과 화면
-result_link: "https://ai-office.smartjohn-d34.workers.dev/home/stock"
+# 결과 화면은 카드의 "분석 화면" 단추(app/workspaces/home.ts page)가 맡는다 — 결과 폴더 단추는 두지 않는다
+result_link: ""
 
 # 상태 보고: 저장소 루트(체크아웃 위치)에 커밋 — 건수만 남긴다
 office_repo: "."

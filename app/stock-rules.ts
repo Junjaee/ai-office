@@ -7,7 +7,7 @@ export type BoardRow = {
   t: string; name: string; price: number; chg_pct: number | null; spark: number[]; ath_pct: number | null; off_hi_pct: number | null;
   fpe: number | null; n_pass: number; n_care: number; n_warn: number; diag: string; next_earn: string | null; warn_keys: string[];
 };
-export type Board = { market: string; as_of: string; generated_at?: string; rows: BoardRow[] };
+export type Board = { market: string; as_of: string; generated_at?: string; rows: BoardRow[]; missing: string[] };
 export type StockRecord = {
   t: string; name: string; exchange: string; sector: string; financial: boolean; as_of: string; price: number; chg_pct: number | null;
   hi52: number; lo52: number; off_hi_pct: number | null; ath: number; ath_date: string; ath_pct: number | null; y_ret_pct: number | null;
@@ -21,7 +21,7 @@ export type TickerDoc = {
   market: string; as_of: string; rec: StockRecord; checks: Check[]; diag: string;
   peers: { t: string; name: string; fpe: number }[]; ref: { fpe: number | null; opm: number | null; label: string };
 };
-export type WatchRow = (BoardRow & { pending: false }) | { t: string; pending: true };
+export type WatchRow = (BoardRow & { pending: false }) | { t: string; pending: true; missing: boolean };
 export type Flag = { kind: "earnings" | "warn" | "high"; title: string; body: string };
 
 /** 상태 이름표. 색만으로 구분하지 않는다 — 글자와 아이콘(선 그림 path)을 함께 쓴다 */
@@ -87,12 +87,13 @@ export function earnText(iso: string | null | undefined, todayIso: string): { da
   return { date: monthDay(iso), days: n === 0 ? "오늘" : n > 0 ? `${n}일 뒤` : "지남" };
 }
 
-/** 관심 목록 순서대로 줄을 만든다. 판에 아직 없는 종목은 "자료를 받는 중" */
+/** 관심 목록 순서대로 줄을 만든다. 판에 아직 없는 종목은 "자료를 받는 중", 판이 "받지 못함"이라 적은 종목은 missing */
 export function watchRows(board: Board | null, watch: string[]): WatchRow[] {
   const byT = new Map((board?.rows ?? []).map((r) => [r.t, r] as const));
+  const miss = new Set(board?.missing ?? []);
   return watch.map((t) => {
     const r = byT.get(t);
-    return r ? { ...r, pending: false as const } : { t, pending: true as const };
+    return r ? { ...r, pending: false as const } : { t, pending: true as const, missing: miss.has(t) };
   });
 }
 
@@ -159,7 +160,8 @@ export function normalizeBoard(input: unknown): Board | null {
       warn_keys: arr(raw.warn_keys).filter((x): x is string => typeof x === "string"),
     });
   }
-  return { market: str(input.market), as_of: str(input.as_of), ...(typeof input.generated_at === "string" ? { generated_at: input.generated_at } : {}), rows };
+  return { market: str(input.market), as_of: str(input.as_of), ...(typeof input.generated_at === "string" ? { generated_at: input.generated_at } : {}), rows,
+    missing: arr(input.missing).filter((x): x is string => typeof x === "string") };
 }
 
 const STATES: readonly string[] = ["pass", "care", "warn", "na"];

@@ -138,10 +138,10 @@ export default function StockBoard({ ws }: { ws: string }) {
                       <div key={r.t} className="stk-tr" role="row">
                         <span role="cell" className="stk-name">
                           <b>{r.t}</b>
-                          <small>자료를 받는 중</small>
+                          <small>{r.missing ? "야후에서 찾지 못함" : "자료를 받는 중"}</small>
                         </span>
                         <span role="cell" style={{ gridColumn: "2 / 9" }} className="auto-meta">
-                          다음 갱신(화~토 07:00) 때 들어옵니다.
+                          {r.missing ? "야후에서 찾지 못함 — 종목 기호를 확인하세요" : "다음 갱신(화~토 07:00) 때 들어옵니다."}
                         </span>
                         <span role="cell" className="stk-acts">
                           <button className="btn btn-ghost" disabled={busy} onClick={() => void change(r.t, "remove")}>
