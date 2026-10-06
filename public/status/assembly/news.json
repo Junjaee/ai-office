@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 12초",
+  "summary": "신규 12건, 실패 0건, 10초",
   "counts": {
-    "new": 9,
+    "new": 12,
     "failed": 0,
-    "total": 3189
+    "total": 3201
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 12초",
-    "[신규] 김주영 의원, 해상특보구역 늘어도 관측망은 5년째 제자리 — 시민행정신문",
-    "[신규] 수도권 주거 혁신포럼 창립 총회 / 정중규 — 브런치",
-    "[신규] 내용을 찾기 쉬운지 확인하는 롯데 자이언츠 슬롯 도움말 구성 — Calgary Roughnecks",
-    "[신규] 피격 사건 연상시킨 ‘탄흔 굿즈’…메가박스 \"남은 수량 폐기\" — JTBC"
+    "신규 12건, 실패 0건, 10초",
+    "[신규] 김정재 의원, 고속도로 터널 방재시설 곳곳서 빈틈…핵심시설 복구는 수개월 — 시민행정신문",
+    "[신규] 필로폰 건네자마자 돌려받아도... 대법 \"매매는 이미 끝났다\" — 파이낸셜뉴스",
+    "[신규] e스포츠·VR까지…무대 넓힌 AG, 지속성은 과제 — 연합뉴스 한민족센터",
+    "[신규] 차기 보수 대통령감은…한동훈 18.7%·장동혁·오세훈 12.3% [여론조사꽃] — edaily.co.kr, 이데일리TV"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37352682576,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37352682576",
-  "request_id": "cron-202610051800",
+  "run_id": 37391783597,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37391783597",
+  "request_id": "cron-202610060000",
   "trigger": "schedule",
-  "started_at": "2026-10-06T03:00:57+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-06T09:02:27+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 59건"
+      "summary": "검색어 5개에서 60건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 9건 (신규 9건) · Calgary Roughnecks 3건, JTBC 1건, 뉴스타운 1건"
+      "summary": "오늘 21건 (신규 12건) · 시민행정신문 5건, Calgary Roughnecks 3건, 뉴스핌 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-06T03:01:09+09:00"
+  "updated_at": "2026-10-06T09:02:39+09:00"
 }
