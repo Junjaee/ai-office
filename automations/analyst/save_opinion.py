@@ -92,8 +92,8 @@ def main(argv: list[str], site: Site | None = None) -> int:
     args = p.parse_args(argv)
     if args.market == "kr":
         ticker = args.ticker
-        if not re.fullmatch(r"[0-9]{6}", ticker):
-            return _fail(f"국내 종목은 숫자 6자리 코드여야 합니다(예: 005930): {ticker}")
+        if not re.fullmatch(r"[0-9][0-9A-Z]{5}", ticker):
+            return _fail(f"국내 종목은 6자리 코드여야 합니다(예: 005930): {ticker}")
     else:
         ticker = args.ticker.upper()
 

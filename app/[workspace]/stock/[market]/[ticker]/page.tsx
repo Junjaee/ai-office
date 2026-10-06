@@ -5,7 +5,7 @@ import { isMarket, type Market } from "../../../../stock-rules";
 import { WORKSPACES, isWorkspaceId } from "../../../../workspaces";
 
 type Props = { params: Promise<{ workspace: string; market: string; ticker: string }> };
-const TICKER_RE: Record<Market, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /^[0-9]{6}$/ };
+const TICKER_RE: Record<Market, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /^[0-9][0-9A-Z]{5}$/ };
 
 function ok(workspace: string, market: string, ticker: string): boolean {
   return isWorkspaceId(workspace) && WORKSPACES[workspace].automations.some((a) => a.page?.href === `/${workspace}/stock`) && isMarket(market) && TICKER_RE[market].test(ticker); // isMarket 먼저 — constructor 같은 상속 속성 이름을 막는다

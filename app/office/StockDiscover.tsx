@@ -7,7 +7,7 @@ import { useStockBoard } from "./useStockBoard";
 
 const PAGE = 60;
 const okNote = (t: string, action: "add" | "remove") => (action === "add" ? `${t} 을(를) 담았어요.` : `${t} 을(를) 뺐어요.`);
-const SYMBOL: Record<Market, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /^[0-9]{6}$/ }; // Worker 와 같은 종목 모양 — 맞지 않으면 분석 링크를 만들지 않는다
+const SYMBOL: Record<Market, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /^[0-9][0-9A-Z]{5}$/ }; // Worker 와 같은 종목 모양 — 맞지 않으면 분석 링크를 만들지 않는다
 const FOOT: Record<Market, string> = {
   us: "발굴 결과는 조건에 맞는 종목을 걸러 보여 주는 것이며 매수 추천이 아닙니다. 출처는 야후 파이낸스와 미국 증권거래위원회(EDGAR) 공시 목록입니다.",
   kr: "발굴 결과는 조건에 맞는 종목을 걸러 보여 주는 것이며 매수 추천이 아닙니다. 출처는 야후 파이낸스입니다. 국내 공시는 아직 받지 않습니다.",

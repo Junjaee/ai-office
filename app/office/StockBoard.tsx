@@ -156,7 +156,7 @@ export default function StockBoard({ ws }: { ws: string }) {
             }}
           >
             <label htmlFor="stk-add">종목 추가</label>
-            <input id="stk-add" value={input} onChange={(ev) => setInput(ev.target.value)} placeholder={tickerPlaceholder(market)} maxLength={market === "kr" ? 6 : 10} inputMode={market === "kr" ? "numeric" : undefined} autoComplete="off" />
+            <input id="stk-add" value={input} onChange={(ev) => setInput(ev.target.value)} placeholder={tickerPlaceholder(market)} maxLength={market === "kr" ? 6 : 10} autoComplete="off" />
             <button className="btn btn-accent" type="submit" disabled={busy || !tickerInputValid(market, input)}>
               담기
             </button>

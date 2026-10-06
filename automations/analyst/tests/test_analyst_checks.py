@@ -73,6 +73,9 @@ def test_peers_same_sector_nearest_size():
     recs = [rec(t="A", mcap=100), rec(t="B", mcap=90), rec(t="C", mcap=500), rec(t="D", mcap=110), rec(t="E", sector="Energy", mcap=100), rec(t="N", mcap=105, fpe=None)]
     out = c.peers(rec(t="A", mcap=100), recs, n=2)
     assert [p["t"] for p in out] == ["B", "D"]
+    assert out[0]["name"] == "A"   # 한글 이름이 없으면 원래 이름
+    kr = c.peers(rec(t="A", mcap=100), [rec(t="B", mcap=90, name_local="비비")], n=1)
+    assert kr[0]["name"] == "비비"
 
 
 def _ck(**states):

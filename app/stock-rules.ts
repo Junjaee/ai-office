@@ -84,10 +84,10 @@ export function eok(v: number | null | undefined, currency: Currency = "USD"): s
 export const displayName = (r: { name: string; name_local?: string | null }): string => r.name_local || r.name;
 
 export const tickerPlaceholder = (market: Market): string => (market === "kr" ? "종목 코드 (예: 005930)" : "종목 기호 (예: NVDA)");
-/** 입력칸의 글자 → 보낼 종목 표기. 미국은 대문자, 국내는 숫자 그대로(대문자 변환 없음) */
-export const tickerInput = (market: Market, s: string): string => (market === "kr" ? s.trim() : s.trim().toUpperCase());
+/** 입력칸의 글자 → 보낼 종목 표기(앞뒤 공백 제거, 대문자). 국내 코드는 신규 상장 `0126Z0` 처럼 영문이 섞일 수 있다 */
+export const tickerInput = (_market: Market, s: string): string => s.trim().toUpperCase();
 /** Worker 와 같은 종목 모양 — 맞지 않으면 담기 단추를 막는다 */
-export const tickerInputValid = (market: Market, s: string): boolean => (market === "kr" ? /^[0-9]{6}$/ : /^[A-Z][A-Z0-9.\-]{0,9}$/).test(tickerInput(market, s));
+export const tickerInputValid = (market: Market, s: string): boolean => (market === "kr" ? /^[0-9][0-9A-Z]{5}$/ : /^[A-Z][A-Z0-9.\-]{0,9}$/).test(tickerInput(market, s));
 export const indexLabel = (market: Market): string => (market === "kr" ? "코스피" : "S&P 500(SPY)");
 /** "다음 갱신(…) 때 들어옵니다" 의 시각 */
 export const nextRunText = (market: Market): string => (market === "kr" ? "월~금 16:30" : "화~토 07:00");

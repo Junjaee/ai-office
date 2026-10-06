@@ -6,15 +6,15 @@ import analyst_sources_us as us
 
 
 class Spy:
-    """fetch_raw 를 대신하는 가짜 — 부른 기호를 적고, fail 에 든 기호는 던지거나 짧은 종가를 돌려준다."""
-    def __init__(self, fail=(), short=()):
-        self.calls, self.fail, self.short = [], set(fail), set(short)
+    """fetch_raw 를 대신하는 가짜 — 부른 기호를 적고, fail 에 든 기호는 던진다."""
+    def __init__(self, fail=()):
+        self.calls, self.fail = [], set(fail)
 
     def __call__(self, symbol, yf=None):
         self.calls.append(symbol)
         if symbol in self.fail:
             raise ValueError("가격 자료가 0일뿐")
-        n = 3 if symbol in self.short else 250
+        n = 250
         return {"t": symbol, "name": "Samsung Electronics", "exchange": "KSC", "sector": "Technology",
                 "closes": [[f"d{i}", 1.0] for i in range(n)], "volumes": [1.0] * n}
 
@@ -42,12 +42,6 @@ def test_without_meta_tries_ks_then_kq(monkeypatch):
     s = Spy(fail={"247540.KS"}); monkeypatch.setattr(us, "fetch_raw", s)
     raw = k.fetch_raw_kr("247540", None)
     assert s.calls == ["247540.KS", "247540.KQ"] and raw["exchange"] == "코스닥" and raw["name_local"] is None
-
-
-def test_short_history_counts_as_failure_and_falls_back(monkeypatch):
-    s = Spy(short={"005930.KS"}); monkeypatch.setattr(us, "fetch_raw", s)
-    raw = k.fetch_raw_kr("005930", {})
-    assert s.calls == ["005930.KS", "005930.KQ"] and raw["exchange"] == "코스닥"
 
 
 def test_both_fail_raises(monkeypatch):

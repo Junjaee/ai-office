@@ -401,6 +401,8 @@ test("종목 이름·입력 검사", () => {
   assert.equal(tickerInputValid("us", "nvda"), true); assert.equal(tickerInputValid("us", "BRK-B"), true);
   assert.equal(tickerInputValid("us", "005930"), false); assert.equal(tickerInputValid("us", ""), false);
   assert.equal(tickerInputValid("kr", "005930"), true); assert.equal(tickerInputValid("kr", "00593"), false);
+  assert.equal(tickerInputValid("kr", "0126Z0"), true); assert.equal(tickerInputValid("kr", " 0126z0 "), true); assert.equal(tickerInput("kr", "0126z0"), "0126Z0");
+  assert.equal(tickerInputValid("kr", "A12345"), false); assert.equal(tickerInputValid("kr", "012345A"), false);
   assert.equal(tickerInputValid("kr", "0059300"), false); assert.equal(tickerInputValid("kr", "NVDA"), false); assert.equal(tickerInputValid("kr", ""), false);
   assert.equal(watchErrorText(400, "bad_request", "kr"), "종목 코드를 확인해 주세요 (예: 005930)");
 });

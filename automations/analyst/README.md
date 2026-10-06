@@ -31,7 +31,7 @@ python automations/analyst/run_analyst.py --market kr              # 실제 저�
 
 한 줄은 `코드 거래소  # 이름`(거래소 `KS`=코스피, `KQ`=코스닥). 가끔 사람이 다시 뽑는다.
 
-1. 가장 최근 거래일의 코스피·코스닥 시가총액을 받는다(KRX Open API 를 쓰면 인증키는 개인 폴더의 `config.yaml` 에 있다 — 값은 어디에도 적지 않는다).
-2. 보통주만 남긴다: 종목명에 `우`·`스팩`·`리츠` 가 들어가거나 코드 끝자리가 0 이 아닌 것, ETF 는 뺀다.
+1. 네이버 시가총액 목록을 쪽별로 받는다: `https://m.stock.naver.com/api/stocks/marketValue/<KOSPI|KOSDAQ>?page=N&pageSize=100` (시가총액 큰 순서).
+2. `stockEndType == "stock"` 만 남기고, 종목명이 `우`·`우B`·`우C`·`우(전환)` 로 끝나는 것(우선주 — 이름에 `우` 가 들어간다고 다 우선주는 아니다, `우리금융지주` 는 보통주)과 이름에 `스팩`·`리츠`·`ETF`·`ETN` 이 들어간 것은 뺀다. 코드는 숫자로 시작하는 6자리이고 신규 상장은 `0126Z0` 처럼 끝에 영문이 섞인다(`^[0-9][0-9A-Z]{5}$`, 검사는 `tests/test_universe_kr.py`). 이름에 `리츠` 가 없는 리츠는 걸러지지 않으니 손으로 뺀다.
 3. 코스피 상위 250 + 코스닥 상위 100 을 쓴다. 머리 주석 한 줄에 기준일과 출처를 적는다.
 4. `python automations/analyst/run_analyst.py --market kr --dry-run` 으로 받아지는지 확인한다.

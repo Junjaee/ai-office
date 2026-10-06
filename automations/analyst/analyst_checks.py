@@ -203,4 +203,4 @@ def peers(rec: dict, records: list[dict], n: int = 3) -> list[dict]:
     me = rec.get("mcap") or 0
     pool = [r for r in records if r["t"] != rec["t"] and r.get("sector") == rec.get("sector") and (r.get("fpe") or 0) > 0 and r.get("mcap")]
     pool.sort(key=lambda r: abs(r["mcap"] - me))
-    return [{"t": r["t"], "name": r["name"], "fpe": r["fpe"]} for r in pool[:n]]
+    return [{"t": r["t"], "name": r.get("name_local") or r["name"], "fpe": r["fpe"]} for r in pool[:n]]

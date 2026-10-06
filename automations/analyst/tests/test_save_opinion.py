@@ -78,8 +78,8 @@ def test_kr_code_accepted_and_url_uses_market(tmp_path, capsys):
     assert "/home/stock/kr/005930" in capsys.readouterr().out
 
 
-@pytest.mark.parametrize("bad", ["ORCL", "59300", "0059300", "00593A"])
-def test_kr_non_six_digit_ticker_exits_1(tmp_path, capsys, bad):
+@pytest.mark.parametrize("bad", ["ORCL", "59300", "0059300", "A12345", "012345A", "0126z0"])
+def test_kr_bad_ticker_exits_1(tmp_path, capsys, bad):
     site = FakeSite()
     assert mod.main(["kr", bad, "--file", write(tmp_path, OP)], site=site) == 1
     assert "6자리" in capsys.readouterr().err and site.saved == []

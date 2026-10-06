@@ -21,7 +21,7 @@ export const WATCH_MAX = 100;
 export const INGEST_MAX_BYTES = 2_000_000;
 export const OPINION_MAX = 20;
 const OPINION_MAX_BYTES = 20_000;
-const TICKER_RE: Record<string, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /^[0-9]{6}$/ };
+const TICKER_RE: Record<string, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /^[0-9][0-9A-Z]{5}$/ };
 
 export const boardKey = (market: string) => `stock/${market}/board.json`;
 export const tickerKey = (market: string, ticker: string) => `stock/${market}/t/${ticker}.json`;

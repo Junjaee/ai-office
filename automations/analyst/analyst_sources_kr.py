@@ -11,8 +11,6 @@ EXCHANGE = {"KS": "코스피", "KQ": "코스닥"}
 
 def _try(code: str, exch: str, yf):
     raw = us.fetch_raw(f"{code}.{exch}", yf)
-    if len(raw["closes"]) < us.MIN_DAYS:   # 야후가 다른 거래소 쪽에 빈 껍데기를 돌려주는 경우
-        raise ValueError(f"가격 자료가 {len(raw['closes'])}일뿐")
     return raw, exch
 
 

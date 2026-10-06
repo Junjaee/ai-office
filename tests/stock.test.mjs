@@ -17,8 +17,8 @@ const body = async (r) => JSON.parse(await r.text());
 test("키와 기호 형식", () => {
   assert.equal(boardKey("us"), "stock/us/board.json");
   assert.equal(tickerKey("us", "BRK-B"), "stock/us/t/BRK-B.json");
-  assert.ok(validTicker("us", "ORCL") && validTicker("us", "BRK-B") && validTicker("kr", "005930"));
-  assert.ok(!validTicker("us", "orcl") && !validTicker("us", "../x") && !validTicker("us", "") && !validTicker("kr", "5930") && !validTicker("jp", "7203"));
+  assert.ok(validTicker("us", "ORCL") && validTicker("us", "BRK-B") && validTicker("kr", "005930") && validTicker("kr", "0126Z0") && validTicker("kr", "0009K0"));
+  assert.ok(!validTicker("us", "orcl") && !validTicker("us", "../x") && !validTicker("us", "") && !validTicker("kr", "5930") && !validTicker("kr", "A12345") && !validTicker("kr", "012345A") && !validTicker("kr", "0126z0") && !validTicker("jp", "7203"));
 });
 
 test("applyWatch: 담기·빼기·중복·상한", () => {
