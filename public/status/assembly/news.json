@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 37초",
+  "summary": "신규 5건, 실패 0건, 13초",
   "counts": {
-    "new": 14,
+    "new": 5,
     "failed": 0,
-    "total": 3297
+    "total": 3302
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 37초",
-    "[신규] 이준석 의원, 화성 동탄9동 직장·학교 목적지 73.7% 경기권 — 경기종합뉴스",
-    "[신규] 조계원 의원, ‘장애인 우선’ 반다비체육센터 4곳 중 1곳 장애인 이용률 10% 미만 — 시민행정신문",
-    "[신규] 신정훈 “호남에 부족했던 건 자원이 아니라 산업…반도체 제2 생산거점으로 국가 대도약의 기회 만들어야” — 시민행정신문",
-    "[신규] 한국항공대 항공경영전공, AVJET ASIA와 협약, “전용기 현장 인턴십 운영” — 시민행정신문"
+    "신규 5건, 실패 0건, 13초",
+    "[신규] 이형일, 세수추계 오차에 \"반도체 호황, 누구도 예측하기 어려워\" — 머니투데이",
+    "[신규] 이언주 의원, “생산‧제조 잃으면 기술주권도 없다…대미 투자, 우리 기업 수주 연결돼야” — 시민행정신문",
+    "[신규] “항만공사 통합 편익 의문”…인천·경기 의원들 국정감사서 '성토' — Daum",
+    "[신규] [2026 국감] 최고가격제 묻겠다던 재경위, SK에너지 대표 증인 철회 이유는 — 현대경제신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37483802407,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37483802407",
-  "request_id": "cron-202610061500",
+  "run_id": 37507994175,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37507994175",
+  "request_id": "cron-202610061800",
   "trigger": "schedule",
-  "started_at": "2026-10-07T00:01:37+09:00",
-  "duration_sec": 37,
+  "started_at": "2026-10-07T03:01:34+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 119건"
+      "summary": "검색어 5개에서 125건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 14건 (신규 14건) · 시민행정신문 3건, Calgary Roughnecks 1건, KB Think 1건"
+      "summary": "오늘 19건 (신규 5건) · 시민행정신문 4건, 머니투데이 2건, Calgary Roughnecks 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-07T00:02:16+09:00"
+  "updated_at": "2026-10-07T03:01:49+09:00"
 }
