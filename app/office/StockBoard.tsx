@@ -2,15 +2,15 @@
 // 관심 종목 판 — /api/stock?view=board 를 읽어 관심 목록 순서대로 그린다. 담기·빼기는 /api/stock/watch.
 import { useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { STATE_META, buildFlags, earnText, money, pctText, polyPoints, tone, watchRows, type BoardRow } from "../stock-rules";
+import { STATE_META, buildFlags, displayName, earnText, money, nextRunText, pctText, polyPoints, tickerInputValid, tickerPlaceholder, tone, watchRows, type BoardRow } from "../stock-rules";
 import { useStockBoard } from "./useStockBoard";
 
 const FLAG_ICON = { earnings: "M7 3v4M17 3v4M4 9h16M5 5h14v15H5z", warn: STATE_META.warn.icon, high: "M4 17l5-5 4 4 7-8M15 8h5v5" } as const;
 const okNote = (t: string, action: "add" | "remove") => (action === "add" ? `${t} 을(를) 담았어요. 판에 없는 종목은 다음 갱신 때 자료가 들어옵니다.` : `${t} 을(를) 뺐어요.`);
-const MARKET = "us";
 
 export default function StockBoard({ ws }: { ws: string }) {
-  const { data, error, busy, note, change: apply, mock } = useStockBoard(okNote);
+  const { data, error, busy, note, change: apply, mock, market } = useStockBoard(okNote);
+  const word = market === "kr" ? "종목 코드" : "종목 기호";
   const [input, setInput] = useState("");
   const change = async (ticker: string, action: "add" | "remove") => {
     if (await apply(ticker, action)) setInput("");
@@ -24,7 +24,7 @@ export default function StockBoard({ ws }: { ws: string }) {
   return (
     <main className="page-shell">
       <div className="wrap dash">
-        <StockHeader ws={ws} asOf={data?.board?.as_of ?? null} view="board" mock={mock} />
+        <StockHeader ws={ws} asOf={data?.board?.as_of ?? null} view="board" mock={mock} market={market} />
         <section className="dash-title">
           <div>
             <h1>관심 종목</h1>
@@ -67,7 +67,7 @@ export default function StockBoard({ ws }: { ws: string }) {
             <span>점검표는 가치·매출 성장·이익 방향·수익성·빚·현금흐름·추세 7가지</span>
           </div>
           {!data && !error ? <p className="auto-meta">불러오는 중…</p> : null}
-          {data && rows.length === 0 ? <p className="auto-meta">아직 담은 종목이 없어요. 아래에서 종목 기호를 넣어 담아 보세요.</p> : null}
+          {data && rows.length === 0 ? <p className="auto-meta">아직 담은 종목이 없어요. 아래에서 {word}를 넣어 담아 보세요.</p> : null}
           {rows.length ? (
             <div className="stk-scroll">
               <div className="stk-table" role="table" aria-label="관심 종목">
@@ -91,7 +91,7 @@ export default function StockBoard({ ws }: { ws: string }) {
                           <small>{r.missing ? "야후에서 찾지 못함" : "자료를 받는 중"}</small>
                         </span>
                         <span role="cell" style={{ gridColumn: "2 / 9" }} className="auto-meta">
-                          {r.missing ? "야후에서 찾지 못함 — 종목 기호를 확인하세요" : "다음 갱신(화~토 07:00) 때 들어옵니다."}
+                          {r.missing ? `야후에서 찾지 못함 — ${word}를 확인하세요` : `다음 갱신(${nextRunText(market)}) 때 들어옵니다.`}
                         </span>
                         <span role="cell" className="stk-acts">
                           <button className="btn btn-ghost" disabled={busy} onClick={() => void change(r.t, "remove")}>
@@ -105,11 +105,11 @@ export default function StockBoard({ ws }: { ws: string }) {
                   return (
                     <div key={r.t} className="stk-tr" role="row">
                       <span role="cell" className="stk-name">
-                        <b>{r.name}</b>
+                        <b>{displayName(r)}</b>
                         <small>{r.t}</small>
                       </span>
                       <span role="cell" className="r">
-                        <span className="stk-num">{money(r.price)}</span>
+                        <span className="stk-num">{money(r.price, r.currency)}</span>
                         <br />
                         <span className={`stk-sub stk-${tone(r.chg_pct)}`}>{pctText(r.chg_pct)}</span>
                       </span>
@@ -135,10 +135,10 @@ export default function StockBoard({ ws }: { ws: string }) {
                         <span className="stk-sub">{e.days}</span>
                       </span>
                       <span role="cell" className="stk-acts">
-                        <a className="btn btn-ghost" href={`/${ws}/stock/${MARKET}/${r.t}${mock ? "?mock=1" : ""}`}>
+                        <a className="btn btn-ghost" href={`/${ws}/stock/${market}/${r.t}${mock ? "?mock=1" : ""}`}>
                           분석 보기
                         </a>
-                        <button className="btn btn-ghost" disabled={busy} onClick={() => void change(r.t, "remove")} aria-label={`${r.name} 빼기`}>
+                        <button className="btn btn-ghost" disabled={busy} onClick={() => void change(r.t, "remove")} aria-label={`${displayName(r)} 빼기`}>
                           빼기
                         </button>
                       </span>
@@ -156,8 +156,8 @@ export default function StockBoard({ ws }: { ws: string }) {
             }}
           >
             <label htmlFor="stk-add">종목 추가</label>
-            <input id="stk-add" value={input} onChange={(ev) => setInput(ev.target.value)} placeholder="종목 기호 (예: NVDA)" maxLength={10} autoComplete="off" />
-            <button className="btn btn-accent" type="submit" disabled={busy || !input.trim()}>
+            <input id="stk-add" value={input} onChange={(ev) => setInput(ev.target.value)} placeholder={tickerPlaceholder(market)} maxLength={market === "kr" ? 6 : 10} inputMode={market === "kr" ? "numeric" : undefined} autoComplete="off" />
+            <button className="btn btn-accent" type="submit" disabled={busy || !tickerInputValid(market, input)}>
               담기
             </button>
             {note ? <span className="auto-meta" role="status">{note}</span> : null}

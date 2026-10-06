@@ -2,20 +2,23 @@
 // 발굴 판 — 봇이 네 관점으로 걸러 온 종목 카드. 자료·담기/빼기는 관심 종목 판과 같은 훅(useStockBoard)을 쓴다.
 import { useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { LENS_LABEL, LENS_ORDER, STATE_META, discoverView, lensDaysText, money, pctText, scoreText, tone, type BoardRow, type LensId } from "../stock-rules";
+import { LENS_LABEL, LENS_ORDER, STATE_META, discoverView, displayName, lensDaysText, money, nextRunText, pctText, scoreText, tone, type BoardRow, type LensId, type Market } from "../stock-rules";
 import { useStockBoard } from "./useStockBoard";
 
-const MARKET = "us";
 const PAGE = 60;
 const okNote = (t: string, action: "add" | "remove") => (action === "add" ? `${t} 을(를) 담았어요.` : `${t} 을(를) 뺐어요.`);
-const SYMBOL = /^[A-Z][A-Z0-9.\-]{0,9}$/; // Worker 와 같은 종목 기호 모양 — 맞지 않으면 분석 링크를 만들지 않는다
+const SYMBOL: Record<Market, RegExp> = { us: /^[A-Z][A-Z0-9.\-]{0,9}$/, kr: /^[0-9]{6}$/ }; // Worker 와 같은 종목 모양 — 맞지 않으면 분석 링크를 만들지 않는다
+const FOOT: Record<Market, string> = {
+  us: "발굴 결과는 조건에 맞는 종목을 걸러 보여 주는 것이며 매수 추천이 아닙니다. 출처는 야후 파이낸스와 미국 증권거래위원회(EDGAR) 공시 목록입니다.",
+  kr: "발굴 결과는 조건에 맞는 종목을 걸러 보여 주는 것이며 매수 추천이 아닙니다. 출처는 야후 파이낸스입니다. 국내 공시는 아직 받지 않습니다.",
+};
 
 const fpeText = (v: number | null) => (v != null && v > 0 ? `${v.toFixed(1)}배` : "–");
 const debtText = (v: number | null) => (v == null ? "–" : v <= 0 ? "현금이 더 많음" : `영업이익의 ${v.toFixed(1)}배`);
 const ratioText = (v: number | null) => (v == null ? "–" : `평소의 ${v.toFixed(1)}배`);
 
 export default function StockDiscover({ ws }: { ws: string }) {
-  const { data, error, busy, note, change, mock } = useStockBoard(okNote);
+  const { data, error, busy, note, change, mock, market } = useStockBoard(okNote);
   const [lens, setLens] = useState<LensId | "all">("all");
   const [shown, setShown] = useState(PAGE);
 
@@ -35,7 +38,7 @@ export default function StockDiscover({ ws }: { ws: string }) {
   return (
     <main className="page-shell">
       <div className="wrap dash">
-        <StockHeader ws={ws} asOf={board?.as_of ?? null} view="discover" mock={mock} />
+        <StockHeader ws={ws} asOf={board?.as_of ?? null} view="discover" mock={mock} market={market} />
         <section className="dash-title">
           <div>
             <h1>발굴</h1>
@@ -71,13 +74,13 @@ export default function StockDiscover({ ws }: { ws: string }) {
 
         {!data && !error ? <p className="auto-meta">불러오는 중…</p> : null}
         {data && cards.length === 0 ? (
-          <div className="empty-state">{noData ? "아직 발굴 자료가 없어요. 다음 갱신(화~토 07:00) 뒤에 채워집니다." : "오늘은 이 관점에 걸린 종목이 없어요."}</div>
+          <div className="empty-state">{noData ? `아직 발굴 자료가 없어요. 다음 갱신(${nextRunText(market)}) 뒤에 채워집니다.` : "오늘은 이 관점에 걸린 종목이 없어요."}</div>
         ) : null}
 
         {cards.length ? (
           <section className="stk-cards" aria-label="발굴 종목">
             {cards.map((r) => (
-              <Card key={r.t} r={r} ws={ws} mock={mock} saved={watch.has(r.t)} busy={busy} label={label} change={change} />
+              <Card key={r.t} r={r} ws={ws} market={market} mock={mock} saved={watch.has(r.t)} busy={busy} label={label} change={change} />
             ))}
           </section>
         ) : null}
@@ -122,23 +125,23 @@ export default function StockDiscover({ ws }: { ws: string }) {
           <p className="auto-meta">오늘은 채점을 건너뛰었어요 — 다음 갱신 때 다시 계산합니다</p>
         ) : null}
 
-        <footer className="dash-foot">발굴 결과는 조건에 맞는 종목을 걸러 보여 주는 것이며 매수 추천이 아닙니다. 출처는 야후 파이낸스와 미국 증권거래위원회(EDGAR) 공시 목록입니다.</footer>
+        <footer className="dash-foot">{FOOT[market]}</footer>
       </div>
     </main>
   );
 }
 
-function Card({ r, ws, mock, saved, busy, label, change }: { r: BoardRow; ws: string; mock: boolean; saved: boolean; busy: boolean; label: (id: LensId) => string; change: (t: string, a: "add" | "remove") => Promise<boolean> }) {
+function Card({ r, ws, market, mock, saved, busy, label, change }: { r: BoardRow; ws: string; market: Market; mock: boolean; saved: boolean; busy: boolean; label: (id: LensId) => string; change: (t: string, a: "add" | "remove") => Promise<boolean> }) {
   const hits = LENS_ORDER.flatMap((id) => r.lenses.filter((h) => h.id === id));
   return (
-    <article className="stk-card" aria-label={r.name}>
+    <article className="stk-card" aria-label={displayName(r)}>
       <div className="stk-card-top">
         <div className="stk-card-name">
-          <h2>{r.name}</h2>
+          <h2>{displayName(r)}</h2>
           <small>{r.t}</small>
         </div>
         <div className="stk-card-price">
-          <span className="stk-num">{money(r.price)}</span>
+          <span className="stk-num">{money(r.price, r.currency)}</span>
           <span className={`stk-sub stk-${tone(r.chg_pct)}`}>{pctText(r.chg_pct)}</span>
         </div>
       </div>
@@ -166,8 +169,8 @@ function Card({ r, ws, mock, saved, busy, label, change }: { r: BoardRow; ws: st
         <button type="button" className={`btn ${saved ? "btn-primary" : "btn-accent"}`} aria-label={`${r.t} ${saved ? "관심 종목에서 빼기" : "관심에 담기"}`} aria-pressed={saved} disabled={busy} onClick={() => void change(r.t, saved ? "remove" : "add")}>
           {saved ? "관심 종목에 있음 · 빼기" : "관심에 담기"}
         </button>
-        {SYMBOL.test(r.t) ? (
-          <a className="btn btn-ghost" aria-label={`${r.t} 분석 보기`} href={`/${ws}/stock/${MARKET}/${r.t}${mock ? "?mock=1" : ""}`}>
+        {SYMBOL[market].test(r.t) ? (
+          <a className="btn btn-ghost" aria-label={`${r.t} 분석 보기`} href={`/${ws}/stock/${market}/${r.t}${mock ? "?mock=1" : ""}`}>
             분석 보기
           </a>
         ) : null}

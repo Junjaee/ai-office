@@ -2,7 +2,7 @@
 // 종목 한 장 — /api/stock?ticker= 를 읽어 그린다. 1단계: 결론은 점검표로 만든 규칙 문장, 사건은 가격에서 계산한 큰 변동일.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { LENS_LABEL, OPINION_HORIZONS, STATE_META, chartGeometry, earnText, eok, money, monthDay, normalizeDoc, normalizeIndex, normalizeOpinions, opinionDateKst, opinionReturns, opinionStale, pctText, tone, watchErrorText, type IndexDoc, type Opinion, type TickerDoc } from "../stock-rules";
+import { LENS_LABEL, OPINION_HORIZONS, STATE_META, chartGeometry, displayName, earnText, eok, eokUnit, indexLabel, money, monthDay, nextRunText, normalizeDoc, normalizeIndex, normalizeOpinions, opinionDateKst, opinionReturns, opinionStale, pctText, stockQuery, tone, watchErrorText, type IndexDoc, type Market, type Opinion, type TickerDoc } from "../stock-rules";
 import { mockDoc, mockIndex, mockOpinions } from "../stock-mock";
 
 type ApiTicker = { market: string; ticker: string; doc: TickerDoc | null; watched: boolean; opinions: Opinion[]; index: IndexDoc | null };
@@ -10,7 +10,7 @@ const UP = "M12 19V5M6 11l6-6 6 6";
 const DOWN = "M12 5v14M6 13l6 6 6-6";
 const eokShort = (v: number | null) => (v == null ? "–" : `${v < 0 ? "−" : ""}${Math.round(Math.abs(v) / 1e8).toLocaleString("ko-KR")}`);
 
-export default function StockPage({ ws, market, ticker }: { ws: string; market: string; ticker: string }) {
+export default function StockPage({ ws, market, ticker }: { ws: string; market: Market; ticker: string }) {
   const [data, setData] = useState<ApiTicker | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -55,7 +55,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
       const r = await fetch("/api/stock/watch", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ market, ticker, action }) });
       const j = (await r.json().catch(() => ({}))) as { error?: string };
       if (!r.ok) {
-        setNote(watchErrorText(r.status, j.error));
+        setNote(watchErrorText(r.status, j.error, market));
         return;
       }
       setData((d) => (d ? { ...d, watched: !d.watched } : d));
@@ -70,27 +70,28 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
   const rec = doc?.rec ?? null;
   const geo = useMemo(() => chartGeometry(rec?.chart ?? [], rec?.moves ?? []), [rec]);
   const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-  const back = `/${ws}/stock${mock ? "?mock=1" : ""}`;
+  const back = `/${ws}/stock${stockQuery(market, mock)}`;
 
   if (!rec || !doc) {
     return (
       <main className="page-shell">
         <div className="wrap dash">
-          <StockHeader ws={ws} asOf={null} view="page" mock={mock} />
+          <StockHeader ws={ws} asOf={null} view="page" mock={mock} market={market} />
           <a className="stk-back" href={back}>
             <StockIcon d="M15 5l-7 7 7 7" />
             관심 종목으로
           </a>
-          <div className="empty-state">{error || (data ? `${ticker} 자료가 아직 없어요. 관심 종목에 담으면 다음 갱신(화~토 07:00) 때 들어옵니다.` : "불러오는 중…")}</div>
+          <div className="empty-state">{error || (data ? `${ticker} 자료가 아직 없어요. 관심 종목에 담으면 다음 갱신(${nextRunText(market)}) 때 들어옵니다.` : "불러오는 중…")}</div>
         </div>
       </main>
     );
   }
 
+  const cur = rec.currency;
   const good = doc.checks.filter((c) => c.state === "pass");
   const bad = doc.checks.filter((c) => c.state === "warn" || c.state === "care");
   const counts = { pass: good.length, care: doc.checks.filter((c) => c.state === "care").length, warn: doc.checks.filter((c) => c.state === "warn").length };
-  const bars = [{ name: rec.name, fpe: rec.fpe, cls: "me" }, ...doc.peers.map((p) => ({ name: p.name, fpe: p.fpe as number | null, cls: "" })), { name: `${doc.ref.label} 중앙값`, fpe: doc.ref.fpe, cls: "ref" }].filter((b) => b.fpe != null && b.fpe > 0);
+  const bars = [{ name: displayName(rec), fpe: rec.fpe, cls: "me" }, ...doc.peers.map((p) => ({ name: p.name, fpe: p.fpe as number | null, cls: "" })), { name: `${doc.ref.label} 중앙값`, fpe: doc.ref.fpe, cls: "ref" }].filter((b) => b.fpe != null && b.fpe > 0);
   const barMax = Math.max(1, ...bars.map((b) => b.fpe as number));
   const e = earnText(rec.next_earn, today);
   const years = rec.annual.slice(-4);
@@ -109,7 +110,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
   return (
     <main className="page-shell">
       <div className="wrap dash">
-        <StockHeader ws={ws} asOf={doc.as_of} view="page" mock={mock} />
+        <StockHeader ws={ws} asOf={doc.as_of} view="page" mock={mock} market={market} />
 
         <section className="stk-hero">
           <div>
@@ -117,7 +118,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
               <StockIcon d="M15 5l-7 7 7 7" />
               관심 종목으로
             </a>
-            <h1>{rec.name}</h1>
+            <h1>{displayName(rec)}</h1>
             <span className="stk-sub">
               {rec.t} · {rec.exchange}
               {rec.sector ? ` · ${rec.sector}` : ""}
@@ -133,7 +134,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
             <div style={{ textAlign: "right" }}>
-              <div className="price">{money(rec.price)}</div>
+              <div className="price">{money(rec.price, cur)}</div>
               <span className={`stk-sub stk-${tone(rec.chg_pct)}`}>전일 대비 {pctText(rec.chg_pct)}</span>
             </div>
             <button className={`btn ${data?.watched ? "btn-ghost" : "btn-accent"}`} disabled={busy} onClick={() => void toggleWatch()}>
@@ -243,11 +244,11 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
             <p>최근 1년 종가. 번호는 하루에 7% 넘게 움직인 날입니다.</p>
           </div>
           <div className="stk-chart">
-            <svg viewBox="0 0 1000 220" preserveAspectRatio="none" role="img" aria-label={`${rec.name} 최근 1년 주가`}>
+            <svg viewBox="0 0 1000 220" preserveAspectRatio="none" role="img" aria-label={`${displayName(rec)} 최근 1년 주가`}>
               <polyline points={geo.points} fill="none" stroke="var(--accent)" strokeWidth={2} vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
             </svg>
-            <span className="y" style={{ top: 0 }}>최고 {money(geo.yMax)}</span>
-            <span className="y" style={{ bottom: 4 }}>최저 {money(geo.yMin)}</span>
+            <span className="y" style={{ top: 0 }}>최고 {money(geo.yMax, cur)}</span>
+            <span className="y" style={{ bottom: 4 }}>최저 {money(geo.yMin, cur)}</span>
             {geo.marks.map((m) => (
               <span key={m.n} className="stk-mark" style={{ left: m.left, top: m.top }}>
                 {m.n}
@@ -265,7 +266,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
                 <li key={m.n}>
                   <span className="stk-mark inline">{m.n}</span>
                   <b>
-                    {m.when} · {money(m.price)}
+                    {m.when} · {money(m.price, cur)}
                   </b>
                   <span>{m.text}</span>
                 </li>
@@ -349,7 +350,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
               </div>
               <div>
                 <dt>평균 목표가{rec.tgt ? ` (${rec.tgt.n}곳)` : ""}</dt>
-                <dd>{rec.tgt ? `$${Math.round(rec.tgt.mean).toLocaleString("en-US")}` : "–"}</dd>
+                <dd>{rec.tgt ? (cur === "KRW" ? money(rec.tgt.mean, cur) : `$${Math.round(rec.tgt.mean).toLocaleString("en-US")}`) : "–"}</dd>
               </div>
             </dl>
           </section>
@@ -357,7 +358,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
           <section className="panel">
             <div className="panel-head">
               <h2>실적과 재무: {years.length}년 흐름</h2>
-              <p>회계연도 기준, 단위 억 달러</p>
+              <p>회계연도 기준, 단위 {eokUnit(cur)}</p>
             </div>
             {years.length ? (
               <div className="stk-years" role="table" aria-label="연도별 실적">
@@ -384,19 +385,19 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
             <dl className="stk-facts">
               <div>
                 <dt>총부채</dt>
-                <dd>{eok(rec.debt)}</dd>
+                <dd>{eok(rec.debt, cur)}</dd>
               </div>
               <div>
                 <dt>현금</dt>
-                <dd>{eok(rec.cash)}</dd>
+                <dd>{eok(rec.cash, cur)}</dd>
               </div>
               <div>
                 <dt>영업으로 번 현금</dt>
-                <dd>{eok(rec.ocf)}</dd>
+                <dd>{eok(rec.ocf, cur)}</dd>
               </div>
               <div>
                 <dt>쓰고 남은 현금</dt>
-                <dd>{eok(rec.fcf)}</dd>
+                <dd>{eok(rec.fcf, cur)}</dd>
               </div>
             </dl>
           </section>
@@ -451,7 +452,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
                     return (
                       <tr key={o.id}>
                         <th scope="row">{monthDay(opinionDateKst(o))}</th>
-                        <td className="stk-num">{money(o.price)}</td>
+                        <td className="stk-num">{money(o.price, cur)}</td>
                         <td className="stk-op-verdict" title={o.verdict}>{o.verdict}</td>
                         {rs.map((r) => (
                           <td key={r.key} className={r.ret === null ? "stk-sub" : `stk-${tone(r.ret)}`}>{retText(r)}</td>
@@ -462,12 +463,12 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
                 </tbody>
               </table>
             </div>
-            <p className="auto-meta">수익률은 쓴 날 주가 대비이며 배당 제외, 그래프가 이틀 간격이라 며칠 어긋날 수 있습니다. 1주·1개월·3개월은 기준일(쓴 날의 종가일)부터 약 7·30·91일 뒤 첫 거래일 기준입니다. 맞고 틀림은 따로 매기지 않습니다.</p>
+            <p className="auto-meta">수익률은 쓴 날 주가 대비이며 배당 제외, 그래프가 이틀 간격이라 며칠 어긋날 수 있습니다. 1주·1개월·3개월은 기준일(쓴 날의 종가일)부터 약 7·30·91일 뒤 첫 거래일 기준입니다. 맞고 틀림은 따로 매기지 않습니다. 지수는 {indexLabel(market)}입니다.</p>
           </section>
         ) : null}
 
         <footer className="dash-foot">
-          출처: 야후 파이낸스(시세·재무·전망){doc.events.length > 0 ? " · 공시: 미국 증권거래위원회(EDGAR)" : ""} · 기준일 {monthDay(doc.as_of)} · 역대 최고가 {money(rec.ath)}({rec.ath_date}) 대비 {pctText(rec.ath_pct, 0)}. 투자 권유가 아니며, 판단은 직접 하셔야 합니다.
+          출처: 야후 파이낸스(시세·재무·전망){market === "us" && doc.events.length > 0 ? " · 공시: 미국 증권거래위원회(EDGAR)" : ""} · 기준일 {monthDay(doc.as_of)} · 역대 최고가 {money(rec.ath, cur)}({rec.ath_date}) 대비 {pctText(rec.ath_pct, 0)}. 투자 권유가 아니며, 판단은 직접 하셔야 합니다.
         </footer>
       </div>
     </main>
