@@ -412,8 +412,27 @@ def test_stale_or_missing_spy_skips_scoring_uploads(tmp_path, capsys):
     for f in (stale, dead):
         site = FakeSite([])
         mod.do_work(cfg(tmp_path), args(), print, fetch=f, site=site)
-        assert "채점은 건너뜁니다" in capsys.readouterr().out
+        out = capsys.readouterr().out
+        assert "지수 종가가 기준일 것이 아니라 오늘 채점과 기록을 건너뜁니다" in out and "기록을 읽지 못해" not in out
         assert "lenshist" not in site.order and "index" not in site.order and site.docs["board"]["lens_score"] is None
+
+
+def test_scoring_crash_skips_score_but_still_uploads_history(tmp_path, capsys, monkeypatch):
+    def boom(*a, **k):
+        raise ValueError("secret AAA detail")
+    monkeypatch.setattr(mod, "score_lenses", boom)
+    site = FakeSite([])
+    mod.do_work(cfg(tmp_path), args(), print, fetch=fetch_info({}), site=site)
+    cap = capsys.readouterr()
+    shown = cap.out + cap.err
+    assert "관점 채점 계산에 실패해 오늘 채점은 건너뜁니다" in cap.out and "secret" not in shown and "AAA" not in shown
+    assert site.docs["board"]["lens_score"] is None and site.order[-2:] == ["lenshist", "index"]
+
+
+def test_board_carries_score_gate_from_rules(tmp_path):
+    site = FakeSite([])
+    mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=site)
+    assert site.docs["board"]["score_gate"] == {"min_n": 30, "min_days": 20}
 
 
 def test_dry_run_reads_history_but_sends_nothing(tmp_path):
@@ -451,7 +470,7 @@ def test_news_only_for_watch_tickers_and_counted(tmp_path):
     out = mod.do_work(news_cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=site, news=news)
     assert sorted(asked) == ["AAA Corp", "ZZZ Corp"]
     assert site.docs["ticker:ZZZ"]["news"][0]["url"].startswith("https://") and site.docs["ticker:AAA"]["news"] == []
-    assert site.docs["ticker:BBB"]["news"] == []
+    assert site.docs["ticker:BBB"]["news"] is None                    # 관심이 아니라 받지 않았다 — 0건([])과 다르다
     assert out["counts"]["news"] == 2 and "관심 종목 기사 제목 2종목" in out["lines"]
     assert "기사" not in mod.build_summary(out["counts"], 3)
 
@@ -461,7 +480,7 @@ def test_news_disabled_asks_nothing(tmp_path):
         raise AssertionError("끄면 받지 않는다")
     site = FakeSite(["ZZZ"])
     out = mod.do_work(cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=site, news=boom)
-    assert out["counts"]["news"] == 0 and site.docs["ticker:ZZZ"]["news"] == [] and not any("기사" in l for l in out["lines"])
+    assert out["counts"]["news"] == 0 and site.docs["ticker:ZZZ"]["news"] is None and not any("기사" in l for l in out["lines"])
 
 
 def test_news_failures_are_counted_and_stop_after_five_straight(tmp_path, capsys):
@@ -488,6 +507,33 @@ def test_news_some_failures_are_summarised(tmp_path, capsys):
         return []
     out = mod.do_work(news_cfg(tmp_path), args(), print, fetch=fetch_ok, site=FakeSite(["W00", "W01", "W02"]), news=news)
     assert "기사 제목을 받지 못해 건너뛴 종목 1건" in capsys.readouterr().out and out["counts"]["news"] == 2
+
+
+def test_news_failure_leaves_none_not_empty(tmp_path):
+    def news(name, as_of):
+        if name.startswith("W01"):
+            raise RuntimeError("x")
+        return []
+    site = FakeSite(["W00", "W01"])
+    mod.do_work(news_cfg(tmp_path), args(), lambda m: None, fetch=fetch_ok, site=site, news=news)
+    assert site.docs["ticker:W00"]["news"] == [] and site.docs["ticker:W01"]["news"] is None
+
+
+def test_news_loop_stops_when_time_budget_is_spent(tmp_path, capsys):
+    asked = []
+
+    def news(name, as_of):
+        asked.append(name)
+        return []
+    ticks = iter(range(0, 10_000, 100))          # 가짜 시계: 부를 때마다 100초씩 간다
+    c = news_cfg(tmp_path)
+    c["news_budget_sec"] = 250
+    site = FakeSite([f"W{i:02d}" for i in range(5)])
+    out = mod.do_work(c, args(), print, fetch=fetch_ok, site=site, news=news, clock=lambda: next(ticks))
+    shown = capsys.readouterr().out
+    assert len(asked) == 2 and "기사 제목을 받지 못해 남은 3종목은 건너뜁니다 (시간 초과)" in shown
+    assert "W0" not in shown and "Corp" not in shown and out["counts"]["news"] == 2
+    assert [site.docs[f"ticker:W{i:02d}"]["news"] for i in range(5)] == [[], [], None, None, None]
 
 
 def test_news_never_leaks_names_or_titles(tmp_path, capsys):

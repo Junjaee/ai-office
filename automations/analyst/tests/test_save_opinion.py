@@ -46,6 +46,19 @@ def test_check_text_finds_forbidden_sentences():
     assert mod.check_text(dict(OP, good=[{"text": "비중  확대 가능", "src": "재무"}]))   # 공백 차이도 잡는다
 
 
+def test_check_text_imperatives_need_no_hangul_after_and_spacing_variants_still_match():
+    def refused(t):
+        return bool(mod.check_text(dict(OP, verdict=t)))
+    assert not refused("악재가 사라졌다") and not refused("회사 라인업이 넓다") and not refused("위험이 사라지면 좋다")
+    for t in ("지금 사라", "지금 사라.", "팔아라!", "목표가 200달러", "목표 가는 200달러", "매수 추천", "매수추천", "매 수  추 천", "비중 확대", "비중확대"):
+        assert refused(t), t
+    assert mod.check_text(dict(OP, verdict="좋은 회사다. 지금 사라.")) == ["지금 사라."]   # 원래 문장을 그대로 돌려준다
+
+
+def test_check_text_survives_malformed_items():
+    assert mod.check_text({"verdict": 5, "good": ["x", None, {"text": 3}], "bad": "oops", "watch": [1, None]}) == []
+
+
 def test_saves_with_site_data(tmp_path, capsys):
     site = FakeSite()
     assert mod.main(["us", "orcl", "--file", write(tmp_path, OP)], site=site) == 0
@@ -81,11 +94,24 @@ def test_forbidden_words_exit_2_and_not_saved(tmp_path, capsys):
 
 
 @pytest.mark.parametrize("data", ["{not json", "[1]", {"good": OP["good"], "bad": OP["bad"]},
-                                  dict(OP, good=[]), dict(OP, bad=None), dict(OP, verdict="  ")])
+                                  dict(OP, good=[]), dict(OP, bad=None), dict(OP, verdict="  "),
+                                  dict(OP, good=["문장"]), dict(OP, good=[None]),                              # 항목이 dict 가 아니다
+                                  dict(OP, bad=[{"text": f"t{i}", "src": "재무"} for i in range(7)]),            # 7개
+                                  dict(OP, verdict="가" * 301), dict(OP, good=[{"text": "가" * 301, "src": "재무"}]),   # 301자
+                                  dict(OP, good=[{"text": "t", "src": "소문"}]), dict(OP, bad=[{"text": "t"}]),   # src 가 틀리거나 없다
+                                  dict(OP, watch=[5]), dict(OP, watch="한 줄"), dict(OP, watch=["w"] * 7), dict(OP, watch=["가" * 201])])
 def test_bad_file_exits_1(tmp_path, data):
     site = FakeSite()
     assert mod.main(["us", "ORCL", "--file", write(tmp_path, data)], site=site) == 1
     assert site.saved == []
+
+
+def test_bad_shape_message_is_plain_korean_and_nothing_is_called(tmp_path, capsys):
+    site = FakeSite()
+    assert mod.main(["us", "ORCL", "--file", write(tmp_path, dict(OP, good=["문장"]))], site=site) == 1
+    err = capsys.readouterr().err
+    assert "good 1번째 항목" in err and "Traceback" not in err
+    assert mod.main(["us", "ORCL", "--file", write(tmp_path, dict(OP, watch=None))], site=site) == 0   # watch 가 null 이면 빈 목록
 
 
 def test_missing_file_exits_1(tmp_path):
@@ -138,11 +164,12 @@ def test_site_get_view_ticker_and_opinion():
         s.ticker("us", "NONE")
 
 
-def test_site_opinion_retries_once_on_5xx_and_not_on_4xx():
+def test_site_opinion_never_retries():
+    """읽기 시간 초과 같은 실패는 Worker 가 이미 썼을 수 있다 — 다시 보내면 같은 해석이 두 번 쌓인다."""
     waits = []
-    s = analyst_publish.Site("https://x.example", http=Http(Resp(503, {}), Resp(200, {"id": "ID2"})), sleep=waits.append)
-    assert s.opinion("us", "ORCL", {}) == "ID2" and waits == [2]
-    s = analyst_publish.Site("https://x.example", http=Http(Resp(400, {}), Resp(200, {"id": "X"})), sleep=waits.append)
-    with pytest.raises(RuntimeError):
-        s.opinion("us", "ORCL", {})
-    assert len(s.http.calls) == 1
+    for first in (Resp(503, {}), Resp(400, {})):
+        s = analyst_publish.Site("https://x.example", http=Http(first, Resp(200, {"id": "X"})), sleep=waits.append)
+        with pytest.raises(RuntimeError):
+            s.opinion("us", "ORCL", {})
+        assert len(s.http.calls) == 1
+    assert waits == []

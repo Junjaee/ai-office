@@ -24,20 +24,59 @@ FORBIDDEN = ["목표가", "매수 추천", "매도 추천", "사라", "팔아라
 SENTENCE_END = re.compile(r"(?<=[.!?。])\s+|\n+")
 
 
+SRC = {"재무", "시세", "뉴스", "전망"}
+IMPERATIVE = {"사라", "팔아라"}   # 뒤에 한글이 이어지면("사라졌다") 다른 말이라 뺀다
+
+
+def _pattern(word: str) -> re.Pattern:
+    """글자 사이에 공백이 얼마든 끼어도 잡는다("매수  추천"). 명령형은 뒤에 한글이 없을 때만."""
+    pat = r"\s*".join(re.escape(c) for c in word.replace(" ", ""))
+    return re.compile(pat + (r"(?![가-힣])" if word in IMPERATIVE else ""))
+
+
+PATTERNS = [_pattern(w) for w in FORBIDDEN]
+
+
 def _texts(op: dict) -> list[str]:
-    return ([op.get("verdict") or ""] + [x.get("text") or "" for x in (op.get("good") or []) + (op.get("bad") or [])]
-            + list(op.get("watch") or []))
+    """검사할 글 전부. 모양이 틀린 항목은 건너뛴다(모양 검사는 validate 가 한다)."""
+    out = [op.get("verdict")]
+    for key in ("good", "bad"):
+        out += [x.get("text") for x in op.get(key) or [] if isinstance(x, dict)]
+    out += op.get("watch") or []
+    return [t for t in out if isinstance(t, str)]
 
 
 def check_text(op: dict) -> list[str]:
-    """금지어가 들어 있는 문장을 돌려준다(없으면 []). 띄어쓰기 차이는 무시한다."""
+    """금지어가 들어 있는 문장을 돌려준다(없으면 []). 글자 사이 띄어쓰기 차이는 무시한다."""
     found = []
     for text in _texts(op):
         for sentence in SENTENCE_END.split(text):
-            flat = sentence.replace(" ", "")
-            if any(w.replace(" ", "") in flat for w in FORBIDDEN):
+            if any(p.search(sentence) for p in PATTERNS):
                 found.append(sentence.strip())
     return found
+
+
+def _text_ok(v, max_len: int) -> bool:
+    return isinstance(v, str) and 1 <= len(v.strip()) <= max_len
+
+
+def validate(data: dict) -> str | None:
+    """사이트(Worker)가 받는 모양과 같은 검사. 어긋나면 사람이 읽을 한 줄, 맞으면 None."""
+    if not _text_ok(data.get("verdict"), 300):
+        return "verdict(한 줄 결론)는 1~300자 글이어야 합니다."
+    for key in ("good", "bad"):
+        items = data.get(key)
+        if not (isinstance(items, list) and 1 <= len(items) <= 6):
+            return f"{key} 는 1~6개여야 합니다."
+        for n, x in enumerate(items, 1):
+            if not (isinstance(x, dict) and _text_ok(x.get("text"), 300)):
+                return f"{key} {n}번째 항목은 text(1~300자 글)와 src 가 있는 {{ }} 모양이어야 합니다."
+            if x.get("src") not in SRC:
+                return f"{key} {n}번째 항목의 src 는 재무·시세·뉴스·전망 중 하나여야 합니다."
+    watch = data.get("watch", [])
+    if not (isinstance(watch, list) and len(watch) <= 6 and all(_text_ok(w, 200) for w in watch)):
+        return "watch 는 200자 이하 글 6개까지의 목록이어야 합니다."
+    return None
 
 
 def _fail(msg: str, code: int = 1) -> int:
@@ -61,13 +100,12 @@ def main(argv: list[str], site: Site | None = None) -> int:
         return _fail(f"파일을 읽지 못했습니다(JSON 형식을 확인하세요): {exc}")
     if not isinstance(data, dict):
         return _fail("파일 맨 바깥은 { } 여야 합니다.")
-    verdict = data.get("verdict")
-    if not (isinstance(verdict, str) and verdict.strip()):
-        return _fail("파일에 verdict(한 줄 결론)가 없습니다.")
-    for key in ("good", "bad"):
-        if not (isinstance(data.get(key), list) and data[key]):
-            return _fail(f"파일에 {key} 항목이 없습니다(1개 이상 필요).")
-    opinion = {"verdict": verdict, "good": data["good"], "bad": data["bad"], "watch": data.get("watch") or []}
+    if data.get("watch") is None:
+        data["watch"] = []
+    problem = validate(data)
+    if problem:
+        return _fail(f"파일 내용을 고쳐 주세요: {problem}")
+    opinion = {"verdict": data["verdict"], "good": data["good"], "bad": data["bad"], "watch": data["watch"]}
 
     hits = check_text(opinion)
     if hits:

@@ -57,6 +57,9 @@ class Site:
         self._post("/api/stock/ingest", body)
 
     def opinion(self, market: str, ticker: str, opinion: dict) -> str:
-        """해석 하나를 저장하고 서버가 붙인 id 를 돌려준다."""
-        r = self._post("/api/stock/opinion", {"market": market, "ticker": ticker, "opinion": opinion})
+        """해석 하나를 저장하고 서버가 붙인 id 를 돌려준다. 다시 보내지 않는다 — 읽기 시간 초과는 서버가 이미 썼을 수 있어
+        다시 보내면 같은 해석이 두 번 쌓인다(보냈는지 불확실하면 사람이 사이트에서 확인한다)."""
+        r = self.http.post(f"{self.base}/api/stock/opinion", json={"market": market, "ticker": ticker, "opinion": opinion},
+                           headers=self._headers(), timeout=TIMEOUT)
+        r.raise_for_status()
         return r.json()["id"]

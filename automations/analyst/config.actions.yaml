@@ -5,6 +5,7 @@ site_url: "https://ai-office.smartjohn-d34.workers.dev"
 
 request_delay: 0.3      # 종목 사이 쉬는 시간(초)
 filings_budget_sec: 480   # 공시(8-K) 확인에 쓸 수 있는 시간(초) — 넘으면 남은 종목은 가격 조건만 본다
+news_budget_sec: 180    # 기사 제목 받기에 쓸 수 있는 시간(초) — 넘으면 남은 종목은 건너뛴다
 news_enabled: true      # 관심 종목의 최근 기사 제목을 받는다(해석할 때 읽을 자료). false 면 아무것도 받지 않는다
 max_fail_ratio: 0.2     # 받지 못한 종목이 이 비율을 넘으면 실패로 끝내고 지난 자료를 둔다
 

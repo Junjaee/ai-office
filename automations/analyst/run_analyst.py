@@ -61,6 +61,8 @@ def read_universe(path: str | Path) -> list[str]:
     return out
 
 SCORE_SKIPPED = "관점 기록을 읽지 못해 오늘 채점은 건너뜁니다"
+SCORE_NO_INDEX = "지수 종가가 기준일 것이 아니라 오늘 채점과 기록을 건너뜁니다"
+SCORE_FAILED = "관점 채점 계산에 실패해 오늘 채점은 건너뜁니다"
 
 
 @contextlib.contextmanager
@@ -74,7 +76,7 @@ def _quiet():
 def _score(site, market: str, as_of: str, hits: dict, closes: dict, spy_closes, progress):
     """(관점 채점 결과, 사이트에 보낼 관점 기록). 지수가 오늘 것이 아니거나 기록을 못 읽으면 (None, None) — 기록을 덮어쓰지 않는다."""
     if not spy_closes or spy_closes[-1][0] != as_of:
-        progress(SCORE_SKIPPED)
+        progress(SCORE_NO_INDEX)
         return None, None
     try:
         with _quiet():
@@ -83,15 +85,23 @@ def _score(site, market: str, as_of: str, hits: dict, closes: dict, spy_closes, 
         progress(SCORE_SKIPPED)
         return None, None
     merged = merge_history(history, as_of, {k: [x["t"] for x in v] for k, v in hits.items()})
-    return score_lenses(merged, closes, spy_closes), merged
+    try:
+        return score_lenses(merged, closes, spy_closes), merged
+    except Exception:  # noqa: BLE001 — 채점이 죽어도 기록은 올린다(오류 내용은 남기지 않는다)
+        progress(SCORE_FAILED)
+        return None, merged
 
 
-def _news(records: list, watch: list, as_of: str, news, delay: float, progress) -> tuple[dict, int]:
-    """관심 종목의 기사 제목 {기호: [...]}, 받은 종목 수. 실패는 세고 넘어간다(이름·오류 내용은 남기지 않는다)."""
-    out, lost, streak, stopped = {}, 0, 0, False
-    for r in records:
+def _news(records: list, watch: list, as_of: str, news, delay: float, progress, budget: float = 180, clock=time.monotonic) -> tuple[dict, int]:
+    """관심 종목의 기사 제목 {기호: [...]}(받은 종목만 — 제목이 0건이어도 받은 것이다), 받은 종목 수. 실패는 세고 넘어간다(이름·오류 내용은 남기지 않는다)."""
+    out, lost, streak, stopped, t0 = {}, 0, 0, False, clock()
+    for i, r in enumerate(records):
         if r["t"] not in watch:
             continue
+        if clock() - t0 > budget:   # 기사 서버가 느려 실행이 끝없이 늘어지지 않게
+            progress(f"기사 제목을 받지 못해 남은 {sum(1 for x in records[i:] if x['t'] in watch)}종목은 건너뜁니다 (시간 초과)")
+            stopped = True
+            break
         if not r.get("name"):
             lost += 1
             continue
@@ -209,10 +219,11 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
                 hits[x["id"]].append({"t": r["t"], "close": r["price"]})
         rows.append(board_row(r, checks, lens))
         docs.append({"market": market, "as_of": r["as_of"], "rec": r, "checks": checks, "diag": diag(checks),
-                     "peers": peers(r, base), "ref": ref_for(r, med, rules.get("sector_min", 5)), "lenses": lens, "events": ev, "news": []})
+                     "peers": peers(r, base), "ref": ref_for(r, med, rules.get("sector_min", 5)), "lenses": lens, "events": ev, "news": None})   # news None = 받지 못했거나 받지 않음, [] = 받았는데 0건
     board = {"market": market, "as_of": as_of, "generated_at": datetime.now(KST).isoformat(timespec="seconds"), "rows": rows, "medians": med,
              "missing": failed_watch,  # missing: 관심 종목 중 받지 못한 것 — 사이트 저장 공간에만 간다(로그·상태 파일에는 건수만)
-             "universe": len(uni), "filings_ok": filings_ok, "lens_info": lens_info(rules, filings_ok)}
+             "universe": len(uni), "filings_ok": filings_ok, "lens_info": lens_info(rules, filings_ok),
+             "score_gate": {"min_n": int((rules.get("score") or {}).get("min_n", 30)), "min_days": int((rules.get("score") or {}).get("min_days", 20))}}
     discover = f"후보 {candidates}종목 · " + " ".join(f"{LENS_LABEL[k]} {len(hits[k])}" for k in LENS_ORDER)
     progress(discover)   # 건수만 — 시험 실행에서도 보이게
 
@@ -232,9 +243,9 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     # 관심 종목 기사 제목(해석할 때 읽을 자료) — 끄면 아무것도 받지 않는다
     news_n = 0
     if cfg.get("news_enabled"):
-        titles, news_n = _news(records, set(watch), as_of, news, delay, progress)
+        titles, news_n = _news(records, set(watch), as_of, news, delay, progress, float(cfg.get("news_budget_sec", 180)), clock)
         for d in docs:
-            d["news"] = titles.get(d["rec"]["t"], [])
+            d["news"] = titles.get(d["rec"]["t"])
 
     if not args.dry_run:
         progress("저장")
