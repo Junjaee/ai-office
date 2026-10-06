@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 13초",
+  "summary": "신규 4건, 실패 0건, 23초",
   "counts": {
-    "new": 5,
+    "new": 4,
     "failed": 0,
-    "total": 3302
+    "total": 3306
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 13초",
-    "[신규] 이형일, 세수추계 오차에 \"반도체 호황, 누구도 예측하기 어려워\" — 머니투데이",
-    "[신규] 이언주 의원, “생산‧제조 잃으면 기술주권도 없다…대미 투자, 우리 기업 수주 연결돼야” — 시민행정신문",
-    "[신규] “항만공사 통합 편익 의문”…인천·경기 의원들 국정감사서 '성토' — Daum",
-    "[신규] [2026 국감] 최고가격제 묻겠다던 재경위, SK에너지 대표 증인 철회 이유는 — 현대경제신문"
+    "신규 4건, 실패 0건, 23초",
+    "[신규] 이준석 의원, 동탄 주민 통근·통학 목적지 73.7% 경기권 — 교통뉴스",
+    "[신규] 이준석 경마장역 메뉴 아이콘 뜻풀이 — Calgary Roughnecks",
+    "[신규] 서영학 여수시장, COP33 남해안 남중권 유치 공감대 확산 나서 — 여수시청",
+    "[신규] [오늘의 국회일정] 상임위·세미나·기자회견·주요 정당 - 10월 7일 — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37507994175,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37507994175",
-  "request_id": "cron-202610061800",
+  "run_id": 37530768394,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37530768394",
+  "request_id": "cron-202610062100",
   "trigger": "schedule",
-  "started_at": "2026-10-07T03:01:34+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-07T06:01:29+09:00",
+  "duration_sec": 23,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 125건"
+      "summary": "검색어 5개에서 124건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 19건 (신규 5건) · 시민행정신문 4건, 머니투데이 2건, Calgary Roughnecks 1건"
+      "summary": "오늘 23건 (신규 4건) · 시민행정신문 4건, Calgary Roughnecks 2건, 머니투데이 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-07T03:01:49+09:00"
+  "updated_at": "2026-10-07T06:01:53+09:00"
 }
