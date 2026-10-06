@@ -2,7 +2,7 @@
 // 종목 한 장 — /api/stock?ticker= 를 읽어 그린다. 1단계: 결론은 점검표로 만든 규칙 문장, 사건은 가격에서 계산한 큰 변동일.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { LENS_LABEL, OPINION_HORIZONS, STATE_META, chartGeometry, earnText, eok, money, monthDay, normalizeDoc, normalizeIndex, normalizeOpinions, opinionReturns, opinionStale, pctText, tone, watchErrorText, type IndexDoc, type Opinion, type TickerDoc } from "../stock-rules";
+import { LENS_LABEL, OPINION_HORIZONS, STATE_META, chartGeometry, earnText, eok, money, monthDay, normalizeDoc, normalizeIndex, normalizeOpinions, opinionDateKst, opinionReturns, opinionStale, pctText, tone, watchErrorText, type IndexDoc, type Opinion, type TickerDoc } from "../stock-rules";
 import { mockDoc, mockIndex, mockOpinions } from "../stock-mock";
 
 type ApiTicker = { market: string; ticker: string; doc: TickerDoc | null; watched: boolean; opinions: Opinion[]; index: IndexDoc | null };
@@ -146,7 +146,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
         <section className="stk-verdict">
           {op ? (
             <>
-              <small>한 줄 결론 · AI 해석 · {monthDay(op.id.slice(0, 10))}</small>
+              <small>한 줄 결론 · AI 해석 · {monthDay(opinionDateKst(op))}</small>
               <p>{op.verdict}</p>
               {stale.length ? (
                 <span className="stk-stale" role="status">
@@ -284,6 +284,12 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
                   </li>
                 ))}
               </ul>
+            </>
+          ) : null}
+          {doc.news === null && data?.watched ? (
+            <>
+              <h3 className="stk-subhead">최근 기사 제목</h3>
+              <p className="auto-meta">기사 제목 자료 없음</p>
             </>
           ) : null}
           {news.length ? (
@@ -427,7 +433,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
               <h2>의견 기록과 채점</h2>
               <p>해석을 쓴 날 이후의 수익률을 지수와 나란히 봅니다.</p>
             </div>
-            <div className="stk-scroll">
+            <div className="stk-scroll" tabIndex={0} role="region" aria-label="의견 기록 표">
               <table className="stk-ops">
                 <thead>
                   <tr>
@@ -444,7 +450,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
                     const rs = opinionReturns(o, rec.chart, data?.index ?? null);
                     return (
                       <tr key={o.id}>
-                        <td>{monthDay(o.id.slice(0, 10))}</td>
+                        <th scope="row">{monthDay(opinionDateKst(o))}</th>
                         <td className="stk-num">{money(o.price)}</td>
                         <td className="stk-op-verdict" title={o.verdict}>{o.verdict}</td>
                         {rs.map((r) => (
@@ -456,7 +462,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
                 </tbody>
               </table>
             </div>
-            <p className="auto-meta">수익률은 쓴 날 주가 대비이며 배당 제외, 그래프가 이틀 간격이라 며칠 어긋날 수 있습니다. 맞고 틀림은 따로 매기지 않습니다.</p>
+            <p className="auto-meta">수익률은 쓴 날 주가 대비이며 배당 제외, 그래프가 이틀 간격이라 며칠 어긋날 수 있습니다. 1주·1개월·3개월은 쓴 날부터 약 7·30·91일 뒤 첫 거래일 기준입니다. 맞고 틀림은 따로 매기지 않습니다.</p>
           </section>
         ) : null}
 

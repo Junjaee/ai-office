@@ -93,8 +93,8 @@ export default function StockDiscover({ ws }: { ws: string }) {
         {data ? <p className="auto-meta">{lensDaysText(data.lensDays)}</p> : null}
         {board?.lens_score ? (
           <section className="stk-section">
-            <h3 className="stk-subhead">관점별 성적 (지수 대비, 배당 제외)</h3>
-            <div className="stk-scroll">
+            <h3 className="stk-subhead">관점별 성적 (최근 1년 · 지수 대비 · 배당 제외)</h3>
+            <div className="stk-scroll" tabIndex={0} role="region" aria-label="관점별 성적 표">
               <table className="stk-ops stk-lens-score">
                 <thead>
                   <tr>
@@ -109,14 +109,17 @@ export default function StockDiscover({ ws }: { ws: string }) {
                     <tr key={id}>
                       <th scope="row">{label(id)}</th>
                       {(["1w", "1m", "3m"] as const).map((h) => (
-                        <td key={h}>{scoreText(board.lens_score?.[id]?.[h])}</td>
+                        <td key={h}>{scoreText(board.lens_score?.[id]?.[h], board.score_gate)}</td>
                       ))}
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            <p className="auto-meta">1주 = 5거래일 · 1개월 = 21거래일 · 3개월 = 63거래일, 최근 1년 종가, 배당 제외</p>
           </section>
+        ) : board && data && data.lensDays > 0 ? (
+          <p className="auto-meta">오늘은 채점을 건너뛰었어요 — 다음 갱신 때 다시 계산합니다</p>
         ) : null}
 
         <footer className="dash-foot">발굴 결과는 조건에 맞는 종목을 걸러 보여 주는 것이며 매수 추천이 아닙니다. 출처는 야후 파이낸스와 미국 증권거래위원회(EDGAR) 공시 목록입니다.</footer>

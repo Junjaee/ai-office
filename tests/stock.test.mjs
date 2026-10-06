@@ -162,6 +162,7 @@ test("없는 경로·메서드", async () => {
 // ---- 3단계: 해석 저장·읽기, 지수·관점 기록 ----
 const OP = { price: 142.3, as_of: "2026-10-02", next_earn: "2026-12-10", verdict: "  한 줄 결론  ", good: [{ text: "좋은 점", src: "재무" }], bad: [{ text: "나쁜 점", src: "시세" }], watch: ["다음 실적"] };
 const cleaned = { ...OP, verdict: "한 줄 결론" };
+const withTicker = () => { const LIVE = fakeR2(); LIVE.store.set(tickerKey("us", "ORCL"), JSON.stringify({ rec: { t: "ORCL" } })); return LIVE; };   // 종목 자료가 올라와 있는 저장 공간
 const opPost = (opinion, extra = {}, headers = {}) => post("/api/stock/opinion", { market: "us", ticker: "ORCL", opinion, ...extra }, headers);
 
 test("cleanOpinion: 정상은 정리해서 돌려주고 모르는 키는 버린다", () => {
@@ -189,7 +190,7 @@ test("cleanOpinion: 어긋나면 null", () => {
 });
 
 test("해석 저장: id 는 서버 시각, 최근 것이 앞, 20개까지, 같은 밀리초도 id 가 겹치지 않는다", async () => {
-  const LIVE = fakeR2();
+  const LIVE = withTicker();
   const r = await handleStock(opPost(OP), { LIVE }, deps);
   assert.equal(r.status, 200);
   const first = await body(r);
@@ -214,6 +215,7 @@ test("해석 저장: 잘못된 기호·시장·본문 400, 토큰, 큰 본문 41
   }
   assert.equal((await handleStock(post("/api/stock/opinion", "not json"), { LIVE }, deps)).status, 400);
   assert.equal(LIVE.store.size, 0);
+  LIVE.store.set(tickerKey("us", "ORCL"), "{}");
   const env = { LIVE, LIVE_TOKEN: "secret-token-1234" };
   assert.equal((await handleStock(opPost(OP), env, deps)).status, 401);
   assert.equal((await handleStock(opPost(OP, {}, { "X-Live-Token": "secret-token-1234" }), env, deps)).status, 200);
@@ -221,6 +223,17 @@ test("해석 저장: 잘못된 기호·시장·본문 400, 토큰, 큰 본문 41
   assert.equal((await handleStock(new Request(`${ORIGIN}/api/stock/opinion`), { LIVE }, deps)).status, 405);
   // 스크립트가 부르는 길이라 다른 출처 검사는 하지 않는다
   assert.equal((await handleStock(opPost(OP, {}, { Origin: "https://evil.example" }), { LIVE }, deps)).status, 200);
+});
+
+test("해석 저장: 자료가 올라와 있지 않은 종목은 404 이고 아무것도 쓰지 않는다", async () => {
+  const LIVE = fakeR2();
+  const r = await handleStock(opPost(OP), { LIVE }, deps);
+  assert.equal(r.status, 404);
+  assert.deepEqual(await body(r), { error: "not_found" });
+  assert.equal(LIVE.store.size, 0);
+  LIVE.store.set(tickerKey("us", "ORCL"), "{}");
+  assert.equal((await handleStock(opPost(OP, { ticker: "MSFT" }), { LIVE }, deps)).status, 404);   // 다른 종목 자료로는 열리지 않는다
+  assert.equal((await handleStock(opPost(OP), { LIVE }, deps)).status, 200);
 });
 
 test("해석 저장: 읽기·해석에 실패하면 503 이고 쓰지 않는다", async () => {

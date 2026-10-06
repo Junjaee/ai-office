@@ -13,9 +13,11 @@ export type BoardRow = {
   fpe: number | null; n_pass: number; n_care: number; n_warn: number; diag: string; next_earn: string | null; warn_keys: string[];
   sector: string; rev_g: number | null; nde: number | null; dv_ratio: number | null; lenses: LensHit[];
 };
-export type Score = { n: number; avg: number | null; win: number | null };
+export type Score = { n: number; days: number; avg: number | null; win: number | null };
+export type ScoreGate = { min_n: number; min_days: number };
+export const DEFAULT_SCORE_GATE: ScoreGate = { min_n: 30, min_days: 20 };
 export type ScoreHorizon = "1w" | "1m" | "3m";
-export type Board = { market: string; as_of: string; generated_at?: string; universe: number | null; rows: BoardRow[]; missing: string[]; lens_info: Record<LensId, { label: string; rule: string }>; lens_score: Record<LensId, Record<ScoreHorizon, Score>> | null };
+export type Board = { market: string; as_of: string; generated_at?: string; universe: number | null; rows: BoardRow[]; missing: string[]; lens_info: Record<LensId, { label: string; rule: string }>; lens_score: Record<LensId, Record<ScoreHorizon, Score>> | null; score_gate: ScoreGate };
 export type StockRecord = {
   t: string; name: string; exchange: string; sector: string; financial: boolean; as_of: string; price: number; chg_pct: number | null;
   hi52: number; lo52: number; off_hi_pct: number | null; ath: number; ath_date: string; ath_pct: number | null; y_ret_pct: number | null;
@@ -29,7 +31,7 @@ export type NewsItem = { title: string; source: string; date: string; url: strin
 export type TickerDoc = {
   market: string; as_of: string; rec: StockRecord; checks: Check[]; diag: string;
   peers: { t: string; name: string; fpe: number }[]; ref: { fpe: number | null; opm: number | null; label: string };
-  lenses: LensHit[]; events: StockEvent[]; news: NewsItem[];
+  lenses: LensHit[]; events: StockEvent[]; news: NewsItem[] | null; // news null = 기사 제목을 받지 못했거나 받지 않음, [] = 받았는데 0건
 };
 export type EvidenceSrc = "재무" | "시세" | "뉴스" | "전망";
 export type Opinion = { id: string; price: number; as_of: string; next_earn: string | null; verdict: string; good: { text: string; src: EvidenceSrc }[]; bad: { text: string; src: EvidenceSrc }[]; watch: string[] };
@@ -209,11 +211,18 @@ export function normalizeBoard(input: unknown): Board | null {
     });
   }
   return { market: str(input.market), as_of: str(input.as_of), ...(typeof input.generated_at === "string" ? { generated_at: input.generated_at } : {}), universe: num(input.universe), rows,
-    missing: arr(input.missing).filter((x): x is string => typeof x === "string"), lens_info: lensInfo(input.lens_info), lens_score: lensScore(input.lens_score) };
+    missing: arr(input.missing).filter((x): x is string => typeof x === "string"), lens_info: lensInfo(input.lens_info), lens_score: lensScore(input.lens_score), score_gate: scoreGate(input.score_gate) };
+}
+
+/** 성적을 숫자로 보여 주는 최소 표본. 없거나 틀리면 기본값(30건·20일) */
+function scoreGate(v: unknown): ScoreGate {
+  const o = isObj(v) ? v : {};
+  const pos = (x: unknown, d: number) => (typeof x === "number" && Number.isInteger(x) && x > 0 ? x : d);
+  return { min_n: pos(o.min_n, DEFAULT_SCORE_GATE.min_n), min_days: pos(o.min_days, DEFAULT_SCORE_GATE.min_days) };
 }
 
 const SCORE_KEYS: ScoreHorizon[] = ["1w", "1m", "3m"];
-/** 관점 성적판: 네 관점 × 세 기간이 모두 {n 0 이상의 정수, avg·win 숫자 또는 null} 일 때만. 하나라도 틀리면 통째로 null */
+/** 관점 성적판: 네 관점 × 세 기간이 모두 {n·days 0 이상의 정수(days 가 없으면 0), avg·win 숫자 또는 null} 일 때만. 하나라도 틀리면 통째로 null */
 function lensScore(v: unknown): Board["lens_score"] {
   if (!isObj(v)) return null;
   const out = {} as NonNullable<Board["lens_score"]>;
@@ -224,8 +233,9 @@ function lensScore(v: unknown): Board["lens_score"] {
     for (const k of SCORE_KEYS) {
       const c = o[k];
       if (!isObj(c) || typeof c.n !== "number" || !Number.isInteger(c.n) || c.n < 0) return null;
+      if (c.days !== undefined && (typeof c.days !== "number" || !Number.isInteger(c.days) || c.days < 0)) return null;
       if ((c.avg !== null && num(c.avg) === null) || (c.win !== null && num(c.win) === null)) return null;
-      row[k] = { n: c.n, avg: c.avg as number | null, win: c.win as number | null };
+      row[k] = { n: c.n, days: (c.days as number | undefined) ?? 0, avg: c.avg as number | null, win: c.win as number | null };
     }
     out[id] = row;
   }
@@ -256,7 +266,7 @@ export function normalizeDoc(input: unknown): TickerDoc | null {
     .map((p) => ({ t: p.t as string, name: p.name as string, fpe: p.fpe as number }));
   const ref = isObj(input.ref) ? { fpe: num(input.ref.fpe), opm: num(input.ref.opm), label: str(input.ref.label, "시장") } : { fpe: null, opm: null, label: "시장" };
   const events = arr(input.events).filter(isObj).filter((e) => typeof e.date === "string" && typeof e.kind === "string").map((e) => ({ date: e.date as string, kind: e.kind as string }));
-  const news = arr(input.news).filter(isObj).filter((n) => typeof n.title === "string" && typeof n.url === "string" && n.url.startsWith("https://"))
+  const news = input.news === null ? null : arr(input.news).filter(isObj).filter((n) => typeof n.title === "string" && typeof n.url === "string" && n.url.startsWith("https://"))
     .slice(0, 8).map((n) => ({ title: n.title as string, source: str(n.source), date: str(n.date), url: n.url as string }));
   return { market: str(input.market), as_of: str(input.as_of), rec, checks, diag: str(input.diag), peers, ref, lenses: lensHits(input.lenses), events, news };
 }
@@ -293,10 +303,16 @@ const dayNum = (iso: string): number => Math.round(Date.parse(`${iso.slice(0, 10
 export const STALE_DAYS = 30;
 export const STALE_MOVE_PCT = 20;
 
+/** 해석을 쓴 날(KST). id 는 서버가 붙인 UTC 시각이라 9시간을 더해 한국 날짜로 읽는다 */
+export function opinionDateKst(op: Pick<Opinion, "id">): string {
+  const t = Date.parse(op.id);
+  return Number.isNaN(t) ? op.id.slice(0, 10) : new Date(t + 9 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
 /** 해석이 오래된 이유 목록(없으면 []). todayIso 는 호출하는 쪽이 정한 오늘(KST) 날짜 */
 export function opinionStale(op: Opinion, rec: { price: number }, todayIso: string): string[] {
   const why: string[] = [];
-  const age = dayNum(todayIso) - dayNum(op.id);
+  const age = dayNum(todayIso) - dayNum(opinionDateKst(op));
   if (age > STALE_DAYS) why.push(`쓴 지 ${age}일 지남`);
   if (op.next_earn && op.next_earn < todayIso) why.push("그 뒤 실적 발표가 있었음");
   if (op.price > 0) {
@@ -308,9 +324,9 @@ export function opinionStale(op: Opinion, rec: { price: number }, todayIso: stri
 
 export const OPINION_HORIZONS = [{ key: "1w", label: "1주", days: 7 }, { key: "1m", label: "1개월", days: 30 }, { key: "3m", label: "3개월", days: 91 }] as const;
 
-/** 해석을 쓴 날 + N일 이후 첫 점의 수익률(종목은 쓸 때 주가, 지수는 쓴 날 이후 첫 점 기준). 그래프 끝을 넘으면 아직 — 전부 null */
+/** 해석 기준일(as_of, 거래일) + N일 이후 첫 점의 수익률. 종목은 쓸 때 주가(op.price), 지수는 기준일 이후 첫 점이 출발점. 그래프 끝을 넘으면 아직 — 전부 null */
 export function opinionReturns(op: Opinion, chart: [string, number][], index: IndexDoc | null): { key: string; label: string; ret: number | null; idx: number | null; excess: number | null }[] {
-  const written = dayNum(op.id);
+  const written = dayNum(op.as_of);
   const iso = (n: number) => new Date(n * 86400000).toISOString().slice(0, 10);
   const firstOn = (pts: [string, number][], d: string) => pts.find(([x]) => x >= d);
   const closes = index?.closes ?? [];
@@ -327,12 +343,12 @@ export function opinionReturns(op: Opinion, chart: [string, number][], index: In
   });
 }
 
-/** 관점 성적 한 줄. 표본이 30건이 되기 전에는 판단하지 않는다 */
-export function scoreText(s: Score | null | undefined): string {
+/** 관점 성적 한 줄. 표본(건수·날짜 수)이 기준에 이르기 전에는 판단하지 않는다 */
+export function scoreText(s: Score | null | undefined, gate: ScoreGate = DEFAULT_SCORE_GATE): string {
   if (!s || s.n <= 0) return "아직 잴 수 있는 기록이 없어요";
-  if (s.n < 30) return `표본 ${s.n}건 — 아직 판단하기 이릅니다`;
+  if (s.n < gate.min_n || s.days < gate.min_days) return `표본 ${s.n}건 · ${s.days}일 — 아직 판단하기 이릅니다`;
   const avg = s.avg === null ? "–" : `${s.avg > 0 ? "+" : ""}${s.avg.toFixed(1)}%p`;
-  return `${s.n}건 · 지수 대비 평균 ${avg} · 이긴 비율 ${s.win === null ? "–" : `${s.win.toFixed(1)}%`}`;
+  return `${s.n}건 · ${s.days}일 · 지수 대비 평균 ${avg} · 이긴 비율 ${s.win === null ? "–" : `${s.win.toFixed(1)}%`}`;
 }
 
 /** 관심 담기·빼기 실패 안내 문구 */

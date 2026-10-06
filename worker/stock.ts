@@ -251,6 +251,10 @@ export async function handleStock(request: Request, env: StockEnv, deps: { now: 
     const { market, ticker } = body;
     const opinion = cleanOpinion(body.opinion);
     if (typeof market !== "string" || typeof ticker !== "string" || !validTicker(market, ticker) || !opinion) return json({ error: "bad_request" }, 400);
+    // 자료가 올라와 있는 종목에만 쓴다 — 아무 기호나 보내 저장 공간을 채우지 못하게(읽기 실패는 모른다는 뜻이라 503)
+    const known = await readStrict(bucket, tickerKey(market, ticker));
+    if (!known.ok) return json({ error: "stock_unavailable" }, 503);
+    if (known.doc === null) return json({ error: "not_found" }, 404);
     const key = opinionKey(market, ticker);
     const cur = await readStrict(bucket, key);
     if (!cur.ok || (cur.doc !== null && !Array.isArray(asObject(cur.doc).items))) return json({ error: "stock_unavailable" }, 503);

@@ -12,14 +12,14 @@ const hits = (ids: LensId[]): LensHit[] => ids.map((id) => ({ id, why: WHY[id] }
 const row = (t: string, name: string, price: number, chg: number, from: number, ath: number, off: number, fpe: number | null, p: number, c: number, w: number, diag: string, next: string | null, warn: string[], lenses: LensId[] = [], dv: number | null = 1, rev_g: number | null = 10, nde: number | null = 1): BoardRow =>
   ({ t, name, price, chg_pct: chg, spark: spark(from, price), ath_pct: ath, off_hi_pct: off, fpe, n_pass: p, n_care: c, n_warn: w, diag, next_earn: next, warn_keys: warn, sector: "Technology", rev_g, nde, dv_ratio: dv, lenses: hits(lenses) });
 
-/** 한 관점(싸고 탄탄)만 표본이 30건 이상 — 나머지는 아직 판단하기 이른 경우를 화면에서 확인하려는 견본 */
+/** 한 관점(싸고 탄탄)만 표본이 30건·20일 이상 — 나머지는 아직 판단하기 이른 경우를 화면에서 확인하려는 견본 */
 function mockLensScore(): NonNullable<Board["lens_score"]> {
   const cells = (a: Score, b: Score, c: Score) => ({ "1w": a, "1m": b, "3m": c });
-  const none: Score = { n: 0, avg: null, win: null };
+  const none: Score = { n: 0, days: 0, avg: null, win: null };
   return {
-    value: cells({ n: 120, avg: 0.4, win: 52.5 }, { n: 96, avg: 1.1, win: 55.2 }, { n: 41, avg: -0.6, win: 48.8 }),
-    growth: cells({ n: 18, avg: 0.9, win: 55.6 }, { n: 9, avg: 2.1, win: 66.7 }, none),
-    event: cells({ n: 7, avg: -0.3, win: 42.9 }, { n: 2, avg: 1.4, win: 50 }, none),
+    value: cells({ n: 120, days: 45, avg: 0.4, win: 52.5 }, { n: 96, days: 42, avg: 1.1, win: 55.2 }, { n: 41, days: 28, avg: -0.6, win: 48.8 }),
+    growth: cells({ n: 18, days: 12, avg: 0.9, win: 55.6 }, { n: 9, days: 7, avg: 2.1, win: 66.7 }, none),
+    event: cells({ n: 7, days: 5, avg: -0.3, win: 42.9 }, { n: 2, days: 2, avg: 1.4, win: 50 }, none),
     flow: cells(none, none, none),
   };
 }
@@ -37,7 +37,7 @@ export function mockBoard(): { board: Board; watch: string[] } {
       row("KO", "The Coca-Cola Company", 71.5, 0.2, 69.0, -2.0, -2.0, 21.0, 6, 1, 0, "좋음: 가치·수익성·빚·현금흐름", "2026-10-21", [], ["value"], 0.8, 6.0, 1.9),
       row("INTC", "Intel Corporation", 24.1, -1.1, 26.0, -60.0, -48.0, null, 2, 1, 4, "경고: 가치·이익 방향·수익성·현금흐름", "2026-10-23", ["이익 방향", "수익성"], [], 0.7, -2.0, 3.8),
     ], missing: [],
-    lens_score: mockLensScore(),
+    lens_score: mockLensScore(), score_gate: { min_n: 30, min_days: 20 },
     lens_info: {
       value: { label: "싸고 탄탄", rule: "점검표의 가치·빚·현금흐름이 모두 통과" },
       growth: { label: "실적 개선", rule: "최근 분기 매출이 전년보다 15% 이상 늘고 이익도 늘어남" },
