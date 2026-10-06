@@ -1,9 +1,9 @@
-"""주식 분석 자동화 — 미국 종목 시세·재무를 받아 점검표를 계산하고 사이트 저장 공간에 올린다.
+"""주식 분석 자동화 — 미국·국내 종목 시세·재무를 받아 점검표를 계산하고 사이트 저장 공간에 올린다.
 
 사용:
   python run_analyst.py                      # 실제 실행 (끝나면 상태 파일 커밋·push)
   python run_analyst.py --dry-run            # 받아서 계산만 하고 보내지 않는다
-  옵션: --config 경로, --market us
+  옵션: --config 경로, --market us|kr
 
 네 관점(싸고 탄탄·실적 개선·사건·돈 몰림) 판정과 미국 공시(EDGAR 8-K) 분류를 더해 발굴 판과 관점 기록도 올린다.
 AI 를 부르지 않는다. 저장소가 공개라서 상태 파일·로그에는 건수만 남기고 종목 기호·이름은 적지 않는다
@@ -38,6 +38,7 @@ from analyst_metrics import build_record  # noqa: E402
 from analyst_publish import Site  # noqa: E402
 from analyst_score import merge_history, score_lenses  # noqa: E402
 from analyst_sources_edgar import Edgar  # noqa: E402
+from analyst_sources_kr import fetch_raw_kr  # noqa: E402
 from analyst_sources_news import fetch_titles  # noqa: E402
 from analyst_sources_us import fetch_raw  # noqa: E402
 
@@ -46,6 +47,14 @@ AUTOMATION_ID = "analyst"
 AUTOMATION_NAME = "주식 분석"
 DEPT = "finance"
 HERE = Path(__file__).resolve().parent
+
+# 시장별로 다른 것은 이 표 하나로 — universe 는 대상 파일, index 는 야후 기호, index_label 은 기록에 적는 이름
+MARKETS = {
+    "us": {"universe": "universe_us.txt", "index": "SPY", "index_label": "SPY", "locale": "us"},
+    "kr": {"universe": "universe_kr.txt", "index": "^KS11", "index_label": "KOSPI", "locale": "kr"},
+}
+MARKET_LABEL = {"us": "미국", "kr": "국내"}
+NO_KR_FILINGS = "국내 공시는 아직 받지 않아 가격 조건만으로 사건을 봅니다"
 
 # yfinance 는 받지 못한 종목의 기호를 직접 로그에 찍는다 — 공개 저장소의 Actions 로그에 남지 않게 막는다
 logging.getLogger("yfinance").setLevel(logging.CRITICAL)
@@ -99,7 +108,7 @@ def _score(site, market: str, as_of: str, hits: dict, closes: dict, spy_closes, 
         return None, merged
 
 
-def _news(records: list, watch: list, as_of: str, news, delay: float, progress, budget: float = 180, clock=time.monotonic) -> tuple[dict, int]:
+def _news(records: list, watch: list, as_of: str, news, delay: float, progress, budget: float = 180, clock=time.monotonic, locale: str = "us") -> tuple[dict, int]:
     """관심 종목의 기사 제목 {기호: [...]}(받은 종목만 — 제목이 0건이어도 받은 것이다), 받은 종목 수. 실패는 세고 넘어간다(이름·오류 내용은 남기지 않는다)."""
     out, lost, streak, stopped, t0 = {}, 0, 0, False, clock()
     for i, r in enumerate(records):
@@ -109,12 +118,13 @@ def _news(records: list, watch: list, as_of: str, news, delay: float, progress, 
             progress(f"기사 제목을 받지 못해 남은 {sum(1 for x in records[i:] if x['t'] in watch)}종목은 건너뜁니다 (시간 초과)")
             stopped = True
             break
-        if not r.get("name"):
+        name = (r.get("name_local") if locale == "kr" else None) or r.get("name")
+        if not name:
             lost += 1
             continue
         try:
             with _quiet():
-                out[r["t"]] = news(r["name"], as_of)
+                out[r["t"]] = news(name, as_of, locale=locale) if locale != "us" else news(name, as_of)
             streak = 0
         except Exception:  # noqa: BLE001
             lost += 1
@@ -130,12 +140,16 @@ def _news(records: list, watch: list, as_of: str, news, delay: float, progress, 
     return out, len(out)
 
 
-def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site: Site | None = None, filings_for=None, clock=time.monotonic, news=fetch_titles) -> dict:
+def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=None, site: Site | None = None, filings_for=None, clock=time.monotonic, news=fetch_titles) -> dict:
     market = getattr(args, "market", "us") or "us"
+    mk = MARKETS[market]
     if site is None:
         site = Site(cfg["site_url"], token=os.environ.get("LIVE_TOKEN", ""))
     rules = load_rules()
-    universe = read_universe(cfg.get("universe_us") or HERE / "universe_us.txt")
+    meta = read_universe_meta(cfg.get(f"universe_{market}") or HERE / mk["universe"])
+    universe = list(meta)
+    if fetch is None:   # 주입된 수집기가 있으면 그것이 먼저(시험). 국내는 거래소·이름을 함께 넘기고, 지수는 야후 기호 그대로 받는다
+        fetch = fetch_raw if market == "us" else lambda t: fetch_raw(t) if t == mk["index"] else fetch_raw_kr(t, meta.get(t))
     try:
         watch = site.watch(market)
     except Exception:  # noqa: BLE001 — 배포 전 시험 실행에서는 사이트에 경로가 아직 없을 수 있다
@@ -180,7 +194,9 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     # 공시(8-K) — 받지 못해도 계속한다(사건 관점은 가격 조건만 남는다). 실패 내용엔 회사·종목이 들어 있어 건수만 센다
     if filings_for is None:
         ua = os.environ.get("SEC_USER_AGENT", "").strip()
-        if ua:
+        if market == "kr":   # 국내는 EDGAR 를 시도하지 않는다
+            progress(NO_KR_FILINGS)
+        elif ua:
             filings_for = Edgar(ua).filings
         else:
             progress("공시 출처 설정(SEC_USER_AGENT)이 없어 가격 조건만으로 사건을 봅니다")
@@ -238,9 +254,9 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     index, spy_closes = None, None
     try:
         with _quiet():
-            spy_closes = fetch("SPY")["closes"]
+            spy_closes = fetch(mk["index"])["closes"]
         if spy_closes[-1][0] == as_of:
-            index = {"t": "SPY", "close": round(float(spy_closes[-1][1]), 2)}
+            index = {"t": mk["index_label"], "close": round(float(spy_closes[-1][1]), 2)}
     except Exception:  # noqa: BLE001
         progress("지수 종가를 받지 못했습니다(기록에는 비워 둡니다)")
     lens_log = {"market": market, "date": as_of, "index": index, "hits": hits}
@@ -250,7 +266,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
     # 관심 종목 기사 제목(해석할 때 읽을 자료) — 끄면 아무것도 받지 않는다
     news_n = 0
     if cfg.get("news_enabled"):
-        titles, news_n = _news(records, set(watch), as_of, news, delay, progress, float(cfg.get("news_budget_sec", 180)), clock)
+        titles, news_n = _news(records, set(watch), as_of, news, delay, progress, float(cfg.get("news_budget_sec", 180)), clock, mk["locale"])
         for d in docs:
             d["news"] = titles.get(d["rec"]["t"])
 
@@ -262,7 +278,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress, fetch=fetch_raw, site
         site.ingest(market, "lens", lens_log, date=as_of)
         if lens_hist is not None:
             site.ingest(market, "lenshist", lens_hist)
-            site.ingest(market, "index", {"t": "SPY", "closes": spy_closes})
+            site.ingest(market, "index", {"t": mk["index_label"], "closes": spy_closes})
 
     n_warn = sum(1 for row in rows if row["n_warn"])
     return {
@@ -279,7 +295,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p = argparse.ArgumentParser(description=AUTOMATION_NAME)
     p.add_argument("--dry-run", action="store_true", help="받아서 계산만 하고 보내지 않는다")
     p.add_argument("--config", default=str(HERE / "config.actions.yaml"), help="설정 파일 경로")
-    p.add_argument("--market", default="us", choices=["us"], help="시장 (1단계는 미국만)")
+    p.add_argument("--market", default="us", choices=list(MARKETS), help="시장 (us | kr)")
     return p.parse_args(argv)
 
 
@@ -288,11 +304,11 @@ def load_config(path: str) -> dict:
         return yaml.safe_load(f) or {}
 
 
-def build_summary(counts: dict, elapsed_sec: float) -> str:
+def build_summary(counts: dict, elapsed_sec: float, market: str = "us") -> str:
     names = {"checked": "점검", "watch": "관심", "failed": "실패", "failed_watch": "관심 실패", "candidates": "후보"}
     parts = [f"{names[k]} {v}건" for k, v in counts.items() if k in names]
     parts.append(f"{elapsed_sec / 60:.1f}분" if elapsed_sec >= 60 else f"{int(elapsed_sec)}초")
-    return ", ".join(parts)
+    return f"{MARKET_LABEL[market]} · " + ", ".join(parts)
 
 
 def build_tasks(cfg: dict, task_results: dict) -> list[dict]:
@@ -332,7 +348,7 @@ def run(argv: list[str], work=None) -> int:
     counts = dict(result.get("counts") or {})
     tasks = dict(result.get("tasks") or {})
     ok = all(v[0] for v in tasks.values())
-    summary = build_summary(counts, time.monotonic() - started)
+    summary = build_summary(counts, time.monotonic() - started, args.market)
     print(summary)
     if not args.dry_run:
         _report(cfg, ok=ok, summary=summary, counts=counts, log_lines=[summary] + list(result.get("lines") or [])[:4],

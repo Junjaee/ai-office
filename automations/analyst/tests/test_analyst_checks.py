@@ -131,3 +131,11 @@ def test_board_row_carries_lens_fields():
     row = c.board_row(rec, _ck(), [{"id": "flow", "why": "x"}])
     assert (row["sector"], row["rev_g"], row["nde"], row["dv_ratio"], row["lenses"]) == ("Technology", 12.0, 0.5, 1.2, [{"id": "flow", "why": "x"}])
     assert c.board_row(rec, _ck())["lenses"] == []
+
+
+def test_cash_flow_text_uses_currency_unit():
+    def cash(**over):
+        return next(x["text"] for x in c.run_checks(rec(fcf=169.1e9, **over), MED, RULES) if x["key"] == "현금흐름")
+    assert cash() == "최근 12개월 쓰고 남은 현금 +1,691억 달러"
+    assert cash(currency="USD").endswith("1,691억 달러") and cash(currency="KRW") == "최근 12개월 쓰고 남은 현금 +1,691억 원"
+    assert c._eok(-169.1e9, "KRW") == "1,691억 원"

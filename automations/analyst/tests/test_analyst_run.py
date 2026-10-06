@@ -74,7 +74,8 @@ def test_public_outputs_never_name_tickers(tmp_path):
     text = " ".join(out["lines"]) + " ".join(v[1] for v in out["tasks"].values()) + mod.build_summary(out["counts"], 3)
     for t in ("AAA", "BBB", "CCC", "ZZZ"):
         assert t not in text
-    assert "점검 4건" in mod.build_summary(out["counts"], 3)
+    assert mod.build_summary(out["counts"], 3).startswith("미국 · 점검 4건")
+    assert mod.build_summary(out["counts"], 3, "kr").startswith("국내 · 점검 4건")
 
 
 def test_some_failures_are_counted_but_too_many_abort(tmp_path):
@@ -633,3 +634,77 @@ def test_read_universe_meta_reads_both_formats(tmp_path):
     us.write_text("# 주석\nAAPL\nbrk-b  # 버크셔\nAAPL\n", encoding="utf-8")
     assert mod.read_universe(us) == ["AAPL", "BRK-B"]
     assert mod.read_universe_meta(us) == {"AAPL": {"exch": None, "name": None}, "BRK-B": {"exch": None, "name": "버크셔"}}
+
+
+# ---- 4단계: 국내 시장 ----
+
+def kr_args(dry=False):
+    return types.SimpleNamespace(dry_run=dry, market="kr")
+
+
+def kr_cfg(tmp_path, body="005930 KS  # 삼성전자\n247540 KQ  # 에코프로비엠\n000660 KS  # SK하이닉스\n"):
+    u = tmp_path / "kr.txt"; u.write_text(body, encoding="utf-8")
+    return {"universe_kr": str(u), "max_fail_ratio": 0.2, "request_delay": 0}
+
+
+def test_kr_uses_kr_universe_kospi_index_and_skips_filings(tmp_path, monkeypatch, capsys):
+    class Boom:
+        def __init__(self, *a, **k):
+            raise AssertionError("국내는 EDGAR 를 부르면 안 된다")
+    monkeypatch.setattr(mod, "Edgar", Boom)
+    monkeypatch.setenv("SEC_USER_AGENT", "Test Agent test@example.com")   # 있어도 국내는 쓰지 않는다
+    asked = []
+
+    def fetch(t):
+        asked.append(t)
+        return fetch_info({})(t)
+    site = FakeSite([])
+    out = mod.do_work(kr_cfg(tmp_path), kr_args(), print, fetch=fetch, site=site)
+    text = capsys.readouterr().out
+    assert asked[:3] == ["005930", "247540", "000660"] and asked[-1] == "^KS11"
+    assert "국내 공시는 아직 받지 않아 가격 조건만으로 사건을 봅니다" in text and "SEC_USER_AGENT" not in text
+    board = site.docs["board"]
+    assert board["market"] == "kr" and board["filings_ok"] is False and board["universe"] == 3
+    assert site.docs[f"lens:{AS_OF}"]["index"]["t"] == "KOSPI"
+    assert site.extra["index"]["t"] == "KOSPI" and out["counts"]["checked"] == 3
+
+
+def test_kr_default_fetch_passes_meta_and_reads_the_index_directly(tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(mod, "fetch_raw_kr", lambda code, meta, yf=None: calls.append(("kr", code, meta)) or fetch_info({})(code))
+    monkeypatch.setattr(mod, "fetch_raw", lambda t, yf=None: calls.append(("raw", t)) or fetch_info({})(t))
+    mod.do_work(kr_cfg(tmp_path), kr_args(dry=True), lambda m: None, site=FakeSite([]))
+    assert calls[0] == ("kr", "005930", {"exch": "KS", "name": "삼성전자"}) and calls[-1] == ("raw", "^KS11")
+    assert len([c for c in calls if c[0] == "kr"]) == 3
+
+
+def test_kr_news_asks_with_kr_locale_and_local_name(tmp_path):
+    asked = []
+
+    def news(name, as_of, locale="us"):
+        asked.append((name, locale))
+        return []
+    c = kr_cfg(tmp_path); c["news_enabled"] = True
+    mod.do_work(c, kr_args(), lambda m: None, fetch=lambda t: dict(fetch_info({})(t), name_local="삼성전자" if t == "005930" else None),
+                site=FakeSite(["005930", "247540"]), news=news)
+    assert sorted(asked) == [("247540 Corp", "kr"), ("삼성전자", "kr")]
+
+
+def test_us_news_call_shape_is_unchanged(tmp_path):
+    seen = []
+    c = news_cfg(tmp_path)
+    mod.do_work(c, args(), lambda m: None, fetch=fetch_ok, site=FakeSite(["AAA"]), news=lambda name, as_of: seen.append(name) or [])
+    assert seen == ["AAA Corp"]
+
+
+def test_kr_output_never_names_codes_or_names(tmp_path, capsys):
+    out = mod.do_work(kr_cfg(tmp_path), kr_args(dry=True), print, fetch=fetch_ok, site=FakeSite([]))
+    text = capsys.readouterr().out + " ".join(out["lines"]) + mod.build_summary(out["counts"], 3, "kr")
+    for w in ("005930", "삼성", "247540", "Corp"):
+        assert w not in text
+
+
+def test_parse_args_accepts_kr():
+    assert mod.parse_args(["--market", "kr"]).market == "kr"
+    with pytest.raises(SystemExit):
+        mod.parse_args(["--market", "jp"])

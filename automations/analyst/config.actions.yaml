@@ -15,7 +15,7 @@ result_link: ""
 # 상태 보고: 저장소 루트(체크아웃 위치)에 커밋 — 건수만 남긴다
 office_repo: "."
 office_workspace: "home"
-next_run: "화~토 07:00"
+next_run: "미국 화~토 07:00 · 국내 월~금 16:30"
 
 # 화면의 직원(하위 작업) id. 원천은 app/workspaces/home.ts (테스트로 일치 강제)
 tasks: [check, collect, discover]

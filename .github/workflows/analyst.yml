@@ -9,7 +9,7 @@ on:
         type: string
         default: ""
       market:
-        description: "시장 (us)"
+        description: "시장 (us | kr)"
         type: string
         default: "us"
 

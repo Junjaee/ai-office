@@ -72,3 +72,13 @@ def test_prints_nothing(capsys):
     fetch_titles("Oracle Corp", "2025-10-03", http=Http())
     out = capsys.readouterr()
     assert out.out == "" and out.err == ""
+
+
+def test_kr_locale_uses_korean_edition_and_name_plus_stock_word():
+    http = Http()
+    fetch_titles("삼성전자", "2025-10-03", http=http, locale="kr")
+    url, _ = http.calls[0]
+    q = urlparse(url).query
+    assert parse_qs(q)["q"] == ["삼성전자 주식"] and "hl=ko" in q and "gl=KR" in q and "ceid=KR:ko" in q
+    http = Http(); fetch_titles("Oracle", "2025-10-03", http=http)
+    assert "hl=en-US" in http.calls[0][0]   # 기본은 미국 그대로

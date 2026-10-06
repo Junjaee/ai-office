@@ -43,8 +43,8 @@ def ref_for(rec: dict, med: dict, sector_min: int) -> dict:
     return {"fpe": med["all"].get("fpe"), "opm": med["all"].get("opm"), "label": "시장"}
 
 
-def _eok(v: float) -> str:
-    return f"{abs(v) / 1e8:,.0f}억 달러"
+def _eok(v: float, currency: str | None = None) -> str:
+    return f"{abs(v) / 1e8:,.0f}억 {'원' if currency == 'KRW' else '달러'}"
 
 
 def run_checks(rec: dict, med: dict, rules: dict) -> list[dict]:
@@ -115,11 +115,11 @@ def run_checks(rec: dict, med: dict, rules: dict) -> list[dict]:
         if fcf is None:
             add("현금흐름", "na", "자료 없음")
         elif fcf > 0:
-            add("현금흐름", "pass", f"최근 12개월 쓰고 남은 현금 +{_eok(fcf)}")
+            add("현금흐름", "pass", f"최근 12개월 쓰고 남은 현금 +{_eok(fcf, rec.get("currency"))}")
         elif ocf is not None and ocf > 0:
-            add("현금흐름", "care", f"쓰고 남은 현금 −{_eok(fcf)} (영업현금은 흑자)")
+            add("현금흐름", "care", f"쓰고 남은 현금 −{_eok(fcf, rec.get("currency"))} (영업현금은 흑자)")
         else:
-            add("현금흐름", "warn", f"최근 12개월 쓰고 남은 현금 −{_eok(fcf)}")
+            add("현금흐름", "warn", f"최근 12개월 쓰고 남은 현금 −{_eok(fcf, rec.get("currency"))}")
 
     # 추세
     off = rec.get("off_hi_pct")
