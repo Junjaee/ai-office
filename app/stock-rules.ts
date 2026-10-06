@@ -1,6 +1,12 @@
 // 주식 분석 화면의 순수 규칙 — 타입, 숫자·날짜 문구, 흐름선 좌표, "오늘 먼저 볼 것". React·fetch 없음(node --test 가 직접 실행).
 // 자료 모양의 원천은 automations/analyst (analyst_metrics.build_record · analyst_checks.board_row).
 
+export type Market = "us" | "kr";
+export const MARKETS: Market[] = ["us", "kr"];
+export const MARKET_LABEL: Record<Market, string> = { us: "미국", kr: "국내" };
+export const isMarket = (v: unknown): v is Market => typeof v === "string" && (MARKETS as string[]).includes(v);
+export type Currency = "USD" | "KRW";
+
 export type CheckState = "pass" | "care" | "warn" | "na";
 export type Check = { key: string; state: CheckState; text: string };
 export type LensId = "value" | "growth" | "event" | "flow";
@@ -9,7 +15,7 @@ export type StockEvent = { date: string; kind: string };
 export const LENS_ORDER: LensId[] = ["value", "growth", "event", "flow"];
 export const LENS_LABEL: Record<LensId, string> = { value: "싸고 탄탄", growth: "실적 개선", event: "사건", flow: "돈 몰림" };
 export type BoardRow = {
-  t: string; name: string; price: number; chg_pct: number | null; spark: number[]; ath_pct: number | null; off_hi_pct: number | null;
+  t: string; name: string; name_local?: string | null; currency: Currency; price: number; chg_pct: number | null; spark: number[]; ath_pct: number | null; off_hi_pct: number | null;
   fpe: number | null; n_pass: number; n_care: number; n_warn: number; diag: string; next_earn: string | null; warn_keys: string[];
   sector: string; rev_g: number | null; nde: number | null; dv_ratio: number | null; lenses: LensHit[];
 };
@@ -19,7 +25,7 @@ export const DEFAULT_SCORE_GATE: ScoreGate = { min_n: 30, min_days: 20 };
 export type ScoreHorizon = "1w" | "1m" | "3m";
 export type Board = { market: string; as_of: string; generated_at?: string; universe: number | null; rows: BoardRow[]; missing: string[]; lens_info: Record<LensId, { label: string; rule: string }>; lens_score: Record<LensId, Record<ScoreHorizon, Score>> | null; score_gate: ScoreGate };
 export type StockRecord = {
-  t: string; name: string; exchange: string; sector: string; financial: boolean; as_of: string; price: number; chg_pct: number | null;
+  t: string; name: string; name_local: string | null; currency: Currency; exchange: string; sector: string; financial: boolean; as_of: string; price: number; chg_pct: number | null;
   hi52: number; lo52: number; off_hi_pct: number | null; ath: number; ath_date: string; ath_pct: number | null; y_ret_pct: number | null;
   spark: number[]; chart: [string, number][]; moves: { date: string; pct: number; close: number }[]; dv_ratio: number | null;
   fpe: number | null; tpe: number | null; pb: number | null; mcap: number | null; rev_g: number | null; eps_g: number | null; opm: number | null;
@@ -47,8 +53,9 @@ export const STATE_META: Record<CheckState, { label: string; cls: string; icon: 
   na: { label: "자료 없음", cls: "planned", icon: "M6 12h12" },
 };
 
-export function money(v: number | null | undefined): string {
+export function money(v: number | null | undefined, currency: Currency = "USD"): string {
   if (v == null || Number.isNaN(v)) return "–";
+  if (currency === "KRW") return `${v < 0 ? "−" : ""}₩${Math.round(Math.abs(v)).toLocaleString("ko-KR")}`;
   return `$${v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
@@ -63,11 +70,37 @@ export function tone(v: number | null | undefined): "up" | "down" | "flat" {
   return v > 0 ? "up" : "down";
 }
 
-/** 달러 금액 → "1,691억 달러" (음수는 − 를 붙인다) */
-export function eok(v: number | null | undefined): string {
+/** 큰 금액의 단위 글자 — "억 달러" / "억 원" */
+export const eokUnit = (currency: Currency = "USD"): string => (currency === "KRW" ? "억 원" : "억 달러");
+
+/** 금액 → "1,691억 달러" / "1,691억 원" (음수는 − 를 붙인다) */
+export function eok(v: number | null | undefined, currency: Currency = "USD"): string {
   if (v == null || Number.isNaN(v)) return "–";
-  const s = `${Math.round(Math.abs(v) / 1e8).toLocaleString("ko-KR")}억 달러`;
+  const s = `${Math.round(Math.abs(v) / 1e8).toLocaleString("ko-KR")}${eokUnit(currency)}`;
   return v < 0 ? `−${s}` : s;
+}
+
+/** 화면에 보여 줄 종목 이름 — 한글 이름이 있으면 그것, 없으면 원래 이름 */
+export const displayName = (r: { name: string; name_local?: string | null }): string => r.name_local || r.name;
+
+export const tickerPlaceholder = (market: Market): string => (market === "kr" ? "종목 코드 (예: 005930)" : "종목 기호 (예: NVDA)");
+/** 입력칸의 글자 → 보낼 종목 표기. 미국은 대문자, 국내는 숫자 그대로(대문자 변환 없음) */
+export const tickerInput = (market: Market, s: string): string => (market === "kr" ? s.trim() : s.trim().toUpperCase());
+/** Worker 와 같은 종목 모양 — 맞지 않으면 담기 단추를 막는다 */
+export const tickerInputValid = (market: Market, s: string): boolean => (market === "kr" ? /^[0-9]{6}$/ : /^[A-Z][A-Z0-9.\-]{0,9}$/).test(tickerInput(market, s));
+export const indexLabel = (market: Market): string => (market === "kr" ? "코스피" : "S&P 500(SPY)");
+/** "다음 갱신(…) 때 들어옵니다" 의 시각 */
+export const nextRunText = (market: Market): string => (market === "kr" ? "월~금 16:30" : "화~토 07:00");
+
+/** 주소의 ?market= 읽기 — 없거나 모르는 값이면 미국 */
+export function marketFromSearch(search: string): Market {
+  const m = new URLSearchParams(search).get("market");
+  return isMarket(m) ? m : "us";
+}
+/** 화면 주소 꼬리 — 미국은 market 을 적지 않아 기존 주소 그대로. ?mock 은 유지 */
+export function stockQuery(market: Market, mock: boolean): string {
+  const q = [market === "us" ? "" : `market=${market}`, mock ? "mock=1" : ""].filter(Boolean).join("&");
+  return q ? `?${q}` : "";
 }
 
 /** SVG polyline 좌표. 높은 값이 위, pad 만큼 위아래 여백 */
@@ -144,9 +177,9 @@ export function buildFlags(rows: BoardRow[], todayIso: string): Flag[] {
   const worst = rows.filter((r) => r.n_warn > 0).sort((a, b) => b.n_warn - a.n_warn)[0];
   const near = rows.filter((r) => r.off_hi_pct != null && r.off_hi_pct > -FLAG_NEAR_HIGH_PCT);
   return [
-    { kind: "earnings", title: "실적 발표가 가까운 종목", body: soon.length ? soon.map((x) => `${x.r.name} ${monthDay(x.r.next_earn as string)}`).join(", ") : `${FLAG_EARN_DAYS}일 안에 예정된 발표가 없어요` },
-    { kind: "warn", title: "경고가 가장 많은 종목", body: worst ? `${worst.name} · 경고 ${worst.n_warn}개 (${worst.warn_keys.join("·")})` : "경고가 있는 종목이 없어요" },
-    { kind: "high", title: "1년 최고가 근처", body: near.length ? near.map((r) => `${r.name} ${pctText(r.off_hi_pct)}`).join(", ") : `최고가 ${FLAG_NEAR_HIGH_PCT}% 안쪽에 있는 종목이 없어요` },
+    { kind: "earnings", title: "실적 발표가 가까운 종목", body: soon.length ? soon.map((x) => `${displayName(x.r)} ${monthDay(x.r.next_earn as string)}`).join(", ") : `${FLAG_EARN_DAYS}일 안에 예정된 발표가 없어요` },
+    { kind: "warn", title: "경고가 가장 많은 종목", body: worst ? `${displayName(worst)} · 경고 ${worst.n_warn}개 (${worst.warn_keys.join("·")})` : "경고가 있는 종목이 없어요" },
+    { kind: "high", title: "1년 최고가 근처", body: near.length ? near.map((r) => `${displayName(r)} ${pctText(r.off_hi_pct)}`).join(", ") : `최고가 ${FLAG_NEAR_HIGH_PCT}% 안쪽에 있는 종목이 없어요` },
   ];
 }
 
@@ -181,6 +214,8 @@ const num = (v: unknown): number | null => (typeof v === "number" && Number.isFi
 const numOr = (v: unknown, d: number): number => num(v) ?? d;
 const str = (v: unknown, d = ""): string => (typeof v === "string" ? v : d);
 const strOrNull = (v: unknown): string | null => (typeof v === "string" ? v : null);
+/** 받은 값이 정확히 "KRW" 일 때만 원화. 값이 아예 없을 때만 시장(kr)을 따른다 */
+const currencyOf = (v: unknown, market: string): Currency => (v === "KRW" || (v === undefined && market === "kr") ? "KRW" : "USD");
 const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 const nums = (v: unknown): number[] => arr(v).filter((x): x is number => typeof x === "number" && Number.isFinite(x));
 
@@ -204,7 +239,7 @@ export function normalizeBoard(input: unknown): Board | null {
   for (const raw of input.rows) {
     if (!isObj(raw) || typeof raw.t !== "string" || !raw.t) continue;
     rows.push({
-      t: raw.t, name: str(raw.name, raw.t), price: numOr(raw.price, 0), chg_pct: num(raw.chg_pct), spark: nums(raw.spark), ath_pct: num(raw.ath_pct), off_hi_pct: num(raw.off_hi_pct),
+      t: raw.t, name: str(raw.name, raw.t), ...(typeof raw.name_local === "string" && raw.name_local ? { name_local: raw.name_local } : {}), currency: currencyOf(raw.currency, str(input.market)), price: numOr(raw.price, 0), chg_pct: num(raw.chg_pct), spark: nums(raw.spark), ath_pct: num(raw.ath_pct), off_hi_pct: num(raw.off_hi_pct),
       fpe: num(raw.fpe), n_pass: numOr(raw.n_pass, 0), n_care: numOr(raw.n_care, 0), n_warn: numOr(raw.n_warn, 0), diag: str(raw.diag), next_earn: strOrNull(raw.next_earn),
       warn_keys: arr(raw.warn_keys).filter((x): x is string => typeof x === "string"),
       sector: str(raw.sector), rev_g: num(raw.rev_g), nde: num(raw.nde), dv_ratio: num(raw.dv_ratio), lenses: lensHits(raw.lenses),
@@ -250,7 +285,7 @@ export function normalizeDoc(input: unknown): TickerDoc | null {
   if (typeof r.t !== "string" || !r.t || num(r.price) === null) return null;
   const tgt = isObj(r.tgt) && num(r.tgt.mean) !== null ? { mean: r.tgt.mean as number, lo: num(r.tgt.lo), hi: num(r.tgt.hi), n: numOr(r.tgt.n, 0) } : null;
   const rec: StockRecord = {
-    t: r.t, name: str(r.name, r.t), exchange: str(r.exchange), sector: str(r.sector), financial: r.financial === true, as_of: str(r.as_of), price: r.price as number, chg_pct: num(r.chg_pct),
+    t: r.t, name: str(r.name, r.t), name_local: strOrNull(r.name_local) || null, currency: currencyOf(r.currency, str(input.market)), exchange: str(r.exchange), sector: str(r.sector), financial: r.financial === true, as_of: str(r.as_of), price: r.price as number, chg_pct: num(r.chg_pct),
     hi52: numOr(r.hi52, 0), lo52: numOr(r.lo52, 0), off_hi_pct: num(r.off_hi_pct), ath: numOr(r.ath, 0), ath_date: str(r.ath_date), ath_pct: num(r.ath_pct), y_ret_pct: num(r.y_ret_pct),
     spark: nums(r.spark),
     chart: arr(r.chart).filter((p): p is [string, number] => Array.isArray(p) && typeof p[0] === "string" && num(p[1]) !== null).map((p) => [p[0], p[1]] as [string, number]),
@@ -352,10 +387,10 @@ export function scoreText(s: Score | null | undefined, gate: ScoreGate = DEFAULT
 }
 
 /** 관심 담기·빼기 실패 안내 문구 */
-export function watchErrorText(status: number, code: string | undefined): string {
+export function watchErrorText(status: number, code: string | undefined, market: Market = "us"): string {
   if (status === 503) return "저장 공간이 아직 연결되지 않았어요";
   if (code === "watch_full") return "관심 종목은 100개까지 담을 수 있어요";
-  if (code === "bad_request") return "종목 기호를 확인해 주세요 (예: NVDA)";
+  if (code === "bad_request") return market === "kr" ? "종목 코드를 확인해 주세요 (예: 005930)" : "종목 기호를 확인해 주세요 (예: NVDA)";
   if (code === "forbidden") return "이 화면에서만 담을 수 있어요";
   return "잠시 뒤 다시 해 주세요";
 }

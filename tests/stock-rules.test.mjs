@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { STATE_META, money, pctText, tone, eok, polyPoints, monthDay, daysUntil, earnText, watchRows, buildFlags, chartGeometry, normalizeBoard, normalizeDoc, watchErrorText, discoverView, lensDaysText, normalizeOpinions, normalizeIndex, opinionStale, opinionDateKst, opinionReturns, scoreText, OPINION_HORIZONS } from "../app/stock-rules.ts";
+import { STATE_META, money, pctText, tone, eok, polyPoints, monthDay, daysUntil, earnText, watchRows, buildFlags, chartGeometry, normalizeBoard, normalizeDoc, MARKETS, MARKET_LABEL, isMarket, displayName, tickerPlaceholder, tickerInputValid, tickerInput, indexLabel, nextRunText, marketFromSearch, stockQuery, eokUnit, watchErrorText, discoverView, lensDaysText, normalizeOpinions, normalizeIndex, opinionStale, opinionDateKst, opinionReturns, scoreText, OPINION_HORIZONS } from "../app/stock-rules.ts";
 
-const row = (o = {}) => ({ t: "AAA", name: "A", price: 100, chg_pct: 1.2, spark: [1, 2, 3], ath_pct: -5, off_hi_pct: -5, fpe: 12, n_pass: 5, n_care: 1, n_warn: 1, diag: "좋음: 가치", next_earn: "2026-10-22", warn_keys: ["빚"], sector: "Tech", rev_g: 5, nde: 1, dv_ratio: 1.2, lenses: [], ...o });
+const row = (o = {}) => ({ t: "AAA", name: "A", currency: "USD", price: 100, chg_pct: 1.2, spark: [1, 2, 3], ath_pct: -5, off_hi_pct: -5, fpe: 12, n_pass: 5, n_care: 1, n_warn: 1, diag: "좋음: 가치", next_earn: "2026-10-22", warn_keys: ["빚"], sector: "Tech", rev_g: 5, nde: 1, dv_ratio: 1.2, lenses: [], ...o });
 
 test("숫자 문구", () => {
   assert.equal(money(142.3), "$142.30");
@@ -365,4 +365,59 @@ test("scoreText: 표본(건수·날짜 수) 부족·없음·충분", () => {
   assert.equal(scoreText({ n: 30, days: 20, avg: null, win: null }), "30건 · 20일 · 지수 대비 평균 – · 이긴 비율 –");
   assert.equal(scoreText({ n: 30, days: 20, avg: 1, win: 50 }, { min_n: 50, min_days: 10 }), "표본 30건 · 20일 — 아직 판단하기 이릅니다");   // 문턱은 판이 정한다
   assert.equal(scoreText({ n: 50, days: 10, avg: 1, win: 50 }, { min_n: 50, min_days: 10 }), "50건 · 10일 · 지수 대비 평균 +1.0%p · 이긴 비율 50.0%");
+});
+
+test("시장 이름과 판별", () => {
+  assert.deepEqual(MARKETS, ["us", "kr"]);
+  assert.deepEqual(MARKET_LABEL, { us: "미국", kr: "국내" });
+  assert.equal(isMarket("kr"), true); assert.equal(isMarket("jp"), false); assert.equal(isMarket(null), false); assert.equal(isMarket("constructor"), false);
+  assert.equal(marketFromSearch("?market=kr&mock=1"), "kr");
+  assert.equal(marketFromSearch(""), "us"); assert.equal(marketFromSearch("?market=zz"), "us"); assert.equal(marketFromSearch("?market="), "us");
+  assert.equal(stockQuery("us", false), ""); assert.equal(stockQuery("us", true), "?mock=1");
+  assert.equal(stockQuery("kr", false), "?market=kr"); assert.equal(stockQuery("kr", true), "?market=kr&mock=1");
+  assert.equal(indexLabel("us"), "S&P 500(SPY)"); assert.equal(indexLabel("kr"), "코스피");
+  assert.equal(nextRunText("us"), "화~토 07:00"); assert.equal(nextRunText("kr"), "월~금 16:30");
+});
+
+test("통화 문구: 원화는 소수 없이, 인자가 없으면 달러 그대로", () => {
+  assert.equal(money(71500, "KRW"), "₩71,500");
+  assert.equal(money(71500.6, "KRW"), "₩71,501");
+  assert.equal(money(0, "KRW"), "₩0");
+  assert.equal(money(-1200, "KRW"), "−₩1,200");
+  assert.equal(money(null, "KRW"), "–"); assert.equal(money(undefined, "KRW"), "–"); assert.equal(money(NaN, "KRW"), "–");
+  assert.equal(money(142.3, "USD"), "$142.30");
+  assert.equal(eok(169.1e9, "KRW"), "1,691억 원"); assert.equal(eok(-45.9e9, "KRW"), "−459억 원"); assert.equal(eok(0, "KRW"), "0억 원"); assert.equal(eok(null, "KRW"), "–");
+  assert.equal(eok(169.1e9, "USD"), "1,691억 달러");
+  assert.equal(eokUnit("KRW"), "억 원"); assert.equal(eokUnit(), "억 달러");
+});
+
+test("종목 이름·입력 검사", () => {
+  assert.equal(displayName({ name: "Samsung Electronics", name_local: "삼성전자" }), "삼성전자");
+  assert.equal(displayName({ name: "Oracle", name_local: null }), "Oracle");
+  assert.equal(displayName({ name: "Oracle", name_local: "" }), "Oracle");
+  assert.equal(displayName({ name: "Oracle" }), "Oracle");
+  assert.equal(tickerPlaceholder("us"), "종목 기호 (예: NVDA)"); assert.equal(tickerPlaceholder("kr"), "종목 코드 (예: 005930)");
+  assert.equal(tickerInput("us", " nvda "), "NVDA"); assert.equal(tickerInput("kr", " 005930 "), "005930");
+  assert.equal(tickerInputValid("us", "nvda"), true); assert.equal(tickerInputValid("us", "BRK-B"), true);
+  assert.equal(tickerInputValid("us", "005930"), false); assert.equal(tickerInputValid("us", ""), false);
+  assert.equal(tickerInputValid("kr", "005930"), true); assert.equal(tickerInputValid("kr", "00593"), false);
+  assert.equal(tickerInputValid("kr", "0059300"), false); assert.equal(tickerInputValid("kr", "NVDA"), false); assert.equal(tickerInputValid("kr", ""), false);
+  assert.equal(watchErrorText(400, "bad_request", "kr"), "종목 코드를 확인해 주세요 (예: 005930)");
+});
+
+test("정리: currency 는 정확히 KRW 일 때만 원화, name_local 은 글자일 때만", () => {
+  const b = normalizeBoard({ market: "kr", as_of: "2026-10-06", rows: [row({ t: "005930", currency: "KRW", name_local: "삼성전자" }), row({ t: "X", currency: "krw" }), row({ t: "Y", currency: 5 }), row({ t: "Z", name_local: 7 })] });
+  assert.deepEqual(b.rows.map((r) => r.currency), ["KRW", "USD", "USD", "USD"]);
+  assert.equal(b.rows[0].name_local, "삼성전자"); assert.equal("name_local" in b.rows[3], false);
+  const old = normalizeBoard({ market: "us", rows: [{ t: "AAA" }] });
+  assert.equal(old.rows[0].currency, "USD");
+  const krOld = normalizeBoard({ market: "kr", rows: [{ t: "005930" }] }); // 통화 칸이 아예 없는 국내 판은 시장을 따른다
+  assert.equal(krOld.rows[0].currency, "KRW");
+  const d = normalizeDoc({ market: "kr", rec: { t: "005930", price: 71500, currency: "KRW", name_local: "삼성전자" } });
+  assert.deepEqual([d.rec.currency, d.rec.name_local], ["KRW", "삼성전자"]);
+  const u = normalizeDoc({ market: "us", rec: { t: "ORCL", price: 1 } });
+  assert.deepEqual([u.rec.currency, u.rec.name_local], ["USD", null]);
+  assert.equal(normalizeDoc({ market: "us", rec: { t: "ORCL", price: 1, currency: "EUR" } }).rec.currency, "USD");
+  const flags = buildFlags([row({ t: "005930", name: "Samsung", name_local: "삼성전자", n_warn: 1, warn_keys: ["빚"] })], "2026-10-05");
+  assert.ok(flags[1].body.startsWith("삼성전자"));
 });

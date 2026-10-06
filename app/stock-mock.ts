@@ -10,7 +10,7 @@ const WHY: Record<LensId, string> = {
 };
 const hits = (ids: LensId[]): LensHit[] => ids.map((id) => ({ id, why: WHY[id] }));
 const row = (t: string, name: string, price: number, chg: number, from: number, ath: number, off: number, fpe: number | null, p: number, c: number, w: number, diag: string, next: string | null, warn: string[], lenses: LensId[] = [], dv: number | null = 1, rev_g: number | null = 10, nde: number | null = 1): BoardRow =>
-  ({ t, name, price, chg_pct: chg, spark: spark(from, price), ath_pct: ath, off_hi_pct: off, fpe, n_pass: p, n_care: c, n_warn: w, diag, next_earn: next, warn_keys: warn, sector: "Technology", rev_g, nde, dv_ratio: dv, lenses: hits(lenses) });
+  ({ t, name, currency: "USD", price, chg_pct: chg, spark: spark(from, price), ath_pct: ath, off_hi_pct: off, fpe, n_pass: p, n_care: c, n_warn: w, diag, next_earn: next, warn_keys: warn, sector: "Technology", rev_g, nde, dv_ratio: dv, lenses: hits(lenses) });
 
 /** 한 관점(싸고 탄탄)만 표본이 30건·20일 이상 — 나머지는 아직 판단하기 이른 경우를 화면에서 확인하려는 견본 */
 function mockLensScore(): NonNullable<Board["lens_score"]> {
@@ -54,7 +54,7 @@ export function mockDoc(ticker: string): TickerDoc {
   chart[chart.length - 1] = ["2026-10-02", 142.3];
   return {
     market: "us", as_of: "2026-10-02", diag: "좋음: 가치·매출 성장·이익 방향·수익성 / 경고: 빚·현금흐름·추세",
-    rec: { t: ticker, name: "Oracle Corporation", exchange: "NYQ", sector: "Technology", financial: false, as_of: "2026-10-02", price: 142.3, chg_pct: 3.1,
+    rec: { t: ticker, name: "Oracle Corporation", name_local: null, currency: "USD", exchange: "NYQ", sector: "Technology", financial: false, as_of: "2026-10-02", price: 142.3, chg_pct: 3.1,
       hi52: 313.0, lo52: 114.99, off_hi_pct: -54.5, ath: 328.33, ath_date: "2025-09-10", ath_pct: -56.7, y_ret_pct: -50.8,
       spark: chart.filter((_, i) => i % 2 === 0).map(([, v]) => v), chart, moves: [{ date: chart[60][0], pct: -8.2, close: chart[60][1] }, { date: chart[118][0], pct: 7.4, close: chart[118][1] }], dv_ratio: 1.01,
       fpe: 12.9, tpe: 22.3, pb: 7.0, mcap: 4.3e11, rev_g: 29.6, eps_g: 54.5, opm: 35.6, net_debt_ebitda: 4.4, debt: 169.1e9, cash: 37.1e9, fcf: -45.9e9, ocf: 46.9e9, rev: 71.8e9,
