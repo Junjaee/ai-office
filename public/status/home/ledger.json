@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 4초",
-    "[추가] 2026년 10월 10/6 신세계프라퍼티위 5,100원 (생활비)"
+    "[추가] 2026년 10월 10/6 국회고성연수원 30,000원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 37405145926,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37405145926",
-  "request_id": "cron-202610060238",
+  "run_id": 37406291390,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37406291390",
+  "request_id": "cron-202610060252",
   "trigger": "schedule",
-  "started_at": "2026-10-06T11:39:26+09:00",
+  "started_at": "2026-10-06T11:53:32+09:00",
   "duration_sec": 4,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-06T11:39:31+09:00"
+  "updated_at": "2026-10-06T11:53:36+09:00"
 }
