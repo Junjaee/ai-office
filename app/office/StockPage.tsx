@@ -2,10 +2,10 @@
 // 종목 한 장 — /api/stock?ticker= 를 읽어 그린다. 1단계: 결론은 점검표로 만든 규칙 문장, 사건은 가격에서 계산한 큰 변동일.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import StockHeader, { StockIcon } from "./StockHeader";
-import { LENS_LABEL, STATE_META, chartGeometry, earnText, eok, money, monthDay, normalizeDoc, pctText, tone, watchErrorText, type TickerDoc } from "../stock-rules";
-import { mockDoc } from "../stock-mock";
+import { LENS_LABEL, OPINION_HORIZONS, STATE_META, chartGeometry, earnText, eok, money, monthDay, normalizeDoc, normalizeIndex, normalizeOpinions, opinionDateKst, opinionReturns, opinionStale, pctText, tone, watchErrorText, type IndexDoc, type Opinion, type TickerDoc } from "../stock-rules";
+import { mockDoc, mockIndex, mockOpinions } from "../stock-mock";
 
-type ApiTicker = { market: string; ticker: string; doc: TickerDoc | null; watched: boolean };
+type ApiTicker = { market: string; ticker: string; doc: TickerDoc | null; watched: boolean; opinions: Opinion[]; index: IndexDoc | null };
 const UP = "M12 19V5M6 11l6-6 6 6";
 const DOWN = "M12 5v14M6 13l6 6 6-6";
 const eokShort = (v: number | null) => (v == null ? "–" : `${v < 0 ? "−" : ""}${Math.round(Math.abs(v) / 1e8).toLocaleString("ko-KR")}`);
@@ -19,14 +19,19 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
 
   const load = useCallback(async () => {
     if (mock) {
-      setData({ market, ticker, doc: normalizeDoc(mockDoc(ticker)), watched: true });
+      setData({ market, ticker, doc: normalizeDoc(mockDoc(ticker)), watched: true, opinions: normalizeOpinions(mockOpinions()), index: normalizeIndex(mockIndex()) });
       return;
     }
     try {
+      // 지수는 수익률 비교용 — 못 읽어도 화면은 계속(null)
+      const idx = fetch(`/api/stock?market=${encodeURIComponent(market)}&view=index&t=${Date.now()}`, { cache: "no-store" })
+        .then((x) => (x.ok ? x.json() : null))
+        .then((x) => normalizeIndex((x as { index?: unknown } | null)?.index))
+        .catch(() => null);
       const r = await fetch(`/api/stock?market=${encodeURIComponent(market)}&ticker=${encodeURIComponent(ticker)}&t=${Date.now()}`, { cache: "no-store" });
       if (!r.ok) throw new Error(r.status === 503 ? "저장 공간이 아직 연결되지 않았어요" : `자료를 불러오지 못했어요 (HTTP ${r.status})`);
-      const j = (await r.json()) as { doc?: unknown; watched?: unknown };
-      setData({ market, ticker, doc: normalizeDoc(j.doc), watched: j.watched === true });
+      const j = (await r.json()) as { doc?: unknown; watched?: unknown; opinions?: unknown };
+      setData({ market, ticker, doc: normalizeDoc(j.doc), watched: j.watched === true, opinions: normalizeOpinions(j.opinions), index: await idx });
       setError("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "자료를 불러오지 못했어요");
@@ -89,6 +94,17 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
   const barMax = Math.max(1, ...bars.map((b) => b.fpe as number));
   const e = earnText(rec.next_earn, today);
   const years = rec.annual.slice(-4);
+  const ops = data?.opinions ?? [];
+  const op = ops[0] ?? null;
+  const stale = op ? opinionStale(op, rec, today) : [];
+  const evid = (list: { text: string; src: string }[]) =>
+    list.map((x, i) => (
+      <li key={i}>
+        {x.text} <span className="stk-src">{x.src}</span>
+      </li>
+    ));
+  const news = doc.news ?? [];
+  const retText = (r: { ret: number | null; idx: number | null }) => (r.ret === null ? "아직" : `${pctText(r.ret)}${r.idx === null ? "" : ` (지수 ${pctText(r.idx)})`}`);
 
   return (
     <main className="page-shell">
@@ -128,9 +144,25 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
         </section>
 
         <section className="stk-verdict">
-          <small>한 줄 결론 · 점검표로 만든 문장</small>
-          <p>{doc.diag}</p>
-          <small>해석이 필요하면 클로드 대화에서 "{rec.t} 해석해 줘"라고 요청하세요. (해석 저장은 다음 단계에서 열립니다)</small>
+          {op ? (
+            <>
+              <small>한 줄 결론 · AI 해석 · {monthDay(opinionDateKst(op))}</small>
+              <p>{op.verdict}</p>
+              {stale.length ? (
+                <span className="stk-stale" role="status">
+                  <StockIcon d={STATE_META.care.icon} size={15} />
+                  해석이 오래됨 — 새 자료가 나왔어요 ({stale.join(" · ")})
+                </span>
+              ) : null}
+              <small>점검표로 만든 문장: {doc.diag}</small>
+            </>
+          ) : (
+            <>
+              <small>한 줄 결론 · 점검표로 만든 문장</small>
+              <p>{doc.diag}</p>
+              <small>해석이 필요하면 클로드 대화에서 "{rec.t} 해석해 줘"라고 요청하세요.</small>
+            </>
+          )}
         </section>
 
         <div className="stk-two">
@@ -146,7 +178,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
               </h2>
             </div>
             <ul className="stk-list">
-              {good.length ? good.map((c) => (
+              {op ? evid(op.good) : good.length ? good.map((c) => (
                 <li key={c.key}>
                   <b>{c.key}</b> {c.text}
                 </li>
@@ -165,12 +197,22 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
               </h2>
             </div>
             <ul className="stk-list">
-              {bad.length ? bad.map((c) => (
+              {op ? evid(op.bad) : bad.length ? bad.map((c) => (
                 <li key={c.key}>
                   <b>{c.key}</b> {c.text} <span className="stk-sub">({STATE_META[c.state].label})</span>
                 </li>
               )) : <li className="auto-meta">주의·경고 항목이 없어요.</li>}
             </ul>
+            {op && op.watch.length ? (
+              <>
+                <h3 className="stk-subhead">다음 실적에서 볼 것</h3>
+                <ul className="stk-list">
+                  {op.watch.map((w, i) => (
+                    <li key={i}>{w}</li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
           </section>
         </div>
 
@@ -239,6 +281,31 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
                 {doc.events.map((ev, i) => (
                   <li key={i}>
                     <b>{/^\d{4}-\d{2}-\d{2}$/.test(ev.date) ? monthDay(ev.date) : ev.date}</b> · {ev.kind}
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
+          {doc.news === null && data?.watched ? (
+            <>
+              <h3 className="stk-subhead">최근 기사 제목</h3>
+              <p className="auto-meta">기사 제목 자료 없음</p>
+            </>
+          ) : null}
+          {news.length ? (
+            <>
+              <h3 className="stk-subhead">최근 기사 제목</h3>
+              <ul className="stk-list stk-news">
+                {news.map((n, i) => (
+                  <li key={i}>
+                    {n.url.startsWith("https://") ? (
+                      <a className="stk-link" href={n.url} target="_blank" rel="noopener noreferrer">{n.title}</a>
+                    ) : (
+                      n.title
+                    )}
+                    <span className="stk-sub">
+                      · {n.source} · {/^\d{4}-\d{2}-\d{2}$/.test(n.date) ? monthDay(n.date) : n.date}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -350,13 +417,54 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
               )}
             </div>
           </section>
-          <section className="panel stk-empty">
+          {ops.length ? null : (
+            <section className="panel stk-empty">
+              <div className="panel-head">
+                <h2>의견 기록과 채점</h2>
+              </div>
+              <div className="auto-meta">아직 기록이 없습니다. 해석을 요청하면 여기에 쌓입니다.</div>
+            </section>
+          )}
+        </div>
+
+        {ops.length ? (
+          <section className="panel">
             <div className="panel-head">
               <h2>의견 기록과 채점</h2>
+              <p>해석을 쓴 날 이후의 수익률을 지수와 나란히 봅니다.</p>
             </div>
-            <div className="auto-meta">아직 기록이 없습니다. 해석을 저장하는 기능은 다음 단계에서 열립니다.</div>
+            <div className="stk-scroll" tabIndex={0} role="region" aria-label="의견 기록 표">
+              <table className="stk-ops">
+                <thead>
+                  <tr>
+                    <th scope="col">쓴 날</th>
+                    <th scope="col">당시 주가</th>
+                    <th scope="col">결론</th>
+                    {OPINION_HORIZONS.map((h) => (
+                      <th key={h.key} scope="col">{h.label}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {ops.map((o) => {
+                    const rs = opinionReturns(o, rec.chart, data?.index ?? null);
+                    return (
+                      <tr key={o.id}>
+                        <th scope="row">{monthDay(opinionDateKst(o))}</th>
+                        <td className="stk-num">{money(o.price)}</td>
+                        <td className="stk-op-verdict" title={o.verdict}>{o.verdict}</td>
+                        {rs.map((r) => (
+                          <td key={r.key} className={r.ret === null ? "stk-sub" : `stk-${tone(r.ret)}`}>{retText(r)}</td>
+                        ))}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="auto-meta">수익률은 쓴 날 주가 대비이며 배당 제외, 그래프가 이틀 간격이라 며칠 어긋날 수 있습니다. 1주·1개월·3개월은 기준일(쓴 날의 종가일)부터 약 7·30·91일 뒤 첫 거래일 기준입니다. 맞고 틀림은 따로 매기지 않습니다.</p>
           </section>
-        </div>
+        ) : null}
 
         <footer className="dash-foot">
           출처: 야후 파이낸스(시세·재무·전망){doc.events.length > 0 ? " · 공시: 미국 증권거래위원회(EDGAR)" : ""} · 기준일 {monthDay(doc.as_of)} · 역대 최고가 {money(rec.ath)}({rec.ath_date}) 대비 {pctText(rec.ath_pct, 0)}. 투자 권유가 아니며, 판단은 직접 하셔야 합니다.

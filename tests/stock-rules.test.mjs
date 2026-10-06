@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { STATE_META, money, pctText, tone, eok, polyPoints, monthDay, daysUntil, earnText, watchRows, buildFlags, chartGeometry, normalizeBoard, normalizeDoc, watchErrorText, discoverView, lensDaysText } from "../app/stock-rules.ts";
+import { STATE_META, money, pctText, tone, eok, polyPoints, monthDay, daysUntil, earnText, watchRows, buildFlags, chartGeometry, normalizeBoard, normalizeDoc, watchErrorText, discoverView, lensDaysText, normalizeOpinions, normalizeIndex, opinionStale, opinionDateKst, opinionReturns, scoreText, OPINION_HORIZONS } from "../app/stock-rules.ts";
 
 const row = (o = {}) => ({ t: "AAA", name: "A", price: 100, chg_pct: 1.2, spark: [1, 2, 3], ath_pct: -5, off_hi_pct: -5, fpe: 12, n_pass: 5, n_care: 1, n_warn: 1, diag: "좋음: 가치", next_earn: "2026-10-22", warn_keys: ["빚"], sector: "Tech", rev_g: 5, nde: 1, dv_ratio: 1.2, lenses: [], ...o });
 
@@ -182,4 +182,187 @@ test("lensDaysText", () => {
   assert.equal(lensDaysText(0), "기준 채점: 아직 기록이 없어요");
   assert.match(lensDaysText(12), /기록 12일째/);
   assert.match(lensDaysText(12), /판단하기 이릅니다/);
+});
+
+// ---- 3단계: 해석·오래됨·수익률·관점 성적 ----
+const rawOp = (o = {}) => ({ id: "2026-10-06T09:12:33.000Z", price: 142.3, as_of: "2026-10-02", next_earn: "2026-12-10", verdict: "한 줄", good: [{ text: "좋다", src: "재무" }], bad: [{ text: "나쁘다", src: "시세" }], watch: ["볼 것"], ...o });
+
+test("normalizeOpinions: 정상 값은 그대로, 최신순", () => {
+  const out = normalizeOpinions([rawOp({ id: "2026-09-01T00:00:00.000Z" }), rawOp()]);
+  assert.deepEqual(out.map((o) => o.id), ["2026-10-06T09:12:33.000Z", "2026-09-01T00:00:00.000Z"]);
+  assert.deepEqual(out[0], rawOp());
+  assert.deepEqual(normalizeOpinions(null), []);
+  assert.deepEqual(normalizeOpinions({}), []);
+  assert.deepEqual(normalizeOpinions([null, "x", 3]), []);
+});
+
+test("normalizeOpinions: <script> 는 지우지 않고 글자로 둔다, 길이만 자른다", () => {
+  const [o] = normalizeOpinions([rawOp({ verdict: "<script>alert(1)</script>" + "가".repeat(400), good: [{ text: "<b>x</b>" + "나".repeat(400), src: "뉴스" }], watch: ["<i>w</i>" + "다".repeat(300)] })]);
+  assert.ok(o.verdict.startsWith("<script>alert(1)</script>"));
+  assert.equal(o.verdict.length, 300);
+  assert.ok(o.good[0].text.startsWith("<b>x</b>"));
+  assert.equal(o.good[0].text.length, 300);
+  assert.ok(o.watch[0].startsWith("<i>w</i>"));
+  assert.equal(o.watch[0].length, 200);
+});
+
+test("normalizeOpinions: 이상한 src 근거는 버리고, 깨진 해석은 통째로 버린다", () => {
+  const [o] = normalizeOpinions([rawOp({ good: [{ text: "a", src: "재무" }, { text: "b", src: "소문" }, { text: 5, src: "뉴스" }, "x"], bad: [{ text: "c", src: "전망" }], watch: ["w", 3, null] })]);
+  assert.deepEqual(o.good, [{ text: "a", src: "재무" }]);
+  assert.deepEqual(o.bad, [{ text: "c", src: "전망" }]);
+  assert.deepEqual(o.watch, ["w"]);
+  assert.deepEqual(normalizeOpinions([rawOp({ price: "142.3" })]), []);   // price 가 문자열이면 그 해석을 버린다
+  assert.deepEqual(normalizeOpinions([rawOp({ id: 5 })]), []);
+  assert.deepEqual(normalizeOpinions([rawOp({ verdict: 5 })]), []);
+  assert.deepEqual(normalizeOpinions([rawOp({ as_of: null })]), []);
+  assert.equal(normalizeOpinions([rawOp({ next_earn: 5 })])[0].next_earn, null);
+});
+
+test("normalizeOpinions: 21개 중 최신 20개", () => {
+  const many = Array.from({ length: 21 }, (_, i) => rawOp({ id: `2026-09-${String(i + 1).padStart(2, "0")}T00:00:00.000Z` }));
+  const out = normalizeOpinions(many);
+  assert.equal(out.length, 20);
+  assert.equal(out[0].id, "2026-09-21T00:00:00.000Z");
+  assert.equal(out[19].id, "2026-09-02T00:00:00.000Z");   // 가장 오래된 하나가 잘림
+});
+
+test("normalizeIndex", () => {
+  assert.deepEqual(normalizeIndex({ t: "SPY", closes: [["2025-10-07", 2], ["2025-10-06", 1], ["x", "y"], [5, 5], "z"] }), { t: "SPY", closes: [["2025-10-06", 1], ["2025-10-07", 2]] });
+  assert.equal(normalizeIndex(null), null);
+  assert.equal(normalizeIndex({ t: "SPY" }), null);
+  assert.equal(normalizeIndex({ t: "SPY", closes: [] }), null);
+  assert.equal(normalizeIndex({ t: "SPY", closes: [["a", "b"]] }), null);
+});
+
+test("normalizeDoc: news 는 https 링크만, 최대 8개, 없으면 []", () => {
+  const n = (i, url = "https://x.test/a") => ({ title: `제목${i}`, source: "S", date: "2026-10-03", url });
+  const d = normalizeDoc({ rec: { t: "A", price: 1 }, news: [n(1), n(2, "http://x.test"), n(3, "javascript:alert(1)"), { title: "t", url: "https://a" }, "x", ...Array.from({ length: 10 }, (_, i) => n(10 + i))] });
+  assert.equal(d.news.length, 8);
+  assert.deepEqual(d.news[0], n(1));
+  assert.ok(d.news.every((x) => x.url.startsWith("https://")));
+  assert.deepEqual(normalizeDoc({ rec: { t: "A", price: 1 } }).news, []);
+  assert.deepEqual(normalizeDoc({ rec: { t: "A", price: 1 }, news: "x" }).news, []);
+});
+
+test("normalizeDoc: news null 은 null 그대로(받지 못함), 빈 배열은 빈 배열(0건)", () => {
+  assert.equal(normalizeDoc({ rec: { t: "A", price: 1 }, news: null }).news, null);
+  assert.deepEqual(normalizeDoc({ rec: { t: "A", price: 1 }, news: [] }).news, []);
+});
+
+const cell = (n, avg, win, days = n) => ({ n, days, avg, win });
+const lensRow = (c) => ({ "1w": c, "1m": c, "3m": c });
+const goodScore = () => ({ value: lensRow(cell(120, 0.4, 52.5)), growth: lensRow(cell(0, null, null)), event: lensRow(cell(5, -1.2, 40)), flow: lensRow(cell(30, null, null)) });
+
+test("normalizeBoard: lens_score 는 모양이 맞을 때만, 아니면 통째로 null", () => {
+  assert.deepEqual(normalizeBoard({ rows: [], lens_score: goodScore() }).lens_score, goodScore());
+  assert.equal(normalizeBoard({ rows: [] }).lens_score, null);
+  assert.equal(normalizeBoard({ rows: [], lens_score: "x" }).lens_score, null);
+  const noFlow = goodScore(); delete noFlow.flow;
+  assert.equal(normalizeBoard({ rows: [], lens_score: noFlow }).lens_score, null);
+  const no3m = goodScore(); delete no3m.value["3m"];
+  assert.equal(normalizeBoard({ rows: [], lens_score: no3m }).lens_score, null);
+  const badN = goodScore(); badN.event["1m"] = cell(-1, 0, 0);
+  assert.equal(normalizeBoard({ rows: [], lens_score: badN }).lens_score, null);
+  const fracN = goodScore(); fracN.event["1m"] = cell(1.5, 0, 0);
+  assert.equal(normalizeBoard({ rows: [], lens_score: fracN }).lens_score, null);
+  const strAvg = goodScore(); strAvg.value["1w"] = cell(3, "0.4", 1);
+  assert.equal(normalizeBoard({ rows: [], lens_score: strAvg }).lens_score, null);
+  const extra = goodScore(); extra.bogus = lensRow(cell(1, 1, 1)); extra.value["1y"] = cell(1, 1, 1);
+  assert.deepEqual(normalizeBoard({ rows: [], lens_score: extra }).lens_score, goodScore());   // 모르는 키는 무시
+  const noDays = goodScore(); delete noDays.value["1w"].days;                                      // days 가 없으면 0 으로 보고 받아들인다
+  assert.equal(normalizeBoard({ rows: [], lens_score: noDays }).lens_score.value["1w"].days, 0);
+  for (const bad of [-1, 1.5, "3", null]) {
+    const o = goodScore(); o.value["1w"].days = bad;
+    assert.equal(normalizeBoard({ rows: [], lens_score: o }).lens_score, null, `days ${bad}`);
+  }
+});
+
+test("normalizeBoard: score_gate 는 board 에서 읽고 없거나 틀리면 30건·20일", () => {
+  assert.deepEqual(normalizeBoard({ rows: [], score_gate: { min_n: 50, min_days: 10 } }).score_gate, { min_n: 50, min_days: 10 });
+  for (const g of [undefined, null, "x", {}, { min_n: 0, min_days: -1 }, { min_n: 1.5, min_days: "2" }]) {
+    assert.deepEqual(normalizeBoard({ rows: [], score_gate: g }).score_gate, { min_n: 30, min_days: 20 });
+  }
+});
+
+test("opinionStale: 30일·±20%·실적 발표 경계", () => {
+  const op = (o = {}) => normalizeOpinions([rawOp({ id: "2026-09-06T00:00:00.000Z", price: 100, next_earn: "2026-12-10", ...o })])[0];
+  const rec = { price: 100 };
+  assert.deepEqual(opinionStale(op(), rec, "2026-10-06"), []);                                    // 30일
+  assert.deepEqual(opinionStale(op(), rec, "2026-10-07"), ["쓴 지 31일 지남"]);                    // 31일
+  assert.deepEqual(opinionStale(op({ price: 100 }), { price: 120 }, "2026-10-06"), []);           // +20.0%
+  assert.deepEqual(opinionStale(op({ price: 100 }), { price: 80 }, "2026-10-06"), []);            // -20.0%
+  assert.deepEqual(opinionStale(op({ price: 100 }), { price: 123.4 }, "2026-10-06"), ["주가가 +23.4% 움직임"]);
+  assert.deepEqual(opinionStale(op({ price: 100 }), { price: 70 }, "2026-10-06"), ["주가가 -30.0% 움직임"]);
+  assert.deepEqual(opinionStale(op({ next_earn: "2026-10-06" }), rec, "2026-10-06"), []);          // 오늘 발표는 아직
+  assert.deepEqual(opinionStale(op({ next_earn: "2026-10-05" }), rec, "2026-10-06"), ["그 뒤 실적 발표가 있었음"]);
+  assert.deepEqual(opinionStale(op({ next_earn: null }), rec, "2026-10-06"), []);
+  assert.deepEqual(opinionStale(op({ next_earn: "2026-10-05", price: 100 }), { price: 130 }, "2026-10-20"), ["쓴 지 44일 지남", "그 뒤 실적 발표가 있었음", "주가가 +30.0% 움직임"]);
+  assert.deepEqual(opinionStale(op({ price: 0 }), rec, "2026-10-06"), []);                          // 0 으로 나누지 않는다
+});
+
+test("opinionDateKst: id(UTC)를 한국 날짜로 — 자정 전후", () => {
+  assert.equal(opinionDateKst({ id: "2026-10-05T16:30:00.000Z" }), "2026-10-06");
+  assert.equal(opinionDateKst({ id: "2026-10-05T14:59:59.000Z" }), "2026-10-05");
+  assert.equal(opinionDateKst({ id: "2026-10-06T09:12:33.000Z" }), "2026-10-06");
+  assert.equal(opinionDateKst({ id: "깨진-값" }), "깨진-값");
+  const op = normalizeOpinions([rawOp({ id: "2026-09-05T16:30:00.000Z", price: 100 })])[0];                // 한국 시각으로는 9월 6일
+  assert.deepEqual(opinionStale(op, { price: 100 }, "2026-10-06"), []);                                     // 30일째 — UTC 날짜(9/5)로 세면 31일이라 오래됨이 된다
+  assert.deepEqual(opinionStale(op, { price: 100 }, "2026-10-07"), ["쓴 지 31일 지남"]);
+});
+
+test("opinionReturns: 기준은 id 날짜가 아니라 as_of(거래일)", () => {
+  // 한국 날짜 10/6 에 쓴 해석이지만 기준일(마지막 거래일)은 10/2
+  const op = normalizeOpinions([rawOp({ id: "2026-10-05T16:30:00.000Z", as_of: "2026-10-02", price: 100 })])[0];
+  const chart = [["2026-10-02", 100], ["2026-10-08", 104], ["2026-10-09", 106], ["2026-11-01", 120]];
+  const idx = { t: "SPY", closes: [["2026-10-01", 400], ["2026-10-02", 500], ["2026-10-09", 510], ["2026-11-01", 525]] };
+  const r = opinionReturns(op, chart, idx);
+  // 1주: 10/2 + 7일 = 10/9 → 종목 106(+6.0%), 지수는 10/2(500) 기준 10/9(510) → +2.0%
+  assert.deepEqual(r[0], { key: "1w", label: "1주", ret: 6, idx: 2, excess: 4 });
+  // 1개월: 10/2 + 30일 = 11/1 → 종목 120(+20.0%), 지수 525 → +5.0%
+  assert.deepEqual(r[1], { key: "1m", label: "1개월", ret: 20, idx: 5, excess: 15 });
+});
+
+test("opinionReturns: 쓴 날 + 7·30·91일 이후 첫 점, 지수는 쓴 날 이후 첫 점이 기준", () => {
+  assert.deepEqual(OPINION_HORIZONS, [{ key: "1w", label: "1주", days: 7 }, { key: "1m", label: "1개월", days: 30 }, { key: "3m", label: "3개월", days: 91 }]);
+  const op = normalizeOpinions([rawOp({ id: "2026-01-01T09:00:00.000Z", as_of: "2026-01-01", price: 100 })])[0];
+  const chart = [["2026-01-01", 99], ["2026-01-09", 110], ["2026-01-31", 120], ["2026-02-10", 90]];
+  const idx = { t: "SPY", closes: [["2025-12-31", 400], ["2026-01-02", 500], ["2026-01-08", 510], ["2026-01-31", 550], ["2026-02-10", 450]] };
+  const r = opinionReturns(op, chart, idx);
+  assert.deepEqual(r.map((x) => x.key), ["1w", "1m", "3m"]);
+  assert.deepEqual(r.map((x) => x.label), ["1주", "1개월", "3개월"]);
+  // 1주: 1/8 이후 첫 점 = 1/9(110) → +10.0%, 지수 1/8(510) vs 기준 1/2(500) → +2.0%
+  assert.deepEqual(r[0], { key: "1w", label: "1주", ret: 10, idx: 2, excess: 8 });
+  // 1개월: 1/31 → 120(+20.0%), 지수 550 → +10.0%
+  assert.deepEqual(r[1], { key: "1m", label: "1개월", ret: 20, idx: 10, excess: 10 });
+  // 3개월: 4/2 → 그래프 끝(2/10)을 넘음 → 아직
+  assert.deepEqual(r[2], { key: "3m", label: "3개월", ret: null, idx: null, excess: null });
+});
+
+test("opinionReturns: 지수가 없으면 idx·excess 만 null, 끝을 넘는 구간은 전부 null", () => {
+  const op = normalizeOpinions([rawOp({ id: "2026-01-01T09:00:00.000Z", as_of: "2026-01-01", price: 100 })])[0];
+  const chart = [["2026-01-09", 105.6], ["2026-02-10", 90]];
+  const r = opinionReturns(op, chart, null);
+  assert.deepEqual(r[0], { key: "1w", label: "1주", ret: 5.6, idx: null, excess: null });   // 소수 1자리
+  assert.deepEqual(r[1], { key: "1m", label: "1개월", ret: -10, idx: null, excess: null });
+  assert.equal(r[2].ret, null);
+  // 지수가 짧아 그 구간 값이 없으면 idx 만 null
+  const short = { t: "SPY", closes: [["2026-01-02", 500], ["2026-01-09", 505]] };
+  const r2 = opinionReturns(op, chart, short);
+  assert.deepEqual(r2[0], { key: "1w", label: "1주", ret: 5.6, idx: 1, excess: 4.6 });
+  assert.deepEqual(r2[1], { key: "1m", label: "1개월", ret: -10, idx: null, excess: null });
+  assert.deepEqual(opinionReturns(op, [], null).map((x) => x.ret), [null, null, null]);
+});
+
+test("scoreText: 표본(건수·날짜 수) 부족·없음·충분", () => {
+  assert.equal(scoreText({ n: 12, days: 5, avg: 0.3, win: 50 }), "표본 12건 · 5일 — 아직 판단하기 이릅니다");
+  assert.equal(scoreText({ n: 29, days: 25, avg: 0.3, win: 50 }), "표본 29건 · 25일 — 아직 판단하기 이릅니다");
+  assert.equal(scoreText({ n: 200, days: 19, avg: 0.3, win: 50 }), "표본 200건 · 19일 — 아직 판단하기 이릅니다");   // 건수가 많아도 며칠 안에 몰렸으면 이르다
+  assert.equal(scoreText({ n: 0, days: 0, avg: null, win: null }), "아직 잴 수 있는 기록이 없어요");
+  assert.equal(scoreText(null), "아직 잴 수 있는 기록이 없어요");
+  assert.equal(scoreText(undefined), "아직 잴 수 있는 기록이 없어요");
+  assert.equal(scoreText({ n: 120, days: 40, avg: 0.4, win: 52.5 }), "120건 · 40일 · 지수 대비 평균 +0.4%p · 이긴 비율 52.5%");
+  assert.equal(scoreText({ n: 30, days: 20, avg: -1.25, win: 40 }), "30건 · 20일 · 지수 대비 평균 -1.3%p · 이긴 비율 40.0%");
+  assert.equal(scoreText({ n: 30, days: 20, avg: null, win: null }), "30건 · 20일 · 지수 대비 평균 – · 이긴 비율 –");
+  assert.equal(scoreText({ n: 30, days: 20, avg: 1, win: 50 }, { min_n: 50, min_days: 10 }), "표본 30건 · 20일 — 아직 판단하기 이릅니다");   // 문턱은 판이 정한다
+  assert.equal(scoreText({ n: 50, days: 10, avg: 1, win: 50 }, { min_n: 50, min_days: 10 }), "50건 · 10일 · 지수 대비 평균 +1.0%p · 이긴 비율 50.0%");
 });

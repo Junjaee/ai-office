@@ -98,3 +98,17 @@
 .stk-card-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 .stk-more { display: flex; justify-content: center; }
 .stk-subhead { margin: 14px 0 6px; font-size: 14px; font-weight: 700; }
+
+/* 3단계: 해석 · 근거 출처 꼬리표 · 기사 제목 · 의견 채점 표 · 관점 성적 표 */
+.stk-verdict .stk-stale { display: inline-flex; align-items: center; gap: 6px; color: #ffd98a; font-size: 13.5px; font-weight: 600; }
+.stk-list li .stk-src { display: inline-block; margin-left: 4px; padding: 0 7px; border: 1px solid var(--d-line-strong); border-radius: 999px; color: var(--d-soft); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.stk-link { color: var(--d-link); font-weight: 600; overflow-wrap: anywhere; }
+.stk-news li { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; min-height: 44px; }
+.stk-ops { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; }
+.stk-ops th, .stk-ops td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--d-line-soft); text-align: left; vertical-align: top; }
+.stk-ops thead th { border-bottom-color: var(--d-line); color: var(--d-faint); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.stk-ops tbody th { font-weight: 600; white-space: nowrap; }
+.stk-ops td { white-space: nowrap; }
+.stk-ops td.stk-op-verdict { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+.stk-lens-score { min-width: 720px; }
+.stk-lens-score td { white-space: normal; min-width: 150px; }
