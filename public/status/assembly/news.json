@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 10초",
+  "summary": "신규 13건, 실패 0건, 12초",
   "counts": {
-    "new": 12,
+    "new": 13,
     "failed": 0,
-    "total": 3201
+    "total": 3214
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 10초",
-    "[신규] 김정재 의원, 고속도로 터널 방재시설 곳곳서 빈틈…핵심시설 복구는 수개월 — 시민행정신문",
-    "[신규] 필로폰 건네자마자 돌려받아도... 대법 \"매매는 이미 끝났다\" — 파이낸셜뉴스",
-    "[신규] e스포츠·VR까지…무대 넓힌 AG, 지속성은 과제 — 연합뉴스 한민족센터",
-    "[신규] 차기 보수 대통령감은…한동훈 18.7%·장동혁·오세훈 12.3% [여론조사꽃] — edaily.co.kr, 이데일리TV"
+    "신규 13건, 실패 0건, 12초",
+    "[신규] 국힘·개혁신당, 내일 수도권 부동산 포럼 토론회…오세훈 기조 강연 — 뉴시스",
+    "[신규] 박용갑 의원 “정부, 5극 3특 의료 인프라 구축 위해 ‘한국판 장기 저금리 융자 지원제도’ 도입해야” — 시민행정신문",
+    "[신규] 아시안 게임 한국 최우수선수(MVP)에 펜싱 오상욱 선수 — 시니어오늘",
+    "[신규] 김남국 의원, “KBS 수신료 분리고지 후 수납률 8.1%p 하락… 추가비용만 785.8억 원” — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37391783597,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37391783597",
-  "request_id": "cron-202610060000",
+  "run_id": 37406982911,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37406982911",
+  "request_id": "cron-202610060300",
   "trigger": "schedule",
-  "started_at": "2026-10-06T09:02:27+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-10-06T12:01:49+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 60건"
+      "summary": "검색어 5개에서 44건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 21건 (신규 12건) · 시민행정신문 5건, Calgary Roughnecks 3건, 뉴스핌 2건"
+      "summary": "오늘 34건 (신규 13건) · 시민행정신문 9건, Calgary Roughnecks 5건, edaily.co.kr 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-06T09:02:39+09:00"
+  "updated_at": "2026-10-06T12:02:01+09:00"
 }
