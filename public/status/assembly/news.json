@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 13초",
+  "summary": "신규 31건, 실패 0건, 11초",
   "counts": {
-    "new": 23,
+    "new": 31,
     "failed": 0,
-    "total": 3237
+    "total": 3268
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 13초",
-    "[신규] 이준석 “동탄 교통, 서울·경기 함께 봐야”… 동탄9동 직장·학교 목적지 73.7% 경기권 — 화성저널",
-    "[신규] 동탄9동(목동·신동) 주민 74% “정기 통근·통학” — 화성시민신문",
-    "[신규] 오세훈 서울시, 범보수 정책 공조 본격화 이재명 정부 23만호 공급·실제 입주는 언제? — 오토투데이",
-    "[신규] 보수 차기 대통령감 한동훈 18.7%…오세훈·장동혁 12.3% [여론조사꽃] — 한국경제"
+    "신규 31건, 실패 0건, 11초",
+    "[신규] [2026 국감] \"흑자인데 왜 통합?\"…4대 항만공사 실익·본사 위치 놓고 공방 — 뉴스핌",
+    "[신규] 레버리지 ETF·집값 상승 책임 추궁... 이형일 \"무겁게 받아들인다\" — 한국일보",
+    "[신규] [AG 결산②] 사격 2관왕 이건혁·평균대 황서현…한국 스타 탄생과 세대교체 — 뉴스핌",
+    "[신규] 24시간 소아응급진료 가능하다지만… 제한 없는 곳은 13.5% — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37421522928,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37421522928",
-  "request_id": "cron-202610060600",
+  "run_id": 37439933179,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37439933179",
+  "request_id": "cron-202610060900",
   "trigger": "schedule",
-  "started_at": "2026-10-06T15:02:21+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-06T18:00:41+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 62건"
+      "summary": "검색어 5개에서 88건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 57건 (신규 23건) · 시민행정신문 9건, Calgary Roughnecks 5건, citizenadmnews.co.kr 5건"
+      "summary": "오늘 88건 (신규 31건) · 시민행정신문 11건, v.daum.net 9건, Calgary Roughnecks 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-06T15:02:35+09:00"
+  "updated_at": "2026-10-06T18:00:53+09:00"
 }
