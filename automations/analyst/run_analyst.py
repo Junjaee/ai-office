@@ -52,13 +52,20 @@ logging.getLogger("yfinance").setLevel(logging.CRITICAL)
 logging.getLogger("yfinance").propagate = False
 
 
-def read_universe(path: str | Path) -> list[str]:
-    out = []
+def read_universe_meta(path: str | Path) -> dict[str, dict]:
+    """{기호: {"exch", "name"}} — 한 줄은 `기호 [거래소]  # 이름`. 미국 파일(이름·거래소 없음)도 읽는다(그때 None)."""
+    out: dict[str, dict] = {}
     for line in Path(path).read_text(encoding="utf-8").splitlines():
-        t = line.split("#", 1)[0].strip().upper()
-        if t and t not in out:
-            out.append(t)
+        body, _, name = line.partition("#")
+        parts = body.split()
+        if parts and parts[0].upper() not in out:
+            out[parts[0].upper()] = {"exch": parts[1].upper() if len(parts) > 1 else None, "name": name.strip() or None}
     return out
+
+
+def read_universe(path: str | Path) -> list[str]:
+    return list(read_universe_meta(path))
+
 
 SCORE_SKIPPED = "관점 기록을 읽지 못해 오늘 채점은 건너뜁니다"
 SCORE_NO_INDEX = "지수 종가가 기준일 것이 아니라 오늘 채점과 기록을 건너뜁니다"

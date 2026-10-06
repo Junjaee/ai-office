@@ -105,3 +105,10 @@ def test_short_history_gives_none_not_zero():
     raw["closes"], raw["volumes"] = raw["closes"][-10:], raw["volumes"][-10:]
     rec = m.build_record(raw)
     assert rec["dv1_ratio"] is None and rec["above_ma20"] is None
+
+
+def test_build_record_currency_and_local_name_defaults_and_kr():
+    r = m.build_record(make_raw())
+    assert r["currency"] == "USD" and r["name_local"] is None
+    r = m.build_record(make_raw(currency="KRW", name_local="삼성전자"))
+    assert r["currency"] == "KRW" and r["name_local"] == "삼성전자"

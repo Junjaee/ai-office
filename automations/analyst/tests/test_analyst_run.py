@@ -622,3 +622,14 @@ def test_ingest_does_not_retry_client_errors():
     with pytest.raises(RuntimeError):
         site.ingest("us", "board", {})
     assert site.http.posts == 1 and waits == []
+
+
+def test_read_universe_meta_reads_both_formats(tmp_path):
+    p = tmp_path / "kr.txt"
+    p.write_text("# 머리 주석\n005930 KS  # 삼성전자\n247540 KQ  # 에코프로비엠\n005930 KS  # 중복\n\n", encoding="utf-8")
+    assert mod.read_universe(p) == ["005930", "247540"]
+    assert mod.read_universe_meta(p) == {"005930": {"exch": "KS", "name": "삼성전자"}, "247540": {"exch": "KQ", "name": "에코프로비엠"}}
+    us = tmp_path / "us.txt"
+    us.write_text("# 주석\nAAPL\nbrk-b  # 버크셔\nAAPL\n", encoding="utf-8")
+    assert mod.read_universe(us) == ["AAPL", "BRK-B"]
+    assert mod.read_universe_meta(us) == {"AAPL": {"exch": None, "name": None}, "BRK-B": {"exch": None, "name": "버크셔"}}

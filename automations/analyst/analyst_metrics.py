@@ -93,6 +93,7 @@ def build_record(raw: dict) -> dict:
                                       "n": int(num(info.get("numberOfAnalystOpinions")) or 0)}
     return {
         "t": raw["t"], "name": raw.get("name") or raw["t"], "exchange": raw.get("exchange") or "", "sector": raw.get("sector") or "",
+        "currency": raw.get("currency") or "USD", "name_local": raw.get("name_local"),
         "financial": (raw.get("sector") or "") in FINANCIAL_SECTORS,
         "as_of": closes[-1][0], "price": round(price, 2), "chg_pct": round((price / prev - 1) * 100, 2) if prev else None,
         "hi52": hi52, "lo52": lo52, "off_hi_pct": round((price / hi52 - 1) * 100, 1),
