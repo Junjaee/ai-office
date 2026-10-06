@@ -149,7 +149,8 @@ def board_row(rec: dict, checks: list[dict], lens: list[dict] | None = None) -> 
             "n_pass": n["pass"], "n_care": n["care"], "n_warn": n["warn"], "diag": diag(checks), "next_earn": rec.get("next_earn"),
             "warn_keys": [c["key"] for c in checks if c["state"] == "warn"],
             "sector": rec.get("sector") or "", "rev_g": rec.get("rev_g"), "nde": rec.get("net_debt_ebitda"), "dv_ratio": rec.get("dv_ratio"),
-            "lenses": list(lens or [])}
+            "lenses": list(lens or []),
+            "currency": rec.get("currency") or "USD", "name_local": rec.get("name_local")}
 
 
 LENS_ORDER = ["value", "growth", "event", "flow"]

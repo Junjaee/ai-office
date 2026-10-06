@@ -71,6 +71,20 @@ def test_saves_with_site_data(tmp_path, capsys):
     assert "2026-10-06T09:12:33.000Z" in out and "/home/stock/us/ORCL" in out
 
 
+def test_kr_code_accepted_and_url_uses_market(tmp_path, capsys):
+    site = FakeSite()
+    assert mod.main(["kr", "005930", "--file", write(tmp_path, OP)], site=site) == 0
+    assert site.saved[0][:2] == ("kr", "005930")
+    assert "/home/stock/kr/005930" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("bad", ["ORCL", "59300", "0059300", "00593A"])
+def test_kr_non_six_digit_ticker_exits_1(tmp_path, capsys, bad):
+    site = FakeSite()
+    assert mod.main(["kr", bad, "--file", write(tmp_path, OP)], site=site) == 1
+    assert "6자리" in capsys.readouterr().err and site.saved == []
+
+
 def test_extra_keys_dropped_watch_defaults_and_next_earn_none(tmp_path):
     site = FakeSite(doc={"as_of": "2026-10-02", "rec": {"price": 10}})
     data = {k: v for k, v in OP.items() if k != "watch"} | {"rating": "A", "id": "x"}

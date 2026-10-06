@@ -66,7 +66,7 @@ def test_medians_and_diag_and_row():
     row = c.board_row(rec(net_debt_ebitda=4.4, fcf=-1e9, ocf=-1e9), checks)
     assert row["n_pass"] == 5 and row["n_care"] == 0 and row["n_warn"] == 2 and row["warn_keys"] == ["빚", "현금흐름"]
     assert set(row) == {"t", "name", "price", "chg_pct", "spark", "ath_pct", "off_hi_pct", "fpe", "n_pass", "n_care", "n_warn", "diag", "next_earn", "warn_keys",
-                       "sector", "rev_g", "nde", "dv_ratio", "lenses"}
+                       "sector", "rev_g", "nde", "dv_ratio", "lenses", "currency", "name_local"}
 
 
 def test_peers_same_sector_nearest_size():
@@ -131,6 +131,13 @@ def test_board_row_carries_lens_fields():
     row = c.board_row(rec, _ck(), [{"id": "flow", "why": "x"}])
     assert (row["sector"], row["rev_g"], row["nde"], row["dv_ratio"], row["lenses"]) == ("Technology", 12.0, 0.5, 1.2, [{"id": "flow", "why": "x"}])
     assert c.board_row(rec, _ck())["lenses"] == []
+
+
+def test_board_row_currency_and_local_name():
+    us = c.board_row(rec(), _ck())
+    assert (us["currency"], us["name_local"]) == ("USD", None)
+    kr = c.board_row(rec(currency="KRW", name_local="삼성전자"), _ck())
+    assert (kr["currency"], kr["name_local"]) == ("KRW", "삼성전자")
 
 
 def test_cash_flow_text_uses_currency_unit():

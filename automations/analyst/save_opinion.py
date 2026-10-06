@@ -1,6 +1,6 @@
 """해석 저장 — 대화에서 만든 해석(JSON)을 사이트에 저장한다. 사람이 자기 PC 에서 돌린다(Actions 아님).
 
-사용:  python save_opinion.py us ORCL --file 해석.json
+사용:  python save_opinion.py us ORCL --file 해석.json   (국내: kr 005930)
 파일: {"verdict": "한 줄 결론", "good": [{"text": "...", "src": "재무"}], "bad": [...], "watch": ["..."]}
 주가·기준일·다음 실적일은 사이트에 있는 그 종목 자료에서 채운다. 금지어(목표가·매수 추천 등)가 있으면 저장하지 않는다.
 환경변수 LIVE_TOKEN 이 있으면 머리글로 보낸다.
@@ -86,11 +86,16 @@ def _fail(msg: str, code: int = 1) -> int:
 
 def main(argv: list[str], site: Site | None = None) -> int:
     p = argparse.ArgumentParser(description="해석을 사이트에 저장한다")
-    p.add_argument("market", choices=["us"])
+    p.add_argument("market", choices=["us", "kr"])
     p.add_argument("ticker")
     p.add_argument("--file", required=True, help="해석 JSON 파일")
     args = p.parse_args(argv)
-    ticker = args.ticker.upper()
+    if args.market == "kr":
+        ticker = args.ticker
+        if not re.fullmatch(r"[0-9]{6}", ticker):
+            return _fail(f"국내 종목은 숫자 6자리 코드여야 합니다(예: 005930): {ticker}")
+    else:
+        ticker = args.ticker.upper()
 
     try:
         data = json.loads(Path(args.file).read_text(encoding="utf-8"))
