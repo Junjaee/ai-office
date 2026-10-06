@@ -462,7 +462,7 @@ export default function StockPage({ ws, market, ticker }: { ws: string; market: 
                 </tbody>
               </table>
             </div>
-            <p className="auto-meta">수익률은 쓴 날 주가 대비이며 배당 제외, 그래프가 이틀 간격이라 며칠 어긋날 수 있습니다. 1주·1개월·3개월은 쓴 날부터 약 7·30·91일 뒤 첫 거래일 기준입니다. 맞고 틀림은 따로 매기지 않습니다.</p>
+            <p className="auto-meta">수익률은 쓴 날 주가 대비이며 배당 제외, 그래프가 이틀 간격이라 며칠 어긋날 수 있습니다. 1주·1개월·3개월은 기준일(쓴 날의 종가일)부터 약 7·30·91일 뒤 첫 거래일 기준입니다. 맞고 틀림은 따로 매기지 않습니다.</p>
           </section>
         ) : null}
 

@@ -129,7 +129,7 @@ export function discoverView(board: Board | null, lens: LensId | "all"): { tabs:
 
 export function lensDaysText(n: number): string {
   if (!n) return "기준 채점: 아직 기록이 없어요";
-  return `기준 채점: 기록 ${n}일째 — 관점별 성적은 표본이 30건 쌓인 뒤에 보여 드립니다(아직 판단하기 이릅니다)`;
+  return `기준 채점: 기록 ${n}일째 — 관점별 성적은 표본이 30건·20일 쌓인 뒤에 보여 드립니다(아직 판단하기 이릅니다)`;
 }
 
 export const FLAG_EARN_DAYS = 30;
