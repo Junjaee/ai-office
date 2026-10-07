@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 60건, 실패 0건, 12초",
+  "summary": "신규 27건, 실패 0건, 15초",
   "counts": {
-    "new": 60,
+    "new": 27,
     "failed": 0,
-    "total": 3396
+    "total": 3423
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 60건, 실패 0건, 12초",
-    "[신규] 오세훈 \"한동훈, 이준석 어우러져 시너지 내는 보수통합 필요\" — 조선일보",
-    "[신규] 오세훈 “한동훈·이준석 함께 시너지 낼 보수 통합 반드시 필요” — 한겨레",
-    "[신규] 오세훈 “한동훈·이준석과 시너지낼 수 있는 보수통합 반드시 필요” — 중앙일보",
-    "[신규] 오세훈 “이준석·한동훈 보수 자산…보수 통합 필요” — KBS 뉴스"
+    "신규 27건, 실패 0건, 15초",
+    "[신규] 오세훈·이준석·한동훈 연대하나…吳 “함께하면 전력 몇 배, 보수통합 필요” — 문화일보",
+    "[신규] 오세훈 \"한동훈·이준석 어우러진 보수 통합 반드시 필요\" — 한국경제",
+    "[신규] [이슈] 취임 100일 오세훈 \"진실의 시간 다가와\"…한동훈·이준석엔 '보수통합' 손짓 — 폴리뉴스 Polinews",
+    "[신규] [IS 인터뷰] 테크볼이 뭐야? 다들 무모하다 했지만, AG 초대 챔피언에 오른 이준석 — 일간스포츠"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37597693922,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37597693922",
-  "request_id": "cron-202610070900",
+  "run_id": 37618050883,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37618050883",
+  "request_id": "cron-202610071200",
   "trigger": "schedule",
-  "started_at": "2026-10-07T18:01:37+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-07T21:01:55+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 125건"
+      "summary": "검색어 5개에서 128건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 113건 (신규 60건) · 시민행정신문 22건, Calgary Roughnecks 14건, Daum 7건"
+      "summary": "오늘 140건 (신규 27건) · 시민행정신문 22건, Calgary Roughnecks 21건, SBS Biz 10건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-07T18:01:50+09:00"
+  "updated_at": "2026-10-07T21:02:10+09:00"
 }
