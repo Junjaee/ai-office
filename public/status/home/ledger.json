@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 5초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
   "counts": {
     "new": 1,
     "replaced": 0,
@@ -13,16 +13,16 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 5초",
-    "[추가] 2026년 10월 10/7 엔씨송파점 61,700원 (생활비)"
+    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
+    "[추가] 2026년 10월 10/7 엔씨송파점 2,990원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 37580393002,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37580393002",
-  "request_id": "cron-202610070613",
+  "run_id": 37584865662,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37584865662",
+  "request_id": "cron-202610070701",
   "trigger": "schedule",
-  "started_at": "2026-10-07T15:14:32+09:00",
-  "duration_sec": 5,
+  "started_at": "2026-10-07T16:02:34+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-07T15:14:38+09:00"
+  "updated_at": "2026-10-07T16:02:37+09:00"
 }
