@@ -1,22 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "뉴스 목록을 받아오지 못했어요",
-  "counts": {},
+  "summary": "신규 60건, 실패 0건, 12초",
+  "counts": {
+    "new": 60,
+    "failed": 0,
+    "total": 3396
+  },
   "next_run": "3시간마다",
   "log": [
-    "뉴스 목록을 받아오지 못했어요",
-    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
+    "신규 60건, 실패 0건, 12초",
+    "[신규] 오세훈 \"한동훈, 이준석 어우러져 시너지 내는 보수통합 필요\" — 조선일보",
+    "[신규] 오세훈 “한동훈·이준석 함께 시너지 낼 보수 통합 반드시 필요” — 한겨레",
+    "[신규] 오세훈 “한동훈·이준석과 시너지낼 수 있는 보수통합 반드시 필요” — 중앙일보",
+    "[신규] 오세훈 “이준석·한동훈 보수 자산…보수 통합 필요” — KBS 뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37579277310,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37579277310",
-  "request_id": "cron-202610070600",
+  "run_id": 37597693922,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37597693922",
+  "request_id": "cron-202610070900",
   "trigger": "schedule",
-  "started_at": "2026-10-07T15:02:01+09:00",
-  "duration_sec": 134,
+  "started_at": "2026-10-07T18:01:37+09:00",
+  "duration_sec": 12,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 125건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 113건 (신규 60건) · 시민행정신문 22건, Calgary Roughnecks 14건, Daum 7건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-10-07T15:04:16+09:00"
+  "updated_at": "2026-10-07T18:01:50+09:00"
 }
