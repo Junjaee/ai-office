@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 13건, 실패 0건, 11초",
+  "summary": "신규 4건, 실패 0건, 14초",
   "counts": {
-    "new": 13,
+    "new": 4,
     "failed": 0,
-    "total": 3436
+    "total": 3440
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 13건, 실패 0건, 11초",
-    "[신규] 오세훈 “한동훈·이준석 등 개혁보수 세력 통합 필요” — 대구신문",
-    "[신규] 오세훈, ‘오동석’ 연대론 띄웠다? — 채널A 뉴스",
-    "[신규] 싱가포르 카지노 숙박|삼성 블록체인 월렛 디시 — Calgary Roughnecks",
-    "[신규] [국감] 천하람 의원 질의 듣는 정빛나 국방부 대변인 — 뉴스1"
+    "신규 4건, 실패 0건, 14초",
+    "[신규] 초보자가 이해하기 쉬운 안전 토토 사이트 쇼미 더벳 메이저 판정 예시 — Calgary Roughnecks",
+    "[신규] 게임의 시각적 분위기를 담은 1인용 게임 무료 테마 페이지 — Calgary Roughnecks",
+    "[신규] 게임별 화면 구성을 비교하는 텍사스 홀덤 포커 규칙 관찰 포인트 — Calgary Roughnecks",
+    "[신규] 헷갈리는 약어를 풀어 쓴 토토 자동차 정비 용어 사전 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37641425023,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37641425023",
+  "run_id": 37641592653,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37641592653",
   "request_id": "cron-202610071500",
   "trigger": "schedule",
-  "started_at": "2026-10-08T00:01:24+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-08T00:02:16+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 130건"
+      "summary": "검색어 5개에서 131건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 13건) · Calgary Roughnecks 3건, 디트NEWS24 2건, 고양 in 1건"
+      "summary": "오늘 17건 (신규 4건) · Calgary Roughnecks 7건, 디트NEWS24 2건, 고양 in 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-08T00:01:37+09:00"
+  "updated_at": "2026-10-08T00:02:32+09:00"
 }
