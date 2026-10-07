@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 14초",
+  "summary": "신규 8건, 실패 0건, 12초",
   "counts": {
-    "new": 4,
+    "new": 8,
     "failed": 0,
-    "total": 3440
+    "total": 3448
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 14초",
-    "[신규] 초보자가 이해하기 쉬운 안전 토토 사이트 쇼미 더벳 메이저 판정 예시 — Calgary Roughnecks",
-    "[신규] 게임의 시각적 분위기를 담은 1인용 게임 무료 테마 페이지 — Calgary Roughnecks",
-    "[신규] 게임별 화면 구성을 비교하는 텍사스 홀덤 포커 규칙 관찰 포인트 — Calgary Roughnecks",
-    "[신규] 헷갈리는 약어를 풀어 쓴 토토 자동차 정비 용어 사전 — Calgary Roughnecks"
+    "신규 8건, 실패 0건, 12초",
+    "[신규] [이슈] 취임 100일 오세훈 \"진실의 시간 다가와\"…한동훈·이준석에 '보수통합' 손짓 — 폴리뉴스 Polinews",
+    "[신규] 인사하는 오세훈·이준석 — 뉴스1",
+    "[신규] 오세훈 서울시장 초청 수도권주거혁신포럼 [포토오늘] — 시사오늘",
+    "[신규] 폴스뷰 카지노 주소 연속 결과 표시의 순서 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37641592653,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37641592653",
-  "request_id": "cron-202610071500",
+  "run_id": 37663500194,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37663500194",
+  "request_id": "cron-202610071800",
   "trigger": "schedule",
-  "started_at": "2026-10-08T00:02:16+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-08T03:01:04+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 131건"
+      "summary": "검색어 5개에서 137건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 17건 (신규 4건) · Calgary Roughnecks 7건, 디트NEWS24 2건, 고양 in 1건"
+      "summary": "오늘 25건 (신규 8건) · Calgary Roughnecks 10건, 뉴스1 2건, 디트NEWS24 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-08T00:02:32+09:00"
+  "updated_at": "2026-10-08T03:01:16+09:00"
 }
