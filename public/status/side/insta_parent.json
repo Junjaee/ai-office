@@ -3,31 +3,32 @@
   "dept": "strategy2",
   "ok": true,
   "running": false,
-  "summary": "게시 0건, 실패 0건, 누적 3건, 1.8분",
+  "summary": "게시 0건, 실패 0건, 누적 3건, 26초",
   "counts": {
     "new": 0,
     "failed": 0,
     "total": 3
   },
-  "next_run": "매일 06:30·11:30 후보 · 07:30 · 12:30 · 18:30 게시",
+  "next_run": "없음 (▶ 시작으로 수동 실행)",
   "log": [
-    "게시 0건, 실패 0건, 누적 3건, 1.8분",
-    "[후보] 경기도 산후조리비 중단 후폭풍…시군 \"자체 지원 검토\" — 연합뉴스 사회",
-    "[후보] 입장료와 예약 없이 즐길 수 있는 — IG 🇰🇷 @momdadmap_incheon · 좋아요 212 · 댓글 10",
-    "[후보] 서울에 이런 곳이 — IG 🇰🇷 @moms.map · 좋아요 762 · 댓글 5.1천",
-    "[후보] 주말에는 예약없이 갈 수 있어요 — IG 🇰🇷 @moms.map · 좋아요 664 · 댓글 5.1천"
+    "게시 0건, 실패 0건, 누적 3건, 26초",
+    "[후보] 출생신고하면 아동수당·부모급여 ‘자동 지급’… 확 달라지는 육아정책 — 베이비뉴스",
+    "[후보] 도심 한복판에 이런 곳이 있다고? — IG 🇰🇷 @momdadmap_incheon · 좋아요 22 · 댓글 0",
+    "[후보] 지금 예약중 — IG 🇰🇷 @moms.map · 좋아요 203 · 댓글 1.8천",
+    "[후보] 선선한 가을바람이 살랑이는 한강, — IG 🇰🇷 @moms.map · 좋아요 76 · 댓글 215"
   ],
   "link": "https://www.instagram.com/",
-  "run_id": 35163711074,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/35163711074",
-  "trigger": "schedule",
-  "started_at": "2026-09-17T08:54:15+09:00",
-  "duration_sec": 107,
+  "run_id": 37704162567,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37704162567",
+  "request_id": "req-20261008084631-1txl",
+  "trigger": "manual",
+  "started_at": "2026-10-08T08:47:49+09:00",
+  "duration_sec": 26,
   "tasks": [
     {
       "id": "topic",
       "status": "done",
-      "summary": "후보 6건 · 사이트에서 골라 주세요"
+      "summary": "후보 8건 · 사이트에서 골라 주세요"
     },
     {
       "id": "write",
@@ -46,5 +47,5 @@
     }
   ],
   "id": "insta_parent",
-  "updated_at": "2026-09-17T08:56:03+09:00"
+  "updated_at": "2026-10-08T08:48:16+09:00"
 }
