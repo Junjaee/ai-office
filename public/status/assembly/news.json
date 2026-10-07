@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 13초",
+  "summary": "신규 16건, 실패 0건, 13초",
   "counts": {
-    "new": 14,
+    "new": 16,
     "failed": 0,
-    "total": 3320
+    "total": 3336
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 13초",
-    "[신규] [국정감사] 박정현 의원, 미래대응기금·고향사랑기부금 ·시간선택제 채용공무원 등 현안 질의 — 시민행정신문",
-    "[신규] 증명이 넘쳐나는 시대, 무엇이 수학의 진보로 이어지는가? — 카이스트신문",
-    "[신규] 전국 11조 원 ‘장기수선충당금’, 깜깜이 관리 속 5년간 비위 3,299건 — 시민행정신문",
-    "[신규] 전국 통합돌봄 5개월간 9.3만 명 신청… 전담조직·인력 배치가 성패 갈랐다 — 시민행정신문"
+    "신규 16건, 실패 0건, 13초",
+    "[신규] 차기 대통령 적합도 한동훈 18.8% 1위…장동혁 14.9%·김민석 14.4% [조원씨앤아이] — 한국경제",
+    "[신규] 이준석 국회의원, 동탄 9동 목동ㆍ신동 주민 대상 교통 인식조사 — 동네정치",
+    "[신규] 김남국 의원, “중고거래 분쟁조정 합의율 70%→57%… 처리기간은 두 배” — 시민행정신문",
+    "[신규] 차기 대통령 후보 적합도 한동훈 오차범위 내 선두 — 경북도민일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37549705442,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37549705442",
-  "request_id": "cron-202610070000",
+  "run_id": 37564762129,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37564762129",
+  "request_id": "cron-202610070300",
   "trigger": "schedule",
-  "started_at": "2026-10-07T09:01:51+09:00",
+  "started_at": "2026-10-07T12:01:48+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 125건"
+      "summary": "검색어 5개에서 114건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 37건 (신규 14건) · 시민행정신문 11건, Calgary Roughnecks 5건, 머니투데이 2건"
+      "summary": "오늘 53건 (신규 16건) · 시민행정신문 22건, Calgary Roughnecks 5건, 머니투데이 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-07T09:02:06+09:00"
+  "updated_at": "2026-10-07T12:02:02+09:00"
 }
