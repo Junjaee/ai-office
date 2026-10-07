@@ -1,41 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 16건, 실패 0건, 13초",
-  "counts": {
-    "new": 16,
-    "failed": 0,
-    "total": 3336
-  },
+  "summary": "뉴스 목록을 받아오지 못했어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 16건, 실패 0건, 13초",
-    "[신규] 차기 대통령 적합도 한동훈 18.8% 1위…장동혁 14.9%·김민석 14.4% [조원씨앤아이] — 한국경제",
-    "[신규] 이준석 국회의원, 동탄 9동 목동ㆍ신동 주민 대상 교통 인식조사 — 동네정치",
-    "[신규] 김남국 의원, “중고거래 분쟁조정 합의율 70%→57%… 처리기간은 두 배” — 시민행정신문",
-    "[신규] 차기 대통령 후보 적합도 한동훈 오차범위 내 선두 — 경북도민일보"
+    "뉴스 목록을 받아오지 못했어요",
+    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37564762129,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37564762129",
-  "request_id": "cron-202610070300",
+  "run_id": 37579277310,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37579277310",
+  "request_id": "cron-202610070600",
   "trigger": "schedule",
-  "started_at": "2026-10-07T12:01:48+09:00",
-  "duration_sec": 13,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 114건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 53건 (신규 16건) · 시민행정신문 22건, Calgary Roughnecks 5건, 머니투데이 2건"
-    }
-  ],
+  "started_at": "2026-10-07T15:02:01+09:00",
+  "duration_sec": 134,
   "id": "news",
-  "updated_at": "2026-10-07T12:02:02+09:00"
+  "updated_at": "2026-10-07T15:04:16+09:00"
 }
