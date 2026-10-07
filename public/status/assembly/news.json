@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 13초",
   "counts": {
-    "new": 8,
+    "new": 4,
     "failed": 0,
-    "total": 3448
+    "total": 3452
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 12초",
-    "[신규] [이슈] 취임 100일 오세훈 \"진실의 시간 다가와\"…한동훈·이준석에 '보수통합' 손짓 — 폴리뉴스 Polinews",
-    "[신규] 인사하는 오세훈·이준석 — 뉴스1",
-    "[신규] 오세훈 서울시장 초청 수도권주거혁신포럼 [포토오늘] — 시사오늘",
-    "[신규] 폴스뷰 카지노 주소 연속 결과 표시의 순서 — Calgary Roughnecks"
+    "신규 4건, 실패 0건, 13초",
+    "[신규] 한동훈·이준석 보수연대 급부상…오세훈까지 나섰지만 ‘빅텐트’의 진짜 걸림돌은 — 진주인터넷뉴스",
+    "[신규] [국감] 국방부 국감서 발언하는 천하람 개혁신당 의원 — 뉴스1",
+    "[신규] 세종시의회 예결위, '글로벌 진로탐험대' 예산 또 전액 삭감 — 뉴스피치",
+    "[신규] 글로벌 진로탐험대 '좌절' ... 5,400 중 3학생 실망감 '꿈틀' — 세종포스트"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37663500194,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37663500194",
-  "request_id": "cron-202610071800",
+  "run_id": 37686302514,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37686302514",
+  "request_id": "cron-202610072100",
   "trigger": "schedule",
-  "started_at": "2026-10-08T03:01:04+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-08T06:01:13+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 137건"
+      "summary": "검색어 5개에서 111건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 25건 (신규 8건) · Calgary Roughnecks 10건, 뉴스1 2건, 디트NEWS24 2건"
+      "summary": "오늘 29건 (신규 4건) · Calgary Roughnecks 10건, 뉴스1 3건, 디트NEWS24 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-08T03:01:16+09:00"
+  "updated_at": "2026-10-08T06:01:27+09:00"
 }
