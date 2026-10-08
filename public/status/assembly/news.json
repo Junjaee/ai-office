@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 29건, 실패 0건, 13초",
+  "summary": "신규 21건, 실패 0건, 12초",
   "counts": {
-    "new": 29,
+    "new": 21,
     "failed": 0,
-    "total": 3497
+    "total": 3518
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 29건, 실패 0건, 13초",
-    "[신규] 이준석 \"AI 활용해 나라장터서 5천628억원 세금 누수 정황 확인\" — 연합뉴스",
-    "[신규] 이준석 \"나라장터서 '바가지' 계약…5600억 세금 낭비\" — 한국경제",
-    "[신규] 이준석 “AI로 새고 있던 5628억원 잡았다”…‘내돈내찾’ 프로젝트 개최 — 서울신문",
-    "[신규] 이준석, 나라장터 5600억 '혈세 낭비 정황' 포착…AI 활용 공모전 연다 — 아시아경제"
+    "신규 21건, 실패 0건, 12초",
+    "[신규] [2026 국감] 이준석 \"4.7조 프론티어 AI, 한국 전략 안 보여…'젠슨황 공화국' 됐나\" — 뉴스핌",
+    "[신규] 이준석 \"AI 활용해 130조 나라장터 5628억 세금 낭비 정황 확인\" — 조세일보",
+    "[신규] 이준석 \"나라장터 105만개 전수조사, 5000억 넘는 세금 누수 찾았다\" — 매일신문",
+    "[신규] 태국측 AG식단 부실 지적에 日지사 \"오지 말았어야\"…막말 논란 — 연합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37720715814,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37720715814",
-  "request_id": "cron-202610080300",
+  "run_id": 37735352204,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37735352204",
+  "request_id": "cron-202610080600",
   "trigger": "schedule",
-  "started_at": "2026-10-08T12:01:48+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-08T15:01:47+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 156건"
+      "summary": "검색어 5개에서 141건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 74건 (신규 29건) · Calgary Roughnecks 17건, 뉴스1 9건, 뉴시스 4건"
+      "summary": "오늘 95건 (신규 21건) · Calgary Roughnecks 19건, 뉴스1 11건, 뉴시스 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-08T12:02:02+09:00"
+  "updated_at": "2026-10-08T15:02:00+09:00"
 }
