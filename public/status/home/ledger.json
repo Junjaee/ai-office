@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
   "counts": {
     "new": 1,
     "replaced": 0,
@@ -13,16 +13,16 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 10월 10/8 다이소아성산업 7,000원 (생활비)"
+    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
+    "[추가] 2026년 10월 10/8 노브랜드스타필드 7,880원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 37749726263,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37749726263",
-  "request_id": "cron-202610080825",
+  "run_id": 37750946916,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37750946916",
+  "request_id": "cron-202610080836",
   "trigger": "schedule",
-  "started_at": "2026-10-08T17:25:55+09:00",
-  "duration_sec": 3,
+  "started_at": "2026-10-08T17:36:56+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-08T17:25:59+09:00"
+  "updated_at": "2026-10-08T17:36:59+09:00"
 }
