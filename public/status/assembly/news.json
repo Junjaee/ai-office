@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 18건, 실패 0건, 14초",
+  "summary": "신규 4건, 실패 0건, 15초",
   "counts": {
-    "new": 18,
+    "new": 4,
     "failed": 0,
-    "total": 3576
+    "total": 3580
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 18건, 실패 0건, 14초",
-    "[신규] PC에서 버튼이 작게 보일 때, 홀덤 펍 블랙 잭 화면 점검 — Calgary Roughnecks",
-    "[신규] 개혁신당 \"이화영 가석방 요구는 협박...이 대통령 재판 재개해야\" — YTN",
-    "[신규] 게임의 시각적 분위기를 담은 만국기 슬롯 머신 테마 페이지 — Calgary Roughnecks",
-    "[신규] [스코어보드-재경위] 정쟁 대신 정책…소모전 넘어선 '미래기금 국감' — 머니투데이"
+    "신규 4건, 실패 0건, 15초",
+    "[신규] 이준석 “나라장터서 5000억 세금누수… 정부 뒷짐” — 경인일보",
+    "[신규] 피망 뉴 베가스 디시 게임 메커니즘 기초 설명 — Calgary Roughnecks",
+    "[신규] 게임 정보를 비교표로 읽는 토토 솔루션 유형 안내 — Calgary Roughnecks",
+    "[신규] 게임을 고르기 전 펼쳐보는 토큰 바카라 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37797183162,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37797183162",
-  "request_id": "cron-202610081500",
+  "run_id": 37820956216,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37820956216",
+  "request_id": "cron-202610081800",
   "trigger": "schedule",
-  "started_at": "2026-10-09T00:01:14+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-09T03:01:08+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 144건"
+      "summary": "검색어 5개에서 149건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 18건 (신규 18건) · 머니투데이 3건, Calgary Roughnecks 2건, YTN 1건"
+      "summary": "오늘 22건 (신규 4건) · Calgary Roughnecks 5건, 머니투데이 3건, YTN 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-09T00:01:29+09:00"
+  "updated_at": "2026-10-09T03:01:25+09:00"
 }
