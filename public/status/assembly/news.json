@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 26건, 실패 0건, 11초",
+  "summary": "신규 14건, 실패 0건, 10초",
   "counts": {
-    "new": 26,
+    "new": 14,
     "failed": 0,
-    "total": 3544
+    "total": 3558
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 26건, 실패 0건, 11초",
-    "[신규] 이준석 \"나라장터 105만개 상품 가격 전수조사…새는 돈 5000억원 넘어\" — 뉴스핌",
-    "[신규] 개혁신당, '내 혈세 찾기 해커톤' 개최…나라장터서만 5628억 줄줄 — 머니투데이",
-    "[신규] 이준석 “AI 활용해 조달청 나라장터 5628억 세금누수 확인” — 매일경제",
-    "[신규] [단독]개당 177만원 하는 HDD, 조달청은 335만원에 샀다 — 동아일보"
+    "신규 14건, 실패 0건, 10초",
+    "[신규] 이준석 \"나라장터 5,628억 낭비\"의 실상… 시중가 비교 아닌 통계 추정, 실제 가격 대조는 129건 — 조달경제신문",
+    "[신규] 이준석 “나라장터서 5628억 세금 낭비 정황”…AI로 분석 — 이택스뉴스",
+    "[신규] 릴이 확장되는 기능이 있다면 읽어볼 토토 고액 환전 제로 메이저 — Calgary Roughnecks",
+    "[신규] 주철현 의원, “효능·효과 미달 사유로 일반공시 자격까지 박탈… 유기농업자재 제도 합리적으로 개선해야” — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37753638538,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37753638538",
-  "request_id": "cron-202610080900",
+  "run_id": 37773837882,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37773837882",
+  "request_id": "cron-202610081200",
   "trigger": "schedule",
-  "started_at": "2026-10-08T18:00:55+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-08T21:00:52+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 143건"
+      "summary": "검색어 5개에서 147건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 121건 (신규 26건) · Calgary Roughnecks 21건, 뉴스1 11건, 뉴스핌 9건"
+      "summary": "오늘 135건 (신규 14건) · Calgary Roughnecks 24건, 뉴스1 11건, 시민행정신문 10건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-08T18:01:07+09:00"
+  "updated_at": "2026-10-08T21:01:03+09:00"
 }
