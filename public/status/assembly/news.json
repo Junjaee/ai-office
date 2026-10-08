@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 16건, 실패 0건, 13초",
+  "summary": "신규 29건, 실패 0건, 13초",
   "counts": {
-    "new": 16,
+    "new": 29,
     "failed": 0,
-    "total": 3468
+    "total": 3497
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 16건, 실패 0건, 13초",
-    "[신규] 이준석 \"쿠팡 검색 한 번이면 될걸\"…나라장터 5천억 바가지 적발 — 뉴스1",
-    "[신규] 손 맞잡는 오세훈 시장 — 뉴스1",
-    "[신규] (정기여론조사)⑧국힘 37.6% 대 민주 37.0%…사실상 '동률' — 뉴스토마토",
-    "[신규] 스마트글라스 쓰고 국감장 온 천하람…강신철 \"AI 등 첨단 기술로 대응 모색\" — 뉴스1"
+    "신규 29건, 실패 0건, 13초",
+    "[신규] 이준석 \"AI 활용해 나라장터서 5천628억원 세금 누수 정황 확인\" — 연합뉴스",
+    "[신규] 이준석 \"나라장터서 '바가지' 계약…5600억 세금 낭비\" — 한국경제",
+    "[신규] 이준석 “AI로 새고 있던 5628억원 잡았다”…‘내돈내찾’ 프로젝트 개최 — 서울신문",
+    "[신규] 이준석, 나라장터 5600억 '혈세 낭비 정황' 포착…AI 활용 공모전 연다 — 아시아경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37705478543,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37705478543",
-  "request_id": "cron-202610080000",
+  "run_id": 37720715814,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37720715814",
+  "request_id": "cron-202610080300",
   "trigger": "schedule",
-  "started_at": "2026-10-08T09:01:45+09:00",
+  "started_at": "2026-10-08T12:01:48+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 144건"
+      "summary": "검색어 5개에서 156건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 45건 (신규 16건) · Calgary Roughnecks 16건, 뉴스1 7건, 디트NEWS24 2건"
+      "summary": "오늘 74건 (신규 29건) · Calgary Roughnecks 17건, 뉴스1 9건, 뉴시스 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-08T09:01:59+09:00"
+  "updated_at": "2026-10-08T12:02:02+09:00"
 }
