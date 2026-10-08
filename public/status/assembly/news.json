@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 10초",
+  "summary": "신규 18건, 실패 0건, 14초",
   "counts": {
-    "new": 14,
+    "new": 18,
     "failed": 0,
-    "total": 3558
+    "total": 3576
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 10초",
-    "[신규] 이준석 \"나라장터 5,628억 낭비\"의 실상… 시중가 비교 아닌 통계 추정, 실제 가격 대조는 129건 — 조달경제신문",
-    "[신규] 이준석 “나라장터서 5628억 세금 낭비 정황”…AI로 분석 — 이택스뉴스",
-    "[신규] 릴이 확장되는 기능이 있다면 읽어볼 토토 고액 환전 제로 메이저 — Calgary Roughnecks",
-    "[신규] 주철현 의원, “효능·효과 미달 사유로 일반공시 자격까지 박탈… 유기농업자재 제도 합리적으로 개선해야” — 시민행정신문"
+    "신규 18건, 실패 0건, 14초",
+    "[신규] PC에서 버튼이 작게 보일 때, 홀덤 펍 블랙 잭 화면 점검 — Calgary Roughnecks",
+    "[신규] 개혁신당 \"이화영 가석방 요구는 협박...이 대통령 재판 재개해야\" — YTN",
+    "[신규] 게임의 시각적 분위기를 담은 만국기 슬롯 머신 테마 페이지 — Calgary Roughnecks",
+    "[신규] [스코어보드-재경위] 정쟁 대신 정책…소모전 넘어선 '미래기금 국감' — 머니투데이"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37773837882,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37773837882",
-  "request_id": "cron-202610081200",
+  "run_id": 37797183162,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37797183162",
+  "request_id": "cron-202610081500",
   "trigger": "schedule",
-  "started_at": "2026-10-08T21:00:52+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-10-09T00:01:14+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 147건"
+      "summary": "검색어 5개에서 144건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 135건 (신규 14건) · Calgary Roughnecks 24건, 뉴스1 11건, 시민행정신문 10건"
+      "summary": "오늘 18건 (신규 18건) · 머니투데이 3건, Calgary Roughnecks 2건, YTN 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-08T21:01:03+09:00"
+  "updated_at": "2026-10-09T00:01:29+09:00"
 }
