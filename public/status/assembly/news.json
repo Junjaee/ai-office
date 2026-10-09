@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 28건, 실패 0건, 13초",
+  "summary": "신규 23건, 실패 0건, 14초",
   "counts": {
-    "new": 28,
+    "new": 23,
     "failed": 0,
-    "total": 3614
+    "total": 3637
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 28건, 실패 0건, 13초",
-    "[신규] 윤석열도 뒤집혔다… 몸 푸는 오세훈 — 에너지경제신문",
-    "[신규] 각 단계에 적용되는 규칙을 찾는 토토 계정 매입 제로사이트 구조 설명 — Calgary Roughnecks",
-    "[신규] 강승규 의원, 농지은행이 아니라 “논 은행” 최근 5년 매입 농지 94%는 논·96%는 농업진흥지역 — 시민행정신문",
-    "[신규] 업데이트 전후 규칙을 대조하는 토네이도 슬롯 변경 사항 — Calgary Roughnecks"
+    "신규 23건, 실패 0건, 14초",
+    "[신규] 토토 시작 사이트 정보 버튼과 설정 버튼의 차이 — Calgary Roughnecks",
+    "[신규] 내용을 찾기 쉬운지 확인하는 자바 스크립트 포커스 아웃 도움말 구성 — Calgary Roughnecks",
+    "[신규] 움직이는 배경과 릴 영역을 나눠 보는 온라인 슬롯 머신 승부 벳 놀 검소 — Calgary Roughnecks",
+    "[신규] [최진 칼럼] 차기 대권주자들을 통해 보는 정국 향방은 — 주간한국"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37877314942,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37877314942",
-  "request_id": "cron-202610090300",
+  "run_id": 37891362700,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37891362700",
+  "request_id": "cron-202610090600",
   "trigger": "schedule",
-  "started_at": "2026-10-09T12:01:38+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-09T15:01:47+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 110건"
+      "summary": "검색어 5개에서 93건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 56건 (신규 28건) · Calgary Roughnecks 15건, 머니투데이 4건, 뉴스1 3건"
+      "summary": "오늘 79건 (신규 23건) · Calgary Roughnecks 26건, 뉴시스 4건, 머니투데이 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-09T12:01:52+09:00"
+  "updated_at": "2026-10-09T15:02:02+09:00"
 }
