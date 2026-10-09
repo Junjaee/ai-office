@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 14초",
+  "summary": "신규 18건, 실패 0건, 13초",
   "counts": {
-    "new": 23,
+    "new": 18,
     "failed": 0,
-    "total": 3637
+    "total": 3655
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 14초",
-    "[신규] 토토 시작 사이트 정보 버튼과 설정 버튼의 차이 — Calgary Roughnecks",
-    "[신규] 내용을 찾기 쉬운지 확인하는 자바 스크립트 포커스 아웃 도움말 구성 — Calgary Roughnecks",
-    "[신규] 움직이는 배경과 릴 영역을 나눠 보는 온라인 슬롯 머신 승부 벳 놀 검소 — Calgary Roughnecks",
-    "[신규] [최진 칼럼] 차기 대권주자들을 통해 보는 정국 향방은 — 주간한국"
+    "신규 18건, 실패 0건, 13초",
+    "[신규] [포토] 이준석, 호쾌한 샷으로 시작 — 이데일리",
+    "[신규] 조국 \"민주당 정신 차려라…내란 격퇴 연합 해체 임계점\" — 한국경제",
+    "[신규] 스캐터는 위치와 상관없이 세나요? 비키니 워리어 즈 게임 규칙 문답 — Calgary Roughnecks",
+    "[신규] 카지노 외형 AI 시대 디자인 패턴: 역사, 현황 및 미래 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37891362700,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37891362700",
-  "request_id": "cron-202610090600",
+  "run_id": 37908592522,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37908592522",
+  "request_id": "cron-202610090900",
   "trigger": "schedule",
-  "started_at": "2026-10-09T15:01:47+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-09T18:01:58+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 93건"
+      "summary": "검색어 5개에서 73건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 79건 (신규 23건) · Calgary Roughnecks 26건, 뉴시스 4건, 머니투데이 4건"
+      "summary": "오늘 97건 (신규 18건) · Calgary Roughnecks 33건, 뉴시스 5건, 머니투데이 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-09T15:02:02+09:00"
+  "updated_at": "2026-10-09T18:02:12+09:00"
 }
