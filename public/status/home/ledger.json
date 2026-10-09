@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 10월 10/9 쿠팡(쿠페이) 31,400원 (생활비)"
+    "[추가] 2026년 10월 10/9 GS25세계로병원점 6,500원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 37879088917,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37879088917",
-  "request_id": "cron-202610090323",
+  "run_id": 37880010707,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37880010707",
+  "request_id": "cron-202610090335",
   "trigger": "schedule",
-  "started_at": "2026-10-09T12:24:25+09:00",
+  "started_at": "2026-10-09T12:37:09+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-09T12:24:29+09:00"
+  "updated_at": "2026-10-09T12:37:12+09:00"
 }
