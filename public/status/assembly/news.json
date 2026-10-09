@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 14초",
+  "summary": "신규 3건, 실패 0건, 12초",
   "counts": {
-    "new": 4,
+    "new": 3,
     "failed": 0,
-    "total": 3678
+    "total": 3681
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 14초",
-    "[신규] 국감장에 로봇이 '성큼성큼', \"퇴장해주세요\" 했더니‥ — MBC 뉴스",
-    "[신규] 규칙을 먼저 읽고 싶은 분들을 위한 세븐포커 확률 — Calgary Roughnecks",
-    "[신규] 기본 규칙에서 보너스 규칙으로 넘어가는 슬롯 사이트 꿀팁 — Calgary Roughnecks",
-    "[신규] 착공 뒤 거듭된 예산 삭감…성포광장, 시민은 언제 다시 이용하나 — 경기연합신문"
+    "신규 3건, 실패 0건, 12초",
+    "[신규] 현금 바둑이 심벌별 역할과 표시 위치 — Calgary Roughnecks",
+    "[신규] PC에서 버튼이 작게 보일 때, 메이플 랜드 슬롯 가격 화면 점검 — Calgary Roughnecks",
+    "[신규] \"조폭·깡패\" 막말 난무…'쇼츠' 노린 정쟁에 얼룩진 1주차 국감 — 진일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37970446163,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37970446163",
-  "request_id": "cron-202610091800",
+  "run_id": 37990814071,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37990814071",
+  "request_id": "cron-202610092100",
   "trigger": "schedule",
-  "started_at": "2026-10-10T03:02:36+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-10T06:01:42+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 52건"
+      "summary": "검색어 5개에서 45건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 12건 (신규 4건) · Calgary Roughnecks 9건, MBC 뉴스 1건, 경기연합신문 1건"
+      "summary": "오늘 15건 (신규 3건) · Calgary Roughnecks 11건, MBC 뉴스 1건, 경기연합신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-10T03:02:50+09:00"
+  "updated_at": "2026-10-10T06:01:55+09:00"
 }
