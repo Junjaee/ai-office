@@ -3,37 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 2,
+    "new": 4,
     "failed": 0,
-    "total": 3582
+    "total": 3586
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 2건, 실패 0건, 12초",
-    "[신규] 이범석호, 국비확보 그라운드 홈런 쾅 칠까 — 동양일보",
-    "[신규] 경기도의회 여야, 추경안 놓고 한목소리 “민생예산 협상 나서라” — 한국글로벌뉴스"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] 게임 종류를 나누는 기준부터 알아두는 유후인 토토로 샵 — Calgary Roughnecks",
+    "[신규] 플레이가 멈춘 것처럼 보일 때, 바카라 2군 상태 표시 — Calgary Roughnecks",
+    "[신규] [국감] 대화 나누는 재경위 與野 간사 — 뉴스1",
+    "[신규] [경기도의회 국민의힘 기자회견문] 경기도는 도민의 엄중한 경고를 직시하고 의회가 제안한 민생 예산 복원안을 즉각 수용하라! — 더최고신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37843659669,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37843659669",
-  "request_id": "cron-202610082100",
+  "run_id": 37862577079,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37862577079",
+  "request_id": "cron-202610090000",
   "trigger": "schedule",
-  "started_at": "2026-10-09T06:01:12+09:00",
+  "started_at": "2026-10-09T09:01:39+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 146건"
+      "summary": "검색어 5개에서 141건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 24건 (신규 2건) · Calgary Roughnecks 5건, 머니투데이 3건, YTN 1건"
+      "summary": "오늘 28건 (신규 4건) · Calgary Roughnecks 7건, 머니투데이 3건, 뉴스1 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-09T06:01:25+09:00"
+  "updated_at": "2026-10-09T09:01:53+09:00"
 }
