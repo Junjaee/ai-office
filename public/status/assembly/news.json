@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 10초",
+  "summary": "신규 8건, 실패 0건, 13초",
   "counts": {
-    "new": 11,
+    "new": 8,
     "failed": 0,
-    "total": 3666
+    "total": 3674
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 10초",
-    "[신규] 경마장역 연구원를 위한 사물인터넷 핵심 전략 — Calgary Roughnecks",
-    "[신규] 스마트폰 회전 후 점검할 카지노 필리핀 촬영 메뉴 위치 — Calgary Roughnecks",
-    "[신규] 화성특례시의회 이계철 의장 \"저도 주민자치에서 시작했다\"… 주민자치위원 격려 — 경기타임스 e",
-    "[신규] 화성특례시의회, 주민자치 소통 한마당서 자치위원 격려 — 한스경제"
+    "신규 8건, 실패 0건, 13초",
+    "[신규] \"교원의 교육활동을 보장하라\" 교원3단체 국회 앞 공동집회 | — 교육언론[창]",
+    "[신규] 게임 소개 문구와 실제 기능을 대조하는 토토 돈 따는 법 디시 — Calgary Roughnecks",
+    "[신규] 선택한 설정을 되돌리는 필리핀 카지노 옵션 안내 — Calgary Roughnecks",
+    "[신규] 게임 규칙에서 숫자가 중요한 부분을 찾는 룰렛 돌리기 게임 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37927355626,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37927355626",
-  "request_id": "cron-202610091200",
+  "run_id": 37948605204,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37948605204",
+  "request_id": "cron-202610091500",
   "trigger": "schedule",
-  "started_at": "2026-10-09T21:01:57+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-10-10T00:02:13+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 64건"
+      "summary": "검색어 5개에서 56건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 108건 (신규 11건) · Calgary Roughnecks 38건, 뉴시스 5건, 머니투데이 4건"
+      "summary": "오늘 8건 (신규 8건) · Calgary Roughnecks 7건, 교육언론[창] 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-09T21:02:07+09:00"
+  "updated_at": "2026-10-10T00:02:27+09:00"
 }
