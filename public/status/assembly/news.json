@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 28건, 실패 0건, 13초",
   "counts": {
-    "new": 4,
+    "new": 28,
     "failed": 0,
-    "total": 3586
+    "total": 3614
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] 게임 종류를 나누는 기준부터 알아두는 유후인 토토로 샵 — Calgary Roughnecks",
-    "[신규] 플레이가 멈춘 것처럼 보일 때, 바카라 2군 상태 표시 — Calgary Roughnecks",
-    "[신규] [국감] 대화 나누는 재경위 與野 간사 — 뉴스1",
-    "[신규] [경기도의회 국민의힘 기자회견문] 경기도는 도민의 엄중한 경고를 직시하고 의회가 제안한 민생 예산 복원안을 즉각 수용하라! — 더최고신문"
+    "신규 28건, 실패 0건, 13초",
+    "[신규] 윤석열도 뒤집혔다… 몸 푸는 오세훈 — 에너지경제신문",
+    "[신규] 각 단계에 적용되는 규칙을 찾는 토토 계정 매입 제로사이트 구조 설명 — Calgary Roughnecks",
+    "[신규] 강승규 의원, 농지은행이 아니라 “논 은행” 최근 5년 매입 농지 94%는 논·96%는 농업진흥지역 — 시민행정신문",
+    "[신규] 업데이트 전후 규칙을 대조하는 토네이도 슬롯 변경 사항 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37862577079,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37862577079",
-  "request_id": "cron-202610090000",
+  "run_id": 37877314942,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37877314942",
+  "request_id": "cron-202610090300",
   "trigger": "schedule",
-  "started_at": "2026-10-09T09:01:39+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-09T12:01:38+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 141건"
+      "summary": "검색어 5개에서 110건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 28건 (신규 4건) · Calgary Roughnecks 7건, 머니투데이 3건, 뉴스1 2건"
+      "summary": "오늘 56건 (신규 28건) · Calgary Roughnecks 15건, 머니투데이 4건, 뉴스1 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-09T09:01:53+09:00"
+  "updated_at": "2026-10-09T12:01:52+09:00"
 }
