@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 5건, 실패 0건, 11초",
   "counts": {
-    "new": 4,
+    "new": 5,
     "failed": 0,
-    "total": 3694
+    "total": 3699
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] [KPGA 어메이징크리 오픈 2R] 1.배용준 -12, T2.브랜든 케왈라마니-김용태 -8, 4.박은신 -7, T5.정재현2575-박정훈-박상현-박태완-김범수-이대한-전성현-문동현-문도엽-임채욱-조우영 -6 — 골프경제신문",
-    "[신규] “군대 안 갑니다”와 “지금 무직입니다” 사이 [안덕기의 프리에이전트] — 데일리안",
-    "[신규] 개혁신당 \"정동영, 대한민국 외교·안보의 짐...교체해야\" — YTN",
-    "[신규] 경기도의회 국민의힘 “민생 외면한 추경…도민 절규에 답해야” — 파주타임스"
+    "신규 5건, 실패 0건, 11초",
+    "[신규] 재정경제기획위원회, 기획예산처 국정감사 실시 — 글로벌뉴스통신GNA",
+    "[신규] \"최악 엔딩\" 더 커뮤니티2 마지막화 결말 심각한 여론..권성민 PD 입장은? (스포, 우승자, 루나) — www.artivenews.co.kr",
+    "[신규] 개혁신당 “정동영 교체하라”… 이재명 외교안보 라인 전면 쇄신 촉구 — 독립신문",
+    "[신규] 국힘 \"정동영, 北 모욕에도 저자세로 일관…경질해야\" — 조선일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38029400406,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38029400406",
-  "request_id": "cron-202610100600",
+  "run_id": 38039870951,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38039870951",
+  "request_id": "cron-202610100900",
   "trigger": "schedule",
-  "started_at": "2026-10-10T15:00:32+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-10T18:01:16+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 29건"
+      "summary": "검색어 5개에서 27건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 28건 (신규 4건) · Calgary Roughnecks 15건, 데일리안 2건, MBC 뉴스 1건"
+      "summary": "오늘 33건 (신규 5건) · Calgary Roughnecks 15건, 데일리안 2건, MBC 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-10T15:00:44+09:00"
+  "updated_at": "2026-10-10T18:01:27+09:00"
 }
