@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 12초",
+  "summary": "신규 6건, 실패 0건, 12초",
   "counts": {
-    "new": 3,
+    "new": 6,
     "failed": 0,
-    "total": 3681
+    "total": 3687
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 12초",
-    "[신규] 현금 바둑이 심벌별 역할과 표시 위치 — Calgary Roughnecks",
-    "[신규] PC에서 버튼이 작게 보일 때, 메이플 랜드 슬롯 가격 화면 점검 — Calgary Roughnecks",
-    "[신규] \"조폭·깡패\" 막말 난무…'쇼츠' 노린 정쟁에 얼룩진 1주차 국감 — 진일보"
+    "신규 6건, 실패 0건, 12초",
+    "[신규] [뉴스분석] 장동혁 밖 범보수 꿈틀…한동훈·김문수·오세훈, 포럼·정책연대 활발 — 뉴스핌",
+    "[신규] 꿈틀거리는 野 잠룡들…물밑 당권경쟁 본격화됐나 — 데일리안",
+    "[신규] 복잡한 설명에서 기준을 찾는 별 카지노 프로모션 규칙 읽기 — Calgary Roughnecks",
+    "[신규] 터치 실수를 줄이기 위해 볼 무료 룰렛 온라인 플레이 버튼 간격 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 37990814071,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37990814071",
-  "request_id": "cron-202610092100",
+  "run_id": 38007078712,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38007078712",
+  "request_id": "cron-202610100000",
   "trigger": "schedule",
-  "started_at": "2026-10-10T06:01:42+09:00",
+  "started_at": "2026-10-10T09:00:31+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 45건"
+      "summary": "검색어 5개에서 42건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 15건 (신규 3건) · Calgary Roughnecks 11건, MBC 뉴스 1건, 경기연합신문 1건"
+      "summary": "오늘 21건 (신규 6건) · Calgary Roughnecks 14건, MBC 뉴스 1건, 경기연합신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-10T06:01:55+09:00"
+  "updated_at": "2026-10-10T09:00:45+09:00"
 }
