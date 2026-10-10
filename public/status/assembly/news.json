@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 11초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 3,
+    "new": 4,
     "failed": 0,
-    "total": 3690
+    "total": 3694
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 11초",
-    "[신규] 자주 묻는 조작 질문에 답하는 에볼루션 배팅거절 — Calgary Roughnecks",
-    "[신규] 김영옥 서울시의회 예결위 부위원장 '관행적 낭비 예산 핀셋 검증…'약자 복지' 사각지대 지운다' — 데일리한국",
-    "[신규] ▒종합 경제정보 미디어 - 이데일리IR▒ — ir.edaily.co.kr"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] [KPGA 어메이징크리 오픈 2R] 1.배용준 -12, T2.브랜든 케왈라마니-김용태 -8, 4.박은신 -7, T5.정재현2575-박정훈-박상현-박태완-김범수-이대한-전성현-문동현-문도엽-임채욱-조우영 -6 — 골프경제신문",
+    "[신규] “군대 안 갑니다”와 “지금 무직입니다” 사이 [안덕기의 프리에이전트] — 데일리안",
+    "[신규] 개혁신당 \"정동영, 대한민국 외교·안보의 짐...교체해야\" — YTN",
+    "[신규] 경기도의회 국민의힘 “민생 외면한 추경…도민 절규에 답해야” — 파주타임스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38018989085,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38018989085",
-  "request_id": "cron-202610100300",
+  "run_id": 38029400406,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38029400406",
+  "request_id": "cron-202610100600",
   "trigger": "schedule",
-  "started_at": "2026-10-10T12:00:34+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-10T15:00:32+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 28건"
+      "summary": "검색어 5개에서 29건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 24건 (신규 3건) · Calgary Roughnecks 15건, MBC 뉴스 1건, ir.edaily.co.kr 1건"
+      "summary": "오늘 28건 (신규 4건) · Calgary Roughnecks 15건, 데일리안 2건, MBC 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-10T12:00:46+09:00"
+  "updated_at": "2026-10-10T15:00:44+09:00"
 }
