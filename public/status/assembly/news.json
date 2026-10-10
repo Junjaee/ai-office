@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 11초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 5,
+    "new": 4,
     "failed": 0,
-    "total": 3699
+    "total": 3703
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 11초",
-    "[신규] 재정경제기획위원회, 기획예산처 국정감사 실시 — 글로벌뉴스통신GNA",
-    "[신규] \"최악 엔딩\" 더 커뮤니티2 마지막화 결말 심각한 여론..권성민 PD 입장은? (스포, 우승자, 루나) — www.artivenews.co.kr",
-    "[신규] 개혁신당 “정동영 교체하라”… 이재명 외교안보 라인 전면 쇄신 촉구 — 독립신문",
-    "[신규] 국힘 \"정동영, 北 모욕에도 저자세로 일관…경질해야\" — 조선일보"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] 국힘 “北김여정 조롱에도 정동영은 저자세… 역량부족, 즉각 사퇴해야” — 천지일보",
+    "[신규] 국세청, 재경부에 건의한 세법개정안, 반영률 18.7% 그쳐 — 부산일보",
+    "[신규] “도지사에게 비밀 일정?”…추미애, 민주당 자료 요구에 ‘불쾌감’ — 이데일리",
+    "[신규] 교육감협의회 “초·중등교육 빠진 미래대응기금 안 된다”…국회에 교부금 개편 재검토 촉구 — 한국공공정책신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38039870951,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38039870951",
-  "request_id": "cron-202610100900",
+  "run_id": 38050414829,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38050414829",
+  "request_id": "cron-202610101200",
   "trigger": "schedule",
-  "started_at": "2026-10-10T18:01:16+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-10T21:01:18+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 27건"
+      "summary": "검색어 5개에서 25건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 33건 (신규 5건) · Calgary Roughnecks 15건, 데일리안 2건, MBC 뉴스 1건"
+      "summary": "오늘 37건 (신규 4건) · Calgary Roughnecks 15건, 데일리안 2건, MBC 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-10T18:01:27+09:00"
+  "updated_at": "2026-10-10T21:01:31+09:00"
 }
