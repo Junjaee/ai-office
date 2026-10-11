@@ -14,11 +14,11 @@
     "신규 0건, 전송 0건, 실패 0건, 14초"
   ],
   "link": "",
-  "run_id": 38007082757,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38007082757",
-  "request_id": "cron-202610100000",
+  "run_id": 38096998895,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38096998895",
+  "request_id": "cron-202610110000",
   "trigger": "schedule",
-  "started_at": "2026-10-10T09:00:33+09:00",
+  "started_at": "2026-10-11T09:01:52+09:00",
   "duration_sec": 14,
   "tasks": [
     {
@@ -33,5 +33,5 @@
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-10-10T09:00:48+09:00"
+  "updated_at": "2026-10-11T09:02:07+09:00"
 }
