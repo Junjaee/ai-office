@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 10월 10/12 쿠팡(쿠페이) 5,990원 (생활비)"
+    "[추가] 2026년 10월 10/12 네이버페이 3,000원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 38150277149,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38150277149",
-  "request_id": "cron-202610111511",
+  "run_id": 38151666935,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38151666935",
+  "request_id": "cron-202610111531",
   "trigger": "schedule",
-  "started_at": "2026-10-12T00:12:39+09:00",
+  "started_at": "2026-10-12T00:32:31+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-12T00:12:43+09:00"
+  "updated_at": "2026-10-12T00:32:35+09:00"
 }
