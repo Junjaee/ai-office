@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 13건, 실패 0건, 12초",
+  "summary": "신규 12건, 실패 0건, 11초",
   "counts": {
-    "new": 13,
+    "new": 12,
     "failed": 0,
-    "total": 3743
+    "total": 3755
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 13건, 실패 0건, 12초",
-    "[신규] 이준석 “내가 미국서 대학 다녔지만 한동훈 딸 의혹 신빙성 없다” — 위키트리",
-    "[신규] 처음 보는 메뉴를 이해하는 무료 베팅 도구 인터페이스 해설 — Calgary Roughnecks",
-    "[신규] 화성특례시의회, 제12회 의장기 축구대회서 생활체육 동호인 격려 — 경기인터넷신문, 비전21뉴스",
-    "[신규] 모바일로 접속했을 때 달라지는 프로미넌스 포커 치트엔진 화면 구성 — Calgary Roughnecks"
+    "신규 12건, 실패 0건, 11초",
+    "[신규] 김문수 의원, 12만명 개인정보 유출 연구재단, 7억 과징금에도 책임자 징계는 ‘0명’ — 시민행정신문",
+    "[신규] 박정현 의원, 땀 흘려 가꾼 농산물 털리는 농가… 검거율 절반 그치고, 피해액은 1년 새 약 2.3배 급증 — 시민행정신문",
+    "[신규] 허종식 의원 “농장 해썹 99.9%, 전화 한 통으로 평가…최대 6년간 현장 확인 ‘전무’” — 시민행정신문",
+    "[신규] 카지노 게임 뱃무브 의 미래: 새로운 트렌드와 발전 방향 - 스텝 바이 스텝 가이드 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38126832071,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38126832071",
-  "request_id": "cron-202610110900",
+  "run_id": 38137649129,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38137649129",
+  "request_id": "cron-202610111200",
   "trigger": "schedule",
-  "started_at": "2026-10-11T18:01:13+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-11T21:01:13+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 39건"
+      "summary": "검색어 5개에서 37건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 40건 (신규 13건) · Calgary Roughnecks 19건, 시민행정신문 2건, ISSUE ON (이슈온) 1건"
+      "summary": "오늘 52건 (신규 12건) · Calgary Roughnecks 22건, 시민행정신문 8건, ISSUE ON (이슈온) 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-11T18:01:26+09:00"
+  "updated_at": "2026-10-11T21:01:25+09:00"
 }
