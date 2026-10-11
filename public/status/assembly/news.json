@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 14초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 9,
+    "new": 4,
     "failed": 0,
-    "total": 3764
+    "total": 3768
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 14초",
-    "[신규] 개혁신당, ‘제2의 윤석열’ 공방에 “거울부터 보기 — 한국사회복지저널",
-    "[신규] 개혁신당, AI 해킹 위험 확인에도 금융회사 7곳 침해사고 비판 — 한국사회복지저널",
-    "[신규] 처음 접속한 화면에서 할 일, 파라곤 카지노 — Calgary Roughnecks",
-    "[신규] 개혁신당, 대법관 공석·재제청 논란에 '적법한 표결' 촉구 — 한국사회복지저널"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] 문진석 의원, '유리지갑 방어법' 대표발의… \"월급 30% 오를 때 세금 79% 올라\" — 시민행정신문",
+    "[신규] 최기상 의원, 방산업 관련 사고재해자 5년 반 동안 128명…3명 중 1명은 청년 — 시민행정신문",
+    "[신규] 김현정 의원 “신한은행 해킹 사고, 은행장 법적 책임지고, 성과급 환수·배상해야” — 시민행정신문",
+    "[신규] 국힘 미래대응기금 반대 — 전북중앙"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38149498571,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38149498571",
-  "request_id": "cron-202610111500",
+  "run_id": 38162031826,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38162031826",
+  "request_id": "cron-202610111800",
   "trigger": "schedule",
-  "started_at": "2026-10-12T00:01:14+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-12T03:01:24+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 44건"
+      "summary": "검색어 5개에서 48건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 9건 (신규 9건) · 한국사회복지저널 5건, Calgary Roughnecks 2건, 경남매일 1건"
+      "summary": "오늘 13건 (신규 4건) · 한국사회복지저널 5건, 시민행정신문 3건, Calgary Roughnecks 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-12T00:01:28+09:00"
+  "updated_at": "2026-10-12T03:01:37+09:00"
 }
