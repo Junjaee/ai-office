@@ -3,35 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 실패 0건, 12초",
+  "summary": "신규 5건, 실패 0건, 12초",
   "counts": {
-    "new": 0,
+    "new": 5,
     "failed": 0,
-    "total": 3706
+    "total": 3711
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 0건, 실패 0건, 12초"
+    "신규 5건, 실패 0건, 12초",
+    "[신규] 기능이 끝났는데 화면이 남아 있다면? 황제 포커 — Calgary Roughnecks",
+    "[신규] 이계철 화성특례시의회 의장 “주민자치의 시작은 주민의 목소리, 완성은 함께 만드는 변화” — 서프라이즈뉴스",
+    "[신규] 화성특례시의회, ‘2026년 화성특례시 주민자치 소통 한마당’ 참석 — 뉴스피크",
+    "[신규] '강적들' 조희대 대법원장 작심 발언부터 SNS 재개한 李 대통령 여론전까지 — 지피코리아"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38085997125,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38085997125",
-  "request_id": "cron-202610102100",
+  "run_id": 38096996786,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38096996786",
+  "request_id": "cron-202610110000",
   "trigger": "schedule",
-  "started_at": "2026-10-11T06:01:42+09:00",
+  "started_at": "2026-10-11T09:01:45+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 19건"
+      "summary": "검색어 5개에서 22건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 3건 (신규 0건) · ISSUE ON (이슈온) 1건, 이데일리 1건, 천지일보 1건"
+      "summary": "오늘 8건 (신규 5건) · Calgary Roughnecks 1건, ISSUE ON (이슈온) 1건, 뉴스피크 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-11T06:01:55+09:00"
+  "updated_at": "2026-10-11T09:01:58+09:00"
 }
