@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 11초",
+  "summary": "신규 23건, 실패 0건, 13초",
   "counts": {
-    "new": 10,
+    "new": 23,
     "failed": 0,
-    "total": 3779
+    "total": 3802
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 11초",
-    "[신규] 한병도 의원, 야차룰’ 등 신종 학폭 가해학생 조치 10건 중 8건 ‘사과·봉사’로 끝나 — 시민행정신문",
-    "[신규] 걷지 못한 과태료만 463억 원, “불법스팸 과태료, 5년째 수납률 한 자릿수… 체납 장기화 해결 계획 필요해” — 시민행정신문",
-    "[신규] [국감] 박해철 의원, 건설사 산재보험급여 3년 새 71% 폭증. ㈜한화는 납부 보험료의 96.6% 지급 — 시민행정신문",
-    "[신규] 민주 35.5% 국힘 41.3%…국힘, 오차범위 내 역전[리얼미터] — 뉴시스"
+    "신규 23건, 실패 0건, 13초",
+    "[신규] [2026국감] 이준석 “예금토큰 원장 누가 관리하나”…신현송 “개인정보는 은행이” — SR타임스",
+    "[신규] 한은 총재 \"프로젝트 한강, 개인정보 감시 우려 없어\" — 연합뉴스",
+    "[신규] [2026 미리 보는 국정감사 이슈] 대방건설 택지 전매 무죄 확정…개발이익 과세는 — 코리아리포트",
+    "[신규] 아시안게임 첫 무대서 '금빛 역사'… 테크볼·크라쉬, 金 따고도 존립 걱정 — livesnews.com"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38186375714,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38186375714",
-  "request_id": "cron-202610120000",
+  "run_id": 38198039267,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38198039267",
+  "request_id": "cron-202610120300",
   "trigger": "schedule",
-  "started_at": "2026-10-12T09:01:07+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-12T12:01:05+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 50건"
+      "summary": "검색어 5개에서 73건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 24건 (신규 10건) · 시민행정신문 6건, 한국사회복지저널 5건, Calgary Roughnecks 4건"
+      "summary": "오늘 47건 (신규 23건) · 시민행정신문 10건, Calgary Roughnecks 5건, 한국사회복지저널 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-12T09:01:19+09:00"
+  "updated_at": "2026-10-12T12:01:19+09:00"
 }
