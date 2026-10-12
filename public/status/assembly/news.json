@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 34건, 실패 0건, 12초",
+  "summary": "신규 19건, 실패 0건, 12초",
   "counts": {
-    "new": 34,
+    "new": 19,
     "failed": 0,
-    "total": 3861
+    "total": 3880
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 34건, 실패 0건, 12초",
-    "[신규] [영상] 이준석 “프로젝트 한강, 안전한가?” — TV서울",
-    "[신규] [포토] 한국은행 국정감사 질의하는 이준석 의원 — 천지일보",
-    "[신규] 이준석 '나라장터 해커톤' 1,295억 집계, 믿을만 한가… 39%는 시중가 아닌 조달 단가 비교, 30%는 근거 미확인 — 조달경제신문",
-    "[신규] '아시안게임 金' 테크볼·쿠라시 단체, 실업팀 창단 공동 호소 — MBC 뉴스"
+    "신규 19건, 실패 0건, 12초",
+    "[신규] 국민의힘·개혁신당, 경기 지역 인선 '난기류' — 인천일보",
+    "[신규] ‘수시 먹통 구제’ 탈락 차점자에 “조치 검토”…대교협, ‘땜질 대책’ 내놓나 — 한겨레",
+    "[신규] “여성 징병제 검토해야”…20대 의견은? — 채널A",
+    "[신규] 대교협 \"수험번호 난수화, 이번 정시 도입은 상당히 고민스러워\" — 연합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38227187523,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38227187523",
-  "request_id": "cron-202610120900",
+  "run_id": 38246386081,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38246386081",
+  "request_id": "cron-202610121200",
   "trigger": "schedule",
-  "started_at": "2026-10-12T18:01:44+09:00",
+  "started_at": "2026-10-12T21:01:47+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 128건"
+      "summary": "검색어 5개에서 134건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 106건 (신규 34건) · 시민행정신문 10건, 글로벌이코노믹 9건, Calgary Roughnecks 6건"
+      "summary": "오늘 125건 (신규 19건) · 시민행정신문 10건, Calgary Roughnecks 9건, 글로벌이코노믹 9건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-12T18:01:57+09:00"
+  "updated_at": "2026-10-12T21:02:00+09:00"
 }
