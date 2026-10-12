@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 19건, 실패 0건, 12초",
+  "summary": "신규 3건, 실패 0건, 12초",
   "counts": {
-    "new": 19,
+    "new": 3,
     "failed": 0,
-    "total": 3880
+    "total": 3883
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 19건, 실패 0건, 12초",
-    "[신규] 국민의힘·개혁신당, 경기 지역 인선 '난기류' — 인천일보",
-    "[신규] ‘수시 먹통 구제’ 탈락 차점자에 “조치 검토”…대교협, ‘땜질 대책’ 내놓나 — 한겨레",
-    "[신규] “여성 징병제 검토해야”…20대 의견은? — 채널A",
-    "[신규] 대교협 \"수험번호 난수화, 이번 정시 도입은 상당히 고민스러워\" — 연합뉴스"
+    "신규 3건, 실패 0건, 12초",
+    "[신규] [국감 말·말·말](12일) — 연합뉴스",
+    "[신규] [오늘의 정치일정] 10월 12일(월) — 뉴스핌",
+    "[신규] 경북도의회 예결위, 13일부터 2025회계연도 결산심사 착수 — 프라임경북뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38246386081,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38246386081",
-  "request_id": "cron-202610121200",
+  "run_id": 38267175418,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38267175418",
+  "request_id": "cron-202610121500",
   "trigger": "schedule",
-  "started_at": "2026-10-12T21:01:47+09:00",
+  "started_at": "2026-10-13T00:02:02+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 134건"
+      "summary": "검색어 5개에서 129건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 125건 (신규 19건) · 시민행정신문 10건, Calgary Roughnecks 9건, 글로벌이코노믹 9건"
+      "summary": "오늘 3건 (신규 3건) · 뉴스핌 1건, 연합뉴스 1건, 프라임경북뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-12T21:02:00+09:00"
+  "updated_at": "2026-10-13T00:02:15+09:00"
 }
