@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 13초",
   "counts": {
-    "new": 5,
+    "new": 4,
     "failed": 0,
-    "total": 3888
+    "total": 3892
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 12초",
-    "[신규] 병무청장 “병역특례 폐지, 국방개혁 기본계획으로 곧 발표” — 서울경제",
-    "[신규] 휴대폰 화면 밝기와 함께 점검할 토토 사이트 레벨 업 가독성 — Calgary Roughnecks",
-    "[신규] 화면에 보이는 금액의 의미부터 짚는 토토 개발자 제로 — Calgary Roughnecks",
-    "[신규] 새로운 기능이 추가됐는지 보는 마작퍼즐 변경 정보 — Calgary Roughnecks"
+    "신규 4건, 실패 0건, 13초",
+    "[신규] 토토 범죄도시 인식 디자인 패턴 상세 설명 — Calgary Roughnecks",
+    "[신규] [오늘의 국감일정] 법사위·행안위·재경위 등 12개 상임위 - 10월 13일 — 뉴스핌",
+    "[신규] 국회 재경위, 오늘 국세청 국감…부동산·가상자산 등 쟁점 — 조세일보",
+    "[신규] 경기도의회 국힘 \"경기도 양당 합의 429억 원 추경안 즉각 수용하라\" — 와이뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38288084695,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38288084695",
-  "request_id": "cron-202610121800",
+  "run_id": 38307901877,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38307901877",
+  "request_id": "cron-202610122100",
   "trigger": "schedule",
-  "started_at": "2026-10-13T03:01:42+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-13T06:01:17+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 127건"
+      "summary": "검색어 5개에서 132건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 8건 (신규 5건) · Calgary Roughnecks 3건, 뉴스핌 1건, 더최고신문 1건"
+      "summary": "오늘 12건 (신규 4건) · Calgary Roughnecks 4건, 뉴스핌 2건, 더최고신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-13T03:01:54+09:00"
+  "updated_at": "2026-10-13T06:01:31+09:00"
 }
