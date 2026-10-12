@@ -3,36 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 13초",
+  "summary": "신규 10건, 실패 0건, 11초",
   "counts": {
-    "new": 1,
+    "new": 10,
     "failed": 0,
-    "total": 3769
+    "total": 3779
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 13초",
-    "[신규] [오늘의 국감일정] 정무위·재경위·행안위 등 12개 상임위 - 10월 12일 — 뉴스핌"
+    "신규 10건, 실패 0건, 11초",
+    "[신규] 한병도 의원, 야차룰’ 등 신종 학폭 가해학생 조치 10건 중 8건 ‘사과·봉사’로 끝나 — 시민행정신문",
+    "[신규] 걷지 못한 과태료만 463억 원, “불법스팸 과태료, 5년째 수납률 한 자릿수… 체납 장기화 해결 계획 필요해” — 시민행정신문",
+    "[신규] [국감] 박해철 의원, 건설사 산재보험급여 3년 새 71% 폭증. ㈜한화는 납부 보험료의 96.6% 지급 — 시민행정신문",
+    "[신규] 민주 35.5% 국힘 41.3%…국힘, 오차범위 내 역전[리얼미터] — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38174602010,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38174602010",
-  "request_id": "cron-202610112100",
+  "run_id": 38186375714,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38186375714",
+  "request_id": "cron-202610120000",
   "trigger": "schedule",
-  "started_at": "2026-10-12T06:01:26+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-12T09:01:07+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 44건"
+      "summary": "검색어 5개에서 50건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 14건 (신규 1건) · 한국사회복지저널 5건, 시민행정신문 3건, Calgary Roughnecks 2건"
+      "summary": "오늘 24건 (신규 10건) · 시민행정신문 6건, 한국사회복지저널 5건, Calgary Roughnecks 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-12T06:01:40+09:00"
+  "updated_at": "2026-10-12T09:01:19+09:00"
 }
