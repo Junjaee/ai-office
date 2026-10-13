@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 13초",
+  "summary": "신규 18건, 실패 0건, 15초",
   "counts": {
-    "new": 11,
+    "new": 18,
     "failed": 0,
-    "total": 3903
+    "total": 3921
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 13초",
-    "[신규] 김병주 “밤새 술 먹는 개고기 팔아놓고” VS 이준석 “대통령이 투뿔 한우로 보이나” — 주간경향",
-    "[신규] 김병주 \"개고기 속여 팔아 놓고\" vs 이준석 \"대통령에게 잘 보이려 난리\" — 뉴스1",
-    "[신규] 박정 의원, 고용노동부 재정사업 고용효과 평균 이하 — 시민행정신문",
-    "[신규] [기자수첩] '몇 배 비싸다' 옆에 업체 이름만… 나라장터 가격 검증, 정확해야 힘 실린다 — 조달경제신문"
+    "신규 18건, 실패 0건, 15초",
+    "[신규] 김병주 “양두구육 장본인이 대통령 험담” 이준석 “이런다고 국방장관 기회 있는줄 아나” — 경향신문",
+    "[신규] '뚝심 대장' 장동혁의 최장수 당대표 기록 갱신 눈앞...연임 가능성 제기 — 계룡일보",
+    "[신규] 문금주 국회의원, 교육부 특별교부금 53.2억 원 확보… 고보장강 교육환경 개선 박차 — 시민행정신문",
+    "[신규] 김남국 의원,“월드컵 중계중단 위기에도 원천 중계권자 직접 확인 안 해…보편적 시청권 감독 공백” — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38325093634,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38325093634",
-  "request_id": "cron-202610130000",
+  "run_id": 38339642486,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38339642486",
+  "request_id": "cron-202610130300",
   "trigger": "schedule",
-  "started_at": "2026-10-13T09:01:17+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-13T12:01:20+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 132건"
+      "summary": "검색어 5개에서 113건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 23건 (신규 11건) · Calgary Roughnecks 4건, 시민행정신문 3건, 뉴스핌 2건"
+      "summary": "오늘 41건 (신규 18건) · 시민행정신문 14건, Calgary Roughnecks 4건, 경향신문 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-13T09:01:31+09:00"
+  "updated_at": "2026-10-13T12:01:35+09:00"
 }
