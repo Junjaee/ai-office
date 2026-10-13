@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 19건, 실패 0건, 11초",
+  "summary": "신규 7건, 실패 0건, 13초",
   "counts": {
-    "new": 19,
+    "new": 7,
     "failed": 0,
-    "total": 3963
+    "total": 3970
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 19건, 실패 0건, 11초",
-    "[신규] 종교 간판 달고 정치집회서 헌금…이준석, 국세청에 \"편법 여부 살펴야\" — 머니투데이",
-    "[신규] 이준석 개혁신당 의원 국감 질의 — 뉴시스",
-    "[신규] \"이재명 근저당 거래, 사인간채무 아닌가\" 질문에 임광현 답변은? [국세청 국감] — 조세일보",
-    "[신규] 김병주 \"개고기 속여 팔아 놓고\" vs 이준석 \"대통령에 잘 보이려 난리\" — 뉴시스"
+    "신규 7건, 실패 0건, 13초",
+    "[신규] 임광현, 금융소득 종합과세 기준 상향 제안에 \"합리적\" [국세청 국감] — 조세일보",
+    "[신규] 서왕진 의원, “멸종위기종 300마리 중 72% '행방묘연'… 속 빈 강정 전락한 복원사업” — 시민행정신문",
+    "[신규] [2026 국감-재경위] 강민국 \"탈세·카드깡' 위장가맹점' 1만5714명 적발\"…금융당국 공동 대응 촉구 — 폴리뉴스 Polinews",
+    "[신규] [2026 국감] 가상자산 과세 석달 앞…임광현 \"완벽하진 않지만 준비 지연 없어\" (종합) — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38373591309,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38373591309",
-  "request_id": "cron-202610130900",
+  "run_id": 38395187025,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38395187025",
+  "request_id": "cron-202610131200",
   "trigger": "schedule",
-  "started_at": "2026-10-13T18:03:56+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-13T21:09:30+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 96건"
+      "summary": "검색어 5개에서 84건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 83건 (신규 19건) · 시민행정신문 20건, Calgary Roughnecks 9건, 뉴시스 8건"
+      "summary": "오늘 90건 (신규 7건) · 시민행정신문 21건, Calgary Roughnecks 9건, 뉴시스 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-13T18:04:08+09:00"
+  "updated_at": "2026-10-13T21:09:44+09:00"
 }
