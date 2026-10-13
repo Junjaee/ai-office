@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 12초",
+  "summary": "신규 19건, 실패 0건, 11초",
   "counts": {
-    "new": 23,
+    "new": 19,
     "failed": 0,
-    "total": 3944
+    "total": 3963
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 12초",
-    "[신규] [에브리리서치 여론조사] 범보수 인물 선호도, 장동혁 21.9%, 한동훈 15.8%, 오세훈 8.9%, 이준석 4.2%, 나경원 3.8%, 안철수 2.6% — 에브리뉴스 EveryNews",
-    "[신규] \"개고기 속여 팔아\"VS\"李는 '투뿔 한우'냐\" 김병주·이준석 '설전' — 한국일보",
-    "[신규] [에브리리서치] 범진보 정청래 12.9%·김민석 12.1%…범보수 장동혁 21.9%·한동훈 15.8% — 폴리뉴스 Polinews",
-    "[신규] 소병훈 의원, 전국 17개 마약류 중독재활센터 확대했지만, 단약 유지·취업·사회복귀 성과지표는 아직 없어 — 시민행정신문"
+    "신규 19건, 실패 0건, 11초",
+    "[신규] 종교 간판 달고 정치집회서 헌금…이준석, 국세청에 \"편법 여부 살펴야\" — 머니투데이",
+    "[신규] 이준석 개혁신당 의원 국감 질의 — 뉴시스",
+    "[신규] \"이재명 근저당 거래, 사인간채무 아닌가\" 질문에 임광현 답변은? [국세청 국감] — 조세일보",
+    "[신규] 김병주 \"개고기 속여 팔아 놓고\" vs 이준석 \"대통령에 잘 보이려 난리\" — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38354397073,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38354397073",
-  "request_id": "cron-202610130600",
+  "run_id": 38373591309,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38373591309",
+  "request_id": "cron-202610130900",
   "trigger": "schedule",
-  "started_at": "2026-10-13T15:01:32+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-13T18:03:56+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 107건"
+      "summary": "검색어 5개에서 96건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 64건 (신규 23건) · 시민행정신문 16건, Calgary Roughnecks 7건, 뉴시스 6건"
+      "summary": "오늘 83건 (신규 19건) · 시민행정신문 20건, Calgary Roughnecks 9건, 뉴시스 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-13T15:01:46+09:00"
+  "updated_at": "2026-10-13T18:04:08+09:00"
 }
