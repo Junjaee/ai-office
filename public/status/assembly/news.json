@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 13초",
+  "summary": "신규 13건, 실패 0건, 13초",
   "counts": {
-    "new": 23,
+    "new": 13,
     "failed": 0,
-    "total": 4050
+    "total": 4063
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 13초",
-    "[신규] 중국이 띄운 차세대 D램 기술…삼성전자도 \"개발 중\" — 연합뉴스",
-    "[신규] ‘SEDEX 2026’ 찾은 주요 인사들…차세대 반도체 기술 ‘관심’ — 뉴스투데이",
-    "[신규] SEDEX 달군 삼성·SK하닉 '기술 경쟁'..TSMC 언급에 \"더 잘하겠다\" — 머니투데이",
-    "[신규] [종합진단] 이준석 '나라장터 현상금 사냥' 문제없나 … 엿새 만에 1,464억 빼고 해커톤 합쳐 '1조3,774억' 찾았다 주장 — 조달경제신문"
+    "신규 13건, 실패 0건, 13초",
+    "[신규] '유퀴즈' 테크볼 이준석·이기찬·최수종♥하희라 부부 인생 이야기 — 국제뉴스",
+    "[신규] 삼성전자 \"셀 면적 줄인 D램 개발 중\"…中 추격에 대응 — 더팩트",
+    "[신규] 송재혁 삼성전자 CTO, 中 CXMT ‘4F²’ 위협에…“우리도 개발 중” — 동아일보",
+    "[신규] 중국이 예고한 차세대 D램 기술…삼성전자도 4F² 개발 중 — 아주경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38539316229,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38539316229",
-  "request_id": "cron-202610140900",
+  "run_id": 38560705968,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38560705968",
+  "request_id": "cron-202610141200",
   "trigger": "schedule",
-  "started_at": "2026-10-14T18:02:03+09:00",
+  "started_at": "2026-10-14T21:01:46+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 85건"
+      "summary": "검색어 5개에서 83건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 80건 (신규 23건) · 뉴시스 8건, 시민행정신문 8건, 이데일리 4건"
+      "summary": "오늘 93건 (신규 13건) · 뉴시스 8건, 시민행정신문 8건, 한국사회복지저널 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-14T18:02:16+09:00"
+  "updated_at": "2026-10-14T21:02:00+09:00"
 }
