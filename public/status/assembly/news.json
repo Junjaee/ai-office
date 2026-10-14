@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 16초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 3,
+    "new": 4,
     "failed": 0,
-    "total": 4078
+    "total": 4082
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 16초",
-    "[신규] 테크볼 金 이준석, 환호 빈도 이유 \"안세영 같은 대단한 선수 아니라서\"('유퀴즈') — OSEN",
-    "[신규] 종교집회서 걷은 헌금, 정치활동에 쓰였다면?…국세청 \"면밀히 검토\" — 이택스뉴스",
-    "[신규] 학원 불법행위 경고만으로는 한계…경기교육청, 첫 위반부터 정지 추진 — 현대경제"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] \"더 잘하겠습니다\"… K반도체 '양강' 출동 — 머니투데이",
+    "[신규] [단독]'나라장터'서 더 비싸게 팔린 中보디캠…\"보안위험·예산낭비 다잡아야\" — 머니투데이",
+    "[신규] [르포]가마솥에 담긴 가을의 풍요…이천쌀문화축제 '구름인파' — 노컷뉴스",
+    "[신규] [우보세] 유통기한 지난 세제 — 머니투데이"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38611600887,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38611600887",
-  "request_id": "cron-202610141800",
+  "run_id": 38636880241,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38636880241",
+  "request_id": "cron-202610142100",
   "trigger": "schedule",
-  "started_at": "2026-10-15T03:02:09+09:00",
-  "duration_sec": 16,
+  "started_at": "2026-10-15T06:01:30+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 89건"
+      "summary": "검색어 5개에서 91건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 15건 (신규 3건) · Calgary Roughnecks 2건, Chosunbiz 1건, OSEN 1건"
+      "summary": "오늘 19건 (신규 4건) · 머니투데이 4건, Calgary Roughnecks 2건, Chosunbiz 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-15T03:02:26+09:00"
+  "updated_at": "2026-10-15T06:01:43+09:00"
 }
