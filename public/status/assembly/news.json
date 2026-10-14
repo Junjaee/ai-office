@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 12초",
+  "summary": "신규 7건, 실패 0건, 12초",
   "counts": {
-    "new": 5,
+    "new": 7,
     "failed": 0,
-    "total": 3975
+    "total": 3982
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 12초",
-    "[신규] 최근 여조서 국힘, 민주당 앞서…당권파 \"장동혁 체제 안정\" — 뉴스줌",
-    "[신규] 유승민 \"장동혁 지도부, 수도권 총선 이기겠나…회의감\" — 조세일보",
-    "[신규] [民감國감] 방사청장, 방산비리 엄정 대응...\"조직 명예에 치명적\" — 디지털포스트",
-    "[신규] 임광현 \"세금 전문 법원 검토할만…성공보수제 도입 준비\" — 금융소비자뉴스"
+    "신규 7건, 실패 0건, 12초",
+    "[신규] '대표직 사퇴' 이준석 \"모든 책임은 대표인 나에게 있어\" [TF사진관] — 더팩트",
+    "[신규] 국세청 국감, 여·야가 따로 없었다…‘세무조사 남용·사각지대 방치’ 질타 — 세정일보",
+    "[신규] 한준호 의원, '넷플릭스, 국내 매출 1조 542억 중 8,539억 본사 지급… 국내 법인 영업이익은 203억에 그쳐' — 시민행정신문",
+    "[신규] 이재관 의원, 전체 마권 매출 1.2% 감소인데 장외발매소 소재 지역 세수는 14.8% 감소 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38467447524,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38467447524",
-  "request_id": "cron-202610132100",
+  "run_id": 38487710931,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38487710931",
+  "request_id": "cron-202610140000",
   "trigger": "schedule",
-  "started_at": "2026-10-14T06:02:13+09:00",
+  "started_at": "2026-10-14T09:01:39+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 82건"
+      "summary": "검색어 5개에서 72건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 5건 (신규 5건) · 경기남부저널 1건, 금융소비자뉴스 1건, 뉴스줌 1건"
+      "summary": "오늘 12건 (신규 7건) · Calgary Roughnecks 2건, 시민행정신문 2건, 경기남부저널 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-14T06:02:26+09:00"
+  "updated_at": "2026-10-14T09:01:52+09:00"
 }
