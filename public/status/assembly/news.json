@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 24건, 실패 0건, 13초",
+  "summary": "신규 23건, 실패 0건, 13초",
   "counts": {
-    "new": 24,
+    "new": 23,
     "failed": 0,
-    "total": 4027
+    "total": 4050
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 24건, 실패 0건, 13초",
-    "[신규] '테크볼 초대 金' 이준석 \"야외 공터서 비·뙤약볕 견디며 훈련\" — 뉴시스",
-    "[신규] '유 퀴즈' 최수종, 모친상 후 녹화서 눈물...母에 쓴소리 후회 — 머니투데이",
-    "[신규] [진보 vs 보수, 인물 선호도 1위] 범진보 ‘정청래’, 범보수 '장동혁' — CNB뉴스",
-    "[신규] 권영진 \"김지용 '친명' 충성 맹세...'검수완박' 180도 달라진 태도, 송곳검증할 것\" — YTN"
+    "신규 23건, 실패 0건, 13초",
+    "[신규] 중국이 띄운 차세대 D램 기술…삼성전자도 \"개발 중\" — 연합뉴스",
+    "[신규] ‘SEDEX 2026’ 찾은 주요 인사들…차세대 반도체 기술 ‘관심’ — 뉴스투데이",
+    "[신규] SEDEX 달군 삼성·SK하닉 '기술 경쟁'..TSMC 언급에 \"더 잘하겠다\" — 머니투데이",
+    "[신규] [종합진단] 이준석 '나라장터 현상금 사냥' 문제없나 … 엿새 만에 1,464억 빼고 해커톤 합쳐 '1조3,774억' 찾았다 주장 — 조달경제신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38519791103,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38519791103",
-  "request_id": "cron-202610140600",
+  "run_id": 38539316229,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38539316229",
+  "request_id": "cron-202610140900",
   "trigger": "schedule",
-  "started_at": "2026-10-14T15:01:44+09:00",
+  "started_at": "2026-10-14T18:02:03+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 72건"
+      "summary": "검색어 5개에서 85건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 57건 (신규 24건) · 뉴시스 6건, 시민행정신문 6건, 이데일리 3건"
+      "summary": "오늘 80건 (신규 23건) · 뉴시스 8건, 시민행정신문 8건, 이데일리 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-14T15:01:58+09:00"
+  "updated_at": "2026-10-14T18:02:16+09:00"
 }
