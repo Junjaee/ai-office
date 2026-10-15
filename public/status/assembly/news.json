@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 15초",
+  "summary": "신규 7건, 실패 0건, 28초",
   "counts": {
-    "new": 10,
+    "new": 7,
     "failed": 0,
-    "total": 4174
+    "total": 4181
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 15초",
-    "[신규] '수의계약·가격비교 면제'…조달청 '우수제품'이 뭐길래 — 매일경제 마켓",
-    "[신규] \"PC 2천만원어치 천재지변 등 이유 수의계약…멀티탭이 19만원\" — 연합뉴스",
-    "[신규] 컴퓨터 구매가 '천재지변'? 20만원 멀티탭도…조달청 국감 도마 — SBS Biz",
-    "[신규] 조달청 우수제품 4만원 전화기가 18만원에 팔려 : 경제 — 재경일보"
+    "신규 7건, 실패 0건, 28초",
+    "[신규] \"본품 아닌 구성품이 4~5배\"… 이준석 국감 추궁에 조달청장 \"가격관리 사각지대 있었다\", 옵션품목 가격 대수술 불가피 — 조달경제신문",
+    "[신규] 맥락 잘린 '1분의 덫'...가짜뉴스 온상 된 유튜브 쇼츠 — 뉴스핌",
+    "[신규] 비슷한 이름의 게임과 구별하는 블록 체인 오픈 소스 상세 정보 — Calgary Roughnecks",
+    "[신규] [KPGA 더 채리티 클래식 1R] 1.정찬민 -9, 2.김연섭 -8, T3.신상훈-이동민-문동현-조우영 -7, T7.스콧 헨드-송민혁 -6, T9.함정우-김홍택-최승빈-최민철-오승택 -5 — 골프경제신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38731461120,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38731461120",
-  "request_id": "cron-202610151200",
+  "run_id": 38756543345,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38756543345",
+  "request_id": "cron-202610151500",
   "trigger": "schedule",
-  "started_at": "2026-10-15T21:01:27+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-10-16T00:01:23+09:00",
+  "duration_sec": 28,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 102건"
+      "summary": "검색어 5개에서 103건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 111건 (신규 10건) · 시민행정신문 13건, 머니투데이 7건, 연합뉴스 5건"
+      "summary": "오늘 7건 (신규 7건) · Calgary Roughnecks 1건, www.icaremn.com 1건, 골프경제신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-15T21:01:44+09:00"
+  "updated_at": "2026-10-16T00:01:52+09:00"
 }
