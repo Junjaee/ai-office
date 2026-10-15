@@ -3,31 +3,31 @@
   "dept": "partner",
   "ok": true,
   "running": false,
-  "summary": "주말 일정 5건, 전송 1건, 2초",
+  "summary": "주말 일정 8건, 전송 1건, 3초",
   "counts": {
-    "events": 5,
+    "events": 8,
     "sent": 1
   },
   "next_run": "매주 목 17:00",
   "log": [
-    "주말 일정 5건, 전송 1건, 2초",
-    "[10/10] 기타 일정",
-    "[10/10] 현장민원실(동탄호수공원)",
-    "[10/10] 이상일 시장 동탄 에서 식사약속 우리가 잡아야됨",
-    "[10/10] 동탄역 한화꿈에그린 야시장"
+    "주말 일정 8건, 전송 1건, 3초",
+    "[10/17] 기타 일정",
+    "[10/17] 제3회 이음터 마을동아리 연합축제 @ 동탄중앙초등학교, 대한민국 경기도 화성시 동탄대로시범길 117",
+    "[10/17] 동탄7동 한마음체육대회",
+    "[10/17] 동탄 6동 주민총회"
   ],
   "link": "",
-  "run_id": 37746976978,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/37746976978",
-  "request_id": "cron-202610080800",
+  "run_id": 38702652254,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38702652254",
+  "request_id": "cron-202610150800",
   "trigger": "schedule",
-  "started_at": "2026-10-08T17:00:58+09:00",
-  "duration_sec": 2,
+  "started_at": "2026-10-15T17:01:22+09:00",
+  "duration_sec": 3,
   "tasks": [
     {
       "id": "fetch",
       "status": "done",
-      "summary": "토 4건 · 일 1건"
+      "summary": "토 5건 · 일 3건"
     },
     {
       "id": "send",
@@ -36,5 +36,5 @@
     }
   ],
   "id": "weekend",
-  "updated_at": "2026-10-08T17:01:00+09:00"
+  "updated_at": "2026-10-15T17:01:26+09:00"
 }
