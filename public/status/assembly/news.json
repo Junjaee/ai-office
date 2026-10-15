@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 14초",
+  "summary": "신규 6건, 실패 0건, 15초",
   "counts": {
-    "new": 4,
+    "new": 6,
     "failed": 0,
-    "total": 4185
+    "total": 4191
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 14초",
-    "[신규] 기본 라운드의 판정 순서를 따라가는 토토의 눈물 — Calgary Roughnecks",
-    "[신규] 재외동포청 이전 논란, 국회의원 9명 / 군수·구청장 / 지역 정치인들의 입장 주목 — 한국뉴스",
-    "[신규] 이광재, “하남교육지원청 조기 신설 환영…약속 지켜가겠다” — 서울뉴스통신",
-    "[신규] 예산 대거 삭감… 국회서 반전 이뤄야 — 전북중앙"
+    "신규 6건, 실패 0건, 15초",
+    "[신규] 국감 자료 확인 — 연합뉴스",
+    "[신규] 설명 문구에 표시된 조건을 분리해 읽는 신정환 바카라 — www.icaremn.com",
+    "[신규] CXMT 4F² D램 추격에 삼성전자 측 \"우리도 개발 중\"… KB證, \"양산 기술 격차 5~7년 여전\" — 리버티코리아포스트",
+    "[신규] [오늘의 국감일정] 재경위·교육위·복지위 등 11개 상임위 - 10월 16일 — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38782083765,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38782083765",
-  "request_id": "cron-202610151800",
+  "run_id": 38806550237,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38806550237",
+  "request_id": "cron-202610152100",
   "trigger": "schedule",
-  "started_at": "2026-10-16T03:01:25+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-16T06:01:22+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 99건"
+      "summary": "검색어 5개에서 97건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 4건) · Calgary Roughnecks 2건, www.icaremn.com 1건, 골프경제신문 1건"
+      "summary": "오늘 17건 (신규 6건) · Calgary Roughnecks 3건, 연합뉴스 3건, www.icaremn.com 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-16T03:01:40+09:00"
+  "updated_at": "2026-10-16T06:01:38+09:00"
 }
