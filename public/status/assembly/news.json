@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 18건, 실패 0건, 12초",
+  "summary": "신규 28건, 실패 0건, 15초",
   "counts": {
-    "new": 18,
+    "new": 28,
     "failed": 0,
-    "total": 4100
+    "total": 4128
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 18건, 실패 0건, 12초",
-    "[신규] '테크볼 금메달' 이준석, 축구 포기 후 험난했던 여정 \"연습할 곳 없어\" — 머니투데이",
-    "[신규] 테크볼 이준석, 금메달 땄는데 “월급 없고 무직” 유재석 비인기종목 고충에 속상(유퀴즈) — 뉴스엔",
-    "[신규] 테크볼 金 이준석, 정규직 전환 직전 사표-인생 역전 — 미디어파인",
-    "[신규] 대기업 정규직 전환 앞두고 사표? \"태극마크 위해 모든 걸 걸었다\" — 머니투데이"
+    "신규 28건, 실패 0건, 15초",
+    "[신규] 경기북부 청년창업사관학교 '수도강·원권 권역IR데이' 행사 개최 — 전자신문",
+    "[신규] [기업 이모저모] 중국發 쇼크에 침묵한 삼전닉스 기술수장 — KB Think",
+    "[신규] “유산 4번 경험 없었다면” 최수종♥하희라 심경 터졌다 (유퀴즈) — 스포츠동아",
+    "[신규] ‘유퀴즈’ 강소라·심영순·이현중 출격 예고 — www.bntnews.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38657556452,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38657556452",
-  "request_id": "cron-202610150000",
+  "run_id": 38674016153,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38674016153",
+  "request_id": "cron-202610150300",
   "trigger": "schedule",
-  "started_at": "2026-10-15T09:01:42+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-15T12:01:24+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 96건"
+      "summary": "검색어 5개에서 108건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 37건 (신규 18건) · 머니투데이 6건, Calgary Roughnecks 2건, 뉴스엔 2건"
+      "summary": "오늘 65건 (신규 28건) · 머니투데이 6건, 뉴시스 3건, 아시아경제 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-15T09:01:55+09:00"
+  "updated_at": "2026-10-15T12:01:40+09:00"
 }
