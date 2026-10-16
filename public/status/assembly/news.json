@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 12초",
+  "summary": "신규 36건, 실패 0건, 13초",
   "counts": {
-    "new": 10,
+    "new": 36,
     "failed": 0,
-    "total": 4201
+    "total": 4237
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 12초",
-    "[신규] 박정 의원, 고용보험심사위원회, 노사대표 동시 참석 12.6% — 시민행정신문",
-    "[신규] 한준호 의원, 공공연구기관 기술이전 계약 절반 가까이, 이후 사업화 현황 파악 못 해 — 시민행정신문",
-    "[신규] 김승원 의원, 석유공사, 경영평가 B→D…안전인력 결원 7배·안전 R&D 집행 ‘0’ — 시민행정신문",
-    "[신규] 조달청 우수제품 지정, 나라장터 고가 논란 — 공감신문"
+    "신규 36건, 실패 0건, 13초",
+    "[신규] 정치인 호감도 1위 오세훈 30%…비호감도 1위 이준석 72% [갤럽] — 한겨레",
+    "[신규] [국감핫인물]\"멀티탭이 19만원?\" AI로 세금 누수 잡은 이준석 — 아시아경제",
+    "[신규] 정치인 호감도 오세훈·한동훈·김민석 순…비호감 1위는? [한국갤럽] — 시사저널",
+    "[신규] 김민석·오세훈·이준석·장동혁·정청래·조국·한동훈 중 누가 좋냐고 1003명에게 물었더니… — 위키트리"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38826983421,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38826983421",
-  "request_id": "cron-202610160000",
+  "run_id": 38843357018,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38843357018",
+  "request_id": "cron-202610160300",
   "trigger": "schedule",
-  "started_at": "2026-10-16T09:01:28+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-16T12:01:22+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 87건"
+      "summary": "검색어 5개에서 101건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 27건 (신규 10건) · 시민행정신문 4건, 연합뉴스 4건, Calgary Roughnecks 3건"
+      "summary": "오늘 63건 (신규 36건) · 시민행정신문 15건, 연합뉴스 4건, Calgary Roughnecks 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-16T09:01:41+09:00"
+  "updated_at": "2026-10-16T12:01:35+09:00"
 }
