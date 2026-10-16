@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 36건, 실패 0건, 13초",
+  "summary": "신규 27건, 실패 0건, 11초",
   "counts": {
-    "new": 36,
+    "new": 27,
     "failed": 0,
-    "total": 4237
+    "total": 4264
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 36건, 실패 0건, 13초",
-    "[신규] 정치인 호감도 1위 오세훈 30%…비호감도 1위 이준석 72% [갤럽] — 한겨레",
-    "[신규] [국감핫인물]\"멀티탭이 19만원?\" AI로 세금 누수 잡은 이준석 — 아시아경제",
-    "[신규] 정치인 호감도 오세훈·한동훈·김민석 순…비호감 1위는? [한국갤럽] — 시사저널",
-    "[신규] 김민석·오세훈·이준석·장동혁·정청래·조국·한동훈 중 누가 좋냐고 1003명에게 물었더니… — 위키트리"
+    "신규 27건, 실패 0건, 11초",
+    "[신규] ‘정치인 호감도’ 오세훈 1위…비호감도 선두는 이준석 [갤럽] — 한겨레",
+    "[신규] [정국진단] 엄경영 \"장동혁 對與투쟁 집결 성과...한동훈 복당은 내년 전대 이후\" — 뉴스핌",
+    "[신규] 차기 총선 ‘야당 다수론’ 47%…여당 지원론보다 13%p 앞서 — 경북매일",
+    "[신규] 차기 총선, 정부 견제론 우세…'與 승리' 34%·'野 승리' 47%[한국갤럽] — 연합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38843357018,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38843357018",
-  "request_id": "cron-202610160300",
+  "run_id": 38858809500,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38858809500",
+  "request_id": "cron-202610160600",
   "trigger": "schedule",
-  "started_at": "2026-10-16T12:01:22+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-16T15:01:22+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 101건"
+      "summary": "검색어 5개에서 127건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 63건 (신규 36건) · 시민행정신문 15건, 연합뉴스 4건, Calgary Roughnecks 3건"
+      "summary": "오늘 90건 (신규 27건) · 시민행정신문 17건, 연합뉴스 6건, 뉴스핌 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-16T12:01:35+09:00"
+  "updated_at": "2026-10-16T15:01:34+09:00"
 }
