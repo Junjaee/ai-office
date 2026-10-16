@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 27건, 실패 0건, 11초",
+  "summary": "신규 20건, 실패 0건, 13초",
   "counts": {
-    "new": 27,
+    "new": 20,
     "failed": 0,
-    "total": 4264
+    "total": 4284
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 27건, 실패 0건, 11초",
-    "[신규] ‘정치인 호감도’ 오세훈 1위…비호감도 선두는 이준석 [갤럽] — 한겨레",
-    "[신규] [정국진단] 엄경영 \"장동혁 對與투쟁 집결 성과...한동훈 복당은 내년 전대 이후\" — 뉴스핌",
-    "[신규] 차기 총선 ‘야당 다수론’ 47%…여당 지원론보다 13%p 앞서 — 경북매일",
-    "[신규] 차기 총선, 정부 견제론 우세…'與 승리' 34%·'野 승리' 47%[한국갤럽] — 연합뉴스"
+    "신규 20건, 실패 0건, 13초",
+    "[신규] “차기 총선서 야당 더 당선돼야” 47%…여당은 34% — 세계일보",
+    "[신규] \"수입 컨테이너 엑스레이 검사 2% 미만\"…마약 반입 사각지대 우려 — 뉴스1",
+    "[신규] 이준석 의원 \"특송 마약 밀수, 풍선효과 차단 점검해야\" — 뉴시스",
+    "[신규] 오세훈이 호감도 1위? 스튜디오 반응은...#shorts - 오마이TV — OhmyNews"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38858809500,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38858809500",
-  "request_id": "cron-202610160600",
+  "run_id": 38877535364,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38877535364",
+  "request_id": "cron-202610160900",
   "trigger": "schedule",
-  "started_at": "2026-10-16T15:01:22+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-16T18:01:26+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 127건"
+      "summary": "검색어 5개에서 121건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 90건 (신규 27건) · 시민행정신문 17건, 연합뉴스 6건, 뉴스핌 4건"
+      "summary": "오늘 110건 (신규 20건) · 시민행정신문 18건, 뉴시스 7건, 연합뉴스 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-16T15:01:34+09:00"
+  "updated_at": "2026-10-16T18:01:40+09:00"
 }
