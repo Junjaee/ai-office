@@ -3,37 +3,38 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 취소 0건, 건너뜀 1건, 대기 0건, 실패 0건, 1초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
   "counts": {
-    "new": 0,
+    "new": 1,
     "replaced": 0,
-    "skip": 1,
+    "skip": 0,
     "wait": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 0건, 취소 0건, 건너뜀 1건, 대기 0건, 실패 0건, 1초"
+    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
+    "[추가] 2026년 10월 10/16 컴포즈커피위례 20,800원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 38828089835,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38828089835",
-  "request_id": "cron-202610160011",
+  "run_id": 38840633604,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38840633604",
+  "request_id": "cron-202610160228",
   "trigger": "schedule",
-  "started_at": "2026-10-16T09:12:27+09:00",
-  "duration_sec": 1,
+  "started_at": "2026-10-16T11:29:32+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 1건 확인, 결제 0건"
+      "summary": "메일 1건 확인, 결제 1건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 0 · 취소 0 · 건너뜀 1"
+      "summary": "추가 1 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-16T09:12:28+09:00"
+  "updated_at": "2026-10-16T11:29:35+09:00"
 }
