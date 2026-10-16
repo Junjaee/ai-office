@@ -3,38 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 12초",
+  "summary": "신규 1건, 실패 0건, 12초",
   "counts": {
-    "new": 3,
+    "new": 1,
     "failed": 0,
-    "total": 4305
+    "total": 4306
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 12초",
-    "[신규] 다음 총선, 정부 견제론 우세…'與 승리' 34%·'野 승리' 47% — 시선뉴스",
-    "[신규] 에볼루션 게이밍 주가 결과 표시와 이용 기록의 차이 — Calgary Roughnecks",
-    "[신규] 경상북도의회 예산결산특별위원회, 현장에서 예산의 방향을 모색하다! — 다경뉴스"
+    "신규 1건, 실패 0건, 12초",
+    "[신규] 초등 저학년 보드게임 : 위험 피하기와 최적화 (2026년 최신판) — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38944064993,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38944064993",
-  "request_id": "cron-202610161800",
+  "run_id": 38966357671,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38966357671",
+  "request_id": "cron-202610162100",
   "trigger": "schedule",
-  "started_at": "2026-10-17T03:01:26+09:00",
+  "started_at": "2026-10-17T06:01:23+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 118건"
+      "summary": "검색어 5개에서 112건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 9건 (신규 3건) · Calgary Roughnecks 1건, 경북일보 1건, 다경뉴스 1건"
+      "summary": "오늘 10건 (신규 1건) · Calgary Roughnecks 2건, 경북일보 1건, 다경뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-17T03:01:39+09:00"
+  "updated_at": "2026-10-17T06:01:36+09:00"
 }
