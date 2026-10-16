@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 12초",
+  "summary": "신규 6건, 실패 0건, 13초",
   "counts": {
-    "new": 12,
+    "new": 6,
     "failed": 0,
-    "total": 4296
+    "total": 4302
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 12초",
-    "[신규] 오세훈·한동훈, 정치인 호감도 나란히 1·2위…비호감 1위는? — 주간조선",
-    "[신규] ‘정치인 호감도’ 오세훈 1위…비호감도 1위는 이준석 — 중앙신문",
-    "[신규] 정치인 호감도 오세훈 30% 1위…비호감도 이준석 72% : 정치 — 재경일보",
-    "[신규] 이 대통령 지지율 39%, 2%p↑...정치인 호감도 오세훈 30% 1위[한국갤럽] — 미디어펜"
+    "신규 6건, 실패 0건, 13초",
+    "[신규] \"이런 개발진은 처음\"...'오딘' 기술 개발 이끈 이준석, MMORPG 드림팀 꾸렸다 — 플레이포럼",
+    "[신규] 장동혁, 보수진영 낮은 호감도에 휘청… 오세훈·한동훈 ‘반사이익’ — 시사위크",
+    "[신규] 정치인 호감도 1위 오세훈 …한동훈 23%, 김민석 21%.. : 정치 — 재경일보",
+    "[신규] 차기 총선 ‘정부 견제론’ 47%… 호감도 1위 정치인, 오세훈 — 미디어워치"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38897597632,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38897597632",
-  "request_id": "cron-202610161200",
+  "run_id": 38920445323,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38920445323",
+  "request_id": "cron-202610161500",
   "trigger": "schedule",
-  "started_at": "2026-10-16T21:01:25+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-17T00:01:18+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 105건"
+      "summary": "검색어 5개에서 113건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 122건 (신규 12건) · 시민행정신문 18건, 연합뉴스 8건, 뉴시스 7건"
+      "summary": "오늘 6건 (신규 6건) · 경북일보 1건, 미디어워치 1건, 시사위크 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-16T21:01:38+09:00"
+  "updated_at": "2026-10-17T00:01:32+09:00"
 }
