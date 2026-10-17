@@ -3,36 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 12초",
+  "summary": "신규 14건, 실패 0건, 11초",
   "counts": {
-    "new": 1,
+    "new": 14,
     "failed": 0,
-    "total": 4306
+    "total": 4320
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 12초",
-    "[신규] 초등 저학년 보드게임 : 위험 피하기와 최적화 (2026년 최신판) — Calgary Roughnecks"
+    "신규 14건, 실패 0건, 11초",
+    "[신규] 경마 배당금 설정 메뉴의 토글과 선택 항목 — Calgary Roughnecks",
+    "[신규] 개혁신당, 국민연금 매도 유예 결정한 ‘누군가’ 밝혀야 — 한국사회복지저널",
+    "[신규] 개혁신당, 전임 지도부 비례대표 출마·위성정당 창당 금지 의결 — 한국사회복지저널",
+    "[신규] 개혁신당, 장유식 권익위원 임명에 이해충돌 문제 제기 — 한국사회복지저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 38966357671,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38966357671",
-  "request_id": "cron-202610162100",
+  "run_id": 38984343341,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/38984343341",
+  "request_id": "cron-202610170000",
   "trigger": "schedule",
-  "started_at": "2026-10-17T06:01:23+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-17T09:01:25+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 112건"
+      "summary": "검색어 5개에서 117건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 1건) · Calgary Roughnecks 2건, 경북일보 1건, 다경뉴스 1건"
+      "summary": "오늘 24건 (신규 14건) · 한국사회복지저널 6건, Calgary Roughnecks 5건, 세정일보 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-17T06:01:36+09:00"
+  "updated_at": "2026-10-17T09:01:37+09:00"
 }
