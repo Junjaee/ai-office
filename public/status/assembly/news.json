@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 3건, 실패 0건, 12초",
   "counts": {
-    "new": 4,
+    "new": 3,
     "failed": 0,
-    "total": 4365
+    "total": 4368
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] 이준석 “추미애, 소방관 말고 부동산 문제로 정부랑 싸워라” — 문화일보",
-    "[신규] 충청, 2028년 4월 총선에서 여야 어느 쪽 후보 지지할까…여당 31%, 야당 49%[한국갤럽] — 이세종경제",
-    "[신규] 바카라 일러스트 보너스 구성 비교 — www.zolotnit.ru",
-    "[신규] 기본 구조가 간결한지 살펴보는 크랩게임 인원 — Calgary Roughnecks"
+    "신규 3건, 실패 0건, 12초",
+    "[신규] [전국체전] 대한체육회, 2026 아이치·나고야하계아시아경기대회대한민국 선수단 우수선수 시상식 개최 — SPOTV NEWS",
+    "[신규] \"한동훈 없이 국민의힘은 정권 못 잡아... 굉장히 용감한 정치인\" — 위키트리",
+    "[신규] 기능 발동 전후를 비교하는 스포츠 토토 라이브 스코어 히츠벳 화면 변화 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39056238352,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39056238352",
-  "request_id": "cron-202610171800",
+  "run_id": 39069125909,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39069125909",
+  "request_id": "cron-202610172100",
   "trigger": "schedule",
-  "started_at": "2026-10-18T03:01:15+09:00",
+  "started_at": "2026-10-18T06:01:20+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 50건"
+      "summary": "검색어 5개에서 45건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 4건) · Calgary Roughnecks 1건, SPOTV NEWS 1건, www.icaremn.com 1건"
+      "summary": "오늘 16건 (신규 3건) · Calgary Roughnecks 2건, SPOTV NEWS 2건, www.icaremn.com 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-18T03:01:28+09:00"
+  "updated_at": "2026-10-18T06:01:33+09:00"
 }
