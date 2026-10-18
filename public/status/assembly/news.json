@@ -7,35 +7,35 @@
   "counts": {
     "new": 9,
     "failed": 0,
-    "total": 4435
+    "total": 4444
   },
   "next_run": "3시간마다",
   "log": [
     "신규 9건, 실패 0건, 12초",
-    "[신규] 테크볼 초대 챔피언 이준석 \"금메달 빨리 털어낼 것\" : 스포츠 — 재경일보",
-    "[신규] [제주 전국체전 이모저모]“끝까지 포기치 않는 뜨거운 투혼… 그대들이 진정한 영웅” — 매일일보",
-    "[신규] 갤럽조사, 민주당 김민석-국민의힘 오세훈, 각당 지지층서 호감도 1위 — 브레이크뉴스",
-    "[신규] 野, 추미애 ‘마지못한 사과’에 “지사직 사퇴하라” 맹공 — 파이낸스투데이"
+    "[신규] 의혹 휩싸인 ‘개혁보수 4인방’ 리스크…“입지 더 커질 수도”, 왜 — 중앙일보",
+    "[신규] “AI가 바꾼 국감”…“질의 수준 급상승” 데이터 무장으로 피감기관 비상 — 경기일보",
+    "[신규] 의료기관 침해사고 89%가 병·의원인데… 보안관제 가입률은 0.006% ‘전무’ — 시민행정신문",
+    "[신규] 김남국 의원 “과업도 안 끝났는데 연구비 전액 지급 … 28억 원 환수 불투명” — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39125531717,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39125531717",
-  "request_id": "cron-202610181200",
+  "run_id": 39138546073,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39138546073",
+  "request_id": "cron-202610181500",
   "trigger": "schedule",
-  "started_at": "2026-10-18T21:01:22+09:00",
+  "started_at": "2026-10-19T00:01:15+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 77건"
+      "summary": "검색어 5개에서 82건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 83건 (신규 9건) · Calgary Roughnecks 14건, 뉴시스 5건, 연합뉴스 5건"
+      "summary": "오늘 9건 (신규 9건) · 시민행정신문 3건, Calgary Roughnecks 2건, 경기일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-18T21:01:35+09:00"
+  "updated_at": "2026-10-19T00:01:28+09:00"
 }
