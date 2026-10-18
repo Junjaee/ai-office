@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 10,
+    "new": 4,
     "failed": 0,
-    "total": 4454
+    "total": 4458
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 12초",
-    "[신규] “밑바닥서 많이 굴렀죠… 금메달 빨리 털어내고 다음 경기 도전” — 국민일보",
-    "[신규] 김정재 의원, ‘제67차 소통의 날’ 개최…지역 현안 해결 위한 — 시민행정신문",
-    "[신규] 이달희 의원, “원주 본사 출근 한 달에 이틀 … 기관장부터 지역에 뿌리내려야” 건보공단·심평원 지역 정착 촉구! — 시민행정신문",
-    "[신규] 박해철 의원, 시멘트 6가 크롬 검출치, 자율협약기준보다 낮아… 법적 기준 전환 서둘러야 — 시민행정신문"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] 메뉴 구성으로 판단하는 이준석 경마장역 접근 편의 — Calgary Roughnecks",
+    "[신규] 송언석 의원, 보험료는 장기연체, 보장은 그대로...‘사고後 일괄납부’꼼수 키우는 납입최고 허점! — 시민행정신문",
+    "[신규] 업데이트 전후 규칙을 대조하는 게임 크래쉬 뜻 변경 사항 — Calgary Roughnecks",
+    "[신규] [오늘의 국감일정] 법사위·정무위·재경위 등 8개 상임위 - 10월 19일 — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39152229234,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39152229234",
-  "request_id": "cron-202610181800",
+  "run_id": 39165905779,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39165905779",
+  "request_id": "cron-202610182100",
   "trigger": "schedule",
-  "started_at": "2026-10-19T03:01:50+09:00",
+  "started_at": "2026-10-19T06:01:31+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 83건"
+      "summary": "검색어 5개에서 76건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 19건 (신규 10건) · 시민행정신문 6건, Calgary Roughnecks 4건, 경기일보 1건"
+      "summary": "오늘 23건 (신규 4건) · 시민행정신문 7건, Calgary Roughnecks 6건, 경기일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-19T03:02:02+09:00"
+  "updated_at": "2026-10-19T06:01:44+09:00"
 }
