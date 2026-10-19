@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 12초",
+  "summary": "신규 22건, 실패 0건, 12초",
   "counts": {
-    "new": 9,
+    "new": 22,
     "failed": 0,
-    "total": 4467
+    "total": 4489
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 12초",
-    "[신규] 낯선 게임도 요소별로 이해하는 토스 되는 토토 사이트 비 타임 — Calgary Roughnecks",
-    "[신규] [국감] 박해철 의원, “온열질환 산재 사망자 역대 최대. 노동자 생명 지킬 특단의 대책 필요” — 시민행정신문",
-    "[신규] 소병훈 의원, “종합병원 10곳 중 6곳 중환자실 전담전문의 없어…제5차 평가 후 의료체계 전면 재검토해야” — 시민행정신문",
-    "[신규] 한준호 의원, 굴착공사 정보 21개 중 통신사 제공은 9개뿐… 현장 담당자 연락처도 빠져 — 시민행정신문"
+    "신규 22건, 실패 0건, 12초",
+    "[신규] 게임을 고르기 전 펼쳐보는 스포츠 토토 규정 — Calgary Roughnecks",
+    "[신규] 전자책 납본 10년, 10권 중 8권이 국가 보존 밖… 모은 책도 ‘서초동 관내 1명’만 본다 — 시민행정신문",
+    "[신규] 복기왕 의원, 경기도 안전점검 ‘솜방망이’… 시·군 위반 166건 과태료 0원 — 시민행정신문",
+    "[신규] 전진숙 의원, 식약처 공무원, 직무관련 주식 보유·거래 문제 3년 연속 확인… 신규 취득만 5건 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39178857731,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39178857731",
-  "request_id": "cron-202610190000",
+  "run_id": 39192663494,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39192663494",
+  "request_id": "cron-202610190300",
   "trigger": "schedule",
-  "started_at": "2026-10-19T09:01:25+09:00",
+  "started_at": "2026-10-19T12:01:42+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 77건"
+      "summary": "검색어 5개에서 106건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 32건 (신규 9건) · 시민행정신문 11건, Calgary Roughnecks 7건, 뉴시스 2건"
+      "summary": "오늘 54건 (신규 22건) · 시민행정신문 17건, Calgary Roughnecks 11건, 뉴시스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-19T09:01:38+09:00"
+  "updated_at": "2026-10-19T12:01:55+09:00"
 }
