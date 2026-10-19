@@ -3,26 +3,26 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 22건, 실패 0건, 12초",
+  "summary": "신규 5건, 실패 0건, 12초",
   "counts": {
-    "new": 22,
+    "new": 5,
     "failed": 0,
-    "total": 4489
+    "total": 4494
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 22건, 실패 0건, 12초",
-    "[신규] 게임을 고르기 전 펼쳐보는 스포츠 토토 규정 — Calgary Roughnecks",
-    "[신규] 전자책 납본 10년, 10권 중 8권이 국가 보존 밖… 모은 책도 ‘서초동 관내 1명’만 본다 — 시민행정신문",
-    "[신규] 복기왕 의원, 경기도 안전점검 ‘솜방망이’… 시·군 위반 166건 과태료 0원 — 시민행정신문",
-    "[신규] 전진숙 의원, 식약처 공무원, 직무관련 주식 보유·거래 문제 3년 연속 확인… 신규 취득만 5건 — 시민행정신문"
+    "신규 5건, 실패 0건, 12초",
+    "[신규] 한글과 영문 용어를 함께 읽는 이준석 경마장역 참고 자료 — Calgary Roughnecks",
+    "[신규] 토토 마카오 먹튀 화면 안의 카운터 뜻 — Calgary Roughnecks",
+    "[신규] [실거주 유도 정책의 그늘]④ “부작용 도외시한 실거주 정책”… 국감서도 난타 — 대한경제",
+    "[신규] 무료 유럽식 룰렛 시뮬레이터 보너스 화면 진입 전 안내 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39192663494,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39192663494",
+  "run_id": 39193872255,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39193872255",
   "request_id": "cron-202610190300",
   "trigger": "schedule",
-  "started_at": "2026-10-19T12:01:42+09:00",
+  "started_at": "2026-10-19T12:16:41+09:00",
   "duration_sec": 12,
   "tasks": [
     {
@@ -33,9 +33,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 54건 (신규 22건) · 시민행정신문 17건, Calgary Roughnecks 11건, 뉴시스 3건"
+      "summary": "오늘 59건 (신규 5건) · 시민행정신문 17건, Calgary Roughnecks 15건, 뉴시스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-19T12:01:55+09:00"
+  "updated_at": "2026-10-19T12:16:53+09:00"
 }
