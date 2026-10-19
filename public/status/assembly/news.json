@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 23초",
+  "summary": "신규 5건, 실패 0건, 14초",
   "counts": {
-    "new": 8,
+    "new": 5,
     "failed": 0,
-    "total": 4544
+    "total": 4549
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 23초",
-    "[신규] 대통령적합도→한동훈 18.7% 김민석 12.7% 오세훈 11.7% — www.newszoom.kr",
-    "[신규] 포켓몬 사다리게임 시스템 아키텍처의 입문 가이드: 사상, 행동 및 결과 — Calgary Roughnecks",
-    "[신규] “추미애, 경기지사 취임 4개월 만에 ‘지사병’ 빠졌나”[정치를 부탁해] — 동아일보",
-    "[신규] 화성특례시의회 의장기 축구대회 성료 — 화성신문"
+    "신규 5건, 실패 0건, 14초",
+    "[신규] 김근식 “장동혁 체제 오래 못 가…한동훈, 안철수·이준석과 충돌은 패착” [세상에 나쁜 정치인은 없다] — 주간조선",
+    "[신규] “추미애, 벌써 ‘지사병’ 빠졌나…‘사과 논란’에 정치 고립 불가피” [정치를 부탁해] — 동아일보",
+    "[신규] 블록 체인 가상 화폐 보너스 전용 심벌 확인 — Calgary Roughnecks",
+    "[신규] 첫 실행과 재실행에서 확인할 도박덱 상태 — Calgary Roughnecks"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39274161730,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39274161730",
-  "request_id": "cron-202610191500",
+  "run_id": 39298989484,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39298989484",
+  "request_id": "cron-202610191800",
   "trigger": "schedule",
-  "started_at": "2026-10-20T00:01:26+09:00",
-  "duration_sec": 23,
+  "started_at": "2026-10-20T03:01:29+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 91건"
+      "summary": "검색어 5개에서 88건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 8건 (신규 8건) · Calgary Roughnecks 3건, www.newszoom.kr 1건, 동아일보 1건"
+      "summary": "오늘 13건 (신규 5건) · Calgary Roughnecks 5건, 동아일보 2건, www.newszoom.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-20T00:01:50+09:00"
+  "updated_at": "2026-10-20T03:01:44+09:00"
 }
