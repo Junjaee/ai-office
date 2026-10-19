@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 9건, 실패 0건, 12초",
   "counts": {
-    "new": 4,
+    "new": 9,
     "failed": 0,
-    "total": 4458
+    "total": 4467
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] 메뉴 구성으로 판단하는 이준석 경마장역 접근 편의 — Calgary Roughnecks",
-    "[신규] 송언석 의원, 보험료는 장기연체, 보장은 그대로...‘사고後 일괄납부’꼼수 키우는 납입최고 허점! — 시민행정신문",
-    "[신규] 업데이트 전후 규칙을 대조하는 게임 크래쉬 뜻 변경 사항 — Calgary Roughnecks",
-    "[신규] [오늘의 국감일정] 법사위·정무위·재경위 등 8개 상임위 - 10월 19일 — 뉴스핌"
+    "신규 9건, 실패 0건, 12초",
+    "[신규] 낯선 게임도 요소별로 이해하는 토스 되는 토토 사이트 비 타임 — Calgary Roughnecks",
+    "[신규] [국감] 박해철 의원, “온열질환 산재 사망자 역대 최대. 노동자 생명 지킬 특단의 대책 필요” — 시민행정신문",
+    "[신규] 소병훈 의원, “종합병원 10곳 중 6곳 중환자실 전담전문의 없어…제5차 평가 후 의료체계 전면 재검토해야” — 시민행정신문",
+    "[신규] 한준호 의원, 굴착공사 정보 21개 중 통신사 제공은 9개뿐… 현장 담당자 연락처도 빠져 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39165905779,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39165905779",
-  "request_id": "cron-202610182100",
+  "run_id": 39178857731,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39178857731",
+  "request_id": "cron-202610190000",
   "trigger": "schedule",
-  "started_at": "2026-10-19T06:01:31+09:00",
+  "started_at": "2026-10-19T09:01:25+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 76건"
+      "summary": "검색어 5개에서 77건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 23건 (신규 4건) · 시민행정신문 7건, Calgary Roughnecks 6건, 경기일보 1건"
+      "summary": "오늘 32건 (신규 9건) · 시민행정신문 11건, Calgary Roughnecks 7건, 뉴시스 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-19T06:01:44+09:00"
+  "updated_at": "2026-10-19T09:01:38+09:00"
 }
