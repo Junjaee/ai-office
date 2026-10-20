@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 30건, 실패 0건, 13초",
+  "summary": "신규 12건, 실패 0건, 12초",
   "counts": {
-    "new": 30,
+    "new": 12,
     "failed": 0,
-    "total": 4649
+    "total": 4661
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 30건, 실패 0건, 13초",
-    "[신규] 이준석, 李대통령에 \"SNS 할 시간에 사람 찾아야\" — 신아일보",
-    "[신규] 이준석 “결혼·은퇴 때 취등록세 낮춰줘야”…‘생애 두 번’ 감면 제안 — 매일경제",
-    "[신규] 이준석 \"추미애, 잇따른 설화로 레임덕 자초…도정 장악력 상실\" — 서울뉴스통신",
-    "[신규] 이준석 “생애주기 주거 이동, 취득·등록세 면제 수준으로 낮춰야”:중수청일보 — 중수청일보"
+    "신규 12건, 실패 0건, 12초",
+    "[신규] 우간다 민주평통, 통일강연회·사생대회 성황 — 글로벌 비즈 뉴스",
+    "[신규] “전략산업이 뭔데, 재원은 어디서”…KIC 전략투자, 국감서 '도마 위' — 마켓인, 이데일리",
+    "[신규] 아디다스골프, '아디다스 오픈 코드케이오스 챔피언십' 성료 — 프라임경제",
+    "[신규] 글로벌 코카-콜라 재단, 하천 복원 작업 후원 — 보건신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39397566094,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39397566094",
-  "request_id": "cron-202610200900",
+  "run_id": 39419113347,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39419113347",
+  "request_id": "cron-202610201200",
   "trigger": "schedule",
-  "started_at": "2026-10-20T18:01:24+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-20T21:01:39+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 129건"
+      "summary": "검색어 5개에서 128건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 113건 (신규 30건) · 시민행정신문 15건, Calgary Roughnecks 12건, 뉴스핌 6건"
+      "summary": "오늘 125건 (신규 12건) · 시민행정신문 15건, Calgary Roughnecks 12건, 뉴시스 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-20T18:01:38+09:00"
+  "updated_at": "2026-10-20T21:01:52+09:00"
 }
