@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 14초",
   "counts": {
-    "new": 12,
+    "new": 4,
     "failed": 0,
-    "total": 4661
+    "total": 4665
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 12초",
-    "[신규] 우간다 민주평통, 통일강연회·사생대회 성황 — 글로벌 비즈 뉴스",
-    "[신규] “전략산업이 뭔데, 재원은 어디서”…KIC 전략투자, 국감서 '도마 위' — 마켓인, 이데일리",
-    "[신규] 아디다스골프, '아디다스 오픈 코드케이오스 챔피언십' 성료 — 프라임경제",
-    "[신규] 글로벌 코카-콜라 재단, 하천 복원 작업 후원 — 보건신문"
+    "신규 4건, 실패 0건, 14초",
+    "[신규] 이준석 \"결혼·은퇴 ‘생애 2번’ 취·등록세 없애거나 대폭 낮춰야\"…법안 발의 추진 — JTBC",
+    "[신규] 파워볼 첫충 양방 제조업 분야 클라우드 컴퓨팅의 해독하기와 트렌드 — Calgary Roughnecks",
+    "[신규] 제일 가까운 카지노 조작 메뉴와 정보 메뉴 구별 — Calgary Roughnecks",
+    "[신규] 민주당 추미애 징계 신중론…김민석 대표와의 인연·당내 갈등 거론 — 스페셜타임스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39419113347,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39419113347",
+  "run_id": 39420963593,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39420963593",
   "request_id": "cron-202610201200",
   "trigger": "schedule",
-  "started_at": "2026-10-20T21:01:39+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-20T21:16:36+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 128건"
+      "summary": "검색어 5개에서 133건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 125건 (신규 12건) · 시민행정신문 15건, Calgary Roughnecks 12건, 뉴시스 8건"
+      "summary": "오늘 129건 (신규 4건) · 시민행정신문 15건, Calgary Roughnecks 14건, 뉴시스 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-20T21:01:52+09:00"
+  "updated_at": "2026-10-20T21:16:51+09:00"
 }
