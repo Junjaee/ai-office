@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 13건, 실패 0건, 12초",
+  "summary": "신규 32건, 실패 0건, 13초",
   "counts": {
-    "new": 13,
+    "new": 32,
     "failed": 0,
-    "total": 4566
+    "total": 4598
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 13건, 실패 0건, 12초",
-    "[신규] 조인철 의원, 서울 시내버스, 매년 4천억 원대 재정지원에도 시민 불편 민원 5년 새 57.5% 증가 — 시민행정신문",
-    "[신규] 개혁신당, 국정감사 질의 공백 비판…AI 조달 분석 결과 언급 — 한국사회복지저널",
-    "[신규] 송옥주 의원, 산사태 고위험지역 297곳, 주민 반대에 관리 사각지대 방치 — 시민행정신문",
-    "[신규] 개혁신당, 추미애 지사에 직접 사과·소방관 인건비 예산 반영 요구 — 한국사회복지저널"
+    "신규 32건, 실패 0건, 13초",
+    "[신규] [전격시사] 이준석 개혁신당 의원 - “국가직 전환도 민주당 주도, 재정지원 안 한 것도 민주당…추미애 ‘레임덕‘ 시작” “소방 재정 빨대”…민주당 책임? — KBS 뉴스",
+    "[신규] 이준석 \"결혼 등 생애주기별 주거 이동 취등록세, 면제 수준으로 낮춰야\" — 뉴스핌",
+    "[신규] 이준석 \"소방관 발언 추미애, 집무 세달만에 '레임덕'\" — 한국경제",
+    "[신규] 이준석 \"추미애, 예산 탓하다 '소방 빨대' 설화로 취임 석 달 만에 레임덕\" — 뉴스1"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39345065956,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39345065956",
-  "request_id": "cron-202610200000",
+  "run_id": 39362015327,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39362015327",
+  "request_id": "cron-202610200300",
   "trigger": "schedule",
-  "started_at": "2026-10-20T09:01:27+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-20T12:01:26+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 84건"
+      "summary": "검색어 5개에서 107건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 30건 (신규 13건) · Calgary Roughnecks 10건, 동아일보 2건, 시민행정신문 2건"
+      "summary": "오늘 62건 (신규 32건) · 시민행정신문 13건, Calgary Roughnecks 10건, 뉴스1 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-20T09:01:40+09:00"
+  "updated_at": "2026-10-20T12:01:40+09:00"
 }
