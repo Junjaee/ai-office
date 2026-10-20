@@ -3,39 +3,37 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 2건, 실패 0건, 13초",
   "counts": {
-    "new": 4,
+    "new": 2,
     "failed": 0,
-    "total": 4672
+    "total": 4674
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] [뉴스 저격] ‘체리따봉’ ‘한동훈 아웃’… 찍히면 치명상, 그래도 또 들여다본다 — 조선일보",
-    "[신규] [국감2026] ‘한미전략투자공사 사장 태도 지적’ 잇따른 재경위 국감…“KIC, 중국산 AI 쓰나” 지적도 — 주간한국",
-    "[신규] 재경위 국정감사 출석한 김종출 KAI 사장 — 뉴스핌",
-    "[신규] 주진우, 김석준 무죄 판결 맹공…“北 위협 사라졌다? 이런 판결 국민이 납득하겠나” — 펜앤마이크"
+    "신규 2건, 실패 0건, 13초",
+    "[신규] [노트북을 열며] 여성징병제 어렵다면 국방세 납부 검토 해보자 — 굿모닝충청",
+    "[신규] 부모·누나·아내 의사…‘피습 자작극’ 정이한 측 “의사 집안서 의사 안 돼, 갈등 풀려한 것” — 헤럴드경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39471045807,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39471045807",
-  "request_id": "cron-202610201800",
+  "run_id": 39496985650,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39496985650",
+  "request_id": "cron-202610202100",
   "trigger": "schedule",
-  "started_at": "2026-10-21T03:01:30+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-21T06:02:22+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 134건"
+      "summary": "검색어 5개에서 132건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 7건 (신규 4건) · Calgary Roughnecks 1건, 글로벌뉴스통신GNA 1건, 뉴스핌 1건"
+      "summary": "오늘 9건 (신규 2건) · Calgary Roughnecks 1건, 굿모닝충청 1건, 글로벌뉴스통신GNA 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-21T03:01:43+09:00"
+  "updated_at": "2026-10-21T06:02:37+09:00"
 }
