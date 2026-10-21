@@ -3,27 +3,27 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 35건, 실패 0건, 15초",
+  "summary": "신규 36건, 실패 0건, 10초",
   "counts": {
-    "new": 35,
+    "new": 36,
     "failed": 0,
-    "total": 4734
+    "total": 4770
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 35건, 실패 0건, 15초",
-    "[신규] 강득구 의원, 플랫폼 데이터에서 자율주행·AI 전환까지정책세미나 개최 — 시민행정신문",
-    "[신규] 동남아 검거 2.5배·송환 2.6배... 초국가범죄 범정부 대응 1년 — 파이낸셜뉴스",
-    "[신규] 살아남는 자가 판 쥔다…셈법 복잡해진 ‘만인의 투쟁’ — 월간중앙",
-    "[신규] [국감] 박해철 의원, 기후에너지환경부 소극행정 신고 897건…조치 사례는‘0건’ — 시민행정신문"
+    "신규 36건, 실패 0건, 10초",
+    "[신규] 이준석 “그냥 대통령을 제미나이로 바꾸자” — 문화일보",
+    "[신규] 이준석 \"제미나이에 물어 통치할 거면 대통령을 제미나이로\" — 한국경제",
+    "[신규] \"제미나이에 물어보니\" 李 언급에… 이준석 \"대통령도 AI로 바꾸자\" — 한국일보",
+    "[신규] 이재명 AI 답변에 보수야권 \"대통령을 제미나이로 바꾸자\" — OhmyNews"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39552843481,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39552843481",
-  "request_id": "cron-202610210600",
+  "run_id": 39573737544,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39573737544",
+  "request_id": "cron-202610210900",
   "trigger": "schedule",
-  "started_at": "2026-10-21T15:01:35+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-10-21T18:02:01+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
@@ -33,9 +33,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 69건 (신규 35건) · 시민행정신문 12건, Calgary Roughnecks 9건, 이데일리 5건"
+      "summary": "오늘 105건 (신규 36건) · 시민행정신문 13건, Calgary Roughnecks 10건, 이데일리 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-21T15:01:51+09:00"
+  "updated_at": "2026-10-21T18:02:11+09:00"
 }
