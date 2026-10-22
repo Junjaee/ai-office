@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 14초",
+  "summary": "신규 8건, 실패 0건, 10초",
   "counts": {
-    "new": 5,
+    "new": 8,
     "failed": 0,
-    "total": 4909
+    "total": 4917
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 14초",
-    "[신규] 이언주 의원 '소방관 국가지원 확대법' 대표발의 — 시민행정신문",
-    "[신규] 국회 재경위 전문위원 \"중앙은행 디지털화폐 부작용 논의 필요\" — 세이프머니",
-    "[신규] 재경위 국감 코인 과세 유예 공방과 주요 현안 대립 : 경제 — 재경일보",
-    "[신규] 가상자산 과세 또 유예하나…김민석 \"연내 결론\"(종합) — 연합뉴스"
+    "신규 8건, 실패 0건, 10초",
+    "[신규] 관세행정 툴(Tool) 동원해 과도한 송객수수료 손 본다 — 한국세정신문",
+    "[신규] 국회 재경위, 오늘 기획예산처·한국은행 등 종합 국감 — 조세일보",
+    "[신규] [오늘의 국감일정] 재경위·교육위·과방위 등 8개 상임위 - 10월 23일 — 뉴스핌",
+    "[신규] 국토부·예산처·과기부 등 종합국감…부동산·해킹 대응 도마, 미래대응기금 공방도 — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39827699424,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39827699424",
-  "request_id": "cron-202610221800",
+  "run_id": 39853747826,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39853747826",
+  "request_id": "cron-202610222100",
   "trigger": "schedule",
-  "started_at": "2026-10-23T03:01:40+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-23T06:01:36+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 123건"
+      "summary": "검색어 5개에서 131건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 19건 (신규 5건) · 시민행정신문 8건, 연합뉴스 2건, S저널 1건"
+      "summary": "오늘 27건 (신규 8건) · 시민행정신문 8건, 뉴스핌 2건, 뉴시스 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-23T03:01:55+09:00"
+  "updated_at": "2026-10-23T06:01:46+09:00"
 }
