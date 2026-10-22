@@ -1,0 +1,83 @@
+시도	의회	홈페이지	회의록 화면	과거 회의록 보유	근거·메모(2026-10-22)
+전남광주	전남광주통합특별시 강진군의회	https://gangjincl.go.kr/		미확인	회의록 서버가 자동 접속을 받지 않음(브라우저로 확인 필요)
+전남광주	전남광주통합특별시 고흥군의회	https://council.goheung.go.kr/main	https://council.goheung.go.kr:8088/	1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전남광주	전남광주통합특별시 곡성군의회	https://www.gokseong.go.kr/council/	https://assembly.gokseong.go.kr/minutes/content/minutes/sessionSearch.html	일부만	5대(2006년)부터 보임
+전남광주	전남광주통합특별시 구례군의회	https://council.gurye.go.kr/assembly/	https://assembly.gurye.go.kr/	1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전남광주	전남광주통합특별시 담양군의회	https://dycouncil.go.kr/main	https://dycouncil.go.kr:8070/	1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전남광주	전남광주통합특별시 무안군의회	http://www.muan.or.kr/		1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전남광주	전남광주통합특별시 보성군의회	https://www.bscouncil.go.kr/		1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전남광주	전남광주통합특별시 신안군의회	https://council.shinan.go.kr/	https://council.shinan.go.kr/content/minutes/billSearch.html	1대부터 있음	대수별 목록에 1대·1991년 표시
+전남광주	전남광주통합특별시 영광군의회	https://www.yeonggwang.go.kr/ygcouncil/	https://www.yeonggwang.go.kr:443/ygcouncil/assem/	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+전남광주	전남광주통합특별시 영암군의회	https://www.yacl.go.kr/		미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+전남광주	전남광주통합특별시 완도군의회	https://www.wdcc.or.kr//		1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전남광주	전남광주통합특별시 장성군의회	https://www.jangseong.go.kr/home/council	https://assem.jangseong.go.kr/user/assem/minute/list.jangseong?menuCd=DOM_000000101001000000&contentsSid=8	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+전남광주	전남광주통합특별시 장흥군의회	https://www.jhc.go.kr/		미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+전남광주	전남광주통합특별시 진도군의회	https://www.jindo.go.kr/council/main.cs	http://222.239.254.109:8080/main.do	1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전남광주	전남광주통합특별시 함평군의회	https://www.hpcouncil.go.kr/		1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전남광주	전남광주통합특별시 해남군의회	http://council.haenam.go.kr/kr/main.do	http://council.haenam.go.kr/kr/assembly/late.do	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+전남광주	전남광주통합특별시 화순군의회	http://council.hwasun.go.kr/	http://council.hwasun.go.kr:8088/Assem/recent_assem.jsp	미확인	회의록 서버가 자동 접속을 받지 않음(브라우저로 확인 필요)
+부산	부산광역시 기장군의회	http://council.gijang.go.kr/		1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+대구	대구광역시 군위군의회	https://www.gwcouncil.kr/	https://www.gwcouncil.kr/content/committee/steeringMinutes.html	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+대구	대구광역시 달성군의회	https://council.dalseong.go.kr/	https://council.dalseong.go.kr/content/minutes/late.html	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+인천	인천광역시 강화군의회	https://council.ganghwa.go.kr/	https://council.ganghwa.go.kr/assembly/minutes/detail.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+인천	인천광역시 옹진군의회	https://council.ongjin.go.kr:443/	https://council.ongjin.go.kr:443/promote/main.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+울산	울산광역시 울주군의회	https://assembly.ulju.ulsan.kr/	https://assembly.ulju.ulsan.kr/kr/minutes/late	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+경기	경기도 가평군의회	https://www.gpassem.go.kr/	https://www.gpassem.go.kr/kr/minutes/search.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+경기	경기도 양평군의회	https://www.ypcouncil.go.kr/main/index.do	https://www.ypcouncil.go.kr/assembly/	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+경기	경기도 연천군의회	http://www.yca21.go.kr/	http://www.yca21.go.kr/meeting/confer/recent.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+강원	강원특별자치도 고성군의회	https://council.gwgs.go.kr/	https://council.gwgs.go.kr/Home/H60000/H60200/councilList	1~10대 목록 있음(내용 미확인)	대수 선택 목록 1~10대
+강원	강원특별자치도 양구군의회	http://www.ygcl.go.kr/		1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+강원	강원특별자치도 양양군의회	https://yangyangcouncil.go.kr/	https://yangyangcouncil.go.kr/kr/minutes/search.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+강원	강원특별자치도 영월군의회	https://council.yw.go.kr/	https://council.yw.go.kr/content/assembly/bill_detail.html	1대부터 있음	대수별 목록 1~9대, 1991년 시작(10대는 별도 확인)
+강원	강원특별자치도 인제군의회	https://www.injecl.go.kr/	https://www.injecl.go.kr/content/minutes/minutesLately.html	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+강원	강원특별자치도 정선군의회	http://council.jeongseon.go.kr/		미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+강원	강원특별자치도 철원군의회	https://www.cwg.go.kr/council/index.do		미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+강원	강원특별자치도 평창군의회	https://cl.happy700.or.kr/kr/main.do	https://cl.happy700.or.kr/kr/assembly/late.do	확인 필요	회기별검색이 1~2대·2019년부터로 표시(대수 번호가 다른 듯)
+강원	강원특별자치도 홍천군의회	https://www.hccouncil.go.kr/	https://www.hccouncil.go.kr/source/korean/assembly/simple.html	1대부터 있음	대수별 목록에 1대·1991년 표시
+강원	강원특별자치도 화천군의회	http://council.ihc.go.kr/basic/main.do	http://152.99.173.51/meeting/confer/desc.php	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+강원	강원특별자치도 횡성군의회	https://www.hsg.go.kr/council/index.do	http://152.99.149.35/?	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+충북	충청북도 괴산군의회	https://council.goesan.go.kr/kr/main.do	https://council.goesan.go.kr/promote/minutes/search.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+충북	충청북도 단양군의회	https://council.danyang.go.kr/	https://council.danyang.go.kr/kr/minutes/search.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+충북	충청북도 보은군의회	http://council.boeun.go.kr/kr/main.do	http://council.boeun.go.kr/kr/news/bbsAssembly.do	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+충북	충청북도 영동군의회	https://council.yd21.go.kr/	http://council.yd21.go.kr/kr/minutes/late	미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+충북	충청북도 옥천군의회	https://council.oc.go.kr/	https://council.oc.go.kr/kr/minutes/late.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+충북	충청북도 음성군의회	https://escouncil.go.kr/kr/main.do	https://escouncil.go.kr/kr/assembly/late.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+충북	충청북도 증평군의회	http://council.jp.go.kr/source/korean/main/main.html	http://council.jp.go.kr/source/korean/assembly/conference6.html	확인 필요	목차별검색에 1~7대·1999년, 8대 이후는 다른 화면인 듯
+충북	충청북도 진천군의회	http://council.jincheon.go.kr/	http://tv.jincheon.go.kr/content/mnewminutes.html	일부만	6대(2013년)부터 보임
+충남	충청남도 금산군의회	https://www.geumsancouncil.go.kr/	https://www.geumsancouncil.go.kr/content/minutes/minutesLately.html	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+충남	충청남도 부여군의회	https://council.buyeo.go.kr/kr/main.do	https://council.buyeo.go.kr/kr/assembly/late.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+충남	충청남도 서천군의회	https://www.scouncil.go.kr/kr.do	https://www.scouncil.go.kr/prog/minutes/kr/sub06_01/minutesRecent/list.do	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+충남	충청남도 예산군의회	https://www.councilyesan.go.kr/council/kr/main.do	https://www.councilyesan.go.kr/council/kr/minutes/qna.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+충남	충청남도 청양군의회	https://council.cheongyang.go.kr/	https://council.cheongyang.go.kr/assembly/	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+충남	충청남도 태안군의회	http://council.taean.go.kr/main/	http://council.taean.go.kr/main/index.php?m_cd=61	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+충남	충청남도 홍성군의회	https://council.hongseong.go.kr/	https://council.hongseong.go.kr/kr/minutes/search.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+전북	전북특별자치도 고창군의회	http://www.gochang.go.kr/council/index.gochang	https://assembly.gochang.go.kr/?&cpath=%2Fcouncil	1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전북	전북특별자치도 무주군의회	https://assem.muju.go.kr/	https://assem.muju.go.kr/content/minutes/mntsLatelyList.html	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+전북	전북특별자치도 부안군의회	https://council.buan.go.kr/index.buan	https://assembly.buan.go.kr/user/assem/minute2/list.buan;jsessionid=78780C763EFA16660422BFDCD336E2CE?generation=10&menuCd=DOM_000000106001000000&contentsSid=39	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+전북	전북특별자치도 순창군의회	https://www.sunchangcouncil.go.kr/		1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전북	전북특별자치도 완주군의회	https://council.wanju.go.kr/	http://council.wanju.go.kr:8081/minutes/kr/main.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+전북	전북특별자치도 임실군의회	https://council.imsil.go.kr/		1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+전북	전북특별자치도 장수군의회	http://council.jangsu.go.kr/		미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+전북	전북특별자치도 진안군의회	http://council.jinan.go.kr/	http://council.jinan.go.kr/kr/minutes/search.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+경북	경상북도 고령군의회	https://council.goryeong.go.kr/		미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+경북	경상북도 봉화군의회	https://www.bonghwacouncil.go.kr/	https://www.bonghwacouncil.go.kr/council/content/minutes/mntsContentsList.html	1대부터 있음	대수별 목록에 1대·1991년 표시
+경북	경상북도 성주군의회	http://www.sjcouncil.go.kr/	http://www.sjcouncil.go.kr/content/minutes/mntsContentsList.html	일부만	3대(1998년)부터
+경북	경상북도 영덕군의회	http://council.yd.go.kr/		확인 필요	"1·2대 회의록" 별도 메뉴(파일 보관 추정), 3대 이후는 검색 틀
+경북	경상북도 영양군의회	https://council.yyg.go.kr:443/	https://council.yyg.go.kr/councilbook/index_time	확인 필요	연표에 1~9대 있음, 회의록 연결 여부 미확인
+경북	경상북도 예천군의회	https://www.ycgcl.kr/	https://www.ycgcl.kr/kr/minutes/search.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+경북	경상북도 울릉군의회	https://www.ulleung.go.kr/council/index.do	https://council.ulleung.go.kr/mnts/	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+경북	경상북도 울진군의회	http://council.uljin.go.kr/	http://council.uljin.go.kr/kr/minutes/qna.do	1대부터 있음	회의록 상세검색에서 1대 검색 결과 있음
+경북	경상북도 의성군의회	http://www.cus.go.kr/	http://www.cus.go.kr/kr/minutes/search.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+경북	경상북도 청도군의회	http://www.cheongdocl.go.kr/kr/main.do	http://www.cheongdocl.go.kr/kr/assembly/session.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+경북	경상북도 청송군의회	https://council.cs.go.kr/main.web	https://councilbook.cs.go.kr/main.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+경북	경상북도 칠곡군의회	http://council.chilgok.go.kr/	http://council.chilgok.go.kr/content/minutes/mntsLatelyList.html	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+경남	경상남도 거창군의회	http://www.gccl.go.kr/		미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+경남	경상남도 고성군의회	https://council.goseong.go.kr/kr/main.do	https://council.goseong.go.kr/kr/news/bbsExport.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+경남	경상남도 남해군의회	https://council.namhae.go.kr/source/korean/main/main.html	https://council.namhae.go.kr/source/korean/assembly/cate.html	1대부터 있음	대수별 목록에 1대·1991년 표시
+경남	경상남도 산청군의회	https://www.sancheong.go.kr/council/kr/main.do	https://www.sancheong.go.kr/council/kr/minutes/qna.do	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+경남	경상남도 의령군의회	https://council.uiryeong.go.kr/index.uiryeong		미확인	회의록 메뉴를 자동으로 못 찾음(사람이 봐야 함)
+경남	경상남도 창녕군의회	https://www.cngc.go.kr/	https://www.cngc.go.kr/kr/minutes/question	미확인	회의록 화면은 찾았으나 대수 목록을 자동으로 못 읽음
+경남	경상남도 하동군의회	https://www.hdcl.go.kr/		1대부터 있음	전자회의록 회기별검색에 1~10대 등록, 1991년(진도·하동 1990) 시작
+경남	경상남도 함안군의회	https://www.haman.go.kr/council.web	https://councilbook.haman.go.kr/assembly/main.do	1~10대 목록 있음(내용 미확인)	대수 선택 목록은 1~10대, 1대 회의록이 실제로 열리는지는 안 봄
+경남	경상남도 함양군의회	https://council.hygn.go.kr/kr/main.do	https://council.hygn.go.kr/kr/assembly/late.do	일부만(확인 필요)	회기별검색에 8~9대만 보임
+경남	경상남도 합천군의회	https://www.hccl.go.kr/source/korean/main/main.jsp	https://www.hccl.go.kr/source/korean/assembly/simple.jsp	1대부터 있음	대수별 목록에 1대·1991년 표시
