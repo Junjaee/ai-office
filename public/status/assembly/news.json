@@ -3,37 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 실패 0건, 13초",
+  "summary": "신규 26건, 실패 0건, 9초",
   "counts": {
-    "new": 2,
+    "new": 26,
     "failed": 0,
-    "total": 4851
+    "total": 4877
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 2건, 실패 0건, 13초",
-    "[신규] 이형일, 가상자산 과세에 \"여러 의견…최대한 숙고해서 판단\" — 연합뉴스",
-    "[신규] [2026 국감] LSD 검사 소홀·보고 누락 의혹...이종욱 \"전 과정 철저 조사\" — 뉴스핌"
+    "신규 26건, 실패 0건, 9초",
+    "[신규] 이준석, 국감서 \"관성적 압축SW 구매\" 지적…자체개발 파일 배포 — 연합뉴스",
+    "[신규] \"쓰지도 않을 압축 프로그램에 1억3000쓴 국가 기관들\" 이준석, 직접 만든 압축 프로그램 무료 배포 — 조선일보",
+    "[신규] 국가기관, 압축SW에 1.3억 썼는데⋯이준석 “하루 만에 만들어” — 국민일보",
+    "[신규] 26 국감] “관세청, ‘마운자로’ 무차별 반입 금지?…中 배터리 압수 같은 촌극” — 세정일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39732882508,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39732882508",
-  "request_id": "cron-202610220600",
+  "run_id": 39752289673,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39752289673",
+  "request_id": "cron-202610220900",
   "trigger": "schedule",
-  "started_at": "2026-10-22T15:16:39+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-22T18:02:41+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 105건"
+      "summary": "검색어 5개에서 112건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 74건 (신규 2건) · 뉴스핌 6건, 연합뉴스 6건, 데일리안 4건"
+      "summary": "오늘 100건 (신규 26건) · 뉴스핌 7건, 시민행정신문 7건, 연합뉴스 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-22T15:16:53+09:00"
+  "updated_at": "2026-10-22T18:02:50+09:00"
 }
