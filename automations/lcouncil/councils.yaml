@@ -1,0 +1,41 @@
+# 수집 대상 지방의회. 조사 결과: docs/지방의회/회의록_보유현황.tsv (2026-10-22)
+#
+# template 는 회의록 시스템의 틀(lcouncil_sites.py 의 어댑터 이름):
+#   ejournal  "전자회의록"(인정보기술) — /assem/search/simple/LoadingSession_Year.json, LoadingList.json, viewer.do?cdUid=
+#   record    서울시의회 틀 — /record/sessionList.do, committeeList.do, orderList.do, recordView.do?key=
+# template 가 없는 의회는 아직 어댑터가 없어 건너뛴다(화면에는 "준비 중"으로 적는다).
+councils:
+  - id: seoul
+    name: 서울특별시의회
+    template: record
+    base: https://ms.smc.seoul.kr
+    council_id: SEOUL
+  - id: gyeongnam
+    name: 경상남도의회
+    template: record
+    base: https://council.gyeongnam.go.kr
+    council_id: GYEONGSANGNAMDO
+  - id: jeonbuk
+    name: 전북특별자치도의회
+    template: ejournal
+    base: https://r.jbstatecouncil.jeonbuk.kr
+  - id: incheon
+    name: 인천광역시의회
+    template: ejournal
+    base: https://record.icouncil.go.kr
+  - id: jngj
+    name: 전남광주통합특별시의회
+    template: ejournal
+    base: https://assem.jeonnam-gwangju.go.kr
+  # ── 아래는 틀 분석이 끝나면 template 를 채운다 ──
+  - { id: busan, name: 부산광역시의회, base: https://council.busan.go.kr/assem }
+  - { id: daegu, name: 대구광역시의회, base: https://council.daegu.go.kr/kr/minutes/table }
+  - { id: daejeon, name: 대전광역시의회, base: https://council.daejeon.go.kr/svc/cms/mnts/MntsMain.do }
+  - { id: ulsan, name: 울산광역시의회, base: https://www.council.ulsan.kr/minutes/assembly/main.do }
+  - { id: sejong, name: 세종특별자치시의회, base: https://council.sejong.go.kr/mnu/ygc/yeongiCouncilMinutes.do }
+  - { id: gyeonggi, name: 경기도의회, base: https://kms.ggc.go.kr/svc/cms/mnts/MntsTreeSesnList.do }
+  - { id: gangwon, name: 강원특별자치도의회, base: https://council.gangwon.kr/kr/minutes/search.do }
+  - { id: chungbuk, name: 충청북도의회, base: http://council.chungbuk.kr/assembly/minutes/session.do }
+  - { id: chungnam, name: 충청남도의회, base: http://council.chungnam.go.kr/kr/minutes/search.do }
+  - { id: gyeongbuk, name: 경상북도의회, base: https://council.gb.go.kr/minutes/text/table }
+  - { id: jeju, name: 제주특별자치도의회, base: https://record.council.jeju.kr/source/minutes/main/main.html }

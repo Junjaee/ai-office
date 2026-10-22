@@ -1,0 +1,18 @@
+# 지방의회 회의록 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GOOGLE_*)로 받는다.
+
+# 결과를 둘 구글 드라이브 상위 폴더. 그 안에 의회별 폴더가 자동으로 생긴다.
+drive_folder_id: ""      # 비어 있으면 실행이 "드라이브 폴더 설정 없음"으로 실패한다 — 사용자가 폴더 주소를 주면 채운다
+result_link: ""
+
+request_delay: 1.5       # 사이트 요청 간격(초). 1초 이상 유지
+retries: 3
+timeout: 60
+per_run_limit: 300       # 의회 하나당 한 번 실행에 받는 최대 건수 (과거분은 여러 날에 나눠 받는다)
+
+# 상태 보고: 저장소 루트(체크아웃 위치)에 커밋
+office_repo: "."
+office_workspace: "assembly"
+next_run: "매일 02:00"
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts 의 automations[].tasks[] (테스트로 일치 강제)
+tasks: [scan, fetch]

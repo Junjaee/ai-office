@@ -28,6 +28,7 @@ export const SCHEDULES: ScheduledJob[] = [
   { workflow: "news.yml", cron: "0 */3 * * *", note: "기사 수집 — 3시간마다(KST 00·03·06…)" },
   { workflow: "ledger.yml", cron: "0 */6 * * *", note: "가계부 — 6시간마다(KST 09·15·21·03)" },
   { workflow: "hscity.yml", cron: "0 0 * * *", note: "화성시 — KST 09:00 (사용자 결정 2026-09-17)" },
+  { workflow: "lcouncil.yml", cron: "0 17 * * *", note: "지방의회 회의록 — 매일 KST 02:00 (사이트 부하 적은 새벽, 사용자 결정 2026-10-22)" },
   { workflow: "weekend.yml", cron: "0 8 * * 4", note: "주말 일정 — 목 KST 17:00" },
   { workflow: "stock.yml", cron: "30 21 * * 1-5", note: "주식 신호 — 화~토 KST 06:30 (미국 장 마감 뒤, 사용자 결정 2026-09-22)" },
   { workflow: "analyst.yml", cron: "0 22 * * 1-5", inputs: { market: "us" }, note: "주식 분석(미국) — 화~토 KST 07:00 (미국 장 마감 뒤, 사용자 결정 2026-10-05)" },

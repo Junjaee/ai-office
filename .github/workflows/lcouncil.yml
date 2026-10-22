@@ -1,0 +1,69 @@
+name: 지방의회 회의록
+
+# 예약은 여기 적지 않는다 — Cloudflare Worker 가 시계를 맡는다(worker/schedule.ts 의 SCHEDULES 에 한 줄).
+# GitHub 의 schedule 은 부하가 높으면 지연되거나 버려진다(공식 문서, 2026-09-17 사용자 결정으로 전부 옮김).
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: "화면에서 누른 요청 id (비워도 됨)"
+        type: string
+        default: ""
+      council:
+        description: "의회 id 하나만 (비우면 전부)"
+        type: string
+        default: "all"
+      limit:
+        description: "의회당 이번 실행에 받을 최대 건수 (비우면 설정값)"
+        type: string
+        default: ""
+
+# runs API 의 display_title 로 "내가 누른 실행"을 결정적으로 매칭한다 — 바꾸지 말 것
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('lcouncil · {0}', inputs.request_id) || 'lcouncil · 예약' }}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lcouncil
+  cancel-in-progress: false
+
+jobs:
+  run:
+    # 기본은 GitHub 서버(ubuntu-latest). 국회 사이트처럼 해외 IP 를 막는 곳을 쓸 때만 아래 "사무실 PC" 블록으로 바꾼다.
+    runs-on: ubuntu-latest
+    timeout-minutes: 300   # 의회 16곳 × 300건 × 1.5초를 넉넉히
+    # ── 사무실 PC 에서 돌릴 때만 주석을 풀어 쓴다 (runs-on: [self-hosted, windows, kr-office]) ──
+    # defaults:
+    #   run:
+    #     # PC 의 PowerShell 프로필(Set-Location 등)을 읽지 않도록 -NoProfile. 이 줄을 지우면 상대 경로가 깨진다
+    #     shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ". '{0}'; exit $LASTEXITCODE"
+    steps:
+      - uses: actions/checkout@v4
+
+      # GitHub 서버에서만 필요 (사무실 PC 에는 Python 3.13 이 이미 있음)
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 의존성 설치
+        run: |
+          python --version
+          python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
+
+      - name: git 사용자 설정 (상태 파일 커밋용)
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+
+      - name: 실행
+        env:
+          # 필요한 비밀값만 남긴다. 값은 GitHub 저장소 Settings → Secrets 에서 넣는다
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/lcouncil/run_lcouncil.py --config automations/lcouncil/config.actions.yaml \
+            --council "${{ inputs.council || 'all' }}" ${{ inputs.limit && format('--limit {0}', inputs.limit) || '' }}

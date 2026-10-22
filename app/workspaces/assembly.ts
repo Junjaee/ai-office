@@ -139,6 +139,14 @@ export const AUTOMATIONS: AutomationDef[] = [
       { id: "audit", name: "국감·국조 수집", role: "국정감사·국정조사는 사이트에서 직접 수집", colors: ["#8a4a3c", "#b9cbdc", "#006bce"], planned: true },
     ],
   },
+  {
+    id: "lcouncil", dept: "research", name: "지방의회 회의록",
+    workflow: "lcouncil.yml", schedule: "매일 02:00",
+    tasks: [
+      { id: "scan", name: "회의 목록 확인", role: "광역의회 사이트의 회기별 목록에서 새 회의록 찾기", colors: ["#3d4a6b", "#d9e4ef", "#2563eb"] },
+      { id: "fetch", name: "본문 저장", role: "회의록 본문을 글자로 받아 드라이브에 저장", colors: ["#4a3d2f", "#efe6d9", "#b45309"] },
+    ],
+  },
   { id: "news", dept: "brand", name: "기사 수집",
     workflow: "news.yml", schedule: "3시간마다",
     tasks: [
