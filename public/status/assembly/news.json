@@ -3,39 +3,37 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 24건, 실패 0건, 12초",
+  "summary": "신규 2건, 실패 0건, 13초",
   "counts": {
-    "new": 24,
+    "new": 2,
     "failed": 0,
-    "total": 4849
+    "total": 4851
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 24건, 실패 0건, 12초",
-    "[신규] 2대 0 승리로 아시안게임 금메달…조창민 부의장, 이준석·이용섭 감독 선수 격려 — 인천일보",
-    "[신규] 李, AI 답변으로 반박…이준석 \"대통령을 제미나이로\" 한동훈 \"제미나이 국정농단\" — TV조선뉴스",
-    "[신규] 이재명 대통령, ‘AI 제미나이’로 국무회의 배석 옹호…야권 총공세 — www.everynews.co.kr",
-    "[신규] 안도걸 의원, “성장률 3.3%·잠재성장률 40년만 반등...경제 재도약 골든타임 놓치지 말아야” — 시민행정신문"
+    "신규 2건, 실패 0건, 13초",
+    "[신규] 이형일, 가상자산 과세에 \"여러 의견…최대한 숙고해서 판단\" — 연합뉴스",
+    "[신규] [2026 국감] LSD 검사 소홀·보고 누락 의혹...이종욱 \"전 과정 철저 조사\" — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39731427438,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39731427438",
+  "run_id": 39732882508,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39732882508",
   "request_id": "cron-202610220600",
   "trigger": "schedule",
-  "started_at": "2026-10-22T15:02:19+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-22T15:16:39+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 107건"
+      "summary": "검색어 5개에서 105건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 72건 (신규 24건) · 뉴스핌 5건, 연합뉴스 5건, 데일리안 4건"
+      "summary": "오늘 74건 (신규 2건) · 뉴스핌 6건, 연합뉴스 6건, 데일리안 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-22T15:02:32+09:00"
+  "updated_at": "2026-10-22T15:16:53+09:00"
 }
