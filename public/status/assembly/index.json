@@ -1,11 +1,12 @@
 {
   "automations": [
     "hscity",
+    "lcouncil",
     "mail",
     "minutes",
     "news",
     "sort",
     "weekend"
   ],
-  "generated_at": "2026-10-23T00:01:55+09:00"
+  "generated_at": "2026-10-23T02:01:37+09:00"
 }

@@ -1,0 +1,1 @@
+{"automation": "lcouncil", "run_id": 39818957879, "request_id": "cron-202610221700", "trigger": "schedule", "started_at": "2026-10-23T02:01:35+09:00", "duration_sec": 1, "ok": false, "summary": "신규 0건, 교체 0건, 실패 5건, 1초", "url": "https://github.com/Junjaee/ai-office/actions/runs/39818957879", "recorded_at": "2026-10-23T02:01:37+09:00"}
