@@ -7,7 +7,8 @@ result_link: "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv
 request_delay: 1.5       # 사이트 요청 간격(초). 1초 이상 유지
 retries: 3
 timeout: 60
-per_run_limit: 300       # 의회 하나당 한 번 실행에 받는 최대 건수 (과거분은 여러 날에 나눠 받는다)
+per_run_limit: 150       # 의회 하나당 한 번 실행에 받는 최대 건수 (과거분은 여러 날에 나눠 받는다). 첫 실행 실측: 1건에 약 20초(드라이브 올리기 포함)
+time_budget_min: 200     # 전체 실행 시간 예산(분). 넘으면 멈추고 보고한다 — 워크플로 상한 300분보다 짧게
 
 # 상태 보고: 저장소 루트(체크아웃 위치)에 커밋
 office_repo: "."

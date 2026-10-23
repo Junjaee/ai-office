@@ -100,7 +100,7 @@ class DriveStore(BaseStore):
         data = text.encode("utf-8")
         prev = self.manifest.get(doc.id, {})
         file_id = prev.get("file_id")
-        if not file_id:
+        if prev and not file_id:   # 예전 기록에 file_id 가 없을 때만 찾는다(새 문서는 바로 올려 요청을 아낀다)
             found = self.c.find(parent, parts[-1])
             file_id = found["id"] if found else None
         new_id = self.c.upload(parent, parts[-1], data, "text/plain", file_id=file_id)

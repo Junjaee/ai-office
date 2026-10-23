@@ -49,13 +49,21 @@ def build_store(cfg: dict, args: argparse.Namespace, council: dict):
     return DriveStore(DriveClient(), cfg["drive_folder_id"], council["name"])
 
 
-def collect_council(council: dict, site, store, limit: int, dry_run: bool, progress) -> dict:
-    """의회 하나. 최근 대수·회기부터 훑어 manifest 에 없는 회의록을 limit 건까지 받는다."""
+def collect_council(council: dict, site, store, limit: int, dry_run: bool, progress, deadline: float | None = None) -> dict:
+    """의회 하나. 최근 대수·회기부터 훑어 manifest 에 없는 회의록을 limit 건까지 받는다.
+
+    deadline(time.monotonic 기준)이 지나면 멈춘다 — 실행 전체가 워크플로 시간 상한에 걸려 보고를 못 하는 일을 막는다.
+    """
     c = {"new": 0, "replaced": 0, "skip": 0, "failed": 0, "seen": 0}
     lines: list[str] = []
     done = 0
     for th in site.terms():
         for doc in site.iter_docs(th):
+            if deadline and time.monotonic() > deadline:
+                progress(f"{council['name']}: 시간 예산이 다 돼 멈춤(다음 실행에 이어서)")
+                if not dry_run:
+                    store.save_manifest()
+                return {"counts": c, "lines": lines}
             c["seen"] += 1
             kind = store.needs_fetch(doc)
             if kind is None:
@@ -103,6 +111,8 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     http = Http(delay=float(cfg.get("request_delay", 1.5)), retries=int(cfg.get("retries", 3)),
                 timeout=int(cfg.get("timeout", 60)))
     limit = args.limit or int(cfg.get("per_run_limit", 300))
+    budget_min = float(cfg.get("time_budget_min", 0) or 0)
+    deadline = time.monotonic() + budget_min * 60 if budget_min else None
 
     total = {"new": 0, "replaced": 0, "failed": 0, "skip": 0, "seen": 0}
     lines: list[str] = []
@@ -117,7 +127,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         progress(f"{council['name']} 시작")
         try:
             store = build_store(cfg, args, council)
-            r = collect_council(council, site, store, limit, args.dry_run, progress)
+            r = collect_council(council, site, store, limit, args.dry_run, progress, deadline)
             total_saved += store.total_ok()
         except Exception as exc:  # noqa: BLE001 - 의회 하나가 막혀도 나머지는 계속
             errors += 1
