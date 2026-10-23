@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 11초",
+  "summary": "신규 52건, 실패 0건, 9초",
   "counts": {
-    "new": 23,
+    "new": 52,
     "failed": 0,
-    "total": 4946
+    "total": 4998
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 11초",
-    "[신규] 이준석 “한동훈은 천박한 법 기술자…무조건 남 죽이려 날뛰어” — 한겨레",
-    "[신규] 이준석 \"장동혁 '욕설 녹취,' 양향자 '경기 45석'... 국힘 다들 제정신 아냐\" — YTN",
-    "[신규] 이준석 \"조희대 탄핵? 설마 하겠나…정치권, 민생보다 정쟁 몰두\" — 대전일보",
-    "[신규] 이준석 \"오세훈 무죄 기대\"… 吳-韓-李 연대설엔 선 그어 — 한국경제"
+    "신규 52건, 실패 0건, 9초",
+    "[신규] 이준석, 한동훈에 “천박한 법 기술자”…“오세훈 재판도 당신 때문” — 주간조선",
+    "[신규] 이준석 “한동훈, ‘저격수’ 홍준표 닮아···천박한 법 기술자” — 주간경향",
+    "[신규] 오세훈 2심 무죄 현장 찾은 이준석…\"명예회복 담백하게 축하\" — 경기일보",
+    "[신규] 이준석 \"吳, '차도살인·정치공세'에서 명예회복…동탄 현안 함께 풀것\" — 머니투데이"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39892775181,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39892775181",
-  "request_id": "cron-202610230300",
+  "run_id": 39928761623,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39928761623",
+  "request_id": "cron-202610230900",
   "trigger": "schedule",
-  "started_at": "2026-10-23T12:02:12+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-23T18:01:22+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 128건"
+      "summary": "검색어 5개에서 146건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 56건 (신규 23건) · 시민행정신문 17건, 뉴스핌 3건, 뉴시스 3건"
+      "summary": "오늘 108건 (신규 52건) · 시민행정신문 22건, 뉴시스 8건, 연합뉴스 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-23T12:02:24+09:00"
+  "updated_at": "2026-10-23T18:01:31+09:00"
 }
