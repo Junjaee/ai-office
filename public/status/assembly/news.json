@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 12초",
+  "summary": "신규 23건, 실패 0건, 11초",
   "counts": {
-    "new": 6,
+    "new": 23,
     "failed": 0,
-    "total": 4923
+    "total": 4946
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 12초",
-    "[신규] 이재관 의원, 51억 들인 해수부 '섬 원격진료', 주민 100명 중 6명만 이용 — 시민행정신문",
-    "[신규] 조계원 의원, 무등록으로 차린 ‘OTT방’ 135곳…소방 점검도 없어 — 시민행정신문",
-    "[신규] 소병훈 의원, “공보의 72% 급감… 시니어의사 사업, 예산 부족으로 신청인원 절반도 못 뽑아 — 시민행정신문",
-    "[신규] 강동구의회 행정재경위, 청년창업·자원순환시설 운영 현황 점검 — 신아일보"
+    "신규 23건, 실패 0건, 11초",
+    "[신규] 이준석 “한동훈은 천박한 법 기술자…무조건 남 죽이려 날뛰어” — 한겨레",
+    "[신규] 이준석 \"장동혁 '욕설 녹취,' 양향자 '경기 45석'... 국힘 다들 제정신 아냐\" — YTN",
+    "[신규] 이준석 \"조희대 탄핵? 설마 하겠나…정치권, 민생보다 정쟁 몰두\" — 대전일보",
+    "[신규] 이준석 \"오세훈 무죄 기대\"… 吳-韓-李 연대설엔 선 그어 — 한국경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39875578731,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39875578731",
-  "request_id": "cron-202610230000",
+  "run_id": 39892775181,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39892775181",
+  "request_id": "cron-202610230300",
   "trigger": "schedule",
-  "started_at": "2026-10-23T09:02:23+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-23T12:02:12+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 123건"
+      "summary": "검색어 5개에서 128건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 33건 (신규 6건) · 시민행정신문 11건, 연합뉴스 3건, 뉴스핌 2건"
+      "summary": "오늘 56건 (신규 23건) · 시민행정신문 17건, 뉴스핌 3건, 뉴시스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-23T09:02:36+09:00"
+  "updated_at": "2026-10-23T12:02:24+09:00"
 }
