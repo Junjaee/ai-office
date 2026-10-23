@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 52건, 실패 0건, 9초",
+  "summary": "신규 12건, 실패 0건, 10초",
   "counts": {
-    "new": 52,
+    "new": 12,
     "failed": 0,
-    "total": 4998
+    "total": 5010
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 52건, 실패 0건, 9초",
-    "[신규] 이준석, 한동훈에 “천박한 법 기술자”…“오세훈 재판도 당신 때문” — 주간조선",
-    "[신규] 이준석 “한동훈, ‘저격수’ 홍준표 닮아···천박한 법 기술자” — 주간경향",
-    "[신규] 오세훈 2심 무죄 현장 찾은 이준석…\"명예회복 담백하게 축하\" — 경기일보",
-    "[신규] 이준석 \"吳, '차도살인·정치공세'에서 명예회복…동탄 현안 함께 풀것\" — 머니투데이"
+    "신규 12건, 실패 0건, 10초",
+    "[신규] 조창민 하남시의회 부의장, 테크볼 금메달리스트 이준석 선수 격려···지역 체육 발전 논의 — 경인매일",
+    "[신규] 사법리스크 고비 넘긴 오세훈...보수진영 권력구도 관심 — YTN",
+    "[신규] 정치인의 화법 — 브런치",
+    "[신규] [토큰워치] ‘프로젝트 한강’ 실거래 확대 앞두고…결제정보 보호·사고 책임은 — 주간한국"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 39928761623,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39928761623",
-  "request_id": "cron-202610230900",
+  "run_id": 39950636143,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39950636143",
+  "request_id": "cron-202610231200",
   "trigger": "schedule",
-  "started_at": "2026-10-23T18:01:22+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-23T21:05:12+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 146건"
+      "summary": "검색어 5개에서 136건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 108건 (신규 52건) · 시민행정신문 22건, 뉴시스 8건, 연합뉴스 7건"
+      "summary": "오늘 120건 (신규 12건) · 시민행정신문 22건, 뉴시스 9건, 연합뉴스 9건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-23T18:01:31+09:00"
+  "updated_at": "2026-10-23T21:05:23+09:00"
 }
