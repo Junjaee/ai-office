@@ -145,6 +145,15 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         progress(f"{council['name']}: 신규 {r['counts']['new']} 교체 {r['counts']['replaced']} "
                  f"실패 {r['counts']['failed']} 건너뜀 {r['counts']['skip']}")
 
+    # 누적 건수는 이번에 돌린 의회만이 아니라 어댑터 있는 의회 전부의 manifest 를 더한다(의회 하나만 돌려도 카드 숫자가 줄지 않게)
+    if not args.dry_run and args.council and args.council != "all":
+        for council in load_councils(args.councils):
+            if build_site(council, http) is None or council["id"] == args.council:
+                continue
+            try:
+                total_saved += build_store(cfg, args, council).total_ok()
+            except Exception as exc:  # noqa: BLE001 - 숫자 하나 때문에 실행을 실패로 만들지 않는다
+                progress(f"{council['name']}: 누적 건수 못 읽음({str(exc)[:60]})")
     counts = {"new": total["new"], "replaced": total["replaced"], "failed": total["failed"] + errors}
     if not args.dry_run:
         counts["total"] = total_saved
