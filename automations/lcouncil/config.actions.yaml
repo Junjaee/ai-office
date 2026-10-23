@@ -1,8 +1,8 @@
 # 지방의회 회의록 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GOOGLE_*)로 받는다.
 
 # 결과를 둘 구글 드라이브 상위 폴더. 그 안에 의회별 폴더가 자동으로 생긴다.
-drive_folder_id: ""      # 비어 있으면 실행이 "드라이브 폴더 설정 없음"으로 실패한다 — 사용자가 폴더 주소를 주면 채운다
-result_link: ""
+drive_folder_id: "10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S"   # 내 드라이브/직장/국회/01. 의정활동/02. 위원회_회의/지방의회 회의록 (국회회의록 _회의록 옆, 2026-10-23)
+result_link: "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S"
 
 request_delay: 1.5       # 사이트 요청 간격(초). 1초 이상 유지
 retries: 3
