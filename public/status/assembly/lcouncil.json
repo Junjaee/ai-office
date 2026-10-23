@@ -1,42 +1,42 @@
 {
   "name": "지방의회 회의록",
   "dept": "research",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 5건, 교체 0건, 실패 0건, 20초",
+  "summary": "신규 713건, 교체 0건, 실패 5건, 114.9분",
   "counts": {
-    "new": 5,
+    "new": 713,
     "replaced": 0,
-    "failed": 0,
-    "total": 5
+    "failed": 5,
+    "total": 1912
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 5건, 교체 0건, 실패 0건, 20초",
-    "[신규] 전남광주통합특별시의회 제1대/제4회/본회의_제5차_2026-10-15.txt",
-    "[신규] 전남광주통합특별시의회 제1대/제4회/본회의_제4차_2026-10-14.txt",
-    "[신규] 전남광주통합특별시의회 제1대/제4회/본회의_제3차_2026-10-13.txt",
-    "[신규] 전남광주통합특별시의회 제1대/제4회/본회의_제2차_2026-10-12.txt"
+    "신규 713건, 교체 0건, 실패 5건, 114.9분",
+    "[신규] 서울특별시의회 제12대/제339회/교통위원회_제6차_2026-10-20.txt",
+    "[신규] 서울특별시의회 제11대/제333회/도시계획균형위원회행정사무감사_2025-11-11.txt",
+    "[신규] 서울특별시의회 제11대/제333회/도시계획균형위원회행정사무감사_2025-11-13.txt",
+    "[신규] 서울특별시의회 제11대/제333회/교통위원회행정사무감사_2025-11-04.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 39889585727,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39889585727",
-  "request_id": "req-20261023112628-jngj",
-  "trigger": "manual",
-  "started_at": "2026-10-23T11:27:23+09:00",
-  "duration_sec": 20,
+  "run_id": 40006498942,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40006498942",
+  "request_id": "cron-202610231700",
+  "trigger": "schedule",
+  "started_at": "2026-10-24T03:50:18+09:00",
+  "duration_sec": 6893,
   "tasks": [
     {
       "id": "scan",
       "status": "done",
-      "summary": "의회 1/1곳 확인, 회의록 5건"
+      "summary": "의회 5/5곳 확인, 회의록 1922건"
     },
     {
       "id": "fetch",
-      "status": "done",
-      "summary": "신규 5건, 교체 0건"
+      "status": "error",
+      "summary": "신규 713건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-10-23T11:27:45+09:00"
+  "updated_at": "2026-10-24T05:45:12+09:00"
 }
