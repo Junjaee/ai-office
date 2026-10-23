@@ -76,11 +76,15 @@ def collect_council(council: dict, site, store, limit: int, dry_run: bool, progr
                 try:
                     text = site.fetch_text(doc)
                     if len(text) < 200:
-                        raise RuntimeError(f"본문이 너무 짧음({len(text)}자)")
-                    path, size = store.save_text(doc, text)
-                    store.record(doc, path, size)
-                    c[kind] += 1
-                    lines.append(f"[{'교체' if kind == 'replaced' else '신규'}] {council['name']} {path}")
+                        # 글자 없는 회의록(스캔 파일만 있거나 빈 문서). 실패가 아니라 "글자 없음"으로 기록해 다시 받지 않는다
+                        store.record(doc, "", 0, status="no_text")
+                        c["no_text"] = c.get("no_text", 0) + 1
+                        lines.append(f"[글자없음] {council['name']} {doc.title}")
+                    else:
+                        path, size = store.save_text(doc, text)
+                        store.record(doc, path, size)
+                        c[kind] += 1
+                        lines.append(f"[{'교체' if kind == 'replaced' else '신규'}] {council['name']} {path}")
                 except Exception as exc:  # noqa: BLE001 - 한 건 실패로 전체를 멈추지 않는다
                     c["failed"] += 1
                     lines.append(f"[실패] {council['name']} {doc.title}: {str(exc)[:80]}")

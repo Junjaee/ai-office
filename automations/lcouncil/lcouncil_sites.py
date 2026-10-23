@@ -101,9 +101,10 @@ class EjournalSite:
 
     def terms(self) -> list[int]:
         html = self.http.get(f"{self.base}/assem/search/simple/session.do").text
-        nums = sorted({int(x) for x in re.findall(r'csNum\s*=\s*"(\d+)"', html)}, reverse=True)
+        # 판에 따라 변수 이름이 csNum(옛 판) 또는 ssnNo(새 판, 전남광주 등)
+        nums = sorted({int(x) for x in re.findall(r'\.(?:csNum|ssnNo)\s*=\s*"(\d+)"', html)}, reverse=True)
         if not nums:
-            raise RuntimeError("대수 목록(csNum)을 찾지 못함")
+            raise RuntimeError("대수 목록(csNum/ssnNo)을 찾지 못함")
         return nums
 
     def iter_docs(self, th: int) -> Iterator[Doc]:
@@ -111,24 +112,31 @@ class EjournalSite:
         for group in self.GROUPS:
             sessions = self.http.json(f"{self.base}/assem/search/simple/LoadingSession_Year.json",
                                       {"searchCsDaesoo": th, "searchCtGroup": group}) or []
-            for s in sorted(sessions, key=lambda x: int(x.get("csNum") or 0), reverse=True):
-                sess = int(s.get("csNum") or 0)
-                stype = s.get("csTypeNm") or ""
+            # 옛 판(csNum·cdUid…)과 새 판(ssnNo·minId…, 전남광주)이 필드 이름만 다르다
+            sess_no = lambda x: int(x.get("csNum") or x.get("ssnNo") or 0)  # noqa: E731
+            for s in sorted(sessions, key=sess_no, reverse=True):
+                sess = sess_no(s)
+                stype = s.get("csTypeNm") or s.get("ssnTpNm") or ""
                 docs = self.http.json(f"{self.base}/assem/search/simple/LoadingList.json",
                                       {"searchCsSession": sess, "searchCtGroup": group}) or []
                 for d in docs:
-                    uid = str(d.get("cdUid"))
+                    new_style = "minId" in d
+                    uid = str(d.get("minId") if new_style else d.get("cdUid"))
                     if uid in seen:
                         continue
                     seen.add(uid)
-                    order = f"제{d['cdChasoo']}차" if str(d.get("cdChasoo") or "0") != "0" else ""
-                    title = f"제{sess}회 {d.get('ctNm') or ''} {order}".strip()
-                    yield Doc(id=uid, th=th, session=sess, session_type=stype, committee=d.get("ctNm") or "",
-                              order=order, date=_date(d.get("cdDate")), title=title,
-                              url=f"{self.base}/assem/viewer.do?cdUid={uid}", temp=(d.get("cdImsi") == "Y"))
+                    chasoo = str(d.get("sessNo" if new_style else "cdChasoo") or "0")
+                    order = f"제{chasoo}차" if chasoo != "0" else ""
+                    committee = d.get("mtgNm" if new_style else "ctNm") or ""
+                    title = f"제{sess}회 {committee} {order}".strip()
+                    yield Doc(id=uid, th=th, session=sess, session_type=stype, committee=committee,
+                              order=order, date=_date(d.get("mtgDate" if new_style else "cdDate")), title=title,
+                              url=f"{self.base}/assem/viewer.do?{'minId' if new_style else 'cdUid'}={uid}",
+                              temp=((d.get("tmpMinYn") if new_style else d.get("cdImsi")) == "Y"))
 
     def fetch_text(self, doc: Doc) -> str:
-        return html_text(self.http.get(doc.url).text, "#bodyBox")
+        html = self.http.get(doc.url).text
+        return html_text(html, "#bodyBox" if 'id="bodyBox"' in html else "#assem-content")
 
 
 # ───────────────────────── 서울시의회 틀 (/record/) ─────────────────────────

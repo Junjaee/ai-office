@@ -43,12 +43,12 @@ class BaseStore:
             return "replaced"
         return None
 
-    def record(self, doc: Doc, path: str, size: int) -> None:
-        self.manifest[doc.id] = {"path": path, "date": doc.date, "temp": doc.temp, "size": size,
+    def record(self, doc: Doc, path: str, size: int, status: str = "ok") -> None:
+        self.manifest[doc.id] = {"path": path, "date": doc.date, "temp": doc.temp, "size": size, "status": status,
                                  "title": doc.title, "saved_at": datetime.now(KST).isoformat(timespec="seconds")}
 
     def total_ok(self) -> int:
-        return len(self.manifest)
+        return sum(1 for v in self.manifest.values() if v.get("status", "ok") == "ok")
 
 
 class LocalStore(BaseStore):
@@ -107,11 +107,12 @@ class DriveStore(BaseStore):
         self._pending_file_id = new_id
         return "/".join(parts), len(data)
 
-    def record(self, doc: Doc, path: str, size: int) -> None:
-        super().record(doc, path, size)
+    def record(self, doc: Doc, path: str, size: int, status: str = "ok") -> None:
+        super().record(doc, path, size, status)
         fid = getattr(self, "_pending_file_id", None)
-        if fid:
+        if fid and status == "ok":
             self.manifest[doc.id]["file_id"] = fid
+        self._pending_file_id = None
 
     def save_manifest(self) -> None:
         data = json.dumps(self.manifest, ensure_ascii=False, indent=1).encode("utf-8")
