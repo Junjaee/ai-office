@@ -3,36 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 12초",
+  "summary": "신규 1건, 실패 0건, 11초",
   "counts": {
     "new": 1,
     "failed": 0,
-    "total": 5062
+    "total": 5063
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 12초",
-    "[신규] 천하람 “이 대통령, 꼰대 같아”…‘강적들’, 오세훈 무죄·장동혁 욕설 파문 분석 — 미디어펜"
+    "신규 1건, 실패 0건, 11초",
+    "[신규] 이준석 기록 넘는 장동혁…‘최장수’ 앞에 놓인 욕설 논란 — 매일경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40092240422,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40092240422",
-  "request_id": "cron-202610241200",
+  "run_id": 40105039272,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40105039272",
+  "request_id": "cron-202610241500",
   "trigger": "schedule",
-  "started_at": "2026-10-24T21:02:13+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-25T00:01:25+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 41건"
+      "summary": "검색어 5개에서 34건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 52건 (신규 1건) · 뉴시스 9건, MBC 뉴스 5건, 뉴스1 4건"
+      "summary": "오늘 1건 (신규 1건) · 매일경제 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-24T21:02:26+09:00"
+  "updated_at": "2026-10-25T00:01:37+09:00"
 }
