@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 9초",
+  "summary": "신규 3건, 실패 0건, 9초",
   "counts": {
-    "new": 10,
+    "new": 3,
     "failed": 0,
-    "total": 5032
+    "total": 5035
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 9초",
-    "[신규] 오세훈 2심 '무죄'...\"상고해야\" vs \"사필귀정\" [포커스] — YTN",
-    "[신규] 오세훈, 정치인생 3번째 기사회생… 야권 \"보수 통합 구심점 기대\" — 조선일보",
-    "[신규] 개혁신당 \"오세훈 '무죄' 사필귀정…특검 무겁게 받아들여야\" — 뉴스1",
-    "[신규] 李대통령 지지율, 7주 만에 40%대…2주 연속 상승 — 주간한국"
+    "신규 3건, 실패 0건, 9초",
+    "[신규] 이준석 \"한동훈, 저격수 시절 홍준표 닮아가…내 관심 밖\" — 한국경제",
+    "[신규] 이준석 “‘법비 다툼’에 거리둘 것…상대를 감옥 보내려 발악하는 정치에 진절머리” — 헤럴드경제",
+    "[신규] 조희대 탄핵 여론 팽팽…반대 39%·찬성 34% — 매일경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40023593349,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40023593349",
-  "request_id": "cron-202610232100",
+  "run_id": 40042796295,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40042796295",
+  "request_id": "cron-202610240000",
   "trigger": "schedule",
-  "started_at": "2026-10-24T06:01:29+09:00",
+  "started_at": "2026-10-24T09:01:30+09:00",
   "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 139건"
+      "summary": "검색어 5개에서 134건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 22건 (신규 10건) · 뉴시스 6건, MBC 뉴스 3건, 뉴스1 3건"
+      "summary": "오늘 25건 (신규 3건) · 뉴시스 6건, MBC 뉴스 3건, 뉴스1 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-24T06:01:39+09:00"
+  "updated_at": "2026-10-24T09:01:40+09:00"
 }
