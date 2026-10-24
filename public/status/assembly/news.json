@@ -3,39 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 12초",
+  "summary": "신규 1건, 실패 0건, 12초",
   "counts": {
-    "new": 11,
+    "new": 1,
     "failed": 0,
-    "total": 5061
+    "total": 5062
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 12초",
-    "[신규] 금메달 따고도 취업 걱정…’테크볼 챔프’ 이준석의 외로운 도전 — 연합뉴스TV",
-    "[신규] 이준석의 '424일' 넘는다…장동혁 '최장수 대표' 눈앞 [신현보의 딥데이터] — 한국경제",
-    "[신규] 오세훈 2심 무죄에 번진 ‘한동훈 책임론’…명태균 사건, 누가 키웠나 — 일요서울i",
-    "[신규] 압도적인 퍼포먼스 직접 느꼈다… 아디다스골프 ‘아디다스 오픈 코드케이오스 챔피언십’ 성료 — 스포츠월드"
+    "신규 1건, 실패 0건, 12초",
+    "[신규] 천하람 “이 대통령, 꼰대 같아”…‘강적들’, 오세훈 무죄·장동혁 욕설 파문 분석 — 미디어펜"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40080265691,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40080265691",
-  "request_id": "cron-202610240900",
+  "run_id": 40092240422,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40092240422",
+  "request_id": "cron-202610241200",
   "trigger": "schedule",
-  "started_at": "2026-10-24T18:01:28+09:00",
+  "started_at": "2026-10-24T21:02:13+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 55건"
+      "summary": "검색어 5개에서 41건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 51건 (신규 11건) · 뉴시스 9건, MBC 뉴스 5건, 뉴스1 4건"
+      "summary": "오늘 52건 (신규 1건) · 뉴시스 9건, MBC 뉴스 5건, 뉴스1 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-24T18:01:41+09:00"
+  "updated_at": "2026-10-24T21:02:26+09:00"
 }
