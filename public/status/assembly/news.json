@@ -3,36 +3,37 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 11초",
+  "summary": "신규 2건, 실패 0건, 11초",
   "counts": {
-    "new": 1,
+    "new": 2,
     "failed": 0,
-    "total": 5063
+    "total": 5065
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 11초",
-    "[신규] 이준석 기록 넘는 장동혁…‘최장수’ 앞에 놓인 욕설 논란 — 매일경제"
+    "신규 2건, 실패 0건, 11초",
+    "[신규] 法 판결에 '일희일비'…법원으로 도망치는 정치 '어쩌나' — 더팩트",
+    "[신규] 김계리 \"한동훈씨, 책임져라…1짱 먹고 대통령될 줄 알았나\" — 이데일리"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40105039272,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40105039272",
-  "request_id": "cron-202610241500",
+  "run_id": 40118735448,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40118735448",
+  "request_id": "cron-202610241800",
   "trigger": "schedule",
-  "started_at": "2026-10-25T00:01:25+09:00",
+  "started_at": "2026-10-25T03:01:21+09:00",
   "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 34건"
+      "summary": "검색어 5개에서 36건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 1건 (신규 1건) · 매일경제 1건"
+      "summary": "오늘 3건 (신규 2건) · 더팩트 1건, 매일경제 1건, 이데일리 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-25T00:01:37+09:00"
+  "updated_at": "2026-10-25T03:01:34+09:00"
 }
