@@ -3,39 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 전송 3건, 실패 0건, 1.4분",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 16초",
   "counts": {
-    "new": 3,
-    "sent": 3,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 3건, 전송 3건, 실패 0건, 1.4분",
-    "[신규] [고시] 도시관리계획(공원) 실시계획인가(변경) 고시 안내 - 치동천 체육공원",
-    "[첨부실패] 고시 2026 834호 공원조성계획 결정 고시문(동탄2 4호체육공원).hwpx: SSLError",
-    "[첨부실패] 위치도 및 관련도면.pdf: SSLError",
-    "[신규] [고시] 공원조성계획(변경)결정 고시- 동탄2 4호체육공원"
+    "신규 0건, 전송 0건, 실패 0건, 16초"
   ],
   "link": "",
-  "run_id": 39875584018,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/39875584018",
-  "request_id": "cron-202610230000",
+  "run_id": 40042801792,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40042801792",
+  "request_id": "cron-202610240000",
   "trigger": "schedule",
-  "started_at": "2026-10-23T09:02:31+09:00",
-  "duration_sec": 85,
+  "started_at": "2026-10-24T09:01:31+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 3건, 첨부 8건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "3건 발송, 무음 0건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-10-23T09:03:58+09:00"
+  "updated_at": "2026-10-24T09:01:48+09:00"
 }
