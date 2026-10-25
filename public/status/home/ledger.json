@@ -3,39 +3,37 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 1건, 건너뜀 0건, 대기 0건, 실패 0건, 7초",
+  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 0초",
   "counts": {
-    "new": 1,
-    "replaced": 1,
+    "new": 0,
+    "replaced": 0,
     "skip": 0,
     "wait": 0,
     "failed": 0
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 1건, 건너뜀 0건, 대기 0건, 실패 0건, 7초",
-    "[추가] 2026년 10월 10/25 위례드림주유소 114,781원 (기타)",
-    "[취소삭제] 2026년 10월 위례드림주유소 150,000원"
+    "신규 0건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 0초"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 40164952801,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40164952801",
-  "request_id": "cron-202610250516",
+  "run_id": 40167581616,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40167581616",
+  "request_id": "cron-202610250600",
   "trigger": "schedule",
-  "started_at": "2026-10-25T14:17:27+09:00",
-  "duration_sec": 7,
+  "started_at": "2026-10-25T15:01:23+09:00",
+  "duration_sec": 0,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 2건 확인, 결제 2건"
+      "summary": "메일 0건 확인, 결제 0건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 1 · 취소 1 · 건너뜀 0"
+      "summary": "추가 0 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-25T14:17:35+09:00"
+  "updated_at": "2026-10-25T15:01:24+09:00"
 }
