@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 17건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 11초",
   "counts": {
-    "new": 17,
+    "new": 4,
     "failed": 0,
-    "total": 5183
+    "total": 5187
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 17건, 실패 0건, 12초",
-    "[신규] “이준석, 한동훈 비난한 것 잘못…개혁보수 싸울 때 아냐” 김근식의 말 — 문화일보",
-    "[신규] 김근식 “이준석, 오세훈 빌어 한동훈 비난 ‘비겁’…서로 자제, 유승민까지 연대해야” — www.dt.co.kr",
-    "[신규] 오세훈 무죄 뒤 보수판 흔들리나…한동훈·이준석과 주도권 경쟁 — 톱스타뉴스",
-    "[신규] 보수 재건 4인방, 유승민·한동훈·오세훈·이준석의 결정적 한계 (인물비상구 20261025 클립 유승민∙한동훈∙오세훈 편) — 경향신문"
+    "신규 4건, 실패 0건, 11초",
+    "[신규] 추미애 “정치적 화형 당해도 소방 재정 개혁”…이준석 “추다르크 되려 하나” — 주간조선",
+    "[신규] 어느새 426일… 최장수 대표 된 장동혁 — 조선일보",
+    "[신규] 이준석, 추미애 ‘화형’에 “애꿎은 소방만 자꾸 도발한다” — 매일경제",
+    "[신규] 與, 부동산·주식 세제개편 정부안 손질하나 — 한국경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40205030497,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40205030497",
-  "request_id": "cron-202610251500",
+  "run_id": 40219269138,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40219269138",
+  "request_id": "cron-202610251800",
   "trigger": "schedule",
-  "started_at": "2026-10-26T00:02:53+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-26T03:02:10+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 124건"
+      "summary": "검색어 5개에서 129건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 17건 (신규 17건) · 경향신문 2건, 시민행정신문 2건, YTN 1건"
+      "summary": "오늘 21건 (신규 4건) · 경향신문 2건, 시민행정신문 2건, YTN 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-26T00:03:06+09:00"
+  "updated_at": "2026-10-26T03:02:21+09:00"
 }
