@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 36건, 실패 0건, 12초",
+  "summary": "신규 17건, 실패 0건, 12초",
   "counts": {
-    "new": 36,
+    "new": 17,
     "failed": 0,
-    "total": 5328
+    "total": 5345
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 36건, 실패 0건, 12초",
-    "[신규] 이준석, 한동훈 겨냥 \"민주당에 부화뇌동‥안에 수류탄 까넣어\" — MBC 뉴스",
-    "[신규] 오세훈 생환에 ‘보수 통합’ 주도권 논쟁 시작…오세훈·한동훈·이준석 연대에 동상이몽 — 경향신문",
-    "[신규] [속보]이준석 “與의 AI판사 도입, 제미나이 쓰면 李대통령 유죄 확정” — 문화일보",
-    "[신규] 오세훈, 이준석과 공관 만찬…‘오ㆍ이ㆍ한’ 연대 시작될까 [불편한 여의도] — 중앙일보"
+    "신규 17건, 실패 0건, 12초",
+    "[신규] 손 맞잡은 오세훈-장동혁...이준석은 한동훈 저격? — YTN",
+    "[신규] [칼럼] ‘추다르크’ 너머는 보지 않는 ‘이준석’ — 시사1",
+    "[신규] [폴리Shorts] 한동훈·이준석도 총선 승리에 헌신해야, 보수 대통합, 선거 직전 아닌 미리 준비해야 #정국인터뷰 #김성태 — 폴리뉴스 Polinews",
+    "[신규] ‘박정희 첫 추모사’ 오세훈, 국힘 의원들·이준석과 연쇄 만찬 — 한겨레"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40296463502,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40296463502",
-  "request_id": "cron-202610260900",
+  "run_id": 40319405066,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40319405066",
+  "request_id": "cron-202610261200",
   "trigger": "schedule",
-  "started_at": "2026-10-26T18:02:32+09:00",
+  "started_at": "2026-10-26T21:02:12+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 219건"
+      "summary": "검색어 5개에서 221건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 162건 (신규 36건) · 뉴시스 13건, 뉴스1 5건, 매일경제 5건"
+      "summary": "오늘 179건 (신규 17건) · 뉴시스 13건, 뉴스1 6건, 세계일보 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-26T18:02:44+09:00"
+  "updated_at": "2026-10-26T21:02:25+09:00"
 }
