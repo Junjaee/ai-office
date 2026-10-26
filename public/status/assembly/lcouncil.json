@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 588건, 교체 0건, 실패 4건, 130.3분",
+  "summary": "신규 0건, 교체 0건, 실패 607건, 148.0분",
   "counts": {
-    "new": 588,
+    "new": 0,
     "replaced": 0,
-    "failed": 4,
+    "failed": 607,
     "total": 3093
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 588건, 교체 0건, 실패 4건, 130.3분",
-    "[신규] 서울특별시의회 제11대/제327회/예산결산특별위원회_제3차_2024-12-04.txt",
-    "[신규] 서울특별시의회 제11대/제327회/예산결산특별위원회_제4차_2024-12-13.txt",
-    "[신규] 서울특별시의회 제11대/제327회/서울에너지공사사장후보자인사청문특별위원회_제1차_2024-11-28.txt",
-    "[신규] 서울특별시의회 제11대/제327회/서울에너지공사사장후보자인사청문특별위원회_제2차_2024-12-10.txt"
+    "신규 0건, 교체 0건, 실패 607건, 148.0분",
+    "[실패] 서울특별시의회 제339회 본회의 제3차(2026.09.11 금요일): <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?",
+    "[실패] 서울특별시의회 제339회 도시계획균형위원회 [임시] 제4차[폐회중](2026.10.23 금요일): <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?",
+    "[실패] 서울특별시의회 제325회 교육위원회 제1차(2024.07.29 월요일): <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?",
+    "[실패] 서울특별시의회 제325회 마약청정도시서울을위한특별위원회 제2차[폐회중](2024.08.20 화요일): <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 40214493946,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40214493946",
-  "request_id": "cron-202610251700",
+  "run_id": 40364613167,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40364613167",
+  "request_id": "cron-202610261700",
   "trigger": "schedule",
-  "started_at": "2026-10-26T02:02:34+09:00",
-  "duration_sec": 7819,
+  "started_at": "2026-10-27T02:01:27+09:00",
+  "duration_sec": 8877,
   "tasks": [
     {
       "id": "scan",
       "status": "done",
-      "summary": "의회 5/5곳 확인, 회의록 3112건"
+      "summary": "의회 5/5곳 확인, 회의록 3711건"
     },
     {
       "id": "fetch",
       "status": "error",
-      "summary": "신규 588건, 교체 0건"
+      "summary": "신규 0건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-10-26T04:12:54+09:00"
+  "updated_at": "2026-10-27T04:29:25+09:00"
 }
