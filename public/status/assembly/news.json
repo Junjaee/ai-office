@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 33건, 실패 0건, 9초",
+  "summary": "신규 36건, 실패 0건, 12초",
   "counts": {
-    "new": 33,
+    "new": 36,
     "failed": 0,
-    "total": 5292
+    "total": 5328
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 33건, 실패 0건, 9초",
-    "[신규] 이준석, 한동훈 겨냥 “민주당에 부화뇌동해 내부에 수류탄 까넣어” — 주간조선",
-    "[신규] ‘이준석·오세훈·한동훈 연대’ 제안에…이준석 \"권투 시합에 칼 들고 나오는 사람 있어\" — JTBC",
-    "[신규] 유승민 \"한동훈·이준석 다 뭉쳐야\" vs 이준석 \"공작정치와 통합 못 해\" — 에브리뉴스 EveryNews",
-    "[신규] 이준석, 또 한동훈 겨냥? “정치 권투장에 혼자 칼 들고 나오는 애 있다” — 한겨레"
+    "신규 36건, 실패 0건, 12초",
+    "[신규] 이준석, 한동훈 겨냥 \"민주당에 부화뇌동‥안에 수류탄 까넣어\" — MBC 뉴스",
+    "[신규] 오세훈 생환에 ‘보수 통합’ 주도권 논쟁 시작…오세훈·한동훈·이준석 연대에 동상이몽 — 경향신문",
+    "[신규] [속보]이준석 “與의 AI판사 도입, 제미나이 쓰면 李대통령 유죄 확정” — 문화일보",
+    "[신규] 오세훈, 이준석과 공관 만찬…‘오ㆍ이ㆍ한’ 연대 시작될까 [불편한 여의도] — 중앙일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40277420379,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40277420379",
-  "request_id": "cron-202610260600",
+  "run_id": 40296463502,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40296463502",
+  "request_id": "cron-202610260900",
   "trigger": "schedule",
-  "started_at": "2026-10-26T15:01:47+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-26T18:02:32+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 203건"
+      "summary": "검색어 5개에서 219건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 126건 (신규 33건) · 뉴시스 10건, 뉴스1 4건, 매일경제 4건"
+      "summary": "오늘 162건 (신규 36건) · 뉴시스 13건, 뉴스1 5건, 매일경제 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-26T15:01:56+09:00"
+  "updated_at": "2026-10-26T18:02:44+09:00"
 }
