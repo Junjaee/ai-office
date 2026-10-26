@@ -1,41 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 17건, 실패 0건, 12초",
-  "counts": {
-    "new": 17,
-    "failed": 0,
-    "total": 5345
-  },
+  "summary": "실행 중 문제가 생겼어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 17건, 실패 0건, 12초",
-    "[신규] 손 맞잡은 오세훈-장동혁...이준석은 한동훈 저격? — YTN",
-    "[신규] [칼럼] ‘추다르크’ 너머는 보지 않는 ‘이준석’ — 시사1",
-    "[신규] [폴리Shorts] 한동훈·이준석도 총선 승리에 헌신해야, 보수 대통합, 선거 직전 아닌 미리 준비해야 #정국인터뷰 #김성태 — 폴리뉴스 Polinews",
-    "[신규] ‘박정희 첫 추모사’ 오세훈, 국힘 의원들·이준석과 연쇄 만찬 — 한겨레"
+    "실행 중 문제가 생겼어요",
+    "HttpError: <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?fields=id&alt=json&uploadType=multipart returned \"The user's Drive storage quota has been exceeded.\". Details: \"[{'message': \"The user's Drive storage quota has been exceeded.\", 'domain': 'usageLimits', 'reason': 'storag"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40319405066,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40319405066",
-  "request_id": "cron-202610261200",
+  "run_id": 40345107807,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40345107807",
+  "request_id": "cron-202610261500",
   "trigger": "schedule",
-  "started_at": "2026-10-26T21:02:12+09:00",
-  "duration_sec": 12,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 221건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 179건 (신규 17건) · 뉴시스 13건, 뉴스1 6건, 세계일보 6건"
-    }
-  ],
+  "started_at": "2026-10-27T00:01:27+09:00",
+  "duration_sec": 8,
   "id": "news",
-  "updated_at": "2026-10-26T21:02:25+09:00"
+  "updated_at": "2026-10-27T00:01:37+09:00"
 }
