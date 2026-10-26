@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 11초",
+  "summary": "신규 10건, 실패 0건, 12초",
   "counts": {
-    "new": 9,
+    "new": 10,
     "failed": 0,
-    "total": 5196
+    "total": 5206
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 11초",
-    "[신규] 이준석 ˝추미애, 애꿎은 소방만 도발˝…소방 재정 발언 비판:중수청일보 — 중수청일보",
-    "[신규] 추미애 “소방 혁신 화형 불사”⋯이준석 “영웅 돼보려는 모양새” — 국민일보",
-    "[신규] ‘경기남부 출마 안 하나’…천하람 “지역구는 본인 결정” — www.dt.co.kr",
-    "[신규] “작년 육사 女 경쟁률 76대 1…여군 장교 지원자, 3년새 82%↑” — 국제신문"
+    "신규 10건, 실패 0건, 12초",
+    "[신규] 이준석 \"추미애, 애꿎은 소방만 도발… 추다르크 되려는 모양\" — 부산파이낸셜뉴스",
+    "[신규] 장동혁, 역대 최장수 당대표 기록에.. 민주 \"버티기 장인\"·국힘 \"김민석 처지부터\" — JIBS제주방송",
+    "[신규] 조희대 탄핵에 다시 뭉치나…국민의힘·개혁신당 \"공조 가능, 합당은 별개\" — 데일리안",
+    "[신규] 오세훈 무죄 후폭풍, 보수 진영 삼각 구도 뜨겁다 — 공감신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40233763395,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40233763395",
-  "request_id": "cron-202610252100",
+  "run_id": 40247346120,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40247346120",
+  "request_id": "cron-202610260000",
   "trigger": "schedule",
-  "started_at": "2026-10-26T06:05:13+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-26T09:02:01+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 137건"
+      "summary": "검색어 5개에서 140건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 30건 (신규 9건) · www.dt.co.kr 2건, 경향신문 2건, 시민행정신문 2건"
+      "summary": "오늘 40건 (신규 10건) · www.dt.co.kr 2건, 경향신문 2건, 시민행정신문 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-26T06:05:25+09:00"
+  "updated_at": "2026-10-26T09:02:14+09:00"
 }
