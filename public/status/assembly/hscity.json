@@ -3,37 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 전송 1건, 실패 0건, 35초",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 16초",
   "counts": {
-    "new": 1,
-    "sent": 1,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 1건, 전송 1건, 실패 0건, 35초",
-    "[첨부실패] 사업수행능력 세부평가기준.hwpx: SSLError",
-    "[신규] [입찰공고] 용역사업 집행계획 및 사업수행능력평가서 제출 안내 공고_동탄도시철도 건설"
+    "신규 0건, 전송 0건, 실패 0건, 16초"
   ],
   "link": "",
-  "run_id": 40145016829,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40145016829",
-  "request_id": "cron-202610250000",
+  "run_id": 40247349489,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40247349489",
+  "request_id": "cron-202610260000",
   "trigger": "schedule",
-  "started_at": "2026-10-25T09:01:29+09:00",
-  "duration_sec": 35,
+  "started_at": "2026-10-26T09:02:14+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 1건, 첨부 4건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "1건 발송, 무음 0건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-10-25T09:02:06+09:00"
+  "updated_at": "2026-10-26T09:02:31+09:00"
 }
