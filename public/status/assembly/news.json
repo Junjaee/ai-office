@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 53건, 실패 0건, 11초",
+  "summary": "신규 33건, 실패 0건, 9초",
   "counts": {
-    "new": 53,
+    "new": 33,
     "failed": 0,
-    "total": 5259
+    "total": 5292
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 53건, 실패 0건, 11초",
-    "[신규] 이준석, 한동훈 겨냥 “민주당 주장에 부화뇌동…안에 수류탄 까넣어” — KBS 뉴스",
-    "[신규] 이준석, 또 한동훈 겨낭 “맨날 뒤에서 공작하는 사람과 연대 못해” — 주간경향",
-    "[신규] 유승민 \"이준석·한동훈·오세훈·장동혁 연대하자! 전당대회서 필요한 역할할 것\" — YTN",
-    "[신규] 이준석, 韓 겨냥 \"민주당 주장에 부화뇌동…안에 수류탄 까넣어\" — 연합뉴스, 세계일보"
+    "신규 33건, 실패 0건, 9초",
+    "[신규] 이준석, 한동훈 겨냥 “민주당에 부화뇌동해 내부에 수류탄 까넣어” — 주간조선",
+    "[신규] ‘이준석·오세훈·한동훈 연대’ 제안에…이준석 \"권투 시합에 칼 들고 나오는 사람 있어\" — JTBC",
+    "[신규] 유승민 \"한동훈·이준석 다 뭉쳐야\" vs 이준석 \"공작정치와 통합 못 해\" — 에브리뉴스 EveryNews",
+    "[신규] 이준석, 또 한동훈 겨냥? “정치 권투장에 혼자 칼 들고 나오는 애 있다” — 한겨레"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40262008503,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40262008503",
-  "request_id": "cron-202610260300",
+  "run_id": 40277420379,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40277420379",
+  "request_id": "cron-202610260600",
   "trigger": "schedule",
-  "started_at": "2026-10-26T12:02:14+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-26T15:01:47+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 194건"
+      "summary": "검색어 5개에서 203건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 93건 (신규 53건) · 뉴시스 7건, 뉴스1 4건, 세계일보 4건"
+      "summary": "오늘 126건 (신규 33건) · 뉴시스 10건, 뉴스1 4건, 매일경제 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-26T12:02:26+09:00"
+  "updated_at": "2026-10-26T15:01:56+09:00"
 }
