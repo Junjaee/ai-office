@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 13초",
+  "summary": "신규 10건, 실패 0건, 13초",
   "counts": {
-    "new": 12,
+    "new": 10,
     "failed": 0,
-    "total": 5504
+    "total": 5514
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 13초",
-    "[신규] [비하인드 뉴스] 이준석의 ‘오세훈 삼행시’…\"훈풍\"? 왠지 기시감이 — JTBC",
-    "[신규] [김종석의 샷]이준석, ‘오세훈 삼행시’ 띄웠다 — 채널A",
-    "[신규] 오세훈 대망론? \"이준석이 가장 큰 역할 할 것\" 김갑수가 현장에서 본 두 사람 (261027 화요일 클립) 김갑수 박순봉 김윤형 전수미 — 경향신문",
-    "[신규] 험난한 보수 통합의 길…이준석·한동훈 벌써 주도권 다툼 — KPI뉴스"
+    "신규 10건, 실패 0건, 13초",
+    "[신규] [시사천국] 천하람 \"독자적 아젠다 찾아야\"…이준석 없는 '자강의 길' 개혁신당 — cpbc News",
+    "[신규] [사사건건] 보수 통합론에 대한 이준석의 생각은? — KBS 뉴스",
+    "[신규] 이준석, 연일 한동훈 저격…그 뒤엔 ‘명태균·탈당’ 앙금 — 중앙일보",
+    "[신규] [비하인드 뉴스] ‘날 들쑤셔?’ 홍준표 \"이러면 돌아간다\" 어디로? — JTBC"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40526838765,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40526838765",
-  "request_id": "cron-202610271500",
+  "run_id": 40556081289,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40556081289",
+  "request_id": "cron-202610271800",
   "trigger": "schedule",
-  "started_at": "2026-10-28T00:04:01+09:00",
+  "started_at": "2026-10-28T03:02:11+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 202건"
+      "summary": "검색어 5개에서 211건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 12건 (신규 12건) · 경향신문 2건, 한겨레 2건, JTBC 1건"
+      "summary": "오늘 22건 (신규 10건) · JTBC 2건, 경향신문 2건, 한겨레 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-28T00:04:15+09:00"
+  "updated_at": "2026-10-28T03:02:25+09:00"
 }
