@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 37건, 실패 0건, 12초",
+  "summary": "신규 30건, 실패 0건, 13초",
   "counts": {
-    "new": 37,
+    "new": 30,
     "failed": 0,
-    "total": 5462
+    "total": 5492
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 37건, 실패 0건, 12초",
-    "[신규] '만찬 정치' 오세훈...이준석의 삼행시 헌정? [앵커리포트] — YTN",
-    "[신규] “우리도 스티븐 유 입국 제한” 정청래 美 비자 지연 본 이준석의 말 — 문화일보",
-    "[신규] 이준석의 ‘오세훈 삼행시’···“오뚝이처럼, 세파 이겨내니, 훈풍이로다” — 주간경향",
-    "[신규] \"오뚝이처럼, 세파 이겨내, 훈풍이\" 이준석의 '오세훈 삼행시'에…친한계 \"다재다능\" — TV조선뉴스"
+    "신규 30건, 실패 0건, 13초",
+    "[신규] 오세훈이 주인공인데…이준석, 왜 ‘한동훈 공격’ 씬스틸러 됐나 — 중앙일보",
+    "[신규] 오세훈 무죄 축하 만찬서 윤상현 ‘비·행·기’ 건배사···이준석이 띄운 ‘오·세·훈’ 삼행시는? — 경향신문",
+    "[신규] “조희대 국조 해본들…말 안되는 소리하다 수렁 빠질 것”[황형준의 법정모독] — 동아일보",
+    "[신규] 이준석, 李 '비싼 변호사·힘 있으면 처벌 안 받는 경우 태반' 발언에 '자기소개 왜 이렇게 박력 있게 하나' — 매일신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40477593602,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40477593602",
-  "request_id": "cron-202610270900",
+  "run_id": 40501497108,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40501497108",
+  "request_id": "cron-202610271200",
   "trigger": "schedule",
-  "started_at": "2026-10-27T18:01:27+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-27T21:09:24+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 187건"
+      "summary": "검색어 5개에서 217건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 117건 (신규 37건) · 문화일보 5건, JTBC 4건, 뉴스1 4건"
+      "summary": "오늘 147건 (신규 30건) · 문화일보 6건, 연합뉴스 6건, 채널A 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-27T18:01:40+09:00"
+  "updated_at": "2026-10-27T21:09:38+09:00"
 }
