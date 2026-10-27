@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 13초",
+  "summary": "신규 4건, 실패 0건, 10초",
   "counts": {
-    "new": 10,
+    "new": 4,
     "failed": 0,
-    "total": 5514
+    "total": 5518
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 13초",
-    "[신규] [시사천국] 천하람 \"독자적 아젠다 찾아야\"…이준석 없는 '자강의 길' 개혁신당 — cpbc News",
-    "[신규] [사사건건] 보수 통합론에 대한 이준석의 생각은? — KBS 뉴스",
-    "[신규] 이준석, 연일 한동훈 저격…그 뒤엔 ‘명태균·탈당’ 앙금 — 중앙일보",
-    "[신규] [비하인드 뉴스] ‘날 들쑤셔?’ 홍준표 \"이러면 돌아간다\" 어디로? — JTBC"
+    "신규 4건, 실패 0건, 10초",
+    "[신규] 오세훈과 밀착, 이준석과 투샷…‘보수 용광로’ 부상한 정점식 — 중앙일보",
+    "[신규] 무죄 선고 이후 정치 보폭 넓히는 오세훈…野의원과 만찬 회동 \"통합\" 강조 — 뉴시스",
+    "[신규] 견제 주고받는 ‘장-이-한’, 吳에 구애 동상이몽 — 동아일보",
+    "[신규] 與, 오늘 가상자산 과세 당정협의…유예 여부 논의 — 연합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40556081289,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40556081289",
-  "request_id": "cron-202610271800",
+  "run_id": 40583092706,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40583092706",
+  "request_id": "cron-202610272100",
   "trigger": "schedule",
-  "started_at": "2026-10-28T03:02:11+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-28T06:01:28+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 211건"
+      "summary": "검색어 5개에서 196건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 22건 (신규 10건) · JTBC 2건, 경향신문 2건, 한겨레 2건"
+      "summary": "오늘 26건 (신규 4건) · JTBC 2건, 경향신문 2건, 중앙일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-28T03:02:25+09:00"
+  "updated_at": "2026-10-28T06:01:39+09:00"
 }
