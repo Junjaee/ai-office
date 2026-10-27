@@ -1,22 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "실행 중 문제가 생겼어요",
-  "counts": {},
+  "summary": "신규 64건, 실패 0건, 12초",
+  "counts": {
+    "new": 64,
+    "failed": 0,
+    "total": 5409
+  },
   "next_run": "3시간마다",
   "log": [
-    "실행 중 문제가 생겼어요",
-    "HttpError: <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?fields=id&alt=json&uploadType=multipart returned \"The user's Drive storage quota has been exceeded.\". Details: \"[{'message': \"The user's Drive storage quota has been exceeded.\", 'domain': 'usageLimits', 'reason': 'storag"
+    "신규 64건, 실패 0건, 12초",
+    "[신규] 김종혁 \"오세훈 삼행시? 대변인이냐\"...이준석 \"정치는 상부상조\" — JTBC",
+    "[신규] 인터뷰 전문: 윤희석 “이준석, 한동훈에게 왜 악감정 갖나…공격 이해 안 돼” [정치시그널] — 채널A",
+    "[신규] [전격시사] 김용태 국민의힘 의원 - “오세훈·이준석·한동훈·장동혁, 내부 자정 통해 뭉쳐야…” “조희대 탄핵, 파기환송에 대한 복수” 보수 야권 통합 주도권은? — KBS 뉴스",
+    "[신규] [뷰리핑] 오세훈·한동훈·이준석, 연대에 ‘동상이몽’? — 한겨레"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40423598529,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40423598529",
-  "request_id": "cron-202610270000",
+  "run_id": 40441754708,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40441754708",
+  "request_id": "cron-202610270300",
   "trigger": "schedule",
-  "started_at": "2026-10-27T09:01:28+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-27T12:01:29+09:00",
+  "duration_sec": 12,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 215건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 64건 (신규 64건) · JTBC 4건, 뉴스1 3건, 뉴스핌 2건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-10-27T09:01:38+09:00"
+  "updated_at": "2026-10-27T12:01:41+09:00"
 }
