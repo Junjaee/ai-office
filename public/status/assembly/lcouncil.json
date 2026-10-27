@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 0건, 교체 0건, 실패 607건, 148.0분",
+  "summary": "신규 608건, 교체 0건, 실패 4건, 152.1분",
   "counts": {
-    "new": 0,
+    "new": 608,
     "replaced": 0,
-    "failed": 607,
-    "total": 3093
+    "failed": 4,
+    "total": 3701
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 0건, 교체 0건, 실패 607건, 148.0분",
-    "[실패] 서울특별시의회 제339회 본회의 제3차(2026.09.11 금요일): <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?",
-    "[실패] 서울특별시의회 제339회 도시계획균형위원회 [임시] 제4차[폐회중](2026.10.23 금요일): <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?",
-    "[실패] 서울특별시의회 제325회 교육위원회 제1차(2024.07.29 월요일): <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?",
-    "[실패] 서울특별시의회 제325회 마약청정도시서울을위한특별위원회 제2차[폐회중](2024.08.20 화요일): <HttpError 403 when requesting https://www.googleapis.com/upload/drive/v3/files?"
+    "신규 608건, 교체 0건, 실패 4건, 152.1분",
+    "[신규] 서울특별시의회 제12대/제339회/본회의_제3차_2026-09-11.txt",
+    "[신규] 서울특별시의회 제12대/제339회/도시계획균형위원회_제1차_2026-08-31.txt",
+    "[신규] 서울특별시의회 제12대/제339회/도시계획균형위원회_제4차_2026-10-23.txt",
+    "[신규] 서울특별시의회 제12대/제339회/교통위원회_제4차_2026-09-03.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 40364613167,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40364613167",
-  "request_id": "cron-202610261700",
+  "run_id": 40546597258,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40546597258",
+  "request_id": "cron-202610271700",
   "trigger": "schedule",
-  "started_at": "2026-10-27T02:01:27+09:00",
-  "duration_sec": 8877,
+  "started_at": "2026-10-28T02:02:00+09:00",
+  "duration_sec": 9123,
   "tasks": [
     {
       "id": "scan",
       "status": "done",
-      "summary": "의회 5/5곳 확인, 회의록 3711건"
+      "summary": "의회 5/5곳 확인, 회의록 3709건"
     },
     {
       "id": "fetch",
       "status": "error",
-      "summary": "신규 0건, 교체 0건"
+      "summary": "신규 608건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-10-27T04:29:25+09:00"
+  "updated_at": "2026-10-28T04:34:04+09:00"
 }
