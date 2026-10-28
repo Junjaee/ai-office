@@ -3,35 +3,36 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 전송 0건, 실패 0건, 32초",
+  "summary": "신규 1건, 전송 1건, 실패 0건, 46초",
   "counts": {
-    "new": 0,
-    "sent": 0,
+    "new": 1,
+    "sent": 1,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 0건, 전송 0건, 실패 0건, 32초"
+    "신규 1건, 전송 1건, 실패 0건, 46초",
+    "[신규]⭐ [입찰공고] 건설공사 안전점검 수행기관 모집 공고(동탄구 장지동 930-1)"
   ],
   "link": "",
-  "run_id": 40423604836,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40423604836",
-  "request_id": "cron-202610270000",
+  "run_id": 40605977668,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40605977668",
+  "request_id": "cron-202610280000",
   "trigger": "schedule",
-  "started_at": "2026-10-27T09:01:22+09:00",
-  "duration_sec": 32,
+  "started_at": "2026-10-28T09:01:37+09:00",
+  "duration_sec": 46,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 0건"
+      "summary": "신규 1건, 첨부 2건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "0건 발송"
+      "summary": "1건 발송, 무음 0건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-10-27T09:01:55+09:00"
+  "updated_at": "2026-10-28T09:02:24+09:00"
 }
