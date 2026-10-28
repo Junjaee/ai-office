@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 16건, 실패 0건, 20초",
+  "summary": "신규 27건, 실패 0건, 12초",
   "counts": {
-    "new": 16,
+    "new": 27,
     "failed": 0,
-    "total": 5570
+    "total": 5597
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 16건, 실패 0건, 20초",
-    "[신규] 이준석·한동훈 신경전?‥보수 주도권 경쟁 — MBC 뉴스",
-    "[신규] “오세훈·한동훈·이준석, 지가 제일 잘난 것 같지만 국민들 보기에 고만고만해” — 주간경향",
-    "[신규] 한국정치 ‘올공파’의 등장… 보수 4인 장동혁·오세훈·한동훈·이준석 ‘복잡한 셈범’ — 문화일보",
-    "[신규] 투표지 247만 장 재검표‥올림픽공원 첫 현장검증 [시사정각] — YTN"
+    "신규 27건, 실패 0건, 12초",
+    "[신규] 구룡마을 간 오세훈...이준석의 속내는? [앵커리포트] — YTN",
+    "[신규] 개혁신당 이준석, 연일 한동훈 때리며 보수 재편 '오동석 연대' 걸림돌로 떠오른다 : '친한계'와 악연 때문? — 허프포스트코리아",
+    "[신규] [아침저널] 조정훈 \"총선 승리 위해 오세훈, 장동혁 둘 다 필요...한동훈, 이준석 갈등? 나도 이준석과 사이 안 좋았다\" — BBS불교방송",
+    "[신규] 진중권 “이준석, 오세훈 '완장' 차고 한동훈 배제…마치 대변인처럼 노골적 속셈” — 중앙신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40641288579,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40641288579",
-  "request_id": "cron-202610280600",
+  "run_id": 40660953741,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40660953741",
+  "request_id": "cron-202610280900",
   "trigger": "schedule",
-  "started_at": "2026-10-28T15:01:31+09:00",
-  "duration_sec": 20,
+  "started_at": "2026-10-28T18:01:31+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 175건"
+      "summary": "검색어 5개에서 158건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 78건 (신규 16건) · 이데일리 5건, JTBC 4건, 한국사회복지저널 4건"
+      "summary": "오늘 105건 (신규 27건) · 이데일리 6건, JTBC 4건, YTN 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-28T15:01:52+09:00"
+  "updated_at": "2026-10-28T18:01:44+09:00"
 }
