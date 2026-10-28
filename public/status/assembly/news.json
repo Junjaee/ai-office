@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 10초",
+  "summary": "신규 13건, 실패 0건, 12초",
   "counts": {
-    "new": 4,
+    "new": 13,
     "failed": 0,
-    "total": 5518
+    "total": 5531
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 10초",
-    "[신규] 오세훈과 밀착, 이준석과 투샷…‘보수 용광로’ 부상한 정점식 — 중앙일보",
-    "[신규] 무죄 선고 이후 정치 보폭 넓히는 오세훈…野의원과 만찬 회동 \"통합\" 강조 — 뉴시스",
-    "[신규] 견제 주고받는 ‘장-이-한’, 吳에 구애 동상이몽 — 동아일보",
-    "[신규] 與, 오늘 가상자산 과세 당정협의…유예 여부 논의 — 연합뉴스"
+    "신규 13건, 실패 0건, 12초",
+    "[신규] 오세훈엔 밀착, 한동훈엔 견제…이준석의 ‘삼행시 정치’ — 서울경제",
+    "[신규] '오이한'·'장한오'? 보수통합이라는 신기루 — OhmyNews",
+    "[신규] \"보수신당 나올 수도\"…민주·국힘·개혁 내홍, 연쇄작용 시나리오 — 동행미디어 시대",
+    "[신규] 개혁신당, 천하람 원내대표에 경기 남부 전략 동참 공개 요청 — 한국사회복지저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40583092706,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40583092706",
-  "request_id": "cron-202610272100",
+  "run_id": 40605972130,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40605972130",
+  "request_id": "cron-202610280000",
   "trigger": "schedule",
-  "started_at": "2026-10-28T06:01:28+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-10-28T09:01:27+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 196건"
+      "summary": "검색어 5개에서 201건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 26건 (신규 4건) · JTBC 2건, 경향신문 2건, 중앙일보 2건"
+      "summary": "오늘 39건 (신규 13건) · 한국사회복지저널 4건, JTBC 3건, 이데일리 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-28T06:01:39+09:00"
+  "updated_at": "2026-10-28T09:01:40+09:00"
 }
