@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 13초",
+  "summary": "신규 5건, 실패 0건, 14초",
   "counts": {
-    "new": 4,
+    "new": 5,
     "failed": 0,
-    "total": 5621
+    "total": 5626
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 13초",
-    "[신규] 이준석 공세에 오세훈 대리 당권설까지…복잡해진 한동훈 셈법 — 더팩트",
-    "[신규] 진중권 \"오세훈·한동훈, 순망치한 관계…보수통합 없이 승부 못 걸어\" — 미디어데일",
-    "[신규] 2027년 예산 정국 개막…강원 “역대급 예결위 라인업” 국비 총력전 — 강원일보",
-    "[신규] 서울시의회 예결위, \" 밥퍼 봉사부터 삼성 반도체 현장까지 \"…내년 예산 심사 준비 — 파이낸스투데이"
+    "신규 5건, 실패 0건, 14초",
+    "[신규] 북한 황해도 개풍군 접경지역 촬영하는 천하람 의원 — 연합뉴스",
+    "[신규] 野, 국방위원장 美 비자 발급 거부에 \"한미 관계 심각한 위기\" — 뉴시스",
+    "[신규] 아주대 교수들 사직에 소아응급실 지켰던 이주영 의원 \"차마 남아달라 못 하겠다\" — 청년의사",
+    "[신규] 경찰 압색 이후 의사 줄사직…이주영 “소아응급실 죽으면 모두가 공범” — 미주중앙일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40741110130,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40741110130",
-  "request_id": "cron-202610281800",
+  "run_id": 40768312584,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40768312584",
+  "request_id": "cron-202610282100",
   "trigger": "schedule",
-  "started_at": "2026-10-29T03:01:24+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-10-29T06:01:32+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 149건"
+      "summary": "검색어 5개에서 163건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 4건) · 경향신문 2건, 동아일보 2건, 강원일보 1건"
+      "summary": "오늘 18건 (신규 5건) · 경향신문 2건, 뉴시스 2건, 동아일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-29T03:01:39+09:00"
+  "updated_at": "2026-10-29T06:01:47+09:00"
 }
