@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 9초",
+  "summary": "신규 9건, 실패 0건, 13초",
   "counts": {
-    "new": 11,
+    "new": 9,
     "failed": 0,
-    "total": 5608
+    "total": 5617
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 9초",
-    "[신규] 이준석, 진성준 美 비자 거부에 “한미동맹 웃음거리” — 경기일보",
-    "[신규] 이준석, 오세훈에 구애-한동훈 견제 ‘왜?’ — 시사위크",
-    "[신규] 오세훈 13.7%·장동혁 11.7%·한동훈 14.0%…“삼국지 전개” — 채널A",
-    "[신규] 오세훈, 무죄 선고 후 정치 행보 확대…보수 통합 강조 — 팩트인뉴스"
+    "신규 9건, 실패 0건, 13초",
+    "[신규] “오세훈에 삼행시 건넨 이준석, 킹메이커로 나설 듯”[정치를 부탁해] — 동아일보",
+    "[신규] \"한동훈과는 같은 자리도 못 있는다\" 이준석이 한동훈 저격하는 진짜 이유는? (261028 수요일 클립) 박진영 장성철 허재무 — 경향신문",
+    "[신규] 이준석 만난 장성철의 천기누설! “2028 총선, 국힘 더 폭망할 것“ (261028 수요일 방송) 박진영 장성철 허재무 — 경향신문",
+    "[신규] [이슈전파사 LIVE] 김어준 “룰라 4선, 코어층 덕분”?!/유시민, 오늘 박시영TV 출연 “유 작가가 먼저 연락” — 한국일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40684380185,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40684380185",
-  "request_id": "cron-202610281200",
+  "run_id": 40711640744,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40711640744",
+  "request_id": "cron-202610281500",
   "trigger": "schedule",
-  "started_at": "2026-10-28T21:01:23+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-29T00:01:36+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 155건"
+      "summary": "검색어 5개에서 151건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 116건 (신규 11건) · 이데일리 6건, 채널A 5건, JTBC 4건"
+      "summary": "오늘 9건 (신규 9건) · 경향신문 2건, 동아일보 2건, 아주경제 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-28T21:01:33+09:00"
+  "updated_at": "2026-10-29T00:01:51+09:00"
 }
