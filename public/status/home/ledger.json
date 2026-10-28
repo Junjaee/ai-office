@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 10월 10/28 하하호호놀이터방 2,400원 (생활비)"
+    "[추가] 2026년 10월 10/28 네이버페이 17,900원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 40613763161,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40613763161",
-  "request_id": "cron-202610280113",
+  "run_id": 40629613939,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40629613939",
+  "request_id": "cron-202610280357",
   "trigger": "schedule",
-  "started_at": "2026-10-28T10:14:23+09:00",
+  "started_at": "2026-10-28T12:58:25+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-28T10:14:27+09:00"
+  "updated_at": "2026-10-28T12:58:29+09:00"
 }
