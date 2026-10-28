@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 13건, 실패 0건, 12초",
+  "summary": "신규 23건, 실패 0건, 12초",
   "counts": {
-    "new": 13,
+    "new": 23,
     "failed": 0,
-    "total": 5531
+    "total": 5554
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 13건, 실패 0건, 12초",
-    "[신규] 오세훈엔 밀착, 한동훈엔 견제…이준석의 ‘삼행시 정치’ — 서울경제",
-    "[신규] '오이한'·'장한오'? 보수통합이라는 신기루 — OhmyNews",
-    "[신규] \"보수신당 나올 수도\"…민주·국힘·개혁 내홍, 연쇄작용 시나리오 — 동행미디어 시대",
-    "[신규] 개혁신당, 천하람 원내대표에 경기 남부 전략 동참 공개 요청 — 한국사회복지저널"
+    "신규 23건, 실패 0건, 12초",
+    "[신규] 진중권의 작심 “이준석, 오세훈에 딱붙어 완장짓” — 문화일보",
+    "[신규] [아침저널] 조정훈 \"한동훈, 이준석 갈등? 나도 이준석과 사이 안 좋았다...공동의 목표 있으면 함께하는 것이 정치의 본질\" — BBS불교방송",
+    "[신규] 이재오, 오세훈·한동훈·이준석에 “지가 제일 잘난 것 같지만 국민들 보기에 고만고만해” — 주간경향",
+    "[신규] 진중권 “이준석, 오세훈 ‘완장’ 차고 한동훈 배제…속셈 너무 노골적” — 시사저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40605972130,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40605972130",
-  "request_id": "cron-202610280000",
+  "run_id": 40624233457,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40624233457",
+  "request_id": "cron-202610280300",
   "trigger": "schedule",
-  "started_at": "2026-10-28T09:01:27+09:00",
+  "started_at": "2026-10-28T12:01:20+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 201건"
+      "summary": "검색어 5개에서 182건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 39건 (신규 13건) · 한국사회복지저널 4건, JTBC 3건, 이데일리 3건"
+      "summary": "오늘 62건 (신규 23건) · JTBC 4건, 이데일리 4건, 한국사회복지저널 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-28T09:01:40+09:00"
+  "updated_at": "2026-10-28T12:01:33+09:00"
 }
