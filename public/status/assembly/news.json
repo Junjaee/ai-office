@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 49건, 실패 0건, 9초",
+  "summary": "신규 27건, 실패 0건, 12초",
   "counts": {
-    "new": 49,
+    "new": 27,
     "failed": 0,
-    "total": 5769
+    "total": 5796
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 49건, 실패 0건, 9초",
-    "[신규] “이준석이 오세훈 완장? 진중권은 한동훈 응원봉” 개혁신당 반응 — 문화일보",
-    "[신규] \"이준석이 오세훈 완장? 진중권 손에는 한동훈 응원봉\" — 뉴시스",
-    "[신규] 한국정치 ‘올공파’의 등장… 보수 4인 장동혁·오세훈·한동훈·이준석 ‘복잡한 셈법’ — 문화일보",
-    "[신규] 법제처, 전통시장에서 찾는 일상 속 법 보물... K-법 생활발견 캠페인 '숨은 법 보물찾기' 개최 — 외교저널"
+    "신규 27건, 실패 0건, 12초",
+    "[신규] 이준석 “정청래 이어 진성준 美비자발급 거부에 대한민국 웃음거리” — 문화일보",
+    "[신규] [인터뷰] 김재섭 “오세훈·한동훈·이준석 연대 위해 본드라도 사 오겠다” — 시사저널",
+    "[신규] 韓·吳 '훈풍' 속 이준석의 찬물…향후 역학은? — 민주신문",
+    "[신규] [정치문법] 무죄 이후의 오세훈…보수 통합의 문 여는가 — 투데이신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40846317938,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40846317938",
-  "request_id": "cron-202610290900",
+  "run_id": 40869815512,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40869815512",
+  "request_id": "cron-202610291200",
   "trigger": "schedule",
-  "started_at": "2026-10-29T18:01:24+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-29T21:01:24+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 185건"
+      "summary": "검색어 5개에서 175건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 161건 (신규 49건) · 뉴시스 12건, 시민행정신문 10건, 문화일보 9건"
+      "summary": "오늘 188건 (신규 27건) · 뉴시스 12건, 시민행정신문 11건, 중앙신문 11건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-29T18:01:34+09:00"
+  "updated_at": "2026-10-29T21:01:37+09:00"
 }
