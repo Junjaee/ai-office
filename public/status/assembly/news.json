@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 12초",
+  "summary": "신규 9건, 실패 0건, 11초",
   "counts": {
-    "new": 20,
+    "new": 9,
     "failed": 0,
-    "total": 5816
+    "total": 5825
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 12초",
-    "[신규] 이준석 의원실, 동탄4·6·7·8·9동 주민 1,004명 대상 예산 우선순위 조사 — 화성신문",
-    "[신규] [비하인드 뉴스] ‘비호감 싸움’ 와중에…홍준표 \"한동훈만 빼고\" — JTBC",
-    "[신규] 강득구 의원, 국회의원연구단체‘약자의눈’, 범죄피해자 안전조치 실효성 점검 …통합적 보호체계 마련 모색 — 시민행정신문",
-    "[신규] 박용갑 의원, 국방반도체 클러스터 조성을 위한 '국방반도체법 개정안' 대표발의 — 시민행정신문"
+    "신규 9건, 실패 0건, 11초",
+    "[신규] '한동훈만 빼고 통합?'...\"이준석이 생각하는 베스트 시나리오\" #shorts - 오마이TV — OhmyNews",
+    "[신규] 이준석당과 진중권, 쎄게 붙었다! 도화선은 진중권 발언!ㅡ \"이준석,오세훈 옆에서 완장질\" : 양영태박사 TV — 인터넷타임즈",
+    "[신규] 제주도, 지방자치단체 인권증진협의회 개최 — 외교저널",
+    "[신규] 중진들 움직임 빨라지나…吳·韓 사이 셈법 복잡 — 더팩트"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40897223043,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40897223043",
-  "request_id": "cron-202610291500",
+  "run_id": 40926760111,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40926760111",
+  "request_id": "cron-202610291800",
   "trigger": "schedule",
-  "started_at": "2026-10-30T00:01:22+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-30T03:01:18+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 197건"
+      "summary": "검색어 5개에서 169건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 20건 (신규 20건) · 뉴시스 2건, 시민행정신문 2건, BBS불교방송 1건"
+      "summary": "오늘 29건 (신규 9건) · 뉴시스 2건, 시민행정신문 2건, BBS불교방송 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-30T00:01:35+09:00"
+  "updated_at": "2026-10-30T03:01:30+09:00"
 }
