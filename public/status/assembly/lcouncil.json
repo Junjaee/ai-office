@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 598건, 교체 1건, 실패 5건, 148.8분",
+  "summary": "신규 443건, 교체 0건, 실패 15건, 158.2분",
   "counts": {
-    "new": 598,
-    "replaced": 1,
-    "failed": 5,
-    "total": 4299
+    "new": 443,
+    "replaced": 0,
+    "failed": 15,
+    "total": 3692
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 598건, 교체 1건, 실패 5건, 148.8분",
-    "[신규] 서울특별시의회 제12대/제339회/주택공간위원회_제1차_2026-09-02.txt",
-    "[신규] 서울특별시의회 제12대/제339회/도시계획균형위원회_제1차_2026-08-31.txt",
-    "[교체] 서울특별시의회 제12대/제339회/도시계획균형위원회_제4차_2026-10-23.txt",
-    "[신규] 서울특별시의회 제12대/제339회/교통위원회_제6차_2026-10-20.txt"
+    "신규 443건, 교체 0건, 실패 15건, 158.2분",
+    "[신규] 서울특별시의회 제11대/제321회/교통위원회행정사무감사_2023-11-02.txt",
+    "[신규] 서울특별시의회 제11대/제321회/교통위원회행정사무감사_2023-11-03.txt",
+    "[신규] 서울특별시의회 제11대/제321회/교통위원회행정사무감사_2023-11-07.txt",
+    "[신규] 서울특별시의회 제11대/제321회/교통위원회행정사무감사_2023-11-08.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 40731578361,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40731578361",
-  "request_id": "cron-202610281700",
+  "run_id": 40917186813,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40917186813",
+  "request_id": "cron-202610291700",
   "trigger": "schedule",
-  "started_at": "2026-10-29T02:01:28+09:00",
-  "duration_sec": 8926,
+  "started_at": "2026-10-30T02:01:28+09:00",
+  "duration_sec": 9491,
   "tasks": [
     {
       "id": "scan",
-      "status": "done",
-      "summary": "의회 5/5곳 확인, 회의록 4301건"
+      "status": "error",
+      "summary": "의회 4/5곳 확인, 회의록 3697건"
     },
     {
       "id": "fetch",
       "status": "error",
-      "summary": "신규 598건, 교체 1건"
+      "summary": "신규 443건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-10-29T04:30:15+09:00"
+  "updated_at": "2026-10-30T04:39:40+09:00"
 }
