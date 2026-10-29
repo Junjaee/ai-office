@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 10월 10/29 토스페이먼츠 8,000원 (생활비)"
+    "[추가] 2026년 10월 10/29 쿠팡이츠 23,610원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 40849953309,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40849953309",
-  "request_id": "cron-202610290928",
+  "run_id": 40853610745,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40853610745",
+  "request_id": "cron-202610290956",
   "trigger": "schedule",
-  "started_at": "2026-10-29T18:29:31+09:00",
+  "started_at": "2026-10-29T18:57:29+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-29T18:29:34+09:00"
+  "updated_at": "2026-10-29T18:57:33+09:00"
 }
