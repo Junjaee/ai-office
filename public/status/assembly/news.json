@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 14초",
+  "summary": "신규 3건, 실패 0건, 10초",
   "counts": {
-    "new": 5,
+    "new": 3,
     "failed": 0,
-    "total": 5626
+    "total": 5629
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 14초",
-    "[신규] 북한 황해도 개풍군 접경지역 촬영하는 천하람 의원 — 연합뉴스",
-    "[신규] 野, 국방위원장 美 비자 발급 거부에 \"한미 관계 심각한 위기\" — 뉴시스",
-    "[신규] 아주대 교수들 사직에 소아응급실 지켰던 이주영 의원 \"차마 남아달라 못 하겠다\" — 청년의사",
-    "[신규] 경찰 압색 이후 의사 줄사직…이주영 “소아응급실 죽으면 모두가 공범” — 미주중앙일보"
+    "신규 3건, 실패 0건, 10초",
+    "[신규] 오세훈 기사회생 후 이준석은 킹메이커 꿈꾸나…친한계와 갈등 보이는 이유는 — 경향신문",
+    "[신규] [🔴LIVE] 유시민 \"이 대통령, 윤석열과 똑같다\"ㅣ정청래 이어 진성준도 미국 비자 거부 당해ㅣ이준석의 '한동훈 까대기'는 '헛방'ㅣ이현종의 뉴스쇼 [문화일보] — 문화일보",
+    "[신규] 홍준표, 차기 보수 대권주자 평가서 한동훈 제외…이어지는 정치적 갈등 — 서울뉴스통신"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40768312584,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40768312584",
-  "request_id": "cron-202610282100",
+  "run_id": 40791212814,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40791212814",
+  "request_id": "cron-202610290000",
   "trigger": "schedule",
-  "started_at": "2026-10-29T06:01:32+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-10-29T09:01:28+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 163건"
+      "summary": "검색어 5개에서 133건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 18건 (신규 5건) · 경향신문 2건, 뉴시스 2건, 동아일보 2건"
+      "summary": "오늘 21건 (신규 3건) · 경향신문 3건, 뉴시스 2건, 동아일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-29T06:01:47+09:00"
+  "updated_at": "2026-10-29T09:01:38+09:00"
 }
