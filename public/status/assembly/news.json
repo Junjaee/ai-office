@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 9초",
+  "summary": "신규 4건, 실패 0건, 13초",
   "counts": {
-    "new": 12,
+    "new": 4,
     "failed": 0,
-    "total": 6002
+    "total": 6006
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 9초",
-    "[신규] 오세훈·장동혁·이준석과 연대? ... 한동훈 \"명분 같다면 누구든\" — 경북도민일보",
-    "[신규] 동서대 학생들이 만든 애니메이션, 부산 도시철도 23개 역서 상영 — 더쎈뉴스",
-    "[신규] 제주도, 해군 기동함대사령부의 지역상생 노력 확인 — 외교저널",
-    "[신규] 윤호중 행안부 장관, 핼러윈 대비 인파밀집 예상지역 현장점검 — 외교저널"
+    "신규 4건, 실패 0건, 13초",
+    "[신규] 제주시, ㈜재성철강에 이웃사랑 성금 1,000만 원 기탁받아 — 외교저널",
+    "[신규] 이주영\"소아응급실이 죽임당하면 모두가 공범…교수들에 차마 남아달라 못해\" — MEDI:GATE NEWS",
+    "[신규] 與 가상자산 과세 여부 1~2주 내 결정...추가 유예 수순 — 아주경제",
+    "[신규] 민주 “민생 예산 늘려 법정시한내 처리”… 국힘 “포퓰리즘 미래기금 등 134조 삭감” — 동아일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41076754559,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41076754559",
-  "request_id": "cron-202610301500",
+  "run_id": 41103166610,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41103166610",
+  "request_id": "cron-202610301800",
   "trigger": "schedule",
-  "started_at": "2026-10-31T00:01:30+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-31T03:01:26+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 159건"
+      "summary": "검색어 5개에서 156건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 12건 (신규 12건) · 시사타파NEWS 2건, 외교저널 2건, SeattleN 1건"
+      "summary": "오늘 16건 (신규 4건) · 외교저널 3건, 시사타파NEWS 2건, MEDI:GATE NEWS 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-31T00:01:39+09:00"
+  "updated_at": "2026-10-31T03:01:40+09:00"
 }
