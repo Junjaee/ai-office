@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 10초",
   "counts": {
-    "new": 6,
+    "new": 11,
     "failed": 0,
-    "total": 5831
+    "total": 5842
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 12초",
-    "[신규] [송채경화 공덕포차] 차별 비판 아랑곳…이재명 폭풍 X 언제까지? — 한겨레",
-    "[신규] AI 위험 제보 플랫폼, 사업자 전달 4건 중 3건 ‘무응답’… 분석·개선 실효성 높여야 — 시민행정신문",
-    "[신규] 이언주 의원, 동백신봉선·언남동천선 추진 현황 점검…국토부 김이탁 차관 참석 — 시민행정신문",
-    "[신규] 신정훈 의원, 장교 임관 전 ‘사라진 군사훈련 기간’도 군복무 경력 인정 추진 — 시민행정신문"
+    "신규 11건, 실패 0건, 10초",
+    "[신규] 윤희석 \"한동훈과 훈훈연대? 오세훈 선택이지만, 그게 상식\"[한판승부] — 네이트",
+    "[신규] 개혁신당, 미래대응기금 재원·지출 구조 개선 요구 — 한국사회복지저널",
+    "[신규] 개혁신당, 한미관계 잇단 차질에 정부 대응 촉구 — 한국사회복지저널",
+    "[신규] 개혁신당, 조희대 대법원장 국정조사 추진에 탄핵소추안 제출 촉구 — 한국사회복지저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40954060371,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40954060371",
-  "request_id": "cron-202610292100",
+  "run_id": 40976923249,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40976923249",
+  "request_id": "cron-202610300000",
   "trigger": "schedule",
-  "started_at": "2026-10-30T06:01:27+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-30T09:01:37+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 161건"
+      "summary": "검색어 5개에서 147건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 35건 (신규 6건) · 시민행정신문 6건, 뉴시스 2건, BBS불교방송 1건"
+      "summary": "오늘 46건 (신규 11건) · 시민행정신문 6건, 한국사회복지저널 5건, 뉴시스 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-30T06:01:40+09:00"
+  "updated_at": "2026-10-30T09:01:48+09:00"
 }
