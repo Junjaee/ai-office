@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 10초",
+  "summary": "신규 32건, 실패 0건, 12초",
   "counts": {
-    "new": 11,
+    "new": 32,
     "failed": 0,
-    "total": 5842
+    "total": 5874
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 10초",
-    "[신규] 윤희석 \"한동훈과 훈훈연대? 오세훈 선택이지만, 그게 상식\"[한판승부] — 네이트",
-    "[신규] 개혁신당, 미래대응기금 재원·지출 구조 개선 요구 — 한국사회복지저널",
-    "[신규] 개혁신당, 한미관계 잇단 차질에 정부 대응 촉구 — 한국사회복지저널",
-    "[신규] 개혁신당, 조희대 대법원장 국정조사 추진에 탄핵소추안 제출 촉구 — 한국사회복지저널"
+    "신규 32건, 실패 0건, 12초",
+    "[신규] 'AG 테크볼 금메달' 이준석, 여자프로농구 시투 나선다 — 뉴시스",
+    "[신규] ‘항소심 무죄’ 오세훈, 대권주자 1위…보수재편 태풍의 눈 — 서울경제",
+    "[신규] 도봉구, 11월 2일 '땡겨요' 상품권 발행…15% 할인 혜택 — 시민행정신문",
+    "[신규] ‘테크볼 金 이준석 시투’ 용인 삼성생명, 11월 2일 홈 개막전 — MHN스포츠"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 40976923249,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40976923249",
-  "request_id": "cron-202610300000",
+  "run_id": 40994940997,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40994940997",
+  "request_id": "cron-202610300300",
   "trigger": "schedule",
-  "started_at": "2026-10-30T09:01:37+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-10-30T12:01:21+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 147건"
+      "summary": "검색어 5개에서 146건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 46건 (신규 11건) · 시민행정신문 6건, 한국사회복지저널 5건, 뉴시스 2건"
+      "summary": "오늘 78건 (신규 32건) · 시민행정신문 9건, 뉴시스 5건, 한국사회복지저널 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-30T09:01:48+09:00"
+  "updated_at": "2026-10-30T12:01:34+09:00"
 }
