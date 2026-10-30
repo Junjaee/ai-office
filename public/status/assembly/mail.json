@@ -3,39 +3,38 @@
   "dept": "qa",
   "ok": true,
   "running": false,
-  "summary": "새 메일 2건, 알림 1건, 실패 0건, 첨부 2건, 드라이브 저장 2건, 18초",
+  "summary": "새 메일 1건, 알림 1건, 실패 0건, 첨부 4건, 드라이브 저장 4건, 24초",
   "counts": {
-    "new": 2,
+    "new": 1,
     "sent": 1,
     "failed": 0,
-    "files": 2,
-    "saved": 2
+    "files": 4,
+    "saved": 4
   },
   "next_run": "새 메일이 오면 (1분마다 확인)",
   "log": [
-    "새 메일 2건, 알림 1건, 실패 0건, 첨부 2건, 드라이브 저장 2건, 18초",
-    "재경위 1건",
+    "새 메일 1건, 알림 1건, 실패 0건, 첨부 4건, 드라이브 저장 4건, 24초",
     "예결위 1건"
   ],
   "link": "https://drive.google.com/drive/folders/1dNwHu2iEAoMnp2NxOPfe8O866kE84tBr",
-  "run_id": 41039457244,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41039457244",
-  "request_id": "cron-202610301015",
+  "run_id": 41041906501,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41041906501",
+  "request_id": "cron-202610301035",
   "trigger": "schedule",
-  "started_at": "2026-10-30T19:16:28+09:00",
-  "duration_sec": 18,
+  "started_at": "2026-10-30T19:36:18+09:00",
+  "duration_sec": 24,
   "tasks": [
     {
       "id": "check",
       "status": "done",
-      "summary": "새 메일 2건"
+      "summary": "새 메일 1건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "알림 2건, 정리 2건, 첨부 2개(드라이브 2개)"
+      "summary": "알림 1건, 정리 1건, 첨부 4개(드라이브 4개)"
     }
   ],
   "id": "mail",
-  "updated_at": "2026-10-30T19:16:46+09:00"
+  "updated_at": "2026-10-30T19:36:43+09:00"
 }
