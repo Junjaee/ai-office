@@ -3,9 +3,9 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
+  "summary": "신규 2건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
   "counts": {
-    "new": 1,
+    "new": 2,
     "replaced": 0,
     "skip": 0,
     "wait": 0,
@@ -13,28 +13,29 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 10월 10/30 메이퓨어의원위 59,400원 (기타)"
+    "신규 2건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
+    "[추가] 2026년 10월 10/30 쿠팡(쿠페이) 15,800원 (생활비)",
+    "[추가] 2026년 10월 10/30 쿠팡(쿠페이) 15,800원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 40989176728,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40989176728",
-  "request_id": "cron-202610300200",
+  "run_id": 41008664244,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41008664244",
+  "request_id": "cron-202610300528",
   "trigger": "schedule",
-  "started_at": "2026-10-30T11:01:17+09:00",
+  "started_at": "2026-10-30T14:29:24+09:00",
   "duration_sec": 3,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 1건 확인, 결제 1건"
+      "summary": "메일 2건 확인, 결제 2건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 1 · 취소 0 · 건너뜀 0"
+      "summary": "추가 2 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-30T11:01:21+09:00"
+  "updated_at": "2026-10-30T14:29:27+09:00"
 }
