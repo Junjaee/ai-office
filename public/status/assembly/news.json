@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 16건, 실패 0건, 11초",
+  "summary": "신규 69건, 실패 0건, 12초",
   "counts": {
-    "new": 16,
+    "new": 69,
     "failed": 0,
-    "total": 5890
+    "total": 5959
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 16건, 실패 0건, 11초",
-    "[신규] ‘신용산객잔’ 서용주 “이준석의 한동훈 비판, 정치적 존재감 끌어올리려는 것” — 일요신문",
-    "[신규] ‘AG 테크볼 金’ 이준석, 여자프로농구 삼성생명 홈 개막전 시투 — 이투데이",
-    "[신규] 金빛 기운 전한다! ‘AG 테크볼 금메달리스트’ 이준석, 내달 2일 삼성생명 홈 개막전서 시투 — 스포츠서울",
-    "[신규] 대학생 1000명에게 '가장 호감 가는 정치인' 물은 결과 — 위키트리"
+    "신규 69건, 실패 0건, 12초",
+    "[신규] 한동훈 \"연대는 친분 아닌 명분으로\"‥'장동혁·이준석도?' 즉답 피해 — MBC 뉴스",
+    "[신규] “이준석과 연대?”물음에, 한동훈 “‘누구와 친하니, 친하지 않니’식 한가한 얘기할 때 아냐” — 주간경향",
+    "[신규] 한동훈, 오세훈과 연대에 “친분 아닌 명분으로 함께해야”…장동혁·이준석은? — 시사저널",
+    "[신규] 이준석 보며 하던 걱정을 민주당 대통령 보면서도 해야 하나 — 프레시안"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41011598529,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41011598529",
-  "request_id": "cron-202610300600",
+  "run_id": 41030325146,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41030325146",
+  "request_id": "cron-202610300900",
   "trigger": "schedule",
-  "started_at": "2026-10-30T15:01:14+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-10-30T18:01:24+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 117건"
+      "summary": "검색어 5개에서 165건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 94건 (신규 16건) · 시민행정신문 9건, 한국사회복지저널 6건, 뉴시스 5건"
+      "summary": "오늘 163건 (신규 69건) · 뉴스1 14건, 시민행정신문 13건, 뉴시스 9건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-30T15:01:27+09:00"
+  "updated_at": "2026-10-30T18:01:38+09:00"
 }
