@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 443건, 교체 0건, 실패 15건, 158.2분",
+  "summary": "신규 487건, 교체 0건, 실패 4건, 134.7분",
   "counts": {
-    "new": 443,
+    "new": 487,
     "replaced": 0,
-    "failed": 15,
-    "total": 3692
+    "failed": 4,
+    "total": 5304
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 443건, 교체 0건, 실패 15건, 158.2분",
-    "[신규] 서울특별시의회 제11대/제321회/교통위원회행정사무감사_2023-11-02.txt",
-    "[신규] 서울특별시의회 제11대/제321회/교통위원회행정사무감사_2023-11-03.txt",
-    "[신규] 서울특별시의회 제11대/제321회/교통위원회행정사무감사_2023-11-07.txt",
-    "[신규] 서울특별시의회 제11대/제321회/교통위원회행정사무감사_2023-11-08.txt"
+    "신규 487건, 교체 0건, 실패 4건, 134.7분",
+    "[신규] 서울특별시의회 제11대/제320회/행정자치위원회_제4차_2023-09-12.txt",
+    "[신규] 서울특별시의회 제11대/제320회/기획경제위원회_제1차_2023-09-04.txt",
+    "[신규] 서울특별시의회 제11대/제320회/문화체육관광위원회_제1차_2023-09-05.txt",
+    "[신규] 서울특별시의회 제11대/제319회/예산결산특별위원회_제3차_2023-06-28.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 40917186813,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40917186813",
-  "request_id": "cron-202610291700",
+  "run_id": 41095033354,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41095033354",
+  "request_id": "cron-202610301700",
   "trigger": "schedule",
-  "started_at": "2026-10-30T02:01:28+09:00",
-  "duration_sec": 9491,
+  "started_at": "2026-10-31T02:01:24+09:00",
+  "duration_sec": 8081,
   "tasks": [
     {
       "id": "scan",
-      "status": "error",
-      "summary": "의회 4/5곳 확인, 회의록 3697건"
+      "status": "done",
+      "summary": "의회 5/5곳 확인, 회의록 5291건"
     },
     {
       "id": "fetch",
       "status": "error",
-      "summary": "신규 443건, 교체 0건"
+      "summary": "신규 487건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-10-30T04:39:40+09:00"
+  "updated_at": "2026-10-31T04:16:06+09:00"
 }
