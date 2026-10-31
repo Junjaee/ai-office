@@ -3,7 +3,7 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
   "counts": {
     "new": 1,
     "replaced": 0,
@@ -13,16 +13,16 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 10월 10/31 쿠팡이츠 27,600원 (식비)"
+    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
+    "[추가] 2026년 10월 10/31 동아오츠카 2,800원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 41155540775,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41155540775",
-  "request_id": "cron-202610310128",
+  "run_id": 41168536651,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41168536651",
+  "request_id": "cron-202610310425",
   "trigger": "schedule",
-  "started_at": "2026-10-31T10:29:28+09:00",
-  "duration_sec": 3,
+  "started_at": "2026-10-31T13:26:21+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-31T10:29:32+09:00"
+  "updated_at": "2026-10-31T13:26:23+09:00"
 }
