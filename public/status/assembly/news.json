@@ -1,40 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 9초",
-  "counts": {
-    "new": 3,
-    "failed": 0,
-    "total": 6030
-  },
+  "summary": "뉴스 목록을 받아오지 못했어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 9초",
-    "[신규] ‘AG 테크볼 金’ 이준석, 여자프로농 — 이투데이",
-    "[신규] 국힘, 美 비자 거부됐다가 받은 진성준에 “‘한미 균열’ 현주소 안 지워져” — 시사저널",
-    "[신규] 국회 재경위 野간사, 與에 \"가상자산 과세 유예 결정해야\" 압박 — 연합뉴스"
+    "뉴스 목록을 받아오지 못했어요",
+    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41174837521,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41174837521",
-  "request_id": "cron-202610310600",
+  "run_id": 41186901335,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41186901335",
+  "request_id": "cron-202610310900",
   "trigger": "schedule",
-  "started_at": "2026-10-31T15:01:23+09:00",
-  "duration_sec": 9,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 85건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 40건 (신규 3건) · 외교저널 3건, 뉴스1 2건, 문화일보 2건"
-    }
-  ],
+  "started_at": "2026-10-31T18:01:23+09:00",
+  "duration_sec": 126,
   "id": "news",
-  "updated_at": "2026-10-31T15:01:33+09:00"
+  "updated_at": "2026-10-31T18:03:30+09:00"
 }
