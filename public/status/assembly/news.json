@@ -3,39 +3,35 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 9초",
+  "summary": "신규 0건, 실패 0건, 12초",
   "counts": {
-    "new": 5,
+    "new": 0,
     "failed": 0,
     "total": 6056
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 9초",
-    "[신규] 진주불교회관 '개관 33주년 기념법회' 봉행 … '포교·나눔의 서원' 다져 — BBS불교방송",
-    "[신규] 세븐 럭 지원 종료 버전 확인 — www.zolotnit.ru",
-    "[신규] 성남시의회 민주당, 이세미 예결위원 사보임 — 뉴스로드",
-    "[신규] 대전시 서울 국회캠프 설치…내년도 국비 5조406억 원 확보 총력 — 뉴스홈(newshome)"
+    "신규 0건, 실패 0건, 12초"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41227289671,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41227289671",
-  "request_id": "cron-202610311800",
+  "run_id": 41241559197,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41241559197",
+  "request_id": "cron-202610312100",
   "trigger": "schedule",
-  "started_at": "2026-11-01T03:01:26+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-11-01T06:01:21+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 45건"
+      "summary": "검색어 5개에서 36건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 5건) · BBS불교방송 1건, YTN 1건, www.zolotnit.ru 1건"
+      "summary": "오늘 10건 (신규 0건) · BBS불교방송 1건, YTN 1건, www.zolotnit.ru 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-01T03:01:35+09:00"
+  "updated_at": "2026-11-01T06:01:34+09:00"
 }
