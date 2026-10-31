@@ -1,0 +1,1 @@
+{"automation": "news", "run_id": 41212776793, "request_id": "cron-202610311500", "trigger": "schedule", "started_at": "2026-11-01T00:01:28+09:00", "duration_sec": 14, "ok": true, "summary": "신규 5건, 실패 0건, 14초", "url": "https://github.com/Junjaee/ai-office/actions/runs/41212776793", "recorded_at": "2026-11-01T00:01:43+09:00"}

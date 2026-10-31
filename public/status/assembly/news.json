@@ -3,27 +3,27 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 16건, 실패 0건, 10초",
+  "summary": "신규 5건, 실패 0건, 14초",
   "counts": {
-    "new": 16,
+    "new": 5,
     "failed": 0,
-    "total": 6046
+    "total": 6051
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 16건, 실패 0건, 10초",
-    "[신규] '테크볼 AG금메달' 이준석 시투한다...용인 삼성생명 홈 개막전 초대박 이벤트 — Chosunbiz",
-    "[신규] KBL 한국 프로농구 리그|'테크볼 AG금메달' 이준석 시투한다...용인 삼성생명 홈 개막전 초대박 이벤트 — ZUM 뉴스",
-    "[신규] 혁신 없는 보수통합은 필패다 — 한겨레21",
-    "[신규] [프로농구] 삼성생명, 2일 하나은행과 홈 첫 경기…세부 숙박권 걸린 슈팅 도전 — 뉴스핌"
+    "신규 5건, 실패 0건, 14초",
+    "[신규] 민주, 지지율 하락 고심...국힘, 권력구도 지각변동 — YTN",
+    "[신규] 한동훈과 손잡으면 안 되는 이유가 뭡니까? (33) — 브런치",
+    "[신규] [KPGA 렉서스 마스터즈 3R] 1.배용준 -12, 2,박준홍 -8, T3.정재현2575-정찬민-이상희-장유빈 -7, T7.송민혁-신용구-강경남 -6, 10.황재민 -5 — 골프경제신문",
+    "[신규] 민주당·조국혁신당 호감도 ‘동반 추락’…국힘 반등했지만 비호감 61% — 매일경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41199214919,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41199214919",
-  "request_id": "cron-202610311200",
+  "run_id": 41212776793,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41212776793",
+  "request_id": "cron-202610311500",
   "trigger": "schedule",
-  "started_at": "2026-10-31T21:01:24+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-01T00:01:28+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
@@ -33,9 +33,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 56건 (신규 16건) · 외교저널 3건, YTN 2건, 골프경제신문 2건"
+      "summary": "오늘 5건 (신규 5건) · YTN 1건, 골프경제신문 1건, 매일경제 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-31T21:01:35+09:00"
+  "updated_at": "2026-11-01T00:01:43+09:00"
 }
