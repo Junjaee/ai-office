@@ -1,22 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "뉴스 목록을 받아오지 못했어요",
-  "counts": {},
+  "summary": "신규 16건, 실패 0건, 10초",
+  "counts": {
+    "new": 16,
+    "failed": 0,
+    "total": 6046
+  },
   "next_run": "3시간마다",
   "log": [
-    "뉴스 목록을 받아오지 못했어요",
-    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
+    "신규 16건, 실패 0건, 10초",
+    "[신규] '테크볼 AG금메달' 이준석 시투한다...용인 삼성생명 홈 개막전 초대박 이벤트 — Chosunbiz",
+    "[신규] KBL 한국 프로농구 리그|'테크볼 AG금메달' 이준석 시투한다...용인 삼성생명 홈 개막전 초대박 이벤트 — ZUM 뉴스",
+    "[신규] 혁신 없는 보수통합은 필패다 — 한겨레21",
+    "[신규] [프로농구] 삼성생명, 2일 하나은행과 홈 첫 경기…세부 숙박권 걸린 슈팅 도전 — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41186901335,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41186901335",
-  "request_id": "cron-202610310900",
+  "run_id": 41199214919,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41199214919",
+  "request_id": "cron-202610311200",
   "trigger": "schedule",
-  "started_at": "2026-10-31T18:01:23+09:00",
-  "duration_sec": 126,
+  "started_at": "2026-10-31T21:01:24+09:00",
+  "duration_sec": 10,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 45건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 56건 (신규 16건) · 외교저널 3건, YTN 2건, 골프경제신문 2건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-10-31T18:03:30+09:00"
+  "updated_at": "2026-10-31T21:01:35+09:00"
 }
