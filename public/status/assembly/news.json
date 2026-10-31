@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 9초",
+  "summary": "신규 5건, 실패 0건, 12초",
   "counts": {
-    "new": 11,
+    "new": 5,
     "failed": 0,
-    "total": 6022
+    "total": 6027
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 9초",
-    "[신규] [정치 포커스] 한동훈과 이준석은 어쩌다 앙숙이 됐을까 — 에너지경제신문",
-    "[신규] [뉴스 즉설]상수가 된 오세훈, 주춤하는 한동훈, 좀 불편한 장동혁 — 대전일보",
-    "[신규] 오세훈·장동혁·한동훈, 지지세 넓히기 ‘삼국지’ — 조선일보",
-    "[신규] 한동훈, 딸 수사에 “일종의 고문을 하겠다는 게 본질···마음대로 해보라” — 주간경향"
+    "신규 5건, 실패 0건, 12초",
+    "[신규] [감리회4] 감리회 제37회 총회 폐회, 12개 연회 신임 감독 취임 — campaigns.do",
+    "[신규] 與국방위원장 진성준 美비자 결국 발급…\"예정대로 내일 출국 美방문\" — 한국NGO신문",
+    "[신규] 오세훈 18.6%로 보수 잠룡 선두권…여야 셈법 복잡해졌다[데이터로 본 정치민심] — 서울경제",
+    "[신규] 김정철 \"중수청·공소청 출범, 지금 완전히 카오스\" — OhmyNews"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41147777007,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41147777007",
-  "request_id": "cron-202610310000",
+  "run_id": 41162485098,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41162485098",
+  "request_id": "cron-202610310300",
   "trigger": "schedule",
-  "started_at": "2026-10-31T09:01:28+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-10-31T12:01:25+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 176건"
+      "summary": "검색어 5개에서 128건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 32건 (신규 11건) · 외교저널 3건, 뉴스1 2건, 문화일보 2건"
+      "summary": "오늘 37건 (신규 5건) · 외교저널 3건, 뉴스1 2건, 문화일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-31T09:01:38+09:00"
+  "updated_at": "2026-10-31T12:01:38+09:00"
 }
