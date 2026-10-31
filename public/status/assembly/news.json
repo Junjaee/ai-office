@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 9초",
   "counts": {
-    "new": 5,
+    "new": 11,
     "failed": 0,
-    "total": 6011
+    "total": 6022
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 12초",
-    "[신규] 한동훈에 \"장동혁·이준석도 명분을 같이하는 사람이냐\" 묻자... — 한국일보",
-    "[신규] 보수 통합 vs 강성 결집 vs 대여 투쟁… 吳·張·韓 삼국지 — 조선일보",
-    "[신규] 與, '최불암 별세'에 \"소탈한 모습 기억될 것…명복 빈다\" — 국제뉴스",
-    "[신규] 예결위, 예산안 및 기금운용계획안 공청회 실시 — 뉴스1"
+    "신규 11건, 실패 0건, 9초",
+    "[신규] [정치 포커스] 한동훈과 이준석은 어쩌다 앙숙이 됐을까 — 에너지경제신문",
+    "[신규] [뉴스 즉설]상수가 된 오세훈, 주춤하는 한동훈, 좀 불편한 장동혁 — 대전일보",
+    "[신규] 오세훈·장동혁·한동훈, 지지세 넓히기 ‘삼국지’ — 조선일보",
+    "[신규] 한동훈, 딸 수사에 “일종의 고문을 하겠다는 게 본질···마음대로 해보라” — 주간경향"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41127716350,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41127716350",
-  "request_id": "cron-202610302100",
+  "run_id": 41147777007,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41147777007",
+  "request_id": "cron-202610310000",
   "trigger": "schedule",
-  "started_at": "2026-10-31T06:01:27+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-10-31T09:01:28+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 160건"
+      "summary": "검색어 5개에서 176건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 21건 (신규 5건) · 외교저널 3건, 시사타파NEWS 2건, MEDI:GATE NEWS 1건"
+      "summary": "오늘 32건 (신규 11건) · 외교저널 3건, 뉴스1 2건, 문화일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-10-31T06:01:40+09:00"
+  "updated_at": "2026-10-31T09:01:38+09:00"
 }
