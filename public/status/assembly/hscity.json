@@ -3,38 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 전송 3건, 실패 0건, 1.1분",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 19초",
   "counts": {
-    "new": 3,
-    "sent": 3,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 3건, 전송 3건, 실패 0건, 1.1분",
-    "[신규] [고시] 도시계획시설[공원]사업 공사 완료 공고",
-    "[신규] [일반공고] 2026년 3분기 동탄구 임대차계약(최초, 변경)신고 공고",
-    "[신규] [입찰공고] 시설공사 수의견적 제출 공고[2026년 노작공원 무장애길 정비사업(전기)"
+    "신규 0건, 전송 0건, 실패 0건, 19초"
   ],
   "link": "",
-  "run_id": 40976928293,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40976928293",
-  "request_id": "cron-202610300000",
+  "run_id": 41147781950,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41147781950",
+  "request_id": "cron-202610310000",
   "trigger": "schedule",
-  "started_at": "2026-10-30T09:01:24+09:00",
-  "duration_sec": 66,
+  "started_at": "2026-10-31T09:01:30+09:00",
+  "duration_sec": 19,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 3건, 첨부 3건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "3건 발송, 무음 0건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-10-30T09:02:31+09:00"
+  "updated_at": "2026-10-31T09:01:50+09:00"
 }
