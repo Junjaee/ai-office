@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 10월 10/31 이마트가든5점 71,190원 (식비)"
+    "[추가] 2026년 10월 10/31 쿠팡이츠 32,000원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 41199216771,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41199216771",
-  "request_id": "cron-202610311200",
+  "run_id": 41200094953,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41200094953",
+  "request_id": "cron-202610311212",
   "trigger": "schedule",
-  "started_at": "2026-10-31T21:01:25+09:00",
+  "started_at": "2026-10-31T21:13:26+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-31T21:01:29+09:00"
+  "updated_at": "2026-10-31T21:13:30+09:00"
 }
