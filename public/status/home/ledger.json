@@ -3,9 +3,9 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 1초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
   "counts": {
-    "new": 0,
+    "new": 1,
     "replaced": 0,
     "skip": 0,
     "wait": 0,
@@ -13,27 +13,28 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 0건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 1초"
+    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
+    "[추가] 2026년 10월 10/31 쿠팡(쿠페이) 9,710원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 41147779489,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41147779489",
-  "request_id": "cron-202610310000",
+  "run_id": 41154652369,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41154652369",
+  "request_id": "cron-202610310117",
   "trigger": "schedule",
-  "started_at": "2026-10-31T09:01:18+09:00",
-  "duration_sec": 1,
+  "started_at": "2026-10-31T10:18:18+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 0건 확인, 결제 0건"
+      "summary": "메일 1건 확인, 결제 1건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 0 · 취소 0 · 건너뜀 0"
+      "summary": "추가 1 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-10-31T09:01:19+09:00"
+  "updated_at": "2026-10-31T10:18:21+09:00"
 }
