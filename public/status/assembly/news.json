@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 10초",
   "counts": {
-    "new": 8,
+    "new": 11,
     "failed": 0,
-    "total": 6070
+    "total": 6081
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 12초",
-    "[신규] ‘오세훈 삼행시’ 눈도장 뒤…국힘 거리두던 이준석, 달라졌다 — 중앙일보",
-    "[신규] 오세훈 시장이 연 보수 연대판…한동훈과 손잡고 이준석까지 끌어안을까 — 헤럴드경제",
-    "[신규] 오세훈·한동훈·장동혁, 주도권 경쟁 치열…보수 재편 놓고 복잡한 셈법 — 한국뉴스종합",
-    "[신규] [기자수첩] 오세훈이 띄운 '보수통합'…만찬보다 중요한 것 — 데일리한국"
+    "신규 11건, 실패 0건, 10초",
+    "[신규] 11월 2일 (월) 출연자 — 채널A",
+    "[신규] 태양 아래 피어난 영원한 우정, Eternal Friendship Beneath the Sun — 시민행정신문",
+    "[신규] 오세훈 \"李정부, 사법부를 발 밑에 두려해... 한동훈·장동혁 힘 합쳐야\" — 조선일보",
+    "[신규] 李 “링거·코피 순방”…野 “고생담이 성과인가·밤낮 X 탓” — 서울Pn, 서울신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41267442531,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41267442531",
-  "request_id": "cron-202611010300",
+  "run_id": 41279091080,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41279091080",
+  "request_id": "cron-202611010600",
   "trigger": "schedule",
-  "started_at": "2026-11-01T12:01:19+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-01T15:01:22+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 36건"
+      "summary": "검색어 5개에서 42건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 24건 (신규 8건) · BBS불교방송 2건, www.zolotnit.ru 2건, 이데일리 2건"
+      "summary": "오늘 35건 (신규 11건) · 이데일리 3건, BBS불교방송 2건, www.zolotnit.ru 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-01T12:01:32+09:00"
+  "updated_at": "2026-11-01T15:01:32+09:00"
 }
