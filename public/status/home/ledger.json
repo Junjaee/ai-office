@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
-    "[추가] 2026년 11월 11/1 (주)푸드케어 3,000원 (식비)"
+    "[추가] 2026년 11월 11/1 주식회사플라잉 28,260원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 41265372552,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41265372552",
-  "request_id": "cron-202611010228",
+  "run_id": 41267776642,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41267776642",
+  "request_id": "cron-202611010305",
   "trigger": "schedule",
-  "started_at": "2026-11-01T11:29:33+09:00",
+  "started_at": "2026-11-01T12:06:24+09:00",
   "duration_sec": 2,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-11-01T11:29:36+09:00"
+  "updated_at": "2026-11-01T12:06:28+09:00"
 }
