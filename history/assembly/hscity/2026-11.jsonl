@@ -1,0 +1,1 @@
+{"automation": "hscity", "run_id": 41254870061, "request_id": "cron-202611010000", "trigger": "schedule", "started_at": "2026-11-01T09:01:38+09:00", "duration_sec": 14, "ok": true, "summary": "신규 0건, 전송 0건, 실패 0건, 14초", "url": "https://github.com/Junjaee/ai-office/actions/runs/41254870061", "recorded_at": "2026-11-01T09:01:53+09:00"}
