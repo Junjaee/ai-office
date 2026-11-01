@@ -3,9 +3,9 @@
   "dept": "research",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
+  "summary": "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
   "counts": {
-    "new": 2,
+    "new": 1,
     "replaced": 0,
     "skip": 0,
     "wait": 0,
@@ -13,29 +13,28 @@
   },
   "next_run": "6시간마다",
   "log": [
-    "신규 2건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 11월 11/1 쿠팡 14,000원 (생활비)",
-    "[추가] 2026년 11월 11/1 쿠팡 7,890원 (생활비)"
+    "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 2초",
+    "[추가] 2026년 11월 11/1 쿠팡 7,950원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 41272934116,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41272934116",
-  "request_id": "cron-202611010423",
+  "run_id": 41273641915,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41273641915",
+  "request_id": "cron-202611010434",
   "trigger": "schedule",
-  "started_at": "2026-11-01T13:24:19+09:00",
-  "duration_sec": 3,
+  "started_at": "2026-11-01T13:35:26+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "메일 2건 확인, 결제 2건"
+      "summary": "메일 1건 확인, 결제 1건"
     },
     {
       "id": "sheet",
       "status": "done",
-      "summary": "추가 2 · 취소 0 · 건너뜀 0"
+      "summary": "추가 1 · 취소 0 · 건너뜀 0"
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-11-01T13:24:23+09:00"
+  "updated_at": "2026-11-01T13:35:29+09:00"
 }
