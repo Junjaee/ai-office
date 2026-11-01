@@ -1,41 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 10초",
-  "counts": {
-    "new": 11,
-    "failed": 0,
-    "total": 6081
-  },
+  "summary": "실행 중 문제가 생겼어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 10초",
-    "[신규] 11월 2일 (월) 출연자 — 채널A",
-    "[신규] 태양 아래 피어난 영원한 우정, Eternal Friendship Beneath the Sun — 시민행정신문",
-    "[신규] 오세훈 \"李정부, 사법부를 발 밑에 두려해... 한동훈·장동혁 힘 합쳐야\" — 조선일보",
-    "[신규] 李 “링거·코피 순방”…野 “고생담이 성과인가·밤낮 X 탓” — 서울Pn, 서울신문"
+    "실행 중 문제가 생겼어요",
+    "HttpError: <HttpError 502 when requesting https://www.googleapis.com/upload/drive/v3/files/1pSQQE_uTe020x9Iiy3XAiDt3K-F_sKMp?fields=id&alt=json&uploadType=media returned \"Bad Gateway\". Details: \"<!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale="
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41279091080,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41279091080",
-  "request_id": "cron-202611010600",
+  "run_id": 41291229795,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41291229795",
+  "request_id": "cron-202611010900",
   "trigger": "schedule",
-  "started_at": "2026-11-01T15:01:22+09:00",
-  "duration_sec": 10,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 42건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 35건 (신규 11건) · 이데일리 3건, BBS불교방송 2건, www.zolotnit.ru 2건"
-    }
-  ],
+  "started_at": "2026-11-01T18:01:15+09:00",
+  "duration_sec": 42,
   "id": "news",
-  "updated_at": "2026-11-01T15:01:32+09:00"
+  "updated_at": "2026-11-01T18:01:58+09:00"
 }
