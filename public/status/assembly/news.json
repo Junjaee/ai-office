@@ -1,22 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "실행 중 문제가 생겼어요",
-  "counts": {},
+  "summary": "신규 26건, 실패 0건, 11초",
+  "counts": {
+    "new": 26,
+    "failed": 0,
+    "total": 6107
+  },
   "next_run": "3시간마다",
   "log": [
-    "실행 중 문제가 생겼어요",
-    "HttpError: <HttpError 502 when requesting https://www.googleapis.com/upload/drive/v3/files/1pSQQE_uTe020x9Iiy3XAiDt3K-F_sKMp?fields=id&alt=json&uploadType=media returned \"Bad Gateway\". Details: \"<!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale="
+    "신규 26건, 실패 0건, 11초",
+    "[신규] 장동혁, 오세훈·이준석엔 연대 손짓…'한동훈 복당'은 완전 차단 — 데일리안",
+    "[신규] 오세훈 향해 \"힘 모으자\"는 장동혁…한동훈엔 ‘선 긋기’ — JTBC",
+    "[신규] 장동혁 \"보수 통합·연대, 필요한 시점에 당원 뜻 모아 추진\"…韓 복당엔 선 그어 — 뉴시스",
+    "[신규] 한동훈엔 선 긋는 장동혁 “복당 불가” — 채널A"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41291229795,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41291229795",
-  "request_id": "cron-202611010900",
+  "run_id": 41304430505,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41304430505",
+  "request_id": "cron-202611011200",
   "trigger": "schedule",
-  "started_at": "2026-11-01T18:01:15+09:00",
-  "duration_sec": 42,
+  "started_at": "2026-11-01T21:01:18+09:00",
+  "duration_sec": 11,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 68건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 61건 (신규 26건) · 시민행정신문 8건, 연합뉴스 3건, 이데일리 3건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-11-01T18:01:58+09:00"
+  "updated_at": "2026-11-01T21:01:31+09:00"
 }
