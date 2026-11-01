@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 12초",
+  "summary": "신규 6건, 실패 0건, 12초",
   "counts": {
-    "new": 7,
+    "new": 6,
     "failed": 0,
-    "total": 6114
+    "total": 6120
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 12초",
-    "[신규] 모호해야 유리하다… 吳의 전략적 선택 — 주간조선",
-    "[신규] '루크 데뷔골+반데이라 자책골' 파주, '김선민 선제골' 충북청주에 2-1 역전승 '10위 점프'[현장 리뷰] — 조선일보",
-    "[신규] 범야권 차기? 오세훈 19.2%…5.9%p 올랐다-리서치웰 — 문화일보",
-    "[신규] 국민의힘 차기 전대 경쟁…장동혁 연임 시동에 오세훈·한동훈 행보 : 정치 — 재경일보"
+    "신규 6건, 실패 0건, 12초",
+    "[신규] 보수 통합론 속 정점식 역할론…현역 의원 참여가 관건 — 더팩트",
+    "[신규] 오세훈은 통합론, 한동훈은 중진과 협력… 보수 재편 기지개 — 세계일보",
+    "[신규] 장동혁 “내가 지도부에 있는 한 한동훈 복당 거론도 부적절” — 주간조선",
+    "[신규] 30대 73% \"한국도 프랑스처럼 대규모 시위 벌어질 가능성\" — 조선일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41319019917,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41319019917",
-  "request_id": "cron-202611011500",
+  "run_id": 41334372930,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41334372930",
+  "request_id": "cron-202611011800",
   "trigger": "schedule",
-  "started_at": "2026-11-02T00:01:23+09:00",
+  "started_at": "2026-11-02T03:01:12+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 72건"
+      "summary": "검색어 5개에서 82건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 7건 (신규 7건) · 경남매일 1건, 문화일보 1건, 브릿지경제 1건"
+      "summary": "오늘 13건 (신규 6건) · 조선일보 2건, 주간조선 2건, 강원도민일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-02T00:01:35+09:00"
+  "updated_at": "2026-11-02T03:01:25+09:00"
 }
