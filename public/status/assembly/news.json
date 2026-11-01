@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 12초",
+  "summary": "신규 9건, 실패 0건, 12초",
   "counts": {
-    "new": 6,
+    "new": 9,
     "failed": 0,
-    "total": 6120
+    "total": 6129
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 12초",
-    "[신규] 보수 통합론 속 정점식 역할론…현역 의원 참여가 관건 — 더팩트",
-    "[신규] 오세훈은 통합론, 한동훈은 중진과 협력… 보수 재편 기지개 — 세계일보",
-    "[신규] 장동혁 “내가 지도부에 있는 한 한동훈 복당 거론도 부적절” — 주간조선",
-    "[신규] 30대 73% \"한국도 프랑스처럼 대규모 시위 벌어질 가능성\" — 조선일보"
+    "신규 9건, 실패 0건, 12초",
+    "[신규] “北 TV 개방? 대표님 짱!” 통일부에 이준석 제안 보낸 尹 촌극 — 중앙일보",
+    "[신규] 장동혁, 당 대표 연임 가능성 시사…“필요하다면 책임 피하지 않겠다” — 더시사법률",
+    "[신규] 오세훈 서울시장, TV조선 ′강적들′ 출연…사법부·부동산 정면 비판 — 파이낸셜경제",
+    "[신규] 張, 연임 질문에 \"피할 생각 없어\" — 조선일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41334372930,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41334372930",
-  "request_id": "cron-202611011800",
+  "run_id": 41349759132,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41349759132",
+  "request_id": "cron-202611012100",
   "trigger": "schedule",
-  "started_at": "2026-11-02T03:01:12+09:00",
+  "started_at": "2026-11-02T06:01:28+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 82건"
+      "summary": "검색어 5개에서 86건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 6건) · 조선일보 2건, 주간조선 2건, 강원도민일보 1건"
+      "summary": "오늘 22건 (신규 9건) · 조선일보 3건, BBS불교방송 2건, 주간조선 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-02T03:01:25+09:00"
+  "updated_at": "2026-11-02T06:01:41+09:00"
 }
