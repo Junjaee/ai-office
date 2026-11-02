@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 12초",
   "counts": {
-    "new": 9,
+    "new": 11,
     "failed": 0,
-    "total": 6262
+    "total": 6273
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 12초",
-    "[신규] 이준석 “어떤 분, 한 군데도 제대로 지내는 곳 없는 것 같다···다들 한 사람 떠올려” — 주간경향",
-    "[신규] “깃발 들겠다는 정청래, ‘김민석 100일’ 후 당권 쿠데타?” [정치를 부탁해] — 동아일보",
-    "[신규] '李 명예훼손·5·18 北 개입설' 전한길 공소청 송치 — 뉴시스",
-    "[신규] “‘오동석장’ 연대로 가야”…뭉칠 수 있나 — 채널A"
+    "신규 11건, 실패 0건, 12초",
+    "[신규] [김종석의 샷]보수주자들 주도권 신경전?…누구 행사에 가야 하나 — 채널A",
+    "[신규] ‘5·18 북한 개입설’ 유포 혐의 전한길, 공소청 송치 — 조선일보",
+    "[신규] 조희대 국조·특검 초읽기...여야 공방 격화 — 공공뉴스",
+    "[신규] 소비쿠폰 안 받았다는 이준석 \"물가상승만 남길 포퓰리즘\" — JTBC"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41467404129,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41467404129",
-  "request_id": "cron-202611021500",
+  "run_id": 41496509583,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41496509583",
+  "request_id": "cron-202611021800",
   "trigger": "schedule",
-  "started_at": "2026-11-03T00:01:27+09:00",
+  "started_at": "2026-11-03T03:01:23+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 131건"
+      "summary": "검색어 5개에서 128건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 9건 (신규 9건) · 경기신문 1건, 뉴스워커 1건, 뉴시스 1건"
+      "summary": "오늘 20건 (신규 11건) · 채널A 2건, JTBC 1건, SBS Biz 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-03T00:01:41+09:00"
+  "updated_at": "2026-11-03T03:01:36+09:00"
 }
