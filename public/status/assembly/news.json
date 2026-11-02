@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 12초",
+  "summary": "신규 27건, 실패 0건, 10초",
   "counts": {
-    "new": 9,
+    "new": 27,
     "failed": 0,
-    "total": 6138
+    "total": 6165
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 12초",
-    "[신규] 돌아온 吳…정치지형 변화 불가피 — 주간한국",
-    "[신규] 보수 4국지 중심에 선 오세훈…장동혁·이준석·한동훈과 동상이몽 — 베타뉴스",
-    "[신규] 이준석, 尹 겨냥했나…\"돈에 관심 없다는 사람은 돈에 미친 사람\" — JTBC",
-    "[신규] 경찰 수사 역량 부족에 '경찰대 로스쿨' 신설?…한동훈 \"국민을 '생체실험 대상'처럼\" 등 [11/2(월) 데일리안 출근길 뉴스] — 데일리안"
+    "신규 27건, 실패 0건, 10초",
+    "[신규] 인터뷰 전문: 이준석 “오세훈, 통합 강조하는 게 맞다고 봐 큰 사람의 자세로 가야” [정치시그널] — 채널A",
+    "[신규] 야권서 들끓는 보수연대론, 이준석은 \"합종연횡 관심 없어 … 가치 중심 열린 대화\" — 뉴데일리",
+    "[신규] 장동혁, 당대표 연임 가능성 시사…오세훈·이준석과 연대 가능성 — 폴리뉴스 Polinews",
+    "[신규] 영등포구, 18개 동 발로 뛰며 213건 제안 접수 …2026년 찾아가는 현장민원실 완료 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41364872699,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41364872699",
-  "request_id": "cron-202611020000",
+  "run_id": 41380722404,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41380722404",
+  "request_id": "cron-202611020300",
   "trigger": "schedule",
-  "started_at": "2026-11-02T09:01:27+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-02T12:01:32+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 90건"
+      "summary": "검색어 5개에서 103건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 31건 (신규 9건) · 조선일보 3건, BBS불교방송 2건, 뉴시스 2건"
+      "summary": "오늘 58건 (신규 27건) · 시민행정신문 4건, 연합뉴스 3건, 조선일보 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-02T09:01:40+09:00"
+  "updated_at": "2026-11-02T12:01:43+09:00"
 }
