@@ -1,0 +1,1 @@
+{"automation": "analyst", "run_id": 41406775504, "request_id": "cron-202611020730", "trigger": "schedule", "started_at": "2026-11-02T16:31:22+09:00", "duration_sec": 814, "ok": true, "summary": "국내 · 점검 349건, 관심 0건, 실패 0건, 관심 실패 0건, 후보 140건, 13.6분", "url": "https://github.com/Junjaee/ai-office/actions/runs/41406775504", "recorded_at": "2026-11-02T16:44:57+09:00"}
