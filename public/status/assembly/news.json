@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 12초",
+  "summary": "신규 9건, 실패 0건, 12초",
   "counts": {
-    "new": 23,
+    "new": 9,
     "failed": 0,
-    "total": 6253
+    "total": 6262
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 12초",
-    "[신규] “정청래, ‘김민석 100일’ 후 당권 쿠데타? 실패하면 반역, 성공하면 혁명”[정치를 부탁해] — 동아일보",
-    "[신규] [포토] 금메달리스트 이준석의 포효 — 루키",
-    "[신규] 오세훈이 뜨니 이상휘도 뜬다…20년 인연 재조명 — 영남경제",
-    "[신규] 박용갑 의원, 홍지선 장관에게 CTX 서대전역 연장 요청 — 시민행정신문"
+    "신규 9건, 실패 0건, 12초",
+    "[신규] 이준석 “어떤 분, 한 군데도 제대로 지내는 곳 없는 것 같다···다들 한 사람 떠올려” — 주간경향",
+    "[신규] “깃발 들겠다는 정청래, ‘김민석 100일’ 후 당권 쿠데타?” [정치를 부탁해] — 동아일보",
+    "[신규] '李 명예훼손·5·18 北 개입설' 전한길 공소청 송치 — 뉴시스",
+    "[신규] “‘오동석장’ 연대로 가야”…뭉칠 수 있나 — 채널A"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41441261719,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41441261719",
-  "request_id": "cron-202611021200",
+  "run_id": 41467404129,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41467404129",
+  "request_id": "cron-202611021500",
   "trigger": "schedule",
-  "started_at": "2026-11-02T21:01:25+09:00",
+  "started_at": "2026-11-03T00:01:27+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 136건"
+      "summary": "검색어 5개에서 131건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 146건 (신규 23건) · 시민행정신문 12건, 데일리안 5건, 뉴스1 4건"
+      "summary": "오늘 9건 (신규 9건) · 경기신문 1건, 뉴스워커 1건, 뉴시스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-02T21:01:38+09:00"
+  "updated_at": "2026-11-03T00:01:41+09:00"
 }
