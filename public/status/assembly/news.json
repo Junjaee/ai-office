@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 38건, 실패 0건, 13초",
+  "summary": "신규 30건, 실패 0건, 13초",
   "counts": {
-    "new": 38,
+    "new": 30,
     "failed": 0,
-    "total": 6428
+    "total": 6458
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 38건, 실패 0건, 13초",
-    "[신규] [뉴스후] 오세훈 둘러싼 삼각관계…한동훈·장동혁·이준석의 동상이몽 — 데일리연합",
-    "[신규] 서귀포시-해군기동함대사령부, 상호 협력 강화 위한 소통의 장 마련 — 외교저널",
-    "[신규] 한동훈 \"서클처럼 정당 운영\" 양당 직격...윤상현 \"오동석장 연대\" — YTN",
-    "[신규] 차기 대권 오세훈 18.4%·장동혁 13.6%·한동훈 12.6% — 에너지경제신문"
+    "신규 30건, 실패 0건, 13초",
+    "[신규] 한동훈, 이준석 오자 악수만 하고 떠나…'보수 통합' 험로 예고 — 아시아경제",
+    "[신규] 국회의원 112명 서명…원내 주요 5개 정당 동참 — 국제신문",
+    "[신규] “AI 도시, 화성특례시에서”… 3일 코엑스 오디토리움에서 화성시 「MARS 2026」 개막 — 서울뉴스통신",
+    "[신규] ‘보수 빅텐트’ 목소리 커지나…윤상현 “오동석 연대 만들어내야” — 동아일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41607574973,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41607574973",
-  "request_id": "cron-202611030900",
+  "run_id": 41632148172,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41632148172",
+  "request_id": "cron-202611031200",
   "trigger": "schedule",
-  "started_at": "2026-11-03T18:01:22+09:00",
+  "started_at": "2026-11-03T21:01:24+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 209건"
+      "summary": "검색어 5개에서 202건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 175건 (신규 38건) · 시민행정신문 6건, 뉴스1 5건, 뉴스핌 5건"
+      "summary": "오늘 205건 (신규 30건) · 동아일보 7건, YTN 6건, 시민행정신문 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-03T18:01:36+09:00"
+  "updated_at": "2026-11-03T21:01:38+09:00"
 }
