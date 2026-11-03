@@ -3,35 +3,39 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 전송 0건, 실패 0건, 17초",
+  "summary": "신규 3건, 전송 1건, 실패 0건, 1.2분",
   "counts": {
-    "new": 0,
-    "sent": 0,
+    "new": 3,
+    "sent": 1,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 0건, 전송 0건, 실패 0건, 17초"
+    "신규 3건, 전송 1건, 실패 0건, 1.2분",
+    "[신규] [일반공고] 2026년 10월 취득세 독촉고지서 반송분 공시송달",
+    "[신규]⭐ [일반공고] 주민등록 무단전출자 직권조치 결과 공고(김○성)",
+    "[첨부실패] 2027학년도 취학아동명부 열람 공고.pdf: SSLError",
+    "[신규]⭐ [일반공고] 2027학년도 취학아동명부 열람 공고"
   ],
   "link": "",
-  "run_id": 41364876527,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41364876527",
-  "request_id": "cron-202611020000",
+  "run_id": 41549714552,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41549714552",
+  "request_id": "cron-202611030000",
   "trigger": "schedule",
-  "started_at": "2026-11-02T09:01:24+09:00",
-  "duration_sec": 17,
+  "started_at": "2026-11-03T09:01:28+09:00",
+  "duration_sec": 74,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 0건"
+      "summary": "신규 3건, 첨부 4건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "0건 발송"
+      "summary": "1건 발송, 무음 2건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-02T09:01:42+09:00"
+  "updated_at": "2026-11-03T09:02:42+09:00"
 }
