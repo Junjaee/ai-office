@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 30건, 실패 0건, 13초",
+  "summary": "신규 11건, 실패 0건, 11초",
   "counts": {
-    "new": 30,
+    "new": 11,
     "failed": 0,
-    "total": 6458
+    "total": 6469
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 30건, 실패 0건, 13초",
-    "[신규] 한동훈, 이준석 오자 악수만 하고 떠나…'보수 통합' 험로 예고 — 아시아경제",
-    "[신규] 국회의원 112명 서명…원내 주요 5개 정당 동참 — 국제신문",
-    "[신규] “AI 도시, 화성특례시에서”… 3일 코엑스 오디토리움에서 화성시 「MARS 2026」 개막 — 서울뉴스통신",
-    "[신규] ‘보수 빅텐트’ 목소리 커지나…윤상현 “오동석 연대 만들어내야” — 동아일보"
+    "신규 11건, 실패 0건, 11초",
+    "[신규] 문금주 의원, 더불어민주당 전국농어민위원장 재선출 — 시민행정신문",
+    "[신규] 원안위원장, 한빛 원전 현장 안전점검 — 외교저널",
+    "[신규] 동작구의회, 연구모임 정책 연구 활발히 펼쳐 — 시민행정신문",
+    "[신규] 동작구의회, 남해군의회 방문 맞아 의정 교류 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41632148172,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41632148172",
-  "request_id": "cron-202611031200",
+  "run_id": 41659413946,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41659413946",
+  "request_id": "cron-202611031500",
   "trigger": "schedule",
-  "started_at": "2026-11-03T21:01:24+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-04T00:01:25+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 202건"
+      "summary": "검색어 5개에서 172건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 205건 (신규 30건) · 동아일보 7건, YTN 6건, 시민행정신문 6건"
+      "summary": "오늘 11건 (신규 11건) · 시민행정신문 3건, YTN 1건, https://www.timess.co.kr/ 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-03T21:01:38+09:00"
+  "updated_at": "2026-11-04T00:01:37+09:00"
 }
