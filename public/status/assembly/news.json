@@ -1,41 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 38건, 실패 0건, 13초",
-  "counts": {
-    "new": 38,
-    "failed": 0,
-    "total": 6688
-  },
+  "summary": "뉴스 목록을 받아오지 못했어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 38건, 실패 0건, 13초",
-    "[신규] [821조 슈퍼 예산, 국회서 찾은 해법] 3. 이준석 국회의원 “수도권 산업 경쟁력 고려해 국비 배분” — 인천일보",
-    "[신규] 경주시, 오는 2027년도 국가지원 예산 확보 나섰다...국회 방문 증액 요청 — 이로운넷",
-    "[신규] 농촌진흥청, 한우농가 찾아 정보통신기술 활용 현장 살펴 — 외교저널",
-    "[신규] 진중권 \"대여 투쟁 스트라이커는 한동훈뿐…오세훈과 협력 불가피\" — 뉴시스"
+    "뉴스 목록을 받아오지 못했어요",
+    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41825608885,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41825608885",
-  "request_id": "cron-202611041200",
+  "run_id": 41853330736,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41853330736",
+  "request_id": "cron-202611041500",
   "trigger": "schedule",
-  "started_at": "2026-11-04T21:01:22+09:00",
-  "duration_sec": 13,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 188건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 230건 (신규 38건) · 시민행정신문 15건, 뉴스핌 12건, 뉴시스 12건"
-    }
-  ],
+  "started_at": "2026-11-05T00:01:27+09:00",
+  "duration_sec": 126,
   "id": "news",
-  "updated_at": "2026-11-04T21:01:36+09:00"
+  "updated_at": "2026-11-05T00:03:34+09:00"
 }
