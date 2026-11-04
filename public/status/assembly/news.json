@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 36건, 실패 0건, 10초",
+  "summary": "신규 69건, 실패 0건, 12초",
   "counts": {
-    "new": 36,
+    "new": 69,
     "failed": 0,
-    "total": 6581
+    "total": 6650
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 36건, 실패 0건, 10초",
-    "[신규] 주낙영 경주시장, 여야 국회의원 만나 국비 지원 요청 — 울산종합일보",
-    "[신규] 농식품부 송미령 장관, 배추 등 가격 하락 김장채소류 실질적 소비촉진 대책 추진 당부 — 외교저널",
-    "[신규] 작은 나눔이 만드는 따뜻한 서귀포 … 김희찬 서귀포시장, 복지 현장 행보 — 외교저널",
-    "[신규] 전은수 의원“음봉고(가칭) 설립 확정 … 2030년 3월 개교” — 시민행정신문"
+    "신규 69건, 실패 0건, 12초",
+    "[신규] [MARS 2026] 코엑스 오디토리움에서 성대한 막 올려 — 미담플러스",
+    "[신규] [이슈전파사 LIVE] 포기 않는 친청계… 최민희 “김 대표에 압박 받아”/국힘 397억 반환 기로, 윤석열 2심 결과는?/상가서 마주친 한동훈·이준석·장예찬 — 한국일보",
+    "[신규] 제주도, 한국환경보전원에 제주 이전 제안 — 외교저널",
+    "[신규] 감자전 굽고 양배추 절이고, 주한 벨라루스 대사관 ‘요리의 날’ 개최 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41782741174,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41782741174",
-  "request_id": "cron-202611040600",
+  "run_id": 41803948669,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41803948669",
+  "request_id": "cron-202611040900",
   "trigger": "schedule",
-  "started_at": "2026-11-04T15:01:26+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-04T18:01:23+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 154건"
+      "summary": "검색어 5개에서 208건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 123건 (신규 36건) · 뉴시스 8건, 시민행정신문 8건, 데일리안 6건"
+      "summary": "오늘 192건 (신규 69건) · 시민행정신문 13건, 뉴시스 10건, 뉴스1 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-04T15:01:37+09:00"
+  "updated_at": "2026-11-04T18:01:36+09:00"
 }
