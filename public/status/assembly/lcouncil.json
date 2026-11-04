@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 444건, 교체 0건, 실패 7건, 163.8분",
+  "summary": "신규 463건, 교체 1건, 실패 1건, 152.9분",
   "counts": {
-    "new": 444,
-    "replaced": 0,
-    "failed": 7,
-    "total": 5757
+    "new": 463,
+    "replaced": 1,
+    "failed": 1,
+    "total": 6390
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 444건, 교체 0건, 실패 7건, 163.8분",
-    "[실패] 서울특별시의회 제340회 본회의 [임시] 제1차(2026.11.02 월요일): <HttpError 502 when requesting https://www.googleapis.com/upload/drive/v3/files?",
-    "[신규] 서울특별시의회 제10대/제303회/교육위원회_제3차_2021-11-24.txt",
-    "[신규] 서울특별시의회 제10대/제303회/교육위원회_제4차_2021-11-26.txt",
-    "[신규] 서울특별시의회 제10대/제303회/교육위원회_제5차_2021-11-30.txt"
+    "신규 463건, 교체 1건, 실패 1건, 152.9분",
+    "[신규] 서울특별시의회 제12대/제340회/본회의_제1차_2026-11-02.txt",
+    "[신규] 서울특별시의회 제12대/제340회/기획경제위원회_제1차_2026-11-02.txt",
+    "[신규] 서울특별시의회 제12대/제340회/환경수자원위원회_제1차_2026-11-03.txt",
+    "[신규] 서울특별시의회 제10대/제301회/본회의_제5차_2021-07-02.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 41679983758,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41679983758",
-  "request_id": "cron-202611031700",
+  "run_id": 41873286635,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41873286635",
+  "request_id": "cron-202611041700",
   "trigger": "schedule",
-  "started_at": "2026-11-04T02:01:27+09:00",
-  "duration_sec": 9828,
+  "started_at": "2026-11-05T02:01:32+09:00",
+  "duration_sec": 9175,
   "tasks": [
     {
       "id": "scan",
       "status": "error",
-      "summary": "의회 3/5곳 확인, 회의록 5734건"
+      "summary": "의회 4/5곳 확인, 회의록 6305건"
     },
     {
       "id": "fetch",
-      "status": "error",
-      "summary": "신규 444건, 교체 0건"
+      "status": "done",
+      "summary": "신규 463건, 교체 1건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-11-04T04:45:18+09:00"
+  "updated_at": "2026-11-05T04:34:29+09:00"
 }
