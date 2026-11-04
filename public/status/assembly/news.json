@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 22건, 실패 0건, 12초",
+  "summary": "신규 8건, 실패 0건, 13초",
   "counts": {
-    "new": 22,
+    "new": 8,
     "failed": 0,
-    "total": 6710
+    "total": 6718
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 22건, 실패 0건, 12초",
-    "[신규] 서귀포시, 암모니아 누출사고 현장수습 및 안전확보 박차 — 외교저널",
-    "[신규] 감정에 지배당하는 한동훈? — 한국일보",
-    "[신규] \"2027년 국비 확보 총력\"…주낙영 경주시장, 국회 방문 — 국제뉴스",
-    "[신규] 오세훈 차기대선 적합도 20.4%…8.4%p 상승 1위 : 정치 — 재경일보"
+    "신규 8건, 실패 0건, 13초",
+    "[신규] 李 가 말하길 \"서울 전체 집값 폭락중이라 말한 적 없다\" ㅡ한국일보 기사 거론하며 \"가짜뉴스다\" 비판! : 양영태박사 TV — 인터넷타임즈",
+    "[신규] 민주당 신천지 파문, \"정치 목적 허위사실 유포\"로 엄단해야! : 양영태박사 TV — 인터넷타임즈",
+    "[신규] [시사천국] 尹 2심도 당선무효형…국힘 397억 반환 위기에 민주당 '부메랑' 될까 — cpbc News",
+    "[신규] [오늘의 국회일정] 국회의장·상임위·세미나·기자회견·주요 정당 -11월 5일 — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41882744793,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41882744793",
-  "request_id": "cron-202611041800",
+  "run_id": 41912012983,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41912012983",
+  "request_id": "cron-202611042100",
   "trigger": "schedule",
-  "started_at": "2026-11-05T03:01:22+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-05T06:01:15+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 180건"
+      "summary": "검색어 5개에서 178건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 22건 (신규 22건) · 연합뉴스 5건, 동아일보 2건, 라디오코리아 2건"
+      "summary": "오늘 30건 (신규 8건) · 연합뉴스 6건, 뉴스핌 2건, 동아일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-05T03:01:35+09:00"
+  "updated_at": "2026-11-05T06:01:28+09:00"
 }
