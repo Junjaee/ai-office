@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 12초",
+  "summary": "신규 54건, 실패 0건, 12초",
   "counts": {
-    "new": 14,
+    "new": 54,
     "failed": 0,
-    "total": 6491
+    "total": 6545
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 12초",
-    "[신규] ‘오딘’ 개발 경험에 AI 결합… 30명 신생 개발사의 도전 — IT조선",
-    "[신규] 화성특례시=AI특례시, 「MARS 2026」 코엑스에서 11월 3일 개막 — 뉴스피크",
-    "[신규] 증심사 오백나한대재 회향…“믿음은 자신을 바꾸는 실천” — BBS불교방송",
-    "[신규] 썩소 부르는 ‘그들만의’ 정당 개혁 쇼 — 최보식의언론"
+    "신규 54건, 실패 0건, 12초",
+    "[신규] [심층분석]‘국민의힘 전당대회’ 차기 당대표 출마설로 주목받는 ‘30대 김재섭’ — www.everynews.co.kr",
+    "[신규] 임미애 의원, \"경북에 국립의대가 옵니다“임미애 의원, 국립경국대 의과대학 신설 환영 — 시민행정신문",
+    "[신규] 이재영 \"오세훈, 간보지 않아…고양이 색깔이 중요한가?\"[뉴스연구소] — 노컷뉴스",
+    "[신규] 허종식 “어디에 살든, 같은 인천시민입니다” … 2026 국감 정책자료집 발간 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41743583138,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41743583138",
-  "request_id": "cron-202611040000",
+  "run_id": 41764381699,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41764381699",
+  "request_id": "cron-202611040300",
   "trigger": "schedule",
-  "started_at": "2026-11-04T09:01:23+09:00",
+  "started_at": "2026-11-04T12:01:18+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 183건"
+      "summary": "검색어 5개에서 154건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 33건 (신규 14건) · 시민행정신문 3건, BBS불교방송 2건, 뉴스1 2건"
+      "summary": "오늘 87건 (신규 54건) · 시민행정신문 7건, 뉴시스 6건, 뉴스1 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-04T09:01:36+09:00"
+  "updated_at": "2026-11-04T12:01:31+09:00"
 }
