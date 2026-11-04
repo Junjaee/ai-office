@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 11초",
+  "summary": "신규 14건, 실패 0건, 12초",
   "counts": {
-    "new": 8,
+    "new": 14,
     "failed": 0,
-    "total": 6477
+    "total": 6491
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 11초",
-    "[신규] 차기 대권 지지율, 오세훈·장동혁·한동훈·김민석 격전 — 브레이크뉴스",
-    "[신규] 새만금개발청, “새만금에서 일하고, 전북에서 함께 살아요” — 외교저널",
-    "[신규] 우체국금융개발원, 사내 AI 경진대회 성료 — BBS불교방송",
-    "[신규] 차기 대통령감은?…오세훈 18.4%·장동혁 13.6%·한동훈 12.6% — 이데일리, 이데일리TV"
+    "신규 14건, 실패 0건, 12초",
+    "[신규] ‘오딘’ 개발 경험에 AI 결합… 30명 신생 개발사의 도전 — IT조선",
+    "[신규] 화성특례시=AI특례시, 「MARS 2026」 코엑스에서 11월 3일 개막 — 뉴스피크",
+    "[신규] 증심사 오백나한대재 회향…“믿음은 자신을 바꾸는 실천” — BBS불교방송",
+    "[신규] 썩소 부르는 ‘그들만의’ 정당 개혁 쇼 — 최보식의언론"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41689709041,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41689709041",
-  "request_id": "cron-202611031800",
+  "run_id": 41743583138,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41743583138",
+  "request_id": "cron-202611040000",
   "trigger": "schedule",
-  "started_at": "2026-11-04T03:01:36+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-04T09:01:23+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 208건"
+      "summary": "검색어 5개에서 183건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 19건 (신규 8건) · 시민행정신문 3건, 외교저널 2건, BBS불교방송 1건"
+      "summary": "오늘 33건 (신규 14건) · 시민행정신문 3건, BBS불교방송 2건, 뉴스1 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-04T03:01:54+09:00"
+  "updated_at": "2026-11-04T09:01:36+09:00"
 }
