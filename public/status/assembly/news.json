@@ -1,22 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "뉴스 목록을 받아오지 못했어요",
-  "counts": {},
+  "summary": "신규 22건, 실패 0건, 12초",
+  "counts": {
+    "new": 22,
+    "failed": 0,
+    "total": 6710
+  },
   "next_run": "3시간마다",
   "log": [
-    "뉴스 목록을 받아오지 못했어요",
-    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
+    "신규 22건, 실패 0건, 12초",
+    "[신규] 서귀포시, 암모니아 누출사고 현장수습 및 안전확보 박차 — 외교저널",
+    "[신규] 감정에 지배당하는 한동훈? — 한국일보",
+    "[신규] \"2027년 국비 확보 총력\"…주낙영 경주시장, 국회 방문 — 국제뉴스",
+    "[신규] 오세훈 차기대선 적합도 20.4%…8.4%p 상승 1위 : 정치 — 재경일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41853330736,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41853330736",
-  "request_id": "cron-202611041500",
+  "run_id": 41882744793,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41882744793",
+  "request_id": "cron-202611041800",
   "trigger": "schedule",
-  "started_at": "2026-11-05T00:01:27+09:00",
-  "duration_sec": 126,
+  "started_at": "2026-11-05T03:01:22+09:00",
+  "duration_sec": 12,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 180건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 22건 (신규 22건) · 연합뉴스 5건, 동아일보 2건, 라디오코리아 2건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-11-05T00:03:34+09:00"
+  "updated_at": "2026-11-05T03:01:35+09:00"
 }
