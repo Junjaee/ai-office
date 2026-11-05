@@ -15,6 +15,10 @@ on:
       text:
         description: "자막 글 (호명 다음부터 다음 호명 전까지)"
         required: true
+      party:
+        description: "정당 (머리글에 '정당 이름'으로)"
+        required: false
+        default: ""
       system:
         description: "지시문(비우면 기본 지시문)"
         required: false
@@ -39,31 +43,46 @@ jobs:
           MEETING: ${{ inputs.meeting }}
           TEXT: ${{ inputs.text }}
           SYSTEM_OVERRIDE: ${{ inputs.system }}
+          PARTY: ${{ inputs.party }}
           PYTHONUTF8: "1"
         run: |
           python -X utf8 - <<'EOF'
           import json, os, sys, time
           sys.path.insert(0, "automations/common")
           from llm import LLM
-          SYSTEM = """당신은 국회 의원실 보좌진을 위해 회의 발언을 정리하는 사람입니다.
-          주어진 글은 국회 생중계의 AI 자막이라 오타·띄어쓰기 오류가 있고, 위원의 질의와 장관·기관장의 답변이 화자 구분 없이 섞여 있습니다.
-          요구:
-          - points: 위원이 물었거나 주장한 것 3~5개. 각 문장 60자 안팎, 수치·고유명사는 자막 그대로(단 명백한 오타는 바로잡되 뜻을 바꾸지 않음).
-          - answers: 장관·기관장 답변 중 중요한 것 0~3개.
-          - 번역투 없이 자연스러운 우리말로, 평가·논평 없이 사실만.
-          설명 없이 JSON 객체 하나만 출력하세요."""
-          SCHEMA = {"type": "object", "required": ["points", "answers"],
-                    "properties": {"points": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 6},
-                                   "answers": {"type": "array", "items": {"type": "string"}, "maxItems": 4}}}
-          text, member, meeting = os.environ["TEXT"], os.environ["MEMBER"], os.environ["MEETING"]
+          SYSTEM = """당신은 국회 의원실 보좌진을 위해 상임위·예결위 회의 발언을 정리하는 사람입니다.
+          주어진 글은 국회 생중계의 AI 자막입니다. 오타·띄어쓰기 오류가 있고, 위원의 질의와 장관·기관장의 답변이 화자 구분 없이 섞여 있습니다. 사람 이름은 자막이 자주 틀리게 받아 적습니다.
+
+          위원이 다룬 주제마다 항목 하나를 만듭니다(보통 3~8개). 짧게 지나간 주제도 빠뜨리지 않습니다.
+          - title: 주제를 명사구로 (예: "광역버스 준공영제 신설 노선 축소", "GTX-A 동탄 운행횟수 축소 우려").
+          - lines: 그 주제의 내용 2~3줄. 순서는 ① 위원이 지적한 사실과 근거 숫자·사례 ② 위원의 요구·제안 ③ 답변자의 답변. 각 줄은 한 문장, 70~120자, 어미는 "~했음"·"~답했음"·"~요구했음"처럼 "~음"으로 끝냅니다.
+          - 답변자는 "직책"으로 적고, 자막에 나온 이름이 확실하면 "이름 직책"(예: 홍지선 국토부장관)으로 적습니다. 애매하면 이름을 빼고 직책만 씁니다.
+          - 수치는 "17.5억 원", "1,500원", "약 5km"처럼 읽기 쉽게 다듬고, 지명·사업명은 자막 그대로 씁니다. 자막 오타는 명백한 것만 바로잡고 뜻을 바꾸지 않습니다. 자막 표기가 미심쩍으면 "(자막상 '…')"로 덧붙입니다.
+          - 번역투 없이 자연스러운 우리말로, 평가·논평 없이 사실만 씁니다.
+          설명 없이 JSON 객체 하나만 출력하세요: {"topics": [{"title": "...", "lines": ["...", "..."]}]}"""
+          SCHEMA = {"type": "object", "required": ["topics"],
+                    "properties": {"topics": {"type": "array", "minItems": 1, "maxItems": 10,
+                                              "items": {"type": "object", "required": ["title", "lines"],
+                                                        "properties": {"title": {"type": "string"},
+                                                                       "lines": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 4}}}}}}
+          text, member, meeting, party = os.environ["TEXT"], os.environ["MEMBER"], os.environ["MEETING"], os.environ.get("PARTY", "")
           system = os.environ.get("SYSTEM_OVERRIDE", "").strip() or SYSTEM
           print(f"입력 {len(text)}자, 지시문 {len(system)}자")
           t0 = time.time()
           llm = LLM(["claude_cli", "gemini"])
-          data = llm.json(system=system, user=f"[회의: {meeting}]\n[위원: {member}]\n\n{text}", schema=SCHEMA)
-          print(f"요약 완료 {time.time()-t0:.0f}초 ({llm.last_provider}), 요점 {len(data['points'])}개, 답변 {len(data.get('answers', []))}개")
-          lines = [f"🔵 {member} 위원 · {meeting}"] + [f" · {p}" for p in data["points"]] + [f" ↳ 답변: {a}" for a in data.get("answers", [])]
-          open("summary.txt", "w", encoding="utf-8").write("\n".join(lines) + "\n\n[json]\n" + json.dumps(data, ensure_ascii=False, indent=1))
+          data = llm.json(system=system, user=f"[회의: {meeting}]
+[위원: {member}]
+
+{text}", schema=SCHEMA)
+          print(f"요약 완료 {time.time()-t0:.0f}초 ({llm.last_provider}), 주제 {len(data['topics'])}개")
+          out = [f"{party} {member}".strip()]
+          for i, t in enumerate(data["topics"], 1):
+              out += ["", f"{i}. {t['title']}"] + [f"◯ {l}" for l in t["lines"]]
+          open("summary.txt", "w", encoding="utf-8").write("
+".join(out) + "
+
+[json]
+" + json.dumps(data, ensure_ascii=False, indent=1))
           EOF
       - uses: actions/upload-artifact@v4
         with:
