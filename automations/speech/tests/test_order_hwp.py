@@ -84,3 +84,23 @@ def test_fetch_returns_none_when_no_mail(monkeypatch):
 
     monkeypatch.setattr(order_hwp, "gmail_service", lambda: FakeService({}))
     assert fetch_question_order("from:x", 3) is None
+
+
+def test_hwp_to_xhtml_gives_pyhwp_a_file_path(monkeypatch, tmp_path):
+    """pyhwp 의 Hwp5File 은 BytesIO 를 못 받는다(실물 파일로 확인 2026-11-05) — 임시 파일 경로를 줘야 한다."""
+    import order_hwp
+
+    seen = {}
+
+    class FakeHwp5File:
+        def __init__(self, src):
+            seen["src"] = src
+
+    class FakeTransform:
+        def transform_hwp5_to_dir(self, hwp, outdir):
+            Path(outdir, "index.xhtml").write_text("<table><tr><td>1</td><td>홍길동</td></tr></table>", encoding="utf-8")
+
+    monkeypatch.setattr(order_hwp, "Hwp5File", FakeHwp5File)
+    monkeypatch.setattr(order_hwp, "HTMLTransform", FakeTransform)
+    assert "홍길동" in order_hwp.hwp_to_xhtml(b"HWP Document File")
+    assert isinstance(seen["src"], str) and seen["src"].endswith(".hwp")

@@ -6,11 +6,13 @@
 """
 from __future__ import annotations
 
-import io
 import re
 import sys
 import tempfile
 from pathlib import Path
+
+from hwp5.hwp5html import HTMLTransform
+from hwp5.xmlmodel import Hwp5File
 
 # 지메일 도우미는 상임위 메일 자동화의 것을 그대로 쓴다
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "mail"))
@@ -23,9 +25,13 @@ _NAME = re.compile(r"^[가-힣]{2,4}$")
 
 def parse_order_html(xhtml: str) -> list[tuple[int, str, str]]:
     """<table> 줄마다 '숫자 | 이름' 쌍을 찾아 (순번, 이름, 정당). 한 줄에 두 단이면 둘 다."""
-    from bs4 import BeautifulSoup
+    import warnings
 
-    soup = BeautifulSoup(xhtml or "", "lxml")
+    from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", XMLParsedAsHTMLWarning)   # xhtml 을 html 파서로 읽는다 — 표만 필요해서 충분
+        soup = BeautifulSoup(xhtml or "", "lxml")
     out: list[tuple[int, str, str]] = []
     for tr in soup.find_all("tr"):
         cells = [" ".join(td.get_text(" ", strip=True).split()) for td in tr.find_all(["td", "th"])]
@@ -47,11 +53,18 @@ def parse_order_html(xhtml: str) -> list[tuple[int, str, str]]:
 
 
 def hwp_to_xhtml(hwp_bytes: bytes) -> str:
-    from hwp5.hwp5html import HTMLTransform
-    from hwp5.xmlmodel import Hwp5File
-
-    with tempfile.TemporaryDirectory() as tmp:
-        HTMLTransform().transform_hwp5_to_dir(Hwp5File(io.BytesIO(hwp_bytes)), tmp)
+    """pyhwp 는 파일 경로(OLE 저장소)만 받으므로 임시 파일에 써서 넘긴다."""
+    # Windows 에서는 pyhwp 가 OLE 파일을 열어 둔 채라 임시 폴더 삭제가 막힐 수 있다 → 닫고, 그래도 안 지워지면 무시(서버는 리눅스)
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+        src = Path(tmp) / "order.hwp"
+        src.write_bytes(hwp_bytes)
+        hwp = Hwp5File(str(src))
+        try:
+            HTMLTransform().transform_hwp5_to_dir(hwp, tmp)
+        finally:
+            close = getattr(hwp, "close", None)
+            if callable(close):
+                close()
         return (Path(tmp) / "index.xhtml").read_text(encoding="utf-8")
 
 
