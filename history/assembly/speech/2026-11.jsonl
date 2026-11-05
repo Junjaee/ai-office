@@ -1,0 +1,1 @@
+{"automation": "speech", "run_id": 42057799168, "request_id": "req-speech-first", "trigger": "manual", "started_at": "2026-11-06T00:43:50+09:00", "duration_sec": 12, "ok": false, "summary": "국회 사이트에 연결할 수 없어요", "url": "https://github.com/Junjaee/ai-office/actions/runs/42057799168", "recorded_at": "2026-11-06T00:44:02+09:00"}
