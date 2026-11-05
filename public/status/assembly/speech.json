@@ -1,0 +1,36 @@
+{
+  "name": "회의 발언 요약",
+  "dept": "qa",
+  "ok": false,
+  "running": false,
+  "summary": "국회 사이트에 연결할 수 없어요",
+  "counts": {},
+  "next_run": "캘린더의 다음 재경위·예결위 회의",
+  "log": [],
+  "link": "",
+  "run_id": 42057799168,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42057799168",
+  "request_id": "req-speech-first",
+  "trigger": "manual",
+  "started_at": "2026-11-06T00:43:50+09:00",
+  "duration_sec": 12,
+  "tasks": [
+    {
+      "id": "listen",
+      "status": "error",
+      "summary": "ConnectionError"
+    },
+    {
+      "id": "summarize",
+      "status": "done",
+      "summary": ""
+    },
+    {
+      "id": "notify",
+      "status": "done",
+      "summary": ""
+    }
+  ],
+  "id": "speech",
+  "updated_at": "2026-11-06T00:44:02+09:00"
+}
