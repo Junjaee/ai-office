@@ -56,10 +56,12 @@ jobs:
                     "properties": {"points": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 6},
                                    "answers": {"type": "array", "items": {"type": "string"}, "maxItems": 4}}}
           text, member, meeting = os.environ["TEXT"], os.environ["MEMBER"], os.environ["MEETING"]
-          print(f"입력 {len(text)}자")
+          system = os.environ.get("SYSTEM_OVERRIDE", "").strip() or SYSTEM
+          print(f"입력 {len(text)}자, 지시문 {len(system)}자")
           t0 = time.time()
-          data = LLM(["claude_cli", "gemini"]).json(system=SYSTEM, user=f"[회의: {meeting}]\n[위원: {member}]\n\n{text}", schema=SCHEMA)
-          print(f"요약 완료 {time.time()-t0:.0f}초, 요점 {len(data['points'])}개, 답변 {len(data.get('answers', []))}개")
+          llm = LLM(["claude_cli", "gemini"])
+          data = llm.json(system=system, user=f"[회의: {meeting}]\n[위원: {member}]\n\n{text}", schema=SCHEMA)
+          print(f"요약 완료 {time.time()-t0:.0f}초 ({llm.last_provider}), 요점 {len(data['points'])}개, 답변 {len(data.get('answers', []))}개")
           lines = [f"🔵 {member} 위원 · {meeting}"] + [f" · {p}" for p in data["points"]] + [f" ↳ 답변: {a}" for a in data.get("answers", [])]
           open("summary.txt", "w", encoding="utf-8").write("\n".join(lines) + "\n\n[json]\n" + json.dumps(data, ensure_ascii=False, indent=1))
           EOF
