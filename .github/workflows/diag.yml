@@ -27,9 +27,7 @@ jobs:
       - run: python3 -m pip install --quiet requests websocket-client
       - name: 일반 자막 서버(socket.io) 접속 확인
         run: |
-          curl -s -m 15 -A "Mozilla/5.0" -H "Origin: https://assembly.webcast.go.kr" "https://smi-dw.webcast.go.kr/socket.io/?EIO=3&transport=polling" -w "
-HTTP %{http_code}
-" | head -c 300
+          curl -s -m 15 -A "Mozilla/5.0" -H "Origin: https://assembly.webcast.go.kr" "https://smi-dw.webcast.go.kr/socket.io/?EIO=3&transport=polling" -w " HTTP %{http_code}" | head -c 300
       - name: 생중계 목록·자막 웹소켓 접속 확인
         run: |
           python3 - <<'EOF'
