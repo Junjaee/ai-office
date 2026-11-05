@@ -16,8 +16,9 @@ from captions import Caption
 CALL_RE = re.compile(r"([가-힣]{2,4})\s*위원님?\s*(질의|질문)\s*(하여|해)?\s*(주시|주십|하겠|하십)")
 # 질의 종료 선언
 END_RE = re.compile(r"([가-힣]{2,4})\s*위원님?\s*수고하셨")
-ADJOURN_RE = re.compile(r"산회")
-RECESS_RE = re.compile(r"정회|휴식")
+# 정회·산회는 사회자의 선포 어미가 붙은 것만 — "산회 이후", "휴식 공간" 같은 발언 속 낱말에 걸리지 않게 (2026-11-05 재생 확인)
+ADJOURN_RE = re.compile(r"산회를?\s*선포|산회하겠|산회합니다")
+RECESS_RE = re.compile(r"정회를?\s*선포|정회하겠|정회하였다가|정회합니다|휴식을?\s*(하겠|취하|가지)")
 
 
 @dataclass
@@ -39,6 +40,8 @@ def detect_call(window_text: str, roster: set[str], special: str) -> str | None:
     for m in CALL_RE.finditer(window_text or ""):
         name = m.group(1)
         if name == special or name in roster:
+            return name
+        if not roster:          # 명단을 아예 못 받은 날 — 가릴 수 없으니 호명 문장이면 받는다
             return name
         # "개혁신당 이준석" 처럼 앞 단어가 붙어 잡히면 뒤 2~4자를 다시 본다
         for n in range(2, 4):
@@ -70,6 +73,11 @@ class Segmenter:
         self.current: Segment | None = None
         self._window: list[tuple[float, str]] = []
         self._used: set[int] = set()
+
+    def restore(self, current: Segment | None, used: set[int]) -> None:
+        """끊긴 실행이 저장해 둔 열린 구간·쓴 순번을 이어받는다."""
+        self.current = current
+        self._used = set(used)
 
     def next_seq(self, member: str) -> int:
         seq = self.roster.get(member, (0, ""))[0]

@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from captions import Caption  # noqa: E402
-from segmenter import Segmenter, detect_call, detect_close  # noqa: E402
+from segmenter import Segment, Segmenter, detect_call, detect_close  # noqa: E402
 
 R = {"권한영": (12, "국민의힘"), "이준석": (13, "개혁신당"), "서지영": (14, "국민의힘")}
 NAMES = set(R)
@@ -110,3 +110,25 @@ def test_roster_without_seq_counts_from_one():
     assert s.current.seq == 1
     feed_all(s, [(100, "이춘석 위원님 질의하여 주십시오")])
     assert s.current.seq == 2
+
+
+def test_restore_continues_open_segment():
+    s = Segmenter(R, "이준석")
+    s.restore(Segment(14, "서지영", "국민의힘", T0, None, ["이전 줄"]), {12, 13, 14})
+    feed_all(s, [(10, "이어지는 줄")])
+    assert s.current.lines == ["이전 줄", "이어지는 줄"]
+    feed_all(s, [(20, "권한영 위원님 질의하여 주십시오")])
+    assert s.current.seq == 15     # 12·13·14 는 이미 썼으니 그 뒤
+
+
+def test_empty_roster_accepts_any_name():
+    """질의순서도 의석 명단도 못 받은 날 — 이름을 가릴 수 없으니 호명 문장이면 받는다."""
+    assert detect_call("김철수 위원님 질의하여 주십시오", set(), "이준석") == "김철수"
+
+
+def test_close_words_inside_speech_are_not_close():
+    """'산회'·'휴식' 한 단어는 발언 속에도 나온다 — 선포·하겠 같은 사회자 어미가 있어야 닫는다."""
+    assert detect_close("산회 이후에 다시 논의하겠습니다") is None
+    assert detect_close("주민들이 휴식 공간이 없다고 합니다") is None
+    assert detect_close("휴식과 합계를 위해 잠시 정회하였다가 10시 40분에 속개하겠습니다") == "recess"
+    assert detect_close("그러면 오늘 회의는 이것으로 마치겠습니다 산회를 선포합니다") == "adjourn"
