@@ -10,13 +10,16 @@ from __future__ import annotations
 
 import json
 import re
+import time
 
 BASE = "https://assembly.webcast.go.kr/main/service/"
-HEADERS = {
+# 일반 GET 용 — Origin 은 붙이지 않는다(웹소켓 접속에만 쓴다)
+GET_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
     "Referer": "https://assembly.webcast.go.kr/main/",
-    "Origin": "https://assembly.webcast.go.kr",
 }
+HEADERS = {**GET_HEADERS, "Origin": "https://assembly.webcast.go.kr"}
+FETCH_RETRIES = 3
 
 _OBJ = re.compile(r"\{[^{}]*\}")
 _XSAMI = re.compile(r'"xsami"\s*:\s*"([^"]+)"')
@@ -73,10 +76,17 @@ def meeting_title(info: dict) -> str:
 
 
 def fetch(path: str, params: dict | None = None, session=None) -> str:
-    """GET {BASE}{path}. 실패(4xx/5xx)는 예외."""
+    """GET {BASE}{path}. 연결이 끊기면 3번까지 다시(2026-11-06 GitHub 서버 첫 실행에서 응답 없이 끊김). 4xx/5xx 는 예외."""
     import requests
 
     s = session or requests.Session()
-    res = s.get(BASE + path, params=params, headers=HEADERS, timeout=20)
-    res.raise_for_status()
-    return res.text
+    for attempt in range(FETCH_RETRIES):
+        try:
+            res = s.get(BASE + path, params=params, headers=GET_HEADERS, timeout=20)
+            res.raise_for_status()
+            return res.text
+        except requests.exceptions.ConnectionError:
+            if attempt == FETCH_RETRIES - 1:
+                raise
+            time.sleep(2 * (attempt + 1))
+    raise RuntimeError("unreachable")

@@ -53,3 +53,50 @@ def test_parse_members():
     html = 'seat({"mno":"1","mname":"김남준","mdang":"더불어민주당"}); seat({"mname":"이춘석","mdang":"더불어민주당"});'
     assert w.parse_members(html) == [("김남준", "더불어민주당"), ("이춘석", "더불어민주당")]
     assert w.parse_members("") == []
+
+
+class FlakySession:
+    """처음 n 번은 연결이 끊기고 그 뒤에 200 — GitHub 서버에서 live_list 가 가끔 응답 없이 끊겼다(2026-11-06 첫 실행)."""
+
+    def __init__(self, fail_times):
+        import requests
+
+        self.fail_times, self.calls, self.exc = fail_times, 0, requests.exceptions.ConnectionError("끊김")
+
+    def get(self, url, params=None, headers=None, timeout=None):
+        self.calls += 1
+        if self.calls <= self.fail_times:
+            raise self.exc
+
+        class R:
+            status_code, text = 200, "ok"
+
+            def raise_for_status(self):
+                pass
+        return R()
+
+
+def test_fetch_retries_on_connection_error(monkeypatch):
+    monkeypatch.setattr(w.time, "sleep", lambda s: None)
+    s = FlakySession(2)
+    assert w.fetch("live_list.asp", None, session=s) == "ok"
+    assert s.calls == 3
+
+
+def test_fetch_gives_up_after_retries(monkeypatch):
+    import requests
+
+    monkeypatch.setattr(w.time, "sleep", lambda s: None)
+    s = FlakySession(10)
+    try:
+        w.fetch("live_list.asp", None, session=s)
+        assert False, "예외가 나야 한다"
+    except requests.exceptions.ConnectionError:
+        pass
+    assert s.calls == 3
+
+
+def test_get_headers_have_no_origin():
+    """일반 GET 에는 Origin 을 붙이지 않는다(웹소켓 접속에만). 서버가 끊은 원인 후보를 하나 줄인다."""
+    assert "Origin" not in w.GET_HEADERS and "User-Agent" in w.GET_HEADERS and "Referer" in w.GET_HEADERS
+    assert w.HEADERS["Origin"] == "https://assembly.webcast.go.kr"
