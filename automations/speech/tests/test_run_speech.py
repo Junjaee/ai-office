@@ -135,3 +135,12 @@ def test_skip_day_marks_and_reports(monkeypatch):
     rep = deps.reports[-1]
     assert "오늘 질의 없음" in rep["summary"] and rep["ok"] is True
     assert all(t["status"] == "done" for t in rep["tasks"])
+
+
+def test_window_end_default_is_three_hours():
+    """손으로 켠 실행(window_end 없음)은 3시간만 기다린다 — live_list 의 xstat 은 회의가 끝나도 1 로 남아(2026-11-06 실측)
+    '방송 중' 판정만으로는 끝을 모르므로 시간대로 끊는다. Worker 가 깨운 실행은 캘린더 시간대를 받는다."""
+    from run_speech import parse_window_end
+
+    assert parse_window_end("", 1000.0) == 1000.0 + 3 * 3600
+    assert parse_window_end("2026-11-05T23:00:00+09:00", 0) == datetime(2026, 11, 5, 23, 0, tzinfo=timezone(timedelta(hours=9))).timestamp()

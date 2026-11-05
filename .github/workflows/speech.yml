@@ -15,7 +15,7 @@ on:
         type: string
         default: ""
       window_end:
-        description: "이 시각(ISO)까지 방송을 기다린다. 비우면 지금부터 8시간"
+        description: "이 시각(ISO)까지 방송을 기다린다. 비우면 지금부터 3시간"
         type: string
         default: ""
 

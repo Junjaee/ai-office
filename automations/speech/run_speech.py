@@ -108,9 +108,11 @@ def special_in(rows: list[tuple[int, str, str]], special: str) -> bool:
 
 
 def parse_window_end(raw: str, now: float) -> float:
+    """Worker 가 준 캘린더 시간대 끝. 없으면(손으로 켬) 3시간 — live_list 의 xstat 은 회의가 끝나도 1 로 남아
+    (2026-11-06 실측: 전날 본회의·예결위가 새벽 1시에도 '개의') 방송 여부만으로는 끝을 알 수 없어 시간으로 끊는다."""
     if raw and raw.strip():
         return datetime.fromisoformat(raw.strip()).timestamp()
-    return now + 8 * 3600
+    return now + 3 * 3600
 
 
 # ───────────────────────── 한 회의 ─────────────────────────
