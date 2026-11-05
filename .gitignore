@@ -79,3 +79,6 @@ CLAUDE.md.drive-old
 *.jks
 *.keystore
 *.apk
+
+# superpowers 계획 실행 작업장(원장·브리프) — 커밋하지 않는다
+.superpowers/

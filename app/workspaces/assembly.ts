@@ -165,6 +165,13 @@ export const AUTOMATIONS: AutomationDef[] = [
       { id: "check", name: "새 메일 확인", role: "재경위·예결위에서 온 새 메일 찾기" },
       { id: "notify", name: "알림·정리", role: "텔레그램으로 알리고 지메일 라벨로 정리" },
     ] },
+  // 회의 생중계 동안만 돈다(Worker 가 캘린더를 보고 깨움) — 예약 없음. 카드 "다음 실행"은 캘린더의 다음 회의(app/status.ts)
+  { id: "speech", dept: "qa", name: "회의 발언 요약", workflow: "speech.yml",
+    tasks: [
+      { id: "listen", name: "자막 수신", role: "생중계 자막을 받아 위원별로 나누기" },
+      { id: "summarize", name: "발언 요약", role: "위원별 질의·답변을 주제별로 요약" },
+      { id: "notify", name: "알림 전송", role: "10명 묶음·이준석 단독으로 텔레그램 전송" },
+    ] },
   // 새 자료가 수신함에 들어왔을 때만 돈다(상임위 메일 실행이 이어서 깨운다) — 예약 없음
   { id: "sort", dept: "review", name: "수신함 정리", workflow: "sort.yml",
     tasks: [

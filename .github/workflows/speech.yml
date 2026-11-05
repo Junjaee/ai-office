@@ -1,0 +1,73 @@
+name: 회의 발언 요약
+
+# 예약은 없다 — Cloudflare Worker 가 구글 캘린더의 재경위·예결위 일정 시간대에 깨운다(worker/webcast.ts).
+# 한 번 켜지면 방송이 끝날 때까지(최대 6시간) 돈다. 끊기면 Worker 가 다시 깨우고 R2 상태로 이어 받는다.
+# 설계: docs/superpowers/specs/2026-11-05-회의-발언-요약-알림-design.md
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: "화면에서 누른 요청 id (비워도 됨)"
+        type: string
+        default: ""
+      xcode:
+        description: "생중계 채널 번호 (재경위 65 · 예결위 21). 비우면 지금 방송 중인 채널을 고른다"
+        type: string
+        default: ""
+      window_end:
+        description: "이 시각(ISO)까지 방송을 기다린다. 비우면 지금부터 8시간"
+        type: string
+        default: ""
+
+# runs API 의 display_title 로 "내가 누른 실행"·"어느 채널" 을 결정적으로 매칭한다 — 바꾸지 말 것 (worker/webcast.ts isRunning)
+run-name: ${{ format('speech · {0} · {1}', inputs.xcode, inputs.request_id) }}
+
+permissions:
+  contents: write
+
+# 재경위·예결위는 동시에 돌 수 있고, 같은 채널은 하나만
+concurrency:
+  group: speech-${{ inputs.xcode }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 의존성 설치
+        run: |
+          python --version
+          python -m pip install --quiet --disable-pip-version-check -r automations/requirements.txt
+
+      # 요약은 Claude 구독(claude -p)으로, 안 되면 Gemini 무료 등급 (automations/common/llm.py)
+      - name: 클로드 설치
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: git 사용자 설정 (상태 파일 커밋용)
+        run: |
+          git config user.name "ai-office-bot"
+          git config user.email "ai-office-bot@users.noreply.github.com"
+
+      # 로그에는 건수와 오류 종류만 찍는다(공개 저장소). 자막·요약·위원 이름은 텔레그램과 R2 에만.
+      - name: 실행
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          NOTICE_530_BOT_TOKEN: ${{ secrets.NOTICE_530_BOT_TOKEN }}
+          NOTICE_530_CHAT_ID: ${{ secrets.NOTICE_530_CHAT_ID }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          LIVE_TOKEN: ${{ secrets.LIVE_TOKEN }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/speech/run_speech.py --config automations/speech/config.actions.yaml --xcode "${{ inputs.xcode }}" --window-end "${{ inputs.window_end }}" --request-id "${{ inputs.request_id }}"

@@ -1,0 +1,39 @@
+# 회의 발언 요약 — GitHub Actions 실행용 설정. 비밀값은 여기 두지 않고 환경변수(GitHub Secrets)로 받는다.
+#   GOOGLE_*(공용 토큰, 지메일 읽기) · NOTICE_530_BOT_TOKEN(530 알림 봇) · NOTICE_530_CHAT_ID(단체방) · TELEGRAM_CHAT_ID(사용자 개인 대화방)
+#   CLAUDE_CODE_OAUTH_TOKEN · GEMINI_API_KEY(요약, automations/common/llm.py) · LIVE_TOKEN(상태 저장 API, 없으면 검사 없음)
+# 설계: docs/superpowers/specs/2026-11-05-회의-발언-요약-알림-design.md
+
+# 지켜볼 생중계 채널 (국회 인터넷의사중계 live_list.asp 의 xcode). 채널을 더하면 그 위원회도 받는다
+channels:
+  "65": "재경위"
+  "21": "예결위"
+
+# 질의순서 메일을 찾는 지메일 검색어(채널별). 행정실이 회의 전날 밤~당일 아침에 보낸다(설계 4-2절)
+order_mail:
+  "65": "from:fec@assembly.go.kr"
+  "21": "from:budget@assembly.go.kr"
+order_lookback_days: 3        # 회의 날짜 앞 며칠 안의 메일까지 본다
+
+special_member: "이준석"       # 항상 단독으로 보내는 위원. 그날 명단에 없어도 호명 대상으로 본다
+special_member_only_days: true # 질의순서 표에 이 위원이 없는 날은 바로 끝낸다(사용자 결정 2026-11-05). 표를 못 받은 날은 돈다
+batch_size: 10                # 몇 명 모이면 한 묶음으로 보내나 (사용자 결정 2026-11-05)
+segment_max_minutes: 25       # 호명 없이 이 시간이 지나면 구간을 닫고 "호명 못 잡음" 표시 (설계 5절)
+summary_topics_max: 8         # 요약 주제 수 상한 (설계 6절)
+
+# 보내는 곳: preview = 사용자 개인 대화방(TELEGRAM_CHAT_ID) · group = 530 단체방(NOTICE_530_CHAT_ID)
+# 요약 품질을 확인하기 전까지는 preview (사용자 결정 2026-11-05 "다 고친 다음에 알림"). 됐다 싶으면 group 으로 바꿔 커밋
+notify_target: preview
+
+# 실행 중 상태(보낸 묶음·열린 구간)를 저장하는 Worker 주소. 6시간 한도로 끊겨도 이어 받는다 (설계 8절)
+state_api_base: "https://ai-office.smartjohn-d34.workers.dev"
+
+# 결과물 위치 (텔레그램으로 보내는 자동화라 폴더 없음)
+result_link: ""
+
+# 상태 보고: 저장소 루트(체크아웃 위치)에 커밋. 공개 저장소라 건수만 남긴다
+office_repo: "."
+office_workspace: "assembly"
+next_run: "캘린더의 다음 재경위·예결위 회의"   # 카드 문구. 실제 다음 회의는 Worker /api/speech/next 가 채운다
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts 의 automations[].tasks[] (테스트로 일치 강제)
+tasks: [listen, summarize, notify]
