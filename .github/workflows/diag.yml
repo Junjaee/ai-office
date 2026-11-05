@@ -19,6 +19,45 @@ jobs:
           python3 -m pip install --quiet yt-dlp >/dev/null 2>&1
           python3 -m yt_dlp -s --no-warnings --print "%(duration)s초 %(width)sx%(height)s" "https://www.reddit.com/r/aivideo/comments/1wdrs0v/what_do_you_sell_at_the_strangest_flea_market/" 2>&1 | tail -2 | sed 's/^/reddit 영상 -> /'
 
+  webcast-live:
+    # 국회 생중계 AI 자막(webcast.go.kr)을 해외 서버에서 받을 수 있는지 (실시간 발언 요약 자동화 사전 조사, 2026-11-05)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: python3 -m pip install --quiet requests websocket-client
+      - name: 생중계 목록·자막 웹소켓 접속 확인
+        run: |
+          python3 - <<'EOF'
+          import json, re, time, requests, websocket
+          H = {"User-Agent": "Mozilla/5.0", "Referer": "https://assembly.webcast.go.kr/main/"}
+          r = requests.get("https://assembly.webcast.go.kr/main/service/live_list.asp", headers=H, timeout=25)
+          print("live_list ->", r.status_code, len(r.text), "bytes")
+          items = re.findall(r'"xcode":"(\d+)","xcgcd":"([^"]*)","xname":"([^"]*)".*?"xstat":"(\d)"', r.text)
+          print("채널:", [(c, n, s) for c, g, n, s in items][:12])
+          live = [(c, g, n) for c, g, n, s in items if s == "1" and g]
+          if not live:
+              print("지금 방송 중인 채널 없음 — 웹소켓 시험 생략"); raise SystemExit
+          xcode, xcgcd, name = live[0]
+          p = requests.get("https://assembly.webcast.go.kr/main/service/live_play.asp", params={"xcode": xcode, "xcgcd": xcgcd}, headers=H, timeout=25)
+          print("live_play ->", p.status_code)
+          m = re.search(r'"xsami":"([^"]+)"', p.text)
+          print("xsami:", m and m.group(1))
+          if not m or not m.group(1).startswith("ws"):
+              raise SystemExit("자막 주소 없음")
+          n, final, t0 = 0, 0, time.time()
+          ws = websocket.create_connection(m.group(1), subprotocols=["echo-protocol"], timeout=20, header=["Origin: https://assembly.webcast.go.kr"])
+          while time.time() - t0 < 40:
+              try:
+                  msg = json.loads(ws.recv())
+              except Exception as e:
+                  print("recv 중단:", e); break
+              n += 1
+              if msg.get("final"): final += 1
+              if n == 1: print("첫 메시지 키:", list(msg)[:8])
+          ws.close()
+          print(f"{name}: 40초 동안 {n}건 수신, 최종본 {final}건")
+          EOF
+
   office-runner:
     runs-on: [self-hosted, windows, kr-office]
     timeout-minutes: 5
