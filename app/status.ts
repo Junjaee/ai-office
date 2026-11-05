@@ -27,8 +27,15 @@ export type ApiStatus = {
   files: Record<string, RealStatus | null>;
   /** 이 PC 자동화(local)의 작업별 살아있음 신호 (`/api/live` 저장분, 큰 board 는 뺀 것) */
   live?: Record<string, LiveDoc | null>;
+  /** 회의 발언 요약: 캘린더의 다음 재경위·예결위 회의와 캘린더 오류 (`/api/speech/next`, 사무실에 speech 카드가 있을 때만) */
+  speech?: { nextMeeting: string | null; calendarError: string | null };
   source: StatusSource;
 };
+
+/** 발언 요약 카드의 "다음 실행"과 캘린더 오류 배너 문구 */
+export const SPEECH_AUTOMATION_ID = "speech";
+export const SPEECH_NO_MEETING = "캘린더에 잡힌 회의 없음";
+export const SPEECH_CALENDAR_BANNER = "회의 일정 캘린더를 읽지 못해 발언 요약이 깨어나지 않아요 · Worker 의 구글 토큰(캘린더 권한)을 확인해 주세요";
 
 export type UiBanner = { key: string; level: "error" | "warn" | "info"; text: string; href?: string };
 
@@ -100,10 +107,20 @@ function clearMatchedRequests(ws: string, runs: Record<string, RunInfo | null>) 
 
 // ───────── 조회 ─────────
 
-async function fetchApiStatus(ws: string): Promise<ApiStatus> {
+async function fetchApiStatus(ws: string, defs: AutomationDef[]): Promise<ApiStatus> {
   const r = await fetch(`/api/status?ws=${encodeURIComponent(ws)}&t=${Date.now()}`, { cache: "no-store" });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  return (await r.json()) as ApiStatus;
+  const api = (await r.json()) as ApiStatus;
+  // 발언 요약 카드가 있는 사무실만 다음 회의를 함께 받는다(실패해도 상태 조회는 그대로)
+  if (defs.some((d) => d.id === SPEECH_AUTOMATION_ID)) {
+    try {
+      const s = await fetch(`/api/speech/next?t=${Date.now()}`, { cache: "no-store" });
+      if (s.ok) api.speech = (await s.json()) as NonNullable<ApiStatus["speech"]>;
+    } catch {
+      /* 다음 폴링 때 재시도 */
+    }
+  }
+  return api;
 }
 
 /** Worker 가 응답하지 않을 때: 배포된 정적 파일만 읽는다 (run 정보 없음, 시작 불가) */
@@ -241,6 +258,9 @@ export function buildLiveState(ws: WorkspaceConfig, api: ApiStatus | null, local
   const views = ws.automations.map((def) =>
     deriveAutomationView(def, api?.files[def.id] ?? null, api?.runs[def.id] ?? null, local[def.id] ?? null, now, source ?? "static", api?.live?.[def.id] ?? null),
   );
+  // 발언 요약 카드의 "다음 실행" = 캘린더의 다음 회의 (상태 규칙이 아니라 보여 줄 값만 바꾼다)
+  const speechView = api?.speech ? views.find((v) => v.id === SPEECH_AUTOMATION_ID) : undefined;
+  if (speechView && api?.speech) speechView.nextRun = api.speech.nextMeeting ?? SPEECH_NO_MEETING;
   const deptViews: Record<string, DeptView> = {};
   for (const dept of ws.departments) {
     deptViews[dept.id] = deriveDeptView(ws.automations.filter((a) => a.dept === dept.id), views);
@@ -256,6 +276,9 @@ export function buildLiveState(ws: WorkspaceConfig, api: ApiStatus | null, local
     if (v.state === "error") banners.push({ key: `failed:${v.id}`, level: "error", text: BANNERS.failed(v.name), href: v.runUrl });
   }
   for (const b of collectWarnings(visibleViews, now)) banners.push({ key: b.kind, level: b.level, text: b.text });
+  if (api?.speech?.calendarError && shownIds.has(SPEECH_AUTOMATION_ID)) {
+    banners.push({ key: "speech-calendar", level: "warn", text: SPEECH_CALENDAR_BANNER });
+  }
   const ghErr = api?.config.githubError ?? null;
   if (ghErr === "not_found") {
     banners.push({ key: "token", level: "error", text: BANNERS.tokenNoRepo });
@@ -303,7 +326,7 @@ export function useLiveStatus(ws: WorkspaceConfig): LiveStatus {
       return;
     }
     try {
-      const data = await fetchApiStatus(ws.id);
+      const data = await fetchApiStatus(ws.id, ws.automations);
       clearMatchedRequests(ws.id, data.runs);
       setApi(data);
     } catch {

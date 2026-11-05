@@ -6,6 +6,9 @@ import { GitHubClient } from "./github.ts";
 import { createRunApiStores, handleHistory, handleReview, handleRun, handleStatus, type RunApiDeps } from "./run-api.ts";
 import { handleLive, type R2Like } from "./live.ts";
 import { handleStock } from "./stock.ts";
+import { handleSpeechState, hasMarker, speechNext } from "./speech-state.ts";
+import { SPEECH_WORKFLOW, activeChannels, fetchMeetings, isRunning, shouldWakeSpeech } from "./webcast.ts";
+import { kstDateKey } from "./run-api.ts";
 import { LEDGER_WATCH_JOB, MAIL_JOB, SCHEDULES, cronRequestId, dueJobs } from "./schedule.ts";
 import {
   LEDGER_COOLDOWN_MS, LEDGER_WATCH_QUERY, MAIL_COOLDOWN_MS, MAIL_WATCH_QUERY, lastRunMs,
@@ -90,6 +93,15 @@ const worker = {
       return handleStock(request, env, { now: () => Date.now() });
     }
 
+    // 회의 발언 요약: 실행 중 상태·오늘 표시(R2), 다음 회의(캘린더)
+    if (url.pathname === "/api/speech/state" || url.pathname === "/api/speech/mark") {
+      return handleSpeechState(request, env);
+    }
+    if (url.pathname === "/api/speech/next") {
+      const body = await speechNext(env as unknown as Record<string, unknown>, fetch, Date.now());
+      return new Response(JSON.stringify(body), { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
+    }
+
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       return handleImageOptimization(request, {
@@ -152,9 +164,42 @@ const worker = {
       console.error(`가계부 깨우기 확인 실패 — ${err instanceof Error ? err.message : String(err)}`);
     }
 
-    if (jobs.length === 0) return;
+    // 회의 발언 요약: 캘린더의 재경위·예결위 일정 시간대에만, 그 채널 실행이 없고 오늘 표시(건너뜀/끝남)가 없을 때 깨운다.
+    // 국회 사이트는 부르지 않는다 — 방송 중인지는 워크플로가 본다 (worker/webcast.ts).
+    const speechJobs: { xcode: string; windowEndMs: number }[] = [];
+    try {
+      const creds = googleCreds(env as unknown as Record<string, unknown>);
+      if (creds) {
+        const token = await accessToken(creds, fetch, nowMs);
+        const active = activeChannels(await fetchMeetings(token, fetch, nowMs), nowMs);
+        if (active.length > 0) {
+          const runs = await github.listWorkflowRuns(SPEECH_WORKFLOW, 20);
+          const today = kstDateKey(nowMs);
+          for (const a of active) {
+            const marked = env.LIVE
+              ? (await hasMarker(env.LIVE, "skip", today, a.xcode)) || (await hasMarker(env.LIVE, "done", today, a.xcode))
+              : false;
+            if (shouldWakeSpeech({ active: true, running: isRunning(runs, a.xcode), marked, lastRunMs: lastRunMs(runs, SPEECH_WORKFLOW), nowMs })) {
+              speechJobs.push(a);
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error(`발언 요약 깨우기 확인 실패 — ${err instanceof Error ? err.message : String(err)}`);
+    }
+
+    if (jobs.length === 0 && speechJobs.length === 0) return;
 
     const requestId = cronRequestId(now);
+    for (const a of speechJobs) {
+      try {
+        await github.dispatch(SPEECH_WORKFLOW, { request_id: requestId, xcode: a.xcode, window_end: new Date(a.windowEndMs).toISOString() });
+        console.log(`발언 요약 실행 요청: 채널 ${a.xcode} ${requestId}`);
+      } catch (err) {
+        console.error(`발언 요약 실행 실패: 채널 ${a.xcode} — ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }
     for (const job of jobs) {
       try {
         await github.dispatch(job.workflow, { request_id: requestId, ...(job.inputs ?? {}) });
