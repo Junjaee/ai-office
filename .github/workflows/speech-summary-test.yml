@@ -70,19 +70,12 @@ jobs:
           print(f"입력 {len(text)}자, 지시문 {len(system)}자")
           t0 = time.time()
           llm = LLM(["claude_cli", "gemini"])
-          data = llm.json(system=system, user=f"[회의: {meeting}]
-[위원: {member}]
-
-{text}", schema=SCHEMA)
+          data = llm.json(system=system, user=f"[회의: {meeting}]\n[위원: {member}]\n\n{text}", schema=SCHEMA)
           print(f"요약 완료 {time.time()-t0:.0f}초 ({llm.last_provider}), 주제 {len(data['topics'])}개")
           out = [f"{party} {member}".strip()]
           for i, t in enumerate(data["topics"], 1):
               out += ["", f"{i}. {t['title']}"] + [f"◯ {l}" for l in t["lines"]]
-          open("summary.txt", "w", encoding="utf-8").write("
-".join(out) + "
-
-[json]
-" + json.dumps(data, ensure_ascii=False, indent=1))
+          open("summary.txt", "w", encoding="utf-8").write("\n".join(out) + "\n\n[json]\n" + json.dumps(data, ensure_ascii=False, indent=1))
           EOF
       - uses: actions/upload-artifact@v4
         with:
