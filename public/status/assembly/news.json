@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 29건, 실패 0건, 13초",
+  "summary": "신규 36건, 실패 0건, 13초",
   "counts": {
-    "new": 29,
+    "new": 36,
     "failed": 0,
-    "total": 6795
+    "total": 6831
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 29건, 실패 0건, 13초",
-    "[신규] 장동혁 압박하는 중진들 “한동훈 복당시켜라” — 에너지경제신문",
-    "[신규] 김근식 \"한동훈, 이준석까지 대통합\" VS 강대규 \"韓 당게 해명이 선결조건\"[보수 사자후] — 노컷뉴스",
-    "[신규] 고용노동부, 장시간 노동, 공짜야근 근절합니다 — 시민행정신문",
-    "[신규] 오세훈 무죄 후…‘한동훈 복당’ 넘어 ‘오동석장’ 연대 부상 — 시사1"
+    "신규 36건, 실패 0건, 13초",
+    "[신규] [포토] 축사하는 개혁신당 이준석 의원 — 천지일보",
+    "[신규] [이슈체크]이준석, 보수 연대론 속 정치적 선택 주목…대구 정치권도 촉각 — 대구일보",
+    "[신규] 이준석 “尹 ‘딸랑이’들 계엄에 쓸려갔듯…민주당도 심판받을 것” 경고 — 시사저널",
+    "[신규] 이준석 \"트럼프 폭주 방치한 공화당 대패…더불어민주당도 심판받을 것\" — 아시아경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41977592180,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41977592180",
-  "request_id": "cron-202611050600",
+  "run_id": 41998894083,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41998894083",
+  "request_id": "cron-202611050900",
   "trigger": "schedule",
-  "started_at": "2026-11-05T15:01:32+09:00",
+  "started_at": "2026-11-05T18:01:29+09:00",
   "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 155건"
+      "summary": "검색어 5개에서 143건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 107건 (신규 29건) · 뉴스핌 9건, 연합뉴스 7건, 뉴스1 5건"
+      "summary": "오늘 143건 (신규 36건) · 뉴시스 11건, 뉴스핌 9건, 뉴스1 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-05T15:01:46+09:00"
+  "updated_at": "2026-11-05T18:01:43+09:00"
 }
