@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 13초",
+  "summary": "신규 4건, 실패 0건, 10초",
   "counts": {
-    "new": 3,
+    "new": 4,
     "failed": 0,
-    "total": 6853
+    "total": 6857
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 13초",
-    "[신규] 여야, 예결위서 미래대응기금 공방…\"미래 성장 기반 투자\" vs \"정부 마음대로 해먹겠다는 것\"(종합) — 뉴시스",
-    "[신규] 예결위 첫날 자정 넘겨 마무리…박홍근, 미래대응기금 쟁점 답변 — K뉴스통신",
-    "[신규] 우상호 도정 첫 예산 정국…협치 역량 성패 ‘가늠자’ — 강원도민일보"
+    "신규 4건, 실패 0건, 10초",
+    "[신규] 예결위, 예산안 종합질의 이틀차… '미래기금' 두고 여야 정면충돌 — 위키리크스한국",
+    "[신규] 국힘, '공소취소 특검' 필버 끝나면 거리로…경복궁·청와대 앞 총력전 — 뉴스1",
+    "[신규] 충청광역연합의회, 첫 결산 심사…예산 집행률 개선 주문 — 대전일보",
+    "[신규] 전진숙 의원, 국회 예산소위 위원 선정…'민생·복지·지역 격차 해소' 꼼꼼히 챙긴다 — BBS불교방송"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42080151344,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42080151344",
-  "request_id": "cron-202611051800",
+  "run_id": 42108678475,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42108678475",
+  "request_id": "cron-202611052100",
   "trigger": "schedule",
-  "started_at": "2026-11-06T03:01:28+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-06T06:01:34+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 154건"
+      "summary": "검색어 5개에서 147건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 7건 (신규 3건) · K뉴스통신 1건, 강원도민일보 1건, 경기일보 1건"
+      "summary": "오늘 11건 (신규 4건) · BBS불교방송 1건, K뉴스통신 1건, 강원도민일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-06T03:01:42+09:00"
+  "updated_at": "2026-11-06T06:01:45+09:00"
 }
