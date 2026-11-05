@@ -15,6 +15,10 @@ on:
       text:
         description: "자막 글 (호명 다음부터 다음 호명 전까지)"
         required: true
+      system:
+        description: "지시문(비우면 기본 지시문)"
+        required: false
+        default: ""
 
 jobs:
   summarize:
@@ -34,6 +38,7 @@ jobs:
           MEMBER: ${{ inputs.member }}
           MEETING: ${{ inputs.meeting }}
           TEXT: ${{ inputs.text }}
+          SYSTEM_OVERRIDE: ${{ inputs.system }}
           PYTHONUTF8: "1"
         run: |
           python -X utf8 - <<'EOF'
