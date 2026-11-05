@@ -48,6 +48,13 @@ def test_send_message_posts_plain_text():
     assert body == {"chat_id": "42", "text": "안녕", "disable_web_page_preview": True}
 
 
+def test_send_message_fans_out_to_comma_separated_chats():
+    s = FakeSession(FakeResp(200, {"ok": True, "result": {"message_id": 1}}),
+                    FakeResp(200, {"ok": True, "result": {"message_id": 2}}))
+    send_message(TOKEN, "42, -4974427478", "안녕", session=s, delay=0)
+    assert [c[2]["chat_id"] for c in s.calls] == ["42", "-4974427478"]
+
+
 def test_send_message_error_is_korean_and_never_contains_token():
     s = FakeSession(FakeResp(403, {"ok": False, "description": "Forbidden: bot can't initiate conversation with a user"}))
     with pytest.raises(RuntimeError) as e:

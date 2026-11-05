@@ -35,9 +35,18 @@ def _hide(text: str, token: str) -> str:
     return text.replace(token, "***") if token else text
 
 
+def _chat_ids(chat_id: str) -> list[str]:
+    """'111,-222' 처럼 쉼표로 여러 대화방을 적으면 각각에 보낸다(개인 + 단체방, 2026-11-05)."""
+    return [c.strip() for c in str(chat_id).split(",") if c.strip()]
+
+
 def send_message(token: str, chat_id: str, text: str, *, session=None, retries: int = 3,
                  delay: float = 1.0, timeout: int = 30) -> dict:
     """글 보내기. 텔레그램이 거절(4xx)하면 바로, 연결 문제·5xx 는 재시도한 뒤 RuntimeError."""
+    ids = _chat_ids(chat_id)
+    if len(ids) > 1:
+        return [send_message(token, c, text, session=session, retries=retries, delay=delay, timeout=timeout)
+                for c in ids][-1]
     s = session or requests.Session()
     url = API.format(token=token, method="sendMessage")
     body = {"chat_id": chat_id, "text": text, "disable_web_page_preview": True}
@@ -71,6 +80,10 @@ def send_document(token: str, chat_id: str, filename: str, data: bytes, *, capti
 
     4xx(파일이 너무 큼·형식 거부 등)는 다시 해도 같으므로 바로 실패, 연결 문제·5xx 는 재시도.
     """
+    ids = _chat_ids(chat_id)
+    if len(ids) > 1:
+        return [send_document(token, c, filename, data, caption=caption, session=session,
+                              retries=retries, delay=delay, timeout=timeout) for c in ids][-1]
     s = session or requests.Session()
     url = API.format(token=token, method="sendDocument")
     body = {"chat_id": chat_id}
