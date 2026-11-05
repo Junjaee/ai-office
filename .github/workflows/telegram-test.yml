@@ -1,0 +1,38 @@
+name: 텔레그램 시험 발송
+
+# 530 알림 봇이 받는 방(NOTICE_530_CHAT_ID)에 글 한 줄을 보내 본다 — 방 번호·봇 권한 확인용.
+# 메일 자동화와 같은 비밀값·같은 send_message 를 쓰므로, 이게 도착하면 메일 알림도 그 방에 간다.
+on:
+  workflow_dispatch:
+    inputs:
+      text:
+        description: "보낼 글"
+        type: string
+        default: "530 알림봇 시험 발송입니다."
+
+run-name: telegram-test
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install --quiet --disable-pip-version-check requests
+      - env:
+          NOTICE_530_BOT_TOKEN: ${{ secrets.NOTICE_530_BOT_TOKEN }}
+          NOTICE_530_CHAT_ID: ${{ secrets.NOTICE_530_CHAT_ID }}
+          TEXT: ${{ inputs.text }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 -c "
+          import os, sys
+          sys.path.insert(0, 'automations/common')
+          from telegram_bot import telegram_env, send_message
+          token, chat = telegram_env('NOTICE_530_CHAT_ID', 'NOTICE_530_BOT_TOKEN')
+          send_message(token, chat, os.environ['TEXT'])
+          print('보냄: 대화방', chat.count(',') + 1, '곳')
+          "
