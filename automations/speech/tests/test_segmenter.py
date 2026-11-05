@@ -132,3 +132,13 @@ def test_close_words_inside_speech_are_not_close():
     assert detect_close("주민들이 휴식 공간이 없다고 합니다") is None
     assert detect_close("휴식과 합계를 위해 잠시 정회하였다가 10시 40분에 속개하겠습니다") == "recess"
     assert detect_close("그러면 오늘 회의는 이것으로 마치겠습니다 산회를 선포합니다") == "adjourn"
+
+
+def test_done_and_next_call_in_one_line():
+    """사회자가 한 호흡에 "수고하셨습니다 … 다음은 ○○ 위원님 질의하여 주십시오" — 닫고 바로 새 구간을 열어야 한다(검토 1)."""
+    s = Segmenter(R, "이준석")
+    feed_all(s, [(0, "권한영 위원님 질의하여 주십시오"), (10, "질의 한 줄")])
+    ev = feed_all(s, [(20, "권한영 위원님 수고하셨습니다 다음은 개혁신당 이준석 위원님 질의하여 주십시오")])
+    assert [e[0] for e in ev] == ["close", "special_call"]
+    assert ev[0][1].member == "권한영" and ev[0][1].lines == ["질의 한 줄"]
+    assert s.current is not None and s.current.member == "이준석" and s.current.seq == 13

@@ -110,3 +110,12 @@ test("fetchMeetings 는 캐시하고 오류는 던진다", async () => {
   assert.equal(good.calls.length, 1);
   assert.deepEqual(second, first);
 });
+
+test("xcode 없이 손으로 켠 실행은 모든 채널에서 실행 중", () => {
+  const runs = [{ path: ".github/workflows/speech.yml", status: "in_progress", display_title: "speech ·  · req-manual" }];
+  assert.equal(isRunning(runs, "21"), true);
+  assert.equal(isRunning(runs, "65"), true);
+  // request_id 가 비어 끝 공백이 잘려도 채널은 읽힌다
+  assert.equal(isRunning([{ path: ".github/workflows/speech.yml", status: "queued", display_title: "speech · 21 ·" }], "21"), true);
+  assert.equal(isRunning([{ path: ".github/workflows/speech.yml", status: "queued", display_title: "speech · 21 ·" }], "65"), false);
+});

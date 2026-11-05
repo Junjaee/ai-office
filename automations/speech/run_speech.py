@@ -48,15 +48,16 @@ AUTOMATION_NAME = "회의 발언 요약"
 DEPT = "qa"
 POLL_SEC = 60            # 방송 대기 중 live_list 확인 간격
 SAVE_SEC = 30            # 상태 저장 간격
-SILENCE_SEC = 600        # 자막이 이만큼 없으면 방송 상태를 다시 본다
+SILENCE_SEC = 600        # 자막이 이만큼 없으면 자막 서버에 다시 붙는다(방송 상태 xstat 은 믿을 수 없다)
+MAX_RUN_SEC = 340 * 60   # GitHub 6시간 한도(워크플로 355분) 전에 스스로 끝내 남은 것을 보낸다. 끝남 표시는 안 쓰므로 Worker 가 다시 깨운다
 
 
 # ───────────────────────── 바깥 세상과 닿는 것(시험에서 바꿔 끼운다) ─────────────────────────
 
-def _default_question_order(query: str, days: int):
+def _default_question_order(query: str, days: int, date_yymmdd: str = ""):
     from order_hwp import fetch_question_order
 
-    return fetch_question_order(query, days)
+    return fetch_question_order(query, days, date_yymmdd)
 
 
 def _default_make_llm():
@@ -105,6 +106,11 @@ def roster_from_members(members: list[tuple[str, str]], special: str) -> dict[st
 
 def special_in(rows: list[tuple[int, str, str]], special: str) -> bool:
     return any(name == special for _, name, _ in rows)
+
+
+def effective_window_end(window_end: float, now: float) -> float:
+    """6시간 한도에 걸려 강제 종료되면 큐에 남은 요약이 사라지므로 그 전에 스스로 끝낸다(검토 2026-11-06)."""
+    return min(window_end, now + MAX_RUN_SEC)
 
 
 def parse_window_end(raw: str, now: float) -> float:
@@ -280,18 +286,24 @@ def _wait_for_live(xcode: str, window_end: float, deps: Deps) -> dict | None:
         deps.sleep(POLL_SEC)
 
 
-def _live_loop(session: Session, xcode: str, window_end: float, deps: Deps, record_fp) -> None:
-    """방송이 끝날(산회·시간대 종료) 때까지: 대기 → 수신 → 끊기면 다시 대기."""
+def _live_loop(session: Session, xcode: str, window_end: float, deps: Deps, record_fp, info: dict | None = None) -> None:
+    """방송이 끝날(산회·시간대 종료) 때까지: 대기 → 수신 → 끊기면 다시 대기. info 는 이미 확인한 채널 정보(첫 바퀴)."""
     while not session.adjourned and deps.now() < window_end:
-        info = _wait_for_live(xcode, window_end, deps)
+        info = info or _wait_for_live(xcode, window_end, deps)
         if not info:
             return
-        xsami = api.parse_xsami(deps.fetch("live_play.asp", {"xcode": xcode, "xcgcd": info["xcgcd"]}))
+        try:
+            xsami = api.parse_xsami(deps.fetch("live_play.asp", {"xcode": xcode, "xcgcd": info["xcgcd"]}))
+        except Exception as exc:  # noqa: BLE001
+            _log(f"채널 정보 실패 {type(exc).__name__}")
+            xsami = ""
         if not xsami.startswith("ws"):
             _log("자막 주소 없음 — 1분 뒤 다시")
+            info = None
             deps.sleep(POLL_SEC)
             continue
         kind = api.caption_kind(xsami)
+        info = None   # 다음 바퀴는 다시 확인한다
         q: queue.Queue = queue.Queue()
         stop = threading.Event()
         start_receiver(xsami, xcode, q, stop, log=_log)
@@ -310,17 +322,19 @@ def _live_loop(session: Session, xcode: str, window_end: float, deps: Deps, reco
                         record_line(record_fp, c, kind)
                     c2 = flt.accept(c)
                     if c2:
-                        session.process(c2)
+                        try:
+                            session.process(c2)
+                        except Exception as exc:  # noqa: BLE001 - 한 줄 때문에 6시간 실행이 죽지 않게
+                            _log(f"자막 처리 실패 {type(exc).__name__}")
                 else:
                     session.pump()
                 if deps.now() - last_save >= SAVE_SEC:
                     last_save = deps.now()
                     _save(session)
                 if deps.now() - last_caption >= SILENCE_SEC:
-                    if not api.is_live(api.channel_info(xcode, deps.fetch("live_list.asp", None))):
-                        _log("방송 끊김 — 다시 기다림")
-                        break
-                    last_caption = deps.now()
+                    # 수신 스레드가 죽었거나 서버가 조용한 것 — xstat 은 회의 뒤에도 1 이라 믿지 않고 그냥 다시 붙는다(정회 중엔 10분마다)
+                    _log("자막 없음 — 다시 접속")
+                    break
         finally:
             stop.set()
 
@@ -348,6 +362,8 @@ def run(argv: list[str], deps: Deps | None = None) -> int:
         out_path = os.devnull
     tasks: dict[str, tuple[bool, str]] = {}
     counts: dict = {}
+    run_date = deps.today()          # 끝남 표시·상태 키는 시작한 날짜 기준 — 자정을 넘겨 끝나도 다음 날을 막지 않게
+    yymmdd = run_date[2:4] + run_date[5:7] + run_date[8:10]
     try:
         xcode = str(args.xcode or "").strip()
         if not xcode and not replaying:
@@ -363,11 +379,14 @@ def run(argv: list[str], deps: Deps | None = None) -> int:
         query = (cfg.get("order_mail") or {}).get(xcode)
         if query:
             try:
-                rows = deps.question_order(query, int(cfg.get("order_lookback_days") or 3))
+                rows = deps.question_order(query, int(cfg.get("order_lookback_days") or 3), yymmdd)
             except Exception as exc:  # noqa: BLE001
                 _log(f"질의순서 못 읽음 {type(exc).__name__}")
         if rows is not None and cfg.get("special_member_only_days") and not special_in(rows, special) and not replaying:
-            deps.state.mark("skip", xcode, deps.today())  # type: ignore[union-attr]
+            try:
+                deps.state.mark("skip", xcode, run_date)  # type: ignore[union-attr]
+            except Exception as exc:  # noqa: BLE001 - 표시 실패로 실행을 오류로 만들지 않는다(10분마다 같은 실패를 되풀이하지 않게)
+                _log(f"건너뜀 표시 실패 {type(exc).__name__}")
             _report(cfg, deps, ok=True, summary=f"오늘 질의 없음 — {channel_name} 질의순서 {len(rows)}명에 없음", counts={"order": len(rows)},
                     started_at=started_at, started=started,
                     tasks={"listen": (True, "오늘 질의 없음"), "summarize": (True, "건너뜀"), "notify": (True, "건너뜀")})
@@ -387,7 +406,7 @@ def run(argv: list[str], deps: Deps | None = None) -> int:
                     session.process(c2)
             session.finish()
         else:
-            window_end = parse_window_end(args.window_end, deps.now())
+            window_end = effective_window_end(parse_window_end(args.window_end, deps.now()), deps.now())
             info = _wait_for_live(xcode, window_end, deps)
             if not info:
                 _report(cfg, deps, ok=True, summary=f"{channel_name} 방송이 시작되지 않음", counts={}, started_at=started_at, started=started,
@@ -400,23 +419,26 @@ def run(argv: list[str], deps: Deps | None = None) -> int:
                 except Exception as exc:  # noqa: BLE001
                     _log(f"의석 명단 못 읽음 {type(exc).__name__}")
             session = Session(cfg, deps, meeting, roster, attendees, out_path=out_path, sync=False)
-            session.key = args.key or str(info.get("xcgcd") or xcode)
+            session.key = args.key or f"{run_date}-{xcode}-{info.get('xcgcd') or ''}"   # 전날 회의 상태를 이어받지 않게 날짜·채널을 넣는다
             try:
                 session.restore(deps.state.get(session.key))  # type: ignore[union-attr]
             except Exception as exc:  # noqa: BLE001
                 _log(f"상태 복원 실패 {type(exc).__name__}")
             record_fp = open(args.record, "a", encoding="utf-8") if args.record else None
             try:
-                _live_loop(session, xcode, window_end, deps, record_fp)
+                _live_loop(session, xcode, window_end, deps, record_fp, info)
             finally:
+                # 어떤 이유로 끝나든 남은 요약은 보내고 상태를 남긴다
                 if record_fp:
                     record_fp.close()
-            session.finish()
-            _save(session)
-            try:
-                deps.state.mark("done", xcode, deps.today())  # type: ignore[union-attr]
-            except Exception as exc:  # noqa: BLE001
-                _log(f"끝남 표시 실패 {type(exc).__name__}")
+                session.finish()
+                _save(session)
+            if session.adjourned:
+                # 산회일 때만 "끝남" — 시간대 끝·시한으로 끝난 것은 표시하지 않아, 같은 날 뒤 일정이나 Worker 의 다시 깨움을 막지 않는다
+                try:
+                    deps.state.mark("done", xcode, run_date)  # type: ignore[union-attr]
+                except Exception as exc:  # noqa: BLE001
+                    _log(f"끝남 표시 실패 {type(exc).__name__}")
 
         counts = dict(session.counts)
         c = counts
@@ -424,7 +446,7 @@ def run(argv: list[str], deps: Deps | None = None) -> int:
         if session.adjourned:
             summary += " · 산회"
         tasks = {
-            "listen": (True, f"자막 {c['captions']}줄, 구간 {c['segments']}"),
+            "listen": (replaying or c["captions"] > 0, f"자막 {c['captions']}줄, 구간 {c['segments']}" + ("" if c["captions"] else " — 자막을 받지 못함")),
             "summarize": (c["summary_failed"] == 0, f"요약 {c['summarized']}건" + (f", 실패 {c['summary_failed']}" if c["summary_failed"] else "")),
             "notify": (c["send_failed"] == 0, f"전송 {c['sent']}묶음" + (f", 실패 {c['send_failed']}" if c["send_failed"] else "")),
         }

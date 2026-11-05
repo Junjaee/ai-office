@@ -115,9 +115,13 @@ class Segmenter:
             if self.current:
                 events.append(("close", self._close(c.at)))
             if kind == "adjourn":
+                self._window.clear()
                 events.append(("adjourn",))
+                return events
+            # "○○ 위원님 수고하셨습니다 다음은 △△ 위원님 질의하여 주십시오" — 한 호흡에 오면 닫은 뒤 이어서 호명을 본다
+            m = END_RE.search(window_text)
+            window_text = window_text[m.end():] if m else ""
             self._window.clear()
-            return events
 
         name = detect_call(window_text, set(self.roster), self.special)
         if name:
@@ -129,6 +133,6 @@ class Segmenter:
             self._window.clear()
             return events
 
-        if self.current and c.text.strip():
+        if self.current and c.text.strip() and not kind:
             self.current.lines.append(c.text.strip())
         return events

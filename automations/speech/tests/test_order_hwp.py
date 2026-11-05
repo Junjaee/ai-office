@@ -104,3 +104,13 @@ def test_hwp_to_xhtml_gives_pyhwp_a_file_path(monkeypatch, tmp_path):
     monkeypatch.setattr(order_hwp, "HTMLTransform", FakeTransform)
     assert "홍길동" in order_hwp.hwp_to_xhtml(b"HWP Document File")
     assert isinstance(seen["src"], str) and seen["src"].endswith(".hwp")
+
+
+def test_find_order_attachment_requires_todays_date_in_name():
+    """다른 날 질의순서를 잡으면 그날을 통째로 건너뛸 수 있다 — 파일 이름의 (YYMMDD) 가 오늘인 것만(검토 8)."""
+    svc = FakeService({
+        "newer": {"ts": 3000, "parts": [("질의순서(261103)_재경위.hwp", "att-03")]},
+        "today": {"ts": 2000, "parts": [("2027_예산안_질의순서(전체)_261105_예결위.hwp", "att-05")]},
+    })
+    assert find_order_attachment(svc, "from:x", 3, "261105") == ("today", "att-05")
+    assert find_order_attachment(svc, "from:x", 3, "261106") is None

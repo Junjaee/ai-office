@@ -60,10 +60,14 @@ export function activeChannels(meetings: Meeting[], nowMs: number): { xcode: str
   return [...ends.entries()].map(([xcode, windowEndMs]) => ({ xcode, windowEndMs }));
 }
 
-/** 그 채널의 speech 실행이 지금 돌고 있나(queued 포함). run-name 은 "speech · <xcode> · <request_id>" */
+/** 그 채널의 speech 실행이 지금 돌고 있나(queued 포함). run-name 은 "speech · <xcode> · <request_id>".
+ *  xcode 없이 손으로 켠 실행("speech ·  · req-…")은 어느 채널이든 잡을 수 있으므로 모든 채널에서 "실행 중"으로 본다. */
 export function isRunning(runs: { path: string; status: string; display_title: string }[], xcode: string): boolean {
-  return runs.some((r) => r.path.endsWith(`/${SPEECH_WORKFLOW}`) && RUNNING.has(r.status)
-    && (r.display_title ?? "").includes(` · ${xcode} · `));
+  return runs.some((r) => {
+    if (!r.path.endsWith(`/${SPEECH_WORKFLOW}`) || !RUNNING.has(r.status)) return false;
+    const m = /speech · (\d*) ·/.exec(r.display_title ?? "");
+    return m !== null && (m[1] === "" || m[1] === xcode);
+  });
 }
 
 export function shouldWakeSpeech(a: { active: boolean; running: boolean; marked: boolean; lastRunMs: number | null; nowMs: number }): boolean {

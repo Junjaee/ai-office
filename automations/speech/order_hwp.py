@@ -72,21 +72,27 @@ def question_order(hwp_bytes: bytes) -> list[tuple[int, str, str]]:
     return parse_order_html(hwp_to_xhtml(hwp_bytes))
 
 
-def find_order_attachment(service, query: str, lookback_days: int) -> tuple[str, str] | None:
-    """검색어에 맞는 최근 메일 중 첨부 이름에 '질의순서'가 든 가장 최근 것 → (message_id, attachment_id)."""
+def find_order_attachment(service, query: str, lookback_days: int, date_yymmdd: str = "") -> tuple[str, str] | None:
+    """검색어에 맞는 최근 메일 중 첨부 이름에 '질의순서'(와 오늘 날짜 YYMMDD)가 든 가장 최근 것 → (message_id, attachment_id).
+
+    날짜를 보는 이유: 다른 날·소위원회 질의순서를 잡으면 그날을 통째로 건너뛰거나 오늘 위원의 호명을 놓친다.
+    행정실 파일 이름은 `질의순서(261103)_…`, `…질의순서(전체)_261105_…` 처럼 회의 날짜를 담는다(2026-11-05 확인).
+    """
     best: tuple[int, str, str] | None = None
     for mid in search_messages(service, f"{query} newer_than:{lookback_days}d has:attachment", limit=20):
         meta = message_meta(service, mid)
         for att in meta.attachments:
-            if ORDER_KEYWORD in att.name and (best is None or meta.ts > best[0]):
+            if ORDER_KEYWORD not in att.name or (date_yymmdd and date_yymmdd not in att.name):
+                continue
+            if best is None or meta.ts > best[0]:
                 best = (meta.ts, mid, att.part_id)
     return (best[1], best[2]) if best else None
 
 
-def fetch_question_order(query: str, lookback_days: int) -> list[tuple[int, str, str]] | None:
-    """지메일에서 질의순서 HWP 를 받아 읽는다. 메일이 없거나 표를 못 읽으면 None."""
+def fetch_question_order(query: str, lookback_days: int, date_yymmdd: str = "") -> list[tuple[int, str, str]] | None:
+    """지메일에서 오늘 질의순서 HWP 를 받아 읽는다. 메일이 없거나 표를 못 읽으면 None(→ 명단 없이 돈다)."""
     service = gmail_service()
-    found = find_order_attachment(service, query, lookback_days)
+    found = find_order_attachment(service, query, lookback_days, date_yymmdd)
     if not found:
         return None
     try:
