@@ -3,31 +3,31 @@
   "dept": "partner",
   "ok": true,
   "running": false,
-  "summary": "주말 일정 5건, 전송 1건, 2초",
+  "summary": "주말 일정 7건, 전송 1건, 2초",
   "counts": {
-    "events": 5,
+    "events": 7,
     "sent": 1
   },
   "next_run": "매주 목 17:00",
   "log": [
-    "주말 일정 5건, 전송 1건, 2초",
-    "[10/31] 기타 일정",
-    "[10/31] 동탄8동 한마음 체육대회 @ 장지체육공원, 대한민국 경기도 화성시 동탄대로4가길 20",
-    "[10/31] 행사 일정",
-    "[10/31] 기타 일정"
+    "주말 일정 7건, 전송 1건, 2초",
+    "[11/7] 기타 일정",
+    "[11/7] 동탄맨 영상촬영",
+    "[11/7] 회의 일정",
+    "[11/7] 동탄 9동 체육대회 @ 왕배체육공원"
   ],
   "link": "",
-  "run_id": 40839135146,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/40839135146",
-  "request_id": "cron-202610290800",
+  "run_id": 41991266587,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41991266587",
+  "request_id": "cron-202611050800",
   "trigger": "schedule",
-  "started_at": "2026-10-29T17:01:18+09:00",
+  "started_at": "2026-11-05T17:01:23+09:00",
   "duration_sec": 2,
   "tasks": [
     {
       "id": "fetch",
       "status": "done",
-      "summary": "토 5건 · 일 0건"
+      "summary": "토 5건 · 일 2건"
     },
     {
       "id": "send",
@@ -36,5 +36,5 @@
     }
   ],
   "id": "weekend",
-  "updated_at": "2026-10-29T17:01:21+09:00"
+  "updated_at": "2026-11-05T17:01:26+09:00"
 }

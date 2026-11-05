@@ -1,0 +1,1 @@
+{"automation": "weekend", "run_id": 41991266587, "request_id": "cron-202611050800", "trigger": "schedule", "started_at": "2026-11-05T17:01:23+09:00", "duration_sec": 2, "ok": true, "summary": "주말 일정 7건, 전송 1건, 2초", "url": "https://github.com/Junjaee/ai-office/actions/runs/41991266587", "recorded_at": "2026-11-05T17:01:26+09:00"}
