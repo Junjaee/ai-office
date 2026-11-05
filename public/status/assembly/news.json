@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 11초",
+  "summary": "신규 33건, 실패 0건, 13초",
   "counts": {
-    "new": 15,
+    "new": 33,
     "failed": 0,
-    "total": 6733
+    "total": 6766
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 11초",
-    "[신규] 금태섭 \"尹 선거법 최종심? 안 바뀐다…국힘, 397억 준비해라\"[한판승부] — 노컷뉴스",
-    "[신규] 경주시, 2027년 국비 확보 총력…국회서 핵심사업 증액 건의 — 아주경제",
-    "[신규] (정기여론조사)⑥국힘 37.7% 대 민주 37.6%…'동률' — 뉴스토마토",
-    "[신규] (정기여론조사)④내일 총선이라면 어느 당 후보에 투표?…국힘 38.9% 대 민주 35.1% — 뉴스토마토"
+    "신규 33건, 실패 0건, 13초",
+    "[신규] [SDF] 전장에 투입되는 AI…실전 변수 극복 가능할까? (이준석-임성신 대담) — SBS 뉴스",
+    "[신규] 권영진 “‘오동동승리 연대’ 만들어야 총선 승리” [정치시그널] — 채널A",
+    "[신규] [애프터 국감]②'쇼츠 전쟁' 뛰어든 보좌진들…조회수와 정책 사이 — 아시아경제",
+    "[신규] [KPGA 투어챔피언십 in Jeju] 2026시즌의 피날레를 장식할 최종전… 개막 하루 앞두고 포토콜 진행 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 41938115025,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41938115025",
-  "request_id": "cron-202611050000",
+  "run_id": 41958865928,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41958865928",
+  "request_id": "cron-202611050300",
   "trigger": "schedule",
-  "started_at": "2026-11-05T09:01:25+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-05T12:01:24+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 179건"
+      "summary": "검색어 5개에서 158건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 45건 (신규 15건) · 연합뉴스 6건, 뉴스핌 4건, 재경일보 3건"
+      "summary": "오늘 78건 (신규 33건) · 뉴스핌 7건, 연합뉴스 6건, 뉴스1 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-05T09:01:38+09:00"
+  "updated_at": "2026-11-05T12:01:38+09:00"
 }
