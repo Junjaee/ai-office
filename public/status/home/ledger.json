@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 11월 11/5 다이소아성산업 1,000원 (생활비)"
+    "[추가] 2026년 11월 11/5 노브랜드스타필 18,860원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 41985174355,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41985174355",
-  "request_id": "cron-202611050708",
+  "run_id": 41986701045,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41986701045",
+  "request_id": "cron-202611050721",
   "trigger": "schedule",
-  "started_at": "2026-11-05T16:09:16+09:00",
+  "started_at": "2026-11-05T16:22:26+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-11-05T16:09:19+09:00"
+  "updated_at": "2026-11-05T16:22:30+09:00"
 }
