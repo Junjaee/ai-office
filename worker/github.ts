@@ -50,6 +50,8 @@ export type GitHubLike = {
   tokenExpiresAt: string | null;
   dispatch(workflowFile: string, inputs: Record<string, string>): Promise<void>;
   listRuns(perPage: number): Promise<RunSummary[]>;
+  /** 한 워크플로의 실행만 — 자주 도는 것에 밀려 30건 창 밖으로 나가지 않게 (speech 깨우기) */
+  listWorkflowRuns(workflowFile: string, perPage: number): Promise<RunSummary[]>;
   listRunsBetween(fromIso: string, toIso: string): Promise<RunSummary[]>;
   readRepoText(path: string): Promise<string | null>;
   readStatusFile(ws: string, id: string): Promise<unknown | null>;
@@ -121,6 +123,15 @@ export class GitHubClient implements GitHubLike {
   /** GET /repos/{o}/{r}/actions/runs?per_page=N → 화면에 필요한 필드만 추린다 */
   async listRuns(perPage: number): Promise<RunSummary[]> {
     const res = await this.#request(`/repos/${OWNER}/${REPO}/actions/runs?per_page=${perPage}`);
+    if (res.status === 404) throw new GitHubNotFoundError();
+    if (!res.ok) throw new GitHubUnavailableError(res.status, `runs returned ${res.status}`);
+    const data = (await res.json()) as { workflow_runs?: Array<Record<string, unknown>> };
+    return (data.workflow_runs ?? []).map(toRunSummary);
+  }
+
+  /** GET /repos/{o}/{r}/actions/workflows/{file}/runs?per_page=N */
+  async listWorkflowRuns(workflowFile: string, perPage: number): Promise<RunSummary[]> {
+    const res = await this.#request(`/repos/${OWNER}/${REPO}/actions/workflows/${encodeURIComponent(workflowFile)}/runs?per_page=${perPage}`);
     if (res.status === 404) throw new GitHubNotFoundError();
     if (!res.ok) throw new GitHubUnavailableError(res.status, `runs returned ${res.status}`);
     const data = (await res.json()) as { workflow_runs?: Array<Record<string, unknown>> };
