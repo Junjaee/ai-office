@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 11초",
+  "summary": "신규 28건, 실패 0건, 12초",
   "counts": {
-    "new": 8,
+    "new": 28,
     "failed": 0,
-    "total": 6878
+    "total": 6906
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 11초",
-    "[신규] 예산정책협의회 함께 참석하는 장동혁·오세훈 — 뉴스1",
-    "[신규] [단독] ‘친명 좌장’ 정성호도 미래대응기금에 우려 표명…“수입 변동·불확실성 커” — 시사저널",
-    "[신규] 조용호 오산시장, 국회 예결위 찾아 국비 324억 지원 요청 — 일간경기",
-    "[신규] 전진숙 의원, 국회 예결위 예산소위 입성해 5조 통합재정 확보 총력 — 뉴스워커"
+    "신규 28건, 실패 0건, 12초",
+    "[신규] 이준석 \"미국 AI 속도조절 대응해야…이재명 정부 ‘배짱이’ 되지 말라\" — JTBC",
+    "[신규] 코스피 5000 붕괴에 야권 李 정부 총공세 … \"정부 무리한 개입의 결과\" — 뉴데일리",
+    "[신규] 국토교통부, 처음엔 분양가 25%로 입주, 내 집 지분은 차근차근! — 시민행정신문",
+    "[신규] 시민행정신문, ‘2026 대한민국 시민행정대상’ 추진…의정·시민공헌 등 8개 부문 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42171780990,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42171780990",
-  "request_id": "cron-202611060600",
+  "run_id": 42191803615,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42191803615",
+  "request_id": "cron-202611060900",
   "trigger": "schedule",
-  "started_at": "2026-11-06T15:01:30+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-06T18:01:31+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 113건"
+      "summary": "검색어 5개에서 85건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 32건 (신규 8건) · 뉴스1 3건, 뉴스핌 3건, 뉴시스 3건"
+      "summary": "오늘 60건 (신규 28건) · 시민행정신문 10건, 뉴시스 4건, 뉴스1 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-06T15:01:42+09:00"
+  "updated_at": "2026-11-06T18:01:44+09:00"
 }
