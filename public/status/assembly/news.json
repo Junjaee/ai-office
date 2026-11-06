@@ -1,41 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 12초",
-  "counts": {
-    "new": 6,
-    "failed": 0,
-    "total": 6943
-  },
+  "summary": "실행 중 문제가 생겼어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 12초",
-    "[신규] 이준석, ‘학력의혹 제기’ 전한길에 “개과천선하면 선처하려 했는데···” — 주간경향",
-    "[신규] 양송이 서울시의원,“서울형 유보통합, 현장 목소리 반영한 선도적 모델 마련해야” — 시민행정신문",
-    "[신규] 국토교통부, 대학생의 참신한 아이디어, 미래 도심항공교통(UAM) 이끈다 — 시민행정신문",
-    "[신규] ‘조작기소 특검법’ 국회 통과…이재명 정부 7번째 특검 — 채널A"
+    "실행 중 문제가 생겼어요",
+    "TimeoutError: The read operation timed out"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42266826282,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42266826282",
-  "request_id": "cron-202611061800",
+  "run_id": 42293150642,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42293150642",
+  "request_id": "cron-202611062100",
   "trigger": "schedule",
-  "started_at": "2026-11-07T03:01:33+09:00",
-  "duration_sec": 12,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 89건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 22건 (신규 6건) · 시민행정신문 7건, 주간경향 2건, 노컷뉴스 1건"
-    }
-  ],
+  "started_at": "2026-11-07T06:01:20+09:00",
+  "duration_sec": 73,
   "id": "news",
-  "updated_at": "2026-11-07T03:01:46+09:00"
+  "updated_at": "2026-11-07T06:02:34+09:00"
 }
