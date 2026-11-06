@@ -1,0 +1,84 @@
+name: HWP 변환 시험
+
+# 서버(ubuntu)에서 질의순서 HWP 를 원본 양식 그대로 이미지로 바꿀 수 있는지 한 번 보는 임시 워크플로.
+# LibreOffice + H2Orestart(한글 필터) → PDF → PNG. 품질을 확인하면 지운다.
+on:
+  workflow_dispatch:
+
+jobs:
+  try:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 파이썬 의존성
+        run: |
+          python -m pip install --quiet -r automations/requirements.txt pymupdf
+
+      - name: LibreOffice + 한글 필터(H2Orestart)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libreoffice fonts-nanum
+          curl -sL -o /tmp/h2o.oxt https://github.com/ebandal/H2Orestart/releases/download/v0.7.2/H2Orestart.oxt
+          unopkg add --shared /tmp/h2o.oxt || unopkg add /tmp/h2o.oxt
+          soffice --version
+
+      - name: 지메일에서 질의순서 첨부 받기
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path += ["automations/common", "automations/mail"]
+          from mail_gmail import download_attachment, gmail_service
+
+          svc = gmail_service()
+          ids = svc.users().messages().list(userId="me", q="from:assembly.go.kr 질의순서 newer_than:90d",
+                                            maxResults=3).execute().get("messages", [])
+
+          def walk(p, out):
+              n = (p.get("filename") or "").strip()
+              if n.lower().endswith(".hwp") and (p.get("body") or {}).get("attachmentId"):
+                  out.append((n, p["body"]["attachmentId"]))
+              for c in p.get("parts") or []:
+                  walk(c, out)
+
+          for m in ids:
+              d = svc.users().messages().get(userId="me", id=m["id"], format="full").execute()
+              found = []
+              walk(d["payload"], found)
+              hit = [f for f in found if "질의순서" in f[0]]
+              if hit:
+                  Path("/tmp/order.hwp").write_bytes(download_attachment(svc, m["id"], hit[0][1]))
+                  print("받음:", hit[0][0])
+                  break
+          else:
+              raise SystemExit("질의순서 첨부 없음")
+          PY
+
+      - name: HWP → PDF → PNG
+        run: |
+          cd /tmp
+          soffice --headless --convert-to pdf order.hwp --outdir /tmp
+          ls -la /tmp/order.pdf
+          python -X utf8 -c "
+          import fitz
+          d = fitz.open('/tmp/order.pdf')
+          print('쪽수', len(d))
+          for i, pg in enumerate(d):
+              pg.get_pixmap(dpi=150).save(f'/tmp/order-{i+1}.png')
+          "
+          ls -la /tmp/order-*.png
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hwp-변환결과
+          path: /tmp/order-*.png
