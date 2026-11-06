@@ -22,10 +22,37 @@ jobs:
       - name: LibreOffice + 한글 필터(H2Orestart)
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq libreoffice fonts-nanum
+          sudo apt-get install -y -qq libreoffice fonts-nanum fonts-noto-cjk fonts-noto-cjk-extra
           curl -sL -o /tmp/h2o.oxt https://github.com/ebandal/H2Orestart/releases/download/v0.7.2/H2Orestart.oxt
           unopkg add --shared /tmp/h2o.oxt || unopkg add /tmp/h2o.oxt
           soffice --version
+
+      # 한컴 전용 글꼴(함초롬·휴먼)은 서버에 없다. 라이선스가 확인되지 않아 심지 않고,
+      # 같은 계열(명조→Noto Serif, 돋움→Noto Sans)로 짝을 맞춘다 — 나눔고딕 하나로 다 바뀌는 것보다 가깝다
+      - name: 글꼴 짝 맞추기
+        run: |
+          sudo tee /etc/fonts/conf.d/99-hancom-sub.conf > /dev/null <<'XML'
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+          <fontconfig>
+            <match target="pattern"><test name="family"><string>휴먼명조</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Serif CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>함초롬바탕</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Serif CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>HCRBatang</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Serif CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>함초롬돋움</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Sans CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>HCRDotum</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Sans CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>바탕</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Serif CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>굴림</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Sans CJK KR</string></edit></match>
+          </fontconfig>
+          XML
+          fc-cache -f > /dev/null
+          fc-match '휴먼명조'; fc-match 'HCRDotum'
 
       - name: 지메일에서 질의순서 첨부 받기
         env:
