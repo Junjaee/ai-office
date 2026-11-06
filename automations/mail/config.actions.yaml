@@ -17,6 +17,15 @@ committees:
     # 첨부를 저장할 드라이브 폴더: 직장/국회/01. 의정활동/02. 위원회_회의/예결위/_수신함
     folder_id: "1rFQ5_cZWEKbjXmbfYqCwRBAiKoG9VwIQ"
 
+# 질의순서 한글 파일은 원본 양식 그대로 이미지로도 보낸다 (사용자 결정 2026-11-06).
+# 이름에 order_keyword 가 든 .hwp/.hwpx 가 대상. 변환은 mail.yml 의 다음 단계(LibreOffice)가 한다.
+order_keyword: "질의순서"
+order_highlight: "이준석"      # 이 이름이 있는 표 행을 아래 색으로 채운다(빈 칸이면 칠하지 않음)
+order_color: "#FF7210"
+# 본문 글꼴(휴먼명조)을 드라이브에서 받아 서버에 설치한다 — 한컴 전용 글꼴이라 서버에 없다.
+# 함초롬돋움은 한컴 전용 .hft 포맷이라 쓸 수 없어 제목은 Noto Sans 로 대체된다.
+order_font_file_id: "1I-ZiaQYbtRATh0nc9374YLDpZBxqI0Fb"
+
 send_attachments: true   # 첨부파일을 텔레그램으로도 보낸다 (사용자 결정 2026-09-17).
                          # false 로 두면 드라이브 저장만 한다 (folder_id 가 있는 위원회)
 max_attachment_mb: 45    # 한 파일 한도 (텔레그램 봇 업로드 한도 50MB). 넘으면 그 파일만 건너뛰고 알린다

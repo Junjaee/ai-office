@@ -81,3 +81,16 @@ def test_safe_lines_never_contain_subject_or_sender():
     for secret in ("의사일정", "공청회", "재정경제기획위원회", "fec@assembly.go.kr", "mail.google.com"):
         assert secret not in joined
     assert safe_lines([], RULES) == ["새 메일 없음"]
+
+
+# ── 질의순서 이미지 (2026-11-06) ──────────────────────────────────────────
+
+def test_is_order_file_and_color():
+    from mail_hwp import hex_rgb, is_order_file
+
+    assert is_order_file("2027_예산안_질의순서_261109.hwp") is True
+    assert is_order_file("질의순서(안).hwpx") is True
+    assert is_order_file("의사일정(안).hwp") is False          # 질의순서가 아니면 그대로 둔다
+    assert is_order_file("질의순서.pdf") is False              # 한글 파일만
+    assert is_order_file("예결위 질의순서.hwp", "예결위") is True
+    assert hex_rgb("#FF7210") == (255, 114, 16)

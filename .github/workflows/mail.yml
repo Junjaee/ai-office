@@ -58,6 +58,60 @@ jobs:
         run: |
           python -X utf8 automations/mail/run_mail.py --config automations/mail/config.actions.yaml ${{ inputs.dry_run && '--dry-run' || '' }}
 
+      # 질의순서 한글 파일이 왔을 때만 — 원본 양식 그대로 이미지로 바꿔 보낸다 (2026-11-06)
+      - name: 한글 변환 도구 설치 (질의순서가 있을 때만)
+        if: steps.mail.outputs.orders != '' && steps.mail.outputs.orders != '0'
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libreoffice fonts-noto-cjk fonts-noto-cjk-extra
+          curl -sL -o /tmp/h2o.oxt https://github.com/ebandal/H2Orestart/releases/download/v0.7.2/H2Orestart.oxt
+          unopkg add --shared /tmp/h2o.oxt || unopkg add /tmp/h2o.oxt
+          python -m pip install --quiet pymupdf
+          # 본문 글꼴(휴먼명조)은 한컴 전용이라 서버에 없다 — 드라이브에서 받아 설치한다
+          mkdir -p ~/.fonts
+          python -X utf8 - <<'PY'
+          import sys, yaml
+          from pathlib import Path
+          sys.path.insert(0, "automations/common")
+          from google_drive import DriveClient
+          cfg = yaml.safe_load(open("automations/mail/config.actions.yaml", encoding="utf-8"))
+          fid = (cfg.get("order_font_file_id") or "").strip()
+          if fid:
+              Path.home().joinpath(".fonts/HMKMM.TTF").write_bytes(DriveClient().download(fid))
+              print("글꼴 설치 완료")
+          PY
+          # 한컴 글꼴 이름을 같은 계열로 짝 맞춘다(함초롬돋움은 .hft 라 서버에서 못 쓴다)
+          sudo tee /etc/fonts/conf.d/99-hancom-sub.conf > /dev/null <<'XML'
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+          <fontconfig>
+            <match target="pattern"><test name="family"><string>함초롬돋움</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Sans CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>HCRDotum</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Sans CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>함초롬바탕</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Serif CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>굴림</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Sans CJK KR</string></edit></match>
+            <match target="pattern"><test name="family"><string>바탕</string></test>
+              <edit name="family" mode="assign" binding="strong"><string>Noto Serif CJK KR</string></edit></match>
+          </fontconfig>
+          XML
+          fc-cache -f > /dev/null
+
+      - name: 질의순서 이미지 보내기
+        if: steps.mail.outputs.orders != '' && steps.mail.outputs.orders != '0'
+        env:
+          NOTICE_530_BOT_TOKEN: ${{ secrets.NOTICE_530_BOT_TOKEN }}
+          NOTICE_530_CHAT_ID: ${{ secrets.NOTICE_530_CHAT_ID }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/mail/send_order_image.py --config automations/mail/config.actions.yaml
+
       # 드라이브 수신함에 새 자료가 들어왔을 때만 — 클로드가 회의 폴더로 나눠 넣는다
       - name: 클로드 설치 (새 자료가 있을 때만)
         if: steps.mail.outputs.saved != '' && steps.mail.outputs.saved != '0'

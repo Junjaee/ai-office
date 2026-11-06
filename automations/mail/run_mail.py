@@ -33,6 +33,7 @@ from mail_gmail import (  # noqa: E402
     build_notice, build_query, download_attachment, ensure_label, file_message,
     gmail_service, message_meta, safe_lines, search_messages,
 )
+from mail_hwp import is_order_file  # noqa: E402
 try:
     from report_status import report as report_status  # noqa: E402
 except ImportError:  # 보고 모듈이 없으면 보고 없이 동작
@@ -44,6 +45,7 @@ AUTOMATION_NAME = "상임위 메일"
 DEPT = "qa"
 HERE = Path(__file__).resolve().parent
 CHAT_KEY = "NOTICE_530_CHAT_ID"           # 530호 알림 공용 대화방 (메일 전용이 아니다, 2026-09-22)
+ORDER_DIR = Path("/tmp/order") if Path("/tmp").is_dir() else HERE / "_order"   # 질의순서 첨부를 두는 곳
 TOKEN_KEY = "NOTICE_530_BOT_TOKEN"        # 보내는 봇 = @notice_530_bot (530호 알림 공용).
                                           # 캘린더 봇(TELEGRAM_BOT_TOKEN)은 주말 일정 전송 전용 (사용자 결정 2026-09-17)
 
@@ -95,7 +97,8 @@ def handle_attachments(service, token: str, chat: str, mails: list, cfg: dict, p
                for r in cfg.get("committees") or []}
     drive = DriveClient() if any(folders.values()) else None
 
-    out = {"sent": 0, "saved": 0, "skipped": 0}
+    out = {"sent": 0, "saved": 0, "skipped": 0, "orders": 0}
+    keyword = (cfg.get("order_keyword") or "질의순서").strip()
     for m in mails:
         for att in m.attachments:
             try:
@@ -105,6 +108,12 @@ def handle_attachments(service, token: str, chat: str, mails: list, cfg: dict, p
                 progress(f"첨부 내려받기 실패 HTTP {status}")
                 out["skipped"] += 1
                 continue
+
+            # 질의순서 한글 파일은 원본 양식 그대로 이미지로 보내려고 따로 둔다(mail.yml 다음 단계)
+            if keyword and is_order_file(att.name, keyword):
+                ORDER_DIR.mkdir(parents=True, exist_ok=True)
+                (ORDER_DIR / att.name).write_bytes(data)
+                out["orders"] += 1
 
             folder = folders.get(m.label)
             if drive and folder:
@@ -168,7 +177,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
                  timeout=int(cfg.get("timeout") or 30))
     progress(f"텔레그램 전송 {len(mails)}건")
 
-    att_result = {"sent": 0, "saved": 0, "skipped": 0}
+    att_result = {"sent": 0, "saved": 0, "skipped": 0, "orders": 0}
     if files:
         att_result = handle_attachments(service, token, chat, mails, cfg, progress)
         progress(f"첨부 전송 {att_result['sent']}개, 드라이브 저장 {att_result['saved']}개"
@@ -193,6 +202,8 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     if files:
         counts["files"] = files
         counts["saved"] = att_result["saved"]
+    if att_result.get("orders"):
+        counts["orders"] = att_result["orders"]
     return {"counts": counts, "lines": lines, "tasks": tasks}
 
 
@@ -213,7 +224,8 @@ def load_config(path: str) -> dict:
 def build_summary(counts: dict, elapsed_sec: float) -> str:
     """카드 부제 한 줄. counts 의 알려진 키를 한국어로 잇는다."""
     names = {"new": "새 메일", "replaced": "교체", "failed": "실패", "skip": "건너뜀",
-             "sent": "알림", "updated": "갱신", "files": "첨부", "saved": "드라이브 저장"}
+             "sent": "알림", "updated": "갱신", "files": "첨부", "saved": "드라이브 저장",
+             "orders": "질의순서"}
     parts = [f"{names[k]} {v}건" for k, v in counts.items() if k in names]
     parts.append(f"{elapsed_sec / 60:.1f}분" if elapsed_sec >= 60 else f"{int(elapsed_sec)}초")
     return ", ".join(parts)
@@ -264,6 +276,7 @@ def run(argv: list[str], work=None) -> int:
     if out_path:
         with open(out_path, "a", encoding="utf-8") as fh:
             fh.write("saved={}\n".format(counts.get("saved", 0)))
+            fh.write("orders={}\n".format(counts.get("orders", 0)))
 
     ok = counts.get("failed", 0) == 0 and all(v[0] for v in task_results.values())
     summary = build_summary(counts, time.monotonic() - started)
