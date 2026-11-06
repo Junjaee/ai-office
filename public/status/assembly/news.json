@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 10초",
+  "summary": "신규 8건, 실패 0건, 11초",
   "counts": {
-    "new": 4,
+    "new": 8,
     "failed": 0,
-    "total": 6850
+    "total": 6878
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 10초",
-    "[신규] 이준석 \"지광, 현금잔고 70억 증명서 제출하고 34억 원 체납, 이상한 일\" — 국제신문",
-    "[신규] 이준석 “尹 ‘딸랑이’들 계엄에 쓸려가…민주, 李 공소취소 맞서야” — 경기일보",
-    "[신규] 이준석 “尹계엄에 쓸려가고 트럼프 대패…민주당도 심판받을 것” — 이데일리",
-    "[신규] [5일 오!정말] 국힘 윤상현 \"오세훈·한동훈·이준석·장동혁 연대가 BTS 연대\" — 비즈니스포스트"
+    "신규 8건, 실패 0건, 11초",
+    "[신규] 예산정책협의회 함께 참석하는 장동혁·오세훈 — 뉴스1",
+    "[신규] [단독] ‘친명 좌장’ 정성호도 미래대응기금에 우려 표명…“수입 변동·불확실성 커” — 시사저널",
+    "[신규] 조용호 오산시장, 국회 예결위 찾아 국비 324억 지원 요청 — 일간경기",
+    "[신규] 전진숙 의원, 국회 예결위 예산소위 입성해 5조 통합재정 확보 총력 — 뉴스워커"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42050623469,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42050623469",
-  "request_id": "cron-202611051500",
+  "run_id": 42171780990,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42171780990",
+  "request_id": "cron-202611060600",
   "trigger": "schedule",
-  "started_at": "2026-11-06T00:01:26+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-06T15:01:30+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 151건"
+      "summary": "검색어 5개에서 113건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 4건 (신규 4건) · 경기일보 1건, 국제신문 1건, 비즈니스포스트 1건"
+      "summary": "오늘 32건 (신규 8건) · 뉴스1 3건, 뉴스핌 3건, 뉴시스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-06T00:01:37+09:00"
+  "updated_at": "2026-11-06T15:01:42+09:00"
 }

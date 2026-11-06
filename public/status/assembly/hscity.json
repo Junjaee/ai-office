@@ -3,38 +3,38 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 전송 2건, 실패 0건, 44초",
+  "summary": "신규 3건, 전송 3건, 실패 0건, 1.2분",
   "counts": {
-    "new": 2,
-    "sent": 2,
+    "new": 3,
+    "sent": 3,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 2건, 전송 2건, 실패 0건, 44초",
-    "[신규]⭐ [입찰공고] 용역 수의견적 제출 공고[동탄대로(남측) 도로 재포장 공사 폐기물처리용역",
-    "[첨부실패] [화성시 동탄구 공고 제2026 522호]동탄대로(남측) 도로 재포장 공사.hwpx: SSLError",
-    "[신규]⭐ [입찰공고] 공사 수의견적 제출공고[동탄대로(남측) 도로 재포장 공사]"
+    "신규 3건, 전송 3건, 실패 0건, 1.2분",
+    "[신규] [고시] 동탄(1)택지개발지구 도시계획시설(공원) 실시계획(변경) 작성 고시[20",
+    "[신규] [입찰공고] 용역 입찰공고[동탄도시철도 건설공사(1단계) 실시설계 건설사업관리 용역]",
+    "[신규] [시정알림방] 동탄구청 식품위생법 및 식품 등의 표시광고에 관한 법률 위반 사실의 공표"
   ],
   "link": "",
-  "run_id": 41938122324,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41938122324",
-  "request_id": "cron-202611050000",
+  "run_id": 42133671813,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42133671813",
+  "request_id": "cron-202611060000",
   "trigger": "schedule",
-  "started_at": "2026-11-05T09:01:28+09:00",
-  "duration_sec": 44,
+  "started_at": "2026-11-06T09:01:20+09:00",
+  "duration_sec": 73,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 2건, 첨부 2건"
+      "summary": "신규 3건, 첨부 7건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "2건 발송, 무음 0건"
+      "summary": "3건 발송, 무음 0건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-05T09:02:13+09:00"
+  "updated_at": "2026-11-06T09:02:35+09:00"
 }
