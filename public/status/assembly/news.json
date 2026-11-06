@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 28건, 실패 0건, 12초",
+  "summary": "신규 15건, 실패 0건, 12초",
   "counts": {
-    "new": 28,
+    "new": 15,
     "failed": 0,
-    "total": 6906
+    "total": 6921
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 28건, 실패 0건, 12초",
-    "[신규] 이준석 \"미국 AI 속도조절 대응해야…이재명 정부 ‘배짱이’ 되지 말라\" — JTBC",
-    "[신규] 코스피 5000 붕괴에 야권 李 정부 총공세 … \"정부 무리한 개입의 결과\" — 뉴데일리",
-    "[신규] 국토교통부, 처음엔 분양가 25%로 입주, 내 집 지분은 차근차근! — 시민행정신문",
-    "[신규] 시민행정신문, ‘2026 대한민국 시민행정대상’ 추진…의정·시민공헌 등 8개 부문 — 시민행정신문"
+    "신규 15건, 실패 0건, 12초",
+    "[신규] [폴리Shorts] 장동혁, 국힘 대표로서 오세훈·한동훈·이준석·장동혁 연합 플랫폼 만들어야 #정국인터뷰 #윤상현 — 폴리뉴스 Polinews",
+    "[신규] “녹내장 치료된다” 전한길, 불법 광고 혐의로 공소청 송치 — 주간조선",
+    "[신규] [이슈] '한동훈 복당론' 다시 고개 '시끌시끌'…長 \"대여 투쟁 집중\" 吳 \"당내 공감대 필요\" 韓 \"결국 순리대로\" — 폴리뉴스 Polinews",
+    "[신규] 중진들이 꺼낸 ‘한동훈 복당론’ — 조선일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42191803615,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42191803615",
-  "request_id": "cron-202611060900",
+  "run_id": 42214427814,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42214427814",
+  "request_id": "cron-202611061200",
   "trigger": "schedule",
-  "started_at": "2026-11-06T18:01:31+09:00",
+  "started_at": "2026-11-06T21:01:28+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 85건"
+      "summary": "검색어 5개에서 79건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 60건 (신규 28건) · 시민행정신문 10건, 뉴시스 4건, 뉴스1 3건"
+      "summary": "오늘 75건 (신규 15건) · 시민행정신문 10건, 뉴시스 4건, 뉴스1 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-06T18:01:44+09:00"
+  "updated_at": "2026-11-06T21:01:41+09:00"
 }
