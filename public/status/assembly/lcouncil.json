@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 448건, 교체 0건, 실패 4건, 161.2분",
+  "summary": "신규 454건, 교체 0건, 실패 1건, 149.1분",
   "counts": {
-    "new": 448,
+    "new": 454,
     "replaced": 0,
-    "failed": 4,
-    "total": 6953
+    "failed": 1,
+    "total": 7591
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 448건, 교체 0건, 실패 4건, 161.2분",
-    "[신규] 서울특별시의회 제12대/제340회/행정자치위원회_제1차_2026-11-04.txt",
-    "[신규] 서울특별시의회 제10대/제298회/본회의_제5차_2020-12-22.txt",
-    "[신규] 서울특별시의회 제10대/제298회/도시안전건설위원회행정사무감사_2020-11-05.txt",
-    "[신규] 서울특별시의회 제10대/제298회/도시안전건설위원회행정사무감사_2020-11-09.txt"
+    "신규 454건, 교체 0건, 실패 1건, 149.1분",
+    "[신규] 서울특별시의회 제10대/제293회/교육위원회_제1차_2020-05-06.txt",
+    "[신규] 서울특별시의회 제10대/제293회/예산결산특별위원회_제1차_2020-05-07.txt",
+    "[신규] 서울특별시의회 제10대/제292회/본회의_제1차_2020-03-24.txt",
+    "[신규] 서울특별시의회 제10대/제292회/예산결산특별위원회_제1차_2020-03-24.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 42257674846,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42257674846",
-  "request_id": "cron-202611061700",
+  "run_id": 42394153201,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42394153201",
+  "request_id": "cron-202611071700",
   "trigger": "schedule",
-  "started_at": "2026-11-07T02:01:32+09:00",
-  "duration_sec": 9669,
+  "started_at": "2026-11-08T02:01:32+09:00",
+  "duration_sec": 8946,
   "tasks": [
     {
       "id": "scan",
       "status": "error",
-      "summary": "의회 3/5곳 확인, 회의록 6910건"
+      "summary": "의회 4/5곳 확인, 회의록 7504건"
     },
     {
       "id": "fetch",
-      "status": "error",
-      "summary": "신규 448건, 교체 0건"
+      "status": "done",
+      "summary": "신규 454건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-11-07T04:42:42+09:00"
+  "updated_at": "2026-11-08T04:30:39+09:00"
 }
