@@ -3,36 +3,37 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 12초",
+  "summary": "신규 2건, 실패 0건, 12초",
   "counts": {
-    "new": 1,
+    "new": 2,
     "failed": 0,
-    "total": 6980
+    "total": 6982
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 12초",
-    "[신규] 이준석, '학력 위조' 주장한 전한길 겨냥 \"처벌 원해⋯마음 바꿨다\" — 아이뉴스24"
+    "신규 2건, 실패 0건, 12초",
+    "[신규] 이준석 학력위조 허위 주장한 전한길, ‘기소의견 송치’ — 미디어오늘",
+    "[신규] 조용호 오산시장, 이광재 국회 예결위원장 만나 지역 현안 국비 324억 원 지원 건의 > 뉴스 — 더코리아"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42370588011,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42370588011",
-  "request_id": "cron-202611071200",
+  "run_id": 42384280075,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42384280075",
+  "request_id": "cron-202611071500",
   "trigger": "schedule",
-  "started_at": "2026-11-07T21:01:24+09:00",
+  "started_at": "2026-11-08T00:01:28+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 72건"
+      "summary": "검색어 5개에서 65건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 59건 (신규 1건) · 시민행정신문 9건, 이데일리 4건, 시사저널 3건"
+      "summary": "오늘 2건 (신규 2건) · 더코리아 1건, 미디어오늘 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-07T21:01:37+09:00"
+  "updated_at": "2026-11-08T00:01:42+09:00"
 }
