@@ -74,25 +74,36 @@ def send_message(token: str, chat_id: str, text: str, *, session=None, retries: 
     raise RuntimeError(f"텔레그램 전송 실패: {last}")
 
 
+def send_photo(token: str, chat_id: str, filename: str, data: bytes, **kw) -> dict:
+    """사진 보내기(sendPhoto) — 채팅에 바로 펼쳐 보인다(파일은 탭해야 열린다).
+
+    대신 텔레그램이 다시 압축하므로 작은 글자는 흐려질 수 있다. 한도 10MB, 긴 변 10000px.
+    """
+    return send_document(token, chat_id, filename, data, method="sendPhoto", field="photo", **kw)
+
+
 def send_document(token: str, chat_id: str, filename: str, data: bytes, *, caption: str = "",
-                  session=None, retries: int = 3, delay: float = 1.0, timeout: int = 120) -> dict:
+                  session=None, retries: int = 3, delay: float = 1.0, timeout: int = 120,
+                  method: str = "sendDocument", field: str = "document") -> dict:
     """파일 보내기(sendDocument). 텔레그램 봇 업로드 한도는 50MB.
 
     4xx(파일이 너무 큼·형식 거부 등)는 다시 해도 같으므로 바로 실패, 연결 문제·5xx 는 재시도.
+    method·field 를 바꾸면 사진으로도 보낸다(send_photo).
     """
     ids = _chat_ids(chat_id)
     if len(ids) > 1:
         return [send_document(token, c, filename, data, caption=caption, session=session,
-                              retries=retries, delay=delay, timeout=timeout) for c in ids][-1]
+                              retries=retries, delay=delay, timeout=timeout,
+                              method=method, field=field) for c in ids][-1]
     s = session or requests.Session()
-    url = API.format(token=token, method="sendDocument")
+    url = API.format(token=token, method=method)
     body = {"chat_id": chat_id}
     if caption:
         body["caption"] = caption[:1024]
     last = ""
     for attempt in range(retries):
         try:
-            res = s.post(url, data=body, files={"document": (filename, data)}, timeout=timeout)
+            res = s.post(url, data=body, files={field: (filename, data)}, timeout=timeout)
         except requests.exceptions.RequestException as exc:
             last = _hide(f"{type(exc).__name__}: {exc}", token)
             if attempt < retries - 1:

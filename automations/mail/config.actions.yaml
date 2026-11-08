@@ -20,6 +20,7 @@ committees:
 # 질의순서 한글 파일은 원본 양식 그대로 이미지로도 보낸다 (사용자 결정 2026-11-06).
 # 이름에 order_keyword 가 든 .hwp/.hwpx 가 대상. 변환은 mail.yml 의 다음 단계(LibreOffice)가 한다.
 order_keyword: "질의순서"
+order_send_as: "photo"         # photo = 채팅에 바로 보이게 / document = 파일로(글자가 더 선명)
 order_highlight: "이준석"      # 이 이름이 있는 표 행을 아래 색으로 채운다(빈 칸이면 칠하지 않음)
 order_color: "#FF7210"
 # 본문 글꼴(휴먼명조)을 드라이브에서 받아 서버에 설치한다 — 한컴 전용 글꼴이라 서버에 없다.

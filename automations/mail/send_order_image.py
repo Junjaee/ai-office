@@ -14,7 +14,7 @@ from pathlib import Path
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
-from telegram_bot import send_document, telegram_env  # noqa: E402
+from telegram_bot import send_document, send_photo, telegram_env  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from mail_hwp import convert  # noqa: E402
 
@@ -38,6 +38,8 @@ def main(argv: list[str]) -> int:
         print("질의순서 파일 없음")
         return 0
 
+    # 사진으로 보내면 채팅에 바로 펼쳐 보인다. 글자가 작아 흐리면 "document" 로 바꾼다
+    as_photo = (cfg.get("order_send_as") or "photo").strip() == "photo"
     highlight = (cfg.get("order_highlight") or "").strip()
     color = (cfg.get("order_color") or "#FF7210").strip()
     token, chat = ("", "")
@@ -56,8 +58,8 @@ def main(argv: list[str]) -> int:
         for img in images:
             if args.dry_run:
                 continue
-            send_document(token, chat, img.name, img.read_bytes(),
-                          timeout=int(cfg.get("timeout") or 60))
+            send = send_photo if as_photo else send_document
+            send(token, chat, img.name, img.read_bytes(), timeout=int(cfg.get("timeout") or 60))
             sent += 1
     print(f"질의순서 {len(files)}건, 이미지 전송 {sent}장" + (f", 실패 {failed}건" if failed else ""))
     return 1 if failed and not sent else 0

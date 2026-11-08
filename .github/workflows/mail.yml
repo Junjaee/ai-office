@@ -67,7 +67,7 @@ jobs:
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq libreoffice fonts-noto-cjk fonts-noto-cjk-extra
+          sudo apt-get install -y -qq libreoffice fonts-nanum fonts-noto-cjk fonts-noto-cjk-extra
           curl -sL -o /tmp/h2o.oxt https://github.com/ebandal/H2Orestart/releases/download/v0.7.2/H2Orestart.oxt
           unopkg add --shared /tmp/h2o.oxt || unopkg add /tmp/h2o.oxt
           python -m pip install --quiet pymupdf
@@ -89,10 +89,12 @@ jobs:
           <?xml version="1.0"?>
           <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
           <fontconfig>
+            <!-- 표 본문 글꼴. Noto Sans 는 폭이 넓어 긴 지역구(권향엽)에서 줄이 밀려
+                 한 쪽짜리가 두 쪽이 됐다(2026-11-06). 폭이 좁은 나눔고딕으로 되돌린다 -->
             <match target="pattern"><test name="family"><string>함초롬돋움</string></test>
-              <edit name="family" mode="assign" binding="strong"><string>Noto Sans CJK KR</string></edit></match>
+              <edit name="family" mode="assign" binding="strong"><string>NanumGothic</string></edit></match>
             <match target="pattern"><test name="family"><string>HCRDotum</string></test>
-              <edit name="family" mode="assign" binding="strong"><string>Noto Sans CJK KR</string></edit></match>
+              <edit name="family" mode="assign" binding="strong"><string>NanumGothic</string></edit></match>
             <match target="pattern"><test name="family"><string>함초롬바탕</string></test>
               <edit name="family" mode="assign" binding="strong"><string>Noto Serif CJK KR</string></edit></match>
             <match target="pattern"><test name="family"><string>굴림</string></test>
