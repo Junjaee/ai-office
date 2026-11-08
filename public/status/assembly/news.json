@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 14초",
+  "summary": "신규 9건, 실패 0건, 9초",
   "counts": {
-    "new": 14,
+    "new": 9,
     "failed": 0,
-    "total": 7003
+    "total": 7012
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 14초",
-    "[신규] 이준석, ‘찐윤’ 이철규·박성민과 해외출장 왜? — 주간경향",
-    "[신규] 김기현, 野구주류·이준석과 영국행 … 보수 통합 구심점 나서나 — 뉴데일리",
-    "[신규] 이준석 “전한길, 자존심 세우길래…선처하려다 마음 바꿔” — 한겨레",
-    "[신규] 김기현·이준석 나란히 영국행…당 안팎 보수통합론 불 지피나 — www.dt.co.kr"
+    "신규 9건, 실패 0건, 9초",
+    "[신규] 국힘 '한동훈 복당론' 다시 고개…보수 연대 셈법 엇갈려 — 뉴시스",
+    "[신규] 개혁신당 김철근, 서울 떠나 용인으로…‘경기 남부’ 집중 — 동아일보",
+    "[신규] [김창권 여의도 훈수]김철근의 ‘용인병 승부수’,개혁신당 경기남부에서 미래를 건다 — 뉴스비전e",
+    "[신규] 11월 9일 (월) 출연자 — 채널A"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42440889320,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42440889320",
-  "request_id": "cron-202611080300",
+  "run_id": 42452981444,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42452981444",
+  "request_id": "cron-202611080600",
   "trigger": "schedule",
-  "started_at": "2026-11-08T12:01:30+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-11-08T15:01:31+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 76건"
+      "summary": "검색어 5개에서 67건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 23건 (신규 14건) · 뉴시스 2건, 연합뉴스 2건, YTN 1건"
+      "summary": "오늘 32건 (신규 9건) · 뉴시스 3건, 연합뉴스 2건, YTN 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-08T12:01:44+09:00"
+  "updated_at": "2026-11-08T15:01:41+09:00"
 }
