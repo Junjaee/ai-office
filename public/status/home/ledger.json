@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 11월 11/8 지파이브연합의원 290,000원 (기타)"
+    "[추가] 2026년 11월 11/8 쿠팡이츠 34,000원 (식비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 42457026531,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42457026531",
-  "request_id": "cron-202611080700",
+  "run_id": 42473922333,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42473922333",
+  "request_id": "cron-202611081101",
   "trigger": "schedule",
-  "started_at": "2026-11-08T16:01:47+09:00",
+  "started_at": "2026-11-08T20:02:21+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-11-08T16:01:51+09:00"
+  "updated_at": "2026-11-08T20:02:25+09:00"
 }
