@@ -3,37 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 전송 1건, 실패 0건, 40초",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 12초",
   "counts": {
-    "new": 2,
-    "sent": 1,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 2건, 전송 1건, 실패 0건, 40초",
-    "[신규]⭐ [일반공고] 2026년 민방위 사이버교육(보충2차교육) 훈련 통지서 반송에 따른 공시",
-    "[신규] [입찰공고] 취소공고[동탄대로(남측) 도로 재포장 공사]"
+    "신규 0건, 전송 0건, 실패 0건, 12초"
   ],
   "link": "",
-  "run_id": 42315561269,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42315561269",
-  "request_id": "cron-202611070000",
+  "run_id": 42427802428,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42427802428",
+  "request_id": "cron-202611080000",
   "trigger": "schedule",
-  "started_at": "2026-11-07T09:01:23+09:00",
-  "duration_sec": 40,
+  "started_at": "2026-11-08T09:01:37+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 2건, 첨부 2건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "1건 발송, 무음 1건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-07T09:02:04+09:00"
+  "updated_at": "2026-11-08T09:01:50+09:00"
 }
