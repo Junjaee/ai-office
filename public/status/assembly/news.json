@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 12초",
+  "summary": "신규 3건, 실패 0건, 12초",
   "counts": {
-    "new": 7,
+    "new": 3,
     "failed": 0,
-    "total": 7033
+    "total": 7036
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 12초",
-    "[신규] 김기현·이준석 16일 영국 동행…보수진영 소통 계기 주목 — 경북일보",
-    "[신규] 고용노동부, 육아휴직, 당일 신청할 수 있습니다! — 시민행정신문",
-    "[신규] “매달 내던 구독료 아꼈다”…나만의 포토샵·오피스, 저작권 괜찮나 — 경기일보",
-    "[신규] 국힘, 당정 '미래대응기금 통한 소방지원'에 \"秋 망언 물타기용\" — 연합뉴스"
+    "신규 3건, 실패 0건, 12초",
+    "[신규] 김기현, 보수통합론속 이준석과 영국 출장 '관심' — 울산신문",
+    "[신규] 국힘 \"미래대응기금, 李정부 쌈짓돈\"…소방지원엔 \"秋 망언 물타기\"(종합) — 뉴시스",
+    "[신규] 국힘 “소방 지원은 당연한 정부 책무…미래대응기금 활용 땜질 처방” — 매일경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42478245281,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42478245281",
-  "request_id": "cron-202611081200",
+  "run_id": 42492606471,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42492606471",
+  "request_id": "cron-202611081500",
   "trigger": "schedule",
-  "started_at": "2026-11-08T21:01:21+09:00",
+  "started_at": "2026-11-09T00:01:28+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 79건"
+      "summary": "검색어 5개에서 81건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 53건 (신규 7건) · 뉴시스 3건, 연합뉴스 3건, 뉴스1 2건"
+      "summary": "오늘 3건 (신규 3건) · 뉴시스 1건, 매일경제 1건, 울산신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-08T21:01:35+09:00"
+  "updated_at": "2026-11-09T00:01:40+09:00"
 }
