@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 299건, 교체 0건, 실패 4건, 140.2분",
+  "summary": "신규 450건, 교체 0건, 실패 2건, 167.8분",
   "counts": {
-    "new": 299,
+    "new": 450,
     "replaced": 0,
-    "failed": 4,
-    "total": 4483
+    "failed": 2,
+    "total": 8041
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 299건, 교체 0건, 실패 4건, 140.2분",
-    "[실패] 서울특별시의회 제298회 본회의 제5차(2020.12.22 화요일): [Errno 32] Broken pipe",
-    "[신규] 서울특별시의회 제10대/제298회/운영위원회_제1차_2020-11-02.txt",
-    "[신규] 서울특별시의회 제10대/제298회/운영위원회_제2차_2020-12-02.txt",
-    "[신규] 서울특별시의회 제10대/제298회/운영위원회_제3차_2020-12-21.txt"
+    "신규 450건, 교체 0건, 실패 2건, 167.8분",
+    "[신규] 서울특별시의회 제10대/제290회/기획경제위원회행정사무감사_2019-11-14.txt",
+    "[신규] 서울특별시의회 제10대/제290회/기획경제위원회행정사무감사_2019-11-15.txt",
+    "[신규] 서울특별시의회 제10대/제290회/기획경제위원회행정사무감사_2019-11-15.txt",
+    "[신규] 서울특별시의회 제10대/제290회/환경수자원위원회행정사무감사_2019-11-04.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 42070363128,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42070363128",
-  "request_id": "cron-202611051700",
+  "run_id": 42502775881,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42502775881",
+  "request_id": "cron-202611081700",
   "trigger": "schedule",
-  "started_at": "2026-11-06T02:01:31+09:00",
-  "duration_sec": 8414,
+  "started_at": "2026-11-09T02:01:28+09:00",
+  "duration_sec": 10067,
   "tasks": [
     {
       "id": "scan",
       "status": "error",
-      "summary": "의회 2/5곳 확인, 회의록 4454건"
+      "summary": "의회 4/5곳 확인, 회의록 7955건"
     },
     {
       "id": "fetch",
       "status": "error",
-      "summary": "신규 299건, 교체 0건"
+      "summary": "신규 450건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-11-06T04:21:46+09:00"
+  "updated_at": "2026-11-09T04:49:17+09:00"
 }

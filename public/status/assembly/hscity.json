@@ -3,38 +3,35 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 전송 3건, 실패 0건, 1.2분",
+  "summary": "신규 0건, 전송 0건, 실패 0건, 12초",
   "counts": {
-    "new": 3,
-    "sent": 3,
+    "new": 0,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 3건, 전송 3건, 실패 0건, 1.2분",
-    "[신규] [고시] 동탄(1)택지개발지구 도시계획시설(공원) 실시계획(변경) 작성 고시[20",
-    "[신규] [입찰공고] 용역 입찰공고[동탄도시철도 건설공사(1단계) 실시설계 건설사업관리 용역]",
-    "[신규] [시정알림방] 동탄구청 식품위생법 및 식품 등의 표시광고에 관한 법률 위반 사실의 공표"
+    "신규 0건, 전송 0건, 실패 0건, 12초"
   ],
   "link": "",
-  "run_id": 42133671813,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42133671813",
-  "request_id": "cron-202611060000",
+  "run_id": 42427802428,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42427802428",
+  "request_id": "cron-202611080000",
   "trigger": "schedule",
-  "started_at": "2026-11-06T09:01:20+09:00",
-  "duration_sec": 73,
+  "started_at": "2026-11-08T09:01:37+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 3건, 첨부 7건"
+      "summary": "신규 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "3건 발송, 무음 0건"
+      "summary": "0건 발송"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-06T09:02:35+09:00"
+  "updated_at": "2026-11-08T09:01:50+09:00"
 }
