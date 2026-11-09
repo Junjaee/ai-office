@@ -49,6 +49,9 @@ export type AutomationDef = {
   inputs?: Record<string, string>;
   /** "매일 09:00" 같은 예약 설명. 있으면 예약 밀림 배너 대상 */
   schedule?: string;
+  /** 시각이 아니라 '일이 생겼을 때' 깨어나는 자동화만 적는다 — 흐름 화면의 묶음·문구가 된다
+   *  (예: "새 상임위 메일이 오면"). 깨우는 쪽은 Worker(worker/gmail.ts·webcast.ts) */
+  wake?: string;
   /** 검토 칸: 자동화가 public/review/<ws>/<id>.json 에 후보를 올리고, 사용자가 사이트에서 골라 만들게 한다 */
   review?: { kind: "topics"; title?: string };
   /** 이 PC 에서 도는 자동화(GitHub 워크플로 없음, 시작 단추 없음). 상태는 자동화가 `/api/live` 로 보내는 살아있음 신호(작업별)로 정한다 */

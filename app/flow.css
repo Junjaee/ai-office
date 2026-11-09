@@ -1,0 +1,44 @@
+/* 자동화 흐름 화면(/<사무실>/flow) — app/office/FlowBoard.tsx.
+   색 토큰은 globals.css, 상태색(--s-*)과 pill 은 대시보드와 같은 것을 쓴다. */
+
+.flow { display: flex; flex-direction: column; gap: 16px; }
+.flow-group { gap: 14px; }
+.flow-rows { display: grid; gap: 12px; }
+
+.flow-row { padding: 14px 16px; border: 1px solid var(--d-line); border-radius: 14px; background: var(--d-line-soft); }
+.flow-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 12px; }
+.flow-head b { font-size: 15px; font-weight: 700; }
+.flow-when { color: var(--d-soft); font-size: 13px; }
+
+.flow-steps { display: flex; flex-wrap: wrap; gap: 20px; margin: 0; padding: 0; list-style: none; }
+.flow-step {
+  position: relative; display: flex; min-width: 150px; max-width: 260px; flex: 1 1 auto; flex-direction: column; gap: 3px;
+  padding: 10px 14px; border: 1px solid var(--d-line-strong); border-radius: 12px; background: #fff;
+}
+.flow-step b { font-size: 14px; font-weight: 500; }
+.flow-step span { color: var(--d-faint); font-size: 12px; }
+
+/* 단계 사이 화살표 — 칸 틈(20px)에 꺾쇠로. 줄이 바뀌면 "다음 줄로 이어짐"으로 읽힌다 */
+.flow-step:not(:last-child)::after {
+  content: ""; position: absolute; right: -15px; top: calc(50% - 5px); width: 9px; height: 9px;
+  border-top: 2px solid var(--d-faint); border-right: 2px solid var(--d-faint);
+  transform: rotate(45deg);
+}
+
+.flow-step.working { border-color: var(--s-run); background: var(--s-run-bg); }
+.flow-step.working span { color: var(--s-run); }
+.flow-step.done { border-color: var(--s-done); background: var(--s-done-bg); }
+.flow-step.done span { color: var(--s-done); }
+.flow-step.error { border-color: var(--s-err); background: var(--s-err-bg); }
+.flow-step.error span { color: var(--s-err); }
+.flow-step.waiting { background: var(--s-idle-bg); }
+.flow-step.planned { border-style: dashed; background: transparent; }
+
+/* 좁은 화면에서는 위에서 아래로 — 화살표도 아래를 가리킨다 */
+@media (max-width: 680px) {
+  .flow-steps { flex-direction: column; gap: 18px; }
+  .flow-step { max-width: none; }
+  .flow-step:not(:last-child)::after {
+    right: auto; left: calc(50% - 5px); top: auto; bottom: -17px; transform: rotate(135deg);
+  }
+}

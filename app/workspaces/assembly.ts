@@ -160,20 +160,20 @@ export const AUTOMATIONS: AutomationDef[] = [
     ] },
   // 5분마다 돌지만 schedule 은 비워 둔다 — 새 메일이 없는 실행은 상태 파일을 쓰지 않아
   // "예약 놓침" 으로 잘못 보일 수 있다(다음 실행 문구는 config.actions.yaml 의 next_run).
-  { id: "mail", dept: "qa", name: "상임위 메일", workflow: "mail.yml",
+  { id: "mail", dept: "qa", name: "상임위 메일", workflow: "mail.yml", wake: "새 상임위 메일이 오면",
     tasks: [
       { id: "check", name: "새 메일 확인", role: "재경위·예결위에서 온 새 메일 찾기" },
       { id: "notify", name: "알림·정리", role: "텔레그램으로 알리고 지메일 라벨로 정리" },
     ] },
   // 회의 생중계 동안만 돈다(Worker 가 캘린더를 보고 깨움) — 예약 없음. 카드 "다음 실행"은 캘린더의 다음 회의(app/status.ts)
-  { id: "speech", dept: "qa", name: "회의 발언 요약", workflow: "speech.yml",
+  { id: "speech", dept: "qa", name: "회의 발언 요약", workflow: "speech.yml", wake: "530호 회의 일정이 있으면",
     tasks: [
       { id: "listen", name: "자막 수신", role: "생중계 자막을 받아 위원별로 나누기" },
       { id: "summarize", name: "발언 요약", role: "위원별 질의·답변을 주제별로 요약" },
       { id: "notify", name: "알림 전송", role: "10명 묶음·이준석 단독으로 텔레그램 전송" },
     ] },
   // 새 자료가 수신함에 들어왔을 때만 돈다(상임위 메일 실행이 이어서 깨운다) — 예약 없음
-  { id: "sort", dept: "review", name: "수신함 정리", workflow: "sort.yml",
+  { id: "sort", dept: "review", name: "수신함 정리", workflow: "sort.yml", wake: "수신함에 새 자료가 들어오면",
     tasks: [
       { id: "plan", name: "자료 분류", role: "파일 내용을 읽고 어느 회의 폴더인지 정하기" },
       { id: "move", name: "폴더 정리", role: "정한 폴더로 옮기고 기록 남기기" },

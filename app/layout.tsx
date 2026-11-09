@@ -4,6 +4,7 @@ import "./dashboard.css";
 import "./review.css";
 import "./live.css";
 import "./stock.css";
+import "./flow.css";
 
 export const metadata: Metadata = {
   title: "AI 오피스",

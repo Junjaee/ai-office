@@ -10,6 +10,7 @@ import { useLiveStatus } from "../status";
 import { useHistory } from "../history";
 import { HISTORY_START, bucketsText, clampDate, dayStats, historyMessage, historyTitle, hourBuckets, runsTitle, shiftDate } from "../history-rules";
 import ReviewPanel from "./ReviewPanel";
+import { Icon, Pill } from "./Pill";
 
 const ws = WORKSPACE;
 const COMPANY = ws.company;
@@ -27,41 +28,6 @@ function newRequestId() {
 const SUMMARY_KEYS = ["running", "done", "idle", "error"] as const;
 /** 이력 표에 처음 보이는 줄 수 (가계부처럼 하루 수백 번 도는 자동화가 있어 나머지는 "더 보기") */
 const HISTORY_FIRST = 30;
-
-// 상태는 색만으로 구분하지 않는다 — 아이콘 + 글자를 함께 쓴다 (24×24 선 아이콘의 path)
-const ICONS = {
-  running: "M8 5.5v13l10.5-6.5z",
-  done: "M5 12.5l4.5 4.5L19 7.5",
-  idle: "M9 6v12M15 6v12",
-  error: "M12 4l9 16H3zM12 10v4M12 17.2v.3",
-  planned: "M12 7v5l3 2M12 3a9 9 0 100 18 9 9 0 000-18",
-  runs: "M4 19V9M10 19V5M16 19v-7M21 19H3",
-  play: "M8 5.5v13l10.5-6.5z",
-  pulse: "M3 12h4l3-7 4 14 3-7h4",
-  prev: "M15 5l-7 7 7 7",
-  next: "M9 5l7 7-7 7",
-  info: "M12 11v6M12 7.5v.3M12 3a9 9 0 100 18 9 9 0 000-18",
-} as const;
-/** 상태 pill 의 CSS 이름(waiting·working·done·error·planned) → 아이콘 */
-const CLASS_ICON: Record<string, keyof typeof ICONS> = { working: "running", done: "done", waiting: "idle", error: "error", planned: "planned" };
-
-function Icon({ name, size = 14, fill = false }: { name: keyof typeof ICONS; size?: number; fill?: boolean }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={fill ? "currentColor" : "none"} stroke={fill ? "none" : "currentColor"} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d={ICONS[name]} />
-    </svg>
-  );
-}
-
-function Pill({ cls, text }: { cls: string; text: string }) {
-  const icon = CLASS_ICON[cls];
-  return (
-    <span className={`status-pill ${cls}`}>
-      {icon ? <Icon name={icon} size={13} /> : null}
-      {text}
-    </span>
-  );
-}
 
 export default function OfficeApp() {
   const live = useLiveStatus(ws);
@@ -202,6 +168,10 @@ export default function OfficeApp() {
               </a>
             ))}
           </nav>
+          <a className="btn btn-ghost flow-link" href={`/${ws.id}/flow`}>
+            <Icon name="flow" size={15} />
+            흐름 보기
+          </a>
           <div className="checked">
             <i className={`check-dot ${live.checkedAt ? "on" : ""}`} aria-hidden="true" />
             {live.checkedAt ? `마지막 확인 ${live.checkedAt.toLocaleTimeString("ko-KR")}` : "상태 확인 중…"}
