@@ -66,7 +66,11 @@ def _paint(img, box, rgb: tuple[int, int, int], scale: float) -> None:
 
 
 def to_images(pdf: Path, out_dir: Path, highlight: str = "", color: str = "#FF7210") -> list[Path]:
-    """PDF → 쪽마다 PNG. highlight 이름이 있는 행은 color 로 채운다."""
+    """PDF → 쪽마다 PNG. highlight 이름이 있는 행은 color 로 채운다.
+
+    글자가 없는 쪽은 건너뛴다. 한글 글꼴 폭이 조금만 달라도 마지막 줄이 밀려
+    빈 쪽이 하나 더 생기는데(2026-11-09), 그 하얀 장까지 보내지 않으려는 것이다.
+    """
     import fitz
     from PIL import Image
 
@@ -76,12 +80,14 @@ def to_images(pdf: Path, out_dir: Path, highlight: str = "", color: str = "#FF72
     out = []
     for i in range(len(doc)):
         page = doc[i]
+        if not page.get_text().strip():
+            continue
         boxes = row_boxes(page, highlight) if highlight else []
         pix = page.get_pixmap(dpi=DPI)
         img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
         for box in boxes:
             _paint(img, box, rgb, scale)
-        path = out_dir / f"{pdf.stem}-{i + 1}.png"
+        path = out_dir / f"{pdf.stem}-{len(out) + 1}.png"
         img.save(path)
         out.append(path)
     return out

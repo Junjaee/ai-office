@@ -115,3 +115,19 @@ def test_convert_skips_when_name_missing(tmp_path, monkeypatch):
     # 칠할 이름을 안 주면 찾지 않고 전부 보낸다
     monkeypatch.setattr(mail_hwp, "has_name", lambda p, name: pytest.fail("찾지 말아야 한다"))
     assert mail_hwp.convert(tmp_path / "질의순서.hwp", tmp_path) == [tmp_path / "1.png"]
+
+
+def test_to_images_skips_blank_page(tmp_path):
+    """글자가 밀려 생긴 빈 쪽은 보내지 않는다 (2026-11-09)."""
+    fitz = pytest.importorskip("fitz")
+    pytest.importorskip("PIL")
+    from mail_hwp import to_images
+
+    doc = fitz.open()
+    doc.new_page().insert_text((72, 100), "question order")   # 1쪽: 글자 있음
+    doc.new_page()                                            # 2쪽: 밀려서 생긴 빈 쪽
+    pdf = tmp_path / "질의순서.pdf"
+    doc.save(pdf)
+
+    images = to_images(pdf, tmp_path)
+    assert [p.name for p in images] == ["질의순서-1.png"]
