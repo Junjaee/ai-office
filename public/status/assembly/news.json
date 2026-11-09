@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 37건, 실패 0건, 9초",
+  "summary": "신규 23건, 실패 0건, 12초",
   "counts": {
-    "new": 37,
+    "new": 23,
     "failed": 0,
-    "total": 7174
+    "total": 7197
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 37건, 실패 0건, 9초",
-    "[신규] 개혁신당 '나랏돈 50조 찾기'…조달가 차액 1천587억 발굴 — 연합뉴스, 연합뉴스 한민족센터",
-    "[신규] 개혁신당 '나랏돈 50조 찾기' … 국민 1169명, 의심 차액 1587억원 발굴 — 뉴데일리",
-    "[신규] 개혁신당 ‘나랏돈 50조 찾기’ 해커톤 시상식…AI로 335억 찾은 25세 ‘대상’ — 조선일보",
-    "[신규] 개혁신당 ‘나랏돈 50조 찾기’에 국민 1169명 참여…25세 사회초년생 대상 수상 — 문화일보"
+    "신규 23건, 실패 0건, 12초",
+    "[신규] 정치는 따로, 정책은 함께…보수 연대 물꼬 트이나 — 민주신문",
+    "[신규] 이재명 대통령, ‘나르바예바’ 우즈베키스탄 상원의장 접견 — 시민행정신문",
+    "[신규] 산림청, 제20회 전국 숲해설경연대회 개최 — 시민행정신문",
+    "[신규] 이재명 대통령, 소방공무원 격려 오찬 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42590114788,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42590114788",
-  "request_id": "cron-202611090900",
+  "run_id": 42613505154,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42613505154",
+  "request_id": "cron-202611091200",
   "trigger": "schedule",
-  "started_at": "2026-11-09T18:01:30+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-11-09T21:01:27+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 159건"
+      "summary": "검색어 5개에서 158건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 141건 (신규 37건) · 시민행정신문 12건, 뉴스1 10건, 뉴시스 9건"
+      "summary": "오늘 164건 (신규 23건) · 시민행정신문 16건, 뉴스1 11건, 뉴시스 9건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-09T18:01:40+09:00"
+  "updated_at": "2026-11-09T21:01:40+09:00"
 }
