@@ -1,36 +1,38 @@
 {
   "name": "회의 발언 요약",
   "dept": "qa",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "국회 사이트에 연결할 수 없어요",
-  "counts": {},
+  "summary": "오늘 질의 없음 — 예결위 질의순서 25명에 없음",
+  "counts": {
+    "order": 25
+  },
   "next_run": "캘린더의 다음 재경위·예결위 회의",
   "log": [],
   "link": "",
-  "run_id": 42057799168,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42057799168",
-  "request_id": "req-speech-first",
-  "trigger": "manual",
-  "started_at": "2026-11-06T00:43:50+09:00",
-  "duration_sec": 12,
+  "run_id": 42601640110,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42601640110",
+  "request_id": "cron-202611091032",
+  "trigger": "schedule",
+  "started_at": "2026-11-09T19:33:47+09:00",
+  "duration_sec": 2,
   "tasks": [
     {
       "id": "listen",
-      "status": "error",
-      "summary": "ConnectionError"
+      "status": "done",
+      "summary": "오늘 질의 없음"
     },
     {
       "id": "summarize",
       "status": "done",
-      "summary": ""
+      "summary": "건너뜀"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": ""
+      "summary": "건너뜀"
     }
   ],
   "id": "speech",
-  "updated_at": "2026-11-06T00:44:02+09:00"
+  "updated_at": "2026-11-09T19:33:49+09:00"
 }

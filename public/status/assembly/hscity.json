@@ -3,35 +3,38 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 전송 0건, 실패 0건, 12초",
+  "summary": "신규 2건, 전송 2건, 실패 0건, 36초",
   "counts": {
-    "new": 0,
-    "sent": 0,
+    "new": 2,
+    "sent": 2,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 0건, 전송 0건, 실패 0건, 12초"
+    "신규 2건, 전송 2건, 실패 0건, 36초",
+    "[신규]⭐ [입찰공고] 용역 수의견적 제출 공고[동탄대로(남측) 도로 재포장 공사 폐기물처리용역",
+    "[첨부실패] [화성시 동탄구 공고 제2026 533호]동탄대로(남측) 도로 재포장 공사.hwpx: SSLError",
+    "[신규]⭐ [입찰공고] 공사 수의견적 제출 공고[동탄대로(남측) 도로 재포장 공사]"
   ],
   "link": "",
-  "run_id": 42427802428,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42427802428",
-  "request_id": "cron-202611080000",
+  "run_id": 42537902775,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42537902775",
+  "request_id": "cron-202611090000",
   "trigger": "schedule",
-  "started_at": "2026-11-08T09:01:37+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-09T09:01:32+09:00",
+  "duration_sec": 36,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 0건"
+      "summary": "신규 2건, 첨부 2건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "0건 발송"
+      "summary": "2건 발송, 무음 0건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-08T09:01:50+09:00"
+  "updated_at": "2026-11-09T09:02:09+09:00"
 }
