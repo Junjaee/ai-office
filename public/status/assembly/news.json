@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 12초",
+  "summary": "신규 20건, 실패 0건, 13초",
   "counts": {
-    "new": 4,
+    "new": 20,
     "failed": 0,
-    "total": 7043
+    "total": 7063
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 12초",
-    "[신규] 국회 예결위, 오늘부터 내년 예산안 경제부처 부별 심사 돌입 — 연합뉴스",
-    "[신규] 국회 예결위, 예산안 부별 심사 돌입…12월 2일 법정 시한 지킬지 관심 — www.dt.co.kr",
-    "[신규] 예결위 부처별 심사 착수…與 \"820조 예산 사수\" vs 국힘 \"靑 특활비 등 27조 삭감\" — 뉴시스",
-    "[신규] 국회 예결위 부별심사 돌입…미래대응기금 최대 쟁점 — 동방일보"
+    "신규 20건, 실패 0건, 13초",
+    "[신규] 한동훈 복당론 김빼는 이준석···‘국민의힘 접점’ 늘리면서 셈법 복잡해져 — 경향신문",
+    "[신규] “현금 쌓아놓고 34억 체납 지광(국제신문 대주주), 국세청 나서라”(종합) — 국제신문",
+    "[신규] 농림축산식품부, 내 농지의 기상재해 위험, 매일 아침 모바일로 확인하세요! — 시민행정신문",
+    "[신규] 테디베어와 함께 활짝 웃는 아이들... 선수 가족을 배려한 'KPGA 투어챔피언십 in Jeju' — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42522995257,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42522995257",
-  "request_id": "cron-202611082100",
+  "run_id": 42537898869,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42537898869",
+  "request_id": "cron-202611090000",
   "trigger": "schedule",
-  "started_at": "2026-11-09T06:01:33+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-09T09:01:24+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 80건"
+      "summary": "검색어 5개에서 88건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 4건) · 뉴시스 2건, www.dt.co.kr 1건, 강원일보 1건"
+      "summary": "오늘 30건 (신규 20건) · 뉴시스 3건, 동방일보 2건, 시민행정신문 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-09T06:01:46+09:00"
+  "updated_at": "2026-11-09T09:01:38+09:00"
 }
