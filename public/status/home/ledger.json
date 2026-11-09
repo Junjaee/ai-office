@@ -14,14 +14,14 @@
   "next_run": "6시간마다",
   "log": [
     "신규 1건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 3초",
-    "[추가] 2026년 11월 11/9 구글페이먼트코리 2,200원 (생활비)"
+    "[추가] 2026년 11월 11/9 (유)농업회사법 36,870원 (생활비)"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 42588310950,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42588310950",
-  "request_id": "cron-202611090845",
+  "run_id": 42590246162,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42590246162",
+  "request_id": "cron-202611090901",
   "trigger": "schedule",
-  "started_at": "2026-11-09T17:46:31+09:00",
+  "started_at": "2026-11-09T18:02:37+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-11-09T17:46:35+09:00"
+  "updated_at": "2026-11-09T18:02:40+09:00"
 }
