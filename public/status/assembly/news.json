@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 23건, 실패 0건, 12초",
+  "summary": "신규 12건, 실패 0건, 12초",
   "counts": {
-    "new": 23,
+    "new": 12,
     "failed": 0,
-    "total": 7197
+    "total": 7030
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 23건, 실패 0건, 12초",
-    "[신규] 정치는 따로, 정책은 함께…보수 연대 물꼬 트이나 — 민주신문",
-    "[신규] 이재명 대통령, ‘나르바예바’ 우즈베키스탄 상원의장 접견 — 시민행정신문",
-    "[신규] 산림청, 제20회 전국 숲해설경연대회 개최 — 시민행정신문",
-    "[신규] 이재명 대통령, 소방공무원 격려 오찬 — 시민행정신문"
+    "신규 12건, 실패 0건, 12초",
+    "[신규] 이준석 주도 ‘나랏돈 50조 찾기’ 해커톤 성과 어땠나 | — 공공뉴스",
+    "[신규] 행정안전부, '2027년 생활권 보행환경 종합정비사업' 대상지 5곳 선정 — 시민행정신문",
+    "[신규] 배경훈 부총리, 국제전기통신연합 전권회의에서 국제 디지털 협력 강화 — 시민행정신문",
+    "[신규] 산림청, 소나무재선충병 전국 확산 차단 위해 소나무류 이동 특별단속 실시 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42613505154,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42613505154",
-  "request_id": "cron-202611091200",
+  "run_id": 42640308606,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42640308606",
+  "request_id": "cron-202611091500",
   "trigger": "schedule",
-  "started_at": "2026-11-09T21:01:27+09:00",
+  "started_at": "2026-11-10T00:01:26+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 158건"
+      "summary": "검색어 5개에서 160건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 164건 (신규 23건) · 시민행정신문 16건, 뉴스1 11건, 뉴시스 9건"
+      "summary": "오늘 12건 (신규 12건) · 시민행정신문 3건, JTBC 1건, 공공뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-09T21:01:40+09:00"
+  "updated_at": "2026-11-10T00:01:39+09:00"
 }
