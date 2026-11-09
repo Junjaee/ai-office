@@ -157,6 +157,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
 
     if not mails:
         tasks["notify"] = (True, "보낼 것 없음")
+        tasks["order"] = (True, "질의순서 없음")
         # 5분마다 도는 자동화라, 새 메일이 없으면 상태 파일을 커밋하지 않는다
         # (커밋 288개/일 방지). 카드는 마지막으로 메일을 처리한 때를 계속 보여 준다.
         return {"counts": {"new": 0, "sent": 0}, "lines": lines, "tasks": tasks, "skip_report": True}
@@ -169,6 +170,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
         if files:
             print(f"─── 첨부 {files}개를 텔레그램·드라이브로 보냅니다(시험 실행이라 하지 않음) ───")
         tasks["notify"] = (True, "시험 실행 — 보내지 않음")
+        tasks["order"] = (True, "시험 실행 — 보내지 않음")
         return {"counts": {"new": len(mails), "sent": 0}, "lines": lines, "tasks": tasks}
 
     # 알림을 먼저 보내고 라벨을 붙인다 — 보내기에 실패하면 라벨이 안 붙어 다음 실행에서 다시 시도한다
@@ -193,6 +195,11 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
             status = getattr(getattr(exc, "resp", None), "status", "?")
             progress(f"라벨 정리 실패 HTTP {status}")
     progress(f"라벨 정리 {filed}건")
+
+    # 질의순서 이미지는 워크플로 다음 단계에서 끝난다 — 여기서는 몇 건인지만 적고,
+    # send_order_image.py 가 report_status.update_task 로 결과를 덮어쓴다
+    orders = att_result.get("orders", 0)
+    tasks["order"] = (True, f"질의순서 {orders}건 — 이미지로 바꾸는 중" if orders else "질의순서 없음")
 
     note = f"알림 {len(mails)}건, 정리 {filed}건"
     if files:

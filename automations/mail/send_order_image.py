@@ -14,6 +14,7 @@ from pathlib import Path
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
+from report_status import update_task  # noqa: E402
 from telegram_bot import send_document, send_photo, telegram_env  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from mail_hwp import convert  # noqa: E402
@@ -65,9 +66,17 @@ def main(argv: list[str]) -> int:
             send = send_photo if as_photo else send_document
             send(token, chat, img.name, img.read_bytes(), timeout=int(cfg.get("timeout") or 60))
             sent += 1
-    print(f"질의순서 {len(files)}건, 이미지 전송 {sent}장"
-          + (f", 건너뜀 {skipped}건" if skipped else "")
-          + (f", 실패 {failed}건" if failed else ""))
+    note = f"질의순서 {len(files)}건, 이미지 {sent}장"
+    if skipped:
+        note += f", {highlight} 없어 건너뜀 {skipped}건"
+    if failed:
+        note += f", 변환 실패 {failed}건"
+    print(note)
+    # 사이트의 직원 "질의순서 이미지" 를 이 결과로 바꾼다 — run_mail 이 이미 상태 파일을 썼다
+    repo = (cfg.get("office_repo") or "").strip()
+    if repo and not args.dry_run:
+        update_task(repo, automation_id="mail", task_id="order", ok=not failed, summary=note,
+                    workspace=cfg.get("office_workspace", "assembly"))
     return 1 if failed and not sent else 0
 
 

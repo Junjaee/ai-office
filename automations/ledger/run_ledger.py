@@ -312,6 +312,21 @@ def cancel_transaction(sheets, tab_name, sheet_id, txn):
     return target
 
 
+def safe_lines(per_tab, dry_run=False):
+    # 상태 파일·실행 일지에 남길 줄 — 상호·금액·날짜 없이 탭별 건수만 (저장소가 공개라서. 본보기: mail_gmail.safe_lines).
+    # 자세한 내역은 가계부 시트에서 본다.
+    out = []
+    for tab, c in per_tab.items():
+        if dry_run:
+            out.append(f"[예정] {tab} 추가 {c.get('add', 0)}건 · 취소 {c.get('cancel', 0)}건")
+            continue
+        if c.get("add"):
+            out.append(f"[추가] {tab} {c['add']}건")
+        if c.get("cancel"):
+            out.append(f"[취소삭제] {tab} {c['cancel']}건")
+    return out
+
+
 def month_key(month, today):
     y = today.year - 1 if (today.month == 1 and month == 12) else today.year
     return f"{y}-{month:02d}"
@@ -332,7 +347,10 @@ def do_work(cfg, args, progress):
 
     today = dt.date.today()
     added = removed = skipped = created = 0
-    lines, tabs, waiting = [], None, {}
+    lines, tabs, waiting, per_tab = [], None, {}, {}
+
+    def count(tab, kind):
+        per_tab.setdefault(tab, {"add": 0, "cancel": 0})[kind] += 1
 
     def mark_done(mid):
         gmail.users().messages().modify(
@@ -371,27 +389,27 @@ def do_work(cfg, args, progress):
                 mark_pending(mid)
             continue
         if args.dry_run:
-            lines.append(f"[예정:{txn['kind']}] {txn['month']}/{txn['day']} "
-                         f"{txn['detail']} {txn['amount']:,}원 ({txn['card']})")
             if txn["kind"] == "cancel":
                 removed += 1
+                count(tab, "cancel")
             else:
                 added += 1
+                count(tab, "add")
             continue
         sid = tabs[tab]
         if txn["kind"] == "cancel":
             row = cancel_transaction(sheets, tab, sid, txn)
             if row:
                 removed += 1
-                lines.append(f"[취소삭제] {tab} {txn['detail']} {txn['amount']:,}원")
+                count(tab, "cancel")
         else:
             insert_transaction(sheets, tab, sid, txn)
             added += 1
-            lines.append(f"[추가] {tab} {txn['month']}/{txn['day']} "
-                         f"{txn['detail']} {txn['amount']:,}원 ({classify_item(txn['detail'])})")
+            count(tab, "add")
         mark_done(mid)
         progress(f"기록 {added + removed}건")
 
+    lines += safe_lines(per_tab, args.dry_run)
     wait_n = sum(waiting.values())
     for tab, n in waiting.items():
         lines.append(f"[대기] 시트에 '{tab}' 탭이 없어 {n}건 보류 — 탭을 만들면 다음 실행 때 들어가요")

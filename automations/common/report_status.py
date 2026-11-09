@@ -133,10 +133,46 @@ def report(repo: str | Path, *, automation_id: str, name: str, dept: str, ok: bo
     ), workspace=workspace)
     # 영구 일지: 상태 파일과 같은 커밋에 한 줄 (자동화별 파일이라 동시에 끝나도 안 겹친다)
     append_history(repo, workspace, automation_id, json.loads(path.read_text(encoding="utf-8")))
-    _git(repo, "add", str(STATUS_DIR), str(HISTORY_DIR))
     stamp = datetime.now(KST).strftime("%Y-%m-%d %H:%M")
-    commit = _git(repo, "commit", "-qm", f"status: {automation_id} {stamp}", check=False)
+    return _commit_push(repo, f"status: {automation_id} {stamp}", str(STATUS_DIR), str(HISTORY_DIR))
+
+
+def _commit_push(repo: Path, message: str, *paths: str) -> bool:
+    _git(repo, "add", *paths)
+    commit = _git(repo, "commit", "-qm", message, check=False)
     if commit.returncode not in (0, 1):                     # 1 = 변경 없음
         print(f"[report_status] commit 실패: {commit.stderr.strip()}", file=sys.stderr)
         return False
     return _push_with_retry(repo)
+
+
+def update_task(repo: str | Path, *, automation_id: str, task_id: str, ok: bool, summary: str = "",
+                workspace: str = "assembly") -> bool:
+    """이미 쓴 상태 파일에서 작업(직원) 하나만 고쳐 다시 커밋한다.
+
+    워크플로의 **다음 단계**에서 끝나는 일도 사이트에 보이게 하려는 것이다
+    (메일의 질의순서 이미지 — 한글 변환 도구를 그때 깔기 때문에 run_mail 안에서 끝낼 수 없다).
+    실행 일지(history)는 건드리지 않는다 — 한 번 실행은 한 줄로 남는다.
+    """
+    repo = Path(repo)
+    if not (repo / ".git").exists():
+        print(f"[report_status] 저장소가 없습니다: {repo}", file=sys.stderr)
+        return False
+    _git(repo, "pull", "--rebase", "-q", check=False)       # 남이 먼저 쓴 것 위에 얹는다
+    path = repo / STATUS_DIR / workspace / f"{automation_id}.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        print(f"[report_status] 상태 파일을 못 읽었습니다: {path}", file=sys.stderr)
+        return False
+    hit = next((t for t in data.get("tasks") or [] if t.get("id") == task_id), None)
+    if hit is None:
+        print(f"[report_status] 작업이 없습니다: {automation_id}/{task_id}", file=sys.stderr)
+        return False
+    hit["status"] = "done" if ok else "error"
+    hit["summary"] = summary
+    if not ok:
+        data["ok"] = False                                  # 작업 하나가 실패하면 자동화도 실패로 본다
+    write_status(repo, automation_id, data, workspace=workspace)
+    stamp = datetime.now(KST).strftime("%Y-%m-%d %H:%M")
+    return _commit_push(repo, f"status: {automation_id} {task_id} {stamp}", str(STATUS_DIR))

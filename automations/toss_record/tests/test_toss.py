@@ -162,3 +162,35 @@ def test_mid_trades_classified():
     b.on_row("trade:kr", "078340", {"timestamp": now_iso(), "price": "37280", "volume": "1"})   # 중간값 37275 위 → 매수
     b.on_row("trade:kr", "078340", {"timestamp": now_iso(), "price": "37260", "volume": "1"})   # 아래 → 매도
     assert [t[3] for t in b.item("078340")["trades"]] == ["B", "S"]
+
+
+def test_board_reads_while_rows_arrive_from_other_threads():
+    """수신 스레드가 deque 를 고치는 동안 board() 를 읽어도 'deque mutated during iteration' 이 나지 않아야 한다(2026-10-06 녹음 중단 원인)."""
+    import threading
+    from live_board import LiveBoard
+    b = LiveBoard(window_sec=1)
+    codes = [f"{i:06d}" for i in range(20)]
+    stop = threading.Event(); errors: list[BaseException] = []
+
+    def feed():
+        i = 0
+        while not stop.is_set():
+            c = codes[i % len(codes)]; i += 1
+            try:
+                b.on_row("orderbook:kr", c, {"timestamp": "", "ask1_p": "101", "ask1_v": "5", "bid1_p": "100", "bid1_v": "7"})
+                b.on_row("trade:kr", c, {"timestamp": "", "price": "100", "volume": "3"})
+            except BaseException as exc:  # noqa: BLE001
+                errors.append(exc); stop.set()
+
+    ths = [threading.Thread(target=feed, daemon=True) for _ in range(3)]
+    for t in ths:
+        t.start()
+    try:
+        for _ in range(300):
+            b.board(codes, {})
+    except BaseException as exc:  # noqa: BLE001
+        errors.append(exc)
+    stop.set()
+    for t in ths:
+        t.join(timeout=2)
+    assert not errors, errors[:1]

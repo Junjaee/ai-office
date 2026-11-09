@@ -55,7 +55,7 @@ class Store:
         row = {"recv_ms": int(time.time() * 1000), **row}
         self.files[key][1].writerow(row); self.n += 1
         if time.time() - self.last_flush > 5:
-            for f, _ in self.files.values():
+            for f, _ in list(self.files.values()):     # 체결 조회 스레드가 동시에 새 파일을 더해도 안전하게(사본 순회)
                 f.flush()
             self.last_flush = time.time()
 
@@ -136,8 +136,11 @@ async def _record(a, codes: list[str], store: Store, until_dt, channels: tuple[s
             await asyncio.sleep(1)
             if poster is not None and board is not None and time.time() - last_post >= LIVE_POST_SEC:
                 last_post = time.time()
-                b = board.board(codes, meta())
-                await asyncio.to_thread(poster.post, "running", summary_line(), b, started)
+                try:                                  # 전광판 집계·전송이 실패해도 녹음은 계속한다
+                    b = board.board(codes, meta())
+                    await asyncio.to_thread(poster.post, "running", summary_line(), b, started)
+                except Exception as exc:  # noqa: BLE001
+                    log(f"실시간 전광판 실패({type(exc).__name__}) — 녹음은 계속")
             if time.time() - last_report >= 300:
                 log(f"진행: 행 {store.n:,} (호가 {sum(s.books for s in stats):,}, 체결 {sum(s.trades for s in stats) + (poller.stats['new'] if poller else 0):,}), 재연결 {sum(s.reconnects for s in stats)}"
                     + (f", 전송 {poster.sent}/{poster.sent + poster.failed}" if poster else "")

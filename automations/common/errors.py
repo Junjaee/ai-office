@@ -24,6 +24,10 @@ MSG_TELEGRAM = "텔레그램으로 보내지 못했어요"
 MSG_TELEGRAM_SETUP = "텔레그램 봇·받는 분 설정이 없어요"
 MSG_GOOGLE = "구글 드라이브 인증이 없거나 만료됐어요"
 MSG_DISK = "저장 공간이 부족해요"
+MSG_PRICES = "시세를 받아오지 못했어요 (야후가 막았을 수 있어요)"
+MSG_FUND = "재무 자료가 부족해 종목을 고르지 못했어요"
+MSG_SEC = "SEC 공시 자료를 받지 못했어요"
+MSG_DATA = "구성종목·회사번호 자료를 받지 못했어요"
 MSG_OTHER = "실행 중 문제가 생겼어요"
 
 
@@ -58,6 +62,15 @@ def to_korean(exc: BaseException) -> str:
     # 뉴스 RSS: google_news 가 재시도 끝에 던지는 RuntimeError("뉴스 요청 실패 ...") — 국회 사이트보다 먼저 본다
     if isinstance(exc, RuntimeError) and "뉴스 요청 실패" in msg:
         return MSG_NEWS
+    # 주식 신호 (stock): 야후 시세·SEC 재무
+    if isinstance(exc, RuntimeError) and "시세 수집 실패" in msg:
+        return MSG_PRICES
+    if isinstance(exc, RuntimeError) and "재무 자료 부족" in msg:
+        return MSG_FUND
+    if isinstance(exc, RuntimeError) and "SEC 요청 실패" in msg:
+        return MSG_SEC
+    if isinstance(exc, RuntimeError) and "자료 요청 실패" in msg:   # 위키·SEC 목록 — 아래 국회 사이트 규칙보다 먼저
+        return MSG_DATA
     # 국회 사이트 연결: requests 연결/타임아웃, 또는 record_site가 재시도 끝에 던지는 RuntimeError("요청 실패 ...")
     if _REQ_CONN and isinstance(exc, _REQ_CONN):
         return MSG_SITE

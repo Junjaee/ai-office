@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import math
+import threading
 import time
 from collections import deque
 from datetime import datetime, timezone, timedelta
@@ -60,9 +61,16 @@ class LiveBoard:
         self.samples: dict[str, deque] = {}                  # code → deque[(recv_ms, asks, bids)] 5초마다 하나
         self.trades: dict[str, deque] = {}                   # code → deque[(recv_ms, ts, price, vol, side)]
         self.books = 0; self.trades_n = 0
+        # 수신(웹소켓 스레드·체결 조회 스레드)과 집계(5초마다 board())가 다른 스레드에서 같은 deque 를 건드린다 — 한 잠금으로 묶는다
+        # (2026-10-06 09:43 'deque mutated during iteration' 로 녹음이 죽었다)
+        self._lock = threading.RLock()
 
     # ---------------- 수신
     def on_row(self, channel: str, code: str, row: dict) -> None:
+        with self._lock:
+            self._on_row(channel, code, row)
+
+    def _on_row(self, channel: str, code: str, row: dict) -> None:
         recv = int(time.time() * 1000)
         if channel.startswith("orderbook"):
             asks = [(_f(row.get(f"ask{i}_p")), _f(row.get(f"ask{i}_v"))) for i in range(1, 11) if row.get(f"ask{i}_p")]
@@ -178,7 +186,8 @@ class LiveBoard:
         return round(flow + wall_pts + ev_pts + depth, 2), parts
 
     def board(self, codes: list[str], meta: dict) -> dict:
-        items = [self.item(c) for c in codes]
+        with self._lock:
+            items = [self.item(c) for c in codes]
         items.sort(key=lambda x: -x["score"])
         return {"at": now_iso(), "codes_n": len(codes), "books": self.books, "trades": self.trades_n, "window_sec": self.window_ms // 1000, **meta, "items": items}
 

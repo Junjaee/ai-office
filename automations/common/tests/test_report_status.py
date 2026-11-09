@@ -241,3 +241,47 @@ def test_report_appends_history_line_in_same_commit(repo, monkeypatch):
     line = json.loads((repo / "history" / "assembly" / "minutes" / "2026-09.jsonl").read_text(encoding="utf-8").strip())
     assert line["run_id"] == 555 and line["trigger"] == "schedule" and line["summary"] == "신규 1건"
     assert git(repo, "status", "--porcelain") == ""
+
+
+# ── 다음 단계에서 끝나는 작업 (메일의 질의순서 이미지, 2026-11-09) ──────────
+
+def _mail_report(repo):
+    report(repo, automation_id="mail", name="상임위 메일", dept="qa", ok=True, summary="새 메일 2건",
+           started_at="2026-11-09T21:00:00+09:00", duration_sec=30,
+           tasks=[{"id": "check", "status": "done", "summary": "새 메일 2건"},
+                  {"id": "order", "status": "done", "summary": "질의순서 1건 — 이미지로 바꾸는 중"}])
+
+
+def test_update_task_replaces_only_that_task(repo, remote):
+    _mail_report(repo)
+    assert report_status.update_task(repo, automation_id="mail", task_id="order", ok=True, summary="이미지 2장") is True
+    data = json.loads((repo / "public" / "status" / "assembly" / "mail.json").read_text(encoding="utf-8"))
+    tasks = {t["id"]: t for t in data["tasks"]}
+    assert tasks["order"] == {"id": "order", "status": "done", "summary": "이미지 2장"}
+    assert tasks["check"]["summary"] == "새 메일 2건"   # 나머지는 그대로
+    assert data["ok"] is True
+    assert data["summary"] == "새 메일 2건"
+
+
+def test_update_task_failure_marks_automation_failed(repo, remote):
+    _mail_report(repo)
+    report_status.update_task(repo, automation_id="mail", task_id="order", ok=False, summary="변환 실패 1건")
+    data = json.loads((repo / "public" / "status" / "assembly" / "mail.json").read_text(encoding="utf-8"))
+    assert data["ok"] is False
+    assert [t for t in data["tasks"] if t["id"] == "order"][0]["status"] == "error"
+
+
+def test_update_task_does_not_add_history_line(repo, remote):
+    """한 번 실행은 일지 한 줄 — 작업 갱신은 줄을 더하지 않는다."""
+    _mail_report(repo)
+    log = repo / "history" / "assembly" / "mail" / "2026-11.jsonl"
+    before = log.read_text(encoding="utf-8")
+    report_status.update_task(repo, automation_id="mail", task_id="order", ok=True, summary="이미지 2장")
+    assert log.read_text(encoding="utf-8") == before
+    assert git(repo, "status", "--porcelain") == ""      # 갱신분도 커밋됐다
+
+
+def test_update_task_missing_task_or_file(repo, remote, capsys):
+    assert report_status.update_task(repo, automation_id="mail", task_id="order", ok=True) is False  # 파일 없음
+    _mail_report(repo)
+    assert report_status.update_task(repo, automation_id="mail", task_id="없는작업", ok=True) is False

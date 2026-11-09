@@ -163,7 +163,8 @@ export const AUTOMATIONS: AutomationDef[] = [
   { id: "mail", dept: "qa", name: "상임위 메일", workflow: "mail.yml", wake: "새 상임위 메일이 오면",
     tasks: [
       { id: "check", name: "새 메일 확인", role: "재경위·예결위에서 온 새 메일 찾기" },
-      { id: "notify", name: "알림·정리", role: "텔레그램으로 알리고, 첨부는 드라이브 수신함에, 질의순서는 이미지로 바꿔 보낸 뒤 지메일 라벨로 정리" },
+      { id: "notify", name: "알림·정리", role: "텔레그램으로 알리고, 첨부는 드라이브 수신함에 저장한 뒤 지메일 라벨로 정리" },
+      { id: "order", name: "질의순서 이미지", role: "질의순서 한글 파일을 원본 양식 그대로 이미지로 바꿔 전송(이준석 위원이 있는 날만)" },
     ] },
   // 회의 생중계 동안만 돈다(Worker 가 캘린더를 보고 깨움) — 예약 없음. 카드 "다음 실행"은 캘린더의 다음 회의(app/status.ts)
   { id: "speech", dept: "qa", name: "회의 발언 요약", workflow: "speech.yml", wake: "530호 회의 일정이 있으면",

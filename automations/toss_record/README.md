@@ -42,7 +42,7 @@
 - `toss_candles.py` — 1분봉 백필(`--targets csv | --codes | --universe`, `--since/--until`, `--stop-at`, 재시작 가능 `minutes/done.txt`). 저장 `minutes\YYYY-MM-DD\<코드>.parquet`(KIS 열 이름).
 - `toss_flows.py` — 수급 백필(`--codes | --universe | --all-listed`, `--kinds`, `--since`, `--refresh`). 저장 `flows\<종류>\<코드>.parquet`(중첩 필드는 점 연결 이름, 전 열 문자열).
 - `start_backfill.ps1` — 분봉(목표 목록) → 수급(시총 범위 전 종목) 을 숨긴 창으로 차례로. `run_chain.py` 가 순서대로 돌린다(REST 작업은 `rest.lock` 으로 하나만).
-- `install_task.ps1` — 작업 스케줄러 등록(Toss-record 08:55, 사용자 확인 뒤).
+- `install_task.ps1` — 작업 스케줄러 등록(Toss-record 08:55 · Toss-backfill 15:40 · Toss-record-logon, 사용자 확인 뒤). `Toss-record-logon` 은 예비: 08:55 에 PC 가 꺼져 있어 못 떴으면 로그인하는 순간 대신 시작한다(2026-09-30 실측 — 08:54 부팅, 로그온 전이라 08:55 작업이 안 뜸). `start_record.ps1` 이 평일 08:40~15:20 밖이면 바로 끝나고, 이미 녹음 중이면 `ws.lock` 이 막는다. 작업 명령은 스크립트(G: 드라이브)가 보일 때까지 최대 10분 기다린 뒤 부른다 — 로그온 직후에는 드라이브가 아직 안 붙어 `-File` 로 바로 부르면 죽는다(2026-10-01 실측, 종료 코드 -196608).
 - `tests/` — 네트워크 없는 시험 9개: `python -m pytest -q automations/toss_record/tests`
 
 ## 비밀값

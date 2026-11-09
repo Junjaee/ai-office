@@ -290,3 +290,23 @@ def test_creatable_months_and_create_request():
     assert mod.create_month_tab(_Sheets(), "2026년 10월", 10) == 99
     assert calls[0] == ("dup", {"sourceSheetId": 5, "insertSheetIndex": 2, "newSheetName": "2026년 10월"})
     assert calls[1] == ("update", "'2026년 10월'!D3", [["10월"]])
+
+
+def test_status_lines_never_carry_merchant_or_amount(monkeypatch):
+    # 저장소가 공개라서 상태 파일·일지에는 상호·금액·날짜 없이 탭별 건수만 남긴다
+    g = FakeGmail()
+    cancel = _sms("[Web발신]", "현대 Amex Gold 취소", "신*재", "24,000원 일시불",
+                  "09/10 12:07", "보승회관여의도", "누적4,049,905원")
+    args = _wire(monkeypatch, g, {"a": APPROVE, "b": APPROVE, "c": cancel})
+    monkeypatch.setattr(mod, "cancel_transaction", lambda *a: 9)
+    result = mod.do_work({}, args, lambda m: None)
+    assert result["lines"] == ["[추가] 2026년 9월 2건", "[취소삭제] 2026년 9월 1건"]
+    joined = " ".join(result["lines"] + [t[1] for t in result["tasks"].values()])
+    assert "보승회관" not in joined and "24,000" not in joined and "원" not in joined
+
+
+def test_dry_run_lines_are_counts_too(monkeypatch):
+    g = FakeGmail()
+    args = _wire(monkeypatch, g, {"a": APPROVE, "b": APPROVE}, dry_run=True)
+    result = mod.do_work({}, args, lambda m: None)
+    assert result["lines"] == ["[예정] 2026년 9월 추가 2건 · 취소 0건"]

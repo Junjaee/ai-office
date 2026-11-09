@@ -1,6 +1,7 @@
 """trade_poll — 가짜 세션으로 중복 제거·활발 종목 판정·전일 종가 고르기."""
 import sys
 import threading
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parents[1]
@@ -18,7 +19,8 @@ class FakeSes:
         return self.batches.pop(0) if self.batches else []
 
     def candles(self, code, interval, count=200, before=None, adjusted=None):
-        return {"candles": [{"timestamp": "2026-09-29T00:00:00+09:00", "closePrice": "110", "highPrice": "112", "volume": "500"},
+        today = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d")     # 오늘 봉은 빼야 한다(날짜를 고정하면 다음 날 깨진다)
+        return {"candles": [{"timestamp": f"{today}T00:00:00+09:00", "closePrice": "110", "highPrice": "112", "volume": "500"},
                             {"timestamp": "2026-09-26T00:00:00+09:00", "closePrice": "100", "highPrice": "104", "volume": "1000"}]}
 
 

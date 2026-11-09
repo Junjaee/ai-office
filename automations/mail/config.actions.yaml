@@ -47,4 +47,4 @@ office_workspace: "assembly"   # 상태 파일을 쓸 사무실 (public/status/<
 next_run: "새 메일이 오면 (1분마다 확인)"   # 카드에 보일 문구. 예약이 아니라 Worker 가 지메일을 보고 깨운다
 
 # 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts 의 automations[].tasks[] (테스트로 일치 강제)
-tasks: [check, notify]
+tasks: [check, notify, order]

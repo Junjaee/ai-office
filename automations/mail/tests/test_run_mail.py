@@ -198,7 +198,8 @@ def test_no_new_mail_skips_report_and_sends_nothing(monkeypatch):
 
     assert sent.sent == [] and gmail.modified == []
     assert out["skip_report"] is True                              # 5분마다 도니 빈 실행은 커밋하지 않는다
-    assert out["tasks"] == {"check": (True, "새 메일 0건"), "notify": (True, "보낼 것 없음")}
+    assert out["tasks"] == {"check": (True, "새 메일 0건"), "notify": (True, "보낼 것 없음"),
+                            "order": (True, "질의순서 없음")}
 
 
 def test_dry_run_sends_nothing_and_keeps_inbox(monkeypatch):
