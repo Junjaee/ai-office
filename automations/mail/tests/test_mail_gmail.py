@@ -2,6 +2,8 @@
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from mail_gmail import (  # noqa: E402
     Attachment, Mail, _clean_sender, _hhmm, build_notice, build_query, describe,
@@ -94,3 +96,22 @@ def test_is_order_file_and_color():
     assert is_order_file("질의순서.pdf") is False              # 한글 파일만
     assert is_order_file("예결위 질의순서.hwp", "예결위") is True
     assert hex_rgb("#FF7210") == (255, 114, 16)
+
+
+def test_convert_skips_when_name_missing(tmp_path, monkeypatch):
+    """질의순서에 이준석이 없으면 이미지를 만들지 않는다 (2026-11-09)."""
+    import mail_hwp
+
+    pdf = tmp_path / "질의순서.pdf"
+    monkeypatch.setattr(mail_hwp, "to_pdf", lambda hwp, out, **kw: pdf)
+    monkeypatch.setattr(mail_hwp, "to_images", lambda *a, **kw: [tmp_path / "1.png"])
+
+    monkeypatch.setattr(mail_hwp, "has_name", lambda p, name: False)
+    assert mail_hwp.convert(tmp_path / "질의순서.hwp", tmp_path, "이준석") == []
+
+    monkeypatch.setattr(mail_hwp, "has_name", lambda p, name: True)
+    assert mail_hwp.convert(tmp_path / "질의순서.hwp", tmp_path, "이준석") == [tmp_path / "1.png"]
+
+    # 칠할 이름을 안 주면 찾지 않고 전부 보낸다
+    monkeypatch.setattr(mail_hwp, "has_name", lambda p, name: pytest.fail("찾지 말아야 한다"))
+    assert mail_hwp.convert(tmp_path / "질의순서.hwp", tmp_path) == [tmp_path / "1.png"]

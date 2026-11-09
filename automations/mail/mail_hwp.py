@@ -87,6 +87,21 @@ def to_images(pdf: Path, out_dir: Path, highlight: str = "", color: str = "#FF72
     return out
 
 
+def has_name(pdf: Path, name: str) -> bool:
+    """문서 어디에든 이 이름이 있나."""
+    import fitz
+
+    doc = fitz.open(pdf)
+    return any(doc[i].search_for(name) for i in range(len(doc)))
+
+
 def convert(hwp: Path, out_dir: Path, highlight: str = "", color: str = "#FF7210") -> list[Path]:
-    """한글 파일 하나 → PNG 목록."""
-    return to_images(to_pdf(hwp, out_dir), out_dir, highlight, color)
+    """한글 파일 하나 → PNG 목록.
+
+    highlight 이름이 문서에 없으면 빈 목록 — 이준석 위원이 질의하지 않는 날의
+    질의순서는 보내지 않는다(사용자 결정 2026-11-09).
+    """
+    pdf = to_pdf(hwp, out_dir)
+    if highlight and not has_name(pdf, highlight):
+        return []
+    return to_images(pdf, out_dir, highlight, color)

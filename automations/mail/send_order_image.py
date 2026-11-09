@@ -46,13 +46,17 @@ def main(argv: list[str]) -> int:
     if not args.dry_run:
         token, chat = telegram_env(CHAT_KEY, TOKEN_KEY)
 
-    sent = failed = 0
+    sent = failed = skipped = 0
     for hwp in files:
         try:
             images = convert(hwp, src, highlight, color)
         except Exception as exc:  # noqa: BLE001 - 한 파일이 실패해도 나머지는 보낸다
             print(f"  · 변환 실패 {hwp.name} — {type(exc).__name__}", file=sys.stderr)
             failed += 1
+            continue
+        if not images:
+            print(f"  · {hwp.name} → '{highlight}' 없음, 보내지 않음")
+            skipped += 1
             continue
         print(f"  · {hwp.name} → 이미지 {len(images)}장")
         for img in images:
@@ -61,7 +65,9 @@ def main(argv: list[str]) -> int:
             send = send_photo if as_photo else send_document
             send(token, chat, img.name, img.read_bytes(), timeout=int(cfg.get("timeout") or 60))
             sent += 1
-    print(f"질의순서 {len(files)}건, 이미지 전송 {sent}장" + (f", 실패 {failed}건" if failed else ""))
+    print(f"질의순서 {len(files)}건, 이미지 전송 {sent}장"
+          + (f", 건너뜀 {skipped}건" if skipped else "")
+          + (f", 실패 {failed}건" if failed else ""))
     return 1 if failed and not sent else 0
 
 
