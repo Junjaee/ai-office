@@ -76,8 +76,9 @@ export default function FlowBoard({ ws: wsId }: { ws: string }) {
                         {a.tasks.map((t) => {
                           const state: TaskState = v?.tasks[t.id]?.state ?? (t.planned ? "planned" : "idle");
                           return (
-                            <li className={`flow-step ${STATE_CLASS[state]}`} key={t.id} title={t.role}>
+                            <li className={`flow-step ${STATE_CLASS[state]}`} key={t.id}>
                               <b>{t.name}</b>
+                              <small>{t.role}</small>
                               <span>{LABELS[state]}</span>
                             </li>
                           );

@@ -12,11 +12,13 @@
 
 .flow-steps { display: flex; flex-wrap: wrap; gap: 20px; margin: 0; padding: 0; list-style: none; }
 .flow-step {
-  position: relative; display: flex; min-width: 150px; max-width: 260px; flex: 1 1 auto; flex-direction: column; gap: 3px;
-  padding: 10px 14px; border: 1px solid var(--d-line-strong); border-radius: 12px; background: #fff;
+  position: relative; display: flex; min-width: 180px; max-width: 300px; flex: 1 1 auto; flex-direction: column; gap: 4px;
+  padding: 12px 14px; border: 1px solid var(--d-line-strong); border-radius: 12px; background: #fff;
 }
 .flow-step b { font-size: 14px; font-weight: 500; }
-.flow-step span { color: var(--d-faint); font-size: 12px; }
+/* 그 칸 안에서 실제로 무슨 일이 일어나는지 — 작업 하나가 여러 일을 하므로 글로 적는다 */
+.flow-step small { color: var(--d-soft); font-size: 12.5px; line-height: 1.5; }
+.flow-step span { margin-top: 2px; color: var(--d-faint); font-size: 12px; }
 
 /* 단계 사이 화살표 — 칸 틈(20px)에 꺾쇠로. 줄이 바뀌면 "다음 줄로 이어짐"으로 읽힌다 */
 .flow-step:not(:last-child)::after {
