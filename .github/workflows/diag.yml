@@ -76,8 +76,8 @@ jobs:
           "git: $(git --version)"
 
   childcare:
-    # 아이사랑(childcare.go.kr) 예약을 해외 서버에서 돌릴 수 있는지 (2026-11-10)
-    # 메인은 해외에서도 정상. 로그인 버튼을 눌러 아이디 로그인 칸까지 가 본다.
+    # 아이사랑 로그인 화면이 /logout 으로 되돌이치는 원인 찾기 (2026-11-10)
+    # 통합 로그인 서버 sso.childcare.go.kr (client_id=ilove) 로 가는 주소를 알아낸다.
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -85,44 +85,39 @@ jobs:
         run: |
           python3 -m pip install --quiet playwright
           python3 -m playwright install --with-deps chromium >/dev/null 2>&1
-      - name: 로그인 화면까지 가 보기
+      - name: 들어가는 길 세 가지의 주소 이동 경로 기록
         run: |
           python3 - <<'EOF'
           from playwright.sync_api import sync_playwright
-          with sync_playwright() as p:
+
+          def trace(p, label, steps):
+              ctx = p.chromium.launch_persistent_context("", headless=True) if False else None
               b = p.chromium.launch()
-              pg = b.new_page(locale="ko-KR", timezone_id="Asia/Seoul")
-              pg.goto("https://www.childcare.go.kr/", wait_until="domcontentloaded", timeout=60000)
-              pg.wait_for_load_state("networkidle", timeout=60000)
-              print("메인:", pg.title())
-
-              pg.get_by_role("link", name="로그인", exact=True).first.click()
-              pg.wait_for_load_state("networkidle", timeout=60000)
-              print("로그인화면:", pg.title(), "|", pg.url)
-
-              tab = pg.get_by_text("아이디 로그인", exact=True)
-              print("아이디 로그인 탭:", tab.count())
-              if tab.count():
-                  tab.first.click(); pg.wait_for_timeout(3000)
-              ins = pg.locator("input:visible")
-              print("보이는 입력란:", [(ins.nth(i).get_attribute("type"), ins.nth(i).get_attribute("id") or ins.nth(i).get_attribute("name")) for i in range(min(ins.count(), 15))])
-              pw = pg.locator("input[type=password]:visible")
-              if pw.count():
-                  pw.first.fill("abc12345")
-                  pg.wait_for_timeout(1000)
-                  print("비번칸에 입력 후 남은 값:", repr(pw.first.input_value()))
-              pg.screenshot(path="login.png", full_page=True)
-
-              # 시간제보육 기관찾기 화면
-              pg.goto("https://www.childcare.go.kr/?menuno=242", wait_until="domcontentloaded", timeout=60000)
-              pg.wait_for_load_state("networkidle", timeout=60000)
-              print("기관찾기:", pg.title(), "|", pg.url)
-              print("독립반:", pg.get_by_text("독립반").count(), "/ 통합반:", pg.get_by_text("통합반").count())
-              pg.screenshot(path="reserve.png", full_page=True)
+              c = b.new_context(locale="ko-KR", timezone_id="Asia/Seoul")   # 매번 쿠키 없는 새 브라우저
+              pg = c.new_page()
+              hops = []
+              pg.on("framenavigated", lambda f: f == pg.main_frame and hops.append(f.url[:120]))
+              print(f"
+===== {label} =====")
+              try:
+                  steps(pg)
+              except Exception as e:
+                  print("중단:", str(e)[:150])
+              pg.wait_for_timeout(6000)
+              for h in hops[:25]:
+                  print("  →", h)
+              print("  제목:", pg.title())
+              print("  비번칸:", pg.locator("input[type=password]").count(), "/ 아이디로그인:", pg.get_by_text("아이디 로그인", exact=True).count())
               b.close()
+
+          with sync_playwright() as p:
+              trace(p, "A. 로그인 주소로 바로", lambda pg: pg.goto("https://www.childcare.go.kr/?menuno=50", wait_until="domcontentloaded", timeout=60000))
+
+              def b_path(pg):
+                  pg.goto("https://www.childcare.go.kr/", wait_until="domcontentloaded", timeout=60000)
+                  pg.wait_for_timeout(5000)
+                  pg.get_by_role("link", name="로그인", exact=True).first.click(timeout=20000)
+              trace(p, "B. 메인에서 로그인 링크 클릭", b_path)
+
+              trace(p, "C. returnUrl 붙여서", lambda pg: pg.goto("https://www.childcare.go.kr/?menuno=50&returnUrl=/?menuno=1", wait_until="domcontentloaded", timeout=60000))
           EOF
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: childcare-screens
-          path: "*.png"
