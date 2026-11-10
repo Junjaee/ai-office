@@ -14,14 +14,14 @@
   "next_run": "새 메일이 오면 (1분마다 확인)",
   "log": [
     "새 메일 1건, 알림 1건, 실패 0건, 첨부 1건, 드라이브 저장 1건, 9초",
-    "예결위 1건"
+    "재경위 1건"
   ],
   "link": "https://drive.google.com/drive/folders/1dNwHu2iEAoMnp2NxOPfe8O866kE84tBr",
-  "run_id": 42640816581,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42640816581",
-  "request_id": "cron-202611091503",
+  "run_id": 42726957951,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42726957951",
+  "request_id": "cron-202611100015",
   "trigger": "schedule",
-  "started_at": "2026-11-10T00:04:30+09:00",
+  "started_at": "2026-11-10T09:16:30+09:00",
   "duration_sec": 9,
   "tasks": [
     {
@@ -41,5 +41,5 @@
     }
   ],
   "id": "mail",
-  "updated_at": "2026-11-10T00:04:40+09:00"
+  "updated_at": "2026-11-10T09:16:39+09:00"
 }
