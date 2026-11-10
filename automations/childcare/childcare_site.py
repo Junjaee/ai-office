@@ -53,6 +53,10 @@ def login(page, user_id: str, password: str, return_to: str = MENU_RESERVE) -> t
     아이디 `#mbrid`, 비밀번호 `#uspass`, 보내기는 `ssoLoginCheck()` 를 부르는 <a> 다.
     비밀번호 값은 어디에도 기록하지 않는다.
     """
+    # 거부 사유는 보통 경고창(alert)으로 온다. 자동 브라우저는 조용히 닫아 버리므로 붙잡아 둔다.
+    alerts: list[str] = []
+    page.on("dialog", lambda d: (alerts.append(d.message), d.accept()))
+
     page.goto(f"{LOGIN}?ltype=id&returnUrl={quote(return_to, safe='')}",
               wait_until="domcontentloaded", timeout=60000)
     page.wait_for_selector("#mbrid", timeout=30000)
@@ -65,14 +69,15 @@ def login(page, user_id: str, password: str, return_to: str = MENU_RESERVE) -> t
     if "childcare.go.kr" in page.url:
         return True, "로그인 성공"
 
-    # 실패하면 화면에 뜬 안내(팝업·경고)를 가린 형태로 돌려준다
-    notice = ""
-    for sel in (".layer-popup:visible", ".alert:visible", ".error:visible", "#alertMsg:visible"):
+    if alerts:
+        return False, "로그인 실패 — " + redact(" / ".join(alerts), limit=140)
+
+    # 경고창이 없으면 화면에 박힌 안내문을 찾는다
+    for sel in (".layer-popup:visible", ".alert:visible", ".error:visible", "#alertMsg:visible", ".txt_error:visible"):
         box = page.locator(sel)
         if box.count():
-            notice = redact(box.first.inner_text(), limit=100)
-            break
-    return False, f"로그인 실패{' — ' + notice if notice else f' (머문 주소 {page.url[:60]})'}"
+            return False, "로그인 실패 — " + redact(box.first.inner_text(), limit=140)
+    return False, f"로그인 실패 (안내문 없음, 머문 주소 {page.url[:60]})"
 
 
 def describe(page, limit: int = 40) -> list[str]:
