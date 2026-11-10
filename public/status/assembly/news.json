@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 24건, 실패 0건, 13초",
+  "summary": "신규 22건, 실패 0건, 10초",
   "counts": {
-    "new": 24,
+    "new": 22,
     "failed": 0,
-    "total": 7081
+    "total": 7103
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 24건, 실패 0건, 13초",
-    "[신규] 조정훈·이준석, 그때 빚내서 집 살걸 ‘초이노믹스’ 최경환, 이재명 정부 부동산 정책 정조준 — 오토투데이",
-    "[신규] “그때 빚내서 집 샀어야 했나”…조정훈·이준석, 최경환 초청 세미나 — 매일경제",
-    "[신규] 박용갑 의원 제안한 ‘의용소방대 현장 안전예산 국비 확대’, 민주당 불금민생단 정책제안 Best 5 선정! — 시민행정신문",
-    "[신규] 의료기관 조사방안 논의 위한 토론회 개최한 이주영 의원 [TF사진관] — 더팩트"
+    "신규 22건, 실패 0건, 10초",
+    "[신규] 홍준표 “요즘 이준석이 나를 한동훈에 빗대 공격···왜 그러나” — 주간경향",
+    "[신규] [정국진단] 고금란 \"이준석 국힘 복당 없다…진중권 완장짓 비판은 억지\" — 뉴스핌",
+    "[신규] 홍준표, 韓 공격하는 이준석에 \"나도 공격해…왜 그러는지 모르겠다\" — 뉴스1",
+    "[신규] 강남스마일안과·한몽국제교류협회, 몽골인 안과 진료 지원 협약 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42746593980,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42746593980",
-  "request_id": "cron-202611100300",
+  "run_id": 42765674828,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42765674828",
+  "request_id": "cron-202611100600",
   "trigger": "schedule",
-  "started_at": "2026-11-10T12:01:20+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-10T15:01:24+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 137건"
+      "summary": "검색어 5개에서 131건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 63건 (신규 24건) · 시민행정신문 9건, 뉴스핌 6건, 더팩트 4건"
+      "summary": "오늘 85건 (신규 22건) · 시민행정신문 10건, 뉴스핌 8건, 뉴스1 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-10T12:01:34+09:00"
+  "updated_at": "2026-11-10T15:01:34+09:00"
 }
