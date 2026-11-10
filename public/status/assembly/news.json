@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 46건, 실패 0건, 9초",
+  "summary": "신규 19건, 실패 0건, 12초",
   "counts": {
-    "new": 46,
+    "new": 19,
     "failed": 0,
-    "total": 7149
+    "total": 7168
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 46건, 실패 0건, 9초",
-    "[신규] 홍준표 “이준석이 나를 한동훈에 빗대 공격···왜 그러나” — 주간경향",
-    "[신규] 보수 통합론 다시 꿈틀…장동혁·오세훈·한동훈·이준석 '4인 셈법' — 매일일보",
-    "[신규] \"그때 빚내서 집 살 걸\"…'초이노믹스' 최경환 野 포럼서 특강 — 뉴스1",
-    "[신규] 안호영, 전북 드론 시험장 조성 모색…방산업체·국방부 세 차례 면담 — 시민행정신문"
+    "신규 19건, 실패 0건, 12초",
+    "[신규] ‘KPGA 투어 퀄리파잉 토너먼트 Final Stage’ 개막…김승혁, 황인춘, 김봉섭, 김민휘 등 출전 — 시민행정신문",
+    "[신규] 김철근, 용인 수지 전격 출격… ‘민주당 과반 견제’ 승부수 통할까 — 경기시사투데이",
+    "[신규] 국방부, 국군사관학교 민간자문특별위원회 회의 개최 — 외교저널",
+    "[신규] \"그때, 빚내서 집 살걸\" '초이노믹스' 최경환, 李정부 부동산 진단은? — 이데일리"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42787134483,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42787134483",
-  "request_id": "cron-202611100900",
+  "run_id": 42812145269,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42812145269",
+  "request_id": "cron-202611101200",
   "trigger": "schedule",
-  "started_at": "2026-11-10T18:01:30+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-11-10T21:01:26+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 144건"
+      "summary": "검색어 5개에서 130건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 131건 (신규 46건) · 시민행정신문 19건, 뉴스핌 9건, 뉴스1 6건"
+      "summary": "오늘 150건 (신규 19건) · 시민행정신문 24건, 뉴스핌 9건, 뉴스1 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-10T18:01:40+09:00"
+  "updated_at": "2026-11-10T21:01:38+09:00"
 }
