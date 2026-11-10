@@ -39,11 +39,11 @@ export const DEPARTMENTS: readonly Department[] = [
   },
   {
     id: "strategy1",
-    name: "가족 일정팀",
-    short: "family.cal",
-    icon: "📅",
-    task: "가족 캘린더 정리·겹침 확인",
-    report: "캘린더가 연결되면 주간 일정을 브리핑합니다.",
+    name: "육아·돌봄팀",
+    short: "care.desk",
+    icon: "🧸",
+    task: "시간제보육 예약·가족 일정",
+    report: "아이 맡길 자리를 잡고 가족 일정을 정리합니다.",
   },
   {
     id: "qa",
@@ -124,7 +124,7 @@ export const DEPARTMENTS: readonly Department[] = [
  * 자동화를 붙일 때 여기서 빼면 다시 나타난다.
  */
 export const HIDDEN_DEPARTMENTS: string[] = [
-  "brand", "strategy1", "qa", "strategy2", "reels", "carousel", "partner", "review",
+  "brand", "qa", "strategy2", "reels", "carousel", "partner", "review",
 ];
 
 /**
@@ -137,6 +137,13 @@ export const AUTOMATIONS: AutomationDef[] = [
       { id: "sheet", name: "시트 정리", role: "지출 시트 기록·월별 합계", colors: ["#4b3b2c", "#bfdbfe", "#cbd5e1"] },
     ] },
   { id: "grocery", dept: "brand", name: "장보기·생필품", tasks: [{ id: "remind", name: "재구매 알림", role: "생필품 재구매 시기 알림" }] },
+  // 시간제보육 예약(automations/childcare/): 아이사랑에 로그인해 독립반 자리를 잡는다.
+  // 1단계(2026-11-10)는 로그인과 예약 화면 구조 확인까지. 실제 예약은 그 구조를 보고 붙인다.
+  { id: "childcare", dept: "strategy1", name: "시간제보육 예약", workflow: "childcare.yml",
+    tasks: [
+      { id: "login", name: "아이사랑 로그인", role: "아이디·비밀번호로 아이사랑에 들어가기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
+      { id: "scan", name: "예약 화면 살피기", role: "시간제보육 신청 화면의 버튼·입력란 구조 확인", colors: ["#4b3b2c", "#fde68a", "#f59e0b"] },
+    ] },
   { id: "family", dept: "strategy1", name: "가족 일정", tasks: [{ id: "sync", name: "일정 정리", role: "가족 캘린더 정리·겹침 확인" }] },
   { id: "bills", dept: "qa", name: "공과금·고지서", tasks: [{ id: "remind", name: "납부 알림", role: "공과금 납부 기한 알림" }] },
   { id: "health", dept: "strategy2", name: "건강·운동", tasks: [{ id: "log", name: "건강 기록", role: "운동·건강 기록 정리" }] },
