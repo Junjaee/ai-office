@@ -9,9 +9,15 @@
 from __future__ import annotations
 
 import re
+from urllib.parse import quote
 
 BASE = "https://www.childcare.go.kr/"
 MENU_RESERVE = "https://www.childcare.go.kr/?menuno=242"  # 시간제보육 신청 > 기관찾기
+
+# 로그인은 아이사랑이 아니라 유보통합포털의 통합회원 로그인에서 한다 (2026-11-10 사용자가 알려 줌).
+# 아이사랑의 "로그인" 링크(?menuno=50)를 타면 sso.childcare.go.kr/sso/logout 과 메인 사이를
+# 끝없이 오가며 로그인 화면이 안 뜬다. 여기로 바로 들어가면 뜬다.
+LOGIN = "https://enter.childinfo.go.kr/icms/total/login/login.html"
 
 # 개인정보로 보일 수 있는 것 — 기록에 남기기 전에 가린다
 _PATTERNS = [
@@ -40,48 +46,33 @@ def settle(page, timeout: int = 30000) -> None:
     page.wait_for_timeout(1500)
 
 
-def open_main(page) -> None:
-    page.goto(BASE, wait_until="domcontentloaded", timeout=60000)
-    settle(page)
+def login(page, user_id: str, password: str, return_to: str = MENU_RESERVE) -> tuple[bool, str]:
+    """통합회원 아이디 로그인. 끝나면 return_to 주소로 돌아온다.
 
-
-def go_login(page) -> None:
-    """메인에서 로그인 버튼을 눌러 통합회원 로그인 화면으로 간다."""
-    open_main(page)
-    page.get_by_role("link", name="로그인", exact=True).first.click(timeout=30000)
-    settle(page)
-
-
-def login(page, user_id: str, password: str) -> tuple[bool, str]:
-    """아이디·비밀번호로 로그인. 성공 여부와 한 줄 설명을 돌려준다.
-
-    비밀번호는 Playwright 가 입력란에 직접 넣는다. 값은 어디에도 기록하지 않는다.
+    로그인 화면은 보안키패드가 꺼진 평범한 폼이다(숨은 값 `kybrdscrtyyn=N`, 2026-11-10 확인).
+    아이디 `#mbrid`, 비밀번호 `#uspass`, 보내기는 `ssoLoginCheck()` 를 부르는 <a> 다.
+    비밀번호 값은 어디에도 기록하지 않는다.
     """
-    go_login(page)
+    page.goto(f"{LOGIN}?ltype=id&returnUrl={quote(return_to, safe='')}",
+              wait_until="domcontentloaded", timeout=60000)
+    page.wait_for_selector("#mbrid", timeout=30000)
 
-    tab = page.get_by_text("아이디 로그인", exact=True)
-    if tab.count():
-        tab.first.click()
-        page.wait_for_timeout(1500)
-
-    pw = page.locator("input[type=password]:visible").first
-    if not pw.count():
-        return False, "비밀번호 칸을 못 찾음 — 보안키패드가 막았거나 화면이 다름"
-
-    # 비밀번호 칸 바로 앞의 보이는 글자 입력칸이 아이디 칸이다
-    ids = page.locator("input[type=text]:visible, input[type=tel]:visible")
-    if not ids.count():
-        return False, "아이디 칸을 못 찾음"
-    ids.last.fill(user_id)
-    pw.fill(password)
-
-    page.get_by_role("button", name=re.compile("로그인")).first.click(timeout=15000)
+    page.fill("#mbrid", user_id)
+    page.fill("#uspass", password)
+    page.locator("a[onclick*='ssoLoginCheck']").first.click(timeout=20000)
     settle(page)
 
-    if page.get_by_role("link", name="로그아웃", exact=True).count():
+    if "childcare.go.kr" in page.url:
         return True, "로그인 성공"
-    alert = redact(page.locator(".alert, .error, #alertMsg").first.inner_text()) if page.locator(".alert, .error, #alertMsg").count() else ""
-    return False, f"로그인 실패{' — ' + alert if alert else ''}"
+
+    # 실패하면 화면에 뜬 안내(팝업·경고)를 가린 형태로 돌려준다
+    notice = ""
+    for sel in (".layer-popup:visible", ".alert:visible", ".error:visible", "#alertMsg:visible"):
+        box = page.locator(sel)
+        if box.count():
+            notice = redact(box.first.inner_text(), limit=100)
+            break
+    return False, f"로그인 실패{' — ' + notice if notice else f' (머문 주소 {page.url[:60]})'}"
 
 
 def describe(page, limit: int = 40) -> list[str]:
