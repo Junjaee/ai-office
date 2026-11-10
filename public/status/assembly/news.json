@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 19건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 12초",
   "counts": {
-    "new": 19,
+    "new": 11,
     "failed": 0,
-    "total": 7168
+    "total": 7067
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 19건, 실패 0건, 12초",
-    "[신규] ‘KPGA 투어 퀄리파잉 토너먼트 Final Stage’ 개막…김승혁, 황인춘, 김봉섭, 김민휘 등 출전 — 시민행정신문",
-    "[신규] 김철근, 용인 수지 전격 출격… ‘민주당 과반 견제’ 승부수 통할까 — 경기시사투데이",
-    "[신규] 국방부, 국군사관학교 민간자문특별위원회 회의 개최 — 외교저널",
-    "[신규] \"그때, 빚내서 집 살걸\" '초이노믹스' 최경환, 李정부 부동산 진단은? — 이데일리"
+    "신규 11건, 실패 0건, 12초",
+    "[신규] 국회의원 연구단체 「수도권 주거혁신포럼」, 최경환 전 경제부총리를 초청해 제3차 세미나 ‘그때 빚내서 집 살걸’을 개최 — www.ainews1.co.kr",
+    "[신규] G7 외교장관회의 계기 한-프랑스 외교장관회담 개최 — 시민행정신문",
+    "[신규] 식약처, 겨울철 다소비 수산물 집중 수거·검사 — 시민행정신문",
+    "[신규] 방송미디어통신위원회, 지역방송 콘텐츠, 해외 진출 지원 나서 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42812145269,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42812145269",
-  "request_id": "cron-202611101200",
+  "run_id": 42839954811,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42839954811",
+  "request_id": "cron-202611101500",
   "trigger": "schedule",
-  "started_at": "2026-11-10T21:01:26+09:00",
+  "started_at": "2026-11-11T00:01:23+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 130건"
+      "summary": "검색어 5개에서 133건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 150건 (신규 19건) · 시민행정신문 24건, 뉴스핌 9건, 뉴스1 6건"
+      "summary": "오늘 11건 (신규 11건) · 시민행정신문 5건, sisakoreanews.kr 1건, www.ainews1.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-10T21:01:38+09:00"
+  "updated_at": "2026-11-11T00:01:36+09:00"
 }
