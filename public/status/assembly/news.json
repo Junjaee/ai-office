@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 10초",
+  "summary": "신규 8건, 실패 0건, 13초",
   "counts": {
-    "new": 4,
+    "new": 8,
     "failed": 0,
-    "total": 7071
+    "total": 7079
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 10초",
-    "[신규] 조정훈·이준석, ‘주거혁신포럼’ 세미나…수도권 주택 공급 논의 — KBS 뉴스",
-    "[신규] 지식재산처,, 범국가 '지식재산 거래 통합 플랫폼' 2027년에 구축된다 — 시민행정신문",
-    "[신규] 국힘 유상범 예결위 간사, 예산소위 입성…도내 예결위원 중 ‘유일’ — 강원일보",
-    "[신규] 수년째 지적에도…성평등부, 국고보조금 반환금 500억 못 받아 — 뉴시스"
+    "신규 8건, 실패 0건, 13초",
+    "[신규] 민주당, 자본시장 정상화 후속 입법 속도…주가 누르기 방지법 등 추진 — 매일일보",
+    "[신규] 예산 심사에서도 지적 받은 KIC 국부펀드…“당장 투자 못할수도” — 아시아경제",
+    "[신규] 미래대응기금 입법의견 111건 중 찬성 '0건'…중복 투자 우려 — 진일보 | 전남일보",
+    "[신규] 예결위, 오늘 비경제부처 예산안 심사…미래기금·특활비 공방 — 연합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42870784026,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42870784026",
-  "request_id": "cron-202611101800",
+  "run_id": 42900824886,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42900824886",
+  "request_id": "cron-202611102100",
   "trigger": "schedule",
-  "started_at": "2026-11-11T03:01:31+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-11T06:01:35+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 131건"
+      "summary": "검색어 5개에서 134건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 15건 (신규 4건) · 시민행정신문 6건, KBS 뉴스 1건, sisakoreanews.kr 1건"
+      "summary": "오늘 23건 (신규 8건) · 시민행정신문 6건, 뉴시스 2건, KBS 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-11T03:01:42+09:00"
+  "updated_at": "2026-11-11T06:01:49+09:00"
 }
