@@ -74,3 +74,35 @@ jobs:
           }
           "python: $(python --version 2>&1)"
           "git: $(git --version)"
+
+  childcare:
+    # 아이사랑(childcare.go.kr) 시간제보육 예약을 GitHub 서버(해외)에서 돌릴 수 있는지 (2026-11-10)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 해외 IP 차단 여부 (메인·로그인·예약 페이지)
+        run: |
+          for u in "https://www.childcare.go.kr/" "https://www.childcare.go.kr/?menuno=50" "https://www.childcare.go.kr/?menuno=242"; do
+            code=$(curl -s -o /tmp/p.html -w "%{http_code} %{time_total}s" --max-time 25 -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" "$u" || echo FAIL)
+            echo "$u -> $code, 한글본문 $(grep -c '아이사랑' /tmp/p.html || true)군데, $(wc -c </tmp/p.html)bytes"
+          done
+      - name: 리눅스 headless 브라우저로 로그인 화면이 뜨는지
+        run: |
+          python3 -m pip install --quiet playwright
+          python3 -m playwright install --with-deps chromium >/dev/null 2>&1
+          python3 - <<'EOF'
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              b = p.chromium.launch()
+              pg = b.new_page(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
+              errs = []
+              pg.on("console", lambda m: m.type == "error" and errs.append(m.text[:120]))
+              pg.goto("https://www.childcare.go.kr/?menuno=50", wait_until="networkidle", timeout=60000)
+              print("제목:", pg.title())
+              print("아이디로그인 탭:", pg.locator("text=아이디 로그인").count())
+              ids = pg.locator("input[type=text], input[type=password]")
+              print("입력란:", [(ids.nth(i).get_attribute("type"), ids.nth(i).get_attribute("id")) for i in range(min(ids.count(), 12))])
+              print("보안프로그램 안내 문구:", pg.locator("text=보안").count(), "군데")
+              print("콘솔 오류:", len(errs), errs[:3])
+              b.close()
+          EOF
