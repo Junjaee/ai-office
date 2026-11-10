@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 10초",
   "counts": {
-    "new": 11,
+    "new": 4,
     "failed": 0,
-    "total": 7067
+    "total": 7071
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 12초",
-    "[신규] 국회의원 연구단체 「수도권 주거혁신포럼」, 최경환 전 경제부총리를 초청해 제3차 세미나 ‘그때 빚내서 집 살걸’을 개최 — www.ainews1.co.kr",
-    "[신규] G7 외교장관회의 계기 한-프랑스 외교장관회담 개최 — 시민행정신문",
-    "[신규] 식약처, 겨울철 다소비 수산물 집중 수거·검사 — 시민행정신문",
-    "[신규] 방송미디어통신위원회, 지역방송 콘텐츠, 해외 진출 지원 나서 — 시민행정신문"
+    "신규 4건, 실패 0건, 10초",
+    "[신규] 조정훈·이준석, ‘주거혁신포럼’ 세미나…수도권 주택 공급 논의 — KBS 뉴스",
+    "[신규] 지식재산처,, 범국가 '지식재산 거래 통합 플랫폼' 2027년에 구축된다 — 시민행정신문",
+    "[신규] 국힘 유상범 예결위 간사, 예산소위 입성…도내 예결위원 중 ‘유일’ — 강원일보",
+    "[신규] 수년째 지적에도…성평등부, 국고보조금 반환금 500억 못 받아 — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42839954811,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42839954811",
-  "request_id": "cron-202611101500",
+  "run_id": 42870784026,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42870784026",
+  "request_id": "cron-202611101800",
   "trigger": "schedule",
-  "started_at": "2026-11-11T00:01:23+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-11T03:01:31+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 133건"
+      "summary": "검색어 5개에서 131건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 11건) · 시민행정신문 5건, sisakoreanews.kr 1건, www.ainews1.co.kr 1건"
+      "summary": "오늘 15건 (신규 4건) · 시민행정신문 6건, KBS 뉴스 1건, sisakoreanews.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-11T00:01:36+09:00"
+  "updated_at": "2026-11-11T03:01:42+09:00"
 }
