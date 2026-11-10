@@ -78,31 +78,73 @@ jobs:
   childcare:
     # 아이사랑(childcare.go.kr) 시간제보육 예약을 GitHub 서버(해외)에서 돌릴 수 있는지 (2026-11-10)
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - name: 해외 IP 차단 여부 (메인·로그인·예약 페이지)
+      - name: 접속 안정성 — 같은 주소 5번 연속
         run: |
-          for u in "https://www.childcare.go.kr/" "https://www.childcare.go.kr/?menuno=50" "https://www.childcare.go.kr/?menuno=242"; do
-            code=$(curl -s -o /tmp/p.html -w "%{http_code} %{time_total}s" --max-time 25 -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" "$u" || echo FAIL)
-            echo "$u -> $code, 한글본문 $(grep -c '아이사랑' /tmp/p.html || true)군데, $(wc -c </tmp/p.html)bytes"
+          for i in 1 2 3 4 5; do
+            code=$(curl -s -o /tmp/p.html -w "%{http_code} %{time_total}s" --max-time 25 -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" "https://www.childcare.go.kr/" || echo FAIL)
+            echo "$i회 -> $code, $(wc -c </tmp/p.html 2>/dev/null || echo 0)bytes"
           done
-      - name: 리눅스 headless 브라우저로 로그인 화면이 뜨는지
+      - name: headless 브라우저로 로그인 화면·예약 화면 확인
         run: |
           python3 -m pip install --quiet playwright
           python3 -m playwright install --with-deps chromium >/dev/null 2>&1
           python3 - <<'EOF'
           from playwright.sync_api import sync_playwright
+          UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
           with sync_playwright() as p:
               b = p.chromium.launch()
-              pg = b.new_page(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
-              errs = []
-              pg.on("console", lambda m: m.type == "error" and errs.append(m.text[:120]))
-              pg.goto("https://www.childcare.go.kr/?menuno=50", wait_until="networkidle", timeout=60000)
-              print("제목:", pg.title())
-              print("아이디로그인 탭:", pg.locator("text=아이디 로그인").count())
-              ids = pg.locator("input[type=text], input[type=password]")
-              print("입력란:", [(ids.nth(i).get_attribute("type"), ids.nth(i).get_attribute("id")) for i in range(min(ids.count(), 12))])
-              print("보안프로그램 안내 문구:", pg.locator("text=보안").count(), "군데")
-              print("콘솔 오류:", len(errs), errs[:3])
+              pg = b.new_page(user_agent=UA, locale="ko-KR", timezone_id="Asia/Seoul")
+              scripts = []
+              pg.on("response", lambda r: "AnySign" in r.url or "keypad" in r.url.lower()) and None
+              pg.on("response", lambda r: scripts.append((r.status, r.url.split("/")[-1][:40])) if ("AnySign" in r.url or "keypad" in r.url.lower()) else None)
+
+              # 1) 메인 먼저 들러 쿠키 받기
+              for n in range(3):
+                  try:
+                      pg.goto("https://www.childcare.go.kr/", wait_until="domcontentloaded", timeout=40000)
+                      print(f"메인 접속 성공 ({n+1}번째 시도)"); break
+                  except Exception as e:
+                      print(f"메인 접속 실패 {n+1}:", str(e)[:80])
+              print("쿠키:", [c["name"] for c in pg.context.cookies()])
+
+              # 2) 로그인 화면
+              pg.goto("https://www.childcare.go.kr/?menuno=50", wait_until="domcontentloaded", timeout=40000)
+              pg.wait_for_timeout(4000)
+              print("로그인화면 제목:", pg.title())
+              print("로그인화면 주소:", pg.url)
+              tab = pg.locator("text=아이디 로그인")
+              print("아이디 로그인 탭:", tab.count())
+              if tab.count():
+                  try:
+                      tab.first.click(); pg.wait_for_timeout(2500)
+                  except Exception as e:
+                      print("탭 클릭 실패:", str(e)[:80])
+              ins = pg.locator("input")
+              print("입력란:", [(ins.nth(i).get_attribute("type"), ins.nth(i).get_attribute("id") or ins.nth(i).get_attribute("name")) for i in range(min(ins.count(), 20))])
+              pw = pg.locator("input[type=password]")
+              if pw.count():
+                  try:
+                      pw.first.fill("test1234"); pg.wait_for_timeout(500)
+                      v = pw.first.input_value()
+                      print("비번 입력 됨 -> 칸에 남은 값:", repr(v), "(별표/암호문이면 보안키패드가 가로챈 것)")
+                  except Exception as e:
+                      print("비번 입력 실패:", str(e)[:120])
+              print("보안프로그램 파일 응답:", scripts[:6])
+              pg.screenshot(path="login.png", full_page=True)
+
+              # 3) 시간제보육 예약 화면
+              pg.goto("https://www.childcare.go.kr/?menuno=242", wait_until="domcontentloaded", timeout=40000)
+              pg.wait_for_timeout(4000)
+              print("예약화면 제목:", pg.title())
+              print("예약화면 주소:", pg.url)
+              print("'독립반' 글자:", pg.locator("text=독립반").count(), "/ '기관찾기':", pg.locator("text=기관찾기").count())
+              pg.screenshot(path="reserve.png", full_page=True)
               b.close()
           EOF
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: childcare-screens
+          path: "*.png"
