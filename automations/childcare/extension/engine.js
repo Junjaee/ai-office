@@ -143,6 +143,7 @@
     cell.click();                               // selectDay2
     await sleep(120);
 
+    const before = popups.length;
     document.getElementById("timecareTableAddBtn").click();   // f_AddQualRow — 서버 확인 한 번
     const until2 = Date.now() + 10000;
     while (Date.now() < until2 && !stop) {
@@ -151,25 +152,34 @@
         log(`장전됨 — ${got ? got.value : "?"} ${cell.innerText.trim()}자리`);
         return;
       }
+      if (popups.length > before) break;                   // 사이트가 거절했다 — 더 기다릴 것 없다
       await sleep(100);
     }
-    throw new Error("추가가 안 됐어요 (중복이거나 이미 예약된 시간일 수 있어요)");
+    const said = popups.slice(before).join(" / ");
+    throw new Error(said ? `추가 거절 — ${said}` : "추가가 안 됐어요 (사이트가 아무 말도 안 했어요)");
   }
 
   // ───────── 발사 ─────────
   // 넷퍼넬(대기열)이 걸려 있어 **한 발만** 쏜다. 다시 쏘면 줄 뒤로 밀린다.
   // 대신 확인창은 뜨는 즉시 누른다 — 사람은 0.5~1초, 이건 1프레임이다.
-  function fire() {
-    const said = [];
-    const seen = new Set();
+  // 사이트가 띄우는 모든 안내를 받아 적고 닫는다. [시작] 때 한 번 걸어 두고 계속 둔다.
+  // 거절 사유가 여기로 오는데, 지금까지는 이걸 안 보고 있어서 원인을 몰랐다(2026-11-11).
+  const popups = [];
+  let popupWatching = false;
+
+  function watchPopups() {
+    if (popupWatching) return;
+    popupWatching = true;
+    const shown = new Map();                               // 창마다 '지금 떠 있는 글' 을 기억
     const hit = () => {
       for (const id of ["layer-confirm-popup-contents", "layer-confirm-popup-contents2",
-                        "layer-popup-contents", "layer-popup-contents2", "layer-popup-contents3"]) {
+                        "layer-popup-contents", "layer-popup-contents2", "layer-popup-contents3",
+                        "alertMsg", "layer-alert-popup-contents"]) {
         const box = document.getElementById(id);
-        if (box && box.offsetParent !== null) {
-          const t = box.innerText.trim();
-          if (t && !seen.has(t)) { seen.add(t); said.push(t); }
-        }
+        if (!box || box.offsetParent === null) { shown.delete(id); continue; }
+        const t = box.innerText.trim();
+        // 닫혔다 같은 글로 다시 떠도 새 안내다 — 그래서 닫힐 때 기억을 지운다
+        if (t && shown.get(id) !== t) { shown.set(id, t); popups.push(t); }
       }
       for (const id of ["layer-confirm-popup-confirm", "layer-confirm-popup-confirm2",
                         "layer-popup-close", "layer-popup-close2", "layer-popup-close3"]) {
@@ -177,20 +187,26 @@
         if (el && el.offsetParent !== null) { el.click(); return; }
       }
     };
-    const obs = new MutationObserver(hit);
-    obs.observe(document.body, { subtree: true, attributes: true, childList: true });
-    const nativeAlert = window.alert;
-    window.alert = (m) => { said.push(String(m)); };
+    new MutationObserver(hit).observe(document.body, { subtree: true, attributes: true, childList: true });
+    const nativeAlert = window.alert, nativeConfirm = window.confirm;
+    window.alert = (m) => { popups.push(String(m)); };
+    window.confirm = (m) => { popups.push(String(m)); return true; };
+    void nativeAlert; void nativeConfirm;                  // 되돌리지 않는다 — 끝까지 받아 적어야 한다
     hit();
+  }
 
+  // ───────── 발사 ─────────
+  // 넷퍼넬(대기열)이 걸려 있어 **한 발만** 쏜다. 다시 쏘면 줄 뒤로 밀린다.
+  function fire() {
+    const from = popups.length;
     window.fnSave();
-
     return new Promise((resolve) => {
-      let left = 120;
+      let left = 240;
       const timer = setInterval(() => {
+        const said = popups.slice(from);
         // 멈춤을 눌러도 이미 보낸 신청은 되돌릴 수 없다 — 기다리기만 그만둔다
         if (said.length || stop || --left <= 0) {
-          clearInterval(timer); obs.disconnect(); window.alert = nativeAlert;
+          clearInterval(timer);
           const msg = said.join(" / ");
           if (!msg && stop) return resolve({ ok: false, msg: "기다리기를 멈췄어요 (신청은 이미 보냈습니다)" });
           resolve({ ok: /예약되었습니다|예약완료|신청이 완료|정상적으로/.test(msg), msg: msg || "응답이 없어요" });
@@ -209,6 +225,7 @@
     const clname = clsel.options[clsel.selectedIndex].text.trim();
     if (!document.getElementById("INFOQUALF")) throw new Error("예약 화면이 아니에요 ('이용정보 신청' 을 여세요)");
 
+    watchPopups();
     const beginHour = Number(cfg.beginHour), hours = Number(cfg.hours);
     log(`${cfg.useDate} ${pad(beginHour)}:00 부터 ${hours}시간 · ${clname}반`);
 
@@ -259,7 +276,7 @@
     log("감시 시작 — 열리는 순간 쏩니다");
     // 보험 한 발은 없앴다 — 줄이 화면 표에 없으면 장전 자체가 안 되므로,
     // 자리가 보이는 것이 곧 방아쇠다.
-    let lastSeen = null, lastError = null, fails = 0;
+    let lastSeen = null, lastError = null, fails = 0, shootFails = 0;
     while (!stop && Date.now() < giveUp) {
       try {
         const seats = await seatsLeft(cfg.useDate, beginHour, clseq);
@@ -268,10 +285,20 @@
           lastSeen = seats;
           log(seats < 0 ? "아직 그 날짜가 표에 없어요" : `남은 자리 ${seats}개`);
         }
-        if (seats >= 1 && await shoot("열림 확인")) return;
+        if (seats >= 1) {
+          try {
+            if (await shoot("열림 확인")) return;
+            shootFails++;
+          } catch (e) {
+            shootFails++;
+            log(`${shootFails}번째 실패 — ${String(e.message).slice(0, 90)}`);
+          }
+          // 중복·이미 예약 같은 사유는 다시 해도 안 된다. 세 번이면 그만두고 사람에게 넘긴다.
+          if (shootFails >= 3) return log("세 번 해도 안 됩니다 — 위 문구를 보고 날짜·시각을 바꿔 보세요");
+        }
       } catch (e) {
         // 같은 오류를 0.5초마다 쌓으면 기록창이 묻힌다 — 달라질 때만 적는다
-        const why = String(e.message).slice(0, 50);
+        const why = String(e.message).slice(0, 60);
         if (why !== lastError) { lastError = why; log(`확인 실패(계속 감시) — ${why}`); }
         if (++fails === 10) log("열 번 내리 실패했어요 — 로그인이 풀렸는지 확인해 보세요");
       }
