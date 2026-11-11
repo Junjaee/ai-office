@@ -24,7 +24,11 @@
   if (window.__childcareMacro) return;        // 주소가 바뀌어도 두 번 뜨지 않게
   window.__childcareMacro = true;
 
-  const GAP_MS = 120;                         // 한 바퀴 돌고 다음 발사까지
+  // 실측(2026-11-12, 아이사랑 실제 화면): 확인창 뜨기 0ms · 확인 누른 뒤 결과 107ms · 닫기 0ms.
+  // 화면 조작은 공짜고 **서버 왕복 107ms 가 전부**다. 그래서 쉬는 시간을 둘 이유가 없다.
+  // 한 바퀴 약 110ms = 초당 9번. 더 줄이려면 응답을 안 기다리고 겹쳐 쏴야 하는데,
+  // 확인창이 하나뿐이라 서로 꼬인다.
+  const GAP_MS = 0;                           // 한 바퀴 돌고 다음 발사까지
   const GIVE_UP_MS = 30 * 60 * 1000;          // 이만큼 해도 안 되면 그만둔다
 
   const DONE = /예약되었습니다|예약완료|신청이 완료|정상적으로/;
@@ -48,7 +52,7 @@
   // 뜨는 즉시 확인을 누르고, 결과 문구만 따로 모은다.
   // 물어보는 창("예약하시겠습니까?")을 결과로 세면 성공을 실패로 읽는다.
   const said = [];
-  let watching = false, lastQueue = "";
+  let watching = false, lastQueue = "", wake = null;
 
   function watch(log) {
     if (watching) return;
@@ -62,7 +66,10 @@
         const t = box.innerText.trim();
         if (!t || shown.get(id) === t) continue;   // 닫혔다 같은 글로 다시 떠도 새 안내다
         shown.set(id, t);
-        if (SAY_IDS.includes(id)) said.push(t);    // 결과만 모은다
+        if (SAY_IDS.includes(id)) {                // 결과만 모은다
+          said.push(t);
+          if (wake) { const w = wake; wake = null; w(); }   // 기다리는 쪽을 즉시 깨운다
+        }
       }
 
       // 넷퍼넬 대기열은 보기만 한다. 누르거나 다시 쏘면 대기표를 버리고 맨 뒤로 간다.
@@ -89,17 +96,23 @@
     tick();
   }
 
-  // 한 발 — 예약하기를 누르고 결과 문구가 올 때까지 기다린다
+  // 한 발 — 예약하기를 누르고 결과 문구가 올 때까지 기다린다.
+  // 들여다보며 기다리지 않고 **결과가 뜨는 순간 깨어난다**(관찰자가 깨운다).
   async function fire(stopped) {
     const from = said.length;
+    const got = new Promise((res) => { wake = res; });
     window.fnSave();
-    for (let i = 0; i < 2400; i++) {               // 최대 2분
-      await sleep(50);
-      if (said.length > from) return said.slice(from).join(" / ");
-      if (visible("NetFunnel_Skin_Top")) { i = 0; continue; }   // 줄 서는 동안은 끝까지 기다린다
-      if (stopped()) return "";
+
+    const deadline = Date.now() + 120000;          // 최대 2분
+    while (Date.now() < deadline) {
+      const hit = await Promise.race([got, sleep(200).then(() => null)]);
+      if (said.length > from) { wake = null; return said.slice(from).join(" / "); }
+      if (hit !== null) break;
+      if (visible("NetFunnel_Skin_Top")) continue; // 줄 서는 동안은 끝까지 기다린다
+      if (stopped()) break;
     }
-    return "";
+    wake = null;
+    return said.length > from ? said.slice(from).join(" / ") : "";
   }
 
   // ───────── 본체 ─────────
@@ -113,11 +126,13 @@
 
     watch(log);
     const until = Date.now() + GIVE_UP_MS;
-    let tries = 0, last = "";
+    let tries = 0, last = "", spent = 0;
 
     while (!stop && Date.now() < until) {
       tries++;
+      const t0 = Date.now();
       const msg = await fire(() => stop);
+      spent += Date.now() - t0;                    // 한 바퀴가 얼마나 걸리는지 — 내일 보려고
       if (stop) break;
 
       if (!msg) {                                  // 응답이 안 왔다
@@ -125,11 +140,17 @@
         await sleep(GAP_MS);
         continue;
       }
-      if (DONE.test(msg)) return log("성공 — " + msg + " (" + tries + "번째)");
+      if (DONE.test(msg)) {
+        return log("성공 — " + msg + " (" + tries + "번째, 한 바퀴 평균 "
+                   + Math.round(spent / tries) + "ms)");
+      }
       if (!NOT_YET.test(msg)) return log("멈춥니다 — " + msg + " (다시 해도 안 될 사유예요)");
 
       if (msg !== last) { last = msg; log(tries + "번째 — " + msg); }
-      else if (tries % 25 === 0) log(tries + "번째까지 같은 답 — 계속합니다");
+      else if (tries % 25 === 0) {
+        log(tries + "번째까지 같은 답 — 계속합니다 (한 바퀴 평균 "
+            + Math.round(spent / tries) + "ms)");
+      }
       await sleep(GAP_MS);
     }
     log(stop ? "멈췄어요" : "시간이 다 됐어요 (30분)");
