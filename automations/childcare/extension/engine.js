@@ -156,16 +156,33 @@
   }
 
   // 사이트 차례 그대로: 반·시간 고르기 → 표 새로 받기 → 칸 누르기 → 추가
-  async function addViaSite(ymd, beginHour, hours, clseq, log) {
-    setSelect("clname", clseq);
+  // 표를 다시 받게 만든다. 반을 '선택 안 함' 으로 비웠다 다시 고르면 change 가 반드시 일어나
+  // occasionCrTmInfoAjax 가 다시 불린다. 같은 값으로 두면 change 가 안 나서 표가 그대로다.
+  function reloadGrid(clseq, hours) {
+    const cl = document.getElementById("clname");
+    if (cl) {
+      cl.value = "";
+      cl.dispatchEvent(new Event("change", { bubbles: true }));
+      cl.value = String(clseq);
+      cl.dispatchEvent(new Event("change", { bubbles: true }));
+    }
     setSelect("rtm", hours);
+  }
+
+  async function addViaSite(ymd, beginHour, hours, clseq, log) {
+    // 화면의 '새로고침' 버튼이 하는 일 그대로(onclick="fnRefresh()").
+    // 우리 조회는 '언제 열렸나' 를 볼 뿐 화면을 바꾸지 않으므로, 여기서 꼭 눌러야 한다.
     if (window.fnRefresh) window.fnRefresh();
+    await sleep(300);
+    reloadGrid(clseq, hours);
 
     const until = Date.now() + 15000;
-    let idx = -1;
+    let idx = -1, retried = false;
     while (Date.now() < until && !stop) {
       idx = pageRowIndex(ymd);
       if (idx >= 0) break;
+      // 절반쯤 지나도 안 보이면 한 번 더 받아 본다 (새로고침이 늦게 끝났을 수 있다)
+      if (!retried && Date.now() > until - 8000) { retried = true; reloadGrid(clseq, hours); }
       await sleep(150);
     }
     if (idx < 0) throw new Error(`${ymd} 줄이 화면 표에 없어요`);
