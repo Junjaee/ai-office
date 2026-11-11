@@ -91,60 +91,69 @@
   }
 
   // ───────── 장전 ─────────
-  // '추가' 버튼이 하는 일은 숨은 값 8개를 채우고 목록에 줄 하나를 만드는 것뿐이라,
-  // 그 값을 직접 써 넣으면 서버를 한 번도 안 부르고 장전된다(약 1ms).
-  // 공백 하나까지 화면과 같아야 한다 — "09 : 00", "09 : 00  ~  13 : 00 ".
-  function arm(ymd, beginHour, hours, clseq, clname) {
-    const d = new Date(`${ymd}T00:00:00`);
-    const endHour = Math.min(beginHour + hours, 18);
-    const bt = `${pad(beginHour)} : 00`, et = `${pad(endHour)} : 00`;
-    const s = {
-      sdate: `${ymd}(${WEEKDAYS[(d.getDay() + 6) % 7]})`,
-      resdt: ymd.replace(/-/g, ""),
-      resbgntm: bt, resendtm: et,
-      restime: `${bt}  ~  ${et} `,
-      rtm: String(endHour - beginHour),
-      resclseq: clseq, resclname: clname,
-    };
-    // 화면의 '이용시간' 칸도 맞춰 둔다. 안 그러면 fnSave 가
-    // "이용정보를 선택해 주시기 바랍니다" 로 막는다(2026-11-11 실패).
-    // 손으로 검증할 때는 앞선 단계에서 이미 골라져 있어 눈치채지 못했다.
-    const rtmSel = document.getElementById("rtm");
-    if (rtmSel && rtmSel.value !== s.rtm) {
-      rtmSel.value = s.rtm;
-      rtmSel.dispatchEvent(new Event("change", { bubbles: true }));
+  // 숨은 값을 직접 채워 넣는 방식을 써 봤지만 사이트가
+  // "이용정보를 선택해 주시기 바랍니다" 로 막았다(2026-11-11).
+  // 처음 손으로 성공했을 때는 앞서 진짜 '추가' 를 눌렀다 지운 화면이라,
+  // 사이트가 남긴 무언가가 더 있었던 것이다. 그래서 **사이트의 진짜 버튼을 그대로 누른다.**
+  // 한 번의 왕복(중복 확인)이 더 들지만 확실하다.
+
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  function setSelect(id, value) {
+    const el = document.getElementById(id);
+    if (el && el.value !== String(value)) {
+      el.value = String(value);
+      el.dispatchEvent(new Event("change", { bubbles: true }));
     }
+  }
 
-    const form = document.getElementById("pfrm");
-    const put = (name, value) => {
-      let el = form.querySelector(`input[name="${name}"]`);
-      if (!el) { el = document.createElement("input"); el.type = "hidden"; el.name = name; form.appendChild(el); }
-      el.value = value;
-    };
-    put("sdateArray", s.sdate); put("restimeArray", s.restime); put("resdtArray", s.resdt);
-    put("resbgntmArray", s.resbgntm); put("resendtmArray", s.resendtm);
-    put("rtmArray", s.rtm); put("resclseqArray", s.resclseq); put("infoNum", "1");
-
-    const body = document.querySelector("#INFOQUALF tbody") || document.getElementById("INFOQUALF");
-    [...body.querySelectorAll("tr[id^=tId_]")].forEach((tr) => tr.remove());
-    const tr = document.createElement("tr");
-    tr.id = "tId_0";
-    tr.innerHTML = [
-      `<input type="checkbox" name="rowQualChkNo" value="on">`,
-      `<input type="hidden" name="resclname0" value="${s.resclname}"><input type="hidden" name="resclseq0" value="${s.resclseq}">${s.resclname}`,
-      `<input type="hidden" name="sdate0" value="${s.sdate}"><input type="hidden" name="resdt0" value="${s.resdt}">${s.sdate}`,
-      `<input type="hidden" name="restime0" value="${s.restime}"><input type="hidden" name="resbgntm0" value="${s.resbgntm}">` +
-      `<input type="hidden" name="resendtm0" value="${s.resendtm}"><input type="hidden" name="rtm0" value="${s.rtm}">${s.restime}`,
-    ].map((c) => `<td>${c}</td>`).join("");
-    body.appendChild(tr);
-
-    // 스스로 점검 — 틀린 채로 쏘면 한 발을 날린다
-    const rows = body.querySelectorAll("tr[id^=tId_]").length;
-    const wrote = form.querySelector('input[name="resdtArray"]');
-    if (rows !== 1 || !wrote || wrote.value !== s.resdt) {
-      throw new Error(`장전 실패 (줄 ${rows}개, 날짜 ${wrote ? wrote.value : "없음"})`);
+  // 화면 표에서 그 날짜가 몇 번째 줄인지. 줄 번호는 칸 id 의 뒷자리다(tm_9_<줄>).
+  function pageRowIndex(ymd) {
+    const rows = [...document.querySelectorAll("tr")].filter((tr) => tr.querySelector("a.time-option"));
+    for (const tr of rows) {
+      if ((tr.innerText.match(/\d{4}-\d{2}-\d{2}/) || [""])[0] !== ymd) continue;
+      const id = tr.querySelector("a.time-option").id;
+      const m = id.match(/_(\d+)$/);
+      if (m) return Number(m[1]);
     }
-    return s;
+    return -1;
+  }
+
+  // 사이트 차례 그대로: 반·시간 고르기 → 표 새로 받기 → 칸 누르기 → 추가
+  async function addViaSite(ymd, beginHour, hours, clseq, log) {
+    setSelect("clname", clseq);
+    setSelect("rtm", hours);
+    if (window.fnRefresh) window.fnRefresh();
+
+    const until = Date.now() + 15000;
+    let idx = -1;
+    while (Date.now() < until && !stop) {
+      idx = pageRowIndex(ymd);
+      if (idx >= 0) break;
+      await sleep(150);
+    }
+    if (idx < 0) throw new Error(`${ymd} 줄이 화면 표에 없어요`);
+
+    setSelect("clname", clseq);                 // 표를 새로 받으면 되돌아가기도 한다
+    setSelect("rtm", hours);
+    const cell = document.getElementById(`tm_${beginHour}_${idx}`);
+    if (!cell) throw new Error(`${pad(beginHour)}시 칸이 없어요 (${ymd})`);
+    const mark = cell.innerText.trim();
+    if (mark === "X" || mark === "0") throw new Error(`${pad(beginHour)}시 자리가 없어요 (${mark})`);
+    cell.click();                               // selectDay2
+    await sleep(120);
+
+    document.getElementById("timecareTableAddBtn").click();   // f_AddQualRow — 서버 확인 한 번
+    const until2 = Date.now() + 10000;
+    while (Date.now() < until2 && !stop) {
+      if (document.querySelector("#INFOQUALF tr[id^=tId_]")) {
+        const got = document.querySelector('#pfrm input[name="resdtArray"]');
+        log(`장전됨 — ${got ? got.value : "?"} ${cell.innerText.trim()}자리`);
+        return;
+      }
+      await sleep(100);
+    }
+    throw new Error("추가가 안 됐어요 (중복이거나 이미 예약된 시간일 수 있어요)");
   }
 
   // ───────── 발사 ─────────
@@ -231,8 +240,9 @@
     }
 
     const shoot = async (why) => {
-      log(`${why} → 발사`);
-      arm(cfg.useDate, beginHour, hours, clseq, clname);
+      log(`${why} → 장전`);
+      await addViaSite(cfg.useDate, beginHour, hours, clseq, log);
+      log("발사");
       const r = await fire();
       log((r.ok ? "성공 — " : "실패 — ") + r.msg);
       return r.ok;
@@ -247,13 +257,10 @@
     if (stop) return log("멈췄어요");
 
     log("감시 시작 — 열리는 순간 쏩니다");
-    let shotAtOpen = NOW_MODE, lastSeen = null;            // 즉시면 보험 한 발을 건너뛴다
-    let lastError = null, fails = 0;
+    // 보험 한 발은 없앴다 — 줄이 화면 표에 없으면 장전 자체가 안 되므로,
+    // 자리가 보이는 것이 곧 방아쇠다.
+    let lastSeen = null, lastError = null, fails = 0;
     while (!stop && Date.now() < giveUp) {
-      if (!shotAtOpen && Date.now() >= fireAt) {            // 보험 한 발
-        shotAtOpen = true;
-        if (await shoot("예상 정각")) return;
-      }
       try {
         const seats = await seatsLeft(cfg.useDate, beginHour, clseq);
         fails = 0; lastError = null;
