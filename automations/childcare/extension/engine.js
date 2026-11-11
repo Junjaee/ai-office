@@ -156,38 +156,46 @@
   }
 
   // 사이트 차례 그대로: 반·시간 고르기 → 표 새로 받기 → 칸 누르기 → 추가
-  // 표를 다시 받게 만든다. 반을 '선택 안 함' 으로 비웠다 다시 고르면 change 가 반드시 일어나
-  // occasionCrTmInfoAjax 가 다시 불린다. 같은 값으로 두면 change 가 안 나서 표가 그대로다.
-  function reloadGrid(clseq, hours) {
+  // 표를 다시 받게 만든다. 반을 '선택 안 함' 으로 비웠다 고르면 확실하지만,
+  // 실제 화면에서는 비우는 순간 사이트가 경고를 띄울 수 있다(사용자 확인 2026-11-11:
+  // 새로고침해도 반 설정은 그대로다). 그래서 **값은 건드리지 않고 change 만 다시 일으킨다** —
+  // 사이트의 handler 가 그때의 #clname 값을 읽어 occasionCrTmInfoAjax 를 다시 부른다.
+  function askGridAgain(clseq, hours) {
     const cl = document.getElementById("clname");
     if (cl) {
-      cl.value = "";
-      cl.dispatchEvent(new Event("change", { bubbles: true }));
-      cl.value = String(clseq);
+      if (cl.value !== String(clseq)) cl.value = String(clseq);
       cl.dispatchEvent(new Event("change", { bubbles: true }));
     }
     setSelect("rtm", hours);
+  }
+
+  async function waitRow(ymd, ms) {
+    const until = Date.now() + ms;
+    while (Date.now() < until && !stop) {
+      const i = pageRowIndex(ymd);
+      if (i >= 0) return i;
+      await sleep(150);
+    }
+    return -1;
   }
 
   async function addViaSite(ymd, beginHour, hours, clseq, log) {
     // 화면의 '새로고침' 버튼이 하는 일 그대로(onclick="fnRefresh()").
     // 우리 조회는 '언제 열렸나' 를 볼 뿐 화면을 바꾸지 않으므로, 여기서 꼭 눌러야 한다.
     if (window.fnRefresh) window.fnRefresh();
-    await sleep(300);
-    reloadGrid(clseq, hours);
+    setSelect("rtm", hours);
 
-    const until = Date.now() + 15000;
-    let idx = -1, retried = false;
-    while (Date.now() < until && !stop) {
-      idx = pageRowIndex(ymd);
-      if (idx >= 0) break;
-      // 절반쯤 지나도 안 보이면 한 번 더 받아 본다 (새로고침이 늦게 끝났을 수 있다)
-      if (!retried && Date.now() > until - 8000) { retried = true; reloadGrid(clseq, hours); }
-      await sleep(150);
+    // 1차: 새로고침만으로 줄이 생기길 기다린다 — 보통 이걸로 된다
+    let idx = await waitRow(ymd, 6000);
+    if (idx < 0) {
+      // 2차: 안 생기면 표를 다시 달라고 한 번 더 조른다
+      log("표가 아직이라 한 번 더 받습니다");
+      askGridAgain(clseq, hours);
+      idx = await waitRow(ymd, 9000);
     }
     if (idx < 0) throw new Error(`${ymd} 줄이 화면 표에 없어요`);
 
-    setSelect("clname", clseq);                 // 표를 새로 받으면 되돌아가기도 한다
+    setSelect("clname", clseq);                 // 혹시 풀렸으면 되돌린다
     setSelect("rtm", hours);
     const cell = document.getElementById(`tm_${beginHour}_${idx}`);
     if (!cell) throw new Error(`${pad(beginHour)}시 칸이 없어요 (${ymd})`);
