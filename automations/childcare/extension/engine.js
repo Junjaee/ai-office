@@ -36,7 +36,7 @@
   // ───────── 서버 시계 ─────────
   // 응답의 Date 헤더는 초 단위라, 초가 **넘어가는 순간**을 잡아야 ms 까지 맞출 수 있다.
   // 재면 늘 실제보다 늦게 나오므로(알아채는 시간 + 응답 오는 시간) 여러 번 재서 가장 작은 값을 쓴다.
-  async function serverOffsetMs(rounds = 8) {
+  async function serverOffsetMs(rounds = 8, aborted = () => false) {
     const probe = async () => {
       const t0 = Date.now();
       const r = await fetch(`${CLOCK_URL}?t=${Math.random()}`, { method: "HEAD", cache: "no-store" });
@@ -44,16 +44,17 @@
       return { d: Date.parse(r.headers.get("date") || ""), mid: t0 + (t1 - t0) / 2 };
     };
     let best = Infinity;
-    for (let n = 0; n < rounds; n++) {
+    for (let n = 0; n < rounds && !aborted(); n++) {
       const first = await probe();
       if (!first.d) continue;
       const until = Date.now() + 1500;
-      while (Date.now() < until) {
+      while (Date.now() < until && !aborted()) {
         const s = await probe();
         if (!s.d) continue;
         if (s.d !== first.d) { best = Math.min(best, s.mid - s.d); break; }
       }
     }
+    if (aborted()) return null;
     if (!isFinite(best)) throw new Error("서버 시각을 못 읽었어요");
     return best;
   }
@@ -160,12 +161,14 @@
     return new Promise((resolve) => {
       let left = 120;
       const timer = setInterval(() => {
-        if (said.length || --left <= 0) {
+        // 멈춤을 눌러도 이미 보낸 신청은 되돌릴 수 없다 — 기다리기만 그만둔다
+        if (said.length || stop || --left <= 0) {
           clearInterval(timer); obs.disconnect(); window.alert = nativeAlert;
           const msg = said.join(" / ");
+          if (!msg && stop) return resolve({ ok: false, msg: "기다리기를 멈췄어요 (신청은 이미 보냈습니다)" });
           resolve({ ok: /예약되었습니다|예약완료|신청이 완료|정상적으로/.test(msg), msg: msg || "응답이 없어요" });
         }
-      }, 500);
+      }, 250);
     });
   }
 
@@ -194,8 +197,9 @@
       giveUp = Date.now() + 60 * 60 * 1000;                // 한 시간 지켜보고 그만둔다
       log("즉시 — 지금부터 지켜보다 자리가 나면 바로 잡습니다 (한 시간)");
     } else {
-      log("서버 시각 맞추는 중…");
-      const offset = await serverOffsetMs(8);
+      log("서버 시각 맞추는 중… (10초쯤 걸립니다)");
+      const offset = await serverOffsetMs(8, () => stop);
+      if (offset === null) return log("멈췄어요");
       log(`이 PC 시계가 서버보다 ${offset > 0 ? "+" : ""}${Math.round(offset)}ms`);
 
       const [oh, om, os] = cfg.openAt.split(":").map(Number);
@@ -216,15 +220,17 @@
       return r.ok;
     };
 
+    let said30 = -1;
     while (!stop && Date.now() < watchFrom) {
       const left = Math.round((watchFrom - Date.now()) / 1000);
-      if (left % 30 === 0) log(`감시 시작까지 ${left}초`);
-      await new Promise((r) => setTimeout(r, 1000));
+      if (left % 30 === 0 && left !== said30) { said30 = left; log(`감시 시작까지 ${left}초`); }
+      await new Promise((r) => setTimeout(r, 250));
     }
     if (stop) return log("멈췄어요");
 
     log("감시 시작 — 열리는 순간 쏩니다");
     let shotAtOpen = NOW_MODE, lastSeen = null;            // 즉시면 보험 한 발을 건너뛴다
+    let lastError = null, fails = 0;
     while (!stop && Date.now() < giveUp) {
       if (!shotAtOpen && Date.now() >= fireAt) {            // 보험 한 발
         shotAtOpen = true;
@@ -232,13 +238,17 @@
       }
       try {
         const seats = await seatsLeft(cfg.useDate, beginHour, clseq);
+        fails = 0; lastError = null;
         if (seats !== lastSeen) {
           lastSeen = seats;
           log(seats < 0 ? "아직 그 날짜가 표에 없어요" : `남은 자리 ${seats}개`);
         }
         if (seats >= 1 && await shoot("열림 확인")) return;
       } catch (e) {
-        log(`확인 실패(계속 감시) — ${String(e.message).slice(0, 50)}`);
+        // 같은 오류를 0.5초마다 쌓으면 기록창이 묻힌다 — 달라질 때만 적는다
+        const why = String(e.message).slice(0, 50);
+        if (why !== lastError) { lastError = why; log(`확인 실패(계속 감시) — ${why}`); }
+        if (++fails === 10) log("열 번 내리 실패했어요 — 로그인이 풀렸는지 확인해 보세요");
       }
       await new Promise((r) => setTimeout(r, Number(cfg.watchInterval)));
     }
@@ -318,7 +328,11 @@
     try { await run(cfg, log); } catch (e) { log(`멈춤 — ${e.message}`); }
     $("go").disabled = false;
   };
-  $("no").onclick = () => { stop = true; log("멈추는 중…"); };
+  $("no").onclick = () => {
+    if (stop) return;
+    stop = true;
+    log("멈추는 중… (이미 보낸 신청은 되돌릴 수 없어요)");
+  };
 
   log("반까지 고른 뒤 [시작]을 누르세요");
 })();
