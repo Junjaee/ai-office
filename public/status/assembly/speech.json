@@ -3,36 +3,43 @@
   "dept": "qa",
   "ok": true,
   "running": false,
-  "summary": "오늘 질의 없음 — 예결위 질의순서 25명에 없음",
+  "summary": "재경위 자막 254줄 · 구간 0 · 요약 0/0실패 · 전송 0묶음 · 산회",
   "counts": {
-    "order": 25
+    "captions": 254,
+    "segments": 0,
+    "summarized": 0,
+    "summary_failed": 0,
+    "sent": 0,
+    "send_failed": 0
   },
   "next_run": "캘린더의 다음 재경위·예결위 회의",
-  "log": [],
+  "log": [
+    "질의순서 없이 진행"
+  ],
   "link": "",
-  "run_id": 42731411552,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42731411552",
-  "request_id": "cron-202611100050",
+  "run_id": 42957533770,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42957533770",
+  "request_id": "cron-202611110410",
   "trigger": "schedule",
-  "started_at": "2026-11-10T09:51:29+09:00",
-  "duration_sec": 3,
+  "started_at": "2026-11-11T13:11:35+09:00",
+  "duration_sec": 2102,
   "tasks": [
     {
       "id": "listen",
       "status": "done",
-      "summary": "오늘 질의 없음"
+      "summary": "자막 254줄, 구간 0"
     },
     {
       "id": "summarize",
       "status": "done",
-      "summary": "건너뜀"
+      "summary": "요약 0건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "건너뜀"
+      "summary": "전송 0묶음"
     }
   ],
   "id": "speech",
-  "updated_at": "2026-11-10T09:51:33+09:00"
+  "updated_at": "2026-11-11T13:46:38+09:00"
 }
