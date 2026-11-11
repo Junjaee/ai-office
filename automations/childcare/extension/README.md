@@ -257,13 +257,26 @@ POST /icms/occasion/occasionCrTmInfoAjax.html
 
 ## 예약하기를 누르면 창이 두 번 뜬다
 
+실제 화면에서 눌러 보고 확인했다(2026-11-12 00:30, 아직 안 열린 11-26 으로).
+
 ```
 예약하기(fnSave) → insertOcreqst()
-  ① 물어보는 창   layer-confirm-popup-*   확인/취소   "예약하시겠습니까?"
-  ② 넷퍼넬 대기열  NetFunnel_Skin_Top      (몰릴 때만)
-  ③ 결과 알림     layer-popup-*           확인만      "1건 예약 중 1건 예약되었습니다."
-                                                      "아직예약가능한 시간이 아닙니다"
+  ① 물어보는 창   layer-confirm-popup-contents2   "예약하시겠습니까?"   확인 = layer-confirm-popup-confirm2
+  ② 넷퍼넬 대기열  NetFunnel_Skin_Top              (몰릴 때만)
+  ③ 결과 알림     layer-alert-popup-contents2     "아직 예약 가능한 시간이 아닙니다."
+                                                  "1건 예약 중 1건 예약되었습니다."
+                                                  확인 = layer-popup-close2
 ```
+
+**③을 닫아야 다시 예약하기를 누를 수 있다.**
+
+### 함정 둘 (둘 다 실제 화면에서만 드러났다)
+
+1. 거절 문구는 `layer-popup-contents` 가 아니라 **`layer-alert-popup-contents2`** 에 뜬다.
+   안 보고 있으면 응답을 못 읽고 한 번 쏜 뒤 멈춘다.
+2. **같은 id 가 문서에 두 벌씩 있다** — 숨은 것과 보이는 것.
+   `getElementById` 는 첫 번째(숨은 것)를 집으므로 글도 못 읽고 확인도 못 누른다.
+   → 같은 id 를 전부 훑어 **보이는 것**을 쓴다.
 
 **둘을 가르지 않으면 "예약하시겠습니까?" 를 결과로 착각해 성공을 실패로 읽는다.**
 id 로 가른다 — `layer-confirm-popup-*` 는 누르기만 하고, `layer-popup-*` 만 답으로 본다.

@@ -262,11 +262,17 @@
       // 창이 두 종류다. 가르지 않으면 "예약하시겠습니까?" 를 결과로 착각한다.
       //   layer-confirm-popup-*  = 물어보는 창(확인/취소)  → 누르기만 하고 결과로 세지 않는다
       //   layer-popup-* , alertMsg = 결과 알림(확인만)     → 이게 답이다
+      // **같은 id 가 문서에 두 벌씩 있다**(숨은 것 + 보이는 것, 2026-11-12 실제 화면에서 확인).
+      // getElementById 는 첫 번째만 집으므로 숨은 쪽을 잡아 아무것도 못 읽고 못 누른다.
+      // 그래서 같은 id 를 전부 훑어 **보이는 것**을 쓴다.
+      const visible = (id) => [...document.querySelectorAll(`[id="${id}"]`)].find((e) => e.offsetParent !== null);
+
       for (const id of ["layer-confirm-popup-contents", "layer-confirm-popup-contents2",
                         "layer-popup-contents", "layer-popup-contents2", "layer-popup-contents3",
-                        "alertMsg", "layer-alert-popup-contents"]) {
-        const box = document.getElementById(id);
-        if (!box || box.offsetParent === null) { shown.delete(id); continue; }
+                        "layer-alert-popup-contents", "layer-alert-popup-contents2",
+                        "layer-alert-popup-contents3", "alertMsg"]) {
+        const box = visible(id);
+        if (!box) { shown.delete(id); continue; }
         const t = box.innerText.trim();
         // 닫혔다 같은 글로 다시 떠도 새 안내다 — 그래서 닫힐 때 기억을 지운다
         if (t && shown.get(id) !== t) {
@@ -276,9 +282,10 @@
       }
       queue();                                             // 대기열은 보기만 한다 (누르지 않는다)
       for (const id of ["layer-confirm-popup-confirm", "layer-confirm-popup-confirm2",
-                        "layer-popup-close", "layer-popup-close2", "layer-popup-close3"]) {
-        const el = document.getElementById(id);
-        if (el && el.offsetParent !== null) { el.click(); return; }
+                        "layer-popup-close", "layer-popup-close2", "layer-popup-close3",
+                        "layer-alert-popup-close", "layer-alert-popup-close2"]) {
+        const el = visible(id);
+        if (el) { el.click(); return; }
       }
     };
     new MutationObserver(hit).observe(document.body, { subtree: true, attributes: true, childList: true });
