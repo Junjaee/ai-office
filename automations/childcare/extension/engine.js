@@ -379,6 +379,7 @@
       .row{display:flex;gap:5px;align-items:center;white-space:nowrap}
       .btns{display:flex;gap:6px;margin-top:10px}
       button{flex:1;padding:7px 0;border:0;border-radius:6px;font:inherit;font-weight:700;cursor:pointer}
+      #cp{flex:0 0 56px}
       .go{background:#2f4b8b;color:#fff} .no{background:#e6e9f0;color:#333}
       pre{margin:10px 0 0;background:#f6f8fc;border-radius:6px;padding:8px;height:120px;overflow:auto;
           white-space:pre-wrap;font:12px/1.45 Consolas,monospace}
@@ -395,7 +396,8 @@
           <span class="row"><input type="time" id="o" step="1">
           <label class="chk"><input type="checkbox" id="now">즉시</label></span></label>
         <label><span>미리 감시</span><input type="number" id="w" style="width:52px">초 전부터</label>
-        <div class="btns"><button class="go" id="go">시작</button><button class="no" id="no">멈춤</button></div>
+        <div class="btns"><button class="go" id="go">시작</button><button class="no" id="no">멈춤</button>
+          <button class="no" id="cp" title="기록을 통째로 복사">복사</button></div>
         <pre id="log"></pre>
       </div>
     </div>`;
@@ -445,6 +447,24 @@
     try { await run(cfg, log); } catch (e) { log(`멈춤 — ${e.message}`); }
     $("go").disabled = false;
   };
+  // 기록을 통째로 복사 — 무슨 일이 있었는지 그대로 넘겨 주기 위해서다
+  $("cp").onclick = async () => {
+    const text = $("log").textContent.trim();
+    try {
+      await navigator.clipboard.writeText(text);
+      log("기록을 복사했어요 — 붙여 넣으시면 됩니다");
+    } catch {
+      // 클립보드를 막는 경우가 있어 그때는 골라 둔다
+      const sel = document.createElement("textarea");
+      sel.value = text;
+      document.body.appendChild(sel);
+      sel.select();
+      try { document.execCommand("copy"); log("기록을 복사했어요"); }
+      catch { log("복사가 막혔어요 — 기록창을 드래그해서 복사해 주세요"); }
+      sel.remove();
+    }
+  };
+
   $("no").onclick = () => {
     if (stop) return;
     stop = true;
