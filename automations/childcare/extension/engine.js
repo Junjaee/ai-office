@@ -225,7 +225,7 @@
       if (popups.length > before) break;                   // 사이트가 거절했다 — 더 기다릴 것 없다
       await sleep(100);
     }
-    const said = popups.slice(before).join(" / ");
+    const said = popups.slice(before).filter((p) => p.kind === "alert").map((p) => p.text).join(" / ");
     throw new Error(said ? `추가 거절 — ${said}` : "추가가 안 됐어요 (사이트가 아무 말도 안 했어요)");
   }
 
@@ -259,6 +259,9 @@
     };
     const shown = new Map();                               // 창마다 '지금 떠 있는 글' 을 기억
     const hit = () => {
+      // 창이 두 종류다. 가르지 않으면 "예약하시겠습니까?" 를 결과로 착각한다.
+      //   layer-confirm-popup-*  = 물어보는 창(확인/취소)  → 누르기만 하고 결과로 세지 않는다
+      //   layer-popup-* , alertMsg = 결과 알림(확인만)     → 이게 답이다
       for (const id of ["layer-confirm-popup-contents", "layer-confirm-popup-contents2",
                         "layer-popup-contents", "layer-popup-contents2", "layer-popup-contents3",
                         "alertMsg", "layer-alert-popup-contents"]) {
@@ -266,7 +269,10 @@
         if (!box || box.offsetParent === null) { shown.delete(id); continue; }
         const t = box.innerText.trim();
         // 닫혔다 같은 글로 다시 떠도 새 안내다 — 그래서 닫힐 때 기억을 지운다
-        if (t && shown.get(id) !== t) { shown.set(id, t); popups.push(t); }
+        if (t && shown.get(id) !== t) {
+          shown.set(id, t);
+          popups.push({ kind: id.startsWith("layer-confirm-") ? "confirm" : "alert", text: t });
+        }
       }
       queue();                                             // 대기열은 보기만 한다 (누르지 않는다)
       for (const id of ["layer-confirm-popup-confirm", "layer-confirm-popup-confirm2",
@@ -277,8 +283,8 @@
     };
     new MutationObserver(hit).observe(document.body, { subtree: true, attributes: true, childList: true });
     const nativeAlert = window.alert, nativeConfirm = window.confirm;
-    window.alert = (m) => { popups.push(String(m)); };
-    window.confirm = (m) => { popups.push(String(m)); return true; };
+    window.alert = (m) => { popups.push({ kind: "alert", text: String(m) }); };
+    window.confirm = (m) => { popups.push({ kind: "confirm", text: String(m) }); return true; };
     void nativeAlert; void nativeConfirm;                  // 되돌리지 않는다 — 끝까지 받아 적어야 한다
     hit();
   }
@@ -291,7 +297,7 @@
     return new Promise((resolve) => {
       let left = 240;
       const timer = setInterval(() => {
-        const said = popups.slice(from);
+        const said = popups.slice(from).filter((p) => p.kind === "alert").map((p) => p.text);
         // 대기열에 서 있는 동안은 아무리 오래 걸려도 기다린다.
         // 여기서 포기하고 다시 쏘면 대기표를 버리고 맨 뒤로 간다.
         const queued = document.getElementById("NetFunnel_Skin_Top");
@@ -319,7 +325,8 @@
 
     watchPopups(log);
     const beginHour = Number(cfg.beginHour), hours = Number(cfg.hours);
-    log(`${cfg.useDate} ${pad(beginHour)}:00 부터 ${hours}시간 · ${clname}반`);
+    const preArmed = armedDates();                        // 사람이 이미 추가해 둔 줄
+    if (!preArmed.length) log(`${cfg.useDate} ${pad(beginHour)}:00 부터 ${hours}시간 · ${clname}반`);
 
     // 즉시: 기다리지 않고 지금부터 지켜보다 자리가 나면 바로 잡는다.
     //       취소표 잡기에도 그대로 쓴다. 정해진 시각이 없으니 '보험 한 발' 은 쏘지 않는다
@@ -331,7 +338,7 @@
       fireAt = Infinity;                                   // 예정 발사 없음 — 자리가 보일 때만 쏜다
       watchFrom = Date.now();
       giveUp = Date.now() + 60 * 60 * 1000;                // 한 시간 지켜보고 그만둔다
-      log("즉시 — 지금부터 지켜보다 자리가 나면 바로 잡습니다 (한 시간)");
+      if (!preArmed.length) log("즉시 — 지금부터 지켜보다 자리가 나면 바로 잡습니다 (한 시간)");
     } else {
       log("서버 시각 맞추는 중… (10초쯤 걸립니다)");
       const offset = await serverOffsetMs(8, () => stop);
@@ -371,21 +378,19 @@
     // 그러니 기다리는 동안 추가까지 끝내 두고, 정각에는 예약하기 한 번만 누른다.
     // 새로고침·칸 클릭·추가(서버 왕복)가 전부 임계 경로에서 빠진다 — 1초 넘게 빨라진다.
     let armed = false;
-    if (!NOW_MODE) {
-      const already = armedDates();
-      const others = already.filter((d) => d !== cfg.useDate);
-      if (others.length) log(`※ 목록에 다른 날짜도 있어요 (${others.join(", ")}) — 같이 예약됩니다`);
-      if (already.includes(cfg.useDate)) {
+    const already = preArmed;
+    if (already.length) {
+      // 사람이 이미 칸을 고르고 추가까지 해 뒀다 — 설정은 쓸 일이 없다.
+      // 그냥 그 줄을 예약하면 된다(사용자 지적 2026-11-12).
+      armed = true;
+      log(`목록에 ${already.length}건 있어요 (${already.join(", ")}) — 이걸 예약합니다`);
+    } else if (!NOW_MODE) {
+      try {
+        await addViaSite(cfg.useDate, beginHour, hours, clseq, log);
         armed = true;
-        log("이미 목록에 올라가 있어요 — 정각에 예약하기만 누릅니다");
-      } else {
-        try {
-          await addViaSite(cfg.useDate, beginHour, hours, clseq, log);
-          armed = true;
-          log("미리 장전 완료 — 정각에 예약하기만 누릅니다");
-        } catch (e) {
-          log(`미리 장전 실패 — 정각에 처음부터 합니다 (${String(e.message).slice(0, 60)})`);
-        }
+        log("미리 장전 완료 — 예약하기만 누르면 됩니다");
+      } catch (e) {
+        log(`미리 장전 실패 — 자리를 지켜보다 처음부터 합니다 (${String(e.message).slice(0, 60)})`);
       }
     }
 
@@ -401,7 +406,8 @@
     if (armed) {
       // 정각보다 5초 일찍부터 누르기 시작한다. 일찍 누른 건 "아직 아닙니다" 로 되돌아올 뿐이라
       // 손해가 없고, 시계가 몇 초 틀려도 첫 순간을 놓치지 않는다.
-      const startAt = fireAt - 5000;
+      // 즉시면 기다리지 않고 바로 누른다.
+      const startAt = NOW_MODE ? Date.now() : fireAt - 5000;
       const left = startAt - Date.now();
       if (left > 0) {
         log(`정각 5초 전부터 누릅니다 (${(left / 1000).toFixed(1)}초 뒤 시작)`);
@@ -414,7 +420,7 @@
       // 그러면 오픈 시각을 맞출 필요가 없다 — **될 때까지 누르면 된다.**
       // 다만 '이미 예약된 시간' 같은 사유는 다시 해도 안 되니 그때는 멈춘다.
       const NOT_YET = /아직|기간이 아닙|시간이 아닙/;
-      const stopAt = fireAt + RETRY_WINDOW_MS;
+      const stopAt = (NOW_MODE ? Date.now() : fireAt) + RETRY_WINDOW_MS;
       let tries = 0, lastMsg = "";
       while (!stop && Date.now() < stopAt) {
         tries++;
@@ -512,6 +518,7 @@
     <div class="box">
       <div class="hd"><span>시간제보육 예약기</span><span id="fold">—</span></div>
       <div class="bd" id="bd">
+        <div id="setup">
         <label><span>이용일</span><input type="date" id="d"></label>
         <label><span>이용 시간</span>
           <span class="row"><select id="b"></select>시부터 <select id="h"></select>시간</span></label>
@@ -519,6 +526,7 @@
           <span class="row"><input type="time" id="o" step="1">
           <label class="chk"><input type="checkbox" id="now">즉시</label></span></label>
         <label><span>미리 감시</span><input type="number" id="w" style="width:52px">초 전부터</label>
+        </div>
         <div class="btns"><button class="go" id="go">시작</button><button class="no" id="no">멈춤</button>
           <button class="no" id="cp" title="기록을 통째로 복사">복사</button></div>
         <pre id="log"></pre>
@@ -594,8 +602,16 @@
     log("멈추는 중… (이미 보낸 신청은 되돌릴 수 없어요)");
   };
 
-  syncRtm();
-  log("반까지 고른 뒤 [시작]을 누르세요");
+  // 사람이 이미 추가해 뒀으면 설정은 필요 없다 — 접어 두고 그 사실만 알린다
+  const ready = armedDates();
+  if (ready.length) {
+    root.getElementById("setup").classList.add("hide");
+    log(`목록에 ${ready.length}건 있어요 (${ready.join(", ")})`);
+    log("설정은 필요 없습니다 — [시작]만 누르세요");
+  } else {
+    syncRtm();
+    log("반까지 고른 뒤 [시작]을 누르세요");
+  }
   log(sessionLine());
   // 조회를 안 하는 동안에도 찍는다 — 멈춘 채로 지켜보면
   // 세션을 살려 두는 게 우리 조회인지 사이트 자체 타이머인지 가려진다
