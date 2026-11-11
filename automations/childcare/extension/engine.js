@@ -28,16 +28,9 @@
   // 화면 조작은 공짜고 **서버 왕복 107ms 가 전부**다. 그래서 쉬는 시간을 둘 이유가 없다.
   // 한 바퀴 약 110ms = 초당 9번. 더 줄이려면 응답을 안 기다리고 겹쳐 쏴야 하는데,
   // 확인창이 하나뿐이라 서로 꼬인다.
-  // 한 바퀴 돌고 다음 발사까지. **패널에서 돌리는 중에도 바꿀 수 있다.**
-  // 0 으로 두면 초당 9번인데, 2026-11-12 08:27 실측에서 50번쯤 쏜 뒤 넷퍼넬 대기열이 생겼다.
-  // 우리가 빨라서 줄을 선 것인지 남들 때문인지 아직 모른다 → 400(초당 약 2.5번)으로 시작한다.
-  const GAP_KEY = "childcare-gap";
-  const DEFAULT_GAP = 400;
-  let gapInput = null;                        // 패널을 만든 뒤 넣는다(섀도 DOM 안이라 document 로는 못 찾는다)
-  const gapMs = () => {
-    const n = Number(gapInput && gapInput.value);
-    return Number.isFinite(n) && n >= 0 ? n : DEFAULT_GAP;
-  };
+  // 한 바퀴 돌고 다음 발사까지. 실측(2026-11-12, 실제 화면)에서 확인창 0ms ·
+  // 확인 누른 뒤 결과 107ms · 닫기 0ms 라, 쉬는 시간을 둘 이유가 없다. 한 바퀴 약 110ms.
+  const GAP_MS = 0;
   const GIVE_UP_MS = 30 * 60 * 1000;          // 이만큼 해도 안 되면 그만둔다
 
   const DONE = /예약되었습니다|예약완료|신청이 완료|정상적으로/;
@@ -56,6 +49,43 @@
   const OK_IDS = ["layer-confirm-popup-confirm", "layer-confirm-popup-confirm2",
                   "layer-popup-close", "layer-popup-close2", "layer-popup-close3",
                   "layer-alert-popup-close", "layer-alert-popup-close2"];
+
+  // ───────── 서버 시계 ─────────
+  // 이 PC 시계는 서버와 수백 ms 어긋난다. 응답의 Date 헤더는 초 단위라 그냥 읽으면
+  // 최대 1초가 틀리므로, **초가 넘어가는 순간**을 잡는다. 재면 늘 실제보다 늦게 나오니
+  // 여러 번 재서 가장 작은 값을 쓴다.
+  const CLOCK_URL = "/cms/gen/images/logo.svg";
+  let offset = null;                          // 이 PC 시계 − 서버 시계 (ms)
+
+  async function syncClock(rounds = 6) {
+    const probe = async () => {
+      const t0 = Date.now();
+      const r = await fetch(CLOCK_URL + "?t=" + Math.random(), { method: "HEAD", cache: "no-store" });
+      const t1 = Date.now();
+      return { d: Date.parse(r.headers.get("date") || ""), mid: t0 + (t1 - t0) / 2 };
+    };
+    let best = Infinity;
+    for (let n = 0; n < rounds; n++) {
+      const first = await probe();
+      if (!first.d) continue;
+      const until = Date.now() + 1500;
+      while (Date.now() < until) {
+        const s2 = await probe();
+        if (!s2.d) continue;
+        if (s2.d !== first.d) { best = Math.min(best, s2.mid - s2.d); break; }
+      }
+    }
+    if (isFinite(best)) offset = best;
+    return offset;
+  }
+
+  const two = (n) => String(n).padStart(2, "0");
+  function serverNowText() {
+    if (offset === null) return "맞추는 중…";
+    const d = new Date(Date.now() - offset);
+    return two(d.getHours()) + ":" + two(d.getMinutes()) + ":" + two(d.getSeconds())
+         + "." + String(d.getMilliseconds()).padStart(3, "0").slice(0, 1);
+  }
 
   // ───────── 창 감시 ─────────
   // 뜨는 즉시 확인을 누르고, 결과 문구만 따로 모은다.
@@ -151,7 +181,7 @@
 
       if (!msg) {                                  // 응답이 안 왔다
         if (tries % 10 === 0) log(tries + "번째 — 응답이 없어요, 계속합니다");
-        await sleep(gapMs());
+        await sleep(GAP_MS);
         continue;
       }
       if (DONE.test(msg)) {
@@ -165,7 +195,7 @@
         log(tries + "번째까지 같은 답 — 계속합니다 (한 바퀴 평균 "
             + Math.round(spent / tries) + "ms)");
       }
-      await sleep(gapMs());
+      await sleep(GAP_MS);
     }
     log(stop ? "멈췄어요" : "시간이 다 됐어요 (30분)");
   }
@@ -186,15 +216,13 @@
     "pre{margin:10px 0 0;background:#f6f8fc;border-radius:6px;padding:8px;height:150px;overflow:auto;",
     "    white-space:pre-wrap;font:12px/1.45 Consolas,monospace}",
     ".hide{display:none}",
-    ".gap{display:flex;align-items:center;gap:5px;margin:0 0 8px;color:#444}",
-    ".gap input{width:62px;padding:3px 6px;border:1px solid #c9d2e3;border-radius:5px;font:inherit}",
-    "#rate{color:#2f4b8b;font-weight:700}",
+    ".clock{margin:0 0 8px;color:#444}",
+    "#clock{color:#2f4b8b;font:700 15px/1.2 Consolas,monospace}",
     "</style>",
     '<div class="box">',
     '  <div class="hd" id="hd">시간제보육 예약기</div>',
     '  <div class="bd" id="bd">',
-    '    <label class="gap">발사 간격 <input id="gap" type="number" min="0" step="50"> ms',
-    '      <span id="rate"></span></label>',
+    '    <div class="clock">서버 시각 <b id="clock">맞추는 중…</b></div>',
     '    <div class="btns">',
     '      <button class="go" id="go">시작</button>',
     '      <button class="no" id="no">멈춤</button>',
@@ -213,26 +241,13 @@
     el.scrollTop = el.scrollHeight;
   };
 
-  gapInput = $("gap");
-  let saved = DEFAULT_GAP;
-  try {
-    const raw = localStorage.getItem(GAP_KEY);        // 없으면 null — Number(null) 은 0 이라 그냥 쓰면 안 된다
-    if (raw !== null && raw !== "") {
-      const v = Number(raw);
-      if (Number.isFinite(v) && v >= 0) saved = v;
-    }
-  } catch (e) { /* 못 읽으면 기본값 */ }
-  gapInput.value = String(saved);
-
-  const showRate = () => {
-    const per = 1000 / (gapMs() + 110);       // 한 바퀴 = 간격 + 서버 왕복 약 110ms
-    $("rate").textContent = "≈ 초당 " + per.toFixed(1) + "번";
-  };
-  gapInput.oninput = () => {
-    showRate();
-    try { localStorage.setItem(GAP_KEY, String(gapMs())); } catch (e) { /* 저장 못 해도 그만 */ }
-  };
-  showRate();
+  // 서버 시계를 띄운다. 10분마다 다시 맞춘다(이 PC 시계가 흐를 수 있다).
+  setInterval(() => { $("clock").textContent = serverNowText(); }, 100);
+  syncClock().then((o) => {
+    if (o === null) return log("서버 시각을 못 읽었어요 — 이 PC 시계로 보세요");
+    log("서버 시각 맞췄어요 (이 PC 시계가 " + (o > 0 ? "+" : "") + Math.round(o) + "ms)");
+  });
+  setInterval(syncClock, 10 * 60 * 1000);
 
   $("hd").onclick = () => $("bd").classList.toggle("hide");
 
