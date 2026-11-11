@@ -182,18 +182,31 @@
     const beginHour = Number(cfg.beginHour), hours = Number(cfg.hours);
     log(`${cfg.useDate} ${pad(beginHour)}:00 부터 ${hours}시간 · ${clname}반`);
 
-    log("서버 시각 맞추는 중…");
-    const offset = await serverOffsetMs(8);
-    log(`이 PC 시계가 서버보다 ${offset > 0 ? "+" : ""}${Math.round(offset)}ms`);
+    // 즉시: 기다리지 않고 지금부터 지켜보다 자리가 나면 바로 잡는다.
+    //       취소표 잡기에도 그대로 쓴다. 정해진 시각이 없으니 '보험 한 발' 은 쏘지 않는다
+    //       (쏠 시각이 없는데 미리 쏘면 거절당하고 그 한 발을 날린다).
+    const NOW_MODE = !!cfg.now;
+    let fireAt, watchFrom, giveUp;
 
-    const [oh, om, os] = cfg.openAt.split(":").map(Number);
-    const openAt = new Date();
-    openAt.setHours(oh, om, os || 0, 0);
-    if (openAt.getTime() <= Date.now()) openAt.setDate(openAt.getDate() + 1);
-    const fireAt = openAt.getTime() + offset;               // 이 PC 시계 기준 발사 시각
+    if (NOW_MODE) {
+      fireAt = Infinity;                                   // 예정 발사 없음 — 자리가 보일 때만 쏜다
+      watchFrom = Date.now();
+      giveUp = Date.now() + 60 * 60 * 1000;                // 한 시간 지켜보고 그만둔다
+      log("즉시 — 지금부터 지켜보다 자리가 나면 바로 잡습니다 (한 시간)");
+    } else {
+      log("서버 시각 맞추는 중…");
+      const offset = await serverOffsetMs(8);
+      log(`이 PC 시계가 서버보다 ${offset > 0 ? "+" : ""}${Math.round(offset)}ms`);
 
-    const watchFrom = fireAt - Number(cfg.watchBefore) * 1000;
-    log(`${new Date(watchFrom).toLocaleTimeString("ko-KR")} 부터 감시, ${new Date(fireAt).toLocaleTimeString("ko-KR")} 에 발사`);
+      const [oh, om, os] = cfg.openAt.split(":").map(Number);
+      const openAt = new Date();
+      openAt.setHours(oh, om, os || 0, 0);
+      if (openAt.getTime() <= Date.now()) openAt.setDate(openAt.getDate() + 1);
+      fireAt = openAt.getTime() + offset;                  // 이 PC 시계 기준 발사 시각
+      watchFrom = fireAt - Number(cfg.watchBefore) * 1000;
+      giveUp = fireAt + 120000;
+      log(`${new Date(watchFrom).toLocaleTimeString("ko-KR")} 부터 감시, ${new Date(fireAt).toLocaleTimeString("ko-KR")} 에 발사`);
+    }
 
     const shoot = async (why) => {
       log(`${why} → 발사`);
@@ -211,8 +224,7 @@
     if (stop) return log("멈췄어요");
 
     log("감시 시작 — 열리는 순간 쏩니다");
-    let shotAtOpen = false, lastSeen = null;
-    const giveUp = fireAt + 120000;
+    let shotAtOpen = NOW_MODE, lastSeen = null;            // 즉시면 보험 한 발을 건너뛴다
     while (!stop && Date.now() < giveUp) {
       if (!shotAtOpen && Date.now() >= fireAt) {            // 보험 한 발
         shotAtOpen = true;
@@ -236,7 +248,7 @@
   // ───────── 패널 ─────────
   const cfg = Object.assign({
     useDate: defaultDate(), beginHour: 9, hours: 4,
-    openAt: "09:00:00", watchBefore: 60, watchInterval: 200,
+    openAt: "09:00:00", watchBefore: 60, watchInterval: 200, now: false,
   }, load());
   if (cfg.useDate < ymdDash(new Date())) cfg.useDate = defaultDate();
 
@@ -246,19 +258,20 @@
   root.innerHTML = `
     <style>
       .box{font:13px/1.5 'Malgun Gothic',sans-serif;background:#fff;border:1px solid #c9d2e3;
-           border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.18);width:300px;overflow:hidden}
+           border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.18);width:344px;overflow:hidden}
       .hd{background:#2f4b8b;color:#fff;padding:8px 12px;font-weight:700;display:flex;justify-content:space-between;cursor:pointer}
       .bd{padding:10px 12px}
       label{display:flex;align-items:center;gap:6px;margin:6px 0}
-      label span{width:66px;color:#444}
+      label span{width:62px;color:#444;flex:none}
       input,select{padding:3px 6px;border:1px solid #c9d2e3;border-radius:5px;font:inherit}
-      .row{display:flex;gap:6px;align-items:center}
+      .row{display:flex;gap:5px;align-items:center;white-space:nowrap}
       .btns{display:flex;gap:6px;margin-top:10px}
       button{flex:1;padding:7px 0;border:0;border-radius:6px;font:inherit;font-weight:700;cursor:pointer}
       .go{background:#2f4b8b;color:#fff} .no{background:#e6e9f0;color:#333}
       pre{margin:10px 0 0;background:#f6f8fc;border-radius:6px;padding:8px;height:120px;overflow:auto;
           white-space:pre-wrap;font:12px/1.45 Consolas,monospace}
       .hide{display:none}
+      .chk{margin:0;gap:4px;white-space:nowrap} .chk span{width:auto}
     </style>
     <div class="box">
       <div class="hd"><span>시간제보육 예약기</span><span id="fold">—</span></div>
@@ -266,7 +279,9 @@
         <label><span>이용일</span><input type="date" id="d"></label>
         <label><span>이용 시간</span>
           <span class="row"><select id="b"></select>시부터 <select id="h"></select>시간</span></label>
-        <label><span>오픈 시각</span><input type="time" id="o" step="1"></label>
+        <label><span>오픈 시각</span>
+          <span class="row"><input type="time" id="o" step="1">
+          <label class="chk"><input type="checkbox" id="now">즉시</label></span></label>
         <label><span>미리 감시</span><input type="number" id="w" style="width:52px">초 전부터</label>
         <div class="btns"><button class="go" id="go">시작</button><button class="no" id="no">멈춤</button></div>
         <pre id="log"></pre>
@@ -279,6 +294,10 @@
   for (let n = 1; n <= 9; n++) $("h").add(new Option(String(n), String(n)));
   $("d").value = cfg.useDate; $("b").value = String(cfg.beginHour);
   $("h").value = String(cfg.hours); $("o").value = cfg.openAt; $("w").value = cfg.watchBefore;
+  $("now").checked = !!cfg.now;
+  const syncNow = () => { $("o").disabled = $("now").checked; $("w").disabled = $("now").checked; };
+  $("now").onchange = syncNow;
+  syncNow();
 
   const log = (line) => {
     const el = $("log");
@@ -291,7 +310,7 @@
     Object.assign(cfg, {
       useDate: $("d").value, beginHour: $("b").value, hours: $("h").value,
       openAt: $("o").value.length === 5 ? `${$("o").value}:00` : $("o").value,
-      watchBefore: $("w").value,
+      watchBefore: $("w").value, now: $("now").checked,
     });
     save(cfg);
     stop = false;
