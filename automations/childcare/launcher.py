@@ -22,13 +22,24 @@ CDP_PORT = 9222
 CLOCK_URL = "https://www.childcare.go.kr/cms/gen/images/logo.svg"
 
 
-def attach_chrome(playwright, port: int = CDP_PORT):
-    """이미 떠 있는 크롬에 붙는다. 로그인 상태를 그대로 쓴다."""
+HOST = "childcare.go.kr"
+
+
+def attach_chrome(playwright, port: int = CDP_PORT, go_to: str = ""):
+    """이미 떠 있는 크롬에서 **아이사랑 탭**을 찾아 붙는다. 로그인 상태를 그대로 쓴다.
+
+    다른 사이트 탭에 붙으면 서버 시각을 못 읽는다(브라우저가 남의 집 응답 헤더를 안 보여 준다).
+    그래서 아이사랑 탭을 찾고, 없으면 하나 열어 거기로 간다.
+    """
     browser = playwright.chromium.connect_over_cdp(f"http://127.0.0.1:{port}")
     if not browser.contexts:
         raise RuntimeError("크롬은 떠 있는데 창이 없어요. 탭을 하나 열어 주세요")
     ctx = browser.contexts[0]
-    page = ctx.pages[0] if ctx.pages else ctx.new_page()
+    page = next((pg for pg in ctx.pages if HOST in pg.url), None)
+    if page is None:
+        page = ctx.pages[0] if ctx.pages else ctx.new_page()
+        page.goto(go_to or f"https://www.{HOST}/", wait_until="domcontentloaded", timeout=60000)
+    page.bring_to_front()
     return browser, page
 
 

@@ -180,7 +180,7 @@ def run_macro(cfg: dict, log, stop: threading.Event) -> None:
 
     with sync_playwright() as p:
         log("크롬에 붙는 중…")
-        browser, page = launcher.attach_chrome(p)
+        browser, page = launcher.attach_chrome(p, go_to=site.MENU_RESERVE)
         try:
             if not site.is_logged_in(page):
                 raise RuntimeError("로그인이 안 돼 있어요. 크롬에서 먼저 로그인해 주세요")
