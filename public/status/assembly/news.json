@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 28건, 실패 0건, 10초",
+  "summary": "신규 39건, 실패 0건, 9초",
   "counts": {
-    "new": 28,
+    "new": 39,
     "failed": 0,
-    "total": 7145
+    "total": 7184
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 28건, 실패 0건, 10초",
-    "[신규] 국힘·개혁신당, 與에 부동산 공조 손짓…보수연대엔 선 긋기 — 매일일보",
-    "[신규] 최경환 전 경제부총리와 이준석, 조정훈 의원 — 매일경제",
-    "[신규] 野의원모임, '빚내서 집사라' 최경환 불러 與부동산정책 저격 — 연합뉴스",
-    "[신규] '빚내서 집 사라' 최경환 부른 野…\"미친 규제, 시장 이기는 정부 없다\" — 머니투데이"
+    "신규 39건, 실패 0건, 9초",
+    "[신규] 이준석 “이 대통령, 본인 누릴 수 있는 것들 다 누려” [현장영상] — 채널A",
+    "[신규] ‘빚내서 집 사라’ 최경환 “李정부 부동산 정책은 미친 대출 규제” — 시사저널",
+    "[신규] “미친규제” 최경환·범야권 의원들, 李정부 부동산정책 전격비판 — 경북매일",
+    "[신규] “빚내서 집사라” 최경환, 정부 부동산 정책에 “미친 규제” 비판 쏟아내 — 한겨레"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42969461518,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42969461518",
-  "request_id": "cron-202611110600",
+  "run_id": 42991589070,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42991589070",
+  "request_id": "cron-202611110900",
   "trigger": "schedule",
-  "started_at": "2026-11-11T15:01:32+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-11T18:01:24+09:00",
+  "duration_sec": 9,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 129건"
+      "summary": "검색어 5개에서 145건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 89건 (신규 28건) · 뉴시스 9건, 시민행정신문 8건, 뉴스1 4건"
+      "summary": "오늘 128건 (신규 39건) · 뉴시스 11건, 시민행정신문 11건, 뉴스1 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-11T15:01:43+09:00"
+  "updated_at": "2026-11-11T18:01:35+09:00"
 }
