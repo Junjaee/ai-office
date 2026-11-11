@@ -159,17 +159,27 @@
     throw new Error(said ? `추가 거절 — ${said}` : "추가가 안 됐어요 (사이트가 아무 말도 안 했어요)");
   }
 
-  // ───────── 발사 ─────────
-  // 넷퍼넬(대기열)이 걸려 있어 **한 발만** 쏜다. 다시 쏘면 줄 뒤로 밀린다.
-  // 대신 확인창은 뜨는 즉시 누른다 — 사람은 0.5~1초, 이건 1프레임이다.
-  // 사이트가 띄우는 모든 안내를 받아 적고 닫는다. [시작] 때 한 번 걸어 두고 계속 둔다.
+  // ───────── 안내창 ─────────
+  // 사이트가 띄우는 모든 안내를 받아 적고 닫는다. 확인창은 뜨는 즉시 누른다
+  // — 사람은 0.5~1초, 이건 1프레임이다. [시작] 때 한 번 걸어 두고 계속 둔다.
   // 거절 사유가 여기로 오는데, 지금까지는 이걸 안 보고 있어서 원인을 몰랐다(2026-11-11).
   const popups = [];
   let popupWatching = false;
 
-  function watchPopups() {
+  function watchPopups(log) {
     if (popupWatching) return;
     popupWatching = true;
+    // 넷퍼넬(대기열) 화면은 알림창이 아니다 — 결과로 세면 안 되고, 보이기만 하면 된다.
+    // 대기 중에는 아무것도 하지 않는다. 다시 쏘면 표를 버리고 맨 뒤로 간다.
+    let lastQueue = "";
+    const queue = () => {
+      for (const el of document.querySelectorAll('[id*="netfunnel" i], [class*="netfunnel" i]')) {
+        if (el.offsetParent === null) continue;
+        const t = el.innerText.trim().replace(/\s+/g, " ").slice(0, 60);
+        if (t && t !== lastQueue) { lastQueue = t; log(`대기열 — ${t}`); }
+        return;
+      }
+    };
     const shown = new Map();                               // 창마다 '지금 떠 있는 글' 을 기억
     const hit = () => {
       for (const id of ["layer-confirm-popup-contents", "layer-confirm-popup-contents2",
@@ -181,6 +191,7 @@
         // 닫혔다 같은 글로 다시 떠도 새 안내다 — 그래서 닫힐 때 기억을 지운다
         if (t && shown.get(id) !== t) { shown.set(id, t); popups.push(t); }
       }
+      queue();                                             // 대기열은 보기만 한다 (누르지 않는다)
       for (const id of ["layer-confirm-popup-confirm", "layer-confirm-popup-confirm2",
                         "layer-popup-close", "layer-popup-close2", "layer-popup-close3"]) {
         const el = document.getElementById(id);
@@ -225,7 +236,7 @@
     const clname = clsel.options[clsel.selectedIndex].text.trim();
     if (!document.getElementById("INFOQUALF")) throw new Error("예약 화면이 아니에요 ('이용정보 신청' 을 여세요)");
 
-    watchPopups();
+    watchPopups(log);
     const beginHour = Number(cfg.beginHour), hours = Number(cfg.hours);
     log(`${cfg.useDate} ${pad(beginHour)}:00 부터 ${hours}시간 · ${clname}반`);
 
