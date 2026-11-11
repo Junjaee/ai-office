@@ -3,37 +3,36 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 전송 2건, 실패 0건, 37초",
+  "summary": "신규 1건, 전송 0건, 실패 0건, 38초",
   "counts": {
-    "new": 2,
-    "sent": 2,
+    "new": 1,
+    "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 2건, 전송 2건, 실패 0건, 37초",
-    "[신규] [도정소식] 쌀도 취향에 따라 고르는 시대, 경기미 소믈리에 교육 현장을 가다",
-    "[신규] [도정소식] 자연의 아름다움과 옛이야기가 깃든 수원의 명산 ‘칠보산’"
+    "신규 1건, 전송 0건, 실패 0건, 38초",
+    "[신규]⭐ [고시] 2026년 민방위 사이버교육(보충2) 훈련 통지서 반송에 따른 공시송달 "
   ],
   "link": "",
-  "run_id": 42724994969,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42724994969",
-  "request_id": "cron-202611100000",
+  "run_id": 42927965754,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42927965754",
+  "request_id": "cron-202611110000",
   "trigger": "schedule",
-  "started_at": "2026-11-10T09:01:36+09:00",
-  "duration_sec": 37,
+  "started_at": "2026-11-11T09:01:31+09:00",
+  "duration_sec": 38,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 2건"
+      "summary": "신규 1건, 첨부 1건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "2건 발송, 무음 0건"
+      "summary": "0건 발송, 무음 1건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-10T09:02:14+09:00"
+  "updated_at": "2026-11-11T09:02:11+09:00"
 }
