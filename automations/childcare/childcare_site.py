@@ -295,28 +295,53 @@ def open_apply_tab(page, class_seq: str = "") -> tuple[str, str]:
     return picked[0], picked[1]
 
 
-def row_index(use_date: str, today=None) -> int:
-    """표에서 그 날짜가 몇 번째 줄인지. 표는 늘 오늘(0)부터 14일 뒤(14)까지다."""
-    from datetime import date, datetime
-
-    today = today or date.today()
-    return (datetime.strptime(use_date, "%Y%m%d").date() - today).days
+def _ymd_dash(use_date: str) -> str:
+    """'20261125' → '2026-11-25'. 표의 행에 적힌 모양."""
+    return f"{use_date[:4]}-{use_date[4:6]}-{use_date[6:8]}"
 
 
-def is_open(page, use_date: str, begin: str) -> bool:
-    """그 날짜·시각에 자리가 있는지 가볍게 확인한다(신청하지 않는다).
+# 자리 수만 가볍게 받아 온다. 화면 전체를 다시 그리는 fnRefresh() 는 요청이 여러 개라 느리다.
+# 이 한 방이면 표 전체(약 24KB)가 온다 — 2026-11-11 실측, 24번 연속 찔러도 막히지 않았다.
+_SEATS_JS = r"""async ([ymd, hour, classSeq]) => {
+  const form = document.getElementById('pfrm');
+  const val = (n) => { const e = form.querySelector(`[name="${n}"]`); return e ? e.value : ''; };
+  const body = new URLSearchParams({
+    chilinnb: val('chilinnb'), stcode: val('stcode'), clseq: classSeq,
+  }).toString();
+  const res = await fetch('/icms/occasion/occasionCrTmInfoAjax.html', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+              'X-Requested-With': 'XMLHttpRequest'},
+    body,
+  });
+  if (!res.ok) return {error: 'HTTP ' + res.status};
+  const box = document.createElement('div');
+  box.innerHTML = await res.text();
 
-    표를 새로 받아 와서 칸 글자가 1 이상인지만 본다.
-    """
-    idx = row_index(use_date)
-    hour = int(begin.split(":")[0])
-    page.evaluate("() => { if (window.fnRefresh) window.fnRefresh() }")
-    page.wait_for_timeout(500)
-    text = page.evaluate(
-        "(id) => { const e = document.getElementById(id); return e ? e.innerText.trim() : null }",
-        f"tm_{hour}_{idx}",
-    )
-    return bool(text) and text.isdigit() and int(text) >= 1
+  // 표의 첫 행이 늘 오늘인 것은 아니다(당일 마감이 지나면 오늘이 빠진다).
+  // 그래서 줄 번호를 날짜로 계산하지 않고, 적힌 날짜를 보고 그 줄을 찾는다.
+  const rows = [...box.querySelectorAll('tr')].filter(tr => /\d{4}-\d{2}-\d{2}/.test(tr.innerText));
+  const days = rows.map(tr => (tr.innerText.match(/\d{4}-\d{2}-\d{2}/) || [''])[0]);
+  const idx = days.indexOf(ymd);
+  if (idx < 0) return {seats: -1, days: [days[0], days[days.length - 1]]};
+  const cell = rows[idx].querySelector('#tm_' + hour + '_' + idx)
+            || box.querySelector('#tm_' + hour + '_' + idx);
+  const txt = cell ? cell.innerText.trim() : '';
+  return {seats: /^\d+$/.test(txt) ? Number(txt) : 0, mark: txt};
+}"""
+
+
+def seats_left(page, class_seq: str, use_date: str, begin: str) -> int:
+    """그 날짜·시각에 남은 자리 수. 날짜가 아직 안 열렸으면 -1."""
+    out = page.evaluate(_SEATS_JS, [_ymd_dash(use_date), int(begin.split(":")[0]), class_seq])
+    if out.get("error"):
+        raise RuntimeError(f"자리 확인 실패 — {out['error']}")
+    return int(out.get("seats", -1))
+
+
+def is_open(page, class_seq: str, use_date: str, begin: str) -> bool:
+    """그 날짜·시각에 자리가 있는지 가볍게 확인한다(신청하지 않는다)."""
+    return seats_left(page, class_seq, use_date, begin) >= 1
 
 
 _ARM_JS = """(s) => {

@@ -67,8 +67,9 @@ DEFAULTS = {
     # 오픈 시각을 정확히 모른다(자료마다 다르고 기관마다 다를 수 있다).
     # 그래서 예상 시각 전부터 "열렸나?"를 가볍게 확인하다가, 열리는 순간 쏜다.
     # 미리 신청을 쏘지는 않는다 — 오픈 전 신청은 거절되고 쌓이면 차단된다.
+    # 자리 확인 한 번에 왕복 0.35초쯤 걸리므로(2026-11-11 실측) 그 위에 더 쉬는 시간이 이 값이다.
     "watch_before_sec": 60,
-    "watch_interval_ms": 500,
+    "watch_interval_ms": 200,
 }
 
 
@@ -244,6 +245,7 @@ def run_macro(cfg: dict, log, stop: threading.Event) -> None:
         give_up = fire_at + int(cfg.get("watch_grace_sec", 120))
         interval = int(cfg["watch_interval_ms"]) / 1000.0
         shot_at_open = False
+        last_seen = None
 
         while not stop.is_set() and time.time() < give_up:
             # 보험 한 발 — 조회로는 안 보여도 신청은 되는 경우가 있다
@@ -252,9 +254,12 @@ def run_macro(cfg: dict, log, stop: threading.Event) -> None:
                 if fire("예상 정각"):
                     return
             try:
-                if site.is_open(page, use_date, begin):
-                    if fire("열림 확인"):
-                        return
+                seats = site.seats_left(page, klass[0], use_date, begin)
+                if seats != last_seen:  # 달라질 때만 적는다 — 매번 적으면 기록창이 묻힌다
+                    last_seen = seats
+                    log("아직 그 날짜가 표에 없어요" if seats < 0 else f"남은 자리 {seats}개")
+                if seats >= 1 and fire("열림 확인"):
+                    return
             except Exception as exc:  # noqa: BLE001 - 조회가 한 번 튕겨도 감시는 계속한다
                 log(f"확인 실패(계속 감시) — {str(exc)[:60]}")
             time.sleep(interval)
@@ -369,7 +374,7 @@ class App(tk.Tk):
             "open_at": self.open_at.get().strip(),
             "use_date": self.use_date.get().strip(),
             "watch_before_sec": int(self.watch_before.get().strip() or 60),
-            "watch_interval_ms": int(self.watch_interval.get().strip() or 500),
+            "watch_interval_ms": int(self.watch_interval.get().strip() or 200),
         })
         return cfg
 

@@ -6,12 +6,12 @@
 from __future__ import annotations
 
 import sys
-from datetime import date
+
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from childcare_site import _slot, row_index  # noqa: E402
+from childcare_site import _slot, _ymd_dash  # noqa: E402
 
 # 화면에서 실제로 읽은 값 (1시간, 들꽃향기, 2026-11-24 09시)
 REAL = {
@@ -45,9 +45,11 @@ def test_콜론_둘레_공백과_물결_모양을_지킨다():
     assert s["restime"] == "13 : 00  ~  17 : 00 "
 
 
-def test_표에서_몇_번째_줄인지():
-    today = date(2026, 11, 11)
-    assert row_index("20261111", today) == 0
-    assert row_index("20261114", today) == 3   # 화면에서 tm_9_3 = 2026-11-14(토)
-    assert row_index("20261116", today) == 5   # 화면에서 tm_9_5 = 2026-11-16(월)
-    assert row_index("20261125", today) == 14  # 오픈되는 날은 늘 마지막 줄
+def test_표의_날짜_모양():
+    """표의 행에는 '2026-11-25' 로 적혀 있다. 줄 번호를 날짜로 계산하지 않고 이 글자로 찾는다.
+
+    표의 첫 행이 늘 오늘인 것은 아니다 — 당일 마감(14시)이 지나면 오늘이 빠진다
+    (2026-11-11 16시에 확인: 표가 11-12 부터 시작했다).
+    """
+    assert _ymd_dash("20261125") == "2026-11-25"
+    assert _ymd_dash("20260101") == "2026-01-01"
