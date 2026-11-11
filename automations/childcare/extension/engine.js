@@ -365,7 +365,7 @@
     // 보험 한 발은 없앴다 — 줄이 화면 표에 없으면 장전 자체가 안 되므로,
     // 자리가 보이는 것이 곧 방아쇠다.
     let lastSeen = null, lastError = null, fails = 0, shootFails = 0;
-    let warnedSession = false;
+    let warnedSession = false, toldWaiting = false;
     while (!stop && Date.now() < giveUp) {
       if (!warnedSession) {
         const endsAt = sessionEndsAt();
@@ -381,7 +381,16 @@
           lastSeen = seats;
           log(seats < 0 ? "아직 그 날짜가 표에 없어요" : `남은 자리 ${seats}개`);
         }
-        if (seats >= 1) {
+        // **자리 숫자가 보인다고 예약이 되는 게 아니다** (2026-11-12 확인).
+        // 자정이 지나면 그날의 14일 뒤 줄이 미리 생기고 자리 수까지 보이지만,
+        // 실제 신청은 9시 전에는 거절된다. 여기서 쏘면 세 번 실패하고 멈춰
+        // 정작 9시에 아무것도 못 한다. 그래서 **정해진 시각 전에는 쏘지 않는다.**
+        const mayShoot = NOW_MODE || Date.now() >= fireAt;
+        if (seats >= 1 && !mayShoot && !toldWaiting) {
+          toldWaiting = true;
+          log(`자리 ${seats}개가 보이지만 아직 발사 시각 전이라 기다립니다`);
+        }
+        if (seats >= 1 && mayShoot) {
           try {
             if (await shoot("열림 확인")) return;
             shootFails++;
