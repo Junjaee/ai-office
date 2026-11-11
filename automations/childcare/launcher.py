@@ -35,10 +35,10 @@ def attach_chrome(playwright, port: int = CDP_PORT, go_to: str = ""):
     if not browser.contexts:
         raise RuntimeError("크롬은 떠 있는데 창이 없어요. 탭을 하나 열어 주세요")
     ctx = browser.contexts[0]
-    page = next((pg for pg in ctx.pages if HOST in pg.url), None)
-    if page is None:
-        page = ctx.pages[0] if ctx.pages else ctx.new_page()
-        page.goto(go_to or f"https://www.{HOST}/", wait_until="domcontentloaded", timeout=60000)
+    page = next((pg for pg in ctx.pages if HOST in pg.url), None) or (ctx.pages[0] if ctx.pages else ctx.new_page())
+    # 아이사랑 탭이라고 아무거나 쓰면 안 된다 — 메인 화면을 잡으면 그 뒤가 전부 엇나간다.
+    # 어느 탭을 잡았든 갈 곳으로 한 번 보내고 시작한다(2026-11-11 실패로 알게 됨).
+    page.goto(go_to or f"https://www.{HOST}/", wait_until="domcontentloaded", timeout=60000)
     page.bring_to_front()
     return browser, page
 

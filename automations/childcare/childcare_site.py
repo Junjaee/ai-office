@@ -174,11 +174,16 @@ MENU_APPLY = "https://www.childcare.go.kr/?menuno=605"  # 시간제보육 입소
 
 
 def is_logged_in(page) -> bool:
-    """마이룸·로그아웃이 보이면 로그인 상태."""
+    """머리글에 '로그아웃' 이 보이면 로그인 상태.
+
+    이 사이트는 머리글도 자바스크립트로 늦게 그린다. 다 그려지기 전에 보면
+    로그인해 놓고도 '로그아웃 상태' 로 읽힌다(2026-11-11 실패).
+    """
+    settle(page)
     try:
-        page.wait_for_selector("text=로그아웃", timeout=5000)
+        page.wait_for_selector("text=로그아웃", timeout=15000)
         return True
-    except Exception:  # noqa: BLE001 - 안 보이면 그냥 로그아웃 상태로 본다
+    except Exception:  # noqa: BLE001 - 끝내 안 보이면 로그아웃 상태로 본다
         return False
 
 

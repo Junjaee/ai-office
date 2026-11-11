@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "시간제보육 예약기",
+  "version": "1.0.0",
+  "description": "아이사랑 시간제보육 독립반 자리를 정각에 잡습니다.",
+  "content_scripts": [
+    {
+      "matches": ["https://www.childcare.go.kr/*"],
+      "js": ["engine.js"],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    }
+  ]
+}
