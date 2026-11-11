@@ -59,6 +59,32 @@
     return best;
   }
 
+  // ───────── 세션 ─────────
+  // 전자정부 프레임워크가 쿠키로 세션 시각을 들고 다닌다(egovLatestServerTime·egovExpireSessionTime).
+  // 지켜보는 동안 로그인이 유지되는지 눈으로 확인하려고 그대로 적어 둔다.
+  // 조회도 로그인 쿠키를 들고 가는 요청이라 **서버 쪽 세션은 그때마다 갱신된다** —
+  // 다만 화면 쪽 타이머까지 같이 움직이는지는 여기 찍히는 값으로 보면 된다.
+  function sessionCookies() {
+    const out = {};
+    for (const part of document.cookie.split(";")) {
+      const i = part.indexOf("=");
+      if (i < 0) continue;
+      const k = part.slice(0, i).trim();
+      if (k.startsWith("egov")) out[k] = decodeURIComponent(part.slice(i + 1));
+    }
+    return out;
+  }
+
+  function sessionLine() {
+    const c = sessionCookies();
+    const latest = Number(c.egovLatestServerTime), expire = Number(c.egovExpireSessionTime);
+    if (!latest || !expire) return `세션 쿠키 ${JSON.stringify(c)}`;
+    // 값이 '밀리초 길이' 인지 '끝나는 시각' 인지 사이트마다 다르다 — 둘 다 재서 말이 되는 쪽을 쓴다
+    const endsAt = expire > 1e11 ? expire : latest + expire;
+    const left = Math.round((endsAt - Date.now()) / 1000);
+    return `세션 남은 시간 약 ${Math.floor(left / 60)}분 ${left % 60}초 (마지막 갱신 ${new Date(latest).toLocaleTimeString("ko-KR")})`;
+  }
+
   // ───────── 자리 확인 ─────────
   // 표 전체(14일치, 약 24KB)가 한 번에 온다. 0.25초 간격 24번 찔러도 막히지 않았다(실측).
   const formVal = (name) => {
@@ -82,6 +108,9 @@
     // 표의 첫 줄이 늘 오늘인 것은 아니다(당일 마감이 지나면 오늘이 빠진다).
     // 그래서 줄 번호를 계산하지 않고, 줄에 적힌 날짜를 보고 찾는다.
     const rows = [...box.querySelectorAll("tr")].filter((tr) => /\d{4}-\d{2}-\d{2}/.test(tr.innerText));
+    // 표에 날짜 줄이 하나도 없으면 시간표를 못 받은 것이다 — 로그인이 풀리면 이렇게 된다.
+    // 이걸 '아직 안 열림(-1)' 으로 읽으면 한 시간 내내 조용히 헛돈다(2026-11-11).
+    if (!rows.length) throw new Error("시간표가 비어 있어요 — 로그인이 풀렸는지 확인해 주세요");
     const days = rows.map((tr) => (tr.innerText.match(/\d{4}-\d{2}-\d{2}/) || [""])[0]);
     const i = days.indexOf(ymd);
     if (i < 0) return -1;                                   // 그 날짜가 아직 안 열렸다
@@ -170,15 +199,22 @@
     if (popupWatching) return;
     popupWatching = true;
     // 넷퍼넬(대기열) 화면은 알림창이 아니다 — 결과로 세면 안 되고, 보이기만 하면 된다.
-    // 대기 중에는 아무것도 하지 않는다. 다시 쏘면 표를 버리고 맨 뒤로 간다.
+    // 요소 이름은 아이사랑이 싣는 netfunnel-skin.js 를 직접 읽어서 확인했다(2026-11-11).
+    // 그 화면에 사이트가 직접 적어 둔 경고: "새로고침, 뒤로가기 또는 재접속하시면
+    // 대기시간이 더 길어집니다." — 그래서 대기 중에는 아무것도 누르지 않는다.
     let lastQueue = "";
     const queue = () => {
-      for (const el of document.querySelectorAll('[id*="netfunnel" i], [class*="netfunnel" i]')) {
-        if (el.offsetParent === null) continue;
-        const t = el.innerText.trim().replace(/\s+/g, " ").slice(0, 60);
-        if (t && t !== lastQueue) { lastQueue = t; log(`대기열 — ${t}`); }
-        return;
-      }
+      const top = document.getElementById("NetFunnel_Skin_Top");
+      if (!top || top.offsetParent === null) return;
+      const txt = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.innerText.trim() : "";
+      };
+      const ahead = txt("NetFunnel_Loading_Popup_Count");
+      const left = txt("NetFunnel_Loading_Popup_TimeLeft");
+      const line = [ahead && `앞에 ${ahead}명`, left && `예상 ${left}`].filter(Boolean).join(" · ")
+                || top.innerText.trim().replace(/\s+/g, " ").slice(0, 60);
+      if (line && line !== lastQueue) { lastQueue = line; log(`대기열 — ${line}`); }
     };
     const shown = new Map();                               // 창마다 '지금 떠 있는 글' 을 기억
     const hit = () => {
@@ -237,6 +273,7 @@
     if (!document.getElementById("INFOQUALF")) throw new Error("예약 화면이 아니에요 ('이용정보 신청' 을 여세요)");
 
     watchPopups(log);
+    log(sessionLine());
     const beginHour = Number(cfg.beginHour), hours = Number(cfg.hours);
     log(`${cfg.useDate} ${pad(beginHour)}:00 부터 ${hours}시간 · ${clname}반`);
 
@@ -288,6 +325,7 @@
     // 보험 한 발은 없앴다 — 줄이 화면 표에 없으면 장전 자체가 안 되므로,
     // 자리가 보이는 것이 곧 방아쇠다.
     let lastSeen = null, lastError = null, fails = 0, shootFails = 0;
+    let nextSessionLog = Date.now() + 60000;               // 1분마다 세션 상태를 적는다
     while (!stop && Date.now() < giveUp) {
       try {
         const seats = await seatsLeft(cfg.useDate, beginHour, clseq);
@@ -313,6 +351,7 @@
         if (why !== lastError) { lastError = why; log(`확인 실패(계속 감시) — ${why}`); }
         if (++fails === 10) log("열 번 내리 실패했어요 — 로그인이 풀렸는지 확인해 보세요");
       }
+      if (Date.now() >= nextSessionLog) { nextSessionLog = Date.now() + 60000; log(sessionLine()); }
       await new Promise((r) => setTimeout(r, Number(cfg.watchInterval)));
     }
     log(stop ? "멈췄어요" : "시간 안에 못 잡았어요");
