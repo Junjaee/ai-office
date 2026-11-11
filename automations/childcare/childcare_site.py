@@ -99,3 +99,226 @@ def open_reserve(page) -> list[str]:
     page.goto(MENU_RESERVE, wait_until="domcontentloaded", timeout=60000)
     settle(page)
     return [f"주소: {page.url}", f"제목: {page.title()}"] + describe(page)
+
+
+# ───────── 예약 (2026-11-11) ─────────
+# 기관찾기 화면의 예약 버튼은 <a id="occasionRes" data-stcode="11710000741"> 이고,
+# 누르면 시간제보육 입소신청 화면(?menuno=605)으로 넘어간다. 거기 폼 #pfrm 에
+# resdtArray(날짜)·resbgntmArray(시작)·resendtmArray(종료)·resclseqArray(반) 이 들어간다.
+
+MENU_APPLY = "https://www.childcare.go.kr/?menuno=605"  # 시간제보육 입소신청
+
+
+def is_logged_in(page) -> bool:
+    """마이룸·로그아웃이 보이면 로그인 상태."""
+    try:
+        page.wait_for_selector("text=로그아웃", timeout=5000)
+        return True
+    except Exception:  # noqa: BLE001 - 안 보이면 그냥 로그아웃 상태로 본다
+        return False
+
+
+def open_reserve_page(page, center: dict) -> None:
+    """기관찾기에서 그 어린이집의 예약 버튼까지 눌러 입소신청 화면으로 들어간다.
+
+    center: {"name", "code", "sido", "gugun"}
+    """
+    page.goto(MENU_RESERVE, wait_until="domcontentloaded", timeout=60000)
+    settle(page)
+
+    page.locator("#sidoUl li a", has_text=center["sido"]).first.click()
+    page.wait_for_timeout(1200)
+    page.locator("#gugunUl li a", has_text=center["gugun"]).first.click()
+    page.wait_for_timeout(800)
+    page.evaluate("() => { document.getElementById('aUnityN').checked = true }")  # 독립반
+    page.locator("#btnSearch").click()
+
+    btn = page.locator(f'a#occasionRes[data-stcode="{center["code"]}"]')
+    btn.wait_for(timeout=30000)
+    btn.click()
+    settle(page)
+    if "menuno=605" not in page.url:
+        raise RuntimeError(f"예약 화면으로 못 들어갔어요 ({page.url[:60]})")
+
+
+# ───────── 장전과 발사 (2026-11-11 실측) ─────────
+# 입소신청 화면(?menuno=605)에서 "이용정보 신청"(#tab1) 을 열면 날짜×시간 표가 나온다.
+#   칸      a.time-option#tm_<시각>_<행번호>, 행번호 = 오늘로부터 며칠 뒤(0~14)
+#   칸 글자 숫자 = 더 받을 수 있는 아동 수(0 이면 자리 없음), X = 운영 안 함
+#   반      select#clname (예: 15=들꽃향기)   이용시간 수 select#rtm
+#   추가    #timecareTableAddBtn → f_AddQualRow()  ← 서버를 한 번 부른다
+#   예약    #timecareConfirm     → fnSave() → insertOcreqst() → 확인창 → 넷퍼넬 → 전송
+#
+# 추가 버튼이 실제로 하는 일은 **숨은 값 8개를 채우고 목록에 행 하나를 만드는 것**뿐이라,
+# 그 값을 우리가 직접 써 넣으면 서버를 한 번도 안 부르고 장전할 수 있다(≈1ms).
+# 정각에는 fnSave() 한 번만 쏜다. 넷퍼넬 대기열이 있으므로 **연타하지 않는다**.
+
+WEEKDAYS = "월화수목금토일"
+
+
+def _slot(use_date: str, begin: str, end: str, class_seq: str, class_name: str) -> dict:
+    """화면이 쓰는 모양 그대로 값을 만든다. 공백 하나까지 실제 화면과 같아야 한다."""
+    from datetime import datetime
+
+    day = datetime.strptime(use_date, "%Y%m%d")
+    bh, bm = begin.split(":")
+    eh, em = end.split(":")
+    bt, et = f"{bh} : {bm}", f"{eh} : {em}"
+    return {
+        "sdate": f"{day:%Y-%m-%d}({WEEKDAYS[day.weekday()]})",
+        "resdt": use_date,
+        "resbgntm": bt,
+        "resendtm": et,
+        "restime": f"{bt}  ~  {et} ",
+        "rtm": str(int(eh) - int(bh)),
+        "resclseq": class_seq,
+        "resclname": class_name,
+    }
+
+
+def open_apply_tab(page, class_seq: str = "") -> tuple[str, str]:
+    """아동을 고르고 '이용정보 신청' 탭을 연다. 고른 (반 코드, 반 이름)을 돌려준다.
+
+    반 코드는 기관마다 다르다. 안 주면 화면의 첫 번째 반을 고른다(독립반은 보통 한 반).
+    정각 전에 미리 해 둔다 — 여기까지가 준비다.
+    """
+    child = page.locator("input[name=occasionChk]").first
+    if not child.count():
+        raise RuntimeError("등록된 아동이 없어요 — 아이사랑에서 시간제보육 아동등록을 먼저 해 주세요")
+    child.check()
+    page.locator("#tab1").click()
+    page.wait_for_selector("#clname", timeout=30000)
+    picked = page.evaluate(
+        """(want) => {
+             const sel = document.getElementById('clname');
+             const opts = [...sel.options].filter(o => o.value);
+             const o = want ? opts.find(o => o.value === want) : opts[0];
+             if (!o) return null;
+             sel.value = o.value;
+             sel.dispatchEvent(new Event('change', {bubbles: true}));
+             return [o.value, o.text.trim()];
+           }""",
+        class_seq,
+    )
+    if not picked:
+        raise RuntimeError("반 목록이 비어 있어요")
+    return picked[0], picked[1]
+
+
+def row_index(use_date: str, today=None) -> int:
+    """표에서 그 날짜가 몇 번째 줄인지. 표는 늘 오늘(0)부터 14일 뒤(14)까지다."""
+    from datetime import date, datetime
+
+    today = today or date.today()
+    return (datetime.strptime(use_date, "%Y%m%d").date() - today).days
+
+
+def is_open(page, use_date: str, begin: str) -> bool:
+    """그 날짜·시각에 자리가 있는지 가볍게 확인한다(신청하지 않는다).
+
+    표를 새로 받아 와서 칸 글자가 1 이상인지만 본다.
+    """
+    idx = row_index(use_date)
+    hour = int(begin.split(":")[0])
+    page.evaluate("() => { if (window.fnRefresh) window.fnRefresh() }")
+    page.wait_for_timeout(500)
+    text = page.evaluate(
+        "(id) => { const e = document.getElementById(id); return e ? e.innerText.trim() : null }",
+        f"tm_{hour}_{idx}",
+    )
+    return bool(text) and text.isdigit() and int(text) >= 1
+
+
+_ARM_JS = """(s) => {
+  const form = document.getElementById('pfrm');
+  const put = (name, value) => {
+    let el = form.querySelector(`input[name="${name}"]`);
+    if (!el) { el = document.createElement('input'); el.type = 'hidden'; el.name = name; form.appendChild(el); }
+    el.value = value;
+  };
+  put('sdateArray', s.sdate);
+  put('restimeArray', s.restime);
+  put('resdtArray', s.resdt);
+  put('resbgntmArray', s.resbgntm);
+  put('resendtmArray', s.resendtm);
+  put('rtmArray', s.rtm);
+  put('resclseqArray', s.resclseq);
+  put('infoNum', '1');
+
+  const body = document.querySelector('#INFOQUALF tbody') || document.getElementById('INFOQUALF');
+  [...body.querySelectorAll('tr[id^=tId_]')].forEach(tr => tr.remove());
+  const tr = document.createElement('tr');
+  tr.id = 'tId_0';
+  const fields = {resclname0: s.resclname, resclseq0: s.resclseq, sdate0: s.sdate, resdt0: s.resdt,
+                  restime0: s.restime, resbgntm0: s.resbgntm, resendtm0: s.resendtm, rtm0: s.rtm};
+  const cells = [
+    `<input type="checkbox" name="rowQualChkNo" value="on">`,
+    `<input type="hidden" name="resclname0" value="${s.resclname}"><input type="hidden" name="resclseq0" value="${s.resclseq}">${s.resclname}`,
+    `<input type="hidden" name="sdate0" value="${s.sdate}"><input type="hidden" name="resdt0" value="${s.resdt}">${s.sdate}`,
+    `<input type="hidden" name="restime0" value="${s.restime}"><input type="hidden" name="resbgntm0" value="${s.resbgntm}">` +
+    `<input type="hidden" name="resendtm0" value="${s.resendtm}"><input type="hidden" name="rtm0" value="${s.rtm}">${s.restime}`,
+  ];
+  tr.innerHTML = cells.map(c => `<td>${c}</td>`).join('');
+  body.appendChild(tr);
+  return [...body.querySelectorAll('tr[id^=tId_]')].length;
+}"""
+
+
+def arm(page, class_seq: str, class_name: str, use_date: str, begin: str, end: str) -> dict:
+    """장전 — 예약 목록 행과 숨은 값을 직접 채운다. 서버를 부르지 않는다."""
+    slot = _slot(use_date, begin, end, class_seq, class_name)
+    rows = page.evaluate(_ARM_JS, slot)
+    if rows != 1:
+        raise RuntimeError(f"장전 실패(행 {rows}개)")
+    return slot
+
+
+# 확인 레이어가 뜨는 즉시 누르도록 미리 걸어 두는 감시자. 사람은 0.5초, 이건 1프레임이다.
+# 결과 문구는 금방 닫힐 수 있으니 뜨는 족족 받아 적어 둔다(2026-11-11 실측으로 필요했다).
+_AUTO_CONFIRM_JS = """() => {
+  window.__fired = [];
+  window.__popups = [];
+  const seen = new Set();
+  const hit = () => {
+    for (const id of ['layer-confirm-popup-contents', 'layer-confirm-popup-contents2']) {
+      const box = document.getElementById(id);
+      if (box && box.offsetParent !== null) {
+        const t = box.innerText.trim();
+        if (t && !seen.has(t)) { seen.add(t); window.__popups.push(t); }
+      }
+    }
+    for (const id of ['layer-confirm-popup-confirm', 'layer-confirm-popup-confirm2']) {
+      const el = document.getElementById(id);
+      if (el && el.offsetParent !== null) { window.__fired.push(id); el.click(); return true; }
+    }
+    return false;
+  };
+  new MutationObserver(hit).observe(document.body, {subtree: true, attributes: true, childList: true});
+  hit();
+}"""
+
+# 실제로 성공했을 때 나온 문구: "1건 예약 중 1건 예약되었습니다." (2026-11-11 실측)
+_OK_WORDS = ("예약되었습니다", "예약완료", "신청이 완료", "정상적으로")
+
+
+def fire(page) -> tuple[bool, str]:
+    """정각 한 방. fnSave() 를 부르고 확인창을 즉시 넘긴다. 넷퍼넬 대기열은 그대로 기다린다."""
+    alerts: list[str] = []
+    page.on("dialog", lambda d: (alerts.append(d.message), d.accept()))
+    page.evaluate(_AUTO_CONFIRM_JS)
+    page.evaluate("() => window.fnSave()")
+
+    # 넷퍼넬 대기열에 들어가면 순서가 올 때까지 기다린다. 여기서 다시 쏘면 줄 뒤로 밀린다.
+    for _ in range(120):
+        page.wait_for_timeout(500)
+        said = alerts + (page.evaluate("() => window.__popups || []") or [])
+        if said:
+            msg = redact(" / ".join(said), limit=140)
+            return any(w in msg for w in _OK_WORDS), msg
+    return False, "응답이 없어요 (대기열이 길거나 막혔을 수 있어요)"
+
+
+def reserve(page, klass: tuple[str, str], use_date: str, begin: str, end: str) -> tuple[bool, str]:
+    """장전 + 발사. 화면은 이미 입소신청 탭이 열려 있어야 한다. klass = (반 코드, 반 이름)."""
+    arm(page, klass[0], klass[1], use_date, begin, end)
+    return fire(page)
