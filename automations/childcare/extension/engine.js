@@ -17,6 +17,8 @@
   const CLOCK_URL = "/cms/gen/images/logo.svg";
   const SEATS_URL = "/icms/occasion/occasionCrTmInfoAjax.html";
   const WEEKDAYS = "월화수목금토일";
+  const RETRY_MS = 400;                    // 예약하기를 다시 누르는 간격
+  const RETRY_WINDOW_MS = 10 * 60 * 1000;  // 정각 뒤 이만큼은 계속 눌러 본다
 
   const load = () => {
     try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
@@ -169,6 +171,13 @@
     setSelect("rtm", hours);
   }
 
+  // 예약 목록(#INFOQUALF)에 이미 올라가 있는 줄의 날짜들
+  function armedDates() {
+    return [...document.querySelectorAll("#INFOQUALF tr[id^=tId_]")]
+      .map((tr) => (tr.innerText.match(/\d{4}-\d{2}-\d{2}/) || [""])[0])
+      .filter(Boolean);
+  }
+
   async function waitRow(ymd, ms) {
     const until = Date.now() + ms;
     while (Date.now() < until && !stop) {
@@ -283,6 +292,10 @@
       let left = 240;
       const timer = setInterval(() => {
         const said = popups.slice(from);
+        // 대기열에 서 있는 동안은 아무리 오래 걸려도 기다린다.
+        // 여기서 포기하고 다시 쏘면 대기표를 버리고 맨 뒤로 간다.
+        const queued = document.getElementById("NetFunnel_Skin_Top");
+        if (!said.length && queued && queued.offsetParent !== null) { left = 240; return; }
         // 멈춤을 눌러도 이미 보낸 신청은 되돌릴 수 없다 — 기다리기만 그만둔다
         if (said.length || stop || --left <= 0) {
           clearInterval(timer);
@@ -353,6 +366,29 @@
       return r.ok;
     };
 
+    // ── 미리 장전 ──
+    // '추가' 는 9시 전에도 된다. 막히는 것은 '예약하기' 뿐이다(사용자 확인 2026-11-12).
+    // 그러니 기다리는 동안 추가까지 끝내 두고, 정각에는 예약하기 한 번만 누른다.
+    // 새로고침·칸 클릭·추가(서버 왕복)가 전부 임계 경로에서 빠진다 — 1초 넘게 빨라진다.
+    let armed = false;
+    if (!NOW_MODE) {
+      const already = armedDates();
+      const others = already.filter((d) => d !== cfg.useDate);
+      if (others.length) log(`※ 목록에 다른 날짜도 있어요 (${others.join(", ")}) — 같이 예약됩니다`);
+      if (already.includes(cfg.useDate)) {
+        armed = true;
+        log("이미 목록에 올라가 있어요 — 정각에 예약하기만 누릅니다");
+      } else {
+        try {
+          await addViaSite(cfg.useDate, beginHour, hours, clseq, log);
+          armed = true;
+          log("미리 장전 완료 — 정각에 예약하기만 누릅니다");
+        } catch (e) {
+          log(`미리 장전 실패 — 정각에 처음부터 합니다 (${String(e.message).slice(0, 60)})`);
+        }
+      }
+    }
+
     let said30 = -1;
     while (!stop && Date.now() < watchFrom) {
       const left = Math.round((watchFrom - Date.now()) / 1000);
@@ -360,6 +396,38 @@
       await new Promise((r) => setTimeout(r, 250));
     }
     if (stop) return log("멈췄어요");
+
+    // 미리 장전해 뒀으면 정각에 예약하기만 누른다. 이게 가장 빠른 길이다.
+    if (armed) {
+      // 정각보다 5초 일찍부터 누르기 시작한다. 일찍 누른 건 "아직 아닙니다" 로 되돌아올 뿐이라
+      // 손해가 없고, 시계가 몇 초 틀려도 첫 순간을 놓치지 않는다.
+      const startAt = fireAt - 5000;
+      const left = startAt - Date.now();
+      if (left > 0) {
+        log(`정각 5초 전부터 누릅니다 (${(left / 1000).toFixed(1)}초 뒤 시작)`);
+        while (!stop && Date.now() < startAt - 300) await sleep(100);
+        while (!stop && Date.now() < startAt) { /* 마지막 0.3초는 쉬지 않고 */ }
+      }
+      if (stop) return log("멈췄어요");
+
+      // 아직 때가 아니면 사이트가 "아직예약가능한 시간이 아닙니다" 로 돌려보낸다(사용자 확인 2026-11-12).
+      // 그러면 오픈 시각을 맞출 필요가 없다 — **될 때까지 누르면 된다.**
+      // 다만 '이미 예약된 시간' 같은 사유는 다시 해도 안 되니 그때는 멈춘다.
+      const NOT_YET = /아직|기간이 아닙|시간이 아닙/;
+      const stopAt = fireAt + RETRY_WINDOW_MS;
+      let tries = 0, lastMsg = "";
+      while (!stop && Date.now() < stopAt) {
+        tries++;
+        const r = await fire();
+        if (r.ok) { log(`성공 — ${r.msg} (${tries}번째)`); return; }
+        if (r.msg !== lastMsg) { lastMsg = r.msg; log(`${tries}번째 — ${r.msg}`); }
+        else if (tries % 20 === 0) log(`${tries}번째까지 같은 답 — 계속합니다`);
+        if (!NOT_YET.test(r.msg)) { log("다시 해도 안 될 사유예요 — 멈춥니다"); return; }
+        await sleep(RETRY_MS);
+      }
+      log(stop ? "멈췄어요" : "정해진 시간 안에 못 잡았어요");
+      return;
+    }
 
     log("감시 시작 — 열리는 순간 쏩니다");
     // 보험 한 발은 없앴다 — 줄이 화면 표에 없으면 장전 자체가 안 되므로,
