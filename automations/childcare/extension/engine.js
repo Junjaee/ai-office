@@ -106,6 +106,15 @@
       rtm: String(endHour - beginHour),
       resclseq: clseq, resclname: clname,
     };
+    // 화면의 '이용시간' 칸도 맞춰 둔다. 안 그러면 fnSave 가
+    // "이용정보를 선택해 주시기 바랍니다" 로 막는다(2026-11-11 실패).
+    // 손으로 검증할 때는 앞선 단계에서 이미 골라져 있어 눈치채지 못했다.
+    const rtmSel = document.getElementById("rtm");
+    if (rtmSel && rtmSel.value !== s.rtm) {
+      rtmSel.value = s.rtm;
+      rtmSel.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
     const form = document.getElementById("pfrm");
     const put = (name, value) => {
       let el = form.querySelector(`input[name="${name}"]`);
@@ -128,6 +137,13 @@
       `<input type="hidden" name="resendtm0" value="${s.resendtm}"><input type="hidden" name="rtm0" value="${s.rtm}">${s.restime}`,
     ].map((c) => `<td>${c}</td>`).join("");
     body.appendChild(tr);
+
+    // 스스로 점검 — 틀린 채로 쏘면 한 발을 날린다
+    const rows = body.querySelectorAll("tr[id^=tId_]").length;
+    const wrote = form.querySelector('input[name="resdtArray"]');
+    if (rows !== 1 || !wrote || wrote.value !== s.resdt) {
+      throw new Error(`장전 실패 (줄 ${rows}개, 날짜 ${wrote ? wrote.value : "없음"})`);
+    }
     return s;
   }
 
@@ -138,14 +154,16 @@
     const said = [];
     const seen = new Set();
     const hit = () => {
-      for (const id of ["layer-confirm-popup-contents", "layer-confirm-popup-contents2"]) {
+      for (const id of ["layer-confirm-popup-contents", "layer-confirm-popup-contents2",
+                        "layer-popup-contents", "layer-popup-contents2", "layer-popup-contents3"]) {
         const box = document.getElementById(id);
         if (box && box.offsetParent !== null) {
           const t = box.innerText.trim();
           if (t && !seen.has(t)) { seen.add(t); said.push(t); }
         }
       }
-      for (const id of ["layer-confirm-popup-confirm", "layer-confirm-popup-confirm2"]) {
+      for (const id of ["layer-confirm-popup-confirm", "layer-confirm-popup-confirm2",
+                        "layer-popup-close", "layer-popup-close2", "layer-popup-close3"]) {
         const el = document.getElementById(id);
         if (el && el.offsetParent !== null) { el.click(); return; }
       }
@@ -304,6 +322,21 @@
   for (let n = 1; n <= 9; n++) $("h").add(new Option(String(n), String(n)));
   $("d").value = cfg.useDate; $("b").value = String(cfg.beginHour);
   $("h").value = String(cfg.hours); $("o").value = cfg.openAt; $("w").value = cfg.watchBefore;
+  // 패널에서 이용 시간을 고르면 화면의 '이용시간' 칸도 바로 따라가게 한다.
+  // (발사 직전에도 한 번 더 맞춘다 — arm() 안에서)
+  const syncRtm = () => {
+    const b = Number($("b").value), h = Number($("h").value);
+    const real = Math.min(b + h, 18) - b;                  // 18시를 넘으면 잘린다
+    const sel = document.getElementById("rtm");
+    if (sel && sel.value !== String(real)) {
+      sel.value = String(real);
+      sel.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    return real;
+  };
+  $("b").onchange = syncRtm;
+  $("h").onchange = syncRtm;
+
   $("now").checked = !!cfg.now;
   const syncNow = () => { $("o").disabled = $("now").checked; $("w").disabled = $("now").checked; };
   $("now").onchange = syncNow;
@@ -334,5 +367,6 @@
     log("멈추는 중… (이미 보낸 신청은 되돌릴 수 없어요)");
   };
 
+  syncRtm();
   log("반까지 고른 뒤 [시작]을 누르세요");
 })();
