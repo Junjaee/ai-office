@@ -273,7 +273,6 @@
     if (!document.getElementById("INFOQUALF")) throw new Error("예약 화면이 아니에요 ('이용정보 신청' 을 여세요)");
 
     watchPopups(log);
-    log(sessionLine());
     const beginHour = Number(cfg.beginHour), hours = Number(cfg.hours);
     log(`${cfg.useDate} ${pad(beginHour)}:00 부터 ${hours}시간 · ${clname}반`);
 
@@ -325,7 +324,6 @@
     // 보험 한 발은 없앴다 — 줄이 화면 표에 없으면 장전 자체가 안 되므로,
     // 자리가 보이는 것이 곧 방아쇠다.
     let lastSeen = null, lastError = null, fails = 0, shootFails = 0;
-    let nextSessionLog = Date.now() + 60000;               // 1분마다 세션 상태를 적는다
     while (!stop && Date.now() < giveUp) {
       try {
         const seats = await seatsLeft(cfg.useDate, beginHour, clseq);
@@ -351,7 +349,6 @@
         if (why !== lastError) { lastError = why; log(`확인 실패(계속 감시) — ${why}`); }
         if (++fails === 10) log("열 번 내리 실패했어요 — 로그인이 풀렸는지 확인해 보세요");
       }
-      if (Date.now() >= nextSessionLog) { nextSessionLog = Date.now() + 60000; log(sessionLine()); }
       await new Promise((r) => setTimeout(r, Number(cfg.watchInterval)));
     }
     log(stop ? "멈췄어요" : "시간 안에 못 잡았어요");
@@ -473,4 +470,8 @@
 
   syncRtm();
   log("반까지 고른 뒤 [시작]을 누르세요");
+  log(sessionLine());
+  // 조회를 안 하는 동안에도 찍는다 — 멈춘 채로 지켜보면
+  // 세션을 살려 두는 게 우리 조회인지 사이트 자체 타이머인지 가려진다
+  setInterval(() => log(sessionLine()), 60000);
 })();
