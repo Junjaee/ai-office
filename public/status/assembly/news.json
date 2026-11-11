@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 13초",
+  "summary": "신규 11건, 실패 0건, 12초",
   "counts": {
-    "new": 6,
+    "new": 11,
     "failed": 0,
-    "total": 7157
+    "total": 7168
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 13초",
-    "[신규] 산림청, 소나무재선충병 확산 차단 위해 국비 추가 투입 — 시민행정신문",
-    "[신규] “시장 이기는 정부는 없다”… 野, 부동산 정책 실정 직격 — 서울신문",
-    "[신규] \"미친 규제\"…여야, 같은 날 국회서 부동산 해법 경쟁 — 동행미디어 시대",
-    "[신규] 나경원 \"당나라 군대냐\"·강신철 \"말씀 취소하라\"…예결위 설전 — 연합뉴스"
+    "신규 11건, 실패 0건, 12초",
+    "[신규] 제주, 전국 재난응급의료 도상훈련 ‘최우수상’ — 외교저널",
+    "[신규] 푸른그룹, ‘2027 푸른그룹 KPGA 윈터투어’ 개최 협약 체결 — 시민행정신문",
+    "[신규] 이재관 의원, 직접 건의하고 예산 증액 이끈 소담스퀘어 충남 준공! — 시민행정신문",
+    "[신규] 보수야권 ‘李정부 부동산정책’ 비판 속 여권 내에서도 이견 — 경상일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43044055056,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43044055056",
-  "request_id": "cron-202611111500",
+  "run_id": 43073647804,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43073647804",
+  "request_id": "cron-202611111800",
   "trigger": "schedule",
-  "started_at": "2026-11-12T00:01:29+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-12T03:01:36+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 144건"
+      "summary": "검색어 5개에서 151건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 6건 (신규 6건) · SBS 뉴스 1건, 동행미디어 시대 1건, 메트로신문 1건"
+      "summary": "오늘 17건 (신규 11건) · 시민행정신문 3건, 재경일보 2건, BBS불교방송 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-12T00:01:43+09:00"
+  "updated_at": "2026-11-12T03:01:49+09:00"
 }
