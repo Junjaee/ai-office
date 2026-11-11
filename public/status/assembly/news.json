@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 31건, 실패 0건, 12초",
+  "summary": "신규 28건, 실패 0건, 10초",
   "counts": {
-    "new": 31,
+    "new": 28,
     "failed": 0,
-    "total": 7117
+    "total": 7145
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 31건, 실패 0건, 12초",
-    "[신규] 최경환 \"시장 이기는 정부 없다\"…李정부 부동산 정책 전환 촉구 — 아시아경제",
-    "[신규] “그때 빚내서 집 살걸”…최경환 전 부총리 “주담대 절대상한 폐지해야” — 헤럴드경제 미주판",
-    "[신규] 수도권 주거혁신포럼, 11일 최경환 초청 세미나…李정부 부동산 정책 진단 — 한스경제",
-    "[신규] 인터뷰 전문: 김기현 “‘한동훈 조기 복당’ 언급한 적 없다…언론 오보” [정치시그널] — 채널A"
+    "신규 28건, 실패 0건, 10초",
+    "[신규] 국힘·개혁신당, 與에 부동산 공조 손짓…보수연대엔 선 긋기 — 매일일보",
+    "[신규] 최경환 전 경제부총리와 이준석, 조정훈 의원 — 매일경제",
+    "[신규] 野의원모임, '빚내서 집사라' 최경환 불러 與부동산정책 저격 — 연합뉴스",
+    "[신규] '빚내서 집 사라' 최경환 부른 野…\"미친 규제, 시장 이기는 정부 없다\" — 머니투데이"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42949865023,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42949865023",
-  "request_id": "cron-202611110300",
+  "run_id": 42969461518,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42969461518",
+  "request_id": "cron-202611110600",
   "trigger": "schedule",
-  "started_at": "2026-11-11T12:01:25+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-11T15:01:32+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 128건"
+      "summary": "검색어 5개에서 129건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 61건 (신규 31건) · 시민행정신문 7건, 뉴시스 3건, 아시아경제 3건"
+      "summary": "오늘 89건 (신규 28건) · 뉴시스 9건, 시민행정신문 8건, 뉴스1 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-11T12:01:38+09:00"
+  "updated_at": "2026-11-11T15:01:43+09:00"
 }
