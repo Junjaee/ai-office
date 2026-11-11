@@ -181,8 +181,13 @@ def parse_open_at(text: str, now: datetime | None = None) -> datetime:
     return today if now < today else today + timedelta(days=1)
 
 
-def run_macro(cfg: dict, log, stop: threading.Event) -> None:
-    """[시작]을 누르면 도는 본체. log(한 줄) 로 창에 알린다."""
+def run_macro(cfg: dict, log, stop: threading.Event, check_only: bool = False) -> None:
+    """[시작]을 누르면 도는 본체. log(한 줄) 로 창에 알린다.
+
+    check_only 면 준비까지만 하고 자리 수를 한 번 읽어 보고 끝낸다([점검] 단추).
+    9시를 기다리지 않고 "exe 가 진짜 끝까지 가는지"를 아무 때나 확인하려는 것이다 —
+    여기까지 가면 정각에 쏠 준비가 다 된 것이다.
+    """
     from playwright.sync_api import sync_playwright
 
     by_name = {c["name"]: c for c in cfg["centers"]}
@@ -213,6 +218,15 @@ def run_macro(cfg: dict, log, stop: threading.Event) -> None:
         site.open_reserve_page(page, by_name[picks[0]])
         klass = site.open_apply_tab(page)
         log(f"준비 끝 — {picks[0]} · {klass[1]}반")
+
+        if check_only:
+            seats = site.seats_left(page, klass[0], use_date, begin)
+            if seats < 0:
+                log(f"{picked} 는 아직 표에 없어요 (그날 9시에 열립니다)")
+            else:
+                log(f"{picked} {begin} — 지금 남은 자리 {seats}개")
+            log("점검 끝. 여기까지 왔으면 정각에 쏠 준비가 된 겁니다")
+            return
 
         watch_before = int(cfg["watch_before_sec"])
         launcher.sleep_until(open_at - timedelta(seconds=watch_before), offset, 0, log)
@@ -335,9 +349,11 @@ class App(tk.Tk):
         btns = ttk.Frame(self)
         btns.grid(row=1, column=0, sticky="we", padx=16)
         ttk.Button(btns, text="크롬 열기", command=self._open_chrome).grid(row=0, column=0, padx=4)
+        self.check_btn = ttk.Button(btns, text="점검", command=lambda: self._start(check_only=True))
+        self.check_btn.grid(row=0, column=1, padx=4)
         self.start_btn = ttk.Button(btns, text="시작", command=self._start)
-        self.start_btn.grid(row=0, column=1, padx=4)
-        ttk.Button(btns, text="멈춤", command=lambda: self.stop.set()).grid(row=0, column=2, padx=4)
+        self.start_btn.grid(row=0, column=2, padx=4)
+        ttk.Button(btns, text="멈춤", command=lambda: self.stop.set()).grid(row=0, column=3, padx=4)
 
         self.log_box = tk.Text(self, height=12, width=52, state="disabled", wrap="word")
         self.log_box.grid(row=2, column=0, padx=16, pady=10)
@@ -362,6 +378,7 @@ class App(tk.Tk):
         if self.worker and not self.worker.is_alive():
             self.worker = None
             self.start_btn.configure(state="normal")
+            self.check_btn.configure(state="normal")
         self.after(100, self._drain)
 
     def _collect(self) -> dict:
@@ -385,21 +402,23 @@ class App(tk.Tk):
         except Exception as exc:  # noqa: BLE001 - 창에 그대로 보여 준다
             messagebox.showerror("크롬 열기", str(exc))
 
-    def _start(self) -> None:
+    def _start(self, check_only: bool = False) -> None:
         if self.worker:
             return
         try:
             self.cfg = self._collect()
             save_settings(self.cfg)
         except ValueError:
-            messagebox.showerror("설정", "시간은 09:30, 오픈 시각은 09:00:00 처럼 적어 주세요")
+            messagebox.showerror("설정", "오픈 시각은 09:00:00, 이용일은 2026-11-25 처럼 적어 주세요")
             return
         self.stop.clear()
         self.start_btn.configure(state="disabled")
+        self.check_btn.configure(state="disabled")
+        self._log("점검합니다 — 쏘지 않습니다" if check_only else "시작합니다")
 
         def work() -> None:
             try:
-                run_macro(self.cfg, self.msgs.put, self.stop)
+                run_macro(self.cfg, self.msgs.put, self.stop, check_only=check_only)
             except Exception as exc:  # noqa: BLE001 - 창에 한 줄로 알린다
                 self.msgs.put(f"멈춤 — {exc}")
 
