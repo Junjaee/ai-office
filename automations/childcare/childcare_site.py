@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import re
+import time
 from urllib.parse import quote
 
 BASE = "https://www.childcare.go.kr/"
@@ -36,14 +37,76 @@ def redact(text: str, limit: int = 60) -> str:
     return out[:limit]
 
 
+def wait_ready(page, selector: str, timeout_ms: int = 40000) -> None:
+    """화면에 그것이 생길 때까지 기다린다. 중간에 튕겨도 견딘다.
+
+    이 사이트는 화면을 그린 뒤 주소를 스스로 `?menuno=1&state=…` 로 한 번 더 바꾼다.
+    그 틈에 건드리면 'Execution context was destroyed' 가 난다(2026-11-11 실패).
+    그래서 튕김을 무시하고 다시 보고, 두 번 연속 보일 때만 됐다고 친다.
+    """
+    end = time.monotonic() + timeout_ms / 1000
+    last = ""
+    while time.monotonic() < end:
+        try:
+            if page.query_selector(selector):
+                time.sleep(0.3)
+                if page.query_selector(selector):  # 또 튕기지 않았는지 한 번 더
+                    return
+        except Exception as exc:  # noqa: BLE001 - 튕기는 중이면 다시 본다
+            last = str(exc).splitlines()[0][:70]
+        time.sleep(0.3)
+    raise RuntimeError(f"화면이 안 떠요 ({selector})" + (f" — {last}" if last else ""))
+
+
+def safe_eval(page, js: str, arg=None, tries: int = 6):
+    """page.evaluate 를 튕김에 견디게 감싼다.
+
+    이 사이트는 주소를 스스로 바꾸는 버릇이 있어, 하필 그 순간 실행하면
+    'Execution context was destroyed' 로 죽는다. 그럴 때만 다시 해 본다.
+    """
+    last = None
+    for _ in range(tries):
+        try:
+            return page.evaluate(js, arg) if arg is not None else page.evaluate(js)
+        except Exception as exc:  # noqa: BLE001 - 이동 중이면 다시, 아니면 그대로 올린다
+            msg = str(exc)
+            if "context was destroyed" not in msg and "Target closed" not in msg:
+                raise
+            last = msg.splitlines()[0][:70]
+            time.sleep(0.4)
+    raise RuntimeError(f"화면이 계속 바뀌어 손을 못 댔어요 — {last}")
+
+
+def tap_text(page, selector: str, text: str, timeout_ms: int = 30000) -> None:
+    """그 글자를 가진 항목이 생길 때까지 기다렸다 누른다.
+
+    지역 목록은 접혀 있어 Playwright 가 클릭을 거부하고(안 보인다며),
+    구·군 목록은 시·도를 고른 뒤 따로 받아 오느라 늦게 생긴다. 둘 다 여기서 처리한다.
+    """
+    js = """([sel, want]) => {
+              const a = [...document.querySelectorAll(sel)].find(e => e.textContent.trim() === want);
+              if (!a) return false;
+              a.click();
+              return true;
+            }"""
+    end = time.monotonic() + timeout_ms / 1000
+    while time.monotonic() < end:
+        if safe_eval(page, js, [selector, text]):
+            return
+        time.sleep(0.3)
+    raise RuntimeError(f"'{text}' 를 못 찾았어요 ({selector})")
+
+
 def settle(page, timeout: int = 30000) -> None:
     """화면이 다 그려질 때까지 기다린다. 이 사이트는 제목이 늦게 채워진다."""
-    page.wait_for_load_state("domcontentloaded", timeout=timeout)
-    try:
-        page.wait_for_function("() => document.title && document.title.length > 0", timeout=timeout)
-    except Exception:  # noqa: BLE001 - 제목이 끝내 안 채워져도 진행은 해 본다
-        pass
-    page.wait_for_timeout(1500)
+    end = time.monotonic() + timeout / 1000
+    while time.monotonic() < end:
+        try:
+            page.wait_for_function("() => document.title && document.title.length > 0", timeout=5000)
+            time.sleep(0.8)
+            return
+        except Exception:  # noqa: BLE001 - 튕기는 중이면 다시 본다
+            time.sleep(0.3)
 
 
 def login(page, user_id: str, password: str, return_to: str = MENU_RESERVE) -> tuple[bool, str]:
@@ -65,6 +128,7 @@ def login(page, user_id: str, password: str, return_to: str = MENU_RESERVE) -> t
     page.fill("#uspass", password)
     page.locator("a[onclick*='ssoLoginCheck']").first.click(timeout=20000)
     settle(page)
+
 
     if "childcare.go.kr" in page.url:
         return True, "로그인 성공"
@@ -118,25 +182,43 @@ def is_logged_in(page) -> bool:
         return False
 
 
+# 기관찾기 화면에만 있는 것. 메인에도 지역 목록(#sidoUl)이 있어서 그걸로는 구분이 안 된다
+#  — 2026-11-11: 메인으로 튕긴 걸 모르고 메인의 지역 목록을 누르고 있었다.
+SEARCH_MARK = "#aUnityN"
+
+
+def open_search_page(page, tries: int = 5) -> None:
+    """시간제보육 기관찾기 화면을 연다. 메인으로 튕기면 다시 들어간다."""
+    for _ in range(tries):
+        page.goto(MENU_RESERVE, wait_until="domcontentloaded", timeout=60000)
+        try:
+            wait_ready(page, SEARCH_MARK, timeout_ms=9000)
+            return
+        except RuntimeError:
+            time.sleep(0.5)
+    raise RuntimeError("기관찾기 화면이 안 열려요 (자꾸 메인으로 돌아가요)")
+
+
 def open_reserve_page(page, center: dict) -> None:
     """기관찾기에서 그 어린이집의 예약 버튼까지 눌러 입소신청 화면으로 들어간다.
 
     center: {"name", "code", "sido", "gugun"}
     """
-    page.goto(MENU_RESERVE, wait_until="domcontentloaded", timeout=60000)
-    settle(page)
+    open_search_page(page)
 
-    page.locator("#sidoUl li a", has_text=center["sido"]).first.click()
-    page.wait_for_timeout(1200)
-    page.locator("#gugunUl li a", has_text=center["gugun"]).first.click()
-    page.wait_for_timeout(800)
-    page.evaluate("() => { document.getElementById('aUnityN').checked = true }")  # 독립반
-    page.locator("#btnSearch").click()
+    # 지역 목록(#sidoUl·#gugunUl)은 접혀 있어 Playwright 가 "안 보인다"며 클릭을 거부하고,
+    # 구·군은 시·도를 고른 뒤 따로 받아 와 늦게 생긴다(2026-11-11 실패로 알게 됨).
+    tap_text(page, "#sidoUl li a", center["sido"])
+    tap_text(page, "#gugunUl li a", center["gugun"])
+    safe_eval(
+        page,
+        "() => { document.getElementById('aUnityN').checked = true; document.getElementById('btnSearch').click() }",
+    )
 
-    btn = page.locator(f'a#occasionRes[data-stcode="{center["code"]}"]')
-    btn.wait_for(timeout=30000)
-    btn.click()
-    settle(page)
+    sel = f'a#occasionRes[data-stcode="{center["code"]}"]'
+    page.wait_for_selector(sel, timeout=30000)
+    safe_eval(page, "(sel) => document.querySelector(sel).click()", sel)
+    wait_ready(page, "#tab1")
     if "menuno=605" not in page.url:
         raise RuntimeError(f"예약 화면으로 못 들어갔어요 ({page.url[:60]})")
 
@@ -182,13 +264,21 @@ def open_apply_tab(page, class_seq: str = "") -> tuple[str, str]:
     반 코드는 기관마다 다르다. 안 주면 화면의 첫 번째 반을 고른다(독립반은 보통 한 반).
     정각 전에 미리 해 둔다 — 여기까지가 준비다.
     """
-    child = page.locator("input[name=occasionChk]").first
-    if not child.count():
+    if not safe_eval(
+        page,
+        """() => {
+             const r = document.querySelector('input[name=occasionChk]');
+             if (!r) return false;
+             r.checked = true; r.click();
+             const tab = document.getElementById('tab1');
+             if (tab) tab.click();
+             return true;
+           }"""
+    ):
         raise RuntimeError("등록된 아동이 없어요 — 아이사랑에서 시간제보육 아동등록을 먼저 해 주세요")
-    child.check()
-    page.locator("#tab1").click()
     page.wait_for_selector("#clname", timeout=30000)
-    picked = page.evaluate(
+    picked = safe_eval(
+        page,
         """(want) => {
              const sel = document.getElementById('clname');
              const opts = [...sel.options].filter(o => o.value);

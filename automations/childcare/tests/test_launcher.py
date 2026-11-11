@@ -85,3 +85,23 @@ def test_오픈시각_문자열을_다음_그_시각으로():
     now = datetime(2026, 11, 11, 8, 30, tzinfo=KST)
     assert parse_open_at("09:00:00", now) == datetime(2026, 11, 11, 9, 0, tzinfo=KST)
     assert parse_open_at("09:00:00", datetime(2026, 11, 11, 9, 30, tzinfo=KST)).day == 12
+
+
+# ── 실제로 고를 수 있는 시간만 (정시 단위, 09~18) ──
+from app import CLOSE_HOUR, MAX_HOURS, OPEN_HOURS, hour_range  # noqa: E402
+
+
+def test_시작시각과_시간수로_정시_구간을_만든다():
+    assert hour_range(9, 4) == ("09:00", "13:00")
+    assert hour_range(13, 1) == ("13:00", "14:00")
+
+
+def test_닫는_시각을_넘지_않는다():
+    assert hour_range(17, 9) == ("17:00", "18:00")
+
+
+def test_고를_수_있는_값은_화면과_같다():
+    """화면의 시간 칸은 09~17, 이용시간은 1~9 (2026-11-11 실측)."""
+    assert list(OPEN_HOURS) == list(range(9, 18))
+    assert list(MAX_HOURS) == list(range(1, 10))
+    assert CLOSE_HOUR == 18

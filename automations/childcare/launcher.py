@@ -43,45 +43,51 @@ def attach_chrome(playwright, port: int = CDP_PORT, go_to: str = ""):
     return browser, page
 
 
-def server_offset_ms(page, samples: int = 6) -> float:
+def server_offset_ms(page, rounds: int = 8) -> float:
     """이 PC 시계가 아이사랑 서버보다 얼마나 빠른지(ms). 양수면 PC 가 빠르다.
 
     응답 헤더 `Date` 는 초 단위라서 값만 읽으면 최대 1초가 틀린다.
-    그래서 초가 **넘어가는 순간**을 잡는다 — 짧은 간격으로 계속 찔러 보다가
-    Date 가 바뀌면 그 순간이 서버의 '정확히 X초 000ms' 다.
+    그래서 초가 **넘어가는 순간**을 잡는다 — 계속 찔러 보다가 Date 가 바뀌면
+    그 순간이 서버의 '정확히 X초 000ms' 다.
+
+    측정은 늘 **실제보다 늦게** 나온다(넘어간 걸 알아채는 데 걸린 시간 + 응답이 오는 시간).
+    그래서 여러 번 재서 **가장 작은 값**을 고른다. 절댓값으로 고르면 0 쪽으로 쏠린다
+    (2026-11-11: 같은 PC 에서 -195ms 와 +271ms 가 번갈아 나왔다).
+
+    재는 일은 브라우저 안에서 한 바퀴 돌린다. 파이썬에서 한 번씩 찌르면
+    왕복에만 수십 ms 가 들어 눈금이 너무 굵어진다.
     """
-    best = None
-    for _ in range(samples):
-        prev = _head_date(page)
-        deadline = time.time() + 1.5
-        while time.time() < deadline:
-            local_before = time.time()
-            now = _head_date(page)
-            if now != prev:
-                # 서버가 막 새 초로 넘어갔다. 요청이 날아가는 시간만큼은 어쩔 수 없다.
-                rtt = time.time() - local_before
-                offset = (local_before + rtt / 2) * 1000 - now * 1000
-                if best is None or abs(offset) < abs(best):
-                    best = offset
-                break
-    if best is None:
-        raise RuntimeError("서버 시각을 못 읽었어요")
-    return best
-
-
-def _head_date(page) -> float:
-    """아이사랑 응답의 Date 헤더를 초 단위 epoch 으로."""
-    ms = page.evaluate(
-        """async (url) => {
-             const r = await fetch(url + '?t=' + Math.random(), {method: 'HEAD', cache: 'no-store'});
-             const d = r.headers.get('date');
-             return d ? Date.parse(d) : 0;
+    best = page.evaluate(
+        """async ([url, rounds]) => {
+             const probe = async () => {
+               const t0 = Date.now();
+               const r = await fetch(url + '?t=' + Math.random(), {method: 'HEAD', cache: 'no-store'});
+               const t1 = Date.now();
+               const d = Date.parse(r.headers.get('date') || '');
+               return {d, mid: t0 + (t1 - t0) / 2};
+             };
+             let best = Infinity;
+             for (let n = 0; n < rounds; n++) {
+               const first = await probe();
+               if (!first.d) continue;
+               const until = Date.now() + 1500;
+               while (Date.now() < until) {
+                 const s = await probe();
+                 if (!s.d) continue;
+                 if (s.d !== first.d) {           // 서버 초가 막 넘어갔다
+                   const off = s.mid - s.d;
+                   if (off < best) best = off;
+                   break;
+                 }
+               }
+             }
+             return best;
            }""",
-        CLOCK_URL,
+        [CLOCK_URL, rounds],
     )
-    if not ms:
-        raise RuntimeError("Date 헤더가 없어요")
-    return ms / 1000.0
+    if best is None or best == float("inf") or abs(best) > 60000:
+        raise RuntimeError("서버 시각을 못 읽었어요")
+    return float(best)
 
 
 def next_open_at(now: datetime | None = None, hour: int = 9) -> datetime:

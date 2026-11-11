@@ -27,6 +27,23 @@ from tkinter import messagebox, ttk
 import childcare_site as site
 import launcher
 
+# 독립반 운영 09:00~18:00 — 화면의 시간 칸이 09~17, 이용시간은 1~9 (2026-11-11 실측)
+OPEN_HOURS = range(9, 18)
+MAX_HOURS = range(1, 10)
+CLOSE_HOUR = 18
+
+# 서버 시각 재기는 구조상 늘 **늦게** 나온다(초가 넘어간 걸 알아채는 데 걸린 시간 + 응답 오는 시간).
+# 그래서 보정값은 이미 안전하게 늦는 쪽이고, 여기서 더 앞당기면 오픈 전에 쏴서 거절당한다.
+# 거절당한 한 발은 그냥 날리는 것이라, 앞당기지 않는다.
+LEAD_MS = 0
+
+
+def hour_range(begin_hour, hours) -> tuple[str, str]:
+    """시작 시각과 시간 수 → ("09:00", "13:00"). 예약은 정시 단위로만 된다."""
+    b, n = int(begin_hour), int(hours)
+    return f"{b:02d}:00", f"{min(b + n, CLOSE_HOUR):02d}:00"
+
+
 SETTINGS_DIR = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "childcare-macro"
 SETTINGS_FILE = SETTINGS_DIR / "settings.json"
 CHROME_PROFILE = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "childcare-chrome"
@@ -43,10 +60,10 @@ DEFAULTS = {
     "first": "힐스송파어린이집",
     "second": "위례별마루어린이집",
     "use_date": "",
-    "begin": "09:30",
-    "end": "13:30",
+    # 아이사랑 독립반은 정시 단위로만 예약된다(화면의 09~17 칸, 1~9시간).
+    "begin_hour": 9,
+    "hours": 4,
     "open_at": "09:00:00",
-    "lead_ms": 150,
     # 오픈 시각을 정확히 모른다(자료마다 다르고 기관마다 다를 수 있다).
     # 그래서 예상 시각 전부터 "열렸나?"를 가볍게 확인하다가, 열리는 순간 쏜다.
     # 미리 신청을 쏘지는 않는다 — 오픈 전 신청은 거절되고 쌓이면 차단된다.
@@ -175,75 +192,74 @@ def run_macro(cfg: dict, log, stop: threading.Event) -> None:
     open_at = parse_open_at(cfg["open_at"])
     picked = cfg["use_date"].strip()
     use_date = datetime.strptime(picked, "%Y-%m-%d").strftime("%Y%m%d")
-    log(f"이용일 {picked} · {cfg['begin']}~{cfg['end']}")
+    begin, end = hour_range(cfg["begin_hour"], cfg["hours"])
+    log(f"이용일 {picked} · {begin}~{end}")
     log(f"1순위 {picks[0]}" + (f" · 2순위 {picks[1]}" if len(picks) > 1 else ""))
 
     with sync_playwright() as p:
         log("크롬에 붙는 중…")
-        browser, page = launcher.attach_chrome(p, go_to=site.MENU_RESERVE)
-        try:
-            if not site.is_logged_in(page):
-                raise RuntimeError("로그인이 안 돼 있어요. 크롬에서 먼저 로그인해 주세요")
-            log("로그인 확인됨")
+        _, page = launcher.attach_chrome(p, go_to=site.MENU_RESERVE)
+        # 붙은 크롬은 사장님 것이라 닫지 않는다 — 닫다가 난 오류가 진짜 원인을 덮었다(2026-11-11)
+        if not site.is_logged_in(page):
+            raise RuntimeError("로그인이 안 돼 있어요. 크롬에서 먼저 로그인해 주세요")
+        log("로그인 확인됨")
 
-            log("서버 시각 맞추는 중…")
-            offset = launcher.server_offset_ms(page)
-            log(f"이 PC 시계가 서버보다 {offset:+.0f}ms")
+        log("서버 시각 맞추는 중…")
+        offset = launcher.server_offset_ms(page)
+        log(f"이 PC 시계가 서버보다 {offset:+.0f}ms")
 
-            log("예약 화면까지 미리 들어가는 중…")
-            site.open_reserve_page(page, by_name[picks[0]])
-            klass = site.open_apply_tab(page)
-            log(f"준비 끝 — {picks[0]} · {klass[1]}반")
+        log("예약 화면까지 미리 들어가는 중…")
+        site.open_reserve_page(page, by_name[picks[0]])
+        klass = site.open_apply_tab(page)
+        log(f"준비 끝 — {picks[0]} · {klass[1]}반")
 
-            watch_before = int(cfg["watch_before_sec"])
-            launcher.sleep_until(open_at - timedelta(seconds=watch_before), offset, 0, log)
-            log(f"감시 시작 — 열리는 순간 쏩니다 ({cfg['watch_interval_ms']}ms 간격)")
+        watch_before = int(cfg["watch_before_sec"])
+        launcher.sleep_until(open_at - timedelta(seconds=watch_before), offset, 0, log)
+        log(f"감시 시작 — 열리는 순간 쏩니다 ({cfg['watch_interval_ms']}ms 간격)")
 
-            def fire(why: str) -> bool:
-                """1순위부터 차례로 신청. 한 곳이라도 되면 True.
+        def fire(why: str) -> bool:
+            """1순위부터 차례로 신청. 한 곳이라도 되면 True.
 
-                1순위는 이미 화면이 열려 있어 곧바로 쏜다. 2순위는 그 기관 화면으로
-                옮겨 가야 해서 몇 초 걸린다(반 코드가 기관마다 다르다).
-                """
-                nonlocal klass
-                for i, name in enumerate(picks, 1):
-                    log(f"{why} → {i}순위 {name} 발사")
-                    try:
-                        if i > 1:
-                            site.open_reserve_page(page, by_name[name])
-                            klass = site.open_apply_tab(page)
-                        ok, note = site.reserve(page, klass, use_date, cfg["begin"], cfg["end"])
-                    except Exception as exc:  # noqa: BLE001 - 한 곳이 터져도 다음 곳은 쏴 본다
-                        log(f"  {name} 오류 — {str(exc)[:80]}")
-                        continue
-                    log(("  성공 — " if ok else "  실패 — ") + note)
-                    if ok:
-                        return True
-                return False
-
-            # 예상 정각(서버 기준)에 도착하도록 보정한 발사 시각
-            fire_at = open_at.timestamp() + (offset - float(cfg["lead_ms"])) / 1000.0
-            give_up = fire_at + int(cfg.get("watch_grace_sec", 120))
-            interval = int(cfg["watch_interval_ms"]) / 1000.0
-            shot_at_open = False
-
-            while not stop.is_set() and time.time() < give_up:
-                # 보험 한 발 — 조회로는 안 보여도 신청은 되는 경우가 있다
-                if not shot_at_open and time.time() >= fire_at:
-                    shot_at_open = True
-                    if fire("예상 정각"):
-                        return
+            1순위는 이미 화면이 열려 있어 곧바로 쏜다. 2순위는 그 기관 화면으로
+            옮겨 가야 해서 몇 초 걸린다(반 코드가 기관마다 다르다).
+            """
+            nonlocal klass
+            for i, name in enumerate(picks, 1):
+                log(f"{why} → {i}순위 {name} 발사")
                 try:
-                    if site.is_open(page, use_date, cfg["begin"]):
-                        if fire("열림 확인"):
-                            return
-                except Exception as exc:  # noqa: BLE001 - 조회가 한 번 튕겨도 감시는 계속한다
-                    log(f"확인 실패(계속 감시) — {str(exc)[:60]}")
-                time.sleep(interval)
+                    if i > 1:
+                        site.open_reserve_page(page, by_name[name])
+                        klass = site.open_apply_tab(page)
+                    ok, note = site.reserve(page, klass, use_date, begin, end)
+                except Exception as exc:  # noqa: BLE001 - 한 곳이 터져도 다음 곳은 쏴 본다
+                    log(f"  {name} 오류 — {str(exc)[:80]}")
+                    continue
+                log(("  성공 — " if ok else "  실패 — ") + note)
+                if ok:
+                    return True
+            return False
 
-            log("멈췄어요" if stop.is_set() else "시간 안에 못 잡았어요")
-        finally:
-            browser.close()
+        # 예상 정각(서버 기준)에 도착하도록 보정한 발사 시각
+        fire_at = open_at.timestamp() + (offset - LEAD_MS) / 1000.0
+        give_up = fire_at + int(cfg.get("watch_grace_sec", 120))
+        interval = int(cfg["watch_interval_ms"]) / 1000.0
+        shot_at_open = False
+
+        while not stop.is_set() and time.time() < give_up:
+            # 보험 한 발 — 조회로는 안 보여도 신청은 되는 경우가 있다
+            if not shot_at_open and time.time() >= fire_at:
+                shot_at_open = True
+                if fire("예상 정각"):
+                    return
+            try:
+                if site.is_open(page, use_date, begin):
+                    if fire("열림 확인"):
+                        return
+            except Exception as exc:  # noqa: BLE001 - 조회가 한 번 튕겨도 감시는 계속한다
+                log(f"확인 실패(계속 감시) — {str(exc)[:60]}")
+            time.sleep(interval)
+
+        log("멈췄어요" if stop.is_set() else "시간 안에 못 잡았어요")
 
 
 class App(tk.Tk):
@@ -275,13 +291,19 @@ class App(tk.Tk):
         self.second.grid(row=1, column=1, columnspan=3, sticky="w", **pad)
 
         ttk.Label(frm, text="이용 시간").grid(row=2, column=0, sticky="w", **pad)
-        self.begin = ttk.Entry(frm, width=8)
-        self.begin.insert(0, self.cfg["begin"])
-        self.begin.grid(row=2, column=1, sticky="w", **pad)
-        ttk.Label(frm, text="~").grid(row=2, column=2)
-        self.end = ttk.Entry(frm, width=8)
-        self.end.insert(0, self.cfg["end"])
-        self.end.grid(row=2, column=3, sticky="w", **pad)
+        self.begin_hour = ttk.Combobox(frm, values=[f"{h:02d}" for h in OPEN_HOURS], width=4, state="readonly")
+        self.begin_hour.set(f"{int(self.cfg['begin_hour']):02d}")
+        self.begin_hour.grid(row=2, column=1, sticky="w", **pad)
+        ttk.Label(frm, text="시부터").grid(row=2, column=2, sticky="w", **pad)
+        self.hours = ttk.Combobox(frm, values=[str(n) for n in MAX_HOURS], width=4, state="readonly")
+        self.hours.set(str(int(self.cfg["hours"])))
+        self.hours.grid(row=2, column=3, sticky="w", **pad)
+        ttk.Label(frm, text="시간").grid(row=2, column=4, sticky="w", **pad)
+        self.span = ttk.Label(frm, text="")
+        self.span.grid(row=2, column=5, sticky="w", **pad)
+        self.begin_hour.bind("<<ComboboxSelected>>", lambda _e: self._show_span())
+        self.hours.bind("<<ComboboxSelected>>", lambda _e: self._show_span())
+        self._show_span()
 
         ttk.Label(frm, text="이용일").grid(row=3, column=0, sticky="w", **pad)
         self.use_date = ttk.Entry(frm, width=12)
@@ -316,6 +338,13 @@ class App(tk.Tk):
         self.log_box.grid(row=2, column=0, padx=16, pady=10)
         self._log("크롬 열기 → 로그인 → 시작 순서로 누르세요")
 
+    def _show_span(self) -> None:
+        """고른 시간을 '09:00 ~ 13:00' 로 보여 준다. 18시를 넘으면 잘린다."""
+        b, n = int(self.begin_hour.get()), int(self.hours.get())
+        begin, end = hour_range(b, n)
+        over = " (18시까지만 돼요)" if b + n > CLOSE_HOUR else ""
+        self.span.configure(text=f"{begin} ~ {end}{over}")
+
     def _log(self, line: str) -> None:
         self.log_box.configure(state="normal")
         self.log_box.insert("end", f"{datetime.now():%H:%M:%S}  {line}\n")
@@ -335,8 +364,8 @@ class App(tk.Tk):
         cfg.update({
             "first": self.first.get(),
             "second": self.second.get(),
-            "begin": self.begin.get().strip(),
-            "end": self.end.get().strip(),
+            "begin_hour": int(self.begin_hour.get()),
+            "hours": int(self.hours.get()),
             "open_at": self.open_at.get().strip(),
             "use_date": self.use_date.get().strip(),
             "watch_before_sec": int(self.watch_before.get().strip() or 60),
