@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 11초",
+  "summary": "신규 31건, 실패 0건, 12초",
   "counts": {
-    "new": 7,
+    "new": 31,
     "failed": 0,
-    "total": 7086
+    "total": 7117
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 11초",
-    "[신규] 오세훈·장동혁·이준석·한동훈 보수 '4자 필승론'의 허상 — 뉴스버스",
-    "[신규] 기상청, \"극한호우-이상기후, 똑똑한 인공지능(AI)으로 잡는다\" — 시민행정신문",
-    "[신규] 당비로 수천만원 지출, 소수정당 의원들의 '무거운 부담' — OhmyNews",
-    "[신규] 장관 관사 확보·농어촌 현금지원이 미래대응? — 조선일보"
+    "신규 31건, 실패 0건, 12초",
+    "[신규] 최경환 \"시장 이기는 정부 없다\"…李정부 부동산 정책 전환 촉구 — 아시아경제",
+    "[신규] “그때 빚내서 집 살걸”…최경환 전 부총리 “주담대 절대상한 폐지해야” — 헤럴드경제 미주판",
+    "[신규] 수도권 주거혁신포럼, 11일 최경환 초청 세미나…李정부 부동산 정책 진단 — 한스경제",
+    "[신규] 인터뷰 전문: 김기현 “‘한동훈 조기 복당’ 언급한 적 없다…언론 오보” [정치시그널] — 채널A"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 42927957029,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42927957029",
-  "request_id": "cron-202611110000",
+  "run_id": 42949865023,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42949865023",
+  "request_id": "cron-202611110300",
   "trigger": "schedule",
-  "started_at": "2026-11-11T09:01:22+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-11T12:01:25+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 137건"
+      "summary": "검색어 5개에서 128건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 30건 (신규 7건) · 시민행정신문 7건, 뉴시스 3건, KBS 뉴스 1건"
+      "summary": "오늘 61건 (신규 31건) · 시민행정신문 7건, 뉴시스 3건, 아시아경제 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-11T09:01:34+09:00"
+  "updated_at": "2026-11-11T12:01:38+09:00"
 }
