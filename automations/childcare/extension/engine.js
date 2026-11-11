@@ -28,7 +28,16 @@
   // 화면 조작은 공짜고 **서버 왕복 107ms 가 전부**다. 그래서 쉬는 시간을 둘 이유가 없다.
   // 한 바퀴 약 110ms = 초당 9번. 더 줄이려면 응답을 안 기다리고 겹쳐 쏴야 하는데,
   // 확인창이 하나뿐이라 서로 꼬인다.
-  const GAP_MS = 0;                           // 한 바퀴 돌고 다음 발사까지
+  // 한 바퀴 돌고 다음 발사까지. **패널에서 돌리는 중에도 바꿀 수 있다.**
+  // 0 으로 두면 초당 9번인데, 2026-11-12 08:27 실측에서 50번쯤 쏜 뒤 넷퍼넬 대기열이 생겼다.
+  // 우리가 빨라서 줄을 선 것인지 남들 때문인지 아직 모른다 → 400(초당 약 2.5번)으로 시작한다.
+  const GAP_KEY = "childcare-gap";
+  const DEFAULT_GAP = 400;
+  let gapInput = null;                        // 패널을 만든 뒤 넣는다(섀도 DOM 안이라 document 로는 못 찾는다)
+  const gapMs = () => {
+    const n = Number(gapInput && gapInput.value);
+    return Number.isFinite(n) && n >= 0 ? n : DEFAULT_GAP;
+  };
   const GIVE_UP_MS = 30 * 60 * 1000;          // 이만큼 해도 안 되면 그만둔다
 
   const DONE = /예약되었습니다|예약완료|신청이 완료|정상적으로/;
@@ -121,7 +130,12 @@
   async function run(log) {
     const rows = [...document.querySelectorAll("#INFOQUALF tr[id^=tId_]")];
     if (!rows.length) throw new Error("예약 목록이 비어 있어요 — 칸을 고르고 [추가] 를 먼저 눌러 주세요");
-    const what = rows.map((tr) => tr.innerText.replace(/\s+/g, " ").trim().slice(0, 40));
+    // 줄 내용은 입력칸(value) 안에 있어 innerText 로는 비어 보인다 — 값에서 읽는다
+    const what = rows.map((tr) => {
+      const v = (n) => (tr.querySelector('[name^="' + n + '"]') || {}).value || "";
+      return [v("resclname"), v("sdate"), v("restime")].filter(Boolean).join(" ").trim()
+             || tr.innerText.replace(/\s+/g, " ").trim().slice(0, 40);
+    });
     log("목록 " + rows.length + "건 — " + what.join(" / "));
 
     watch(log);
@@ -137,7 +151,7 @@
 
       if (!msg) {                                  // 응답이 안 왔다
         if (tries % 10 === 0) log(tries + "번째 — 응답이 없어요, 계속합니다");
-        await sleep(GAP_MS);
+        await sleep(gapMs());
         continue;
       }
       if (DONE.test(msg)) {
@@ -151,7 +165,7 @@
         log(tries + "번째까지 같은 답 — 계속합니다 (한 바퀴 평균 "
             + Math.round(spent / tries) + "ms)");
       }
-      await sleep(GAP_MS);
+      await sleep(gapMs());
     }
     log(stop ? "멈췄어요" : "시간이 다 됐어요 (30분)");
   }
@@ -172,10 +186,15 @@
     "pre{margin:10px 0 0;background:#f6f8fc;border-radius:6px;padding:8px;height:150px;overflow:auto;",
     "    white-space:pre-wrap;font:12px/1.45 Consolas,monospace}",
     ".hide{display:none}",
+    ".gap{display:flex;align-items:center;gap:5px;margin:0 0 8px;color:#444}",
+    ".gap input{width:62px;padding:3px 6px;border:1px solid #c9d2e3;border-radius:5px;font:inherit}",
+    "#rate{color:#2f4b8b;font-weight:700}",
     "</style>",
     '<div class="box">',
     '  <div class="hd" id="hd">시간제보육 예약기</div>',
     '  <div class="bd" id="bd">',
+    '    <label class="gap">발사 간격 <input id="gap" type="number" min="0" step="50"> ms',
+    '      <span id="rate"></span></label>',
     '    <div class="btns">',
     '      <button class="go" id="go">시작</button>',
     '      <button class="no" id="no">멈춤</button>',
@@ -193,6 +212,27 @@
     el.textContent += new Date().toLocaleTimeString("ko-KR") + "  " + line + "\n";
     el.scrollTop = el.scrollHeight;
   };
+
+  gapInput = $("gap");
+  let saved = DEFAULT_GAP;
+  try {
+    const raw = localStorage.getItem(GAP_KEY);        // 없으면 null — Number(null) 은 0 이라 그냥 쓰면 안 된다
+    if (raw !== null && raw !== "") {
+      const v = Number(raw);
+      if (Number.isFinite(v) && v >= 0) saved = v;
+    }
+  } catch (e) { /* 못 읽으면 기본값 */ }
+  gapInput.value = String(saved);
+
+  const showRate = () => {
+    const per = 1000 / (gapMs() + 110);       // 한 바퀴 = 간격 + 서버 왕복 약 110ms
+    $("rate").textContent = "≈ 초당 " + per.toFixed(1) + "번";
+  };
+  gapInput.oninput = () => {
+    showRate();
+    try { localStorage.setItem(GAP_KEY, String(gapMs())); } catch (e) { /* 저장 못 해도 그만 */ }
+  };
+  showRate();
 
   $("hd").onclick = () => $("bd").classList.toggle("hide");
 
