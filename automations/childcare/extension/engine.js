@@ -75,14 +75,21 @@
     return out;
   }
 
-  function sessionLine() {
+  function sessionEndsAt() {
     const c = sessionCookies();
     const latest = Number(c.egovLatestServerTime), expire = Number(c.egovExpireSessionTime);
-    if (!latest || !expire) return `세션 쿠키 ${JSON.stringify(c)}`;
+    if (!latest || !expire) return 0;
     // 값이 '밀리초 길이' 인지 '끝나는 시각' 인지 사이트마다 다르다 — 둘 다 재서 말이 되는 쪽을 쓴다
-    const endsAt = expire > 1e11 ? expire : latest + expire;
+    return expire > 1e11 ? expire : latest + expire;
+  }
+
+  function sessionLine() {
+    const endsAt = sessionEndsAt();
+    if (!endsAt) return `세션 쿠키 ${JSON.stringify(sessionCookies())}`;
+    const c = sessionCookies();
     const left = Math.round((endsAt - Date.now()) / 1000);
-    return `세션 남은 시간 약 ${Math.floor(left / 60)}분 ${left % 60}초 (마지막 갱신 ${new Date(latest).toLocaleTimeString("ko-KR")})`;
+    return `세션 남은 시간 약 ${Math.floor(left / 60)}분 ${left % 60}초 `
+         + `(마지막 갱신 ${new Date(Number(c.egovLatestServerTime)).toLocaleTimeString("ko-KR")})`;
   }
 
   // ───────── 자리 확인 ─────────
@@ -301,6 +308,15 @@
       watchFrom = fireAt - Number(cfg.watchBefore) * 1000;
       giveUp = fireAt + 120000;
       log(`${new Date(watchFrom).toLocaleTimeString("ko-KR")} 부터 감시, ${new Date(fireAt).toLocaleTimeString("ko-KR")} 에 발사`);
+
+      // 가장 위험한 경우 — 너무 일찍 켜 두면 발사 전에 로그인이 풀려
+      // 9시에 아무 일도 일어나지 않는다. 미리 알린다.
+      const endsAt = sessionEndsAt();
+      if (endsAt && endsAt < fireAt + 60000) {
+        const mins = Math.max(0, Math.round((endsAt - Date.now()) / 60000));
+        log(`⚠ 발사 전에 로그인이 풀릴 수 있어요 (세션 약 ${mins}분 남음)`);
+        log("⚠ 다시 로그인한 뒤 [시작]을 눌러 주세요");
+      }
     }
 
     const shoot = async (why) => {
@@ -324,7 +340,15 @@
     // 보험 한 발은 없앴다 — 줄이 화면 표에 없으면 장전 자체가 안 되므로,
     // 자리가 보이는 것이 곧 방아쇠다.
     let lastSeen = null, lastError = null, fails = 0, shootFails = 0;
+    let warnedSession = false;
     while (!stop && Date.now() < giveUp) {
+      if (!warnedSession) {
+        const endsAt = sessionEndsAt();
+        if (endsAt && endsAt - Date.now() < 180000) {       // 3분도 안 남았다
+          warnedSession = true;
+          log("⚠ 로그인이 곧 풀립니다 — 다른 탭에서 아이사랑을 한 번 눌러 주세요");
+        }
+      }
       try {
         const seats = await seatsLeft(cfg.useDate, beginHour, clseq);
         fails = 0; lastError = null;
