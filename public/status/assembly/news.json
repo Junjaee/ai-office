@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 13초",
+  "summary": "신규 8건, 실패 0건, 10초",
   "counts": {
-    "new": 15,
+    "new": 8,
     "failed": 0,
-    "total": 7286
+    "total": 7224
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 13초",
-    "[신규] [사설]집값 폭등 빌미 제공한 ‘빚 내서 집사라’가 정상인가 — 경향신문",
-    "[신규] 개혁신당, 제14차 비상대책위원회 주요발언 발표 — 한국사회복지저널",
-    "[신규] 개혁신당 이기인, 李 특검법 거부권 행사 촉구... \"故김문기 아내, 두 아이 키우려 미용 배워\" — 시선뉴스",
-    "[신규] \"김문기 안 지켜주더니 대통령 지키려 특검법?\" 이기인 분통 — 뉴데일리"
+    "신규 8건, 실패 0건, 10초",
+    "[신규] \"최민희와 한동훈, 이준석의 공통점은~\" 김민하의 신박한 분석 (261112 목요일 클립) 김민하 신인규 이유진 — 경향신문",
+    "[신규] [아침저널] 신동욱 \"윤리위원 폭로? 조작 증거는 왜 안 밝히나..재조사 요구도 맞지 않아\" — BBS불교방송",
+    "[신규] 장동혁에 제동 건 오세훈 '비대위' — 전파신문",
+    "[신규] 한동훈 복당?국힘 내부 다시 논쟁 — 뉴스줌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43214071139,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43214071139",
-  "request_id": "cron-202611121200",
+  "run_id": 43243178258,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43243178258",
+  "request_id": "cron-202611121500",
   "trigger": "schedule",
-  "started_at": "2026-11-12T21:01:36+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-13T00:01:31+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 140건"
+      "summary": "검색어 5개에서 144건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 135건 (신규 15건) · 뉴시스 9건, 뉴스1 8건, 시민행정신문 5건"
+      "summary": "오늘 8건 (신규 8건) · BBS불교방송 1건, 경향신문 1건, 뉴스줌 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-12T21:01:49+09:00"
+  "updated_at": "2026-11-13T00:01:41+09:00"
 }
