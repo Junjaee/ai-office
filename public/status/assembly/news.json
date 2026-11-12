@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 26건, 실패 0건, 10초",
+  "summary": "신규 23건, 실패 0건, 11초",
   "counts": {
-    "new": 26,
+    "new": 23,
     "failed": 0,
-    "total": 7212
+    "total": 7235
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 26건, 실패 0건, 10초",
-    "[신규] 이준석 “한동훈 복당 원하면, 당원게시판 쓴 정신 이상한 사람 잡아라” — 주간경향",
-    "[신규] '한동훈 복당' 野 통합 최대 걸림돌 … 오세훈 '글쎄', 장동혁-이준석 '부정적' — 뉴데일리",
-    "[신규] 신동욱 \"이준석과 합당, 한동훈보다 부작용 적을 것\" — 뉴스1",
-    "[신규] 이준석 \"한동훈, 당원 게시판 작성자 빨리 밝혀야\" — 뉴시스"
+    "신규 23건, 실패 0건, 11초",
+    "[신규] 이준석 “‘혼자 잘 났다고 떠드는 사람’ 빼고, 보수 연대 논의” — 주간경향",
+    "[신규] 이준석 \"이 대통령 연락주면 20만호 즉시 공급 가능한 땅 알려주겠다\" — JTBC",
+    "[신규] 이준석 \"조작 징계 논리 안 맞아…한 세력 빼놓고 보수 연대 가능\" — 한국경제",
+    "[신규] 조작징계 의혹에 韓복당 갈등 수면위로…吳-張 충돌 여진도 — 연합뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43145280041,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43145280041",
-  "request_id": "cron-202611120300",
+  "run_id": 43165163581,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43165163581",
+  "request_id": "cron-202611120600",
   "trigger": "schedule",
-  "started_at": "2026-11-12T12:01:47+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-12T15:01:35+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 164건"
+      "summary": "검색어 5개에서 149건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 61건 (신규 26건) · 뉴스1 7건, 뉴시스 5건, 시민행정신문 5건"
+      "summary": "오늘 84건 (신규 23건) · 뉴스1 7건, 뉴시스 6건, 시민행정신문 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-12T12:01:58+09:00"
+  "updated_at": "2026-11-12T15:01:47+09:00"
 }
