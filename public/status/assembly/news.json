@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 12초",
+  "summary": "신규 26건, 실패 0건, 10초",
   "counts": {
-    "new": 12,
+    "new": 26,
     "failed": 0,
-    "total": 7186
+    "total": 7212
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 12초",
-    "[신규] ‘빚내서 집 사라’ 최경환 초청한 野…“시장 이기는 정부 없어” — 서울경제",
-    "[신규] 국세청장 인사청문회 일정 등 논의하는 재경위 여야 간사 — 뉴스1",
-    "[신규] 국회 예결위, 비경제부처 심사 이틀째…여·야 공방 — 조세일보",
-    "[신규] 예결위, 오늘 부별심사 마무리…162조 미래기금 놓고 여야 격돌 — 뉴시안"
+    "신규 26건, 실패 0건, 10초",
+    "[신규] 이준석 “한동훈 복당 원하면, 당원게시판 쓴 정신 이상한 사람 잡아라” — 주간경향",
+    "[신규] '한동훈 복당' 野 통합 최대 걸림돌 … 오세훈 '글쎄', 장동혁-이준석 '부정적' — 뉴데일리",
+    "[신규] 신동욱 \"이준석과 합당, 한동훈보다 부작용 적을 것\" — 뉴스1",
+    "[신규] 이준석 \"한동훈, 당원 게시판 작성자 빨리 밝혀야\" — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43124110982,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43124110982",
-  "request_id": "cron-202611120000",
+  "run_id": 43145280041,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43145280041",
+  "request_id": "cron-202611120300",
   "trigger": "schedule",
-  "started_at": "2026-11-12T09:01:32+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-12T12:01:47+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 156건"
+      "summary": "검색어 5개에서 164건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 35건 (신규 12건) · 시민행정신문 4건, 재경일보 4건, 뉴스1 3건"
+      "summary": "오늘 61건 (신규 26건) · 뉴스1 7건, 뉴시스 5건, 시민행정신문 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-12T09:01:45+09:00"
+  "updated_at": "2026-11-12T12:01:58+09:00"
 }
