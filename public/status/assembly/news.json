@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 10초",
+  "summary": "신규 4건, 실패 0건, 11초",
   "counts": {
-    "new": 8,
+    "new": 4,
     "failed": 0,
-    "total": 7224
+    "total": 7228
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 10초",
-    "[신규] \"최민희와 한동훈, 이준석의 공통점은~\" 김민하의 신박한 분석 (261112 목요일 클립) 김민하 신인규 이유진 — 경향신문",
-    "[신규] [아침저널] 신동욱 \"윤리위원 폭로? 조작 증거는 왜 안 밝히나..재조사 요구도 맞지 않아\" — BBS불교방송",
-    "[신규] 장동혁에 제동 건 오세훈 '비대위' — 전파신문",
-    "[신규] 한동훈 복당?국힘 내부 다시 논쟁 — 뉴스줌"
+    "신규 4건, 실패 0건, 11초",
+    "[신규] 지평도서관, ‘오뒷세이아’ 인문학 특강 신청자 모집 — 양평시민의소리",
+    "[신규] 삼성, 임직원 10만8000명 나눔 동참…지역사회 상생 확대 — 뷰어스",
+    "[신규] 예결위 이어 상임위까지… 강원 여야 현안·예산 점검 분주 — 강원도민일보",
+    "[신규] 이원택 전북지사, 국가예산 증액 '최종 관문' 예결위·원내지도부 설득 — 아시아뉴스전북"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43243178258,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43243178258",
-  "request_id": "cron-202611121500",
+  "run_id": 43275387149,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43275387149",
+  "request_id": "cron-202611121800",
   "trigger": "schedule",
-  "started_at": "2026-11-13T00:01:31+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-13T03:01:31+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 144건"
+      "summary": "검색어 5개에서 140건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 8건 (신규 8건) · BBS불교방송 1건, 경향신문 1건, 뉴스줌 1건"
+      "summary": "오늘 12건 (신규 4건) · BBS불교방송 1건, 강원도민일보 1건, 경향신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-13T00:01:41+09:00"
+  "updated_at": "2026-11-13T03:01:42+09:00"
 }
