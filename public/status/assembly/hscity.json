@@ -3,36 +3,39 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 전송 0건, 실패 0건, 38초",
+  "summary": "신규 3건, 전송 0건, 실패 0건, 1.3분",
   "counts": {
-    "new": 1,
+    "new": 3,
     "sent": 0,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 1건, 전송 0건, 실패 0건, 38초",
-    "[신규]⭐ [고시] 2026년 민방위 사이버교육(보충2) 훈련 통지서 반송에 따른 공시송달 "
+    "신규 3건, 전송 0건, 실패 0건, 1.3분",
+    "[신규] [일반공고] 공시송달 공고의 건[「건축법」 위반 이행강제금 부과 처분의 사전통보([영",
+    "[첨부실패] 동탄구공고 2026 547 공시송달 대상자명단(고지).pdf: SSLError",
+    "[신규] [일반공고] 2026년 10월 지방소득세 납세고지서 반송분 공시송달 공고",
+    "[첨부실패] 동탄구공고 2026 548 공시송달 공고문(독촉).pdf: SSLError"
   ],
   "link": "",
-  "run_id": 42927965754,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42927965754",
-  "request_id": "cron-202611110000",
+  "run_id": 43124117938,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43124117938",
+  "request_id": "cron-202611120000",
   "trigger": "schedule",
-  "started_at": "2026-11-11T09:01:31+09:00",
-  "duration_sec": 38,
+  "started_at": "2026-11-12T09:01:35+09:00",
+  "duration_sec": 77,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 1건, 첨부 1건"
+      "summary": "신규 3건, 첨부 6건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "0건 발송, 무음 1건"
+      "summary": "0건 발송, 무음 3건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-11T09:02:11+09:00"
+  "updated_at": "2026-11-12T09:02:53+09:00"
 }
