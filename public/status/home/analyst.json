@@ -3,47 +3,47 @@
   "dept": "finance",
   "ok": true,
   "running": false,
-  "summary": "국내 · 점검 349건, 관심 0건, 실패 0건, 관심 실패 0건, 후보 142건, 9.3분",
+  "summary": "미국 · 점검 500건, 관심 3건, 실패 3건, 관심 실패 0건, 후보 199건, 20.7분",
   "counts": {
-    "checked": 349,
-    "watch": 0,
-    "failed": 0,
+    "checked": 500,
+    "watch": 3,
+    "failed": 3,
     "failed_watch": 0,
-    "candidates": 142,
-    "news": 0
+    "candidates": 199,
+    "news": 3
   },
   "next_run": "미국 화~토 07:00 · 국내 월~금 16:30",
   "log": [
-    "국내 · 점검 349건, 관심 0건, 실패 0건, 관심 실패 0건, 후보 142건, 9.3분",
+    "미국 · 점검 500건, 관심 3건, 실패 3건, 관심 실패 0건, 후보 199건, 20.7분",
     "기준일 2026-11-12",
-    "경고가 하나라도 있는 종목 314개",
-    "관점에 걸린 종목 142개",
-    "관심 종목 기사 제목 0종목"
+    "경고가 하나라도 있는 종목 274개",
+    "관점에 걸린 종목 199개",
+    "관심 종목 기사 제목 3종목"
   ],
   "link": "",
-  "run_id": 43175807944,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43175807944",
-  "request_id": "cron-202611120730",
+  "run_id": 43315838593,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43315838593",
+  "request_id": "cron-202611122200",
   "trigger": "schedule",
-  "started_at": "2026-11-12T16:31:34+09:00",
-  "duration_sec": 559,
+  "started_at": "2026-11-13T07:01:32+09:00",
+  "duration_sec": 1243,
   "tasks": [
     {
       "id": "check",
       "status": "done",
-      "summary": "점검표 349종목, 관심 0종목"
+      "summary": "점검표 500종목, 관심 3종목"
     },
     {
       "id": "collect",
       "status": "done",
-      "summary": "349종목 수집, 실패 0건"
+      "summary": "500종목 수집, 실패 3건"
     },
     {
       "id": "discover",
       "status": "done",
-      "summary": "후보 142종목 · 싸고 탄탄 48 실적 개선 100 사건 6 돈 몰림 26"
+      "summary": "후보 199종목 · 싸고 탄탄 106 실적 개선 120 사건 1 돈 몰림 13"
     }
   ],
   "id": "analyst",
-  "updated_at": "2026-11-12T16:40:54+09:00"
+  "updated_at": "2026-11-13T07:22:16+09:00"
 }
