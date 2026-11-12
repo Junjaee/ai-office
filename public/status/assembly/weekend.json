@@ -3,31 +3,30 @@
   "dept": "partner",
   "ok": true,
   "running": false,
-  "summary": "주말 일정 7건, 전송 1건, 2초",
+  "summary": "주말 일정 3건, 전송 1건, 2초",
   "counts": {
-    "events": 7,
+    "events": 3,
     "sent": 1
   },
   "next_run": "매주 목 17:00",
   "log": [
-    "주말 일정 7건, 전송 1건, 2초",
-    "[11/7] 기타 일정",
-    "[11/7] 동탄맨 영상촬영",
-    "[11/7] 회의 일정",
-    "[11/7] 동탄 9동 체육대회 @ 왕배체육공원"
+    "주말 일정 3건, 전송 1건, 2초",
+    "[11/14] 운동 일정",
+    "[11/14] 결혼식 일정",
+    "[11/14] 동탄7동 체육회 스크린골프"
   ],
   "link": "",
-  "run_id": 41991266587,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/41991266587",
-  "request_id": "cron-202611050800",
+  "run_id": 43179513383,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43179513383",
+  "request_id": "cron-202611120800",
   "trigger": "schedule",
-  "started_at": "2026-11-05T17:01:23+09:00",
+  "started_at": "2026-11-12T17:01:31+09:00",
   "duration_sec": 2,
   "tasks": [
     {
       "id": "fetch",
       "status": "done",
-      "summary": "토 5건 · 일 2건"
+      "summary": "토 3건 · 일 0건"
     },
     {
       "id": "send",
@@ -36,5 +35,5 @@
     }
   ],
   "id": "weekend",
-  "updated_at": "2026-11-05T17:01:26+09:00"
+  "updated_at": "2026-11-12T17:01:34+09:00"
 }
