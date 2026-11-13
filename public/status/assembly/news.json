@@ -3,37 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 실패 0건, 12초",
+  "summary": "신규 4건, 실패 0건, 10초",
   "counts": {
-    "new": 2,
+    "new": 4,
     "failed": 0,
-    "total": 7211
+    "total": 7215
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 2건, 실패 0건, 12초",
-    "[신규] 오세훈·이준석, 시청서 조찬 회동…정책 현안 논의 — 서울경제",
-    "[신규] 육동한 춘천시장, 국회 예결위원장 면담…9개 핵심사업 국비 확보 총력 — 뉴스티앤티"
+    "신규 4건, 실패 0건, 10초",
+    "[신규] 오세훈, 이준석 만나…장동혁과는 행사 시간차 : 정치 — 재경일보",
+    "[신규] 정부가 세면 '신규' 60%, 국회 가면 '기존' 과반… 미래대응기금 모호한 사업 기준 [2027 나라살림 대해부] — 한국일보",
+    "[신규] 박용갑 의원 “예결위 의원으로서 끝까지 최선 다할 것” — 대전시티저널",
+    "[신규] 허태정 대전시장, 다시 국회행 국비 위한 광폭 행보 — 뉴스밴드"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43478412500,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43478412500",
-  "request_id": "cron-202611131800",
+  "run_id": 43506795937,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43506795937",
+  "request_id": "cron-202611132100",
   "trigger": "schedule",
-  "started_at": "2026-11-14T03:01:30+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-14T06:01:31+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 88건"
+      "summary": "검색어 5개에서 91건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 2건) · 시민행정신문 2건, TV조선뉴스 1건, 뉴스티앤티 1건"
+      "summary": "오늘 15건 (신규 4건) · 시민행정신문 2건, TV조선뉴스 1건, 뉴스밴드 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-14T03:01:43+09:00"
+  "updated_at": "2026-11-14T06:01:41+09:00"
 }
