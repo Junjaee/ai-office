@@ -60,9 +60,11 @@
   async function syncClock(rounds = 6) {
     const probe = async () => {
       const t0 = Date.now();
-      const r = await fetch(CLOCK_URL + "?t=" + Math.random(), { method: "HEAD", cache: "no-store" });
-      const t1 = Date.now();
-      return { d: Date.parse(r.headers.get("date") || ""), mid: t0 + (t1 - t0) / 2 };
+      try {
+        const r = await fetch(CLOCK_URL + "?t=" + Math.random(), { method: "HEAD", cache: "no-store" });
+        const t1 = Date.now();
+        return { d: Date.parse(r.headers.get("date") || ""), mid: t0 + (t1 - t0) / 2 };
+      } catch (e) { return { d: 0, mid: t0 }; }   // 요청 실패가 시작을 죽이면 안 된다
     };
     let best = Infinity;
     for (let n = 0; n < rounds; n++) {
@@ -195,6 +197,46 @@
     return said.length > from ? said.slice(from).join(" / ") : "";
   }
 
+  // ───────── 정각 자동 시작 · 첫 발 데우기 ─────────
+  // 첫 발만 유독 느리다(실측 313ms, 그 뒤 107ms) — 연결이 식어서다.
+  // 쏘기 직전에 가벼운 HEAD 를 보내 연결을 데워 둔다. 실패해도 무시한다.
+  async function warm() {
+    try {
+      await Promise.all([0, 1].map(() =>
+        fetch(CLOCK_URL + "?w=" + Math.random(), { method: "HEAD", cache: "no-store" })));
+    } catch (e) { /* 데우기 실패가 예약을 막으면 안 된다 */ }
+  }
+
+  // "HH:MM:SS"(또는 HH:MM) → 서버 기준 오늘 그 시각의 epoch. 못 읽으면 null.
+  function targetEpoch(hms) {
+    const m = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/.exec(hms.trim());
+    if (m == null || offset === null) return null;
+    const sv = new Date(Date.now() - offset);        // 서버 기준 지금
+    sv.setHours(+m[1], +m[2], +(m[3] || 0), 0);
+    return sv.getTime();                             // 서버 기준 목표
+  }
+
+  // 서버 시계가 target 이 될 때까지 기다린다. 0.4초 전에 연결을 데운다.
+  // 멈춤을 누르면 곧바로 빠져나온다(false 반환). 도달하면 true.
+  async function waitUntilStart(target, log) {
+    let warmed = false, lastSec = -1;
+    while (!stop) {
+      const left = target - (Date.now() - offset);   // 서버 기준 남은 ms
+      if (left <= 0) return true;
+      if (!warmed && left <= 400) { warmed = true; warm(); }
+      if (left > 5000) {
+        const sec = Math.round(left / 1000);
+        if (sec % 10 === 0 && sec !== lastSec) { lastSec = sec; log("정각까지 " + sec + "초"); }
+        await sleep(Math.min(left - 3000, 1000));
+      } else {
+        const sec = Math.ceil(left / 1000);
+        if (sec !== lastSec) { lastSec = sec; log("정각까지 " + sec + "초"); }
+        await sleep(left > 500 ? 40 : 2);            // 막판은 촘촘히
+      }
+    }
+    return false;
+  }
+
   // ───────── 본체 ─────────
   let stop = false;
 
@@ -258,13 +300,16 @@
     "pre{margin:10px 0 0;background:#f6f8fc;border-radius:6px;padding:8px;height:150px;overflow:auto;",
     "    white-space:pre-wrap;font:12px/1.45 Consolas,monospace}",
     ".hide{display:none}",
-    ".clock{margin:0 0 8px;color:#444}",
+    ".clock{margin:0 0 6px;color:#444}",
     "#clock{color:#2f4b8b;font:700 15px/1.2 Consolas,monospace}",
+    ".at{margin:0 0 8px;color:#444}",
+    "#at{width:92px;font:inherit;padding:2px 6px;border:1px solid #c9d2e3;border-radius:5px}",
     "</style>",
     '<div class="box">',
     '  <div class="hd" id="hd">시간제보육 예약기</div>',
     '  <div class="bd" id="bd">',
     '    <div class="clock">서버 시각 <b id="clock">맞추는 중…</b></div>',
+    '    <div class="at">시작 시각 <input id="at" value="08:59:58" placeholder="비우면 즉시"></div>',
     '    <div class="btns">',
     '      <button class="go" id="go">시작</button>',
     '      <button class="no" id="no">멈춤</button>',
@@ -298,8 +343,29 @@
     if ($("go").disabled) return;
     stop = false;
     $("go").disabled = true;
-    // 한 번이라도 쐈으면 끝날 때 기록을 파일로 남긴다(새로고침하면 기록창이 비워진다)
-    try { await run(log); saveLog(); } catch (e) { log("멈춤 — " + e.message); }
+    try {
+      const field = $("at").value.trim();
+      if (!field) {
+        await warm();                               // 즉시 시작도 첫 발 전에 데운다
+      } else {
+        if (offset === null) { log("시계를 맞추는 중…"); await syncClock(); }
+        const target = targetEpoch(field);
+        if (target === null) {
+          log("시작 시각을 못 읽었어요 (예: 08:59:58) — 즉시 시작합니다");
+          await warm();
+        } else if (target - (Date.now() - offset) <= 0) {
+          log("그 시각은 이미 지났어요 — 즉시 시작합니다");
+          await warm();
+        } else {
+          log("정각 대기 — 서버 " + field + " 에 자동 시작 ([멈춤] 누르면 취소)");
+          if (!(await waitUntilStart(target, log))) { log("대기를 멈췄어요"); $("go").disabled = false; return; }
+          log("출발!");
+        }
+      }
+      // 한 번이라도 쐈으면 끝날 때 기록을 파일로 남긴다(새로고침하면 기록창이 비워진다)
+      await run(log);
+      saveLog();
+    } catch (e) { log("멈춤 — " + e.message); }
     $("go").disabled = false;
   };
 
