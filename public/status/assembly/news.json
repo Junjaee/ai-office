@@ -3,27 +3,25 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 19초",
+  "summary": "신규 2건, 실패 0건, 12초",
   "counts": {
-    "new": 9,
+    "new": 2,
     "failed": 0,
-    "total": 7209
+    "total": 7211
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 19초",
-    "[신규] [장문기의 여의주(住)] AI에 이어 비만치료제…이준석의 무기는 집요함 — 아주경제",
-    "[신규] 이재명 대통령, 자본시장 정책 간담회 후 시민 소통 — 시민행정신문",
-    "[신규] 이언주“개인 일탈로 방산업체 지정 철회 어불성설 … 경제안보·국익 최우선해야” — 시민행정신문",
-    "[신규] 한동훈 복당 잡음, 셈법 복잡해지는 보수진영 — 서드앵글"
+    "신규 2건, 실패 0건, 12초",
+    "[신규] 오세훈·이준석, 시청서 조찬 회동…정책 현안 논의 — 서울경제",
+    "[신규] 육동한 춘천시장, 국회 예결위원장 면담…9개 핵심사업 국비 확보 총력 — 뉴스티앤티"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43448268299,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43448268299",
-  "request_id": "cron-202611131500",
+  "run_id": 43478412500,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43478412500",
+  "request_id": "cron-202611131800",
   "trigger": "schedule",
-  "started_at": "2026-11-14T00:01:38+09:00",
-  "duration_sec": 19,
+  "started_at": "2026-11-14T03:01:30+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
@@ -33,9 +31,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 9건 (신규 9건) · 시민행정신문 2건, TV조선뉴스 1건, 매일신문 1건"
+      "summary": "오늘 11건 (신규 2건) · 시민행정신문 2건, TV조선뉴스 1건, 뉴스티앤티 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-14T00:01:58+09:00"
+  "updated_at": "2026-11-14T03:01:43+09:00"
 }
