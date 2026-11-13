@@ -135,6 +135,47 @@
     tick();
   }
 
+  // ───────── 넷퍼넬 응답 기록 ─────────
+  // 넷퍼넬 서버가 돌려준 값을 **읽기만** 한다. 사이트 함수는 그대로 부르고, 값을 바꾸거나
+  // 요청을 더 보내지 않는다. 응답 모양은 "5002:201:key=…&nwait=842&nnext=10&tps=5&ttl=3".
+  // 대기표(key)는 적지 않는다 — 기록은 복사해서 남에게 보이는 것이다.
+  const NF_TYPE = { 5001: "표 받기", 5002: "입장 확인", 5003: "대기 유지",
+                    5004: "완료 알림", 5101: "표 받고 입장 확인" };
+  const NF_CODE = { 200: "통과", 201: "대기", 202: "대기", 300: "넷퍼넬 꺼짐",
+                    301: "차단", 302: "IP 차단", 303: "급행" };
+  const nfLast = {}, nfCount = {};
+
+  function noteFunnel(raw, log) {
+    const m = /^(\d{4}):(\d{3}):?([\s\S]*)$/.exec(raw);
+    if (!m) return;
+    const type = m[1], code = m[2];
+    const vals = m[3].split("&").filter((kv) => kv && !/^\s*(key|ip|port)=/.test(kv)).join(" ");
+    nfCount[type + ":" + code] = (nfCount[type + ":" + code] || 0) + 1;
+    // 광클 중에는 초당 스무 개가 온다 — 값이 바뀔 때만, 같은 답이면 1초에 한 줄까지만 적는다
+    const sig = code + " " + vals, was = nfLast[type] || {};
+    if (sig === was.sig || (code === was.code && Date.now() - was.at < 1000)) return;
+    nfLast[type] = { sig, code, at: Date.now() };
+    log("넷퍼넬 " + (NF_TYPE[type] || type) + " — "
+        + (NF_CODE[code] || (code >= 500 ? "오류" : "?")) + "(" + code + ") " + vals);
+  }
+
+  const funnelTotals = () => {
+    const t = Object.keys(nfCount).map((k) => k + "×" + nfCount[k]).join(" ");
+    return t ? " · 넷퍼넬 " + t : "";
+  };
+
+  // 사이트가 넷퍼넬 스크립트를 두 번 올리므로(덮어쓰면 풀린다) 쏘기 전마다 붙어 있는지 본다
+  function tapFunnel(log) {
+    const proto = window.NetFunnel && window.NetFunnel.TsClient && window.NetFunnel.TsClient.prototype;
+    if (!proto || !proto._showResult || proto._showResult.__tap) return;
+    const orig = proto._showResult;
+    proto._showResult = function () {
+      try { noteFunnel(String(this.result || ""), log); } catch (e) { /* 기록 실패가 예약을 막으면 안 된다 */ }
+      return orig.apply(this, arguments);
+    };
+    proto._showResult.__tap = true;
+  }
+
   // 한 발 — 예약하기를 누르고 결과 문구가 올 때까지 기다린다.
   // 들여다보며 기다리지 않고 **결과가 뜨는 순간 깨어난다**(관찰자가 깨운다).
   async function fire(stopped) {
@@ -174,6 +215,7 @@
 
     while (!stop && Date.now() < until) {
       tries++;
+      tapFunnel(log);
       const t0 = Date.now();
       const msg = await fire(() => stop);
       spent += Date.now() - t0;                    // 한 바퀴가 얼마나 걸리는지 — 내일 보려고
@@ -186,18 +228,18 @@
       }
       if (DONE.test(msg)) {
         return log("성공 — " + msg + " (" + tries + "번째, 한 바퀴 평균 "
-                   + Math.round(spent / tries) + "ms)");
+                   + Math.round(spent / tries) + "ms" + funnelTotals() + ")");
       }
       if (!NOT_YET.test(msg)) return log("멈춥니다 — " + msg + " (다시 해도 안 될 사유예요)");
 
       if (msg !== last) { last = msg; log(tries + "번째 — " + msg); }
       else if (tries % 25 === 0) {
         log(tries + "번째까지 같은 답 — 계속합니다 (한 바퀴 평균 "
-            + Math.round(spent / tries) + "ms)");
+            + Math.round(spent / tries) + "ms" + funnelTotals() + ")");
       }
       await sleep(GAP_MS);
     }
-    log(stop ? "멈췄어요" : "시간이 다 됐어요 (30분)");
+    log((stop ? "멈췄어요" : "시간이 다 됐어요 (30분)") + funnelTotals());
   }
 
   // ───────── 패널 ─────────
