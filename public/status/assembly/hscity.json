@@ -3,39 +3,36 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 전송 0건, 실패 0건, 1.3분",
+  "summary": "신규 1건, 전송 1건, 실패 0건, 49초",
   "counts": {
-    "new": 3,
-    "sent": 0,
+    "new": 1,
+    "sent": 1,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 3건, 전송 0건, 실패 0건, 1.3분",
-    "[신규] [일반공고] 공시송달 공고의 건[「건축법」 위반 이행강제금 부과 처분의 사전통보([영",
-    "[첨부실패] 동탄구공고 2026 547 공시송달 대상자명단(고지).pdf: SSLError",
-    "[신규] [일반공고] 2026년 10월 지방소득세 납세고지서 반송분 공시송달 공고",
-    "[첨부실패] 동탄구공고 2026 548 공시송달 공고문(독촉).pdf: SSLError"
+    "신규 1건, 전송 1건, 실패 0건, 49초",
+    "[신규] [입찰공고] 용역 수의견적 제출 공고[동탄테크노벨리 일원 도로 재포장공사 폐기물처리용"
   ],
   "link": "",
-  "run_id": 43124117938,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43124117938",
-  "request_id": "cron-202611120000",
+  "run_id": 43333586951,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43333586951",
+  "request_id": "cron-202611130000",
   "trigger": "schedule",
-  "started_at": "2026-11-12T09:01:35+09:00",
-  "duration_sec": 77,
+  "started_at": "2026-11-13T09:01:42+09:00",
+  "duration_sec": 49,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 3건, 첨부 6건"
+      "summary": "신규 1건, 첨부 1건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "0건 발송, 무음 3건"
+      "summary": "1건 발송, 무음 0건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-12T09:02:53+09:00"
+  "updated_at": "2026-11-13T09:02:32+09:00"
 }
