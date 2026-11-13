@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 33건, 실패 0건, 10초",
+  "summary": "신규 15건, 실패 0건, 12초",
   "counts": {
-    "new": 33,
+    "new": 15,
     "failed": 0,
-    "total": 7272
+    "total": 7287
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 33건, 실패 0건, 10초",
-    "[신규] 이준석 \"20만 호 즉시 공급할 땅 있어…李, 연락 주면 알려드리겠다\" — 뉴시스",
-    "[신규] \"없을 땐 어떻게 일했지?\" AI에 쓴 정치자금 1년 만에 9배 — OhmyNews",
-    "[신규] 이재관 의원, 주민자치회 참여 폭 넓힌다…지방자치법 개정안 대표발의 — 시민행정신문",
-    "[신규] 박용갑 의원 “어린이 간식 지원, 차별 있어선 안 돼” … 최교진 장관 “당연히 해결할 문제, 재정당국과 협의할 것” — 시민행정신문"
+    "신규 15건, 실패 0건, 12초",
+    "[신규] 이준석 “한동훈은 ‘욕쟁이 할머니 집’…그런데 맛도 없어” — 한겨레",
+    "[신규] 이준석, 눈물의 기자회견 후 SNS에 \"당원 가입하기 좋은 날\" — JTBC",
+    "[신규] 정동만 의원, 가덕도신공항 건설사 간담회...공사비 현실화 등 의견 청취 — 시민행정신문",
+    "[신규] 인천광역시교육청, 학생선수 31명 대상 진천국가대표선수촌 체육 진로 캠프 운영 — 일간투데이"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43356065479,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43356065479",
-  "request_id": "cron-202611130300",
+  "run_id": 43375747203,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43375747203",
+  "request_id": "cron-202611130600",
   "trigger": "schedule",
-  "started_at": "2026-11-13T12:01:45+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-13T15:01:22+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 120건"
+      "summary": "검색어 5개에서 100건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 56건 (신규 33건) · 시민행정신문 12건, 뉴시스 3건, 연합뉴스 3건"
+      "summary": "오늘 71건 (신규 15건) · 시민행정신문 14건, 연합뉴스 5건, 뉴시스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-13T12:01:56+09:00"
+  "updated_at": "2026-11-13T15:01:35+09:00"
 }
