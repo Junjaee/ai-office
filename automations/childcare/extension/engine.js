@@ -254,7 +254,7 @@
     ".bd{padding:10px 12px}",
     ".btns{display:flex;gap:6px}",
     "button{flex:1;padding:8px 0;border:0;border-radius:6px;font:inherit;font-weight:700;cursor:pointer}",
-    ".go{background:#2f4b8b;color:#fff} .no{background:#e6e9f0;color:#333} #cp{flex:0 0 56px}",
+    ".go{background:#2f4b8b;color:#fff} .no{background:#e6e9f0;color:#333} #cp,#sv{flex:0 0 52px}",
     "pre{margin:10px 0 0;background:#f6f8fc;border-radius:6px;padding:8px;height:150px;overflow:auto;",
     "    white-space:pre-wrap;font:12px/1.45 Consolas,monospace}",
     ".hide{display:none}",
@@ -269,6 +269,7 @@
     '      <button class="go" id="go">시작</button>',
     '      <button class="no" id="no">멈춤</button>',
     '      <button class="no" id="cp">복사</button>',
+    '      <button class="no" id="sv">저장</button>',
     "    </div>",
     '    <pre id="log"></pre>',
     "  </div>",
@@ -297,9 +298,28 @@
     if ($("go").disabled) return;
     stop = false;
     $("go").disabled = true;
-    try { await run(log); } catch (e) { log("멈춤 — " + e.message); }
+    // 한 번이라도 쐈으면 끝날 때 기록을 파일로 남긴다(새로고침하면 기록창이 비워진다)
+    try { await run(log); saveLog(); } catch (e) { log("멈춤 — " + e.message); }
     $("go").disabled = false;
   };
+
+  // 기록을 글 파일로 내려받는다 — 크롬의 다운로드 폴더에 생긴다.
+  function saveLog() {
+    const d = new Date();
+    const name = "시간제보육-기록-" + d.getFullYear() + two(d.getMonth() + 1) + two(d.getDate())
+               + "-" + two(d.getHours()) + two(d.getMinutes()) + two(d.getSeconds()) + ".txt";
+    log("기록을 파일로 저장해요 — 다운로드 폴더의 " + name);
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(
+      new Blob(["﻿" + $("log").textContent], { type: "text/plain;charset=utf-8" }));
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  }
+
+  $("sv").onclick = saveLog;
 
   $("no").onclick = () => {
     if (stop) return;
