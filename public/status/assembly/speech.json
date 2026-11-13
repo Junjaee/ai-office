@@ -1,46 +1,38 @@
 {
   "name": "회의 발언 요약",
   "dept": "qa",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "예결위 자막 2001줄 · 구간 7 · 요약 7/0실패 · 전송 3묶음",
+  "summary": "오늘 질의 없음 — 예결위 질의순서 25명에 없음",
   "counts": {
-    "captions": 2001,
-    "segments": 7,
-    "summarized": 7,
-    "summary_failed": 0,
-    "sent": 3,
-    "send_failed": 4
+    "order": 25
   },
   "next_run": "캘린더의 다음 재경위·예결위 회의",
-  "log": [
-    "질의순서 24명",
-    "전송 실패 RuntimeError"
-  ],
+  "log": [],
   "link": "",
-  "run_id": 42990274199,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/42990274199",
-  "request_id": "cron-202611110850",
+  "run_id": 43164080614,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43164080614",
+  "request_id": "cron-202611120550",
   "trigger": "schedule",
-  "started_at": "2026-11-11T17:51:37+09:00",
-  "duration_sec": 18515,
+  "started_at": "2026-11-12T14:51:37+09:00",
+  "duration_sec": 4,
   "tasks": [
     {
       "id": "listen",
       "status": "done",
-      "summary": "자막 2001줄, 구간 7"
+      "summary": "오늘 질의 없음"
     },
     {
       "id": "summarize",
       "status": "done",
-      "summary": "요약 7건"
+      "summary": "건너뜀"
     },
     {
       "id": "notify",
-      "status": "error",
-      "summary": "전송 3묶음, 실패 4"
+      "status": "done",
+      "summary": "건너뜀"
     }
   ],
   "id": "speech",
-  "updated_at": "2026-11-11T23:00:13+09:00"
+  "updated_at": "2026-11-12T14:51:42+09:00"
 }

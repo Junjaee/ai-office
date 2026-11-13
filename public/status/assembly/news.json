@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 10초",
+  "summary": "신규 33건, 실패 0건, 10초",
   "counts": {
-    "new": 6,
+    "new": 33,
     "failed": 0,
-    "total": 7174
+    "total": 7272
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 10초",
-    "[신규] 민주당의 부동산 실용주의, “비거주 1주택 차별 철폐해야.” — 슬로우뉴스",
-    "[신규] 조현 외교부장관, 제2차 G7 외교장관회의 참석 — 시민행정신문",
-    "[신규] 예결위, 오늘 비경제부처 예산안 심사 이틀째 진행 — 연합뉴스",
-    "[신규] 국회 예결위, 오늘 부별심사 마무리…감액·증액 심사 본격화 — 뉴시스"
+    "신규 33건, 실패 0건, 10초",
+    "[신규] 이준석 \"20만 호 즉시 공급할 땅 있어…李, 연락 주면 알려드리겠다\" — 뉴시스",
+    "[신규] \"없을 땐 어떻게 일했지?\" AI에 쓴 정치자금 1년 만에 9배 — OhmyNews",
+    "[신규] 이재관 의원, 주민자치회 참여 폭 넓힌다…지방자치법 개정안 대표발의 — 시민행정신문",
+    "[신규] 박용갑 의원 “어린이 간식 지원, 차별 있어선 안 돼” … 최교진 장관 “당연히 해결할 문제, 재정당국과 협의할 것” — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43099414734,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43099414734",
-  "request_id": "cron-202611112100",
+  "run_id": 43356065479,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43356065479",
+  "request_id": "cron-202611130300",
   "trigger": "schedule",
-  "started_at": "2026-11-12T06:01:21+09:00",
+  "started_at": "2026-11-13T12:01:45+09:00",
   "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 151건"
+      "summary": "검색어 5개에서 120건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 23건 (신규 6건) · 시민행정신문 4건, 연합뉴스 2건, 재경일보 2건"
+      "summary": "오늘 56건 (신규 33건) · 시민행정신문 12건, 뉴시스 3건, 연합뉴스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-12T06:01:32+09:00"
+  "updated_at": "2026-11-13T12:01:56+09:00"
 }
