@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 24건, 실패 0건, 12초",
+  "summary": "신규 10건, 실패 0건, 12초",
   "counts": {
-    "new": 24,
+    "new": 10,
     "failed": 0,
-    "total": 7311
+    "total": 7321
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 24건, 실패 0건, 12초",
-    "[신규] 이준석 “한동훈, 욕쟁이 할머니집인데 맛도 없다···가라고 강요하면 폭력” — 주간경향",
-    "[신규] 이준석 \"한동훈, 보수 쪽 작살내…총선도 화끈하게 져\" — 조세일보",
-    "[신규] 이준석 “한동훈은 ‘맛없는 욕쟁이 할머니 집’”…연일 직격 — 시사저널",
-    "[신규] 신동욱 \"한동훈 복당보다 이준석과 통합, 부작용 적을 수도\" — 뉴시스"
+    "신규 10건, 실패 0건, 12초",
+    "[신규] 이준석 \"한동훈은 '욕쟁이 할머니?'···맛도 없는데 가야 한다고 강요하면 폭력\" — 대구MBC",
+    "[신규] 이준석 \"한동훈은 욕쟁이 할머니인데 맛도 없다…통합 강요는 폭력\" — 경기일보",
+    "[신규] 장동혁, ‘韓 복당 비판’ 안철수와 회동…오세훈은 이준석 만나 — 동아일보",
+    "[신규] 오세훈·이준석 조찬 회동…동탄 광역버스 등 정책 논의 — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43397766843,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43397766843",
-  "request_id": "cron-202611130900",
+  "run_id": 43421613826,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43421613826",
+  "request_id": "cron-202611131200",
   "trigger": "schedule",
-  "started_at": "2026-11-13T18:01:23+09:00",
+  "started_at": "2026-11-13T21:01:26+09:00",
   "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 96건"
+      "summary": "검색어 5개에서 83건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 95건 (신규 24건) · 시민행정신문 16건, 연합뉴스 6건, 뉴시스 5건"
+      "summary": "오늘 105건 (신규 10건) · 시민행정신문 16건, 뉴시스 6건, 연합뉴스 6건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-13T18:01:35+09:00"
+  "updated_at": "2026-11-13T21:01:39+09:00"
 }
