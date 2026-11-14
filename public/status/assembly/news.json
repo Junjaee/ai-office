@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 11초",
+  "summary": "신규 17건, 실패 0건, 12초",
   "counts": {
-    "new": 3,
+    "new": 17,
     "failed": 0,
-    "total": 7219
+    "total": 7236
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 11초",
-    "[신규] [기고] 결국 육사만 이전… 안보마저 정략으로 삼는 '갈라치기' 정치 — 더퍼블릭",
-    "[신규] 육동한 시장, 국회 찾아 내년도 국비 확보 막판 총력 — 동방일보",
-    "[신규] 野 \"미래대응기금 전액 삭감\" vs 與 \"뒤로 증액 요구, 앞뒤 다른 공세\" — 경북도민일보"
+    "신규 17건, 실패 0건, 12초",
+    "[신규] [속보] 전한길 \"이준석 하버드 졸업장 내놔라\"…이준석 \"허위 사실 남발 추가 고소\" — 프레시안",
+    "[신규] [속보] \"노무현이 하버드 입학 추천?\"…이준석, 전한길에 추가 고소 예고 — 매일신문",
+    "[신규] [속보] 전한길 “노무현 추천서로 하버드 입학”…이준석 “허위 사실 추가 고소” — 경기일보",
+    "[신규] “노무현 추천으로 하버드 입학?”···이준석 전한길 추가 고소 예고 — 주간경향"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43549357050,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43549357050",
-  "request_id": "cron-202611140300",
+  "run_id": 43564233273,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43564233273",
+  "request_id": "cron-202611140600",
   "trigger": "schedule",
-  "started_at": "2026-11-14T12:01:22+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-14T15:01:32+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 89건"
+      "summary": "검색어 5개에서 116건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 19건 (신규 3건) · 시민행정신문 2건, M이코노미뉴스 1건, TV조선뉴스 1건"
+      "summary": "오늘 36건 (신규 17건) · 매일신문 2건, 시민행정신문 2건, 프레시안 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-14T12:01:34+09:00"
+  "updated_at": "2026-11-14T15:01:44+09:00"
 }
