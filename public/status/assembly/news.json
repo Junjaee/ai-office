@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 10초",
+  "summary": "신규 4건, 실패 0건, 12초",
   "counts": {
-    "new": 5,
+    "new": 4,
     "failed": 0,
-    "total": 7250
+    "total": 7101
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 10초",
-    "[신규] 이준석 “노무현 추천으로 하버드 입학?”…전한길 추가 고소 예고 — 미주중앙일보",
-    "[신규] 이준석 \"노무현 대통령 추천서로 하버드 입학?\"⋯전한길 추가 고소 예고 — 아이뉴스24",
-    "[신규] \"노무현이 하버드 입학 추천?\"…이준석, 전한길에 추가 고소 예고 — 매일신문",
-    "[신규] 이준석 “조작 징계? 가처분 걸면 된다” 한동훈 직격 — 문화일보"
+    "신규 4건, 실패 0건, 12초",
+    "[신규] 이준석 “내가 노무현 추천서 받았다고?” 전한길 형사고소 예고 — 미디어오늘",
+    "[신규] 노무현 추천으로 하버드 입학했다고?…이준석, 전한길 추가 고소 예고 — 헤럴드경제",
+    "[신규] 이준석, 전한길 추가 고소 예고…학력 의혹 반박 : 정치 — 재경일보",
+    "[신규] 대전시, 2027년 국비 1조 원 확보 총력… 허 시장 '국회 광폭 행보' — 충청뉴스큐"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43592707092,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43592707092",
-  "request_id": "cron-202611141200",
+  "run_id": 43607840802,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43607840802",
+  "request_id": "cron-202611141500",
   "trigger": "schedule",
-  "started_at": "2026-11-14T21:01:28+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-15T00:01:30+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 80건"
+      "summary": "검색어 5개에서 82건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 50건 (신규 5건) · 경기일보 3건, 매일신문 3건, 문화일보 2건"
+      "summary": "오늘 4건 (신규 4건) · 미디어오늘 1건, 재경일보 1건, 충청뉴스큐 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-14T21:01:39+09:00"
+  "updated_at": "2026-11-15T00:01:43+09:00"
 }
