@@ -3,38 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 11초",
+  "summary": "신규 3건, 실패 0건, 14초",
   "counts": {
     "new": 3,
     "failed": 0,
-    "total": 7104
+    "total": 7107
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 11초",
-    "[신규] 예산안 처리시한 2주여 앞으로…여야, 예결소위서 본격대결 돌입 — 연합뉴스 한민족센터",
-    "[신규] 예산안 처리시한 2주 앞으로…여야, 예결소위서 본격대결 돌입 — 위키리크스한국",
-    "[신규] 국가예산 증액·금융중심지 지정 요청…이원택 전북특별자치도지사 국회 면담 — 타파인"
+    "신규 3건, 실패 0건, 14초",
+    "[신규] 이준석, 전한길 추가 고소 예고…˝하버드 졸업장 공개한 지 10년 넘어˝:중수청일보 — 중수청일보",
+    "[신규] 靑, 전기차 생산세액공제 조건부 포함 가닥…국회 논의 주목 — 뉴스1",
+    "[신규] 국회 예결위 예산안조정소위 16일부터 가동…與野 예산 줄다리기 본격화 — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43640502391,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43640502391",
-  "request_id": "cron-202611142100",
+  "run_id": 43656048696,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43656048696",
+  "request_id": "cron-202611150000",
   "trigger": "schedule",
-  "started_at": "2026-11-15T06:01:27+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-15T09:01:29+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 82건"
+      "summary": "검색어 5개에서 81건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 7건 (신규 3건) · 미디어오늘 1건, 연합뉴스 한민족센터 1건, 위키리크스한국 1건"
+      "summary": "오늘 10건 (신규 3건) · 뉴스1 1건, 뉴시스 1건, 미디어오늘 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-15T06:01:39+09:00"
+  "updated_at": "2026-11-15T09:01:44+09:00"
 }
