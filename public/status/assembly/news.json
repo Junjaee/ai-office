@@ -1,22 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "뉴스 목록을 받아오지 못했어요",
-  "counts": {},
+  "summary": "신규 27건, 실패 0건, 12초",
+  "counts": {
+    "new": 27,
+    "failed": 0,
+    "total": 7134
+  },
   "next_run": "3시간마다",
   "log": [
-    "뉴스 목록을 받아오지 못했어요",
-    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
+    "신규 27건, 실패 0건, 12초",
+    "[신규] \"노무현 대통령 추천, 시험 안 치고 하버드 갔다\" 전한길 주장에 이준석 추가 고소 예고 — 아시아경제",
+    "[신규] \"시험 안 치고 노무현 추천으로 하버드 갔다\" 전한길 주장에…이준석 \"16일 추가 형사 조치\" — 파이낸셜뉴스",
+    "[신규] [인터뷰] 윤상현 “장동혁 곧 만나 설득할 것…한동훈과 마주 앉기 싫어도 결단해야” — 시사저널",
+    "[신규] [정대철 인터뷰] “특검 남발하면 李 지지율 20%대로…권력 유지 어려워진다” — 시사저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43670384210,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43670384210",
-  "request_id": "cron-202611150300",
+  "run_id": 43683506282,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43683506282",
+  "request_id": "cron-202611150600",
   "trigger": "schedule",
-  "started_at": "2026-11-15T12:01:37+09:00",
-  "duration_sec": 135,
+  "started_at": "2026-11-15T15:01:21+09:00",
+  "duration_sec": 12,
+  "tasks": [
+    {
+      "id": "collect",
+      "status": "done",
+      "summary": "검색어 5개에서 76건"
+    },
+    {
+      "id": "digest",
+      "status": "done",
+      "summary": "오늘 37건 (신규 27건) · 강원일보 2건, 뉴스1 2건, 시사저널 2건"
+    }
+  ],
   "id": "news",
-  "updated_at": "2026-11-15T12:03:53+09:00"
+  "updated_at": "2026-11-15T15:01:33+09:00"
 }
