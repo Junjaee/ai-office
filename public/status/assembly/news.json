@@ -3,27 +3,27 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 18건, 실패 0건, 11초",
+  "summary": "신규 8건, 실패 0건, 12초",
   "counts": {
-    "new": 18,
+    "new": 8,
     "failed": 0,
-    "total": 7035
+    "total": 7043
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 18건, 실패 0건, 11초",
-    "[신규] 외교부, 한중 외교장관 회담 및 만찬 — 시민행정신문",
-    "[신규] 국토교통부, '광주 자율주행 실증도시' 본궤도 진입 … 이달 30일 첫 차량 운행 준비 — 시민행정신문",
-    "[신규] “건강한 노후, 파크골프로 함께”… 대한노인파크골프협회 공식 출범 — 시민행정신문",
-    "[신규] [부음] 한동훈(국회의원)씨 장인상 — 아이뉴스24"
+    "신규 8건, 실패 0건, 12초",
+    "[신규] [김형구의 시시각각] 민주당의 ‘서울 반 토막’ 걱정 — 미주중앙일보",
+    "[신규] '조작기소특검법' 공포 목전…국회, 예산·본회의 '첩첩산중'[여의뷰] — 아이뉴스24",
+    "[신규] 두산건설, 3Q 영업익 271억…전년 대비 39% 감소 — 아이뉴스24",
+    "[신규] 이인선, 2조7337억원 '사립대 반값 등록금' 예결소위 통과…교육 형평성 확보 — 아이뉴스24"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43727465714,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43727465714",
-  "request_id": "cron-202611151500",
+  "run_id": 43744299866,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43744299866",
+  "request_id": "cron-202611151800",
   "trigger": "schedule",
-  "started_at": "2026-11-16T00:01:23+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-16T03:01:19+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
@@ -33,9 +33,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 18건 (신규 18건) · 아이뉴스24 11건, 시민행정신문 3건, www.dt.co.kr 1건"
+      "summary": "오늘 26건 (신규 8건) · 아이뉴스24 16건, 시민행정신문 3건, www.dt.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-16T00:01:36+09:00"
+  "updated_at": "2026-11-16T03:01:31+09:00"
 }
