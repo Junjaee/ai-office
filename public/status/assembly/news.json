@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 9초",
+  "summary": "신규 18건, 실패 0건, 11초",
   "counts": {
-    "new": 14,
+    "new": 18,
     "failed": 0,
-    "total": 7174
+    "total": 7035
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 9초",
-    "[신규] 예사롭지 않은 김태호의 연말 움직임..당권행보 본격화? — 부산일보",
-    "[신규] 821조 예산 심사 본격화…'162조 미래대응기금' 놓고 여야 격돌 — 아이뉴스24",
-    "[신규] 오세훈의 `그 글`... 훈훈연대 멸망 신호였나 — 매일신문",
-    "[신규] 윤상현 “복당의 강보다 두려운 건 분열의 늪”…오동석장 연대 거듭 제안 — 스페셜타임스"
+    "신규 18건, 실패 0건, 11초",
+    "[신규] 외교부, 한중 외교장관 회담 및 만찬 — 시민행정신문",
+    "[신규] 국토교통부, '광주 자율주행 실증도시' 본궤도 진입 … 이달 30일 첫 차량 운행 준비 — 시민행정신문",
+    "[신규] “건강한 노후, 파크골프로 함께”… 대한노인파크골프협회 공식 출범 — 시민행정신문",
+    "[신규] [부음] 한동훈(국회의원)씨 장인상 — 아이뉴스24"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43711673222,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43711673222",
-  "request_id": "cron-202611151200",
+  "run_id": 43727465714,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43727465714",
+  "request_id": "cron-202611151500",
   "trigger": "schedule",
-  "started_at": "2026-11-15T21:01:28+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-11-16T00:01:23+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 81건"
+      "summary": "검색어 5개에서 85건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 77건 (신규 14건) · 뉴스1 4건, 뉴시스 4건, 아이뉴스24 4건"
+      "summary": "오늘 18건 (신규 18건) · 아이뉴스24 11건, 시민행정신문 3건, www.dt.co.kr 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-15T21:01:38+09:00"
+  "updated_at": "2026-11-16T00:01:36+09:00"
 }
