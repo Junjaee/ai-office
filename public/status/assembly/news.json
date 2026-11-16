@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 60건, 실패 0건, 10초",
+  "summary": "신규 20건, 실패 0건, 11초",
   "counts": {
-    "new": 60,
+    "new": 20,
     "failed": 0,
-    "total": 7201
+    "total": 7221
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 60건, 실패 0건, 10초",
-    "[신규] 김현정의원, 가상자산 자금세탁 대응 강화하는 '특정금융정보법' 개정안 대표발의 — 시민행정신문",
-    "[신규] 주목받는 국민의힘 조문정치…장동혁, 한동훈 찾아갈까 — 에너지경제신문",
-    "[신규] 모스탄 “허위사실 비방은 악한 죄”·· 정작 자신은? — 평화나무",
-    "[신규] 부동산은 못사고 주식마저 털린 사람들[황보람의 너클볼] — 뷰어스"
+    "신규 20건, 실패 0건, 11초",
+    "[신규] 개혁신당, 개혁연구원장에 정승연 인하대 교수 [정치오늘] — 시사오늘",
+    "[신규] 제주도, 24시간 분만 진료 정상화…안심 출산 환경 조성 박차 — 외교저널",
+    "[신규] 한동훈 빙부상에 친한계 집결…오세훈·김문수 등도 조문 — 뉴시스",
+    "[신규] 친한계 총출동…한동훈 빙부상 빈소 찾은 여야 거물들 — 한국경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43835967654,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43835967654",
-  "request_id": "cron-202611160900",
+  "run_id": 43862747080,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43862747080",
+  "request_id": "cron-202611161200",
   "trigger": "schedule",
-  "started_at": "2026-11-16T18:01:25+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-16T21:01:28+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 149건"
+      "summary": "검색어 5개에서 156건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 184건 (신규 60건) · 아이뉴스24 50건, 시민행정신문 9건, 뉴시스 8건"
+      "summary": "오늘 204건 (신규 20건) · 아이뉴스24 56건, 뉴시스 9건, 시민행정신문 9건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-16T18:01:36+09:00"
+  "updated_at": "2026-11-16T21:01:39+09:00"
 }
