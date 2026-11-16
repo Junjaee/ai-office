@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 13초",
+  "summary": "신규 8건, 실패 1건, 18초",
   "counts": {
-    "new": 15,
-    "failed": 0,
-    "total": 7003
+    "new": 8,
+    "failed": 1,
+    "total": 7011
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 13초",
-    "[신규] '吳·韓·張' 구도 밖 틈새 노리는 이준석…'확장성'이 관건 — 더팩트",
-    "[신규] 과학기술정보통신부, 국내 최고의 대학생 프로그래밍 대결 펼쳐져 — 시민행정신문",
-    "[신규] 지식재산처, '2026년 국제상표·디자인출원 설명회' 개최 — 시민행정신문",
-    "[신규] 대한민국, 국제전기통신연합(ITU) 이사국 10선 연임 성공 및 전파규칙위원회(RRB) 24년 만에 재진출 — 시민행정신문"
+    "신규 8건, 실패 1건, 18초",
+    "[신규] 방송미디어통신위원회, 1인당 월평균 스팸 수신량 17.7% 감소 — 시민행정신문",
+    "[신규] 재정경제부'세무사 시험 부정행위 대응 TF' 킥오프 회의 및 세무사 시험 부정행위자 시험 무효 절차 개시 — 시민행정신문",
+    "[신규] [속보] 교육부 \"수능 시험장 전파 차단, 법적·기술적 한계로 검토 안 한다\" — 아이뉴스24",
+    "[신규] \"사료 떨어졌죠?\"…BTS 제이홉, 알고보니 몇년째 유기견 후원 — 아이뉴스24"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43924340449,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43924340449",
-  "request_id": "cron-202611161800",
+  "run_id": 43955667951,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43955667951",
+  "request_id": "cron-202611162100",
   "trigger": "schedule",
-  "started_at": "2026-11-17T03:01:41+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-17T06:01:31+09:00",
+  "duration_sec": 18,
   "tasks": [
     {
       "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 162건"
+      "status": "error",
+      "summary": "검색어 5개에서 155건, 실패 1개"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 30건 (신규 15건) · 시민행정신문 14건, 아이뉴스24 5건, OBC 뉴스 1건"
+      "summary": "오늘 38건 (신규 8건) · 시민행정신문 16건, 아이뉴스24 7건, OBC 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-17T03:01:55+09:00"
+  "updated_at": "2026-11-17T06:01:50+09:00"
 }
