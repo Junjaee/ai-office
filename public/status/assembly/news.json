@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 1건, 18초",
+  "summary": "신규 30건, 실패 0건, 14초",
   "counts": {
-    "new": 6,
-    "failed": 1,
-    "total": 7017
+    "new": 30,
+    "failed": 0,
+    "total": 7047
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 1건, 18초",
-    "[신규] 한동훈 장인 빈소에 오세훈·김문수·정동영…李대통령·장동혁은 조화 — 서울경제",
-    "[신규] 오세훈·한동훈 없는 국힘 당권 경쟁…‘틈새 공략’ 노리는 중진들 — 경향신문",
-    "[신규] 개혁신당, 부울경 지지율 7.1%…30대 — 이투데이",
-    "[신규] 더민주전국혁신회의, 최민희 최고위원 제명 촉구 기자회견 — 뉴스1"
+    "신규 30건, 실패 0건, 14초",
+    "[신규] 이준석, 수능 AI 부정행위 탐지앱 영국행 비행기서 직접 개발 \"교육부 장관 답변에 한숨\" — 매일신문",
+    "[신규] 장동혁, 한동훈 장인상 조문…오세훈은 전날 — 에너지경제신문",
+    "[신규] 이준석, 기내서 '수능 부정행위' 탐지 앱 개발…교육부에 검증 제안 — 데일리안",
+    "[신규] 민청련 출신 광주 토박이가 묻다…'전라도는 왜 이럴까' [신간] — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43984105829,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43984105829",
-  "request_id": "cron-202611170000",
+  "run_id": 44007104033,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44007104033",
+  "request_id": "cron-202611170300",
   "trigger": "schedule",
-  "started_at": "2026-11-17T09:01:38+09:00",
-  "duration_sec": 18,
+  "started_at": "2026-11-17T12:01:28+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
-      "status": "error",
-      "summary": "검색어 5개에서 136건, 실패 1개"
+      "status": "done",
+      "summary": "검색어 5개에서 145건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 44건 (신규 6건) · 시민행정신문 16건, 아이뉴스24 7건, OBC 뉴스 1건"
+      "summary": "오늘 74건 (신규 30건) · 시민행정신문 17건, 아이뉴스24 9건, 뉴시스 7건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-17T09:01:57+09:00"
+  "updated_at": "2026-11-17T12:01:43+09:00"
 }
