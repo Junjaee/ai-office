@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 30건, 실패 0건, 12초",
+  "summary": "신규 29건, 실패 0건, 17초",
   "counts": {
-    "new": 30,
+    "new": 29,
     "failed": 0,
-    "total": 7077
+    "total": 7106
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 30건, 실패 0건, 12초",
-    "[신규] ‘하버드 출신’ 이준석도 나섰다…직접 만든 ‘AI 커닝 탐지 앱’ 깜짝 — 중앙일보",
-    "[신규] '한라산 꼭대기'서도 코딩하던 이준석, 'AI 컨닝 전파' 탐지 앱 개발 — 머니투데이",
-    "[신규] [속보]이준석 “영국 출장 비행기서 AI커닝 방지 앱 개발…수능 때 이용하라” — 국제신문",
-    "[신규] 이준석, 직접 만든 ‘AI 커닝 탐지 앱’ 공개…“정부가 적극 검증해야” — 서울신문, 서울Pn"
+    "신규 29건, 실패 0건, 17초",
+    "[신규] 이준석 \"수험장 전파 탐지 앱 개발\"‥교육부에 한시 허용 요청 — MBC 뉴스",
+    "[신규] 이준석 \"교육부 답변 한숨…비행기서 코딩, AI 커닝 방지 앱 배포\" — JTBC",
+    "[신규] 이준석, 비행기서 만든 AI 부정행위 탐지 앱 공개…“교육부 답변에 한숨” — 주간조선",
+    "[신규] '하버드 컴공과' 이준석, 비행기서 뚝딱…'AI 커닝 탐지 앱' 공개 — 한국경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44028082268,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44028082268",
-  "request_id": "cron-202611170600",
+  "run_id": 44051655533,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44051655533",
+  "request_id": "cron-202611170900",
   "trigger": "schedule",
-  "started_at": "2026-11-17T15:01:31+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-17T18:01:26+09:00",
+  "duration_sec": 17,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 131건"
+      "summary": "검색어 5개에서 134건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 104건 (신규 30건) · 시민행정신문 17건, 뉴시스 9건, 아이뉴스24 9건"
+      "summary": "오늘 133건 (신규 29건) · 시민행정신문 17건, 뉴시스 11건, 아이뉴스24 11건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-17T15:01:44+09:00"
+  "updated_at": "2026-11-17T18:01:44+09:00"
 }
