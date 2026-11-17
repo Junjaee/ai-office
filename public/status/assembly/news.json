@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 30건, 실패 0건, 14초",
+  "summary": "신규 30건, 실패 0건, 12초",
   "counts": {
     "new": 30,
     "failed": 0,
-    "total": 7047
+    "total": 7077
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 30건, 실패 0건, 14초",
-    "[신규] 이준석, 수능 AI 부정행위 탐지앱 영국행 비행기서 직접 개발 \"교육부 장관 답변에 한숨\" — 매일신문",
-    "[신규] 장동혁, 한동훈 장인상 조문…오세훈은 전날 — 에너지경제신문",
-    "[신규] 이준석, 기내서 '수능 부정행위' 탐지 앱 개발…교육부에 검증 제안 — 데일리안",
-    "[신규] 민청련 출신 광주 토박이가 묻다…'전라도는 왜 이럴까' [신간] — 뉴시스"
+    "신규 30건, 실패 0건, 12초",
+    "[신규] ‘하버드 출신’ 이준석도 나섰다…직접 만든 ‘AI 커닝 탐지 앱’ 깜짝 — 중앙일보",
+    "[신규] '한라산 꼭대기'서도 코딩하던 이준석, 'AI 컨닝 전파' 탐지 앱 개발 — 머니투데이",
+    "[신규] [속보]이준석 “영국 출장 비행기서 AI커닝 방지 앱 개발…수능 때 이용하라” — 국제신문",
+    "[신규] 이준석, 직접 만든 ‘AI 커닝 탐지 앱’ 공개…“정부가 적극 검증해야” — 서울신문, 서울Pn"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44007104033,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44007104033",
-  "request_id": "cron-202611170300",
+  "run_id": 44028082268,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44028082268",
+  "request_id": "cron-202611170600",
   "trigger": "schedule",
-  "started_at": "2026-11-17T12:01:28+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-11-17T15:01:31+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 145건"
+      "summary": "검색어 5개에서 131건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 74건 (신규 30건) · 시민행정신문 17건, 아이뉴스24 9건, 뉴시스 7건"
+      "summary": "오늘 104건 (신규 30건) · 시민행정신문 17건, 뉴시스 9건, 아이뉴스24 9건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-17T12:01:43+09:00"
+  "updated_at": "2026-11-17T15:01:44+09:00"
 }
