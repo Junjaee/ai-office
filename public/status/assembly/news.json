@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": false,
   "running": false,
-  "summary": "신규 8건, 실패 1건, 18초",
+  "summary": "신규 6건, 실패 1건, 18초",
   "counts": {
-    "new": 8,
+    "new": 6,
     "failed": 1,
-    "total": 7011
+    "total": 7017
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 1건, 18초",
-    "[신규] 방송미디어통신위원회, 1인당 월평균 스팸 수신량 17.7% 감소 — 시민행정신문",
-    "[신규] 재정경제부'세무사 시험 부정행위 대응 TF' 킥오프 회의 및 세무사 시험 부정행위자 시험 무효 절차 개시 — 시민행정신문",
-    "[신규] [속보] 교육부 \"수능 시험장 전파 차단, 법적·기술적 한계로 검토 안 한다\" — 아이뉴스24",
-    "[신규] \"사료 떨어졌죠?\"…BTS 제이홉, 알고보니 몇년째 유기견 후원 — 아이뉴스24"
+    "신규 6건, 실패 1건, 18초",
+    "[신규] 한동훈 장인 빈소에 오세훈·김문수·정동영…李대통령·장동혁은 조화 — 서울경제",
+    "[신규] 오세훈·한동훈 없는 국힘 당권 경쟁…‘틈새 공략’ 노리는 중진들 — 경향신문",
+    "[신규] 개혁신당, 부울경 지지율 7.1%…30대 — 이투데이",
+    "[신규] 더민주전국혁신회의, 최민희 최고위원 제명 촉구 기자회견 — 뉴스1"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43955667951,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43955667951",
-  "request_id": "cron-202611162100",
+  "run_id": 43984105829,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43984105829",
+  "request_id": "cron-202611170000",
   "trigger": "schedule",
-  "started_at": "2026-11-17T06:01:31+09:00",
+  "started_at": "2026-11-17T09:01:38+09:00",
   "duration_sec": 18,
   "tasks": [
     {
       "id": "collect",
       "status": "error",
-      "summary": "검색어 5개에서 155건, 실패 1개"
+      "summary": "검색어 5개에서 136건, 실패 1개"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 38건 (신규 8건) · 시민행정신문 16건, 아이뉴스24 7건, OBC 뉴스 1건"
+      "summary": "오늘 44건 (신규 6건) · 시민행정신문 16건, 아이뉴스24 7건, OBC 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-17T06:01:50+09:00"
+  "updated_at": "2026-11-17T09:01:57+09:00"
 }
