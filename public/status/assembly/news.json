@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 12건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 14초",
   "counts": {
-    "new": 12,
+    "new": 11,
     "failed": 0,
-    "total": 7118
+    "total": 6977
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 12건, 실패 0건, 12초",
-    "[신규] ‘하버드 출신’ 이준석, 英 출장 비행기서 ‘AI 커닝 방지 앱’ 개발 — 시사저널",
-    "[신규] 이준석, 수능 AI 부정행위 막을 전파 탐지 앱 개발 … 교육부에 현장 검증 제안 — 뉴데일리",
-    "[신규] 이준석, 영국행 비행기서 ‘AI 커닝 방지 앱’ 직접 개발…교육부에 활용 제안 — 대경일보",
-    "[신규] “차기 대통령감은 누구?” 국민 1014명에게 물었더니… — 위키트리"
+    "신규 11건, 실패 0건, 14초",
+    "[신규] \"영국행 비행기서 직접 코딩\"…이준석, AI 커닝 잡는 전파탐지 앱 개발 — KBC광주방송",
+    "[신규] 이준석 “전파 탐지 앱 개발…교육부에 사용 한시 허용 요청” — KBS 뉴스",
+    "[신규] 이준석, 비행기서 직접 만든 ‘AI커닝 탐지 앱’ 공개 “감독관 휴대폰으로 신호 포착” — 문화일보",
+    "[신규] 이준석 \"수능 수험장 전파 탐지 앱 개발…교육부, 한시적 허용해야\" — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44079161827,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44079161827",
-  "request_id": "cron-202611171200",
+  "run_id": 44109442867,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44109442867",
+  "request_id": "cron-202611171500",
   "trigger": "schedule",
-  "started_at": "2026-11-17T21:01:22+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-18T00:01:30+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 142건"
+      "summary": "검색어 5개에서 151건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 145건 (신규 12건) · 시민행정신문 17건, 뉴시스 11건, 아이뉴스24 11건"
+      "summary": "오늘 11건 (신규 11건) · 뉴시스 2건, KBC광주방송 1건, KBS 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-17T21:01:35+09:00"
+  "updated_at": "2026-11-18T00:01:45+09:00"
 }
