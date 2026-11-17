@@ -3,37 +3,36 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 2건, 전송 2건, 실패 0건, 41초",
+  "summary": "신규 1건, 전송 1건, 실패 0건, 55초",
   "counts": {
-    "new": 2,
-    "sent": 2,
+    "new": 1,
+    "sent": 1,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 2건, 전송 2건, 실패 0건, 41초",
-    "[신규]⭐ [입찰공고] 공사 수의견적 제출 공고[2026년 가로수 바람막이 설치(동탄2지구 1구",
-    "[신규]⭐ [입찰공고] 공사 수의견적 제출 공고[2026년 가로수 바람막이 설치공사(동탄1지구)"
+    "신규 1건, 전송 1건, 실패 0건, 55초",
+    "[신규]⭐ [입찰공고] 시설공사 전자입찰 공고[장지천 경로당 건립 공사(건축,기계)]"
   ],
   "link": "",
-  "run_id": 43777872104,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43777872104",
-  "request_id": "cron-202611160000",
+  "run_id": 43984114244,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43984114244",
+  "request_id": "cron-202611170000",
   "trigger": "schedule",
-  "started_at": "2026-11-16T09:01:33+09:00",
-  "duration_sec": 41,
+  "started_at": "2026-11-17T09:01:37+09:00",
+  "duration_sec": 55,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 2건, 첨부 2건"
+      "summary": "신규 1건, 첨부 3건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "2건 발송, 무음 0건"
+      "summary": "1건 발송, 무음 0건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-16T09:02:14+09:00"
+  "updated_at": "2026-11-17T09:02:33+09:00"
 }
