@@ -3,27 +3,24 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 18초",
+  "summary": "신규 1건, 실패 0건, 10초",
   "counts": {
-    "new": 4,
+    "new": 1,
     "failed": 0,
-    "total": 6981
+    "total": 6982
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 18초",
-    "[신규] [정치家] 개혁신당 ②ㅣ AI 부정행위 논란에 수능 연기 촉구…민생·정치 현안 대응 보폭 확대 — CBC뉴스",
-    "[신규] 김기현·이준석, 영국서 북한 인권 공조…보수 진영 의원외교 주목 — OBC 뉴스",
-    "[신규] 민형배 전남광주통합특별시장, 국회 지도부·예결위원 면담…핵심 입법과제 해결·내년도 국비 확보 총력 — 데일리스포츠한국",
-    "[신규] 나경원·강신철 충돌 뒤에 ‘장병 복지 예산’ 반토막 낸 국힘당, 왜? — 자주시보"
+    "신규 1건, 실패 0건, 10초",
+    "[신규] 국회 예산심의 막판 총력전… “엄승용 보령시장, 국비 확보 사활” — 투어코리아"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44143219726,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44143219726",
-  "request_id": "cron-202611171800",
+  "run_id": 44175304487,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44175304487",
+  "request_id": "cron-202611172100",
   "trigger": "schedule",
-  "started_at": "2026-11-18T03:01:30+09:00",
-  "duration_sec": 18,
+  "started_at": "2026-11-18T06:01:32+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
@@ -33,9 +30,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 15건 (신규 4건) · 뉴시스 2건, CBC뉴스 1건, KBC광주방송 1건"
+      "summary": "오늘 16건 (신규 1건) · 뉴시스 2건, CBC뉴스 1건, KBC광주방송 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-18T03:01:49+09:00"
+  "updated_at": "2026-11-18T06:01:43+09:00"
 }
