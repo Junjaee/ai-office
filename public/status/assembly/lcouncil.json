@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 305건, 교체 0건, 실패 3건, 166.3분",
+  "summary": "신규 458건, 교체 0건, 실패 1건, 169.4분",
   "counts": {
-    "new": 305,
+    "new": 458,
     "replaced": 0,
-    "failed": 3,
-    "total": 7743
+    "failed": 1,
+    "total": 11939
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 305건, 교체 0건, 실패 3건, 166.3분",
-    "[신규] 서울특별시의회 제12대/제340회/문화체육관광위원회행정사무감사_2026-11-03.txt",
+    "신규 458건, 교체 0건, 실패 1건, 169.4분",
+    "[신규] 서울특별시의회 제12대/제340회/본회의_제2차_2026-11-17.txt",
+    "[신규] 서울특별시의회 제12대/제340회/교육위원회_제1차_2026-11-03.txt",
     "[신규] 서울특별시의회 제12대/제339회/운영위원회_제2차_2026-09-07.txt",
-    "[실패] 서울특별시의회 제270회 도시계획관리위원회 제3차(2016.09.02 금요일): [Errno 32] Broken pipe",
-    "[신규] 서울특별시의회 제9대/제270회/도시계획관리위원회_제4차_2016-09-05.txt"
+    "[신규] 서울특별시의회 제9대/제270회/도시계획관리위원회_제3차_2016-09-02.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 43913779228,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43913779228",
-  "request_id": "cron-202611161700",
+  "run_id": 44132236016,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44132236016",
+  "request_id": "cron-202611171700",
   "trigger": "schedule",
-  "started_at": "2026-11-17T02:01:28+09:00",
-  "duration_sec": 9979,
+  "started_at": "2026-11-18T02:01:32+09:00",
+  "duration_sec": 10161,
   "tasks": [
     {
       "id": "scan",
       "status": "error",
-      "summary": "의회 3/5곳 확인, 회의록 7678건"
+      "summary": "의회 4/5곳 확인, 회의록 11854건"
     },
     {
       "id": "fetch",
-      "status": "error",
-      "summary": "신규 305건, 교체 0건"
+      "status": "done",
+      "summary": "신규 458건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-11-17T04:47:48+09:00"
+  "updated_at": "2026-11-18T04:50:54+09:00"
 }
