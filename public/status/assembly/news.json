@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 10초",
+  "summary": "신규 11건, 실패 0건, 18초",
   "counts": {
-    "new": 7,
+    "new": 11,
     "failed": 0,
-    "total": 7053
+    "total": 6908
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 10초",
-    "[신규] 개혁신당, 추경호 무죄에 \"칼춤은 특검이 추고 대가는 국민이 치러\" — MBC 뉴스",
-    "[신규] 개혁신당 \"289억 원이 부족했다면 무엇이 부족했는지 밝혀야\" — 한국사회복지저널",
-    "[신규] 李대통령 “세상 바꾸는데 행복” 조응천 “대법관 늘리고 檢 폐지해서?” — 문화일보",
-    "[신규] 가상자산 과세, '공제 250만원' 유지에 손실이월공제 기간 추가 논의...\"오늘 의결할 듯\" (종합) — 디지털애셋"
+    "신규 11건, 실패 0건, 18초",
+    "[신규] 'AG 직후 약속 지켰다' 테크볼 대표팀, 사상 첫 진천선수촌 입성→대한체육회 지원으로 세계선수권 대비 — 머니투데이",
+    "[신규] 선택 2025 제21대 대통령선거 — 뉴스핌",
+    "[신규] 나경원, 李 ‘수능 부정행위 1억 포상’에 “수험생끼리 서로 감시하라는 것” — 경기일보",
+    "[신규] AI 커닝, AI로 맞선다…수능장서 통할까 — 지디넷코리아"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44299877454,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44299877454",
-  "request_id": "cron-202611181200",
+  "run_id": 44330667501,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44330667501",
+  "request_id": "cron-202611181500",
   "trigger": "schedule",
-  "started_at": "2026-11-18T21:01:30+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-19T00:01:22+09:00",
+  "duration_sec": 18,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 97건"
+      "summary": "검색어 5개에서 94건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 87건 (신규 7건) · 뉴시스 6건, 뉴스1 4건, 연합뉴스 4건"
+      "summary": "오늘 11건 (신규 11건) · Traders Union 1건, 경기일보 1건, 경인일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-18T21:01:41+09:00"
+  "updated_at": "2026-11-19T00:01:41+09:00"
 }
