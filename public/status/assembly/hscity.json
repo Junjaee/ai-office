@@ -3,7 +3,7 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 전송 1건, 실패 0건, 55초",
+  "summary": "신규 1건, 전송 1건, 실패 0건, 43초",
   "counts": {
     "new": 1,
     "sent": 1,
@@ -11,21 +11,21 @@
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 1건, 전송 1건, 실패 0건, 55초",
-    "[신규]⭐ [입찰공고] 시설공사 전자입찰 공고[장지천 경로당 건립 공사(건축,기계)]"
+    "신규 1건, 전송 1건, 실패 0건, 43초",
+    "[신규] [고시] 동탄(2)택지개발지구 도시계획시설(공원) 실시계획(변경) 작성 고시[20"
   ],
   "link": "",
-  "run_id": 43984114244,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43984114244",
-  "request_id": "cron-202611170000",
+  "run_id": 44204266101,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44204266101",
+  "request_id": "cron-202611180000",
   "trigger": "schedule",
-  "started_at": "2026-11-17T09:01:37+09:00",
-  "duration_sec": 55,
+  "started_at": "2026-11-18T09:01:46+09:00",
+  "duration_sec": 43,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 1건, 첨부 3건"
+      "summary": "신규 1건, 첨부 2건"
     },
     {
       "id": "notify",
@@ -34,5 +34,5 @@
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-17T09:02:33+09:00"
+  "updated_at": "2026-11-18T09:02:30+09:00"
 }
