@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 17건, 실패 0건, 17초",
+  "summary": "신규 24건, 실패 0건, 15초",
   "counts": {
-    "new": 17,
+    "new": 24,
     "failed": 0,
-    "total": 7022
+    "total": 7046
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 17건, 실패 0건, 17초",
-    "[신규] 나경원 \"수능 대책 답답하고 다급…이준석 부정행위 탐지 앱 즉시 검증해야\" — 뉴스핌",
-    "[신규] 이준석 \"추경호 무죄, 기초적인 헌법 부정한 법비들의 정치\"…1년 전 주장 다시 꺼냈다 — 매일신문",
-    "[신규] [단독] '어린이보호구역 현수막' 지적받은 개혁신당…이준석 의원이 또 — 노컷뉴스",
-    "[신규] 이 대통령, 동아시아 정상회의 첫 참석…한반도 평화에 관심·협력 당부 — 시민행정신문"
+    "신규 24건, 실패 0건, 15초",
+    "[신규] 이준석, 추경호 무죄에 \"법비들의 감옥 보내기 경쟁 끝내야\" — 뉴시스",
+    "[신규] 이준석 \"추경호 무죄…법비들의 감옥 보내기 경쟁 그만\" — 뉴스1",
+    "[신규] 나경원 \"이준석 전파 탐지 앱 검증해야\" 수능 대책 보완 촉구 — 뉴스클레임",
+    "[신규] [세나정] 이정현 “국민의힘 혼수상태…민주당에 카펫 깔아주는 일 그만해야” — 주간조선"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44248215267,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44248215267",
-  "request_id": "cron-202611180600",
+  "run_id": 44271945764,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44271945764",
+  "request_id": "cron-202611180900",
   "trigger": "schedule",
-  "started_at": "2026-11-18T15:01:32+09:00",
-  "duration_sec": 17,
+  "started_at": "2026-11-18T18:01:39+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 120건"
+      "summary": "검색어 5개에서 99건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 56건 (신규 17건) · 뉴시스 4건, 뉴스1 3건, 연합뉴스 3건"
+      "summary": "오늘 80건 (신규 24건) · 뉴시스 6건, 뉴스1 4건, 연합뉴스 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-18T15:01:51+09:00"
+  "updated_at": "2026-11-18T18:01:55+09:00"
 }
