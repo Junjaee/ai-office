@@ -3,39 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 4건, 실패 0건, 11초",
+  "summary": "신규 1건, 실패 0건, 10초",
   "counts": {
-    "new": 4,
+    "new": 1,
     "failed": 0,
-    "total": 6912
+    "total": 6913
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 4건, 실패 0건, 11초",
-    "[신규] 이준석 “추경호 유죄 주장, 기본적 헌법 무시…尹·李 들어 심화된 법비들의 정치” — 문화일보",
-    "[신규] \"걸리면 취소, 안 걸리면 40억?\"…이혜훈 반포 원펜타스 '엄벌' 촉구하는 민심 — 뉴시스",
-    "[신규] 김중남 시장 국비 확보 사활…국회 예결위 집중공략 — 강원도민일보",
-    "[신규] [사설] 여야, 권력 겨냥 징계… 민생·예산 심의는 뒷전 — 아시아투데이"
+    "신규 1건, 실패 0건, 10초",
+    "[신규] ‘유아 영·수 학원비 세액공제 폐지’ 제동 건 국회 — 서울경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44364985313,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44364985313",
-  "request_id": "cron-202611181800",
+  "run_id": 44396998932,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44396998932",
+  "request_id": "cron-202611182100",
   "trigger": "schedule",
-  "started_at": "2026-11-19T03:01:39+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-19T06:01:36+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 92건"
+      "summary": "검색어 5개에서 89건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 15건 (신규 4건) · 뉴시스 2건, Traders Union 1건, 강원도민일보 1건"
+      "summary": "오늘 16건 (신규 1건) · 뉴시스 2건, Traders Union 1건, 강원도민일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-19T03:01:50+09:00"
+  "updated_at": "2026-11-19T06:01:47+09:00"
 }
