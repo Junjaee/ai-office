@@ -207,13 +207,40 @@
     } catch (e) { /* 데우기 실패가 예약을 막으면 안 된다 */ }
   }
 
-  // "HH:MM:SS"(또는 HH:MM) → 서버 기준 오늘 그 시각의 epoch. 못 읽으면 null.
+  // "HH:MM:SS" · "HH:MM" · "HH:MM:SS.mmm" → {h,m,s,ms}. 못 읽으면 null.
+  function parseHMS(hms) {
+    const m = /^(\d{1,2}):(\d{2})(?::(\d{2}))?(?:\.(\d{1,3}))?$/.exec((hms || "").trim());
+    if (m == null) return null;
+    return { h: +m[1], m: +m[2], s: +(m[3] || 0),
+             ms: +((m[4] || "0") + "00").slice(0, 3) };   // .9 → 900, .94 → 940
+  }
+
+  function fmtHMSms(d) {
+    return two(d.getHours()) + ":" + two(d.getMinutes()) + ":" + two(d.getSeconds())
+         + "." + String(d.getMilliseconds()).padStart(3, "0");
+  }
+
+  // 그 시각(서버 기준 오늘)의 epoch. 못 읽거나 시계를 못 맞췄으면 null.
   function targetEpoch(hms) {
-    const m = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/.exec(hms.trim());
-    if (m == null || offset === null) return null;
+    const p = parseHMS(hms);
+    if (p == null || offset === null) return null;
     const sv = new Date(Date.now() - offset);        // 서버 기준 지금
-    sv.setHours(+m[1], +m[2], +(m[3] || 0), 0);
+    sv.setHours(p.h, p.m, p.s, p.ms);
     return sv.getTime();                             // 서버 기준 목표
+  }
+
+  // 서버까지 왕복이 얼마나 걸리는지 잰다(ms). 여러 번 재서 가장 빠른 값.
+  // 늘 실제보다 느리게 나오므로(브라우저·네트워크 지연이 더해져서) 최솟값이 참값에 가깝다.
+  async function measurePing(rounds = 7) {
+    let best = Infinity;
+    for (let i = 0; i < rounds; i++) {
+      const t0 = performance.now();
+      try {
+        await fetch(CLOCK_URL + "?p=" + Math.random(), { method: "HEAD", cache: "no-store" });
+        best = Math.min(best, performance.now() - t0);
+      } catch (e) { /* 한 번 실패는 건너뛴다 */ }
+    }
+    return isFinite(best) ? best : null;
   }
 
   // 서버 시계가 target 이 될 때까지 기다린다. 0.4초 전에 연결을 데운다.
@@ -303,13 +330,15 @@
     ".clock{margin:0 0 6px;color:#444}",
     "#clock{color:#2f4b8b;font:700 15px/1.2 Consolas,monospace}",
     ".at{margin:0 0 8px;color:#444}",
-    "#at{width:92px;font:inherit;padding:2px 6px;border:1px solid #c9d2e3;border-radius:5px}",
+    "#at{width:108px;font:inherit;padding:2px 6px;border:1px solid #c9d2e3;border-radius:5px}",
+    "#ping{width:auto;flex:none;padding:3px 8px;font-size:12px;background:#e6e9f0;color:#333;margin-left:4px}",
     "</style>",
     '<div class="box">',
     '  <div class="hd" id="hd">시간제보육 예약기</div>',
     '  <div class="bd" id="bd">',
     '    <div class="clock">서버 시각 <b id="clock">맞추는 중…</b></div>',
-    '    <div class="at">시작 시각 <input id="at" value="08:59:58" placeholder="비우면 즉시"></div>',
+    '    <div class="at">시작 시각 <input id="at" value="09:00:00" placeholder="비우면 즉시">'
+    + '<button id="ping">속도측정</button></div>',
     '    <div class="btns">',
     '      <button class="go" id="go">시작</button>',
     '      <button class="no" id="no">멈춤</button>',
@@ -338,6 +367,27 @@
   setInterval(syncClock, 10 * 60 * 1000);
 
   $("hd").onclick = () => $("bd").classList.toggle("hide");
+
+  // [속도측정] — 서버까지 왕복을 재서, 그 절반(편도)만큼 시작 시각을 앞당긴다.
+  // 첫 발이 09:00:00.000 에 서버에 '도착'하도록 (가는 데 걸리는 만큼 미리 쏜다).
+  $("ping").onclick = async () => {
+    if ($("ping").disabled) return;
+    $("ping").disabled = true;
+    log("인터넷 속도 재는 중…");
+    try {
+      const rtt = await measurePing();
+      if (rtt === null) { log("속도를 못 쟀어요 — 다시 눌러 주세요"); return; }
+      const lead = Math.round(rtt / 2);               // 편도 ≈ 왕복의 절반
+      const base = parseHMS($("at").value) || { h: 9, m: 0, s: 0, ms: 0 };
+      const d = new Date(2000, 0, 1, base.h, base.m, base.s, base.ms - lead);  // lead 만큼 당김
+      $("at").value = fmtHMSms(d);
+      log("왕복 " + Math.round(rtt) + "ms · 편도 " + lead + "ms 당겨 → 시작 시각 " + $("at").value);
+    } catch (e) {
+      log("속도 측정 오류 — " + e.message);
+    } finally {
+      $("ping").disabled = false;
+    }
+  };
 
   $("go").onclick = async () => {
     if ($("go").disabled) return;
