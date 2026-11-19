@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 12초",
+  "summary": "신규 3건, 실패 1건, 15초",
   "counts": {
-    "new": 15,
-    "failed": 0,
-    "total": 7287
+    "new": 3,
+    "failed": 1,
+    "total": 6916
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 12초",
-    "[신규] 이준석 “한동훈은 ‘욕쟁이 할머니 집’…그런데 맛도 없어” — 한겨레",
-    "[신규] 이준석, 눈물의 기자회견 후 SNS에 \"당원 가입하기 좋은 날\" — JTBC",
-    "[신규] 정동만 의원, 가덕도신공항 건설사 간담회...공사비 현실화 등 의견 청취 — 시민행정신문",
-    "[신규] 인천광역시교육청, 학생선수 31명 대상 진천국가대표선수촌 체육 진로 캠프 운영 — 일간투데이"
+    "신규 3건, 실패 1건, 15초",
+    "[신규] 이준석 \"법 기술자들 정계 떠나야…AI로 입법 생산성 경쟁을\" — 동행미디어 시대",
+    "[신규] [천지일보 여론조사] “내일 총선이면 어디에 투표?”… 국힘 47.4%, 민주 31.5% — 천지일보",
+    "[신규] 예결소위 '공소청 특활비' 심사 쟁점…국힘 \"공소청 0원·중수청 42억 앞뒤 맞나\" — 뉴시스",
+    "[실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 43375747203,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43375747203",
-  "request_id": "cron-202611130600",
+  "run_id": 44425514509,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44425514509",
+  "request_id": "cron-202611190000",
   "trigger": "schedule",
-  "started_at": "2026-11-13T15:01:22+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-19T09:01:25+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 100건"
+      "status": "error",
+      "summary": "검색어 5개에서 64건, 실패 1개"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 71건 (신규 15건) · 시민행정신문 14건, 연합뉴스 5건, 뉴시스 3건"
+      "summary": "오늘 19건 (신규 3건) · 뉴시스 3건, Traders Union 1건, 강원도민일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-13T15:01:35+09:00"
+  "updated_at": "2026-11-19T09:01:40+09:00"
 }
