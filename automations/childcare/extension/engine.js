@@ -352,9 +352,12 @@
   document.body.appendChild(host);
 
   const $ = (id) => root.getElementById(id);
+  // 기록 시각은 **서버 시계 기준 밀리초까지**(조정하려면 세부 단위가 필요하다).
+  // 시계를 아직 못 맞췄으면 이 PC 시각으로 적는다.
   const log = (line) => {
     const el = $("log");
-    el.textContent += new Date().toLocaleTimeString("ko-KR") + "  " + line + "\n";
+    const now = offset === null ? new Date() : new Date(Date.now() - offset);
+    el.textContent += fmtHMSms(now) + "  " + line + "\n";
     el.scrollTop = el.scrollHeight;
   };
 
