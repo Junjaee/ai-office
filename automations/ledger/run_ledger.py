@@ -353,8 +353,10 @@ def do_work(cfg, args, progress):
         per_tab.setdefault(tab, {"add": 0, "cancel": 0})[kind] += 1
 
     def mark_done(mid):
+        # 받은편지함에서도 뺀다 — 처리 끝난 카드 문자가 쌓이지 않게 (사용자 결정 2026-11-19)
         gmail.users().messages().modify(
-            userId="me", id=mid, body={"addLabelIds": [label_id], "removeLabelIds": [pending_id]}).execute()
+            userId="me", id=mid,
+            body={"addLabelIds": [label_id], "removeLabelIds": [pending_id, "INBOX"]}).execute()
 
     def mark_pending(mid):
         gmail.users().messages().modify(

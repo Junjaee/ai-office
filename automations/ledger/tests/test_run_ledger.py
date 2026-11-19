@@ -160,6 +160,8 @@ def test_unparsable_mail_is_labeled_so_it_is_not_seen_again(monkeypatch):
     result = mod.do_work({}, args, lambda m: None)
     assert result["counts"] == {"new": 1, "replaced": 0, "skip": 1, "wait": 0, "failed": 0}
     assert sorted(g.labeled) == [("bad", ("L1",)), ("good", ("L1",))]
+    # 처리 끝난 문자는 받은편지함에서도 뺀다 (사용자 결정 2026-11-19)
+    assert sorted(g.unlabeled) == [("bad", ("P1", "INBOX")), ("good", ("P1", "INBOX"))]
 
 
 def test_dry_run_labels_nothing(monkeypatch):
@@ -192,7 +194,7 @@ def test_pending_is_done_once_the_tab_exists(monkeypatch):
     result = mod.do_work({}, args, lambda m: None)
     assert result["counts"]["new"] == 1 and result["counts"]["wait"] == 0
     assert g.labeled == [("dec", ("L1",))]
-    assert g.unlabeled == [("dec", ("P1",))]
+    assert g.unlabeled == [("dec", ("P1", "INBOX"))]   # 대기 라벨을 떼고 받은편지함에서도 뺀다
 
 
 def test_dry_run_does_not_label_pending(monkeypatch):
