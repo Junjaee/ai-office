@@ -11,22 +11,22 @@
   "next_run": "매주 목 17:00",
   "log": [
     "주말 일정 3건, 전송 1건, 2초",
-    "[11/14] 운동 일정",
-    "[11/14] 결혼식 일정",
-    "[11/14] 동탄7동 체육회 스크린골프"
+    "[11/21] 기타 일정",
+    "[11/22] 결혼식 일정",
+    "[11/22] 저녁 식사 일정"
   ],
   "link": "",
-  "run_id": 43179513383,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/43179513383",
-  "request_id": "cron-202611120800",
+  "run_id": 44484056013,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44484056013",
+  "request_id": "cron-202611190800",
   "trigger": "schedule",
-  "started_at": "2026-11-12T17:01:31+09:00",
+  "started_at": "2026-11-19T17:01:27+09:00",
   "duration_sec": 2,
   "tasks": [
     {
       "id": "fetch",
       "status": "done",
-      "summary": "토 3건 · 일 0건"
+      "summary": "토 1건 · 일 2건"
     },
     {
       "id": "send",
@@ -35,5 +35,5 @@
     }
   ],
   "id": "weekend",
-  "updated_at": "2026-11-12T17:01:34+09:00"
+  "updated_at": "2026-11-19T17:01:29+09:00"
 }
