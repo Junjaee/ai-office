@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 1건, 15초",
+  "summary": "신규 29건, 실패 0건, 10초",
   "counts": {
-    "new": 3,
-    "failed": 1,
-    "total": 6916
+    "new": 29,
+    "failed": 0,
+    "total": 6945
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 1건, 15초",
-    "[신규] 이준석 \"법 기술자들 정계 떠나야…AI로 입법 생산성 경쟁을\" — 동행미디어 시대",
-    "[신규] [천지일보 여론조사] “내일 총선이면 어디에 투표?”… 국힘 47.4%, 민주 31.5% — 천지일보",
-    "[신규] 예결소위 '공소청 특활비' 심사 쟁점…국힘 \"공소청 0원·중수청 42억 앞뒤 맞나\" — 뉴시스",
-    "[실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
+    "신규 29건, 실패 0건, 10초",
+    "[신규] KBO 총회, 허구연 총재 제26대 총재로 선출 — 시민행정신문",
+    "[신규] 국기원, ‘2026 자랑스러운 태권도인 상 시상식’개최 — 시민행정신문",
+    "[신규] 금융위원회, 불법사금융 원스톱 지원, 이제 센터 방문 없이 신청할 수 있어요! — 시민행정신문",
+    "[신규] 식약처, 'AI로 여는 식품위해평가의 새로운 지평' 모색 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44425514509,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44425514509",
-  "request_id": "cron-202611190000",
+  "run_id": 44448393904,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44448393904",
+  "request_id": "cron-202611190300",
   "trigger": "schedule",
-  "started_at": "2026-11-19T09:01:25+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-11-19T12:01:43+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
-      "status": "error",
-      "summary": "검색어 5개에서 64건, 실패 1개"
+      "status": "done",
+      "summary": "검색어 5개에서 94건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 19건 (신규 3건) · 뉴시스 3건, Traders Union 1건, 강원도민일보 1건"
+      "summary": "오늘 48건 (신규 29건) · 시민행정신문 9건, 뉴시스 7건, 머니투데이 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-19T09:01:40+09:00"
+  "updated_at": "2026-11-19T12:01:53+09:00"
 }
