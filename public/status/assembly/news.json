@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 29건, 실패 0건, 10초",
+  "summary": "신규 33건, 실패 0건, 11초",
   "counts": {
-    "new": 29,
+    "new": 33,
     "failed": 0,
-    "total": 6945
+    "total": 6978
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 29건, 실패 0건, 10초",
-    "[신규] KBO 총회, 허구연 총재 제26대 총재로 선출 — 시민행정신문",
-    "[신규] 국기원, ‘2026 자랑스러운 태권도인 상 시상식’개최 — 시민행정신문",
-    "[신규] 금융위원회, 불법사금융 원스톱 지원, 이제 센터 방문 없이 신청할 수 있어요! — 시민행정신문",
-    "[신규] 식약처, 'AI로 여는 식품위해평가의 새로운 지평' 모색 — 시민행정신문"
+    "신규 33건, 실패 0건, 11초",
+    "[신규] 장동혁·안철수·이준석, '한동훈 빼고' … 韓과 푸닥거리 없던 오세훈만 관망 — 뉴데일리",
+    "[신규] 2026년 제주시 교육행정협의회 정기회 개최 — 외교저널",
+    "[신규] 중소벤처기업부, 제3자 부당개입, 의심된다면 신고해주세요 — 시민행정신문",
+    "[신규] [신간] 오효석 기자의 네 번째 책 '내 얼굴에 침뱉기' 출간 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44448393904,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44448393904",
-  "request_id": "cron-202611190300",
+  "run_id": 44469085358,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44469085358",
+  "request_id": "cron-202611190600",
   "trigger": "schedule",
-  "started_at": "2026-11-19T12:01:43+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-19T15:01:41+09:00",
+  "duration_sec": 11,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 94건"
+      "summary": "검색어 5개에서 118건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 48건 (신규 29건) · 시민행정신문 9건, 뉴시스 7건, 머니투데이 2건"
+      "summary": "오늘 81건 (신규 33건) · 시민행정신문 13건, 뉴시스 10건, 뉴스1 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-19T12:01:53+09:00"
+  "updated_at": "2026-11-19T15:01:52+09:00"
 }
