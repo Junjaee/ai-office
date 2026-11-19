@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 15초",
+  "summary": "신규 5건, 실패 0건, 14초",
   "counts": {
     "new": 5,
     "failed": 0,
-    "total": 6849
+    "total": 6854
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 15초",
-    "[신규] 한-캐나다, 안정적·호혜적 에너지 공급망 구축 협력 지속 — 시민행정신문",
-    "[신규] 과기정통부, 생활현장 밀접형 전파규제 3건 개선 — 시민행정신문",
-    "[신규] 민주 `조희대 탄핵` 추진….권현서 `김민석, 대표직 내려놓을 각오해야`[일타뉴스] — 매일신문",
-    "[신규] 축산단체들 “내년 농업예산 증액해야” 한목소리 — 한국농정신문"
+    "신규 5건, 실패 0건, 14초",
+    "[신규] 개인정보위, 일본과 데이터 이전 및 인공지능 프라이버시 협력 강화 — 시민행정신문",
+    "[신규] 한성숙 국무총리, 주택공급 활성화를 위한 경기도권 지자체장 만찬간담회 개최 — 시민행정신문",
+    "[신규] 재경위 예산안 상정 관련 항하며 퇴장하는 국민의힘 — 뉴시스",
+    "[신규] 덕담 주고 받은 강원도-여야 정치권, ‘4707억’ 국회 증액 나선다 — 강원일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44549993247,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44549993247",
-  "request_id": "cron-202611191500",
+  "run_id": 44583261112,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44583261112",
+  "request_id": "cron-202611191800",
   "trigger": "schedule",
-  "started_at": "2026-11-20T00:01:25+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-11-20T03:01:33+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 130건"
+      "summary": "검색어 5개에서 127건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 5건 (신규 5건) · 시민행정신문 2건, 뉴시스 1건, 매일신문 1건"
+      "summary": "오늘 10건 (신규 5건) · 시민행정신문 4건, 뉴시스 2건, 강원일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-20T00:01:41+09:00"
+  "updated_at": "2026-11-20T03:01:48+09:00"
 }
