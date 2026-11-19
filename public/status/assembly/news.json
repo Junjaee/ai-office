@@ -1,41 +1,39 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 14초",
+  "summary": "신규 1건, 실패 1건, 18초",
   "counts": {
-    "new": 5,
-    "failed": 0,
-    "total": 6854
+    "new": 1,
+    "failed": 1,
+    "total": 6855
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 14초",
-    "[신규] 개인정보위, 일본과 데이터 이전 및 인공지능 프라이버시 협력 강화 — 시민행정신문",
-    "[신규] 한성숙 국무총리, 주택공급 활성화를 위한 경기도권 지자체장 만찬간담회 개최 — 시민행정신문",
-    "[신규] 재경위 예산안 상정 관련 항하며 퇴장하는 국민의힘 — 뉴시스",
-    "[신규] 덕담 주고 받은 강원도-여야 정치권, ‘4707억’ 국회 증액 나선다 — 강원일보"
+    "신규 1건, 실패 1건, 18초",
+    "[신규] 대한체육회·인천시교육청, 학생선수 대상 '진천선수촌 체육 진로 캠프' 개최 — 머니투데이",
+    "[실패] 예결위: 뉴스 요청 실패: '예결위' 기사 목록을 받지 못했습니다 (429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%EC%98%88%EA%B2%B0%EC%9C%84%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44583261112,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44583261112",
-  "request_id": "cron-202611191800",
+  "run_id": 44614449482,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44614449482",
+  "request_id": "cron-202611192100",
   "trigger": "schedule",
-  "started_at": "2026-11-20T03:01:33+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-11-20T06:01:27+09:00",
+  "duration_sec": 18,
   "tasks": [
     {
       "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 127건"
+      "status": "error",
+      "summary": "검색어 5개에서 102건, 실패 1개"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 5건) · 시민행정신문 4건, 뉴시스 2건, 강원일보 1건"
+      "summary": "오늘 11건 (신규 1건) · 시민행정신문 4건, 뉴시스 2건, 강원일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-20T03:01:48+09:00"
+  "updated_at": "2026-11-20T06:01:46+09:00"
 }
