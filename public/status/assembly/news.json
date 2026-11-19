@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 22건, 실패 0건, 13초",
+  "summary": "신규 5건, 실패 0건, 15초",
   "counts": {
-    "new": 22,
+    "new": 5,
     "failed": 0,
-    "total": 7045
+    "total": 6849
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 22건, 실패 0건, 13초",
-    "[신규] 이준석 대한전선 사장, 임직원과 소통··· 목표는 하나로, 과정은 치열하게, 결실은 함께 — 일렉트릭파워",
-    "[신규] “너무 잘 먹어 걱정”… 진천 첫 입촌 테크볼 대표팀, 이제 세계로 — 한국일보",
-    "[신규] 산업통상부 국가기술표준원, 소형드론 배터리 국가표준 제정 추진 — 시민행정신문",
-    "[신규] 2026년 유소년 지도자-학부모 대상 KBO 의무세미나 개최 — 시민행정신문"
+    "신규 5건, 실패 0건, 15초",
+    "[신규] 한-캐나다, 안정적·호혜적 에너지 공급망 구축 협력 지속 — 시민행정신문",
+    "[신규] 과기정통부, 생활현장 밀접형 전파규제 3건 개선 — 시민행정신문",
+    "[신규] 민주 `조희대 탄핵` 추진….권현서 `김민석, 대표직 내려놓을 각오해야`[일타뉴스] — 매일신문",
+    "[신규] 축산단체들 “내년 농업예산 증액해야” 한목소리 — 한국농정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44519926133,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44519926133",
-  "request_id": "cron-202611191200",
+  "run_id": 44549993247,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44549993247",
+  "request_id": "cron-202611191500",
   "trigger": "schedule",
-  "started_at": "2026-11-19T21:01:29+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-20T00:01:25+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 131건"
+      "summary": "검색어 5개에서 130건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 148건 (신규 22건) · 시민행정신문 32건, 뉴시스 12건, 연합뉴스 7건"
+      "summary": "오늘 5건 (신규 5건) · 시민행정신문 2건, 뉴시스 1건, 매일신문 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-19T21:01:42+09:00"
+  "updated_at": "2026-11-20T00:01:41+09:00"
 }
