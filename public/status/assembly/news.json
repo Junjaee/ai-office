@@ -3,39 +3,38 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 12초",
+  "summary": "신규 3건, 실패 0건, 10초",
   "counts": {
-    "new": 5,
+    "new": 3,
     "failed": 0,
-    "total": 6696
+    "total": 6699
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 12초",
-    "[신규] 행정안전부 장관, 도로살얼음 취약구간 안전관리 실태 점검 — 외교저널",
-    "[신규] 구자욱, MLB 사무국으로부터 신분조회 요청 — 시민행정신문",
-    "[신규] “2028년 총선 패배하면, 2030년 정권 되찾아도 다시 무너질 수 있어” — 월간중앙",
-    "[신규] 강대규 ``탄핵 남발` 민주당…기각되면 `국회의원 월급` 깎아야`[일타뉴스] — 매일신문"
+    "신규 3건, 실패 0건, 10초",
+    "[신규] 국힘 \"보복 탄핵·탈옥특검\"…연말 정국 '급랭' — 연합뉴스",
+    "[신규] 이개호 국회의원, 2027년 지역 현안·전통문화 예산 확보 총력…예결위원장·장관 면담 — 시사의창",
+    "[신규] 국회 교육위원회, 교육부 사업예산 약 3조7127억원 순증…예결위로 — 교육을 비추다"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44788718656,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44788718656",
-  "request_id": "cron-202611201800",
+  "run_id": 44816481389,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44816481389",
+  "request_id": "cron-202611202100",
   "trigger": "schedule",
-  "started_at": "2026-11-21T03:01:20+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-21T06:01:31+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 80건"
+      "summary": "검색어 5개에서 75건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 5건) · KNEWSLA 1건, 뉴스핌 1건, 뉴시스 1건"
+      "summary": "오늘 14건 (신규 3건) · KNEWSLA 1건, 교육을 비추다 1건, 뉴스핌 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-21T03:01:33+09:00"
+  "updated_at": "2026-11-21T06:01:42+09:00"
 }
