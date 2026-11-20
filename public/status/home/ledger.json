@@ -16,11 +16,11 @@
     "신규 0건, 취소 0건, 건너뜀 0건, 대기 0건, 실패 0건, 0초"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 44583266272,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44583266272",
-  "request_id": "cron-202611191800",
+  "run_id": 44642347190,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44642347190",
+  "request_id": "cron-202611200000",
   "trigger": "schedule",
-  "started_at": "2026-11-20T03:01:30+09:00",
+  "started_at": "2026-11-20T09:01:29+09:00",
   "duration_sec": 0,
   "tasks": [
     {
@@ -35,5 +35,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-11-20T03:01:31+09:00"
+  "updated_at": "2026-11-20T09:01:30+09:00"
 }
