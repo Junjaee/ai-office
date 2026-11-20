@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 17건, 실패 0건, 17초",
+  "summary": "신규 9건, 실패 0건, 13초",
   "counts": {
-    "new": 17,
+    "new": 9,
     "failed": 0,
-    "total": 6914
+    "total": 6923
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 17건, 실패 0건, 17초",
-    "[신규] 축구 접고 회사 그만두고 아시아 정상… 이준석, 인천 학생선수들 앞에 서다 — 한국무예신문",
-    "[신규] 기후에너지환경부, 전기차 보조금, 43만 대로 늘리겠습니다 — 시민행정신문",
-    "[신규] ‘독고다이’ 오세훈의 변신… 세 늘리며 ‘보수 빅텐트’ 시동? — 월간중앙",
-    "[신규] “오세훈 시장은 보수의 장형(長兄), 장동혁 대표는 통합 설계자 돼야” — 월간중앙"
+    "신규 9건, 실패 0건, 13초",
+    "[신규] 꽃놀이패 쥔 오세훈, ‘동·석·장’ 중 누구 손 먼저 잡을까 — 월간중앙",
+    "[신규] '마이 케이팝 스타' 시상하는 천하람 개혁신당 원내대표 — 뉴스핌",
+    "[신규] 李대통령 지지율 40%…민주 36%·국힘 28%로 오차밖 與우세[한국갤럽] — 연합뉴스",
+    "[신규] 대법원장 탄핵에 야권 강력 반발…한동훈 “친위쿠데타이자 내란” — 이슈밸리"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44707108918,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44707108918",
-  "request_id": "cron-202611200900",
+  "run_id": 44732236251,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44732236251",
+  "request_id": "cron-202611201200",
   "trigger": "schedule",
-  "started_at": "2026-11-20T18:01:26+09:00",
-  "duration_sec": 17,
+  "started_at": "2026-11-20T21:01:19+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 70건"
+      "summary": "검색어 5개에서 73건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 70건 (신규 17건) · 시민행정신문 9건, 뉴시스 8건, MTN 머니투데이방송 2건"
+      "summary": "오늘 79건 (신규 9건) · 뉴시스 10건, 시민행정신문 9건, 연합뉴스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-20T18:01:44+09:00"
+  "updated_at": "2026-11-20T21:01:33+09:00"
 }
