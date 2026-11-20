@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 9건, 실패 0건, 13초",
+  "summary": "신규 6건, 실패 0건, 16초",
   "counts": {
-    "new": 9,
+    "new": 6,
     "failed": 0,
-    "total": 6923
+    "total": 6691
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 9건, 실패 0건, 13초",
-    "[신규] 꽃놀이패 쥔 오세훈, ‘동·석·장’ 중 누구 손 먼저 잡을까 — 월간중앙",
-    "[신규] '마이 케이팝 스타' 시상하는 천하람 개혁신당 원내대표 — 뉴스핌",
-    "[신규] 李대통령 지지율 40%…민주 36%·국힘 28%로 오차밖 與우세[한국갤럽] — 연합뉴스",
-    "[신규] 대법원장 탄핵에 야권 강력 반발…한동훈 “친위쿠데타이자 내란” — 이슈밸리"
+    "신규 6건, 실패 0건, 16초",
+    "[신규] 국힘 “조희대 탄핵은 판결 보복”…민주당과 정면충돌 — KNEWSLA",
+    "[신규] 이 대통령 지지율 40%, 1%p↑...민주 36%·국힘 28%[한국갤럽] — 여성신문",
+    "[신규] 관악구의회, 예결특위 구성…1조1756억원 내년도 예산안 심사 — 시정일보",
+    "[신규] 이개호 국회의원, 2027년 ’지역 핵심사업·전통문화 예산’ 국비 확보 건의 — 목포타임즈"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44732236251,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44732236251",
-  "request_id": "cron-202611201200",
+  "run_id": 44758988224,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44758988224",
+  "request_id": "cron-202611201500",
   "trigger": "schedule",
-  "started_at": "2026-11-20T21:01:19+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-21T00:01:38+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 73건"
+      "summary": "검색어 5개에서 74건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 79건 (신규 9건) · 뉴시스 10건, 시민행정신문 9건, 연합뉴스 3건"
+      "summary": "오늘 6건 (신규 6건) · KNEWSLA 1건, 뉴시스 1건, 목포타임즈 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-20T21:01:33+09:00"
+  "updated_at": "2026-11-21T00:01:56+09:00"
 }
