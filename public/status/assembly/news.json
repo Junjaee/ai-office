@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 13초",
+  "summary": "신규 17건, 실패 0건, 17초",
   "counts": {
-    "new": 20,
+    "new": 17,
     "failed": 0,
-    "total": 6897
+    "total": 6914
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 13초",
-    "[신규] “유시민·이준석 코인 발언 아쉬워…이젠 인식 바꿔야” — 이데일리",
-    "[신규] 조희대의 사법부가 스스로 부끄러워해야 할 추경호의 무죄:서울의 소리 — 서울의 소리",
-    "[신규] 정일영 의원, ‘수능 부정행위 10년 응시정지’법안 발의 — 시민행정신문",
-    "[신규] 민주당, 조희대 대법원장 탄핵 추진…정치권 삼권분립 공방 격화 — 일간투데이"
+    "신규 17건, 실패 0건, 17초",
+    "[신규] 축구 접고 회사 그만두고 아시아 정상… 이준석, 인천 학생선수들 앞에 서다 — 한국무예신문",
+    "[신규] 기후에너지환경부, 전기차 보조금, 43만 대로 늘리겠습니다 — 시민행정신문",
+    "[신규] ‘독고다이’ 오세훈의 변신… 세 늘리며 ‘보수 빅텐트’ 시동? — 월간중앙",
+    "[신규] “오세훈 시장은 보수의 장형(長兄), 장동혁 대표는 통합 설계자 돼야” — 월간중앙"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44684807201,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44684807201",
-  "request_id": "cron-202611200600",
+  "run_id": 44707108918,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44707108918",
+  "request_id": "cron-202611200900",
   "trigger": "schedule",
-  "started_at": "2026-11-20T15:01:22+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-20T18:01:26+09:00",
+  "duration_sec": 17,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 97건"
+      "summary": "검색어 5개에서 70건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 53건 (신규 20건) · 뉴시스 8건, 시민행정신문 8건, 뉴스1 2건"
+      "summary": "오늘 70건 (신규 17건) · 시민행정신문 9건, 뉴시스 8건, MTN 머니투데이방송 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-20T15:01:36+09:00"
+  "updated_at": "2026-11-20T18:01:44+09:00"
 }
