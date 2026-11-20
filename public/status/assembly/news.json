@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 16초",
+  "summary": "신규 5건, 실패 0건, 12초",
   "counts": {
-    "new": 6,
+    "new": 5,
     "failed": 0,
-    "total": 6691
+    "total": 6696
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 16초",
-    "[신규] 국힘 “조희대 탄핵은 판결 보복”…민주당과 정면충돌 — KNEWSLA",
-    "[신규] 이 대통령 지지율 40%, 1%p↑...민주 36%·국힘 28%[한국갤럽] — 여성신문",
-    "[신규] 관악구의회, 예결특위 구성…1조1756억원 내년도 예산안 심사 — 시정일보",
-    "[신규] 이개호 국회의원, 2027년 ’지역 핵심사업·전통문화 예산’ 국비 확보 건의 — 목포타임즈"
+    "신규 5건, 실패 0건, 12초",
+    "[신규] 행정안전부 장관, 도로살얼음 취약구간 안전관리 실태 점검 — 외교저널",
+    "[신규] 구자욱, MLB 사무국으로부터 신분조회 요청 — 시민행정신문",
+    "[신규] “2028년 총선 패배하면, 2030년 정권 되찾아도 다시 무너질 수 있어” — 월간중앙",
+    "[신규] 강대규 ``탄핵 남발` 민주당…기각되면 `국회의원 월급` 깎아야`[일타뉴스] — 매일신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44758988224,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44758988224",
-  "request_id": "cron-202611201500",
+  "run_id": 44788718656,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44788718656",
+  "request_id": "cron-202611201800",
   "trigger": "schedule",
-  "started_at": "2026-11-21T00:01:38+09:00",
-  "duration_sec": 16,
+  "started_at": "2026-11-21T03:01:20+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 74건"
+      "summary": "검색어 5개에서 80건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 6건 (신규 6건) · KNEWSLA 1건, 뉴시스 1건, 목포타임즈 1건"
+      "summary": "오늘 11건 (신규 5건) · KNEWSLA 1건, 뉴스핌 1건, 뉴시스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-21T00:01:56+09:00"
+  "updated_at": "2026-11-21T03:01:33+09:00"
 }
