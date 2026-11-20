@@ -337,7 +337,7 @@
     '  <div class="hd" id="hd">시간제보육 예약기</div>',
     '  <div class="bd" id="bd">',
     '    <div class="clock">서버 시각 <b id="clock">맞추는 중…</b></div>',
-    '    <div class="at">시작 시각 <input id="at" value="09:00:00" placeholder="비우면 즉시">'
+    '    <div class="at">시작 시각 <input id="at" value="08:59:59.450" placeholder="비우면 즉시">'
     + '<button id="ping">속도측정</button></div>',
     '    <div class="btns">',
     '      <button class="go" id="go">시작</button>',
