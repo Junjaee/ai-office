@@ -3,36 +3,37 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 16초",
+  "summary": "신규 2건, 실패 0건, 12초",
   "counts": {
-    "new": 1,
+    "new": 2,
     "failed": 0,
-    "total": 6586
+    "total": 6588
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 16초",
-    "[신규] 범보수 차기 대선주자 장동혁·오세훈 접전…2030 표심은 오세훈 [쿠키뉴스 여론조사] — 쿠키뉴스"
+    "신규 2건, 실패 0건, 12초",
+    "[신규] 조희대의 사법부가 스스로 부끄러워해야 할 추경호의 무죄 — 국민뉴스",
+    "[신규] 해외 주식 안 팔았는데 양도세 폭탄 왜? — 에너지경제신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44933149018,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44933149018",
-  "request_id": "cron-202611211800",
+  "run_id": 44949273175,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44949273175",
+  "request_id": "cron-202611212100",
   "trigger": "schedule",
-  "started_at": "2026-11-22T03:01:25+09:00",
-  "duration_sec": 16,
+  "started_at": "2026-11-22T06:01:31+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 32건"
+      "summary": "검색어 5개에서 33건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 7건 (신규 1건) · JTBC 1건, SeattleN 1건, 경기일보 1건"
+      "summary": "오늘 9건 (신규 2건) · JTBC 1건, SeattleN 1건, 경기일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-22T03:01:42+09:00"
+  "updated_at": "2026-11-22T06:01:44+09:00"
 }
