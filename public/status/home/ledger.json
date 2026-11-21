@@ -17,11 +17,11 @@
     "[추가] 2026년 11월 1건"
   ],
   "link": "https://docs.google.com/spreadsheets/d/1A36RI04614y4ZPGE01gRVy_aIIoblg1XPVErcfNtzkg/edit",
-  "run_id": 44889547705,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44889547705",
-  "request_id": "cron-202611210925",
+  "run_id": 44893172383,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44893172383",
+  "request_id": "cron-202611211011",
   "trigger": "schedule",
-  "started_at": "2026-11-21T18:26:29+09:00",
+  "started_at": "2026-11-21T19:12:23+09:00",
   "duration_sec": 3,
   "tasks": [
     {
@@ -36,5 +36,5 @@
     }
   ],
   "id": "ledger",
-  "updated_at": "2026-11-21T18:26:32+09:00"
+  "updated_at": "2026-11-21T19:12:27+09:00"
 }
