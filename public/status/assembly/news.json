@@ -3,39 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 6건, 실패 0건, 13초",
+  "summary": "신규 1건, 실패 0건, 16초",
   "counts": {
-    "new": 6,
+    "new": 1,
     "failed": 0,
-    "total": 6585
+    "total": 6586
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 6건, 실패 0건, 13초",
-    "[신규] 이재명-김문수, 수도권 ‘유세 대결’…이준석, 이틀째 ‘광주 공략’ — JTBC",
-    "[신규] 인천 갤러리 그림마실, ‘작은숨’ 첫 번째 전시회 개최…일상 속 예술로 전하는 따뜻한 위로 — 외교저널",
-    "[신규] 해외서 구매한 위고비·마운자로, 12일부터 3개월분 반입 허용 > 뉴스포커스 — SeattleN",
-    "[신규] “복통령이 개혁신당에?”…국회의원 꿈꿨던 박상보 근황 보니 — 주간경향"
+    "신규 1건, 실패 0건, 16초",
+    "[신규] 범보수 차기 대선주자 장동혁·오세훈 접전…2030 표심은 오세훈 [쿠키뉴스 여론조사] — 쿠키뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44916880517,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44916880517",
-  "request_id": "cron-202611211500",
+  "run_id": 44933149018,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44933149018",
+  "request_id": "cron-202611211800",
   "trigger": "schedule",
-  "started_at": "2026-11-22T00:01:23+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-22T03:01:25+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 35건"
+      "summary": "검색어 5개에서 32건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 6건 (신규 6건) · JTBC 1건, SeattleN 1건, 경기일보 1건"
+      "summary": "오늘 7건 (신규 1건) · JTBC 1건, SeattleN 1건, 경기일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-22T00:01:37+09:00"
+  "updated_at": "2026-11-22T03:01:42+09:00"
 }
