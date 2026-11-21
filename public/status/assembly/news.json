@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 10초",
+  "summary": "신규 5건, 실패 0건, 17초",
   "counts": {
-    "new": 3,
+    "new": 5,
     "failed": 0,
-    "total": 6699
+    "total": 6704
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 10초",
-    "[신규] 국힘 \"보복 탄핵·탈옥특검\"…연말 정국 '급랭' — 연합뉴스",
-    "[신규] 이개호 국회의원, 2027년 지역 현안·전통문화 예산 확보 총력…예결위원장·장관 면담 — 시사의창",
-    "[신규] 국회 교육위원회, 교육부 사업예산 약 3조7127억원 순증…예결위로 — 교육을 비추다"
+    "신규 5건, 실패 0건, 17초",
+    "[신규] 개혁신당 김정철 전 최고위원, “내가 바뀐 것인가. 아니면 개혁신당 가치가 바뀐 것인가?” — 에브리뉴스 EveryNews",
+    "[신규] 보훈부, ‘2026년 보훈문화 체험활동 우수 프로그램 경진대회’ 20일 개최 — 외교저널",
+    "[신규] 산림청, 시민참여형 서포터즈 '홍릉숲지킴이' 발대식 개최 — 시민행정신문",
+    "[신규] '마이 케이팝 스타' 시상식서 발언하는 천하람 원내대표 — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44816481389,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44816481389",
-  "request_id": "cron-202611202100",
+  "run_id": 44840892672,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44840892672",
+  "request_id": "cron-202611210000",
   "trigger": "schedule",
-  "started_at": "2026-11-21T06:01:31+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-21T09:01:23+09:00",
+  "duration_sec": 17,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 75건"
+      "summary": "검색어 5개에서 71건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 14건 (신규 3건) · KNEWSLA 1건, 교육을 비추다 1건, 뉴스핌 1건"
+      "summary": "오늘 19건 (신규 5건) · 뉴스핌 2건, 시민행정신문 2건, 외교저널 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-21T06:01:42+09:00"
+  "updated_at": "2026-11-21T09:01:41+09:00"
 }
