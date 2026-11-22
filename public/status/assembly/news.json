@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 13초",
+  "summary": "신규 7건, 실패 0건, 10초",
   "counts": {
-    "new": 3,
+    "new": 7,
     "failed": 0,
-    "total": 6518
+    "total": 6525
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 13초",
-    "[신규] 이준석 “사법부 정치적 압박 참담…근조 민주당, 부끄러운 줄 알라” — www.dt.co.kr",
-    "[신규] 예산 처리시한 D-9…여야, 미래대응기금 놓고 벼랑끝 대치 전망 — 경북신문",
-    "[신규] [단독] 토스·직방 키운 '청년창업사관학교', 폐교 안한다 — 이데일리",
-    "[정리] 오래된 기록 121건 삭제"
+    "신규 7건, 실패 0건, 10초",
+    "[신규] 이준석 “민주당은 한 방에 무너질 것… 부끄러운 줄 알라” — 세계일보",
+    "[신규] 송영길 의원, 인천 12개 대학 총학생회와 ‘치맥 간담회’… 인천 청년 주거·취업·역차별 논의 — 시민행정신문",
+    "[신규] 해양수산부, 김장철을 맞아 천일염과 젓갈에 대한 원산지 표시를 더 꼼꼼하게 점검한다 — 시민행정신문",
+    "[신규] [단독] 산업부 “수출지원 기여금서 상선·원전 빼야” — 서울경제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45035909201,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45035909201",
-  "request_id": "cron-202611221500",
+  "run_id": 45052625107,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45052625107",
+  "request_id": "cron-202611221800",
   "trigger": "schedule",
-  "started_at": "2026-11-23T00:01:28+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-23T03:01:27+09:00",
+  "duration_sec": 10,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 62건"
+      "summary": "검색어 5개에서 68건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 3건 (신규 3건) · www.dt.co.kr 1건, 경북신문 1건, 이데일리 1건"
+      "summary": "오늘 10건 (신규 7건) · 시민행정신문 2건, www.dt.co.kr 1건, 강원도민일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-23T00:01:42+09:00"
+  "updated_at": "2026-11-23T03:01:37+09:00"
 }
