@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 9초",
+  "summary": "신규 20건, 실패 0건, 12초",
   "counts": {
-    "new": 15,
+    "new": 20,
     "failed": 0,
-    "total": 6606
+    "total": 6626
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 9초",
-    "[신규] [속보] 이준석 “민주당은 한 방에 무너질 것… 부끄러운 줄 알라” — 세계일보",
-    "[신규] '조희대 탄핵' 추진에 이준석 \"근조 민주당…역풍으로 한방에 무너질 것\" — 머니투데이",
-    "[신규] 이준석 “사법부 정지 시도 민주당, 입법부 마비 ‘망상 법비’처럼 무너질 것” — 서울신문",
-    "[신규] [열린광광] 자강 없는 보수 대통합의 허상 — 기호일보"
+    "신규 20건, 실패 0건, 12초",
+    "[신규] 이준석 \"근조 민주당…조희대 탄핵 강행하면 한 방에 무너질 것\" — 뉴스핌",
+    "[신규] [속보] 이준석 “근조 민주당, 부끄러운 줄 알라”...조희대 탄핵에 맹비난 — 경기일보",
+    "[신규] “근조 민주당”…이준석이 찌른 조희대 탄핵의 급소 — OBC 뉴스",
+    "[신규] 이준석 \"민주당, 대법원장 탄핵 시 한 방에 무너진다\" — 더팩트"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44991824819,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44991824819",
-  "request_id": "cron-202611220600",
+  "run_id": 45005456130,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45005456130",
+  "request_id": "cron-202611220900",
   "trigger": "schedule",
-  "started_at": "2026-11-22T15:01:32+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-11-22T18:01:29+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 33건"
+      "summary": "검색어 5개에서 59건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 27건 (신규 15건) · 뉴시스 2건, 매일신문 2건, 머니투데이 2건"
+      "summary": "오늘 47건 (신규 20건) · 경기일보 3건, 연합뉴스 3건, 뉴스핌 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-22T15:01:42+09:00"
+  "updated_at": "2026-11-22T18:01:42+09:00"
 }
