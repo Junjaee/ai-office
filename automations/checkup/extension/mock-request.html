@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>네이버 예약 :: 영유아 검진 (월요일~금요일)</title></head>
+<body><div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script>
+// 네이버 예약 ExtraInputForm·SubmitButton 조각(2026-11-16)을 같은 구조·같은 이벤트로 옮긴 가짜 신청서.
+const h = React.createElement, { useState } = React;
+const FORMS = [
+  { type: "SELECT", title: "본원에 진료 기록이 있습니까?(차트 번호 있음)", options: ["있음", "없음(예약불가/확인시 통보없이 취소됨)"] },
+  { type: "SELECT", title: "(필수)개인정보 제공 동의", options: ["동의", "비동의"] },
+  { type: "SELECT", title: "주민등록번호 확인 안내로 연락드립니다. 꼭 받아주세요! (가입시 등록 연락처로 드립니다)", options: ["동의"] },
+  { type: "TEXTAREA", title: "영유아검진 받을 아이 - 이름 / 생일(6자리)" },
+  { type: "TEXTAREA", title: "엄마 생일(6자리), 아빠 생일(6자리)" },
+  { type: "SELECT", title: "예약 후 정보 수정 안됩니다.정확하게 입력 해주세요.정보 누락시 취소에 동의 하시나요?", options: ["동의"] },
+];
+// 주소에 ?form=clinic 을 붙이면 교정 클리닉의 신청서(상품 전용 질문 넷, 2026-11-22 설정값)로 바뀐다
+if (/form=clinic/.test(location.search)) FORMS.splice(0, FORMS.length,
+  { type: "TEXTAREA", title: "교정 클리닉 받을 아이 이름/나이" },
+  { type: "SELECT", title: "(필수) 개인정보 제공 동의", options: ["네 확인했습니다."] },
+  { type: "CHECKBOX", title: "교정 진행 과목을 잘 확인하셨나요?", options: ["두상 교정(단두, 사두, 주상두증, 헬멧 문의 등)", "다리 교정(평발, 안짱다리, O다리, X다리 등)"] },
+  { type: "SELECT", title: "예약 당일 취소가 발생하지 않도록 일정을 잘 확인해 주시기 바랍니다.", options: ["네 확인했습니다."] });
+function Checkbox({ i, options, onChange }) {
+  const picked = React.useRef({});
+  return options.map((t, n) => h("div", { className: "form_checkbox", key: n }, h("label", { className: "label" },
+    h("input", { type: "checkbox", className: "input blind", value: t, defaultChecked: false,
+      onChange: (e) => { picked.current[t] = e.target.checked; onChange(i, options.filter((o) => picked.current[o]).join(",")); } }),
+    h("span", { className: "icon" }), h("span", { className: "text" }, t))));
+}
+function Select({ i, value, options, onChange }) {
+  const [open, setOpen] = useState(false);
+  return h("div", { className: "form_select" },
+    h("button", { type: "button", className: "select_btn" + (open ? " active" : ""), onClick: () => setOpen(!open) },
+      value || h("span", { className: "placeholder" }, "해당하는 항목을 선택해주세요."), h("i", { className: "fn-booking" })),
+    open && h("ul", { className: "select_list" },
+      !value && h("li", null, h("button", { type: "button", className: "select_item selected" }, "해당하는 항목을 선택해주세요.", h("i"))),
+      options.map((t, n) => h("li", { key: n }, h("button", { type: "button", className: "select_item" + (value === t ? " selected" : ""),
+        onClick: () => { onChange(i, t); setOpen(false); } }, t, value === t && h("span", { className: "blind" }, "선택됨"))))));
+}
+function Textarea({ i, onChange }) {
+  return h("div", { className: "form_text textarea" }, h("label", { className: "label" },
+    h("textarea", { name: "extra" + i, id: "extra" + i, cols: 30, rows: 1, className: "input", placeholder: "내용을 입력해주세요.",
+      onInput: (e) => onChange(i, e.target.value.trim()), defaultValue: "" })));
+}
+function App() {
+  const [vals, setVals] = useState({}), [ready, setReady] = useState(false), [pop, setPop] = useState("");
+  React.useEffect(() => { setTimeout(() => setReady(true), 300); }, []);          // 질문은 한 박자 늦게 그려진다
+  const onChange = (i, v) => setVals((old) => ({ ...old, [i]: v }));
+  window.__vals = vals;
+  return h("div", null,
+    h("section", { "data-valid": "details" }, h("h3", { className: "booking_title" }, "예약자 정보"),
+      h("textarea", { placeholder: "업체에 요청하실 내용을 적어주세요." })),
+    h("section", { className: "section_booking_extra", "data-valid": "extra" }, h("div", { className: "booking_inner" },
+      h("h3", { className: "booking_title" }, "추가 정보"),
+      ready && FORMS.map((f, i) => h("div", { key: i },
+        h(f.type === "SELECT" ? "label" : "span", { className: "form_title", htmlFor: "extra" + i }, f.title, h("span", { className: "necessary_text" }, "필수")),
+        f.type === "SELECT" ? h(Select, { i, value: vals[i], options: f.options, onChange })
+          : f.type === "CHECKBOX" ? h(Checkbox, { i, options: f.options, onChange }) : h(Textarea, { i, onChange }))))),
+    pop && h("div", { className: "popup_wrap" }, pop),
+    h("button", { type: "button", "data-tst_submit_click": "1", onClick: () => {
+      if (FORMS.some((f, i) => !vals[i])) return setPop("필수 항목을 모두 입력해 주세요.");
+      sessionStorage.setItem("mock.sent", JSON.stringify(vals));
+      location.replace("/my/bookings/12345?popup=BookingCompletion");
+    } }, "동의하고 예약하기"));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(h(App));
+</script></body></html>

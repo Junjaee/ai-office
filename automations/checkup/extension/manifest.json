@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "영유아검진 예약기",
+  "version": "1.4.3",
+  "description": "하이엔 소아청소년과 영유아검진 네이버 예약을 월요일 9시 정각에 잡습니다.",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://booking.naver.com/*",
+        "https://m.booking.naver.com/*"
+      ],
+      "js": ["rules.js", "content.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ]
+}
