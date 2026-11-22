@@ -1,40 +1,22 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 12초",
-  "counts": {
-    "new": 3,
-    "failed": 0,
-    "total": 6591
-  },
+  "summary": "뉴스 목록을 받아오지 못했어요",
+  "counts": {},
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 12초",
-    "[신규] 인사동 아라아트센터서 3일 연속 대규모 문화예술·시상 행사 열린다. — 시민행정신문",
-    "[신규] ‘이준석 사퇴’ 개혁신당, 비대위 전환 돌입…이르면 13일 지명 발표 — 쿠키뉴스",
-    "[신규] 예산 처리시한 D-10…여야, 미래대응기금 놓고 벼랑끝 대치 가나 — 연합뉴스"
+    "뉴스 목록을 받아오지 못했어요",
+    "RuntimeError: [실패] 이준석: 뉴스 요청 실패: '이준석' 기사 목록을 받지 못했습니다 (503 Server Error: Service Unavailable for url: https://news.google.com/rss/search?q=%EC%9D%B4%EC%A4%80%EC%84%9D%20when%3A1d&hl=ko&gl=KR&ceid=KR:ko)"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 44964533237,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44964533237",
-  "request_id": "cron-202611220000",
+  "run_id": 44978654978,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44978654978",
+  "request_id": "cron-202611220300",
   "trigger": "schedule",
-  "started_at": "2026-11-22T09:01:28+09:00",
-  "duration_sec": 12,
-  "tasks": [
-    {
-      "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 30건"
-    },
-    {
-      "id": "digest",
-      "status": "done",
-      "summary": "오늘 12건 (신규 3건) · 쿠키뉴스 2건, JTBC 1건, SeattleN 1건"
-    }
-  ],
+  "started_at": "2026-11-22T12:01:31+09:00",
+  "duration_sec": 120,
   "id": "news",
-  "updated_at": "2026-11-22T09:01:42+09:00"
+  "updated_at": "2026-11-22T12:03:32+09:00"
 }
