@@ -3,39 +3,36 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 7건, 실패 0건, 10초",
+  "summary": "신규 1건, 실패 0건, 14초",
   "counts": {
-    "new": 7,
+    "new": 1,
     "failed": 0,
-    "total": 6525
+    "total": 6526
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 7건, 실패 0건, 10초",
-    "[신규] 이준석 “민주당은 한 방에 무너질 것… 부끄러운 줄 알라” — 세계일보",
-    "[신규] 송영길 의원, 인천 12개 대학 총학생회와 ‘치맥 간담회’… 인천 청년 주거·취업·역차별 논의 — 시민행정신문",
-    "[신규] 해양수산부, 김장철을 맞아 천일염과 젓갈에 대한 원산지 표시를 더 꼼꼼하게 점검한다 — 시민행정신문",
-    "[신규] [단독] 산업부 “수출지원 기여금서 상선·원전 빼야” — 서울경제"
+    "신규 1건, 실패 0건, 14초",
+    "[신규] 이준석 “장동혁, 황교안의 길 가나”｜국민의힘 부정선거 논란·장외투쟁, 차기 총선 대패 경고 — 진주인터넷뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45052625107,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45052625107",
-  "request_id": "cron-202611221800",
+  "run_id": 45069641276,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45069641276",
+  "request_id": "cron-202611222100",
   "trigger": "schedule",
-  "started_at": "2026-11-23T03:01:27+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-23T06:01:29+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 68건"
+      "summary": "검색어 5개에서 72건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 10건 (신규 7건) · 시민행정신문 2건, www.dt.co.kr 1건, 강원도민일보 1건"
+      "summary": "오늘 11건 (신규 1건) · 시민행정신문 2건, www.dt.co.kr 1건, 강원도민일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-23T03:01:37+09:00"
+  "updated_at": "2026-11-23T06:01:44+09:00"
 }
