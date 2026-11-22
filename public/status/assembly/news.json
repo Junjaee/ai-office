@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 20건, 실패 0건, 12초",
+  "summary": "신규 10건, 실패 0건, 14초",
   "counts": {
-    "new": 20,
+    "new": 10,
     "failed": 0,
-    "total": 6626
+    "total": 6636
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 20건, 실패 0건, 12초",
-    "[신규] 이준석 \"근조 민주당…조희대 탄핵 강행하면 한 방에 무너질 것\" — 뉴스핌",
-    "[신규] [속보] 이준석 “근조 민주당, 부끄러운 줄 알라”...조희대 탄핵에 맹비난 — 경기일보",
-    "[신규] “근조 민주당”…이준석이 찌른 조희대 탄핵의 급소 — OBC 뉴스",
-    "[신규] 이준석 \"민주당, 대법원장 탄핵 시 한 방에 무너진다\" — 더팩트"
+    "신규 10건, 실패 0건, 14초",
+    "[신규] 이준석 “근조 민주당, 부끄러운 줄 알라”...조희대 탄핵에 맹비난 — 경기일보",
+    "[신규] 이준석, '조희대 탄핵' 추진에…\"근조 민주당, 한방에 무너질 것\" — 뉴시스",
+    "[신규] [열린광장] 자강 없는 보수 대통합의 허상 — 기호일보",
+    "[신규] 이재명 대통령, 울산 전통시장 방문 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45005456130,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45005456130",
-  "request_id": "cron-202611220900",
+  "run_id": 45020096600,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45020096600",
+  "request_id": "cron-202611221200",
   "trigger": "schedule",
-  "started_at": "2026-11-22T18:01:29+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-22T21:01:30+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 59건"
+      "summary": "검색어 5개에서 67건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 47건 (신규 20건) · 경기일보 3건, 연합뉴스 3건, 뉴스핌 2건"
+      "summary": "오늘 57건 (신규 10건) · 경기일보 4건, 시민행정신문 4건, 뉴시스 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-22T18:01:42+09:00"
+  "updated_at": "2026-11-22T21:01:45+09:00"
 }
