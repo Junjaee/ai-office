@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 18건, 실패 0건, 13초",
+  "summary": "신규 3건, 실패 0건, 14초",
   "counts": {
-    "new": 18,
+    "new": 3,
     "failed": 0,
-    "total": 6635
+    "total": 6582
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 18건, 실패 0건, 13초",
-    "[신규] 보수 대연합부터 코스피 반토막까지, 이준석의 해법은…24일 라이브 출연 [불편한 여의도] — 중앙일보, 미주중앙일보",
-    "[신규] 개인정보위, 한전 개인정보 유출사고 조사 착수 — 시민행정신문",
-    "[신규] 교육부, 대학수학능력시험 부정행위 신고센터 안내 — 시민행정신문",
-    "[신규] 정은경 보건복지부장관, 난임 당사자 직접 만나 난임 지원제도 개선 위한 의견 청취 — 시민행정신문"
+    "신규 3건, 실패 0건, 14초",
+    "[신규] 국힘·개혁신당 “정부 세법개정안 전면 수정해야…다음 총선은 심판 선거될 것” — 동아일보",
+    "[신규] 제307회 안산시의회 정례회 예결위원장, 최찬규 의원 선출 — 광교신문",
+    "[신규] 충남도의회, 경기도의회서 예산심사 벤치마킹 — www.briefingcc.com",
+    "[정리] 오래된 기록 56건 삭제"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45170298902,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45170298902",
-  "request_id": "cron-202611231200",
+  "run_id": 45200417499,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45200417499",
+  "request_id": "cron-202611231500",
   "trigger": "schedule",
-  "started_at": "2026-11-23T21:01:28+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-24T00:01:30+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 115건"
+      "summary": "검색어 5개에서 114건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 120건 (신규 18건) · 뉴시스 14건, 시민행정신문 13건, 뉴스1 3건"
+      "summary": "오늘 3건 (신규 3건) · www.briefingcc.com 1건, 광교신문 1건, 동아일보 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-23T21:01:43+09:00"
+  "updated_at": "2026-11-24T00:01:45+09:00"
 }
