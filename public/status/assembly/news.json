@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 14초",
+  "summary": "신규 9건, 실패 0건, 13초",
   "counts": {
-    "new": 3,
+    "new": 9,
     "failed": 0,
-    "total": 6582
+    "total": 6591
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 14초",
-    "[신규] 국힘·개혁신당 “정부 세법개정안 전면 수정해야…다음 총선은 심판 선거될 것” — 동아일보",
-    "[신규] 제307회 안산시의회 정례회 예결위원장, 최찬규 의원 선출 — 광교신문",
-    "[신규] 충남도의회, 경기도의회서 예산심사 벤치마킹 — www.briefingcc.com",
-    "[정리] 오래된 기록 56건 삭제"
+    "신규 9건, 실패 0건, 13초",
+    "[신규] 이준석, 코스피 급락에 제도 개선 3대 제안…“반대매매 기준 통일해야” — 뉴스코리아",
+    "[신규] 기후에너지환경부, 현장의 걸림돌 걷어내고 '햇빛소득마을' 안착 속도 낸다 — 시민행정신문",
+    "[신규] 산업통상부, 카타르와 LNG 공급망 안정화 및 플랜트・조선 분야 협력 확대 논의 — 시민행정신문",
+    "[신규] 해양수산부, 우리 바다장어로 든든한 겨울나기! '한어(韓漁)' 연말 보양 특별 기획전 열린다 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45200417499,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45200417499",
-  "request_id": "cron-202611231500",
+  "run_id": 45233790642,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45233790642",
+  "request_id": "cron-202611231800",
   "trigger": "schedule",
-  "started_at": "2026-11-24T00:01:30+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-11-24T03:01:27+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 114건"
+      "summary": "검색어 5개에서 111건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 3건 (신규 3건) · www.briefingcc.com 1건, 광교신문 1건, 동아일보 1건"
+      "summary": "오늘 12건 (신규 9건) · 시민행정신문 3건, OBC 뉴스 1건, www.briefingcc.com 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-24T00:01:45+09:00"
+  "updated_at": "2026-11-24T03:01:40+09:00"
 }
