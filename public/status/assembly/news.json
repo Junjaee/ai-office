@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "신규 28건, 실패 1건, 15초",
+  "summary": "신규 18건, 실패 0건, 13초",
   "counts": {
-    "new": 28,
-    "failed": 1,
-    "total": 6617
+    "new": 18,
+    "failed": 0,
+    "total": 6635
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 28건, 실패 1건, 15초",
-    "[신규] “2028년 총선은 부동산 심판 선거”…조정훈·이준석, 종부세 손질 요구 — 매일경제",
-    "[신규] 野, 이재명 정부 세법 개정안 비판 \"다음 총선은 부동산 심판 선거\" — 한국일보",
-    "[신규] 野 종부세 14억 통일·장특공제 유지…세법 8대 수정 요구 — SBS Biz",
-    "[신규] 국기연, '2026 국방 실물 인공지능 토론회' 개최 — 시민행정신문"
+    "신규 18건, 실패 0건, 13초",
+    "[신규] 보수 대연합부터 코스피 반토막까지, 이준석의 해법은…24일 라이브 출연 [불편한 여의도] — 중앙일보, 미주중앙일보",
+    "[신규] 개인정보위, 한전 개인정보 유출사고 조사 착수 — 시민행정신문",
+    "[신규] 교육부, 대학수학능력시험 부정행위 신고센터 안내 — 시민행정신문",
+    "[신규] 정은경 보건복지부장관, 난임 당사자 직접 만나 난임 지원제도 개선 위한 의견 청취 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45143267671,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45143267671",
-  "request_id": "cron-202611230900",
+  "run_id": 45170298902,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45170298902",
+  "request_id": "cron-202611231200",
   "trigger": "schedule",
-  "started_at": "2026-11-23T18:01:29+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-11-23T21:01:28+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
-      "status": "error",
-      "summary": "검색어 5개에서 99건, 실패 1개"
+      "status": "done",
+      "summary": "검색어 5개에서 115건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 102건 (신규 28건) · 뉴시스 14건, 시민행정신문 9건, 뉴스1 3건"
+      "summary": "오늘 120건 (신규 18건) · 뉴시스 14건, 시민행정신문 13건, 뉴스1 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-23T18:01:45+09:00"
+  "updated_at": "2026-11-23T21:01:43+09:00"
 }
