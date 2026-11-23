@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 449건, 교체 0건, 실패 2건, 187.4분",
+  "summary": "신규 456건, 교체 0건, 실패 2건, 186.9분",
   "counts": {
-    "new": 449,
+    "new": 456,
     "replaced": 0,
     "failed": 2,
-    "total": 14038
+    "total": 14494
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 449건, 교체 0건, 실패 2건, 187.4분",
-    "[신규] 서울특별시의회 제12대/제339회/교육위원회_제1차_2026-08-31.txt",
-    "[신규] 서울특별시의회 제9대/제264회/행정자치위원회행정사무감사_2015-11-20.txt",
+    "신규 456건, 교체 0건, 실패 2건, 186.9분",
+    "[신규] 서울특별시의회 제12대/제340회/행정자치위원회행정사무감사_2026-11-03.txt",
+    "[신규] 서울특별시의회 제12대/제339회/교통위원회_제2차_2026-09-01.txt",
     "[실패] 서울특별시의회 제261회 문화체육관광위원회 제1차[폐회중](2015.07.20 월요일): 요청 실패(3회): https://ms.smc.seoul.kr/record/recordView.do?key=d788de9c44653e32512d",
-    "[신규] 서울특별시의회 제9대/제254회/교통위원회_제5차_2014-07-24.txt"
+    "[신규] 서울특별시의회 제8대/제250회/교육위원회_제3차_2013-11-29.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 45047003263,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45047003263",
-  "request_id": "cron-202611221700",
+  "run_id": 45222914462,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45222914462",
+  "request_id": "cron-202611231700",
   "trigger": "schedule",
-  "started_at": "2026-11-23T02:01:29+09:00",
-  "duration_sec": 11241,
+  "started_at": "2026-11-24T02:01:32+09:00",
+  "duration_sec": 11214,
   "tasks": [
     {
       "id": "scan",
       "status": "error",
-      "summary": "의회 4/5곳 확인, 회의록 13940건"
+      "summary": "의회 4/5곳 확인, 회의록 14392건"
     },
     {
       "id": "fetch",
       "status": "error",
-      "summary": "신규 449건, 교체 0건"
+      "summary": "신규 456건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-11-23T05:08:52+09:00"
+  "updated_at": "2026-11-24T05:08:27+09:00"
 }
