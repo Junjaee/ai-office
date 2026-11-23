@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 26건, 실패 0건, 18초",
+  "summary": "신규 28건, 실패 1건, 15초",
   "counts": {
-    "new": 26,
-    "failed": 0,
-    "total": 6589
+    "new": 28,
+    "failed": 1,
+    "total": 6617
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 26건, 실패 0건, 18초",
-    "[신규] 국힘·개혁신당 '수도권 주거 혁신포럼' 의원들 \"부동산 세법개정안 전면 수정하라\" — www.everynews.co.kr",
-    "[신규] 국힘-개혁신당 “세법개정안 철회해야…다음 총선은 부동산 심판선거” — 동아일보",
-    "[신규] 이준석 “코스피 오를 때 조롱 많이 받았는데 5개월 만에…” 대안 제시 — 헤럴드경제",
-    "[신규] 개혁신당 \"'경기남부' 거점 마련 지속…AI·과학기술 의제 선도\" — 머니투데이"
+    "신규 28건, 실패 1건, 15초",
+    "[신규] “2028년 총선은 부동산 심판 선거”…조정훈·이준석, 종부세 손질 요구 — 매일경제",
+    "[신규] 野, 이재명 정부 세법 개정안 비판 \"다음 총선은 부동산 심판 선거\" — 한국일보",
+    "[신규] 野 종부세 14억 통일·장특공제 유지…세법 8대 수정 요구 — SBS Biz",
+    "[신규] 국기연, '2026 국방 실물 인공지능 토론회' 개최 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45121321431,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45121321431",
-  "request_id": "cron-202611230600",
+  "run_id": 45143267671,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45143267671",
+  "request_id": "cron-202611230900",
   "trigger": "schedule",
-  "started_at": "2026-11-23T15:01:28+09:00",
-  "duration_sec": 18,
+  "started_at": "2026-11-23T18:01:29+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 113건"
+      "status": "error",
+      "summary": "검색어 5개에서 99건, 실패 1개"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 74건 (신규 26건) · 뉴시스 14건, 시민행정신문 5건, www.dt.co.kr 2건"
+      "summary": "오늘 102건 (신규 28건) · 뉴시스 14건, 시민행정신문 9건, 뉴스1 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-23T15:01:47+09:00"
+  "updated_at": "2026-11-23T18:01:45+09:00"
 }
