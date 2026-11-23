@@ -3,36 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 1건, 실패 0건, 14초",
+  "summary": "신규 8건, 실패 0건, 13초",
   "counts": {
-    "new": 1,
+    "new": 8,
     "failed": 0,
-    "total": 6526
+    "total": 6534
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 1건, 실패 0건, 14초",
-    "[신규] 이준석 “장동혁, 황교안의 길 가나”｜국민의힘 부정선거 논란·장외투쟁, 차기 총선 대패 경고 — 진주인터넷뉴스"
+    "신규 8건, 실패 0건, 13초",
+    "[신규] '대법원장 탄핵' 마주한 보수 진영…'장·한·석' 이번엔 뭉칠까, 흩어질까 — 데일리안",
+    "[신규] 농촌진흥청, '제3회 RDA 인사이트 데이' 개최 — 시민행정신문",
+    "[신규] 과학기술정보통신부, 미래의 피지컬 AI 전문가 발굴! '2026 청소년 로보틱스 챌린지' 결선 개최 — 시민행정신문",
+    "[신규] ‘개혁신당’ 이기인, 용인정 나선다…“경기남부 새 이정표” — www.dt.co.kr"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45069641276,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45069641276",
-  "request_id": "cron-202611222100",
+  "run_id": 45086290934,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45086290934",
+  "request_id": "cron-202611230000",
   "trigger": "schedule",
-  "started_at": "2026-11-23T06:01:29+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-11-23T09:01:19+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 72건"
+      "summary": "검색어 5개에서 76건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 1건) · 시민행정신문 2건, www.dt.co.kr 1건, 강원도민일보 1건"
+      "summary": "오늘 19건 (신규 8건) · 시민행정신문 4건, www.dt.co.kr 2건, www.ngtv.tv 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-23T06:01:44+09:00"
+  "updated_at": "2026-11-23T09:01:32+09:00"
 }
