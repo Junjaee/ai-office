@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 14건, 실패 0건, 13초",
+  "summary": "신규 12건, 실패 2건, 19초",
   "counts": {
-    "new": 14,
-    "failed": 0,
-    "total": 6623
+    "new": 12,
+    "failed": 2,
+    "total": 6635
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 14건, 실패 0건, 13초",
-    "[신규] [칼럼] 기름값과 농촌기본소득에 대해…30·40대 ‘자칭 중도’의 생각에 놀랐다.:내외신문 — 내외신문",
-    "[신규] 이준석 \"강금실 국정원장이 뭔 뜬금포냐…李 선대위 명부 말곤 인사 수첩 없단 뜻\" — 데일리안",
-    "[신규] 주가 폭락 두고 엇갈린 처방…與 “주주 보호” 野 “종부세 폐지” — 매일경제 마켓",
-    "[신규] 국힘, 연평도포격전 16주년에 \"軍기강 바로세우고 안보 강화\" — 연합뉴스"
+    "신규 12건, 실패 2건, 19초",
+    "[신규] ‘보수 대연합’ 실현 가능할까… 이준석이 보는 성공 조건은 [불편한 여의도] — 중앙일보",
+    "[신규] 안철수·이준석이 문제 삼은 강금실의 ‘중국 정부 특별고문’ 경력, 어떤 일을 했나 — 주간경향",
+    "[신규] [세나정] 이기인 \"민심은 마일리지같은 것… 총선 10석 목표\" — 주간조선",
+    "[신규] 이준석, 강금실 국정원장 지명에 \"청개구리도 아니고...뜬금포\" — 경북도민일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45316476885,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45316476885",
-  "request_id": "cron-202611240300",
+  "run_id": 45337298427,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45337298427",
+  "request_id": "cron-202611240600",
   "trigger": "schedule",
-  "started_at": "2026-11-24T12:01:23+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-24T15:01:28+09:00",
+  "duration_sec": 19,
   "tasks": [
     {
       "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 107건"
+      "status": "error",
+      "summary": "검색어 5개에서 57건, 실패 2개"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 44건 (신규 14건) · 시민행정신문 6건, 뉴시스 2건, 동아일보 2건"
+      "summary": "오늘 56건 (신규 12건) · 시민행정신문 6건, 뉴시스 4건, 주간조선 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-24T12:01:37+09:00"
+  "updated_at": "2026-11-24T15:01:48+09:00"
 }
