@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 24건, 실패 0건, 11초",
+  "summary": "신규 22건, 실패 0건, 15초",
   "counts": {
-    "new": 24,
+    "new": 22,
     "failed": 0,
-    "total": 6696
+    "total": 6688
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 24건, 실패 0건, 11초",
-    "[신규] 이준석, 강금실 지명에 “정보·방첩 경력 전무” [정치오늘] — 시사오늘",
-    "[신규] 국힘, 한준호 때리며 강금실 정조준…\"中지방정부 고문 활동\"(종합) — 연합뉴스",
-    "[신규] 국토교통부, 중고차 광고 가격, 실제 구매비용 표시 추진 — 시민행정신문",
-    "[신규] 박정현 의원, 국가공무원노동조합 감사패 받아 “국가직행정공제회 출범까지 함께하겠다” — 시민행정신문"
+    "신규 22건, 실패 0건, 15초",
+    "[신규] 법무부, '친일반민족행위자재산조사위원회' 위원 9명 인선 작업 마무리…국회 임명동의 절차 진행 예정 — 시민행정신문",
+    "[신규] 지식재산처, '2026 대한민국 정부혁신 박람회' 참가 — 시민행정신문",
+    "[신규] 우주항공청, '지구 저궤도에서 심우주까지' 우주 광통신 워크숍 개최 — 시민행정신문",
+    "[신규] 제주시， 취약계층에 연탄 나눔 봉사활동 전개 — 외교저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45389442866,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45389442866",
-  "request_id": "cron-202611241200",
+  "run_id": 45420530115,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45420530115",
+  "request_id": "cron-202611241500",
   "trigger": "schedule",
-  "started_at": "2026-11-24T21:01:28+09:00",
-  "duration_sec": 11,
+  "started_at": "2026-11-25T00:01:34+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 119건"
+      "summary": "검색어 5개에서 147건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 117건 (신규 24건) · 시민행정신문 15건, 뉴시스 6건, 데일리안 4건"
+      "summary": "오늘 22건 (신규 22건) · 시민행정신문 8건, 외교저널 3건, JTBC 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-24T21:01:39+09:00"
+  "updated_at": "2026-11-25T00:01:50+09:00"
 }
