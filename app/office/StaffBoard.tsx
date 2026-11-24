@@ -1,7 +1,7 @@
 "use client";
 // 사무실 본문(2026-11-24, 사용자 결정): 위에는 조직도(팀 → 직원), 아래에는 업무 목록 + 고른 업무의 작업 기록.
 // 직원이 주인공이다 — 직원 이름은 직업 이름(TaskDef.title), 업무명은 그 아래 설명으로 쓴다.
-// 조직도에서 팀을 누르면 목록이 그 팀 업무만, 직원을 누르면 그 직원의 업무가 펼쳐진다.
+// 조직도는 팀 → 업무(자동화) → 직원 세 층이다. 팀을 누르면 목록이 그 팀 업무만, 업무 이름이나 직원을 누르면 그 업무가 펼쳐진다.
 // 묶음 순서·기본 선택은 app/board-rules.ts, 깨어나는 때 문구는 app/flow-rules.ts.
 import { useMemo, useState } from "react";
 import { boardGroups, pickOnBoard, staffName } from "../board-rules";
@@ -80,20 +80,24 @@ export default function StaffBoard({ ws, depts, automations, views, loaded, canR
                   <b>{d.name}</b>
                   <small>{count}명</small>
                 </button>
-                <div className="org-crew">
-                  {autos.map((a) =>
-                    a.tasks.map((t) => {
+                {/* 팀 안에서도 업무(자동화)별로 나눈다 — 한 팀이 서로 다른 일 둘을 맡기도 한다(자료실 정리팀 = 수신함 정리 + 화성시 공고) */}
+                {autos.map((a) => (
+                  <div key={a.id} className={`org-crew ${a.id === selId ? "on" : ""}`}>
+                    <button className="org-part" onClick={() => setPicked(a.id)} title="이 업무 펼쳐 보기">
+                      {a.name}
+                    </button>
+                    {a.tasks.map((t) => {
                       const state = stateOf(a, t);
                       return (
-                        <button key={`${a.id}.${t.id}`} className="org-m" onClick={() => setPicked(a.id)} title={`${t.name} — ${t.role}`}>
+                        <button key={t.id} className="org-m" onClick={() => setPicked(a.id)} title={`${t.name} — ${t.role}`}>
                           <Face task={t} tone={toneOf(d.id)} />
                           <b>{staffName(t)}</b>
                           <Pill cls={STATE_CLASS[state]} text={LABELS[state]} />
                         </button>
                       );
-                    }),
-                  )}
-                </div>
+                    })}
+                  </div>
+                ))}
               </div>
             );
           })}

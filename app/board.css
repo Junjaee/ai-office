@@ -19,6 +19,8 @@
 .org-lead b { display: block; font-size: 14.5px; font-weight: 700; word-break: keep-all; }
 .org-lead small { display: block; margin-top: 2px; color: var(--d-soft); font-size: 12px; }
 .org-crew { display: flex; width: 100%; flex-direction: column; gap: 6px; margin-top: 8px; padding: 8px; border-radius: 12px; background: var(--s-idle-bg); }
+.org-part { min-height: 32px; padding: 2px 6px; border: 0; background: none; color: var(--d-soft); font: inherit; font-size: 12.5px; font-weight: 700; text-align: left; word-break: keep-all; cursor: pointer; }
+.org-part:hover { color: var(--d-ink); }
 .org-m { display: flex; min-height: 44px; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 7px 8px; border: 0; border-radius: 9px; background: #fff; color: var(--d-ink); font: inherit; text-align: left; cursor: pointer; }
 .org-m:hover { box-shadow: inset 0 0 0 1px var(--d-line-strong); }
 .org-m b { min-width: 0; flex: 1 1 auto; font-size: 13px; font-weight: 500; word-break: keep-all; }
@@ -26,7 +28,9 @@
 /* 고른 업무의 팀(또는 걸러 보는 팀) */
 .org-team.on > .org-stem { background: var(--accent); }
 .org-team.on .org-lead { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-.org-team.on .org-crew { background: var(--accent-soft); }
+/* 고른 업무의 직원들만 짙게 */
+.org-crew.on { background: var(--accent-soft); }
+.org-crew.on .org-part { color: var(--d-ink); }
 
 /* ── 업무 목록 + 고른 업무 ──────────────────────────────── */
 .work { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
