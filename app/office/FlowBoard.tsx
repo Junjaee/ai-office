@@ -3,6 +3,7 @@
 // 그림은 사무실 설정(app/workspaces/<사무실>.ts)에서 그대로 읽는다. 자동화를 더하면 여기도 저절로 늘어난다.
 // 작업 칸 색은 대시보드와 같은 상태(app/status.ts → status-rules.ts)라 지금 도는 것이 그대로 보인다.
 import { useEffect, useMemo } from "react";
+import { staffName } from "../board-rules";
 import { WAKE_LABEL, WAKE_NOTE, wakeGroups, wakeNote } from "../flow-rules";
 import { LABELS, STATE_CLASS, isRealAutomation, type TaskState } from "../status-rules";
 import { useLiveStatus } from "../status";
@@ -77,8 +78,11 @@ export default function FlowBoard({ ws: wsId }: { ws: string }) {
                           const state: TaskState = v?.tasks[t.id]?.state ?? (t.planned ? "planned" : "idle");
                           return (
                             <li className={`flow-step ${STATE_CLASS[state]}`} key={t.id}>
-                              <b>{t.name}</b>
-                              <small>{t.role}</small>
+                              <b>{staffName(t)}</b>
+                              <small>
+                                {t.title ? `${t.name} — ` : ""}
+                                {t.role}
+                              </small>
                               <span>{LABELS[state]}</span>
                             </li>
                           );

@@ -1,16 +1,17 @@
 "use client";
-// 단일 페이지 대시보드(2026-10-02 픽셀 사무실에서 전환):
-// 머리글(사무실 탭) → 제목·전체 시작 → 배너 → 요약 5칸 → 자동화 카드 + 옆 패널(시간대별 실행·언제 실행되나) → 실행 이력(날짜별) → 토스트
+// 단일 페이지 대시보드(2026-10-02 픽셀 사무실에서 전환, 2026-11-24 직원 중심으로):
+// 머리글(사무실 탭) → 제목·전체 시작 → 배너 → 요약 5칸 → 조직도 + 업무 목록·작업 기록(StaffBoard)
+// → 시간대별 실행·언제 실행되나 → 실행 이력(날짜별) → 토스트
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { WORKSPACE } from "../../company.config";
 import { WORKSPACE_LIST } from "../workspaces";
-import { LABELS, STATE_CLASS, TRIGGER_LABEL, durationText, historyLabel, relativeTime, secondsText, type AutomationView, type TaskState } from "../status-rules";
+import { LABELS, STATE_CLASS, TRIGGER_LABEL, durationText, historyLabel, secondsText, type AutomationView } from "../status-rules";
 import { useLiveStatus } from "../status";
 import { useHistory } from "../history";
 import { HISTORY_START, bucketsText, clampDate, dayStats, historyMessage, historyTitle, hourBuckets, runsTitle, shiftDate } from "../history-rules";
-import ReviewPanel from "./ReviewPanel";
 import { Icon, Pill } from "./Pill";
+import StaffBoard from "./StaffBoard";
 
 const ws = WORKSPACE;
 const COMPANY = ws.company;
@@ -33,7 +34,6 @@ export default function OfficeApp() {
   const live = useLiveStatus(ws);
   const [toast, setToast] = useState("");
   const [busy, setBusy] = useState<Set<string>>(() => new Set());
-  const [open, setOpen] = useState<Set<string>>(() => new Set());
   const [histDate, setHistDate] = useState<string | null>(null); // null = 오늘
   const [histAll, setHistAll] = useState(false);
   const hist = useHistory(ws, histDate);
@@ -139,14 +139,6 @@ export default function OfficeApp() {
     [live, showToast],
   );
 
-  const toggleOpen = (id: string) =>
-    setOpen((s) => {
-      const n = new Set(s);
-      if (n.has(id)) n.delete(id);
-      else n.add(id);
-      return n;
-    });
-
   const now = new Date();
   const canRun = live.canRun !== false;
   const scheduled = cardViews.filter((v) => v.nextRun);
@@ -250,158 +242,9 @@ export default function OfficeApp() {
           ) : null}
         </section>
 
-        <div className="dash-main">
-          <section className="dash-list" aria-label="자동화">
-            <div className="section-head">
-              <h2>자동화 {cardViews.length}개</h2>
-              <span>{live.loaded ? live.summary.brief : "자동화 상태를 불러오는 중…"}</span>
-            </div>
-            {visibleDepts.length === 0 ? (
-              <div className="empty-state">
-                아직 연결된 자동화가 없어요.
-                <br />
-                <small>자동화가 생기면 이 자리에 카드가 생깁니다.</small>
-              </div>
-            ) : (
-              <div className="auto-cards">
-                {cardViews.map((v) => {
-                  const def = visibleAutomations.find((a) => a.id === v.id)!;
-                  const dept = ws.departments.find((d) => d.id === v.dept);
-                  const isOpen = open.has(v.id) || v.state === "error";
-                  const hasReview = Boolean(def.review && def.workflow);
-                  const real = Boolean(def.workflow || def.local);
-                  return (
-                    <article key={v.id} className={`auto-card ${hasReview ? "wide" : ""}`} id={`auto-${v.id}`}>
-                      <div className="auto-head">
-                        <div className="auto-title">
-                          <span className="auto-team">{dept?.name}</span>
-                          <h3>{v.name}</h3>
-                        </div>
-                        <Pill cls={STATE_CLASS[v.state]} text={LABELS[v.state]} />
-                      </div>
-                      <p className="auto-sub">
-                        {v.sub}
-                        {v.state === "error" && v.runUrl ? (
-                          <>
-                            {" · "}
-                            <a href={v.runUrl} target="_blank" rel="noreferrer">
-                              자세한 기록 보기 ↗
-                            </a>
-                          </>
-                        ) : null}
-                      </p>
-                      <ul className="task-list">
-                        {def.tasks.map((t) => {
-                          const ts = v.tasks[t.id];
-                          const state: TaskState = ts?.state ?? "idle";
-                          return (
-                            <li key={t.id} id={`task-${v.id}.${t.id}`} className="task-row" title={t.role}>
-                              <span className={`task-ico ${STATE_CLASS[state]}`}>
-                                <Icon name={state} size={12} />
-                              </span>
-                              <b>{t.name}</b>
-                              {ts?.note && (state === "done" || state === "error") ? <small>{ts.note}</small> : null}
-                              <em className={STATE_CLASS[state]}>{LABELS[state]}</em>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                      {hasReview ? (
-                        <ReviewPanel
-                          ws={ws.id}
-                          automationId={v.id}
-                          title={def.review!.title ?? "검토"}
-                          canRun={canRun}
-                          busy={busy.has(v.id) || v.state === "running"}
-                          onRun={(inputs) => run(v.id, inputs)}
-                        />
-                      ) : null}
-                      {real ? (
-                        <dl className="auto-facts">
-                          <div>
-                            <dt>마지막 실행</dt>
-                            <dd>{v.lastRunAt ? relativeTime(v.lastRunAt, now) : "아직 실행한 적 없어요"}</dd>
-                          </div>
-                          {v.durationSec != null ? (
-                            <div>
-                              <dt>걸린 시간</dt>
-                              <dd>{secondsText(v.durationSec)}</dd>
-                            </div>
-                          ) : null}
-                          {v.trigger ? (
-                            <div>
-                              <dt>방식</dt>
-                              <dd>{TRIGGER_LABEL[v.trigger]}</dd>
-                            </div>
-                          ) : null}
-                          {v.nextRun ? (
-                            <div>
-                              <dt>다음 실행</dt>
-                              <dd>{v.nextRun}</dd>
-                            </div>
-                          ) : null}
-                          {v.counts?.total != null ? (
-                            <div>
-                              <dt>누적</dt>
-                              <dd>{v.counts.total.toLocaleString("ko-KR")}건</dd>
-                            </div>
-                          ) : null}
-                        </dl>
-                      ) : null}
-                      {isOpen ? (
-                        <div className="auto-log">
-                          {v.log?.length ? (
-                            <ul>
-                              {v.log.slice(0, 5).map((line, i) => (
-                                <li key={i}>{line}</li>
-                              ))}
-                            </ul>
-                          ) : null}
-                          {v.runUrl ? (
-                            <a href={v.runUrl} target="_blank" rel="noreferrer">
-                              자세한 기록 보기 (GitHub 실행 페이지) ↗
-                            </a>
-                          ) : null}
-                        </div>
-                      ) : null}
-                      <div className="auto-actions">
-                        {def.workflow && canRun ? (
-                          <button className="btn btn-primary btn-run" onClick={() => run(v.id)} disabled={busy.has(v.id) || v.state === "running" || !live.loaded}>
-                            <Icon name="play" size={13} fill />
-                            {busy.has(v.id) ? "요청 중…" : def.review ? "주제 뽑기" : "시작"}
-                          </button>
-                        ) : null}
-                        {def.live ? (
-                          <a className="btn btn-dark" href={`/${ws.id}/live/${v.id}`}>
-                            <Icon name="pulse" size={15} />
-                            실시간 보기
-                          </a>
-                        ) : null}
-                        {def.page ? (
-                          <a className="btn btn-dark" href={def.page.href}>
-                            <Icon name="runs" size={15} />
-                            {def.page.label}
-                          </a>
-                        ) : null}
-                        {v.link ? (
-                          <a className="btn btn-ghost" href={v.link} target="_blank" rel="noreferrer">
-                            결과 폴더 열기 ↗
-                          </a>
-                        ) : null}
-                        {v.log?.length || v.runUrl ? (
-                          <button className="btn btn-ghost" onClick={() => toggleOpen(v.id)} aria-expanded={isOpen}>
-                            {isOpen ? "접기" : "자세히"}
-                          </button>
-                        ) : null}
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            )}
-          </section>
+        <StaffBoard ws={ws} depts={visibleDepts} automations={visibleAutomations} views={cardViews} loaded={live.loaded} canRun={canRun} busy={busy} now={now} run={run} />
 
-          <aside className="dash-side">
+        <div className="dash-extra">
             {runnable.length > 0 ? (
               <section className="panel">
                 <div className="panel-head">
@@ -444,7 +287,6 @@ export default function OfficeApp() {
                 </ul>
               </section>
             ) : null}
-          </aside>
         </div>
 
         {runnable.length > 0 ? (

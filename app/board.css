@@ -1,0 +1,77 @@
+/* 사무실 본문: 조직도 + 업무 목록·작업 기록 — app/office/StaffBoard.tsx (2026-11-24).
+   색 토큰은 globals.css, 상태 pill·버튼·.panel·.auto-facts·.auto-log 는 dashboard.css 것을 그대로 쓴다. */
+
+/* ── 직원 얼굴(직업 이름 첫 글자) ───────────────────────── */
+.st-av { display: grid; width: 28px; height: 28px; flex: none; place-items: center; border-radius: 50%; color: #1f2937; font-size: 12.5px; font-weight: 700; }
+.st-av.stacked { width: 26px; height: 26px; margin-left: -8px; border: 2px solid #fff; font-size: 12px; }
+
+/* ── 조직도 ─────────────────────────────────────────────── */
+.org { align-items: center; gap: 0; padding: 22px 20px; }
+.org-root { padding: 12px 28px; border-radius: 12px; background: var(--accent); color: #fff; text-align: center; }
+.org-root b { display: block; font-size: 15px; font-weight: 700; }
+.org-root span { display: block; margin-top: 2px; font-size: 12.5px; opacity: .85; }
+.org-stem { display: block; width: 2px; height: 18px; background: var(--d-line-strong); }
+.org-bar { display: block; width: 82%; height: 2px; background: var(--d-line-strong); }
+.org-teams { display: grid; width: 100%; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.org-team { display: flex; min-width: 0; flex-direction: column; align-items: center; }
+.org-lead { width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid var(--d-line-strong); border-radius: 12px; background: #fff; color: var(--d-ink); font: inherit; text-align: center; cursor: pointer; }
+.org-lead:hover { border-color: var(--d-soft); }
+.org-lead b { display: block; font-size: 14.5px; font-weight: 700; word-break: keep-all; }
+.org-lead small { display: block; margin-top: 2px; color: var(--d-soft); font-size: 12px; }
+.org-crew { display: flex; width: 100%; flex-direction: column; gap: 6px; margin-top: 8px; padding: 8px; border-radius: 12px; background: var(--s-idle-bg); }
+.org-m { display: flex; min-height: 44px; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 7px 8px; border: 0; border-radius: 9px; background: #fff; color: var(--d-ink); font: inherit; text-align: left; cursor: pointer; }
+.org-m:hover { box-shadow: inset 0 0 0 1px var(--d-line-strong); }
+.org-m b { min-width: 0; flex: 1 1 auto; font-size: 13px; font-weight: 500; word-break: keep-all; }
+.org-m .status-pill { height: 24px; padding: 0 8px; font-size: 12px; }
+/* 고른 업무의 팀(또는 걸러 보는 팀) */
+.org-team.on > .org-stem { background: var(--accent); }
+.org-team.on .org-lead { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.org-team.on .org-crew { background: var(--accent-soft); }
+
+/* ── 업무 목록 + 고른 업무 ──────────────────────────────── */
+.work { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+.work-list { min-width: 0; flex: 1 1 380px; overflow: hidden; border: 1px solid var(--d-line); border-radius: 14px; background: #fff; }
+.work-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; padding: 14px; }
+.work-head h2 { font-size: 18px; font-weight: 700; }
+.work-head span { color: var(--d-faint); font-size: 12.5px; }
+.work-grp { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-top: 1px solid var(--d-line); background: var(--d-line-soft); color: var(--d-soft); font-size: 12.5px; }
+.work-grp .status-pill { height: 24px; padding: 0 8px; font-size: 12px; }
+.work-row { display: flex; width: 100%; min-height: 48px; flex-wrap: wrap; align-items: center; gap: 2px 10px; padding: 8px 14px; border: 0; border-top: 1px solid var(--d-line-soft); background: #fff; color: var(--d-ink); font: inherit; text-align: left; cursor: pointer; }
+.work-row:hover { background: var(--d-line-soft); }
+.work-row.on { background: var(--accent-soft); }
+.work-row b { flex: 1 1 auto; font-size: 14px; font-weight: 500; word-break: keep-all; }
+.work-row.on b { font-weight: 700; }
+.work-row small { color: var(--d-soft); font-size: 12.5px; }
+.work-faces { display: flex; padding-left: 8px; }
+
+.work-detail { display: flex; min-width: 0; flex: 999 1 520px; flex-direction: column; gap: 18px; padding: 22px 24px; border: 1px solid var(--d-line); border-radius: 14px; background: #fff; }
+.work-title { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.work-title h2 { margin-top: 2px; font-size: 24px; font-weight: 700; letter-spacing: -.02em; word-break: keep-all; }
+.work-title-side { display: flex; align-items: center; gap: 10px; }
+.work-facts { padding: 14px 16px; border-radius: 12px; background: var(--d-line-soft); }
+.work-h3 { margin-bottom: 14px; font-size: 15px; font-weight: 700; }
+
+/* 작업 기록 — 직원 순서대로 세로 줄에 꿴다 */
+.steps { display: flex; flex-direction: column; gap: 18px; margin: 0 0 0 6px; padding: 0 0 0 20px; border-left: 2px solid var(--d-line); list-style: none; }
+.step { position: relative; display: flex; flex-direction: column; gap: 4px; }
+.step::before { content: ""; position: absolute; top: 8px; left: -28px; width: 10px; height: 10px; border: 2px solid #fff; border-radius: 50%; background: var(--s-idle); }
+.step.working::before { background: var(--s-run); }
+.step.done::before { background: var(--s-done); }
+.step.error::before { background: var(--s-err); }
+.step.end::before { top: 4px; background: var(--d-faint); }
+.step-who { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.step-who b { font-size: 14px; font-weight: 700; }
+.step-who .status-pill { height: 24px; padding: 0 8px; font-size: 12px; }
+.step-note { margin: 0; color: var(--d-ink); font-size: 13.5px; overflow-wrap: anywhere; }
+.step-role { margin: 0; color: var(--d-soft); font-size: 12.5px; }
+.step.end b { font-size: 14px; font-weight: 500; }
+
+/* 본문 아래 곁들임: 시간대별 실행 횟수 · 언제 실행되나 */
+.dash-extra { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 14px; }
+
+@media (max-width: 680px) {
+  .org { padding: 16px 12px; }
+  .org-bar { width: 2px; height: 10px; }
+  .work-detail { padding: 18px 16px; }
+  .work-title h2 { font-size: 21px; }
+}

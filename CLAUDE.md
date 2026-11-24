@@ -19,9 +19,9 @@
 
 ## 화면이 보여 주는 것 (바꾸지 말 것)
 
-- 직원 = 자동화의 하위 작업(`automations[].tasks[]`). 이름은 사람 이름이 아니라 **업무명**.
+- 직원 = 자동화의 하위 작업(`automations[].tasks[]`). **직원 이름은 직업 이름**(`tasks[].title` — "속기사", "사서", "메일 연락관"; 사용자 결정 2026-11-24)이고, 업무명(`tasks[].name`)은 그 아래 설명으로 쓴다. 사람 이름("김대리")은 쓰지 않는다 — 이름만 봐도 하는 일을 알 수 있어야 한다. 같은 일을 하는 직원이 여럿이면 앞에 구분을 붙인다(메일 연락관·회의 연락관). 사무실 안에서 겹치지 않아야 하고, 실제로 도는 자동화의 직원은 반드시 짓는다(`tests/board-rules.test.mjs` 가 검사). 화면에서는 `app/board-rules.ts` 의 `staffName()` 으로 읽는다.
 - 직원 상태는 네 가지뿐: **쉬는 중 · 일하는 중 · 끝남 · 오류** (+ 아직 자동화 안 된 업무는 "준비 중"). 상태는 색만으로 구분하지 않고 **아이콘 + 글자**를 함께 쓴다(그림 문자 대신 선 아이콘).
-- **화면 구성(대시보드, 2026-10-02)**: 머리글(사무실 탭·마지막 확인) → 제목·전체 시작 → 배너 → 요약 5칸(상태별 직원 수 4칸 + 그 날 실행 횟수) → 자동화 카드(팀 이름·상태·직원별 상태·마지막 실행·걸린 시간·방식·다음 실행·누적) + 옆 패널(시간대별 실행 횟수 막대, 언제 실행되나) → 실행 이력 표(30줄 넘으면 "더 보기"). 보이는 카드 = 실제로 도는 자동화(워크플로 또는 local)가 붙은 부서의 자동화. 픽셀 사무실(월드·캐릭터)은 화면에서 뺐다 — `app/game/`·`app/office.css` 는 남아 있지만 쓰지 않는다(되살릴 일이 없으면 지워도 된다). 모양은 `app/dashboard.css`, 색 토큰은 `app/globals.css`(`--accent` = 사무실 대표 색).
+- **화면 구성(대시보드, 2026-10-02 · 직원 중심으로 2026-11-24)**: 머리글(사무실 탭·마지막 확인) → 제목·전체 시작 → 배너 → 요약 5칸(상태별 직원 수 4칸 + 그 날 실행 횟수) → **조직도**(사무실 → 팀 → 직원, 직원마다 상태) → **업무 목록**(상태별 묶음: 일하는 중 → 오류 → 끝남 → 쉬는 중) + **고른 업무**(시작 단추·일하는 때·마지막 실행·걸린 시간·방식·다음 실행·누적·검토 칸·직원 순서대로의 작업 기록·로그·실시간 보기·결과 폴더) → 시간대별 실행 횟수 막대·언제 실행되나 → 실행 이력 표(30줄 넘으면 "더 보기"). 조직도에서 팀을 누르면 목록이 그 팀 업무만, 직원을 누르면 그 직원의 업무가 펼쳐진다. 처음 열면 목록 맨 위(일하는 중·오류)가 펼쳐져 있다. 자동화 카드 격자는 없앴다(사용자가 시안 5종 가운데 "조직도 + 업무 목록·작업 기록"을 골랐다). 보이는 팀·업무 = 실제로 도는 자동화(워크플로 또는 local)가 붙은 부서의 자동화. 본문은 `app/office/StaffBoard.tsx`·`app/board.css`, 묶음 순서·기본 선택은 `app/board-rules.ts`. 픽셀 사무실(월드·캐릭터)은 화면에서 뺐다 — `app/game/`·`app/office.css` 는 남아 있지만 쓰지 않는다(되살릴 일이 없으면 지워도 된다). 모양은 `app/dashboard.css`, 색 토큰은 `app/globals.css`(`--accent` = 사무실 대표 색).
 - **흐름 화면**(`/<사무실>/flow`, 2026-11-09): 머리글의 "흐름 보기"로 연다. 자동화를 **무엇이 깨우는지**로 묶고(일이 생기면 · 정해진 시각에 · 사람이 시작할 때만 · 이 PC 에서), 자동화마다 작업(직원)을 화살표로 이어 그린다. 칸 색은 대시보드와 같은 상태다. 묶는 규칙은 `app/flow-rules.ts`(순수, `import type` 만), 화면은 `app/office/FlowBoard.tsx`·`app/flow.css`. **자료는 전부 사무실 설정에서 읽으므로 자동화를 더하면 그림도 저절로 늘어난다** — 손으로 그린 그림은 두지 않는다. 시각이 아니라 일이 생겼을 때 도는 자동화는 설정에 `wake: "새 상임위 메일이 오면"` 한 줄을 적는다(깨우는 쪽 코드가 있어야 한다 — `tests/flow-rules.test.mjs` 가 검사).
 - 요약 줄의 **전체 시작**, 카드마다 **시작** 버튼이 실제로 GitHub Actions 를 실행한다(`POST /api/run`). **전체 시작은 따라다니는 머리글(sticky nav)에 두지 않는다** — 스크롤하면 카드의 ▶ 시작 자리와 겹쳐 개별 시작 대신 전체가 눌렸다(2026-09-10). 버튼 보호는 없다(사이트 주소를 아는 사람은 누구나 실행 가능). 중복 실행 방지·하루 50회 상한은 Worker 가 지킨다.
 - **사이트 변경은 모든 사무실에 함께 적용한다.** 사무실 하나만 고치는 요청이라도 나머지 사무실에서 깨지지 않는지 본다.
@@ -39,7 +39,7 @@
 새 자동화를 만들 때뿐 아니라 **이미 있는 자동화에 기능을 더할 때도** 그 일을 직원(`tasks[]`) 하나로 만들어 사이트에서 보이게 한다.
 사용자는 코드가 아니라 화면(카드·흐름)으로 자동화를 파악한다 — 화면에 없는 일은 없는 일이 된다.
 (질의순서 이미지 보내기를 메일의 `notify` 안에 넣었다가 흐름 화면에서 안 보여 지적받았다.)
-① `app/workspaces/<사무실>.ts` 의 `tasks[]` ② `automations/<id>/config.actions.yaml` 의 `tasks:` ③ 파이썬 `report(..., tasks=[...])` — 셋이 같아야 하고, 어긋나면 `tests/workspaces.test.mjs` 가 잡는다.
+① `app/workspaces/<사무실>.ts` 의 `tasks[]`(직업 이름 `title` 포함) ② `automations/<id>/config.actions.yaml` 의 `tasks:` ③ 파이썬 `report(..., tasks=[...])` — 셋이 같아야 하고, 어긋나면 `tests/workspaces.test.mjs` 가 잡는다.
 부서당 직원 6명 제한에 걸리면 임의로 합치지 말고 사용자에게 알린다.
 
 ## 새 자동화 붙이기
@@ -92,7 +92,8 @@ python -m pytest -q automations
 - `app/workspaces/` 사무실 설정(`types.ts`, `assembly.ts`, `home.ts`, `index.ts`). `company.config.ts` 는 현재 사무실을 내보내는 한 줄짜리 파일.
 - `app/status-rules.ts` 상태 파일 v2 + GitHub run + 로컬 요청 → 화면 상태(순수). `app/status.ts` 조회·폴링 훅(`/api/status` → 정적 파일 폴백). `app/history.ts`·`app/history-rules.ts` 실행 이력(날짜별) 조회 훅·순수 규칙.
 - `app/office/FlowBoard.tsx` 흐름 화면(`/<사무실>/flow`, 모양 `app/flow.css`, 규칙 `app/flow-rules.ts`). `app/office/Pill.tsx` 상태 pill·선 아이콘(대시보드와 공용).
-- `app/office/OfficeApp.tsx` 단일 페이지 대시보드 화면(모양 `app/dashboard.css`). 하루 집계·시간대별 횟수는 `app/history-rules.ts`(`dayStats`·`hourBuckets`). `app/game/`(옛 픽셀 사무실 월드·엔진)와 `app/office.css` 는 2026-10-02 부터 화면에서 쓰지 않는다.
+- `app/office/StaffBoard.tsx` 대시보드 본문(조직도 + 업무 목록·작업 기록, 모양 `app/board.css`, 규칙 `app/board-rules.ts`).
+- `app/office/OfficeApp.tsx` 단일 페이지 대시보드 화면(모양 `app/dashboard.css`) — 머리글·요약·실행 이력과 실행 요청(`run`)을 맡고 본문은 StaffBoard 에 넘긴다. 하루 집계·시간대별 횟수는 `app/history-rules.ts`(`dayStats`·`hourBuckets`). `app/game/`(옛 픽셀 사무실 월드·엔진)와 `app/office.css` 는 2026-10-02 부터 화면에서 쓰지 않는다.
 - `worker/` Cloudflare Worker: `index.ts`(라우팅) `run-api.ts`(`/api/run`, `/api/status`, `/api/history`) `github.ts`(dispatch·runs·Contents) `config.ts` `stock.ts`(`/api/stock`: 주식 분석 자료·관심 목록)(발굴 판은 `lensDays`·관점 기록 포함, 화면 `app/office/StockDiscover.tsx`).
 - `automations/insta/` 인스타 게시글(콘텐츠 제작·게시형의 표준 구현: 소재→글→카드→업로드, 주제 프로필·계정별 자동화). 새 계정·새 플랫폼은 `automations/insta/README.md` 참고.
 - `automations/speech/` 회의 발언 요약(2026-11-06): 재경위·예결위 생중계 자막 → 호명으로 위원별 구간 → Claude 요약(주제별 `◯` 줄) → 530 알림(10명 묶음, 이준석 단독). **Worker 는 국회 사이트를 안 부르고 캘린더(530호 일정)로만 깨운다**(`worker/webcast.ts`), 상태·표시는 R2 `speech/`(`worker/speech-state.ts`, `/api/speech/state|mark|next`). 이준석 위원이 질의하는 날만 돈다(질의순서 HWP, `order_hwp.py`). 전송은 `notify_target: preview`(개인 대화방)로 시작해 품질 확인 뒤 `group`. 설계 `docs/superpowers/specs/2026-11-05-회의-발언-요약-알림-design.md`, 상세 `automations/speech/README.md`.
