@@ -3,35 +3,36 @@
   "dept": "review",
   "ok": true,
   "running": false,
-  "summary": "신규 0건, 전송 0건, 실패 0건, 15초",
+  "summary": "신규 1건, 전송 1건, 실패 0건, 38초",
   "counts": {
-    "new": 0,
-    "sent": 0,
+    "new": 1,
+    "sent": 1,
     "failed": 0
   },
   "next_run": "매일 09:00",
   "log": [
-    "신규 0건, 전송 0건, 실패 0건, 15초"
+    "신규 1건, 전송 1건, 실패 0건, 38초",
+    "[신규] [도정소식] 경기도, 철도 파업 대비 비상수송대책 마련…버스 56회·시외버스 93회 "
   ],
   "link": "",
-  "run_id": 45086295888,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45086295888",
-  "request_id": "cron-202611230000",
+  "run_id": 45293635357,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45293635357",
+  "request_id": "cron-202611240000",
   "trigger": "schedule",
-  "started_at": "2026-11-23T09:01:34+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-11-24T09:01:30+09:00",
+  "duration_sec": 38,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "신규 0건"
+      "summary": "신규 1건"
     },
     {
       "id": "notify",
       "status": "done",
-      "summary": "0건 발송"
+      "summary": "1건 발송, 무음 0건"
     }
   ],
   "id": "hscity",
-  "updated_at": "2026-11-23T09:01:49+09:00"
+  "updated_at": "2026-11-24T09:02:09+09:00"
 }
