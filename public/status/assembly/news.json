@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 14초",
+  "summary": "신규 12건, 실패 2건, 19초",
   "counts": {
-    "new": 10,
-    "failed": 0,
-    "total": 6636
+    "new": 12,
+    "failed": 2,
+    "total": 6635
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 14초",
-    "[신규] 이준석 “근조 민주당, 부끄러운 줄 알라”...조희대 탄핵에 맹비난 — 경기일보",
-    "[신규] 이준석, '조희대 탄핵' 추진에…\"근조 민주당, 한방에 무너질 것\" — 뉴시스",
-    "[신규] [열린광장] 자강 없는 보수 대통합의 허상 — 기호일보",
-    "[신규] 이재명 대통령, 울산 전통시장 방문 — 시민행정신문"
+    "신규 12건, 실패 2건, 19초",
+    "[신규] ‘보수 대연합’ 실현 가능할까… 이준석이 보는 성공 조건은 [불편한 여의도] — 중앙일보",
+    "[신규] 안철수·이준석이 문제 삼은 강금실의 ‘중국 정부 특별고문’ 경력, 어떤 일을 했나 — 주간경향",
+    "[신규] [세나정] 이기인 \"민심은 마일리지같은 것… 총선 10석 목표\" — 주간조선",
+    "[신규] 이준석, 강금실 국정원장 지명에 \"청개구리도 아니고...뜬금포\" — 경북도민일보"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45020096600,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45020096600",
-  "request_id": "cron-202611221200",
+  "run_id": 45337298427,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45337298427",
+  "request_id": "cron-202611240600",
   "trigger": "schedule",
-  "started_at": "2026-11-22T21:01:30+09:00",
-  "duration_sec": 14,
+  "started_at": "2026-11-24T15:01:28+09:00",
+  "duration_sec": 19,
   "tasks": [
     {
       "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 67건"
+      "status": "error",
+      "summary": "검색어 5개에서 57건, 실패 2개"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 57건 (신규 10건) · 경기일보 4건, 시민행정신문 4건, 뉴시스 3건"
+      "summary": "오늘 56건 (신규 12건) · 시민행정신문 6건, 뉴시스 4건, 주간조선 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-22T21:01:45+09:00"
+  "updated_at": "2026-11-24T15:01:48+09:00"
 }
