@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 12초",
+  "summary": "신규 15건, 실패 0건, 13초",
   "counts": {
-    "new": 3,
+    "new": 15,
     "failed": 0,
-    "total": 6594
+    "total": 6609
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 12초",
-    "[신규] 개혁신당 '경기남부 벨트' 추가 인선 예고…千 빠진 채 진용 짠다 — 더팩트",
-    "[신규] 820조 슈퍼예산에 “72조 더 달라”… 여야, 증액 경쟁 — 동아일보",
-    "[신규] “국비 한 푼이라도 더”… 박수현·허태정, 국회 찾아 총력전 — 문화일보"
+    "신규 15건, 실패 0건, 13초",
+    "[신규] [세나정] 이기인 \"이준석, 야성 사라졌다…과거 모습 되찾아야\" — 주간조선",
+    "[신규] 이준석 “코스피 ‘초심자의 운’ 말했다 조롱받아…지금 3가지 필요” 제안 — 문화일보",
+    "[신규] 산림청, 3-30-300 기반 녹지형평성 중심의 도시숲 정책 방향 모색 — 시민행정신문",
+    "[신규] 고용노동부, 작은 사업장 건강지킴이 '근로자건강센터', 김포·포항에 새로 문 연다. — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45265249468,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45265249468",
-  "request_id": "cron-202611232100",
+  "run_id": 45293626347,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45293626347",
+  "request_id": "cron-202611240000",
   "trigger": "schedule",
-  "started_at": "2026-11-24T06:01:30+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-24T09:01:26+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 122건"
+      "summary": "검색어 5개에서 152건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 15건 (신규 3건) · 시민행정신문 3건, 동아일보 2건, OBC 뉴스 1건"
+      "summary": "오늘 30건 (신규 15건) · 시민행정신문 6건, 동아일보 2건, 문화일보 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-24T06:01:43+09:00"
+  "updated_at": "2026-11-24T09:01:40+09:00"
 }
