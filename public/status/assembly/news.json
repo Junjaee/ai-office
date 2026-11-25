@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 12초",
+  "summary": "신규 16건, 실패 0건, 14초",
   "counts": {
-    "new": 5,
+    "new": 16,
     "failed": 0,
-    "total": 6702
+    "total": 6718
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 12초",
-    "[신규] 과학기술정보통신부, 인공지능·인간형 로봇부터 전기차까지, 미래 일상을 움직일 '차세대 이차전지' 핵심 성과 한자리에 — 시민행정신문",
-    "[신규] 과학기술정보통신부, 기업이 제안한 기술수요, 정부 연구개발로 이어진다 — 시민행정신문",
-    "[신규] 조계원 의원, “K-의료관광, 고부가가치 체류형 산업으로 도약할 때” — 시민행정신문",
-    "[신규] 보건복지부, 학생 선발부터 학비 지원까지... 국립의전원 설립·운영 세부 기준 마련 — 시민행정신문"
+    "신규 16건, 실패 0건, 14초",
+    "[신규] 이준석, 한동훈에 “남을 찌르기만 했던 분이라 아무거나 막 공격, 금도 없어” — 주간경향",
+    "[신규] 이준석 \"한동훈, 남을 찌르기만 했던 분…검찰 정치는 위험\" — 뉴스1",
+    "[신규] 이준석 KB운용 실장 “AI 구경꾼 돼선 안돼…승자독식 기업 담아야” [진주 in 재테크] — 데일리안",
+    "[신규] 송옥주 의원, 2026년 농업발전혁신인상 수상 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45486691243,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45486691243",
-  "request_id": "cron-202611242100",
+  "run_id": 45514658767,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45514658767",
+  "request_id": "cron-202611250000",
   "trigger": "schedule",
-  "started_at": "2026-11-25T06:01:30+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-25T09:01:28+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 123건"
+      "summary": "검색어 5개에서 135건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 36건 (신규 5건) · 시민행정신문 13건, 외교저널 4건, JTBC 1건"
+      "summary": "오늘 52건 (신규 16건) · 시민행정신문 14건, 한국사회복지저널 10건, 외교저널 4건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-25T06:01:43+09:00"
+  "updated_at": "2026-11-25T09:01:43+09:00"
 }
