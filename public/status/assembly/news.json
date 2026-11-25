@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 24건, 실패 0건, 17초",
+  "summary": "신규 17건, 실패 0건, 15초",
   "counts": {
-    "new": 24,
+    "new": 17,
     "failed": 0,
-    "total": 6808
+    "total": 6791
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 24건, 실패 0건, 17초",
-    "[신규] 법제처, 빛의 혁명, 12·3 국민주권의 날 — 시민행정신문",
-    "[신규] 개인정보보호위원회, 에듀테크 사업자가 꼭 지켜야 할 6대 개인정보 보호수칙 — 시민행정신문",
-    "[신규] 식품의약품안전처, 약 봉투에서 만나는 의약품 부작용 피해구제 제도, QR코드로 간편하게 — 시민행정신문",
-    "[신규] 조계원 의원·시민사회, COP33 대한민국 유치 선언 촉구 — 시민행정신문"
+    "신규 17건, 실패 0건, 15초",
+    "[신규] 음주 운전·성 비위 무관용 원칙…제주도, 공직기강 엄정 대응 — 외교저널",
+    "[신규] 지식재산처, 국제 특허출원, 달라지는 제도 한눈에 — 시민행정신문",
+    "[신규] 농림축산식품부, 추운 날씨, 차 아래 길고양이를 지켜주세요. — 시민행정신문",
+    "[신규] 이재명 대통령, 서울 은평구 대림골목시장 방문 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45609710897,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45609710897",
-  "request_id": "cron-202611251200",
+  "run_id": 45640343601,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45640343601",
+  "request_id": "cron-202611251500",
   "trigger": "schedule",
-  "started_at": "2026-11-25T21:01:25+09:00",
-  "duration_sec": 17,
+  "started_at": "2026-11-26T00:01:26+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 122건"
+      "summary": "검색어 5개에서 116건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 142건 (신규 24건) · 시민행정신문 28건, 한국사회복지저널 11건, 뉴시스 9건"
+      "summary": "오늘 17건 (신규 17건) · 시민행정신문 11건, 외교저널 2건, KBC광주방송 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-25T21:01:43+09:00"
+  "updated_at": "2026-11-26T00:01:42+09:00"
 }
