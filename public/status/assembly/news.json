@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 15건, 실패 0건, 10초",
+  "summary": "신규 21건, 실패 0건, 16초",
   "counts": {
-    "new": 15,
+    "new": 21,
     "failed": 0,
-    "total": 6733
+    "total": 6754
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 15건, 실패 0건, 10초",
-    "[신규] 이준석 “경력없는 강금실을 국정원장에…뭔 뜬금포인가” — 문화일보",
-    "[신규] \"김택수 촌장X테크볼金 이준석의 금빛 멘토링@진천선수촌\" '초롱초롱' 인천 꿈나무들 \"저희 태극마크 달고 다시 올게요\" — 스포츠조선",
-    "[신규] 왜 강금실·한준호인가...커지는 개각 논란, 청문회 전부터 '삐걱' [이슈톺] — YTN",
-    "[신규] [김종석의 리포트]“중국 위해 복무한 사람”…안철수, 강금실 직격 — 채널A"
+    "신규 21건, 실패 0건, 16초",
+    "[신규] “행정수도 완성을 위한 대응전략과 시민의 역할” 강준현 국회의원 행정수도특별법 전략설명회 — 시민행정신문",
+    "[신규] NEWS > 상세 — mbcgn.kr",
+    "[신규] 국방부, 국가폭력 가해자의 불법·부당 서훈 취소 — 시민행정신문",
+    "[신규] 소병훈 의원, 수면마취 시행 의료기관 개설자 응급장비 구비 의무화하는 '의료법 개정안' 대표발의 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45536960534,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45536960534",
-  "request_id": "cron-202611250300",
+  "run_id": 45557499859,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45557499859",
+  "request_id": "cron-202611250600",
   "trigger": "schedule",
-  "started_at": "2026-11-25T12:01:32+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-25T15:01:34+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 123건"
+      "summary": "검색어 5개에서 142건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 67건 (신규 15건) · 시민행정신문 14건, 한국사회복지저널 10건, 외교저널 4건"
+      "summary": "오늘 88건 (신규 21건) · 시민행정신문 20건, 한국사회복지저널 10건, 뉴시스 8건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-25T12:01:43+09:00"
+  "updated_at": "2026-11-25T15:01:51+09:00"
 }
