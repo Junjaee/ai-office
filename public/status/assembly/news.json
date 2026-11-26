@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": false,
+  "ok": true,
   "running": false,
-  "summary": "신규 28건, 실패 1건, 18초",
+  "summary": "신규 39건, 실패 0건, 17초",
   "counts": {
-    "new": 28,
-    "failed": 1,
-    "total": 6846
+    "new": 39,
+    "failed": 0,
+    "total": 6885
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 28건, 실패 1건, 18초",
-    "[신규] 이재관 의원, 27일 국회서 ‘동물복지진흥원이 나아갈 길’ 토론회 개최 — 시민행정신문",
-    "[신규] 스무살 병사 추락사 2년…검사 5번 바뀌고 기소 '0' — 평화나무",
-    "[신규] 개혁신당, 국힘에 '조희대 탄핵 반대 연대' 거듭 제안 — 연합뉴스",
-    "[신규] 개혁신당 \"李 개각 '회전문 인사'⋯'예스·충성' 할 사람만 뽑나\" — 아이뉴스24"
+    "신규 39건, 실패 0건, 17초",
+    "[신규] 이준석 \"탄핵 추진하면 법원은 이 대통령 재판 재개해야\"[시사쇼] — 아시아경제",
+    "[신규] 원안위, 제2026-19회 원자력안전위원회 개최 — 시민행정신문",
+    "[신규] [포토] 개혁신당 비상대책위원회의 — 시사포커스",
+    "[신규] 식약처, 2026 적극행정 우수사례 경진대회 '국무총리상' 수상 — 외교저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45746150465,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45746150465",
-  "request_id": "cron-202611260300",
+  "run_id": 45765284963,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45765284963",
+  "request_id": "cron-202611260600",
   "trigger": "schedule",
-  "started_at": "2026-11-26T12:01:22+09:00",
-  "duration_sec": 18,
+  "started_at": "2026-11-26T15:01:17+09:00",
+  "duration_sec": 17,
   "tasks": [
     {
       "id": "collect",
-      "status": "error",
-      "summary": "검색어 5개에서 97건, 실패 1개"
+      "status": "done",
+      "summary": "검색어 5개에서 141건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 72건 (신규 28건) · 시민행정신문 24건, 뉴시스 5건, 강원도민일보 3건"
+      "summary": "오늘 111건 (신규 39건) · 시민행정신문 36건, 뉴시스 8건, 강원도민일보 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-26T12:01:41+09:00"
+  "updated_at": "2026-11-26T15:01:34+09:00"
 }
