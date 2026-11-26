@@ -7,35 +7,35 @@
   "counts": {
     "new": 9,
     "failed": 0,
-    "total": 6809
+    "total": 6818
   },
   "next_run": "3시간마다",
   "log": [
     "신규 9건, 실패 0건, 17초",
-    "[신규] 송미령 농림축산식품부장관, 국제농업개발기금(IFAD) 총재 면담 — 시민행정신문",
-    "[신규] 과기정통부, 개정 정보통신망법·시행령의 현장 안착을 위한 기업 대상 설명회 개최 — 시민행정신문",
-    "[신규] 과학기술정보통신부, 인공지능 자율화가 바꿀 미래 산업·사회 질서 논의 — 시민행정신문",
-    "[신규] 김주영 의원·성수유니온랩, 국회토론회 공동 개최 — 시민행정신문"
+    "[신규] 박용갑 의원, AI 이용 ‘가짜 의사’ 영상 등 규제 '국민건강증진법' 개정안 대표발의 — 시민행정신문",
+    "[신규] 금태섭 전 의원 “진영만 남은 정치, 평론만 하지 않겠다” — 한겨레21",
+    "[신규] '원내 5당' 개혁신당, '경기 남부'서 도약 꿈꾼다 — 데일리안",
+    "[신규] [오늘의 국회일정] 상임위·세미나·주요 정당 - 11월 26일 — 뉴스핌"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45700364587,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45700364587",
-  "request_id": "cron-202611252100",
+  "run_id": 45725610329,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45725610329",
+  "request_id": "cron-202611260000",
   "trigger": "schedule",
-  "started_at": "2026-11-26T06:01:22+09:00",
+  "started_at": "2026-11-26T09:01:24+09:00",
   "duration_sec": 17,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 133건"
+      "summary": "검색어 5개에서 99건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 35건 (신규 9건) · 시민행정신문 22건, 외교저널 2건, KBC광주방송 1건"
+      "summary": "오늘 44건 (신규 9건) · 시민행정신문 23건, 외교저널 2건, KBC광주방송 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-26T06:01:40+09:00"
+  "updated_at": "2026-11-26T09:01:42+09:00"
 }
