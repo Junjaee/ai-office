@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 33건, 실패 0건, 10초",
+  "summary": "신규 23건, 실패 0건, 17초",
   "counts": {
-    "new": 33,
+    "new": 23,
     "failed": 0,
-    "total": 6918
+    "total": 6941
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 33건, 실패 0건, 10초",
-    "[신규] 이준석 “李대통령, 분당집 팔아 25억 차익…청년 내 집 가질 기회 왜 막나” — 경기일보",
-    "[신규] 안덕수 국세청장 후보자 \"수료과정에서 별도 요건 도입은 국세청장 승인사항\" — 한국세정신문",
-    "[신규] 보건복지부, 2027년 비급여 보고·공개항목 확대 등 비급여 관리방안 논의 — 시민행정신문",
-    "[신규] 개혁신당, 개정 형사소송법 시행...'피해자 보호 방안' 토론회 개최 [TF사진관] — 더팩트"
+    "신규 23건, 실패 0건, 17초",
+    "[신규] 지광 꼼수 체납…법인계좌 조회토록 법 개정 추진 — 국제신문",
+    "[신규] 외교부, 한-이란 외교장관 통화 — 시민행정신문",
+    "[신규] 제주시，도시숲 정원사·자원봉사자와 시민간담회 개최 — 외교저널",
+    "[신규] 성평등가족부, 강풍·풍랑 대비 청소년시설 행동요령 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45788060574,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45788060574",
-  "request_id": "cron-202611260900",
+  "run_id": 45815694085,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45815694085",
+  "request_id": "cron-202611261200",
   "trigger": "schedule",
-  "started_at": "2026-11-26T18:01:26+09:00",
-  "duration_sec": 10,
+  "started_at": "2026-11-26T21:01:25+09:00",
+  "duration_sec": 17,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 123건"
+      "summary": "검색어 5개에서 131건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 144건 (신규 33건) · 시민행정신문 39건, 뉴시스 12건, 연합뉴스 4건"
+      "summary": "오늘 167건 (신규 23건) · 시민행정신문 43건, 뉴시스 14건, 연합뉴스 5건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-26T18:01:37+09:00"
+  "updated_at": "2026-11-26T21:01:43+09:00"
 }
