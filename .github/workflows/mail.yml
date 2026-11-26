@@ -131,3 +131,15 @@ jobs:
           PYTHONUTF8: "1"
         run: |
           python -X utf8 automations/sort/run_sort.py --config automations/sort/config.actions.yaml
+
+      # 정리된 회의 폴더에 의사일정이 있으면 캘린더에 회의 일정을 넣는다 (발언 요약·주말 일정이 그 캘린더를 본다)
+      - name: 의사일정을 캘린더에 (새 자료가 있을 때만)
+        if: steps.mail.outputs.saved != '' && steps.mail.outputs.saved != '0'
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          PYTHONUTF8: "1"
+        run: |
+          python -X utf8 automations/agenda/run_agenda.py --config automations/agenda/config.actions.yaml

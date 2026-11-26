@@ -64,7 +64,7 @@ test("묶음마다 이름과 설명이 있다", () => {
 test("wake 를 적은 자동화는 깨우는 쪽 코드가 있다", () => {
   // 사건으로 깨어나려면 Worker 가 그 자동화를 깨워야 한다(worker/schedule.ts 의 MAIL_JOB·gmail.ts·webcast.ts).
   // 설정에만 wake 를 적고 깨우는 코드가 없으면 영원히 안 도는 자동화가 된다.
-  const wakers = ["mail", "ledger", "speech", "sort"];
+  const wakers = ["mail", "ledger", "speech", "sort", "agenda"];
   for (const ws of WORKSPACE_LIST) {
     for (const a of ws.automations) {
       if (a.wake) assert.ok(wakers.includes(a.id), `${ws.id}/${a.id}: wake 를 적었는데 깨우는 쪽이 없다`);

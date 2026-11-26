@@ -1,0 +1,26 @@
+# 의사일정 — 회의 폴더의 의사일정 파일을 읽어 캘린더에 회의 일정을 넣는다.
+# 비밀값은 환경변수(GitHub Secrets): GOOGLE_*(공용 토큰 — 드라이브 읽기 + 캘린더 일정 쓰기)
+# 위원회 폴더 위치는 수신함 정리 설정(automations/sort/config.actions.yaml 의 committees)을 그대로 쓴다.
+
+# 넣을 캘린더: 530호 일정 (비공개) — 주말 일정·발언 요약이 읽는 그 캘린더
+calendar_id: "1cad154d55cbc50b2d6f7205d0e583e845c725d89a89177461c814662e6815c2@group.calendar.google.com"
+
+# 끝 시각은 의사일정에 없다 → 그날 이 시각까지로 넣는다(시작이 그 뒤면 2시간).
+# 발언 요약은 일정 끝 3시간 뒤까지 지켜보므로 18:00 이면 21:00 까지 본다.
+end_time: "18:00"
+
+# 사람이 이미 넣은 일정으로 볼 다른 말 — 같은 시작 시각에 제목에 위원회 이름이나 이 말이 있으면 넣지 않는다.
+# 530호 캘린더에는 재경위 청문회를 "[인사청문회] …" 로 적는다(worker/webcast.ts 의 WATCH_CHANNELS 와 같은 뜻).
+same_as:
+  재경위: ["인사청문회"]
+
+# 결과물 위치 (캘린더에 넣는 자동화라 폴더 없음)
+result_link: ""
+
+# 상태 보고. 새로 넣거나 고친 일정이 없으면 커밋하지 않는다
+office_repo: "."
+office_workspace: "assembly"
+next_run: "의사일정이 오면"
+
+# 화면의 직원(하위 작업) id. 원천은 app/workspaces/assembly.ts
+tasks: [read, sync]

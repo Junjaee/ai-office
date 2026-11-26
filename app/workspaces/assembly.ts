@@ -198,8 +198,13 @@ export const AUTOMATIONS: AutomationDef[] = [
     ] },
   { id: "press", dept: "carousel", name: "보도자료",
     tasks: [{ id: "draft", name: "보도자료 초안", role: "질의 결과를 보도자료 형식으로 작성" }] },
-  { id: "calendar", dept: "partner", name: "의사일정",
-    tasks: [{ id: "sync", name: "의사일정 반영", role: "상임위 의사일정을 캘린더에 반영" }] },
+  // 수신함 정리가 끝나면 같은 실행(mail.yml)이 이어서 돌린다 — 예약 없음. 폴더 이름이 파이썬 표준 모듈과 겹치지 않게 id 는 agenda
+  { id: "agenda", dept: "partner", name: "의사일정", workflow: "agenda.yml", wake: "회의 폴더에 의사일정이 들어오면",
+    takes: ["드라이브 · 회의 폴더"], gives: ["캘린더 · 530호 일정"],
+    tasks: [
+      { id: "read", name: "의사일정 읽기", title: "의사일정 서기", role: "회의 폴더의 의사일정 첫 줄에서 차수·날짜·시각 읽기" },
+      { id: "sync", name: "캘린더 반영", title: "달력 관리인", role: "530호 캘린더에 회의 일정 넣기(같은 회의는 한 번만)" },
+    ] },
   // 매주 목 17:00 예약이지만 schedule 은 비워 둔다 — 주 1회라 36시간 기준 "예약 놓침" 경고가 잘못 뜬다(문구는 next_run).
   { id: "weekend", dept: "partner", name: "주말 일정 알림", workflow: "weekend.yml",
     takes: ["캘린더 · 530호 일정"], gives: ["텔레그램 · 개인 대화방"],
