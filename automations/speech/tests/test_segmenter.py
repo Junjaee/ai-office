@@ -32,6 +32,11 @@ def test_call_split_over_two_lines():
     assert s.current.lines == ["홍지선 장관님 어디 계시지요"]
 
 
+def test_call_hasigetseumnida():
+    # 2026-11-26 재경위 인사청문회 실측 — 이 말투를 못 잡아 오후 질의를 전부 놓쳤다
+    assert detect_call("이상입니다 다음은 서지영 위원님 질의하시겠습니다", NAMES, "이준석") == "서지영"
+
+
 def test_colleague_mention_is_not_call():
     assert detect_call("존경하는 이준석 위원님 말씀처럼 저도 그렇게 봅니다", NAMES, "이준석") is None
 
