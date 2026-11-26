@@ -8,7 +8,9 @@
 import type { FetchLike } from "./gmail.ts";
 
 /** 일정 제목에 든 단어 → 생중계 채널(xcode). 채널을 더하면 그 위원회도 감시한다 */
-export const WATCH_CHANNELS: Record<string, string> = { "재경위": "65", "예결위": "21" };
+// "인사청문회": 530호 캘린더에 "[인사청문회] ○○○ 후보자 인사청문회" 로만 적혀 재경위 청문회를 놓쳤다(2026-11-26).
+// 이 캘린더에 오르는 청문회는 재경위 것뿐이라 재경위 채널로 본다 — 다른 위원회 청문회면 방송이 없어 기다리다 끝난다.
+export const WATCH_CHANNELS: Record<string, string> = { "재경위": "65", "예결위": "21", "인사청문회": "65" };
 /** 530호 일정 (비공개) — automations/weekend/config.actions.yaml 의 calendar_id 와 같다 */
 export const SPEECH_CALENDAR_ID = "1cad154d55cbc50b2d6f7205d0e583e845c725d89a89177461c814662e6815c2@group.calendar.google.com";
 export const SPEECH_WORKFLOW = "speech.yml";
@@ -30,12 +32,13 @@ export type Meeting = { title: string; startMs: number; endMs: number; xcodes: s
 const RUNNING = new Set(["in_progress", "queued", "waiting", "requested", "pending"]);
 const WEEKDAY = ["일", "월", "화", "수", "목", "금", "토"];
 
-/** 제목에 재경위/예결위가 들어 있고 시각이 있는(종일 아닌) 일정만 */
+/** 제목에 감시 단어(재경위·예결위·인사청문회)가 들어 있고 시각이 있는(종일 아닌) 일정만 */
 export function meetingsFrom(items: CalendarItem[]): Meeting[] {
   const out: Meeting[] = [];
   for (const it of items ?? []) {
     const title = (it.summary ?? "").trim();
-    const xcodes = Object.entries(WATCH_CHANNELS).filter(([word]) => title.includes(word)).map(([, x]) => x);
+    // 한 제목에 같은 채널의 단어가 둘 들어가도("[재경위] 인사청문회") 채널은 하나
+    const xcodes = [...new Set(Object.entries(WATCH_CHANNELS).filter(([word]) => title.includes(word)).map(([, x]) => x))];
     if (xcodes.length === 0) continue;
     const startMs = Date.parse(it.start?.dateTime ?? "");
     const endMs = Date.parse(it.end?.dateTime ?? "");

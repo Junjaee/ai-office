@@ -119,3 +119,11 @@ test("xcode 없이 손으로 켠 실행은 모든 채널에서 실행 중", () =
   assert.equal(isRunning([{ path: ".github/workflows/speech.yml", status: "queued", display_title: "speech · 21 ·" }], "21"), true);
   assert.equal(isRunning([{ path: ".github/workflows/speech.yml", status: "queued", display_title: "speech · 21 ·" }], "65"), false);
 });
+
+test("인사청문회 일정은 재경위 채널로 본다 (2026-11-26 놓침)", () => {
+  const at = { start: { dateTime: "2026-11-26T10:00:00+09:00" }, end: { dateTime: "2026-11-26T18:00:00+09:00" } };
+  const [m] = meetingsFrom([{ summary: "[인사청문회] 후보자 인사청문회", ...at }]);
+  assert.deepEqual(m.xcodes, ["65"]);
+  // 제목에 재경위까지 적혀 있어도 채널은 하나
+  assert.deepEqual(meetingsFrom([{ summary: "[재경위] 인사청문회", ...at }])[0].xcodes, ["65"]);
+});
