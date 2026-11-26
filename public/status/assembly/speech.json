@@ -1,45 +1,46 @@
 {
   "name": "회의 발언 요약",
   "dept": "qa",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "재경위 자막 511줄 · 구간 0 · 요약 0/0실패 · 전송 0묶음 · 산회",
+  "summary": "재경위 자막 1350줄 · 구간 13 · 요약 13/0실패 · 전송 2묶음 · 산회",
   "counts": {
-    "captions": 511,
-    "segments": 0,
-    "summarized": 0,
+    "captions": 1350,
+    "segments": 13,
+    "summarized": 13,
     "summary_failed": 0,
-    "sent": 0,
-    "send_failed": 0
+    "sent": 2,
+    "send_failed": 4
   },
   "next_run": "캘린더의 다음 재경위·예결위 회의",
   "log": [
-    "질의순서 없이 진행"
+    "질의순서 21명",
+    "전송 실패 RuntimeError"
   ],
   "link": "",
-  "run_id": 44439950421,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/44439950421",
-  "request_id": "cron-202611190150",
-  "trigger": "schedule",
-  "started_at": "2026-11-19T10:51:48+09:00",
-  "duration_sec": 4100,
+  "run_id": 45767488194,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45767488194",
+  "request_id": "req-20261126-hearing3",
+  "trigger": "manual",
+  "started_at": "2026-11-26T15:20:56+09:00",
+  "duration_sec": 10384,
   "tasks": [
     {
       "id": "listen",
       "status": "done",
-      "summary": "자막 511줄, 구간 0"
+      "summary": "자막 1350줄, 구간 13"
     },
     {
       "id": "summarize",
       "status": "done",
-      "summary": "요약 0건"
+      "summary": "요약 13건"
     },
     {
       "id": "notify",
-      "status": "done",
-      "summary": "전송 0묶음"
+      "status": "error",
+      "summary": "전송 2묶음, 실패 4"
     }
   ],
   "id": "speech",
-  "updated_at": "2026-11-19T12:00:09+09:00"
+  "updated_at": "2026-11-26T18:14:02+09:00"
 }
