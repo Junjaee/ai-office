@@ -3,27 +3,25 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 8건, 실패 0건, 17초",
+  "summary": "신규 2건, 실패 0건, 16초",
   "counts": {
-    "new": 8,
+    "new": 2,
     "failed": 0,
-    "total": 6926
+    "total": 6928
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 8건, 실패 0건, 17초",
-    "[신규] “한동훈, 명태균 때 오세훈·이준석에 칼 꽂으려···‘뭐 어쩌라’는 표정 더 한 맺혀” — 주간경향",
-    "[신규] 꿈에 그리던 선수촌‥\"마지막일지도 모르는 기회니까요\" — MBC 뉴스",
-    "[신규] '선수촌 소원' 이뤘다…\"고기가 2종류라니!\" — SBS 뉴스, 네이트",
-    "[신규] 정의혜 외교부 차관보, 이라크 방문 및 현지 진출 우리 기업 간담회 개최 — 시민행정신문"
+    "신규 2건, 실패 0건, 16초",
+    "[신규] 김종민“한중FTA K팝공연 빠진 문화개방 빈 껍데기 우려, 中企‧소상공인 대책 TF 가동해야” — 시민행정신문",
+    "[신규] 여야, 예결소위서 미래대응기금 사업 이견…예산 심사 잇따라 보류(종합2보) — 뉴시스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45844750116,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45844750116",
-  "request_id": "cron-202611261500",
+  "run_id": 45872471640,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45872471640",
+  "request_id": "cron-202611261800",
   "trigger": "schedule",
-  "started_at": "2026-11-27T00:01:32+09:00",
-  "duration_sec": 17,
+  "started_at": "2026-11-27T03:01:27+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
@@ -33,9 +31,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 8건 (신규 8건) · MBC 뉴스 1건, SBS 뉴스 1건, 네이트 1건"
+      "summary": "오늘 10건 (신규 2건) · 뉴시스 2건, 시민행정신문 2건, MBC 뉴스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-27T00:01:50+09:00"
+  "updated_at": "2026-11-27T03:01:44+09:00"
 }
