@@ -134,6 +134,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   { id: "insta_policy", dept: "research", name: "인스타 게시글 · 오늘정책 (지원금·세금·제도)",
     workflow: "insta.yml", inputs: { account: "policy" },   // 예약 없음 — ▶ 시작으로만 (사용자 결정 2026-09-17)
     review: { kind: "topics", title: "오늘의 주제 검토" },
+    takes: ["소재 RSS"], gives: ["R2 · 인스타 카드", "인스타그램"],
     tasks: [
       { id: "topic", name: "소재 선정", title: "정책 기획자", role: "후보 20건을 검토 칸에 올리고, 고른 것이 없으면 1순위를 게시", colors: ["#2b2f36", "#f3ead6", "#f2b544"] },
       { id: "write", name: "글쓰기", title: "정책 작가", role: "카드 원고·캡션·해시태그 작성과 자동 심사", colors: ["#3a2f1f", "#fbf1d9", "#d99a1e"] },
@@ -144,6 +145,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   { id: "insta_parent", dept: "strategy2", name: "인스타 게시글 · parent (육아 꿀팁·혜택)",
     workflow: "insta.yml", inputs: { account: "parent" },   // 예약 없음 — ▶ 시작으로만 (사용자 결정 2026-09-17)
     review: { kind: "topics", title: "오늘의 주제 검토" },
+    takes: ["소재 RSS"], gives: ["R2 · 인스타 카드", "인스타그램"],
     tasks: [
       { id: "topic", name: "육아 소재 선정", title: "육아 기획자", role: "육아 지원금·제도·방법 후보 20건, 고른 것이 없으면 1순위", colors: ["#3a2a24", "#ffe9dd", "#ff8a5b"] },
       { id: "write", name: "육아 글쓰기", title: "육아 작가", role: "대상·금액·기간·근거 기관이 든 기사와 캡션", colors: ["#3a2f1f", "#fbf1d9", "#ff8a5b"] },
@@ -153,6 +155,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   { id: "insta_benefit", dept: "brand", name: "인스타 게시글 · benefit (돈 되는 혜택 알림)",
     workflow: "insta.yml", inputs: { account: "benefit" },   // 예약 없음 — ▶ 시작으로만 (사용자 결정 2026-09-17)
     review: { kind: "topics", title: "오늘의 주제 검토" },
+    takes: ["소재 RSS"], gives: ["R2 · 인스타 카드", "인스타그램"],
     tasks: [
       { id: "topic", name: "혜택 소재 선정", title: "혜택 기획자", role: "지원금·환급·제도 변화 후보 20건, 고른 것이 없으면 1순위", colors: ["#16263d", "#dff7ea", "#5ee0a0"] },
       { id: "write", name: "혜택 글쓰기", title: "혜택 작가", role: "대상·금액·기간·신청 방법이 든 기사와 캡션", colors: ["#0f1b2d", "#e6f0ff", "#5ee0a0"] },

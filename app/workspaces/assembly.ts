@@ -133,6 +133,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   {
     id: "minutes", dept: "research", name: "국회회의록 수집",
     workflow: "minutes.yml", // 예약 없음 — 수동으로만 (2026-09-11)
+    takes: ["국회 회의록 사이트"], gives: ["드라이브 · 회의록"],
     tasks: [
       { id: "collect", name: "회의록 수집", title: "회의록 기록관", role: "본회의·위원회 회의록 목록 조회와 PDF 저장", colors: ["#6b3d34", "#d9efee", "#006bce"] },
       { id: "replace", name: "확정본 교체", title: "확정본 교정원", role: "임시회의록이 확정본으로 바뀌면 다시 저장", colors: ["#2f2a3d", "#cfd6dc", "#b9cbdc"] },
@@ -142,6 +143,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   {
     id: "lcouncil", dept: "research", name: "지방의회 회의록",
     workflow: "lcouncil.yml", schedule: "매일 02:00",
+    takes: ["지방의회 사이트"], gives: ["드라이브 · 지방의회 회의록"],
     tasks: [
       { id: "scan", name: "회의 목록 확인", title: "지방의회 조사원", role: "광역의회 사이트의 회기별 목록에서 새 회의록 찾기", colors: ["#3d4a6b", "#d9e4ef", "#2563eb"] },
       { id: "fetch", name: "본문 저장", title: "지방의회 기록관", role: "회의록 본문을 글자로 받아 드라이브에 저장", colors: ["#4a3d2f", "#efe6d9", "#b45309"] },
@@ -149,6 +151,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   },
   { id: "news", dept: "brand", name: "기사 수집",
     workflow: "news.yml", schedule: "3시간마다",
+    takes: ["구글 뉴스"], gives: ["드라이브 · 기사 묶음"],
     tasks: [
       { id: "collect", name: "기사 모으기", title: "스크랩 기자", role: "구글 뉴스에서 의원·위원회 기사 검색", colors: ["#2f4858", "#e8eef2", "#0f766e"] },
       { id: "digest", name: "요약 정리", title: "뉴스 편집자", role: "중복 기사를 합치고 묶음별로 정리해 드라이브에 저장", colors: ["#4a3b2f", "#f0e6d8", "#b45309"] },
@@ -161,6 +164,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   // 5분마다 돌지만 schedule 은 비워 둔다 — 새 메일이 없는 실행은 상태 파일을 쓰지 않아
   // "예약 놓침" 으로 잘못 보일 수 있다(다음 실행 문구는 config.actions.yaml 의 next_run).
   { id: "mail", dept: "qa", name: "상임위 메일", workflow: "mail.yml", wake: "새 상임위 메일이 오면",
+    takes: ["지메일 · 상임위 메일"], gives: ["텔레그램 · 530 알림", "드라이브 · 위원회 수신함"],
     tasks: [
       { id: "check", name: "새 메일 확인", title: "우편 담당", role: "재경위·예결위에서 온 새 메일 찾기" },
       { id: "notify", name: "알림·정리", title: "메일 연락관", role: "텔레그램으로 알리고, 첨부는 드라이브 수신함에 저장한 뒤 지메일 라벨로 정리" },
@@ -168,6 +172,7 @@ export const AUTOMATIONS: AutomationDef[] = [
     ] },
   // 회의 생중계 동안만 돈다(Worker 가 캘린더를 보고 깨움) — 예약 없음. 카드 "다음 실행"은 캘린더의 다음 회의(app/status.ts)
   { id: "speech", dept: "qa", name: "회의 발언 요약", workflow: "speech.yml", wake: "530호 회의 일정이 있으면",
+    takes: ["캘린더 · 530호 일정", "국회 생중계 자막", "지메일 · 상임위 메일"], gives: ["텔레그램 · 개인 대화방"],
     tasks: [
       { id: "listen", name: "자막 수신", title: "속기사", role: "생중계 자막을 받아 위원별로 나누기" },
       { id: "summarize", name: "발언 요약", title: "회의 서기", role: "위원별 질의·답변을 주제별로 요약" },
@@ -175,6 +180,7 @@ export const AUTOMATIONS: AutomationDef[] = [
     ] },
   // 새 자료가 수신함에 들어왔을 때만 돈다(상임위 메일 실행이 이어서 깨운다) — 예약 없음
   { id: "sort", dept: "review", name: "수신함 정리", workflow: "sort.yml", wake: "수신함에 새 자료가 들어오면",
+    takes: ["드라이브 · 위원회 수신함"], gives: ["드라이브 · 회의 폴더"],
     tasks: [
       { id: "plan", name: "자료 분류", title: "사서", role: "파일 내용을 읽고 어느 회의 폴더인지 정하기" },
       { id: "move", name: "폴더 정리", title: "서고 정리원", role: "정한 폴더로 옮기고 기록 남기기" },
@@ -196,12 +202,14 @@ export const AUTOMATIONS: AutomationDef[] = [
     tasks: [{ id: "sync", name: "의사일정 반영", role: "상임위 의사일정을 캘린더에 반영" }] },
   // 매주 목 17:00 예약이지만 schedule 은 비워 둔다 — 주 1회라 36시간 기준 "예약 놓침" 경고가 잘못 뜬다(문구는 next_run).
   { id: "weekend", dept: "partner", name: "주말 일정 알림", workflow: "weekend.yml",
+    takes: ["캘린더 · 530호 일정"], gives: ["텔레그램 · 개인 대화방"],
     tasks: [
       { id: "fetch", name: "주말 일정 모으기", title: "일정 비서", role: "530호 비공개 캘린더에서 이번 주 토·일 일정 읽기", colors: ["#2e3a4f", "#e6eef7", "#2563eb"] },
       { id: "send", name: "텔레그램 보내기", title: "일정 연락관", role: "정리한 주말 일정을 받는 분 텔레그램으로 전송", colors: ["#3b2f4a", "#efe7f7", "#229ed9"] },
     ] },
   { id: "hscity", dept: "review", name: "화성시 공고 수집",
     workflow: "hscity.yml", schedule: "매일 09:00",
+    takes: ["화성시청 게시판"], gives: ["드라이브 · 화성시 공고", "텔레그램 · 동탄 알림"],
     tasks: [
       { id: "collect", name: "공고 수집", title: "화성시 조사원", role: "화성시청 8개 게시판에서 동탄(화성시을) 공고 수집·드라이브 저장", colors: ["#2f4858", "#e8eef2", "#0f766e"] },
       { id: "notify", name: "알림 발송", title: "동탄 연락관", role: "새 공고를 동탄 전용 텔레그램으로 알림(공시송달 등 행정 루틴 제외)", colors: ["#3b2f4a", "#efe7f7", "#229ed9"] },

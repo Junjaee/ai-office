@@ -12,6 +12,13 @@ description: AI 오피스에 새 자동화(파이썬 + GitHub Actions + 대시�
 - 참고 구현(읽을 필요가 있을 때만): `automations/minutes/collect_minutes.py`, `automations/common/report_status.py`
 - **콘텐츠 제작·게시형(인스타·릴스·쇼츠·블로그)** 은 `automations/insta/` 가 표준 구현이다: 소재(RSS)→글(무료 LLM: Claude 구독 CLI→Gemini)→카드(HTML→Playwright JPEG)→업로드(R2 공개 URL→플랫폼 API), 주제 프로필 `profiles/<주제>.yaml`, 계정별 자동화 id `<플랫폼>_<계정>`. 새 인스타 계정은 코드 복사 없이 `automations/insta/README.md` 의 "새 계정 붙이기" 6단계만 따른다. 릴스·쇼츠·블로그는 이 구조를 복사해 `automations/<플랫폼>/` 을 만든다.
 
+## 0-0. 먼저 `REPO/자동화_목록.md` 를 읽는다 (질문보다 먼저)
+
+우리가 가진 자동화 전부와 서로의 연결이 있다. 읽고 나서 사용자에게 먼저 말한다:
+- **같은 일을 하는 자동화가 이미 있는가** — 있으면 새로 만들지 않고 그 자동화에 직원을 더한다(CLAUDE.md "일이 늘면 직원을 만든다").
+- **이어 붙일 자리가 있는가** — "이어져 있는 것" 표에서 새 자동화가 받을 만한 것을 찾는다. 이미 누가 메일을 받고 파일을 정리하고 있으면 그 결과물에서 시작한다(같은 메일·사이트를 또 읽지 않는다).
+- "이름만 있고 코드가 없는 것"에 같은 자리가 있으면 그 id·부서를 그대로 쓴다.
+
 ## 0. 시작 전 질문 (한 번에 묻고, 답을 받은 뒤 진행)
 
 1. **무엇을 하는 자동화인가?** 입력(사이트·API·메일·파일)과 결과물(드라이브 폴더·시트·알림). 하위 작업(직원)을 1~3개로 나눌 수 있으면 이름까지. 예: 기사 수집 → `collect`(기사 수집), `digest`(요약 정리)
@@ -91,6 +98,9 @@ PY
 
 - `tasks[].id` = yaml `tasks:` = `do_work` 가 돌려주는 `tasks` 키. `tests/workspaces.test.mjs` 가 불일치를 잡는다.
 - 그 부서가 `HIDDEN_DEPARTMENTS` 에 있으면 뺀다. 부서 하나에 직원(tasks) 합계 6명 이하.
+- **받는 것 `takes` · 내놓는 것 `gives`** 를 적는다 — `takes: ["지메일 · 상임위 메일"], gives: ["드라이브 · 위원회 수신함"]`. 이름은 `app/workspaces/types.ts` 의 `Resource` 에서 고르고, 없으면 거기에 먼저 더한다. 앞 자동화가 내놓는 이름과 **글자까지 같아야** 이어진 것으로 나온다.
+- 직원마다 직업 이름 `title` 을 짓는다(사무실 안에서 겹치지 않게).
+- 등록했으면 **`node scripts/automation-list.mjs`** 로 `자동화_목록.md` 를 다시 만들어 함께 커밋한다(안 하면 테스트가 실패한다).
 
 ## 4-1. (선택) 사용자가 고른 것만 만들게 하려면 — 검토 칸
 
@@ -134,6 +144,7 @@ bash scripts/npm.sh test && bash scripts/npm.sh tsc && bash scripts/npm.sh build
 - [ ] 사이트 카드에 직원(tasks)이 보이고 상태가 "쉬는 중/끝남" 중 하나
 - [ ] 시작 버튼(API) 으로 1회 실행 → 끝남 → 상태 파일에 `run_id`·`request_id`·`tasks[]` 기록
 - [ ] 결과물이 있으면 `result_link` 가 채워져 카드에 "결과 폴더 열기" 버튼이 보임
+- [ ] 설정에 `takes`·`gives` 를 적었고 `자동화_목록.md` 를 다시 만들어 커밋함
 - [ ] 비밀값이 코드·문서·커밋에 없음
 - [ ] 메모리(`project-ai-office-dashboard`)에 새 자동화 한 줄 추가
 

@@ -132,6 +132,7 @@ export const HIDDEN_DEPARTMENTS: string[] = [
  */
 export const AUTOMATIONS: AutomationDef[] = [
   { id: "ledger", dept: "research", name: "지출·정산", workflow: "ledger.yml", schedule: "6시간마다", wake: "새 카드 문자가 오면",
+    takes: ["지메일 · 카드 문자"], gives: ["구글 시트 · 가계부"],
     tasks: [
       { id: "collect", name: "내역 수집", title: "영수증 수집원", role: "카드·계좌 지출 내역 받아오기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
       { id: "sheet", name: "시트 정리", title: "장부 정리원", role: "지출 시트 기록·월별 합계", colors: ["#4b3b2c", "#bfdbfe", "#cbd5e1"] },
@@ -140,6 +141,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   // 시간제보육 예약(automations/childcare/): 아이사랑에 로그인해 독립반 자리를 잡는다.
   // 1단계(2026-11-10)는 로그인과 예약 화면 구조 확인까지. 실제 예약은 그 구조를 보고 붙인다.
   { id: "childcare", dept: "strategy1", name: "시간제보육 예약", workflow: "childcare.yml",
+    takes: ["아이사랑 사이트"], gives: ["아이사랑 예약"],
     tasks: [
       { id: "login", name: "아이사랑 로그인", title: "아이사랑 접수원", role: "아이디·비밀번호로 아이사랑에 들어가기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
       { id: "scan", name: "예약 화면 살피기", title: "보육 예약 조사원", role: "시간제보육 신청 화면의 버튼·입력란 구조 확인", colors: ["#4b3b2c", "#fde68a", "#f59e0b"] },
@@ -152,6 +154,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   { id: "car", dept: "partner", name: "차량 관리", tasks: [{ id: "schedule", name: "차량 일정", role: "정비·보험·검사 일정 알림" }] },
   // 이 PC 에서 도는 자동화(automations/toss_record/): GitHub 워크플로 없음 → 시작 단추 없음, 상태는 /api/live 신호로. 실시간 화면 /home/live/orderbook
   { id: "orderbook", dept: "finance", name: "호가 녹음(토스)", local: true, live: { kind: "orderbook", title: "실시간 호가·체결" }, schedule: "평일 08:55~15:35 (이 PC)",
+    code: "toss_record", takes: ["토스 웹소켓"], gives: ["이 PC 파일", "R2 · 실시간 호가"],
     tasks: [
       { id: "record", name: "실시간 녹음", title: "호가 기록원", role: "토스 웹소켓으로 100종목 10단계 호가·체결을 저장", colors: ["#2b2f3a", "#fde68a", "#f59e0b"] },
       { id: "candles", name: "1분봉 백필", title: "분봉 수집원", role: "과거 1분봉(2022-11~) 내려받기", colors: ["#4b3b2c", "#bbf7d0", "#22c55e"] },
@@ -160,6 +163,7 @@ export const AUTOMATIONS: AutomationDef[] = [
   // 주식 분석(automations/analyst/): 미국 종목 시세·재무를 받아 점검표를 계산하고 네 관점으로 후보를 걸러 발굴 판에 올려 /home/stock 화면에 보여 준다. 자료는 R2 stock/ (공개 저장소에는 건수만)
   { id: "analyst", dept: "finance", name: "주식 분석", workflow: "analyst.yml", inputs: { market: "us" }, schedule: "미국 화~토 07:00 · 국내 월~금 16:30",
     page: { href: "/home/stock", label: "분석 화면" },
+    takes: ["야후 파이낸스"], gives: ["R2 · 주식 자료"],
     tasks: [
       { id: "collect", name: "주식 자료 수집", title: "시세 조사원", role: "야후 파이낸스에서 시세·재무·실적일 받기", colors: ["#313b56", "#e0f2fe", "#3b82f6"] },
       { id: "check", name: "종목 점검", title: "종목 점검원", role: "점검표 7가지 계산과 관심 종목 판 갱신", colors: ["#2b2f3a", "#bbf7d0", "#22c55e"] },

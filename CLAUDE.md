@@ -34,6 +34,15 @@
   - **해석·채점**(3단계): 사용자가 "○○ 해석해 줘"라고 하면 `stock-opinion` 스킬 절차대로 써서 `automations/analyst/save_opinion.py` 로 저장한다(Worker `/api/stock/opinion`, R2 `stock/opinions/`; 금지어는 저장 스크립트가 막는다). 종목 한 장은 해석이 30일 지나거나 실적 발표가 있었거나 주가가 ±20% 움직이면 "오래됨"으로 표시하고, 해석 뒤 1주·1개월·3개월 수익률을 지수와 나란히 보여 준다(맞고 틀림은 매기지 않음).
   - 발굴 관점 채점은 매일 실행이 `lens-history.json` 에 걸린 종목을 쌓아 계산하고 발굴 판 아래에 보여 주며, 표본이 30건이 되기 전에는 판단을 보류한다. 기사 제목은 관심 종목만 받는다(R2 에만, 공개 로그·상태 파일에는 건수만).
 
+## 자동화를 만들거나 고치기 전에 `자동화_목록.md` 부터 읽는다 (사용자 결정 2026-11-26)
+
+저장소 맨 위의 **`자동화_목록.md`** 에 우리가 가진 자동화가 전부 있다 — 무엇이 깨우는지, 무엇을 받아 무엇을 내놓는지, 서로 어떻게 이어지는지, 직원과 코드 위치까지.
+새 자동화를 만들거나 있는 것을 고칠 때는 **코드를 열기 전에 이 문서를 먼저 읽고**, 이미 있는 자동화가 내놓는 것을 받아 쓸 수 있는지·같은 일을 하는 자동화가 있는지 본 뒤 사용자에게 "○○ 에 이어 붙이면 된다"를 먼저 말한다.
+(인사청문회 날 발언 요약이 안 깨어난 뒤, 의사일정을 캘린더에 넣는 자동화를 새로 짜려다 — 이미 메일·수신함 정리가 그 파일을 받아 회의 폴더까지 만들고 있었다.)
+
+- 이 문서는 **손으로 고치지 않는다.** `node scripts/automation-list.mjs` 가 사무실 설정과 예약표(`worker/schedule.ts`)에서 만든다. 자동화를 더하거나 고쳤으면 다시 돌려 함께 커밋한다 — 어긋나면 `tests/automation-list.test.mjs` 가 실패한다.
+- 실제로 도는 자동화는 설정에 **받는 것 `takes` · 내놓는 것 `gives`** 를 적는다(이름은 `app/workspaces/types.ts` 의 `Resource` 목록에서 고르고, 없으면 거기에 먼저 더한다). 두 자동화가 같은 이름을 쓰면 이어진 것으로 보고 목록의 "이어져 있는 것" 표에 나온다. 받는 자동화가 없는 줄이 새 자동화를 붙일 자리다.
+
 ## 자동화에 일이 늘면 직원을 만든다 (사용자 결정 2026-11-09)
 
 새 자동화를 만들 때뿐 아니라 **이미 있는 자동화에 기능을 더할 때도** 그 일을 직원(`tasks[]`) 하나로 만들어 사이트에서 보이게 한다.
@@ -98,5 +107,6 @@ python -m pytest -q automations
 - `automations/insta/` 인스타 게시글(콘텐츠 제작·게시형의 표준 구현: 소재→글→카드→업로드, 주제 프로필·계정별 자동화). 새 계정·새 플랫폼은 `automations/insta/README.md` 참고.
 - `automations/speech/` 회의 발언 요약(2026-11-06): 재경위·예결위 생중계 자막 → 호명으로 위원별 구간 → Claude 요약(주제별 `◯` 줄) → 530 알림(10명 묶음, 이준석 단독). **Worker 는 국회 사이트를 안 부르고 캘린더(530호 일정)로만 깨운다**(`worker/webcast.ts`), 상태·표시는 R2 `speech/`(`worker/speech-state.ts`, `/api/speech/state|mark|next`). 이준석 위원이 질의하는 날만 돈다(질의순서 HWP, `order_hwp.py`). 전송은 `notify_target: preview`(개인 대화방)로 시작해 품질 확인 뒤 `group`. 설계 `docs/superpowers/specs/2026-11-05-회의-발언-요약-알림-design.md`, 상세 `automations/speech/README.md`.
 - `automations/` 파이썬 자동화와 공통 모듈, `.github/workflows/` 실행 워크플로, `public/status/<사무실>/` 상태 파일. `history/<사무실>/<자동화>/<YYYY-MM>.jsonl` 실행 일지(영구 기록) — `report()` 가 실행마다 한 줄씩 더하고, 지난 기록 복원은 `python automations/common/history_log.py --backfill`(여러 번 돌려도 같은 결과). 화면의 실행 이력은 이 일지와 GitHub 날짜별 실행 목록을 합쳐 보여 준다(`/api/history`).
+- `자동화_목록.md` 가진 자동화 전부와 서로의 연결(만드는 것은 `scripts/automation-list.mjs`, 손으로 고치지 않는다).
 - `scripts/npm.sh` npm 명령을 드라이브 밖 로컬 작업 폴더에서 돌리는 도구. `scripts/npm.cmd` 는 명령 프롬프트·미리보기 도구(`.claude/launch.json`)용 — 그냥 `bash` 라고 부르면 WSL 이 잡히므로 Git Bash 를 찾아 npm.sh 를 부른다. `templates/automation/` 새 자동화 뼈대. `.claude/skills/new-automation/` 새 자동화 절차.
 - `android/cardsms/` 카드문자 전달 안드로이드 앱(MacroDroid 대체, 2026-09-22). 문자를 지메일 `[카드SMS]` 로 넣고 Worker 가 1분마다 확인해 가계부를 깨운다. 빌드는 `scripts/gradle.sh`(드라이브 밖) 또는 `cardsms-app.yml`(서명 APK). 설치·재발급은 `android/cardsms/README.md`.

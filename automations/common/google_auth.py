@@ -14,12 +14,14 @@ import sys
 from pathlib import Path
 
 # 공용 토큰 권한 — 모든 자동화가 GOOGLE_* 하나를 함께 쓴다. 권한을 더할 때는 이 목록에 넣고 다시 발급한다
-# (빼면 그 권한을 쓰는 자동화가 멈춘다: 드라이브=회의록·기사, 지메일·시트=가계부, 캘린더=주말 일정)
+# (빼면 그 권한을 쓰는 자동화가 멈춘다: 드라이브=회의록·기사, 지메일·시트=가계부, 캘린더=주말 일정·발언 요약)
+# 캘린더는 2026-11-26 에 읽기 전용(calendar.readonly) → 일정 읽기·쓰기(calendar.events)로 넓혔다 — 의사일정을 캘린더에 넣으려는 것.
+# 이 목록은 **발급할 때만** 쓴다. 자동화는 토큰이 가진 권한 그대로 쓰므로, 다시 발급해 갈아 끼우기 전까지 옛 토큰도 그대로 돈다.
 SCOPES = [
     "https://www.googleapis.com/auth/drive",
     "https://www.googleapis.com/auth/gmail.modify",
     "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/calendar.readonly",
+    "https://www.googleapis.com/auth/calendar.events",
 ]
 
 
