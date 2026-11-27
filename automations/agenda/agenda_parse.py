@@ -17,6 +17,14 @@ KST = timezone(timedelta(hours=9))
 HEAD = re.compile(r"제\s*(\d+)\s*차\s+(\S*위원회)")
 WHEN = re.compile(r"(?:(\d{4})\s*\.\s*)?(\d{1,2})\s*\.\s*(\d{1,2})\s*\.\s*\(.\)\s*(\d{1,2})\s*:\s*(\d{2})")
 FOLDER_DATE = re.compile(r"^(\d{8})_")
+ROOM = re.compile(r"(본관|의원회관|국회)\s*(\d+)\s*호")
+# 한글 파일을 글자로 뽑으면 생기는 찌꺼기(捤獥 汤捯, 󰠲󰠲…)를 버리고 읽을 수 있는 글자만 남긴다
+KEEP = re.compile(r"[^가-힣0-9A-Za-z()\[\]., :~%·※\-/\n]")
+# 표가 한 줄로 풀려 오므로 안건 번호·장소 칸·안내문 앞에서 끊는다("재경위 전체회의실"은 앞 낱말까지 묶는다).
+# 셋 다 안 보이면 끊지 않는다 — 위원회마다 양식이 달라 억지로 쪼개면 엉뚱한 데가 잘린다.
+BREAK = re.compile(r"\s(?=\d{1,2}\.\s)|\s(?=※)|\s(?=\S+\s+\S*회의실)")
+ITEM = re.compile(r"^(\d{1,2}\.|※)")                      # 안건 줄 또는 ※ 안내
+DATE_LINE = re.compile(r"^\d{1,2}\s*\.\s*\d{1,2}\s*\.\s*\(")  # "11. 30.(월)" — 안건이 아니라 날짜
 
 
 @dataclass(frozen=True)
@@ -56,8 +64,30 @@ def is_sub(m: Meeting) -> bool:
     return "소위" in m.body
 
 
-def title_of(label: str, m: Meeting) -> str:
-    return f"[{label}] 제{m.n}차 전체회의"
+def room_of(text: str) -> str:
+    """본문에서 회의 장소("본관 430호"). 못 찾으면 빈 칸."""
+    r = ROOM.search(text or "")
+    return f"{r.group(1)} {r.group(2)}호" if r else ""
+
+
+def title_of(label: str, m: Meeting, room: str = "") -> str:
+    return f"[{label}] 제{m.n}차 전체회의" + (f" ({room})" if room else "")
+
+
+def clean_body(text: str) -> str:
+    """의사일정 본문을 읽을 수 있는 꼴로 — 찌꺼기를 버리고 줄을 끊는다(내용은 그대로 둔다)."""
+    t = re.sub(r"[ \t]{2,}", " ", KEEP.sub(" ", text or "")).strip()
+    return BREAK.sub("\n", t)
+
+
+def agenda_text(text: str) -> str:
+    """캘린더 설명에 넣을 안건. 번호로 시작하는 줄과 ※ 안내만 남긴다.
+
+    표 머리글("일 시 안 건 명 비 고")·장소 칸은 뺀다(장소는 제목과 장소 칸에 따로 들어간다).
+    안건을 하나도 못 찾으면 본문 전체를 그대로 — 양식이 다른 위원회에서 빈 설명이 되지 않게.
+    """
+    lines = [ln for ln in clean_body(text).split("\n") if ITEM.match(ln) and not DATE_LINE.match(ln)]
+    return "\n".join(lines) if any(ln[0].isdigit() for ln in lines) else clean_body(text)
 
 
 def event_id(label: str, m: Meeting) -> str:
@@ -74,10 +104,12 @@ def end_of(m: Meeting, end_time: str) -> datetime:
     return end if end > m.start else m.start + timedelta(hours=2)
 
 
-def build_event(label: str, m: Meeting, end_time: str, description: str = "") -> dict:
+def build_event(label: str, m: Meeting, end_time: str, body: str = "") -> dict:
+    """캘린더 일정 하나. 장소·안건은 의사일정 본문에서 그대로 가져온다(사용자 결정 2026-11-27)."""
     when = lambda dt: {"dateTime": dt.isoformat(), "timeZone": "Asia/Seoul"}  # noqa: E731
-    return {"id": event_id(label, m), "summary": title_of(label, m),
-            "start": when(m.start), "end": when(end_of(m, end_time)), "description": description}
+    room = room_of(body)
+    return {"id": event_id(label, m), "summary": title_of(label, m, room), "location": room,
+            "start": when(m.start), "end": when(end_of(m, end_time)), "description": agenda_text(body)}
 
 
 def _start(item: dict) -> datetime | None:

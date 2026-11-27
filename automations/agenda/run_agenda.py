@@ -75,9 +75,10 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     n = {"files": 0, "unread": 0, "sub": 0, "add": 0, "move": 0, "same": 0, "manual": 0, "deleted": 0}
     for c in committees:
         label = (c.get("label") or "").strip()
-        for fdate, folder_id, item in agenda_files(drive, (c.get("parent_id") or "").strip(), today):
+        for fdate, _folder_id, item in agenda_files(drive, (c.get("parent_id") or "").strip(), today):
             n["files"] += 1
-            m = parse_header(read_text(drive, item, max_chars=300), fdate)
+            body = read_text(drive, item, max_chars=1500)   # 설명에 안건까지 담으려고 넉넉히 읽는다
+            m = parse_header(body, fdate)
             if not m:
                 n["unread"] += 1
                 continue
@@ -86,8 +87,7 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
                 continue
             day = m.start.date()
             what = decide(label, m, fetch_events(cal, calendar_id, (day,)), tuple(same_as.get(label) or ()))
-            event = build_event(label, m, end_time,
-                                f"의사일정에서 자동으로 넣은 일정입니다.\n회의 폴더: https://drive.google.com/drive/folders/{folder_id}")
+            event = build_event(label, m, end_time, body)
             if args.dry_run:
                 print(f"  · [{what}] {event['summary']} {m.start:%m/%d %H:%M}~{end_of(m, end_time):%H:%M}")
             elif what == "add":
