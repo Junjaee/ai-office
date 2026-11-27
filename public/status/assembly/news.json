@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 5건, 실패 0건, 13초",
+  "summary": "신규 13건, 실패 0건, 16초",
   "counts": {
-    "new": 5,
+    "new": 13,
     "failed": 0,
-    "total": 6950
+    "total": 6963
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 5건, 실패 0건, 13초",
-    "[신규] “오세훈 한동훈 이준석 저 씹다 찌그러져” 국민의힘 前 윤리위원들 또 폭로 [자막뉴스] — 채널A",
-    "[신규] 국가기술표준원, AI 로봇이 배우는 동작 데이터, 국가표준(KS)으로 체계화 추진 — 시민행정신문",
-    "[신규] “여당의 대법원장 탄핵은 해외 토픽감”…천하람, 민주당에 던진 경고 [요즘여의섬] — 매일경제",
-    "[신규] 1000명을 대상으로 어떤 정당을 지지하는지 물었더니 나온 결과 — 위키트리"
+    "신규 13건, 실패 0건, 16초",
+    "[신규] 이준석 “한동훈, 기소계획서 막 흔들어···무한 방패 가졌다고 착각” — 주간경향",
+    "[신규] `세무냥이` 불똥 튄 63기 합격자들…이준석 `법에 없는 시험을 또?` — 매일신문",
+    "[신규] '조작 징계' 주장 국힘 전 윤리위원들, 한동훈에 \"사과하겠다\" 만남 제안 — 뉴시스",
+    "[신규] 법관 익명 게시판에 ‘李 대통령 재판 재개’ 얘기까지? — 채널A"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45931653763,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45931653763",
-  "request_id": "cron-202611270300",
+  "run_id": 45949170652,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45949170652",
+  "request_id": "cron-202611270600",
   "trigger": "schedule",
-  "started_at": "2026-11-27T12:01:29+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-27T15:01:33+09:00",
+  "duration_sec": 16,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 104건"
+      "summary": "검색어 5개에서 93건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 32건 (신규 5건) · 시민행정신문 7건, 뉴시스 3건, 한국사회복지저널 3건"
+      "summary": "오늘 45건 (신규 13건) · 시민행정신문 8건, 뉴시스 4건, 한국사회복지저널 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-27T12:01:43+09:00"
+  "updated_at": "2026-11-27T15:01:50+09:00"
 }
