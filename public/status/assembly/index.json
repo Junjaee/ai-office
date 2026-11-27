@@ -1,5 +1,6 @@
 {
   "automations": [
+    "agenda",
     "hscity",
     "lcouncil",
     "mail",
@@ -9,5 +10,5 @@
     "speech",
     "weekend"
   ],
-  "generated_at": "2026-11-26T15:01:34+09:00"
+  "generated_at": "2026-11-27T16:12:13+09:00"
 }
