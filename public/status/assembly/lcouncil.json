@@ -3,40 +3,40 @@
   "dept": "research",
   "ok": false,
   "running": false,
-  "summary": "신규 451건, 교체 0건, 실패 3건, 191.4분",
+  "summary": "신규 314건, 교체 0건, 실패 3건, 165.2분",
   "counts": {
-    "new": 451,
+    "new": 314,
     "replaced": 0,
     "failed": 3,
-    "total": 15804
+    "total": 11033
   },
   "next_run": "매일 02:00",
   "log": [
-    "신규 451건, 교체 0건, 실패 3건, 191.4분",
-    "[신규] 서울특별시의회 제12대/제340회/주택공간위원회행정사무감사_2026-11-04.txt",
+    "신규 314건, 교체 0건, 실패 3건, 165.2분",
+    "[신규] 서울특별시의회 제12대/제340회/행정자치위원회행정사무감사_2026-11-04.txt",
     "[실패] 서울특별시의회 제261회 문화체육관광위원회 제1차[폐회중](2015.07.20 월요일): 요청 실패(3회): https://ms.smc.seoul.kr/record/recordView.do?key=d788de9c44653e32512d",
-    "[실패] 서울특별시의회 제242회 교육위원회 제3차(2012.11.20 화요일): [Errno 32] Broken pipe",
-    "[신규] 서울특별시의회 제8대/제242회/교육위원회_제4차_2012-11-21.txt"
+    "[신규] 서울특별시의회 제8대/제242회/교육위원회_제3차_2012-11-20.txt",
+    "[신규] 서울특별시의회 제8대/제240회/재정경제위원회_제2차_2012-09-07.txt"
   ],
   "link": "https://drive.google.com/drive/folders/10Pf9m4v1R08Znthq4wrhw5g-yv4szs3S",
-  "run_id": 45863971028,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45863971028",
-  "request_id": "cron-202611261700",
+  "run_id": 46038358473,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/46038358473",
+  "request_id": "cron-202611271700",
   "trigger": "schedule",
-  "started_at": "2026-11-27T02:01:31+09:00",
-  "duration_sec": 11483,
+  "started_at": "2026-11-28T02:01:29+09:00",
+  "duration_sec": 9914,
   "tasks": [
     {
       "id": "scan",
       "status": "error",
-      "summary": "의회 4/5곳 확인, 회의록 15721건"
+      "summary": "의회 3/5곳 확인, 회의록 10969건"
     },
     {
       "id": "fetch",
       "status": "error",
-      "summary": "신규 451건, 교체 0건"
+      "summary": "신규 314건, 교체 0건"
     }
   ],
   "id": "lcouncil",
-  "updated_at": "2026-11-27T05:12:55+09:00"
+  "updated_at": "2026-11-28T04:46:44+09:00"
 }
