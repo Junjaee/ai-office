@@ -3,39 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 35건, 실패 0건, 12초",
+  "summary": "신규 11건, 실패 0건, 13초",
   "counts": {
-    "new": 35,
+    "new": 11,
     "failed": 0,
-    "total": 7055
+    "total": 6947
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 35건, 실패 0건, 12초",
-    "[신규] 이준석 “분당집 25억 번 대통령은 꼭대기 올라가 놓고” …보편형 공공임대 분양 금지 비판 — www.dt.co.kr",
-    "[신규] 2026 KBO Academy (유소년 지도자 역량강화 세미나) 개최 — 시민행정신문",
-    "[신규] 제주시 애월읍, 인구 4만 달성 기념행사 개최 — 외교저널",
-    "[신규] 전남광주통합특별시 나주 육용오리농장 고병원성 조류인플루엔자 발생에 따라 방역관리 강화 — 시민행정신문"
+    "신규 11건, 실패 0건, 13초",
+    "[신규] 이재명 대통령 \"광장의 요구, 국민이 체감하는 변화로 만들어야\" — 시민행정신문",
+    "[신규] 최민희 중징계와 장동혁 폭로 정국…여야 또다른 공천관리위원회 `윤리위` [금주의 이슈] — 매일신문",
+    "[신규] 용혜인 의원, 안산 사회연대경제 현장 간담회 개최 — 시민행정신문",
+    "[신규] 산림청, 겨울철 등산객 산행 안전수칙 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45995102184,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45995102184",
-  "request_id": "cron-202611271200",
+  "run_id": 46021044513,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/46021044513",
+  "request_id": "cron-202611271500",
   "trigger": "schedule",
-  "started_at": "2026-11-27T21:01:20+09:00",
-  "duration_sec": 12,
+  "started_at": "2026-11-28T00:01:26+09:00",
+  "duration_sec": 13,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 128건"
+      "summary": "검색어 5개에서 110건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 137건 (신규 35건) · 시민행정신문 34건, 뉴시스 9건, 연합뉴스 8건"
+      "summary": "오늘 11건 (신규 11건) · 시민행정신문 4건, JTBC 1건, 뉴시스 1건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-27T21:01:33+09:00"
+  "updated_at": "2026-11-28T00:01:40+09:00"
 }
