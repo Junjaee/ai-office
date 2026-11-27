@@ -105,7 +105,9 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
 
     skipped = n["unread"] + n["sub"]
     tasks = {
-        "read": (True, f"의사일정 {n['files']}개 읽음" + (f", {n['unread']}개는 못 읽음" if n["unread"] else "")),
+        # 못 읽은 의사일정은 사람이 손으로 넣어야 한다 — 끝남으로 두면 그냥 지나간다(2026-11-27)
+        "read": (not n["unread"],
+                 f"의사일정 {n['files']}개 찾음" + (f", {n['unread']}개는 못 읽음 — 손으로 넣어 주세요" if n["unread"] else "")),
         "sync": (True, f"새로 {n['add']}건, 시각 고침 {n['move']}건, 이미 있음 {n['same'] + n['manual']}건"),
     }
     counts = {"new": n["add"], "moved": n["move"], "skip": skipped}
