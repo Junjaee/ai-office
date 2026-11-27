@@ -52,3 +52,27 @@ def test_decide_add_same_move_manual():
 def test_folder_date():
     assert folder_date("20261126_전체위") == "20261126"
     assert folder_date("인사청문_홍길동") is None
+
+
+# ── 표 머리글이 끼고 연도가 없는 양식 (2026-11-27 제12차) ──────────────────
+
+TABLE = ("제439회국회(정기회) 의 사 일 정(안) 제12차 재정경제기획위원회 "
+         "일 시 안 건 명 비 고 11. 30.(월) 14:00 1. 국세청장후보자 인사청문요청안")
+
+
+def test_parse_header_reads_table_form_with_folder_year():
+    m = parse_header(TABLE, "20261130")
+    assert (m.n, m.body) == (12, "재정경제기획위원회")
+    assert m.start == datetime(2026, 11, 30, 14, 0, tzinfo=KST)
+
+
+def test_parse_header_needs_folder_date_when_year_missing():
+    assert parse_header(TABLE) is None                 # 연도를 구할 데가 없다
+    assert parse_header(TABLE, "2026") is None         # 8자리가 아니다
+    assert parse_header(TABLE, "20261201") is None     # 폴더가 말하는 날과 다르다 — 넣지 않는다
+
+
+def test_parse_header_prefers_year_in_text():
+    """본문에 연도가 있으면 폴더 날짜는 보지 않는다(폴더 이름이 잘못돼도 본문이 이긴다)."""
+    m = parse_header("제11차 재정경제기획위원회 2026. 11. 26.(목) 10:00", "20260101")
+    assert m.start == datetime(2026, 11, 26, 10, 0, tzinfo=KST)

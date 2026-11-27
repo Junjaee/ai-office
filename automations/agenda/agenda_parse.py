@@ -1,7 +1,10 @@
-"""의사일정 — 한글 파일 첫 줄에서 회의를 읽고 캘린더 일정으로 바꾼다 (순수 함수, 네트워크 없음).
+"""의사일정 — 한글 파일 첫머리에서 회의를 읽고 캘린더 일정으로 바꾼다 (순수 함수, 네트워크 없음).
 
-의사일정 첫머리는 늘 같은 모양이다:  `제11차 재정경제기획위원회 2026. 11. 26.(목) 10:00`
-글자 규칙만으로 읽는다(AI 호출 없음).
+첫머리 모양이 한 가지가 아니다. 글자 규칙만으로 읽는다(AI 호출 없음).
+  제11차 재정경제기획위원회 2026. 11. 26.(목) 10:00          ← 차수 바로 뒤에 날짜
+  제12차 재정경제기획위원회 … 일 시 안 건 명 비 고 11. 30.(월) 14:00   ← 표 머리글이 끼고 연도가 없다
+그래서 차수·회의체를 먼저 찾고 **그 뒤**에서 날짜·시각을 찾는다. 연도가 없으면 회의 폴더
+이름(`20261130_전체위`)에서 가져오되, 월·일이 폴더와 다르면 읽지 않는다 — 틀린 일정보다 없는 편이 낫다.
 """
 from __future__ import annotations
 
@@ -11,8 +14,8 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
 KST = timezone(timedelta(hours=9))
-HEADER = re.compile(
-    r"제\s*(\d+)\s*차\s+(\S*위원회)\s+(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.\s*\(.\)\s*(\d{1,2})\s*:\s*(\d{2})")
+HEAD = re.compile(r"제\s*(\d+)\s*차\s+(\S*위원회)")
+WHEN = re.compile(r"(?:(\d{4})\s*\.\s*)?(\d{1,2})\s*\.\s*(\d{1,2})\s*\.\s*\(.\)\s*(\d{1,2})\s*:\s*(\d{2})")
 FOLDER_DATE = re.compile(r"^(\d{8})_")
 
 
@@ -23,14 +26,27 @@ class Meeting:
     start: datetime   # KST
 
 
-def parse_header(text: str) -> Meeting | None:
-    """본문 앞부분에서 차수·회의체·날짜·시각. 못 읽으면 None(넣지 않는다 — 틀린 일정보다 없는 편이 낫다)."""
-    m = HEADER.search(text or "")
-    if not m:
+def parse_header(text: str, folder_date: str = "") -> Meeting | None:
+    """본문 앞부분에서 차수·회의체·날짜·시각. 못 읽으면 None(넣지 않는다 — 틀린 일정보다 없는 편이 낫다).
+
+    folder_date: 회의 폴더 이름의 날짜 8자리("20261130"). 본문에 연도가 없을 때만 쓴다.
+    """
+    head = HEAD.search(text or "")
+    if not head:
         return None
-    n, body, y, mo, d, h, mi = m.groups()
+    when = WHEN.search(text, head.end())
+    if not when:
+        return None
+    y, mo, d, h, mi = when.groups()
+    if not y:
+        if len(folder_date) != 8 or not folder_date.isdigit():
+            return None                                   # 연도를 어디서도 못 구한다
+        if f"{int(mo):02d}{int(d):02d}" != folder_date[4:]:
+            return None                                   # 폴더가 말하는 날과 다르다 — 엉뚱한 날짜를 넣지 않는다
+        y = folder_date[:4]
     try:
-        return Meeting(int(n), body, datetime(int(y), int(mo), int(d), int(h), int(mi), tzinfo=KST))
+        return Meeting(int(head.group(1)), head.group(2),
+                       datetime(int(y), int(mo), int(d), int(h), int(mi), tzinfo=KST))
     except ValueError:
         return None
 

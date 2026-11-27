@@ -42,19 +42,21 @@ DEPT = "partner"
 SORT_CONFIG = HERE.parent / "sort" / "config.actions.yaml"
 
 
-def agenda_files(drive, parent_id: str, today: str) -> list[tuple[str, Item]]:
-    """오늘 이후 회의 폴더(YYYYMMDD_…) 안의 의사일정 파일 — (폴더 id, 파일), 오래 고친 것부터(나중 것이 이긴다)."""
+def agenda_files(drive, parent_id: str, today: str) -> list[tuple[str, str, Item]]:
+    """오늘 이후 회의 폴더(YYYYMMDD_…) 안의 의사일정 파일 — (폴더 날짜, 폴더 id, 파일),
+    오래 고친 것부터(나중 것이 이긴다). 폴더 날짜는 본문에 연도가 없을 때 쓴다."""
     folders = drive.files().list(
         q=f"'{parent_id}' in parents and mimeType = '{FOLDER_MIME}' and trashed = false",
         fields="files(id,name)", pageSize=1000).execute().get("files", [])
-    out: list[tuple[str, Item]] = []
+    out: list[tuple[str, str, Item]] = []
     for f in folders:
-        if (folder_date(f["name"]) or "") < today:
+        fdate = folder_date(f["name"]) or ""
+        if fdate < today:
             continue
         files = drive.files().list(
             q=f"'{f['id']}' in parents and name contains '의사일정' and trashed = false and mimeType != '{FOLDER_MIME}'",
             fields="files(id,name,size)", pageSize=20, orderBy="modifiedTime").execute().get("files", [])
-        out += [(f["id"], Item(x["id"], x["name"], int(x.get("size") or 0))) for x in files]
+        out += [(fdate, f["id"], Item(x["id"], x["name"], int(x.get("size") or 0))) for x in files]
     return out
 
 
@@ -73,9 +75,9 @@ def do_work(cfg: dict, args: argparse.Namespace, progress) -> dict:
     n = {"files": 0, "unread": 0, "sub": 0, "add": 0, "move": 0, "same": 0, "manual": 0, "deleted": 0}
     for c in committees:
         label = (c.get("label") or "").strip()
-        for folder_id, item in agenda_files(drive, (c.get("parent_id") or "").strip(), today):
+        for fdate, folder_id, item in agenda_files(drive, (c.get("parent_id") or "").strip(), today):
             n["files"] += 1
-            m = parse_header(read_text(drive, item, max_chars=300))
+            m = parse_header(read_text(drive, item, max_chars=300), fdate)
             if not m:
                 n["unread"] += 1
                 continue
