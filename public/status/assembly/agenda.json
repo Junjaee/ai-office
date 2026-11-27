@@ -3,37 +3,36 @@
   "dept": "partner",
   "ok": true,
   "running": false,
-  "summary": "새 일정 0건, 시각 고침 0건, 건너뜀 1건, 1초",
+  "summary": "새 일정 1건, 시각 고침 0건, 건너뜀 0건, 3초",
   "counts": {
-    "new": 0,
+    "new": 1,
     "moved": 0,
-    "skip": 1
+    "skip": 0
   },
   "next_run": "의사일정이 오면",
   "log": [
-    "새 일정 0건, 시각 고침 0건, 건너뜀 1건, 1초",
-    "새 일정 0건, 시각 고침 0건",
-    "첫 줄을 못 읽은 의사일정 1개 — 손으로 넣어 주세요"
+    "새 일정 1건, 시각 고침 0건, 건너뜀 0건, 3초",
+    "새 일정 1건, 시각 고침 0건"
   ],
   "link": "",
-  "run_id": 45956682957,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45956682957",
-  "request_id": "cron-202611270710",
-  "trigger": "schedule",
-  "started_at": "2026-11-27T16:12:12+09:00",
-  "duration_sec": 1,
+  "run_id": 45962156984,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45962156984",
+  "request_id": "req-20261127165829-cal",
+  "trigger": "manual",
+  "started_at": "2026-11-27T16:59:10+09:00",
+  "duration_sec": 3,
   "tasks": [
     {
       "id": "read",
       "status": "done",
-      "summary": "의사일정 1개 읽음, 1개는 못 읽음"
+      "summary": "의사일정 1개 찾음"
     },
     {
       "id": "sync",
       "status": "done",
-      "summary": "새로 0건, 시각 고침 0건, 이미 있음 0건"
+      "summary": "새로 1건, 시각 고침 0건, 이미 있음 0건"
     }
   ],
   "id": "agenda",
-  "updated_at": "2026-11-27T16:12:13+09:00"
+  "updated_at": "2026-11-27T16:59:14+09:00"
 }
