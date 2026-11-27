@@ -1,41 +1,41 @@
 {
   "name": "기사 수집",
   "dept": "brand",
-  "ok": true,
+  "ok": false,
   "running": false,
-  "summary": "신규 11건, 실패 0건, 13초",
+  "summary": "신규 16건, 실패 1건, 19초",
   "counts": {
-    "new": 11,
-    "failed": 0,
-    "total": 6947
+    "new": 16,
+    "failed": 1,
+    "total": 6963
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 11건, 실패 0건, 13초",
-    "[신규] 이재명 대통령 \"광장의 요구, 국민이 체감하는 변화로 만들어야\" — 시민행정신문",
-    "[신규] 최민희 중징계와 장동혁 폭로 정국…여야 또다른 공천관리위원회 `윤리위` [금주의 이슈] — 매일신문",
-    "[신규] 용혜인 의원, 안산 사회연대경제 현장 간담회 개최 — 시민행정신문",
-    "[신규] 산림청, 겨울철 등산객 산행 안전수칙 — 시민행정신문"
+    "신규 16건, 실패 1건, 19초",
+    "[신규] 경찰, 이준석 ‘성접대 의혹’ 불송치…\"공소시효 지났다\" — JTBC",
+    "[신규] 지식재산처, 반도체 장비 제조기업의 지식재산(IP) 경쟁력 강화를 위한 현장 소통 간담회 개최 — 시민행정신문",
+    "[신규] 대학(원)생이 설계한 반도체, 실제 칩으로 선보여 — 시민행정신문",
+    "[신규] 제주시, 아동학대 고위험군 가정 합동점검 실시 — 외교저널"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 46021044513,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/46021044513",
-  "request_id": "cron-202611271500",
+  "run_id": 46046209356,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/46046209356",
+  "request_id": "cron-202611271800",
   "trigger": "schedule",
-  "started_at": "2026-11-28T00:01:26+09:00",
-  "duration_sec": 13,
+  "started_at": "2026-11-28T03:01:25+09:00",
+  "duration_sec": 19,
   "tasks": [
     {
       "id": "collect",
-      "status": "done",
-      "summary": "검색어 5개에서 110건"
+      "status": "error",
+      "summary": "검색어 5개에서 124건, 실패 1개"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 11건 (신규 11건) · 시민행정신문 4건, JTBC 1건, 뉴시스 1건"
+      "summary": "오늘 27건 (신규 16건) · 시민행정신문 11건, 조선일보 3건, JTBC 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-28T00:01:40+09:00"
+  "updated_at": "2026-11-28T03:01:45+09:00"
 }
