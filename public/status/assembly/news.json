@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 9초",
+  "summary": "신규 14건, 실패 0건, 14초",
   "counts": {
-    "new": 3,
+    "new": 14,
     "failed": 0,
-    "total": 6931
+    "total": 6945
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 9초",
-    "[신규] 도의회, 내년도 예산안 예비심사 마무리…30일부터 예결특위 심사 — 강원일보",
-    "[신규] 국회의원 지역구 민원 증액의 비밀은 ‘소소위’ — 에너지경제신문",
-    "[신규] 與 “33조 증액” vs 野 “81조 삭감” 미래대응기금 세부사업 심사 돌입 — 이데일리"
+    "신규 14건, 실패 0건, 14초",
+    "[신규] 이준석 “아파트 차익 25억 李대통령, 국민 내집마련은 고깝나” — 문화일보",
+    "[신규] 개혁신당 이준석, 개정 형사소송법에 \"검사 보완수사권 제한이 가장 큰 문제\" — 한국사회복지저널",
+    "[신규] 서울특별시의회 이민옥 위원장, 자원봉사자 유공자 표창 수여식 참석, “자원봉사자 자긍심 높이는 의정활동 펼칠 것” — 시민행정신문",
+    "[신규] 산업통상부 국가기술표준원, 인공지능(AI), 기술 진화에서 산업 대전환까지 표준이 함께 한다 — 시민행정신문"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 45895113446,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45895113446",
-  "request_id": "cron-202611262100",
+  "run_id": 45914226436,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/45914226436",
+  "request_id": "cron-202611270000",
   "trigger": "schedule",
-  "started_at": "2026-11-27T06:01:27+09:00",
-  "duration_sec": 9,
+  "started_at": "2026-11-27T09:01:23+09:00",
+  "duration_sec": 14,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 117건"
+      "summary": "검색어 5개에서 147건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 13건 (신규 3건) · 뉴시스 2건, 시민행정신문 2건, MBC 뉴스 1건"
+      "summary": "오늘 27건 (신규 14건) · 시민행정신문 6건, 뉴시스 3건, 한국사회복지저널 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-27T06:01:37+09:00"
+  "updated_at": "2026-11-27T09:01:38+09:00"
 }
