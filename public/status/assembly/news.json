@@ -3,38 +3,39 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 3건, 실패 0건, 15초",
+  "summary": "신규 7건, 실패 0건, 12초",
   "counts": {
-    "new": 3,
+    "new": 7,
     "failed": 0,
-    "total": 6990
+    "total": 6997
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 3건, 실패 0건, 15초",
-    "[신규] 세무사회 “수습세무사 평가 강화, 추가시험·별도 수료요건 아니다” — 이택스뉴스",
-    "[신규] 예산안 시한 D-4…여야 '104조 미래대응기금' 접점 못 찾고 헛바퀴 — 경북도민일보",
-    "[신규] 민주당서도 \"그게 그거 같은 사업\"...미래대응기금, 여야 협공에 의결 전면 보류 — 펜앤마이크"
+    "신규 7건, 실패 0건, 12초",
+    "[신규] 국민의힘 ‘조작 징계’ 의혹 일파만파…계파 갈등 격화 — 경북신문",
+    "[신규] 김종인 \"이준석 선대위 복귀 기대 어려워…우리에게 마이너스\" — JTBC",
+    "[신규] 국힘 '조작 징계' 내홍 격화…\"비겁한 정치\" \"복당해도 다시 징계\" — 뉴시스",
+    "[신규] 국민의힘 징계 개입 의혹 확산…계파 갈등 격화 — 팩트인뉴스"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 46114639182,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/46114639182",
-  "request_id": "cron-202611280600",
+  "run_id": 46128444801,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/46128444801",
+  "request_id": "cron-202611280900",
   "trigger": "schedule",
-  "started_at": "2026-11-28T15:01:24+09:00",
-  "duration_sec": 15,
+  "started_at": "2026-11-28T18:01:27+09:00",
+  "duration_sec": 12,
   "tasks": [
     {
       "id": "collect",
       "status": "done",
-      "summary": "검색어 5개에서 93건"
+      "summary": "검색어 5개에서 61건"
     },
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 54건 (신규 3건) · 시민행정신문 13건, 조선일보 3건, JTBC 2건"
+      "summary": "오늘 61건 (신규 7건) · 시민행정신문 13건, JTBC 3건, 동방일보 3건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-28T15:01:39+09:00"
+  "updated_at": "2026-11-28T18:01:39+09:00"
 }
