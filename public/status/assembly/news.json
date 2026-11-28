@@ -3,27 +3,26 @@
   "dept": "brand",
   "ok": true,
   "running": false,
-  "summary": "신규 10건, 실패 0건, 16초",
+  "summary": "신규 3건, 실패 0건, 15초",
   "counts": {
-    "new": 10,
+    "new": 3,
     "failed": 0,
-    "total": 6987
+    "total": 6990
   },
   "next_run": "3시간마다",
   "log": [
-    "신규 10건, 실패 0건, 16초",
-    "[신규] `국정원 논란`에 `국보법 폐지`까지…문성호 `이 와중에 국정원장이 강금실?`[일타뉴스] — 매일신문",
-    "[신규] 김영우 \"일벌백계 최민희, 보궐선거 전당대회급 될 것\"[한판승부] — 노컷뉴스",
-    "[신규] [김영환 칼럼] 중력의 법칙 — 논객닷컴",
-    "[신규] 국민의힘, 이재명 대통령 판다 외교 거절에 \"민망함은 국민 몫\" — 한국사회복지저널"
+    "신규 3건, 실패 0건, 15초",
+    "[신규] 세무사회 “수습세무사 평가 강화, 추가시험·별도 수료요건 아니다” — 이택스뉴스",
+    "[신규] 예산안 시한 D-4…여야 '104조 미래대응기금' 접점 못 찾고 헛바퀴 — 경북도민일보",
+    "[신규] 민주당서도 \"그게 그거 같은 사업\"...미래대응기금, 여야 협공에 의결 전면 보류 — 펜앤마이크"
   ],
   "link": "https://drive.google.com/drive/folders/1-yG62NnwC2ALLaysRNoEzpbyfJ32f7CX",
-  "run_id": 46100793356,
-  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/46100793356",
-  "request_id": "cron-202611280300",
+  "run_id": 46114639182,
+  "run_url": "https://github.com/Junjaee/ai-office/actions/runs/46114639182",
+  "request_id": "cron-202611280600",
   "trigger": "schedule",
-  "started_at": "2026-11-28T12:01:28+09:00",
-  "duration_sec": 16,
+  "started_at": "2026-11-28T15:01:24+09:00",
+  "duration_sec": 15,
   "tasks": [
     {
       "id": "collect",
@@ -33,9 +32,9 @@
     {
       "id": "digest",
       "status": "done",
-      "summary": "오늘 51건 (신규 10건) · 시민행정신문 13건, 조선일보 3건, JTBC 2건"
+      "summary": "오늘 54건 (신규 3건) · 시민행정신문 13건, 조선일보 3건, JTBC 2건"
     }
   ],
   "id": "news",
-  "updated_at": "2026-11-28T12:01:45+09:00"
+  "updated_at": "2026-11-28T15:01:39+09:00"
 }
